@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1F204F0D-8B34-77BE-54B6-1A1EC08973EF}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Helix</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\Debug\windows\Helix\</OutDir>
+    <IntDir>..\bin_obj\Debug\windows\Helix\</IntDir>
+    <TargetName>Helix</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Release\windows\Helix\</OutDir>
+    <IntDir>..\bin_obj\Release\windows\Helix\</IntDir>
+    <TargetName>Helix</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
+    <ClInclude Include="src\Helix\Core\Config.hpp" />
+    <ClInclude Include="src\Helix\Core\Type.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\Camera.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\Components.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\Transform.hpp" />
+    <ClInclude Include="src\Helix\ECS\Entity\Entity.hpp" />
+    <ClInclude Include="src\Helix\ECS\Registry.hpp" />
+    <ClInclude Include="src\Helix\ECS\System\Render.hpp" />
+    <ClInclude Include="src\Helix\ECS\System\System.hpp" />
+    <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp" />
+    <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
+    <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
+    <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
+    <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
+    <ClInclude Include="src\Helix\IO\IO.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLVertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\RenderContextAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\RenderAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Blueprint\TextureBlueprint.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\IndexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\Layout\VertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\RenderBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\VertexBufferTemplate.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\VertexContainer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Context\RenderContext.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Interface\IBindable.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\IStaticBindable.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\Texture3D.hpp" />
+    <ClInclude Include="src\Helix\Window\Platform\Windows\WindowsWindow.hpp" />
+    <ClInclude Include="src\Helix\Window\Window.hpp" />
+    <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\VertexBuffer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Helix\Core\Deprecated\Instantiate.cpp" />
+    <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\RenderContextAPI.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\RenderAPI.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Buffer\Layout\VertexLayout.cpp" />
+    <ClCompile Include="src\Helix\Core\Deprecated\VertexBufferTemplate.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Material\Material.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Renderer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Shader\Pipeline.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Shader\Shader.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Texture\Texture.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Texture\Texture2D.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Texture\Texture3D.cpp" />
+    <ClCompile Include="src\Helix\Window\Platform\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Helix\Window\Window.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="vendor\glad\GLAD.vcxproj">
+      <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
