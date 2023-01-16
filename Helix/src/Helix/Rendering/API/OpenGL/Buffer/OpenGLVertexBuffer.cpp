@@ -23,7 +23,7 @@ namespace hlx
 
     void OpenGLVertexBuffer::bind() const 
     {
-        if (!m_mappedBuffer.expired()) throw std::runtime_error{ "Buffer may not be mapped while rendering!" };
+        if (m_isMapped) throw std::runtime_error{ "Buffer may not be mapped while rendering!" };
 
         glBindBuffer(m_target, m_id);
     }

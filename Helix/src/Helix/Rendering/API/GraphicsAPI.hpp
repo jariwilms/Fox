@@ -41,7 +41,18 @@ namespace hlx
         //{
         //    return std::make_shared<OpenGLIndexBuffer>(data);
         //}
-        
+        template<typename T, typename U>
+        static std::shared_ptr<VertexBuffer> create_t(const std::vector<U>& data)
+        {
+            return std::make_shared<OpenGLVertexBuffer>(data.size() * sizeof(T), data.data());
+        }
+        template<typename T, typename U>
+        static std::shared_ptr<T> create_s(const std::vector<U>& data) = delete;
+        template<> static std::shared_ptr<IndexBuffer> create_s(const std::vector<unsigned int>& data)
+        {
+            return std::make_shared<OpenGLIndexBuffer>(data.size() * sizeof(unsigned int), data.data());
+        }
+
 
         
         template<> static std::shared_ptr<FrameBuffer>  create(const glm::uvec2& dimensions)
@@ -52,32 +63,5 @@ namespace hlx
         {
             return std::make_shared<OpenGLRenderBuffer>(type, layout, samples, dimensions);
         }
-
-
-
-        template<typename T, typename U>
-        static std::shared_ptr<VertexBuffer> create_t(const std::vector<U>& data)
-        {
-            return std::make_shared<OpenGLVertexBuffer>(data.size() * sizeof(T), data.data());
-        }
-        static std::shared_ptr<IndexBuffer> create_s(const std::span<unsigned int>& data)
-        {
-            return std::make_shared<OpenGLIndexBuffer>(data);
-        }
-
-
-
-
-
-        //template<typename T, typename U>
-        //static std::shared_ptr<VertexBuffer> create_t(const std::vector<U>& data)
-        //{
-        //    return std::make_shared<OpenGLVertexBuffer>(data.size() * sizeof(U), data.data());
-        //}
-        //template<typename T>
-        //static std::shared_ptr<IndexBuffer> create_t(const std::vector<unsigned int>& data)
-        //{
-        //    return std::make_shared<OpenGLIndexBuffer>(data);
-        //}
     };
 }

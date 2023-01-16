@@ -25,9 +25,14 @@ namespace hlx
 		}
 		virtual void unmap()
 		{
-			m_mappedBuffer.reset();
 			_unmap();
+			m_isMapped = false;
 		}
+
+        bool is_mapped() const
+        {
+            return m_isMapped;
+        }
 
 	protected:
 		IndexBuffer(size_t size)

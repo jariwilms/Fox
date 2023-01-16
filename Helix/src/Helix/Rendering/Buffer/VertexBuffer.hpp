@@ -3,7 +3,6 @@
 #include "stdafx.hpp"
 
 #include "VertexContainer.hpp"
-#include "Helix/Core/Library/Interface/IBindable.hpp"
 #include "Helix/Core/Library/Semantics/NonCopyable.hpp"
 
 namespace hlx
@@ -21,23 +20,26 @@ namespace hlx
         template<typename T = byte>
         std::weak_ptr<std::span<T>> map(VertexContainer::AccessFlag flags)
         {
-            if (!m_mappedBuffer.expired()) return m_mappedBuffer;
+            auto* buffer = reinterpret_cast<T*>(_map(flags));
+            m_isMapped = true;
 
-            auto* buffer = reinterpret_cast<byte*>(_map(flags));
-            m_mappedBuffer = std::make_shared<std::span<byte>>(buffer, m_size / sizeof(byte));
-
-            return m_mappedBuffer;
+            return std::make_shared<std::span<T>>(buffer, m_size / sizeof(T));
         }
         virtual void unmap()
         {
-            m_mappedBuffer.reset();
             _unmap();
+            m_isMapped = false;
+        }
+
+        bool is_mapped() const
+        {
+            return m_isMapped;
         }
 
     protected:
         VertexBuffer(size_t size)
             : VertexContainer{ size } {}
 
-        std::weak_ptr<std::span<byte>> m_mappedBuffer{};
+        bool m_isMapped{};
     };
 }

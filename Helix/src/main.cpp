@@ -50,7 +50,7 @@ int main()
 
 	auto vboP = GraphicsAPI::create_t<VertexBuffer>(positions);
 	auto vboC = GraphicsAPI::create_t<VertexBuffer>(colors);
-	auto ibo  = GraphicsAPI::create_s(indices);
+	auto ibo  = GraphicsAPI::create_s<IndexBuffer>(indices);
 
 	auto vao = GraphicsAPI::create<VertexArray>();
 	vao->tie(vboP, positionLayout);
