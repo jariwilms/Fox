@@ -66,6 +66,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -88,6 +89,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -98,6 +100,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
+    <ClInclude Include="src\Helix\EXP\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Core\Config.hpp" />
     <ClInclude Include="src\Helix\Core\Type.hpp" />

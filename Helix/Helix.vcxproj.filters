@@ -238,6 +238,7 @@
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Layout\UniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLUniformBuffer.hpp" />
+    <ClInclude Include="src\Helix\EXP\Buffer\VertexBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Core\Deprecated\Instantiate.cpp">
