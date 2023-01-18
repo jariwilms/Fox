@@ -25,11 +25,11 @@ namespace hlx
     {
         if (m_isMapped) throw std::runtime_error{ "Buffer may not be mapped while rendering!" };
 
-        glBindBuffer(m_target, m_id);
+        glBindBuffer(m_internalTarget, m_id);
     }
     void OpenGLVertexBuffer::unbind() const
     {
-        glBindBuffer(m_target, 0);
+        glBindBuffer(m_internalTarget, 0);
     }
     bool OpenGLVertexBuffer::is_bound() const
     {

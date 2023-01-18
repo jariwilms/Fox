@@ -11,7 +11,6 @@ namespace hlx
 
 		glCreateRenderbuffers(1, &m_id);
 		glNamedRenderbufferStorageMultisample(m_id, m_samples, m_internalFormat, dimensions.x, dimensions.y);
-		//glNamedRenderbufferStorageMultisample(m_id, m_samples, GL_DEPTH_COMPONENT, dimensions.x, dimensions.y);
 	}
 	OpenGLRenderBuffer::~OpenGLRenderBuffer()
 	{
@@ -20,11 +19,11 @@ namespace hlx
 
 	void OpenGLRenderBuffer::bind() const
 	{
-		glBindRenderbuffer(m_target, m_id);
+		glBindRenderbuffer(m_internalTarget, m_id);
 	}
 	void OpenGLRenderBuffer::unbind() const
 	{
-		glBindRenderbuffer(m_target, 0);
+		glBindRenderbuffer(m_internalTarget, 0);
 	}
 	bool OpenGLRenderBuffer::is_bound() const
 	{

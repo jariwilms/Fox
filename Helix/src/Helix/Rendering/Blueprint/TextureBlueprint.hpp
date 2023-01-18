@@ -2,9 +2,8 @@
 
 #include "stdafx.hpp"
 
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Rendering/Texture/Texture2D.hpp"
-#include "Helix/Rendering/Texture/Texture3D.hpp"
-#include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture2D.hpp"
 #include "Helix/IO/Filesystem/Image.hpp"
 
 namespace hlx
@@ -18,11 +17,10 @@ namespace hlx
 		std::shared_ptr<T> build(const std::shared_ptr<Image> image) const = delete;
 		template<> std::shared_ptr<Texture2D> build(const std::shared_ptr<Image> image) const 
 		{
-			const auto buffer     = image->read();
-			const auto data       = std::span<byte>{ buffer->begin(), buffer->size() };
-			const auto dimensions = glm::uvec3{ image->dimensions(), 0u };
+			const auto buffer = image->read(true);
+			std::span<byte> data{ buffer->begin(), buffer->size() };
 
-			return std::make_shared<OpenGLTexture2D>(format, layout, wrappingS, wrappingT, minFilter, magFilter, dimensions, data);
+			return GraphicsAPI::create_tex(format, layout, wrappingS, wrappingT, minFilter, magFilter, image->dimensions(), data);
 		}
 
 		template<typename T, typename... Args>
@@ -31,17 +29,11 @@ namespace hlx
 		{
 			return std::make_shared<OpenGLTexture2D>(format, layout, wrappingS, wrappingT, minFilter, magFilter, dimensions);
 		}
-		template<> std::shared_ptr<Texture3D> reserve(const glm::uvec3& dimensions) const
-		{
-			return {};
-			//return std::make_shared<OpenGLTexture2D>(format, layout, wrappingS, wrappingT, minFilter, magFilter, dimensions);
-		}
 
 		Texture::Format   format{ Texture::Format::RGBA };
 		Texture::Layout   layout{ Texture2D::Layout::RGBA8 };
 		Texture::Wrapping wrappingS{ Texture2D::Wrapping::ClampToEdge };
 		Texture::Wrapping wrappingT{ Texture2D::Wrapping::ClampToEdge };
-		Texture::Wrapping wrappingR{ Texture2D::Wrapping::ClampToEdge };
 		Texture::Filter   minFilter{ Texture2D::Filter::Nearest };
 		Texture::Filter   magFilter{ Texture2D::Filter::Nearest };
 	};

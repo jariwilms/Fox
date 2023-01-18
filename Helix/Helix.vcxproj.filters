@@ -222,9 +222,6 @@
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp">
       <Filter>Helix\Rendering\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\Texture\Texture3D.hpp">
-      <Filter>Helix\Rendering\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Window\Platform\Windows\WindowsWindow.hpp">
       <Filter>Helix\Window\Platform\Windows</Filter>
     </ClInclude>
@@ -239,6 +236,8 @@
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\Layout\UniformBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLUniformBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Core\Deprecated\Instantiate.cpp">
@@ -280,9 +279,6 @@
     <ClCompile Include="src\Helix\Rendering\API\RenderAPI.cpp">
       <Filter>Helix\Rendering\API</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Buffer\Layout\VertexLayout.cpp">
-      <Filter>Helix\Rendering\Buffer\Layout</Filter>
-    </ClCompile>
     <ClCompile Include="src\Helix\Core\Deprecated\VertexBufferTemplate.cpp">
       <Filter>Helix\Rendering\Buffer</Filter>
     </ClCompile>
@@ -298,21 +294,6 @@
     <ClCompile Include="src\Helix\Rendering\Renderer.cpp">
       <Filter>Helix\Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Shader\Pipeline.cpp">
-      <Filter>Helix\Rendering\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Shader\Shader.cpp">
-      <Filter>Helix\Rendering\Shader</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Texture\Texture.cpp">
-      <Filter>Helix\Rendering\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Texture\Texture2D.cpp">
-      <Filter>Helix\Rendering\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Texture\Texture3D.cpp">
-      <Filter>Helix\Rendering\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="src\Helix\Window\Platform\Windows\WindowsWindow.cpp">
       <Filter>Helix\Window\Platform\Windows</Filter>
     </ClCompile>
@@ -322,5 +303,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLUniformBuffer.cpp" />
   </ItemGroup>
 </Project>

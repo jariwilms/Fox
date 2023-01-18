@@ -23,6 +23,6 @@ namespace hlx
         void* _map(VertexContainer::AccessFlag flags) const override;
         void  _unmap() const override;
 
-		OpenGL::Target m_target{ GL_ARRAY_BUFFER };
+		GLenum m_internalTarget{ GL_ARRAY_BUFFER };
 	};
 }

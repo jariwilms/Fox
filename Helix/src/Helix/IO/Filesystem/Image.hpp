@@ -12,22 +12,31 @@ namespace hlx
 	struct Image : public File
 	{
 	public:
-		using File::File;
-
-		std::shared_ptr<std::vector<byte>> read() override
+		explicit Image(const std::filesystem::path& path)
+			: File{ path }
 		{
-			const auto buffer = File::read();
-			const auto image = stbi_load_from_memory(buffer->data(), static_cast<int>(m_size), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels), 0);
-			m_rawSize = (static_cast<size_t>(m_dimensions.x) * static_cast<size_t>(m_dimensions.y));
 
-			auto result = std::make_shared<std::vector<byte>>(image, image + m_size);
-			stbi_image_free(image);
+		}
+
+		const std::shared_ptr<std::vector<byte>> read(bool flip = false, unsigned int channels = 4)
+		{
+			if (!m_imageData.expired()) return m_imageData.lock();
+
+			stbi_set_flip_vertically_on_load(flip);
+
+			const auto image    = File::read();
+			const auto rawImage = stbi_load_from_memory(image->data(), static_cast<int>(m_size), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels), channels);
+			m_rawSize = (static_cast<size_t>(m_dimensions.x) * static_cast<size_t>(m_dimensions.y)) * channels;
+
+			auto result = std::make_shared<std::vector<byte>>(rawImage, rawImage + m_rawSize);
+			m_imageData = result;
+			stbi_image_free(rawImage);
 
 			return result;
 		}
-		void write(const std::vector<byte>& data) override                     //Make File::write() protected? => using File::write; in classes that need it
+		void write(const std::vector<byte>& data) override
 		{
-
+			throw std::logic_error{ "Not implemented!" };
 		}
 
 		glm::uvec2 dimensions() const
@@ -41,7 +50,7 @@ namespace hlx
 
 	private:
 		glm::uvec2 m_dimensions{};
-		unsigned int m_channels;
+		unsigned int m_channels{};
 
 		std::weak_ptr<std::vector<byte>> m_imageData;
 		size_t m_rawSize{};

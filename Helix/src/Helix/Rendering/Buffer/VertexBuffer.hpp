@@ -13,9 +13,9 @@ namespace hlx
         virtual ~VertexBuffer() = default;
 
         template<typename T = byte>
-        void copy(size_t offset, const std::span<T>& data)
+        void copy(unsigned int offset, const std::span<T>& data)
         {
-            _copy(offset * sizeof(T), data.size() * sizeof(T), data.data());
+            _copy(static_cast<size_t>(offset) * sizeof(T), data.size() * sizeof(T), data.data());
         }
         template<typename T = byte>
         std::weak_ptr<std::span<T>> map(VertexContainer::AccessFlag flags)

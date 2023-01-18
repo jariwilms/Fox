@@ -16,8 +16,8 @@ namespace hlx
         {
             m_fov = 90.0f;
             m_aspect = 16.0f / 9.0f;
-
-            m_view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, -3.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
+            
+            m_view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 3.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
             m_projection = Projection::create<Projection::Type::Perspective>(m_fov, m_aspect, 0.001f, 10000.0f);
         }
 

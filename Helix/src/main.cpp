@@ -1,15 +1,13 @@
 #include "stdafx.hpp"
 
+#include "glad/glad.h"
+#include "glfw/glfw3.h"
+
 #include "Helix/IO/IO.hpp"
 #include "Helix/Window/Window.hpp"
-#include "Helix/Rendering/Buffer/VertexArray.hpp"
-#include "Helix/Rendering/Buffer/VertexBuffer.hpp"
-#include "Helix/Rendering/Buffer/IndexBuffer.hpp"
-#include "Helix/Rendering/Shader/Shader.hpp"
-#include "Helix/Rendering/Shader/Pipeline.hpp"
-#include "Helix/ECS/Registry.hpp"
-#include "Helix/ECS/Components/Components.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
+#include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
+#include "Helix/ECS/Components/Camera.hpp"
 
 int main()
 {
@@ -22,60 +20,89 @@ int main()
 
 
 
+	Camera camera{};
+
+
+
 
 	std::vector<float> positions =
 	{
-		 0.0f,  0.5f, //Top middle
+		-0.5f,  0.5f, //Top middle
 		-0.5f, -0.5f, //Bottom left
 		 0.5f, -0.5f, //Bottom right
+		 0.5f,  0.5f, //Top right
 	};
 	std::vector<float> colors =
 	{
 		1.0f, 0.0f, 0.0f, 
 		0.0f, 1.0f, 0.0f, 
 		0.0f, 0.0f, 1.0f, 
+		0.0f, 1.0f, 0.0f, 
+	};
+	std::vector<float> texCoords =
+	{
+		0.0f, 1.0f,
+		0.0f, 0.0f,
+		1.0f, 0.0f,
+		1.0f, 1.0f,
 	};
 	std::vector<unsigned int> indices =
 	{
 		0, 1, 2, //First triangle
+		0, 2, 3, //Second triangle
 	};
 
-	auto positionLayout = VertexLayout::create();
-	positionLayout->specify<float>(2);
+	auto layout2f = GraphicsAPI::create_vlo();
+	layout2f->specify<float>(2);
 
-	auto colorLayout = VertexLayout::create();
-	colorLayout->specify<float>(3);
+	auto layout3f = GraphicsAPI::create_vlo();
+	layout3f->specify<float>(3);
 
 
 
-	auto vboP = GraphicsAPI::create_t<VertexBuffer>(positions);
-	auto vboC = GraphicsAPI::create_t<VertexBuffer>(colors);
-	auto ibo  = GraphicsAPI::create_s<IndexBuffer>(indices);
+	auto vboP = GraphicsAPI::create_vbo(positions);
+	auto vboC = GraphicsAPI::create_vbo(colors);
+	auto vboT = GraphicsAPI::create_vbo(texCoords);
+	auto ibo  = GraphicsAPI::create_ibo(indices);
 
-	auto vao = GraphicsAPI::create<VertexArray>();
-	vao->tie(vboP, positionLayout);
-	vao->tie(vboC, colorLayout);
+	auto vao = GraphicsAPI::create_vao();
+	vao->tie(vboP, layout2f);
+	vao->tie(vboC, layout3f);
+	vao->tie(vboT, layout2f);
 	vao->tie(ibo);
 
 
 
-    const auto vertexFile = IO::load<File>("shaders/vertex.glsl");
-    const auto fragmentFile = IO::load<File>("shaders/fragment.glsl");
-    const auto vertexSource = vertexFile->read();
-    const auto fragmentSource = fragmentFile->read();
+    const auto vertexSource   = IO::load<File>("shaders/compiled/vert.spv")->read();
+    const auto fragmentSource = IO::load<File>("shaders/compiled/frag.spv")->read();
 
-    auto vertexShader = Shader::create(Shader::Type::Vertex, *vertexSource);
+    auto vertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *vertexSource);
     if (!vertexShader->valid()) throw std::runtime_error{ vertexShader->error().data() };
 
-    auto fragmentShader = Shader::create(Shader::Type::Fragment, *fragmentSource);
+    auto fragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *fragmentSource);
     if (!fragmentShader->valid()) throw std::runtime_error{ fragmentShader->error().data() };
 
-    auto pipeline = Pipeline::create({ vertexShader, fragmentShader });
+    auto pipeline = GraphicsAPI::create_plo({ vertexShader, fragmentShader });
 
 
 
-    vao->bind();
+	std::array<glm::mat4, 2> matrices{ camera.view(), camera.projection() };
+	auto ubo = GraphicsAPI::create_ubo(matrices);
+	ubo->bind_base(0);
+	
+
+
+	TextureBlueprint bp{};
+	auto kiryuImage = IO::load<Image>("textures/Kiryu.png");
+	auto kiryuTexture = bp.build<Texture2D>(kiryuImage);
+
+
+
+	kiryuTexture->bind(0);
+	vao->bind();
     pipeline->bind();
+
+
 
 
 

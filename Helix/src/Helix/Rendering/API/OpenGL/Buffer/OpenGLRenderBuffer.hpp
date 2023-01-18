@@ -16,8 +16,7 @@ namespace hlx
 		bool is_bound() const override;
 
 	private:
-		OpenGL::Target m_target{ GL_RENDERBUFFER };
-		OpenGL::Format m_format{};
-		OpenGL::InternalFormat m_internalFormat{};
+		GLenum m_internalTarget{ GL_RENDERBUFFER };
+		GLenum m_internalFormat{};
 	};
 }

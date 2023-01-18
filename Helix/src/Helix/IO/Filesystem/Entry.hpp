@@ -21,19 +21,9 @@ namespace hlx
 		{
 			return m_name;
 		}
-		size_t size() const
-		{
-			return m_size;
-		}
-
-		bool exists() const
-		{
-			return std::filesystem::exists(m_path);
-		}
 
 	protected:
 		std::filesystem::path m_path{};
 		std::string m_name{};
-		size_t m_size{};
 	};
 }

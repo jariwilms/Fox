@@ -17,12 +17,7 @@ namespace hlx
     class OpenGL
     {
     public:
-        using Target         = GLenum;
-        using Format         = GLenum;
-        using InternalFormat = GLenum;
-        using Bitfield       = GLbitfield;
-
-        static constexpr GLsizei type_size(GLenum type)
+        static constexpr GLsizei     type_size(GLenum type)
         {
             switch (type)
             {
@@ -36,8 +31,8 @@ namespace hlx
                 default:			   throw std::invalid_argument{ "Invalid type!" };
             }
         }
-
-        static constexpr GLenum buffer_access(VertexContainer::AccessFlag flags)
+                                     
+        static constexpr GLenum      buffer_access(VertexContainer::AccessFlag flags)
         {
             GLenum result{};
             const auto f = static_cast<std::underlying_type<VertexContainer::AccessFlag>::type>(flags);
@@ -47,8 +42,8 @@ namespace hlx
 
             return result;
         }
-
-        static constexpr GLenum texture_format(Texture::Format format)
+                                     
+        static constexpr GLenum      texture_format(Texture::Format format)
         {
             switch (format)
             {
@@ -60,7 +55,7 @@ namespace hlx
                 default:			        throw std::invalid_argument{ "Invalid format!" };
             }
         }
-        static constexpr GLenum texture_layout(Texture::Layout layout)         //== InternalFormat
+        static constexpr GLenum      texture_layout(Texture::Layout layout)         //== InternalFormat
         {
             switch (layout)
             {
@@ -75,7 +70,7 @@ namespace hlx
                 default:                      throw std::invalid_argument{ "Invalid layout!" };
             }
         }
-        static constexpr GLenum texture_wrapping(Texture::Wrapping wrapping)
+        static constexpr GLenum      texture_wrapping(Texture::Wrapping wrapping)
         {
             switch (wrapping)
             {
@@ -89,7 +84,7 @@ namespace hlx
                 default:									 throw std::invalid_argument{ "Invalid wrapping!" };
             }
         }
-        static constexpr GLenum texture_filter(Texture::Filter filter)
+        static constexpr GLenum      texture_filter(Texture::Filter filter)
         {
             switch (filter)
             {
@@ -105,8 +100,8 @@ namespace hlx
                 default:                                    throw std::invalid_argument{ "Invalid filter!" };
             }
         }
-
-        static constexpr GLenum renderbuffer_type(RenderBuffer::Type type)
+                                     
+        static constexpr GLenum      renderbuffer_type(RenderBuffer::Type type)
         {
             switch (type)
             {
@@ -118,7 +113,7 @@ namespace hlx
                 default:                               throw std::invalid_argument{ "Invalid type!" };
             }
         }
-        static constexpr GLenum renderbuffer_layout(RenderBuffer::Layout layout)
+        static constexpr GLenum      renderbuffer_layout(RenderBuffer::Layout layout)
         {
             switch (layout)
             {
@@ -132,8 +127,7 @@ namespace hlx
                 default:                                    throw std::invalid_argument{ "Invalid layout!" };
             }
         }
-
-        static constexpr GLenum framebuffer_target(FrameBuffer::Target target)
+        static constexpr GLenum      framebuffer_target(FrameBuffer::Target target)
         {
             switch (target)
             {
@@ -145,7 +139,7 @@ namespace hlx
             }
         }
 
-        static constexpr GLenum shader_type(Shader::Type type)
+        static constexpr GLenum      shader_type(Shader::Type type)
         {
             switch (type)
             {
@@ -159,33 +153,60 @@ namespace hlx
                 default:                                   throw std::invalid_argument{ "Invalid type!" };
             }
         }
-        static constexpr GLenum shader_stage(Shader::Type type)
+        static constexpr GLenum      shader_stage(Shader::Type stage)
         {
-            switch (type)
+            switch (stage)
             {
                 case Shader::Type::Vertex:                 return GL_VERTEX_SHADER_BIT;
                 case Shader::Type::TessellationControl:    return GL_TESS_CONTROL_SHADER_BIT;
                 case Shader::Type::TessellationEvaluation: return GL_TESS_EVALUATION_SHADER_BIT;
-                case Shader::Type::Geometry:			   return GL_GEOMETRY_SHADER_BIT;
+                case Shader::Type::Geometry:               return GL_GEOMETRY_SHADER_BIT;
                 case Shader::Type::Fragment:			   return GL_FRAGMENT_SHADER_BIT;
                 case Shader::Type::Compute:				   return GL_COMPUTE_SHADER_BIT;
 
                 default:                                   throw std::invalid_argument{ "Invalid type!" };
             }
         }
-        static constexpr GLint  shader_parameter(GLuint shader, GLenum parameter)
+        static constexpr GLint       shader_parameter(GLuint shader, GLenum parameter)
         {
             GLint result{};
             glGetShaderiv(shader, parameter, &result);
 
             return result;
         }
-        static constexpr GLint  program_parameter(GLuint program, GLenum parameter)
+        static constexpr std::string shader_infolog(GLuint shader)
+        {
+            std::string infolog{};
+            GLsizei length = shader_parameter(shader, GL_INFO_LOG_LENGTH);
+            GLsizei bufSize{length};
+
+            infolog.resize(length);
+            glGetShaderInfoLog(shader, bufSize, nullptr, infolog.data());
+
+            return infolog;
+        }
+
+        static constexpr GLint       program_parameter(GLuint program, GLenum parameter)
         {
             GLint result{};
             glGetProgramiv(program, parameter, &result);
 
             return result;
+        }
+        static constexpr GLint       program_uniform_location(Id shaderId, const std::string& identifier)
+        {
+            return glGetUniformLocation(shaderId, identifier.c_str());
+        }
+        static constexpr std::string program_infolog(GLuint program)
+        {
+            std::string infolog{};
+            GLsizei length = program_parameter(program, GL_INFO_LOG_LENGTH);
+            GLsizei bufSize{ length };
+
+            infolog.resize(length);
+            glGetProgramInfoLog(program, bufSize, nullptr, infolog.data());
+
+            return infolog;
         }
     };
 }

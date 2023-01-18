@@ -8,12 +8,11 @@ namespace hlx
 	{
 		glCreateProgramPipelines(1, &m_id);
 	}
-	OpenGLPipeline::OpenGLPipeline(std::initializer_list<std::shared_ptr<Shader>> shaders)
+	OpenGLPipeline::OpenGLPipeline(std::initializer_list<const std::shared_ptr<Shader>> shaders)
 	{
 		glCreateProgramPipelines(1, &m_id);
 
-		for (const auto& shader : shaders)
-			stage(shader);
+		std::for_each(shaders.begin(), shaders.end(), [this](const auto& shader) { stage(shader); });
 	}
 	OpenGLPipeline::~OpenGLPipeline()
 	{
@@ -34,58 +33,20 @@ namespace hlx
 		return false;
 	}
 
-	void OpenGLPipeline::stage(std::shared_ptr<Shader> shader)
+	void OpenGLPipeline::stage(const std::shared_ptr<Shader> shader)
 	{
 		const auto stage = OpenGL::shader_stage(shader->type());
 		glUseProgramStages(m_id, stage, shader->id());
-	}
 
-	void OpenGLPipeline::forward(std::string_view identifier, const bool& value)
-	{
-		glUniform1i(uniform_location(identifier), value);
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const int& value)
-	{
-		glUniform1i(uniform_location(identifier), value);
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const float& value)
-	{
-		glUniform1f(uniform_location(identifier), value);
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const glm::vec2& value)
-	{
-		glUniform2fv(uniform_location(identifier), 1, glm::value_ptr(value));
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const glm::vec3& value)
-	{
-		glUniform3fv(uniform_location(identifier), 1, glm::value_ptr(value));
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const glm::vec4& value)
-	{
-		glUniform4fv(uniform_location(identifier), 1, glm::value_ptr(value));
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const glm::mat2& value)
-	{
-		glUniformMatrix2fv(uniform_location(identifier), 1, GL_FALSE, glm::value_ptr(value));
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const glm::mat3& value)
-	{
-		glUniformMatrix3fv(uniform_location(identifier), 1, GL_FALSE, glm::value_ptr(value));
-	}
-	void OpenGLPipeline::forward(std::string_view identifier, const glm::mat4& value)
-	{
-		glUniformMatrix4fv(uniform_location(identifier), 1, GL_FALSE, glm::value_ptr(value));
-	}
+		switch (shader->type())
+		{
+			case Shader::Type::Vertex:                 m_shaders[0] = shader; break;
+			case Shader::Type::TessellationControl:    m_shaders[1] = shader; break;
+			case Shader::Type::TessellationEvaluation: m_shaders[2] = shader; break;
+			case Shader::Type::Geometry:               m_shaders[3] = shader; break;
+			case Shader::Type::Fragment:               m_shaders[4] = shader; break;
 
-    void OpenGLPipeline::forward_uniform(std::string_view identifier, size_t size, const void* data)
-    {
-
-    }
-
-	GLint OpenGLPipeline::uniform_location(std::string_view identifier)
-    {
-        std::string name{ identifier };
-
-        return glGetUniformLocation(m_id, name.c_str());
-    }
+			default:                                   throw std::invalid_argument{ "Invalid shader stage!" };
+		}
+	}
 }

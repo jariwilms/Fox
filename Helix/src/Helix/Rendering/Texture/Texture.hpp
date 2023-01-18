@@ -54,14 +54,28 @@ namespace hlx
 
 		virtual void bind(unsigned int slot) const = 0;
 
-		Format format() const;
-		Layout layout() const;
-		Filter min_filter() const;
-		Filter mag_filter() const;
+		Format format() const
+		{
+			return m_format;
+		}
+		Layout layout() const
+		{
+			return m_layout;
+		}
+		Filter min_filter() const
+		{
+			return m_minFilter;
+		}
+		Filter mag_filter() const
+		{
+			return m_magFilter;
+		}
 
 	protected:
-		Texture(Texture::Format format, Layout layout);
-		Texture(Texture::Format format, Layout layout, Filter minFilter, Filter magFilter, Levels levels = 1);
+		Texture(Texture::Format format, Layout layout)
+			: m_format{ format }, m_layout{ layout } {}
+		Texture(Texture::Format format, Layout layout, Filter minFilter, Filter magFilter, Levels levels)
+            : m_layout{ layout }, m_minFilter{ minFilter }, m_magFilter{ magFilter }, m_levels{ levels } {}
 
 		const Format m_format{};
 		const Layout m_layout{};

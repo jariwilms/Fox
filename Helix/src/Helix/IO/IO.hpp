@@ -17,10 +17,7 @@ namespace hlx
 		}
 		
 		template<typename T>
-		static std::shared_ptr<T> load(const std::filesystem::path& path)
-		{
-			return {};
-		}
+		static std::shared_ptr<T> load(const std::filesystem::path& path) = delete;
 		template<> static std::shared_ptr<File> load<File>(const std::filesystem::path& path)
 		{
 			const auto fPath = from_root(path);
@@ -29,7 +26,9 @@ namespace hlx
 		}
 		template<> static std::shared_ptr<Image> load<Image>(const std::filesystem::path& path)
 		{
+			const auto fPath = from_root(path);
 
+			return std::make_shared<Image>(fPath);
 		}
 
 		static Directory& root()

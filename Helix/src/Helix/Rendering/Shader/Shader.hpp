@@ -23,16 +23,33 @@ namespace hlx
 
 		virtual ~Shader() = default;
 
-		static std::shared_ptr<Shader> create(Type type, std::string_view source);
-		static std::shared_ptr<Shader> create(Type type, const std::vector<byte>& source);
+        virtual void forward(const std::string& identifier, const bool&      value) = 0;
+        virtual void forward(const std::string& identifier, const int&       value) = 0;
+        virtual void forward(const std::string& identifier, const float&     value) = 0;
+        virtual void forward(const std::string& identifier, const glm::vec2& value) = 0;
+        virtual void forward(const std::string& identifier, const glm::vec3& value) = 0;
+        virtual void forward(const std::string& identifier, const glm::vec4& value) = 0;
+        virtual void forward(const std::string& identifier, const glm::mat2& value) = 0;
+        virtual void forward(const std::string& identifier, const glm::mat3& value) = 0;
+        virtual void forward(const std::string& identifier, const glm::mat4& value) = 0;
 
-		bool valid() const;
-		std::string_view error() const;
+		bool valid() const
+		{
+			return m_valid;
+		}
+		std::string_view error() const
+		{
+			return m_error;
+		}
 
-		Type type() const;
+		Type type() const
+		{
+			return m_type;
+		}
 
 	protected:
-		Shader(Type type); //TODO: check if shader starts with "vertex" etc. according to type passed => error
+		Shader(Type type)
+			: m_type{ type } {}
 
 		const Type m_type{};
 		std::string m_error{};

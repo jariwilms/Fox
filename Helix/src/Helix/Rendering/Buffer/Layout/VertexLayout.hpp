@@ -24,8 +24,6 @@ namespace hlx
 
 		virtual ~VertexLayout() = default;
 
-		static std::shared_ptr<VertexLayout> create();
-
 		template<typename T>
 		void specify(unsigned int count) = delete;
 		template<> void specify<bool>              (unsigned int count)

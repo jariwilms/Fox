@@ -115,6 +115,7 @@
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
     <ClInclude Include="src\Helix\IO\IO.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLUniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />
@@ -134,6 +135,7 @@
     <ClInclude Include="src\Helix\Rendering\Buffer\IndexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\RenderBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\Layout\UniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Helix\Core\Deprecated\VertexBufferTemplate.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexContainer.hpp" />
@@ -148,7 +150,6 @@
     <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Texture\Texture3D.hpp" />
     <ClInclude Include="src\Helix\Window\Platform\Windows\WindowsWindow.hpp" />
     <ClInclude Include="src\Helix\Window\Window.hpp" />
     <ClInclude Include="src\stdafx.hpp" />
@@ -157,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="src\Helix\Core\Deprecated\Instantiate.cpp" />
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\Layout\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.cpp" />
@@ -169,17 +171,11 @@
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\RenderContextAPI.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\RenderAPI.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Buffer\Layout\VertexLayout.cpp" />
     <ClCompile Include="src\Helix\Core\Deprecated\VertexBufferTemplate.cpp" />
     <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
     <ClCompile Include="src\Helix\Rendering\Material\Material.cpp" />
     <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Helix\Rendering\Renderer.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Shader\Pipeline.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Shader\Shader.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Texture\Texture.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Texture\Texture2D.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Texture\Texture3D.cpp" />
     <ClCompile Include="src\Helix\Window\Platform\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Helix\Window\Window.cpp" />
     <ClCompile Include="src\main.cpp" />

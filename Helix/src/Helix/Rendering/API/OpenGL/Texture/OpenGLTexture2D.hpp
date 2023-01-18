@@ -24,8 +24,8 @@ namespace hlx
 		void copy(const glm::uvec2& dimensions, const glm::uvec2& offset, const std::span<byte>& data) const override;
 
 	private:
-		OpenGL::Target         m_target{ GL_TEXTURE_2D };
-		OpenGL::Format         m_format{};
-		OpenGL::InternalFormat m_internalFormat{};
+		GLenum m_internalTarget{ GL_TEXTURE_2D };
+		GLenum m_internalFormat{};
+		GLenum m_internalLayout{};
 	};
 }
