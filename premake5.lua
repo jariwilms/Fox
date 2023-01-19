@@ -64,9 +64,6 @@ project "Helix"
 	{
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
-		"STB_IMAGE_WRITE_IMPLEMENTATION", 
-		
-		"TINYGLTF_IMPLEMENTATION", 
 	}
 	
 	disablewarnings
