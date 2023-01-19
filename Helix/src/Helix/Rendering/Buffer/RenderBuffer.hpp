@@ -4,13 +4,11 @@
 
 #include "glm/glm.hpp"
 
-#include "VertexContainer.hpp"
-#include "Helix/Core/Library/Interface/IBindable.hpp"
-#include "Helix/Core/Library/Semantics/NonCopyable.hpp"
+#include "Helix/Rendering/Interface/IBindable.hpp"
 
 namespace hlx
 {
-	class RenderBuffer : public IBindable, public NonCopyable
+	class RenderBuffer : public IBindable
 	{
 	public:
 		enum class Type

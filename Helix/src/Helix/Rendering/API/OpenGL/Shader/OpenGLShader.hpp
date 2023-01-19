@@ -26,8 +26,7 @@ namespace hlx
         void forward(const std::string& identifier, const glm::mat3& value) override;
         void forward(const std::string& identifier, const glm::mat4& value) override;
 
-	private:
+    private:
 		GLenum m_internalStage{};
-
 	};
 }

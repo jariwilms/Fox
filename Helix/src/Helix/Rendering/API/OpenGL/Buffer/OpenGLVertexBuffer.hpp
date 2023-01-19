@@ -2,27 +2,21 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Rendering/Buffer/VertexBuffer.hpp"
+#include "OpenGLBuffer.hpp"
 
 namespace hlx
 {
-	class OpenGLVertexBuffer : public VertexBuffer
-	{
-	public:
-		OpenGLVertexBuffer(size_t size);
-		OpenGLVertexBuffer(size_t size, const void* data);
-		~OpenGLVertexBuffer() override;
+    template<typename T>
+    class OpenGLVertexBuffer : public virtual OpenGLBuffer<T>
+    {
+    public:
+        OpenGLVertexBuffer(unsigned int count)
+            : OpenGLBuffer<T>{ GL_ARRAY_BUFFER, count }, Buffer<T>{ count } {}
+        OpenGLVertexBuffer(const std::span<T>& data)
+            : OpenGLBuffer<T>{ GL_ARRAY_BUFFER, data }, Buffer<T>{ static_cast<unsigned int>(data.size()) } {}
+        ~OpenGLVertexBuffer() = default;
 
-		void bind() const override;
-		void unbind() const override;
-		bool is_bound() const override;
-
-	private:
-        void  _copy(size_t offset, size_t size, const void* data) const override;
-        void* _map(VertexContainer::AccessFlag flags) const override;
-        void  _unmap() const override;
-
-		GLenum m_internalTarget{ GL_ARRAY_BUFFER };
-	};
+    protected:
+        using OpenGLBuffer<T>::m_internalTarget;
+    };
 }

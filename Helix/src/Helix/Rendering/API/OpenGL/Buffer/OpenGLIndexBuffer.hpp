@@ -2,27 +2,17 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Rendering/Buffer/IndexBuffer.hpp"
+#include "OpenGLBuffer.hpp"
 
 namespace hlx
 {
-	class OpenGLIndexBuffer : public IndexBuffer
-	{
-	public:
-		OpenGLIndexBuffer(size_t size);
-		OpenGLIndexBuffer(size_t size, const void* data);
-		~OpenGLIndexBuffer();
-
-		void bind() const override;
-		void unbind() const override;
-		bool is_bound() const override;
-
-	private:
-		void  _copy(size_t offset, size_t size, const void* data) const override;
-		void* _map(VertexContainer::AccessFlag flags) const override;
-		void  _unmap() const override;
-
-		GLenum m_internalTarget{ GL_ELEMENT_ARRAY_BUFFER };
-	};
+    class OpenGLIndexBuffer : public OpenGLBuffer<unsigned int>
+    {
+    public:
+        OpenGLIndexBuffer(unsigned int count)
+            : OpenGLBuffer{ GL_ELEMENT_ARRAY_BUFFER, count }, Buffer{ count } {}
+        OpenGLIndexBuffer(const std::span<unsigned int>& data)
+            : OpenGLBuffer{ GL_ELEMENT_ARRAY_BUFFER, data }, Buffer{ static_cast<unsigned int>(data.size()) } {}
+        ~OpenGLIndexBuffer() = default;
+    };
 }

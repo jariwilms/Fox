@@ -4,7 +4,7 @@
 
 #include "glm/glm.hpp"
 
-#include "Helix/Core/Library/Interface/IBindable.hpp"
+#include "Helix/Rendering/Interface/IBindable.hpp"
 
 namespace hlx
 {

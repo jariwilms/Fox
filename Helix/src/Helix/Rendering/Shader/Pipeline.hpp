@@ -3,7 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Shader.hpp"
-#include "Helix/Core/Library/Interface/IBindable.hpp"
+#include "Helix/Rendering/Interface/IBindable.hpp"
 #include "Helix/Core/Library/Semantics/NonCopyable.hpp"
 
 namespace hlx

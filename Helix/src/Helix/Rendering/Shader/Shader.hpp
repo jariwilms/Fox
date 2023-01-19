@@ -2,12 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Library/Interface/IBindable.hpp"
+#include "Helix/Rendering/Interface/IBindable.hpp"
 #include "Helix/Core/Library/Semantics/NonCopyable.hpp"
 
 namespace hlx
 {
-	class Shader : public IBindable, public NonCopyable
+	class Shader : public IBindable
 	{
 	public:
 		enum class Type
@@ -22,6 +22,10 @@ namespace hlx
 		};
 
 		virtual ~Shader() = default;
+
+		void bind() const override {};
+		void unbind() const override {};
+		bool is_bound() const override { return false; }
 
         virtual void forward(const std::string& identifier, const bool&      value) = 0;
         virtual void forward(const std::string& identifier, const int&       value) = 0;

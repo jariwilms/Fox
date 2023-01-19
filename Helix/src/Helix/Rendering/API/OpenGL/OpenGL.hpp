@@ -7,6 +7,7 @@
 #include "glm/glm.hpp"
 
 #include "Helix/Core/Type.hpp"
+#include "Helix/Rendering/Buffer/Buffer.hpp"
 #include "Helix/Rendering/Buffer/RenderBuffer.hpp"
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"
 #include "Helix/Rendering/Shader/Shader.hpp"
@@ -17,6 +18,33 @@ namespace hlx
     class OpenGL
     {
     public:
+        static GLenum                type_enum(size_t tHash)
+        {
+            if (tHash == typeid(char)          .hash_code()) return GL_BYTE;
+            if (tHash == typeid(unsigned char) .hash_code()) return GL_UNSIGNED_BYTE;
+            if (tHash == typeid(short)         .hash_code()) return GL_SHORT;
+            if (tHash == typeid(unsigned short).hash_code()) return GL_UNSIGNED_SHORT;
+            if (tHash == typeid(int)           .hash_code()) return GL_INT;
+            if (tHash == typeid(unsigned int)  .hash_code()) return GL_UNSIGNED_INT;
+            if (tHash == typeid(float)         .hash_code()) return GL_FLOAT;
+            if (tHash == typeid(double)        .hash_code()) return GL_DOUBLE;
+
+            throw std::invalid_argument{ "Invalid type!" };
+        }
+        static GLsizei               type_size(size_t tHash)
+        {
+            if (tHash == typeid(char)              .hash_code()) return sizeof(GLbyte);
+            if (tHash == typeid(unsigned char)     .hash_code()) return sizeof(GLubyte);
+            if (tHash == typeid(short)             .hash_code()) return sizeof(GLshort);
+            if (tHash == typeid(unsigned short)    .hash_code()) return sizeof(GLushort);
+            if (tHash == typeid(int)               .hash_code()) return sizeof(GLint);
+            if (tHash == typeid(unsigned int)      .hash_code()) return sizeof(GLuint);
+            if (tHash == typeid(long long)         .hash_code()) return sizeof(GLint64);
+            if (tHash == typeid(unsigned long long).hash_code()) return sizeof(GLuint64);
+            if (tHash == typeid(float)             .hash_code()) return sizeof(GLfloat);
+
+            throw std::invalid_argument{ "Invalid type!" };
+        }
         static constexpr GLsizei     type_size(GLenum type)
         {
             switch (type)
@@ -30,17 +58,6 @@ namespace hlx
 
                 default:			   throw std::invalid_argument{ "Invalid type!" };
             }
-        }
-                                     
-        static constexpr GLenum      buffer_access(VertexContainer::AccessFlag flags)
-        {
-            GLenum result{};
-            const auto f = static_cast<std::underlying_type<VertexContainer::AccessFlag>::type>(flags);
-
-            if (f & 0x1) result |= GL_MAP_READ_BIT;
-            if (f & 0x2) result |= GL_MAP_WRITE_BIT;
-
-            return result;
         }
                                      
         static constexpr GLenum      texture_format(Texture::Format format)

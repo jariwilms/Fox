@@ -21,11 +21,11 @@ namespace hlx
 	{
 		glBindRenderbuffer(m_internalTarget, m_id);
 	}
-	void OpenGLRenderBuffer::unbind() const
+    void OpenGLRenderBuffer::unbind() const
 	{
 		glBindRenderbuffer(m_internalTarget, 0);
 	}
-	bool OpenGLRenderBuffer::is_bound() const
+    bool OpenGLRenderBuffer::is_bound() const
 	{
 		return false;
 	}

@@ -9,11 +9,11 @@ namespace hlx
     public:
         Mesh() = default;
 
-        const std::shared_ptr<VertexBuffer> vertices() const
-        {
-            //return m_vertices;
-            return {};
-        }
+        //const std::shared_ptr<VertexBuffer> vertices() const
+        //{
+        //    //return m_vertices;
+        //    return {};
+        //}
 
     protected:
     };
