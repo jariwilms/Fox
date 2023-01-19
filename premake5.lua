@@ -16,9 +16,11 @@ workspace "Helix"
 	includedir["STB"] = "Helix/vendor/stb/include"
 	includedir["GLM"] = "Helix/vendor/glm/include"
 	includedir["ENTT"] = "Helix/vendor/entt/include"
+	includedir["TINYGLTF"] = "Helix/vendor/tinygltf/include"
 	
 	include "Helix/vendor/glad"
 	include "Helix/vendor/glfw"
+	include "Helix/vendor/tinygltf"
 	
 project "Helix"
 	location "Helix"
@@ -48,6 +50,7 @@ project "Helix"
 		"%{includedir.STB}", 
 		"%{includedir.GLM}", 
 		"%{includedir.ENTT}", 
+		"%{includedir.TINYGLTF}", 
 	}
 	
 	links
@@ -60,7 +63,16 @@ project "Helix"
 	defines
 	{
 		"STB_IMAGE_STATIC", 
-		"STB_IMAGE_IMPLEMENTATION"
+		"STB_IMAGE_IMPLEMENTATION", 
+		"STB_IMAGE_WRITE_IMPLEMENTATION", 
+		
+		"TINYGLTF_IMPLEMENTATION", 
+	}
+	
+	disablewarnings
+	{
+		"4250", 
+		"26451", 
 	}
 	
 	filter "system:windows"

@@ -14,7 +14,7 @@ namespace hlx
         if (!shaderId) throw std::runtime_error{ "Failed to create shader!" };
 
         glProgramParameteri(m_id, GL_PROGRAM_SEPARABLE, GL_TRUE);
-        glShaderBinary(1, &shaderId, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), binary.size());
+        glShaderBinary(1, &shaderId, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size()));
         glSpecializeShader(shaderId, "main", 0, nullptr, nullptr);
 
         auto compiled = OpenGL::shader_parameter(shaderId, GL_COMPILE_STATUS);

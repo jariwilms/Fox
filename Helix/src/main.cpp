@@ -2,6 +2,7 @@
 
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
+#include "tinygltf/tiny_gltf.h"
 
 #include "Helix/IO/IO.hpp"
 #include "Helix/Window/Window.hpp"
@@ -22,7 +23,6 @@ int main()
 
 
 	Camera camera{};
-
 
 
 
@@ -107,6 +107,12 @@ int main()
 	kiryuTexture->bind(0);
 	vao->bind();
     pipeline->bind();
+
+
+
+
+
+
 
 
 

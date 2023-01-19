@@ -59,14 +59,14 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4250;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;TINYGLTF_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
-      <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -79,8 +79,9 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4250;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;TINYGLTF_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -89,7 +90,6 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
-      <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -99,11 +99,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Helix\Core\Config.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\IndexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\UniformBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexContainer.hpp" />
     <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
-    <ClInclude Include="src\Helix\EXP\Buffer\VertexBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
-    <ClInclude Include="src\Helix\Core\Config.hpp" />
     <ClInclude Include="src\Helix\Core\Type.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Camera.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />
@@ -113,22 +122,19 @@
     <ClInclude Include="src\Helix\ECS\Registry.hpp" />
     <ClInclude Include="src\Helix\ECS\System\Render.hpp" />
     <ClInclude Include="src\Helix\ECS\System\System.hpp" />
+    <ClInclude Include="src\Helix\EXP\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
     <ClInclude Include="src\Helix\IO\IO.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.hpp" />
@@ -137,25 +143,20 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\RenderContextAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\RenderAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\RenderContextAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\IndexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\IndexBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Layout\VertexAttribute.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\UniformBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexContainer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Context\RenderContext.hpp" />
     <ClInclude Include="src\Helix\Rendering\Interface\IBindable.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Layout\VertexAttribute.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp" />
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
@@ -167,23 +168,22 @@
     <ClInclude Include="src\Helix\Window\Platform\Windows\WindowsWindow.hpp" />
     <ClInclude Include="src\Helix\Window\Window.hpp" />
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
-    <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />
     <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.cpp" />
+    <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.cpp" />
+    <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\RenderContextAPI.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\RenderAPI.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\RenderContextAPI.cpp" />
     <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
     <ClCompile Include="src\Helix\Rendering\Material\Material.cpp" />
     <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp" />
