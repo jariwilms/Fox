@@ -198,9 +198,6 @@
     <ClInclude Include="src\Helix\ECS\System\System.hpp">
       <Filter>Helix\ECS\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\EXP\Buffer\VertexBuffer.hpp">
-      <Filter>Helix\EXP\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp">
       <Filter>Helix\IO\Filesystem</Filter>
     </ClInclude>
@@ -249,9 +246,6 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp">
       <Filter>Helix\Rendering\API\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp">
-      <Filter>Helix\Rendering\API\OpenGL</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp">
       <Filter>Helix\Rendering\API\OpenGL\Shader</Filter>
     </ClInclude>
@@ -260,9 +254,6 @@
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.hpp">
       <Filter>Helix\Rendering\API\OpenGL\Texture</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\API\RenderAPI.hpp">
-      <Filter>Helix\Rendering\API</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\RenderContextAPI.hpp">
       <Filter>Helix\Rendering\API</Filter>
@@ -312,9 +303,6 @@
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp">
       <Filter>Helix\Rendering\Projection</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\Renderer.hpp">
-      <Filter>Helix\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp">
       <Filter>Helix\Rendering\Shader</Filter>
     </ClInclude>
@@ -327,13 +315,21 @@
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp">
       <Filter>Helix\Rendering\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Window\Platform\Windows\WindowsWindow.hpp">
+    <ClInclude Include="src\Helix\Window\API\GLFW\GLFWWindow.hpp">
       <Filter>Helix\Window\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Window\Window.hpp">
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
+    <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
+    <ClInclude Include="src\Helix\Input\Input.hpp" />
+    <ClInclude Include="src\Helix\Input\Code\KeyCode.hpp" />
+    <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp" />
+    <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
+    <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp">
@@ -360,9 +356,6 @@
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.cpp">
       <Filter>Helix\Rendering\API\OpenGL\Context</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.cpp">
-      <Filter>Helix\Rendering\API\OpenGL</Filter>
-    </ClCompile>
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.cpp">
       <Filter>Helix\Rendering\API\OpenGL\Shader</Filter>
     </ClCompile>
@@ -371,9 +364,6 @@
     </ClCompile>
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.cpp">
       <Filter>Helix\Rendering\API\OpenGL\Texture</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\API\RenderAPI.cpp">
-      <Filter>Helix\Rendering\API</Filter>
     </ClCompile>
     <ClCompile Include="src\Helix\Rendering\API\RenderContextAPI.cpp">
       <Filter>Helix\Rendering\API</Filter>
@@ -387,10 +377,7 @@
     <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp">
       <Filter>Helix\Rendering\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Renderer.cpp">
-      <Filter>Helix\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Window\Platform\Windows\WindowsWindow.cpp">
+    <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp">
       <Filter>Helix\Window\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Helix\Window\Window.cpp">
@@ -398,5 +385,7 @@
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\Helix\Input\Input.cpp" />
+    <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
   </ItemGroup>
 </Project>

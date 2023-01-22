@@ -5,13 +5,8 @@
 
 namespace hlx
 {
-	std::shared_ptr<RenderContextAPI> RenderContext::create()
-	{
-		return std::make_unique<OpenGLRenderContext>();
-	}
-
-	const hlx::RenderContextAPI::Attributes& RenderContext::attributes()
-	{
-		return s_renderContextAPI->attributes();
-	}
+    void RenderContext::init(const std::shared_ptr<RenderContextAPI> renderContextAPI)
+    {
+        s_renderContextAPI = renderContextAPI;
+    }
 }

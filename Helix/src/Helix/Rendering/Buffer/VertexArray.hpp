@@ -22,11 +22,17 @@ namespace hlx
         }
         virtual void tie(const std::shared_ptr<IndexBuffer> indices) = 0;
 
+        bool indexed() const
+        {
+            return m_indexed;
+        }
+
     protected:
         VertexArray() = default;
 
         virtual void tie(Id bufferId, const std::shared_ptr<VertexLayout> layout) = 0;
 
         unsigned int m_attributes{};
+        bool m_indexed{};
     };
 }

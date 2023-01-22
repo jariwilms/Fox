@@ -9,11 +9,9 @@ namespace hlx
 	class RenderContext
 	{
 	public:
-		static std::shared_ptr<RenderContextAPI> create();
-
-		static const RenderContextAPI::Attributes& attributes();
+		static void init(const std::shared_ptr<RenderContextAPI> renderContextAPI);
 
 	private:
-		static inline std::unique_ptr<RenderContextAPI> s_renderContextAPI;
+		static inline std::shared_ptr<RenderContextAPI> s_renderContextAPI;
 	};
 }

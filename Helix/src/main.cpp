@@ -2,75 +2,89 @@
 
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
-#include "tinygltf/tiny_gltf.h"
 
+#include "Helix/ECS/Components/Camera.hpp"
+#include "Helix/Input/Input.hpp"
+#include "Helix/IO/Import/Model/GLTFImporter.hpp"
 #include "Helix/IO/IO.hpp"
-#include "Helix/Window/Window.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
-#include "Helix/ECS/Components/Camera.hpp"
-
-#include "Helix/EXP/Buffer/VertexBuffer.hpp"
+#include "Helix/Window/Window.hpp"
 
 int main()
 {
 	using namespace hlx;
 
-	glm::uvec2 dimensions{ 1280, 720 };
-	auto properties = Window::Properties{ "Helix", dimensions };
-	auto window = Window::create(properties);
+    auto window = Window::create("Helix", glm::uvec2{ 1280, 720 });
 
-
+    
 
 	Camera camera{};
 
+    std::vector<float> vertices = 
+	{
+		//Positions            //Normals           //TexCoords
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+         0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
 
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
 
-	std::vector<float> positions =
-	{
-		-0.5f,  0.5f, //Top middle
-		-0.5f, -0.5f, //Bottom left
-		 0.5f, -0.5f, //Bottom right
-		 0.5f,  0.5f, //Top right
-	};
-	std::vector<float> colors =
-	{
-		1.0f, 0.0f, 0.0f, 
-		0.0f, 1.0f, 0.0f, 
-		0.0f, 0.0f, 1.0f, 
-		0.0f, 1.0f, 0.0f, 
-	};
-	std::vector<float> texCoords =
-	{
-		0.0f, 1.0f,
-		0.0f, 0.0f,
-		1.0f, 0.0f,
-		1.0f, 1.0f,
-	};
+        -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+
+         0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+         0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+         0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f,
+         0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 1.0f,
+         0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+         0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f, 0.0f, 0.0f,   0.0f, 1.0f
+    };
 	std::vector<unsigned int> indices =
 	{
 		0, 1, 2, //First triangle
 		0, 2, 3, //Second triangle
 	};
 
-	auto layout2f = std::make_shared<VertexLayout>();
-	layout2f->specify<float>(2);
-
-	auto layout3f = std::make_shared<VertexLayout>();
-	layout3f->specify<float>(3);
-
-
-
-	auto vboP = GraphicsAPI::create_vbo<float>(positions);
-	auto vboC = GraphicsAPI::create_vbo<float>(colors);
-	auto vboT = GraphicsAPI::create_vbo<float>(texCoords);
+	auto vboV = GraphicsAPI::create_vbo<float>(vertices);
 	auto ibo  = GraphicsAPI::create_ibo(indices);
 
+    auto layout = std::make_shared<VertexLayout>();
+    layout->specify<float>(3);
+    layout->specify<float>(3);
+    layout->specify<float>(2);
+
 	auto vao = GraphicsAPI::create_vao();
-	vao->tie(vboP, layout2f);
-	vao->tie(vboC, layout3f);
-	vao->tie(vboT, layout2f);
+	vao->tie(vboV, layout);
 	vao->tie(ibo);
+
+
 
 
 
@@ -84,6 +98,8 @@ int main()
     if (!fragmentShader->valid()) throw std::runtime_error{ fragmentShader->error().data() };
 
     auto pipeline = GraphicsAPI::create_plo({ vertexShader, fragmentShader });
+
+
 
 
 
@@ -101,31 +117,21 @@ int main()
 	TextureBlueprint bp{};
 	auto kiryuImage = IO::load<Image>("textures/Kiryu.png");
 	auto kiryuTexture = bp.build<Texture2D>(kiryuImage);
-
-
-
 	kiryuTexture->bind(0);
+
+
+
+
+
 	vao->bind();
     pipeline->bind();
-
-
-
-
-
-
-
-
-
-
 
 	while (true)
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
 		window->refresh();
 	}

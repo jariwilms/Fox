@@ -57,7 +57,8 @@ project "Helix"
 	{
 		"GLAD", 
 		"GLFW", 
-		"opengl32.lib"
+		"TINYGLFT", 
+		"opengl32.lib", 
 	}
 	
 	defines

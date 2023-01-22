@@ -9,9 +9,9 @@ project "TINYGLTF"
 	
 	files
 	{
-		"include/tinygltf/*.h", 
-		"include/tinygltf/*.hpp", 
-		"include/tinygltf/*.cc", 
+		"**.h", 
+		"**.hpp", 
+		"**.cc", 
 	}
 	
 	filter "configurations:Debug"

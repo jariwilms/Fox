@@ -32,6 +32,7 @@
 
 #include <chrono>
 #include <memory>
+#include <bitset>
 #include <ranges>
 #include <random>
 #include <utility>

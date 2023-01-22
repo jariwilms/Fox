@@ -25,7 +25,7 @@ namespace hlx
 		{
 			return m_dimensions;
 		}
-
+		//TODO: add mipmap filtering options => texture filter + mipmap filter options
 	protected:
 		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions)
             : Texture{ format, layout }, m_dimensions{ dimensions } {}

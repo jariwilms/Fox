@@ -1,22 +1,20 @@
 #include "stdafx.hpp"
 
 #include "Window.hpp"
-#include "Platform/Windows/WindowsWindow.hpp"
-//#include "Platform/Windows/LinuxWindow.hpp"
-//#include "Platform/Windows/MacOSWindow.hpp"
+#include "Helix/Window/API/GLFW/GLFWWindow.hpp"
 
 namespace hlx
 {
-	Window::Window(const Window::Properties& properties)
-		: m_properties{ properties } {}
+	Window::Window(const std::string& title, const glm::uvec2& dimensions)
+		: m_title{ title }, m_dimensions{ dimensions } {}
 
-	std::shared_ptr<Window> Window::create(const Window::Properties& properties)
+	std::shared_ptr<Window> Window::create(const std::string& title, const glm::uvec2& dimensions)
 	{
-		return std::make_shared<WindowsWindow>(properties);
+		return std::make_shared<GLFWWindow>(title, dimensions);
 	}
 
-	const Window::Properties& Window::properties()
-	{
-		return m_properties;
-	}
+    NativeWindow* Window::native_window()
+    {
+		return s_nativeWindow;
+    }
 }
