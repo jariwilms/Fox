@@ -81,13 +81,13 @@ namespace hlx
         {
             return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, data);
         }
-        static std::shared_ptr<Texture2D>        create_tex(Texture::Format format, Texture::Layout layout, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::Filter minFilter, Texture::Filter magFilter, const glm::uvec2& dimensions)
+        static std::shared_ptr<Texture2D>        create_tex(Texture::Format format, Texture::Layout layout, const glm::uvec2& dimensions, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter, unsigned int levels)
         {
-            return std::make_shared<OpenGLTexture2D>(format, layout, wrappingS, wrappingT, minFilter, magFilter, dimensions);
+            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, wrappingS, wrappingT, minFilter, magFilter, levels);
         }
-        static std::shared_ptr<Texture2D>        create_tex(Texture::Format format, Texture::Layout layout, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::Filter minFilter, Texture::Filter magFilter, const glm::uvec2& dimensions, const std::span<byte>& data)
+        static std::shared_ptr<Texture2D>        create_tex(Texture::Format format, Texture::Layout layout, const glm::uvec2& dimensions, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter, unsigned int levels, const std::span<byte>& data)
         {
-            return std::make_shared<OpenGLTexture2D>(format, layout, wrappingS, wrappingT, minFilter, magFilter, dimensions, data);
+            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, wrappingS, wrappingT, minFilter, magFilter, levels, data);
         }
     };
 }

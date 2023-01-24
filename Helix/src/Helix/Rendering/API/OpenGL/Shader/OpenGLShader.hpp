@@ -16,16 +16,6 @@ namespace hlx
 		OpenGLShader(Type type, const std::span<byte>& binary);
 		~OpenGLShader();
 
-        void forward(const std::string& identifier, const bool&      value) override;
-        void forward(const std::string& identifier, const int&       value) override;
-        void forward(const std::string& identifier, const float&     value) override;
-        void forward(const std::string& identifier, const glm::vec2& value) override;
-        void forward(const std::string& identifier, const glm::vec3& value) override;
-        void forward(const std::string& identifier, const glm::vec4& value) override;
-        void forward(const std::string& identifier, const glm::mat2& value) override;
-        void forward(const std::string& identifier, const glm::mat3& value) override;
-        void forward(const std::string& identifier, const glm::mat4& value) override;
-
     private:
 		GLenum m_internalStage{};
 	};

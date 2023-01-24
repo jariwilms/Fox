@@ -18,6 +18,7 @@ namespace hlx
     {
         m_lastActiveKeys = m_activeKeys;
         m_lastActiveButtons = m_activeButtons;
+        m_lastCursorPosition = m_cursorPosition;
     }
     void GLFWInputHandler::reset()
     {
@@ -31,56 +32,70 @@ namespace hlx
         m_lastCursorPosition = glm::vec2{};
     }
 
-    bool GLFWInputHandler::any_pressed()
+    bool GLFWInputHandler::any_pressed() const
     {
         return m_activeKeys.any() || m_activeButtons.any();
     }
-    bool GLFWInputHandler::any_down()
+    bool GLFWInputHandler::any_down() const
     {
         return false;
     }
-    bool GLFWInputHandler::any_up()
+    bool GLFWInputHandler::any_up() const
     {
         return false;
     }
 
-    bool GLFWInputHandler::key_pressed(KeyCode code)
+    bool GLFWInputHandler::key_pressed(KeyCode code) const
     {
         return m_activeKeys.test(code);
     }
-    bool GLFWInputHandler::key_down(KeyCode code)
+    bool GLFWInputHandler::key_down(KeyCode code) const
     {
         return m_activeKeys.test(code) && !m_lastActiveKeys.test(code);
     }
-    bool GLFWInputHandler::key_up(KeyCode code)
+    bool GLFWInputHandler::key_up(KeyCode code) const
     {
         return !m_activeKeys.test(code) && m_lastActiveKeys.test(code);
     }
 
-    bool GLFWInputHandler::button_pressed(ButtonCode code)
+    bool GLFWInputHandler::button_pressed(ButtonCode code) const
     {
         return m_activeButtons.test(code);
     }
-    bool GLFWInputHandler::button_down(ButtonCode code)
+    bool GLFWInputHandler::button_down(ButtonCode code) const
     {
         return m_activeButtons.test(code) && !m_lastActiveButtons.test(code);
     }
-    bool GLFWInputHandler::button_up(ButtonCode code)
+    bool GLFWInputHandler::button_up(ButtonCode code) const
     {
         return !m_activeButtons.test(code) && m_lastActiveButtons.test(code);
     }
 
-    bool GLFWInputHandler::scrolling()
+    bool GLFWInputHandler::scrolling() const
     {
         return false;
     }
-    bool GLFWInputHandler::scrolling_vertical()
+    bool GLFWInputHandler::scrolling_vertical() const
     {
         return false;
     }
-    bool GLFWInputHandler::scrolling_horizontal()
+    bool GLFWInputHandler::scrolling_horizontal() const
     {
         return false;
+    }
+
+    bool GLFWInputHandler::modifier(ModifierCode code) const
+    {
+        return false;
+    }
+    
+    glm::vec2 GLFWInputHandler::cursor_position() const
+    {
+        return m_cursorPosition;
+    }
+    glm::vec2 GLFWInputHandler::cursor_position_relative() const
+    {
+        return m_cursorPosition - m_lastCursorPosition;
     }
 
     void GLFWInputHandler::glfw_input_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)

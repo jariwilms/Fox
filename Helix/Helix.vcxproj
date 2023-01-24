@@ -59,7 +59,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4250;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4250;6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -79,7 +79,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4250;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4250;6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;HLX_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\stb\include;vendor\glm\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
@@ -113,6 +113,7 @@
     <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexContainer.hpp" />
     <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
     <ClInclude Include="src\Helix\Core\Type.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Camera.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />
@@ -122,19 +123,20 @@
     <ClInclude Include="src\Helix\ECS\Registry.hpp" />
     <ClInclude Include="src\Helix\ECS\System\Render.hpp" />
     <ClInclude Include="src\Helix\ECS\System\System.hpp" />
-    <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp" />
-    <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
-    <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
-    <ClInclude Include="src\Helix\Input\Input.hpp" />
-    <ClInclude Include="src\Helix\Input\Code\KeyCode.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
+    <ClInclude Include="src\Helix\IO\IO.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
-    <ClInclude Include="src\Helix\IO\IO.hpp" />
+    <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp" />
+    <ClInclude Include="src\Helix\Input\Code\KeyCode.hpp" />
+    <ClInclude Include="src\Helix\Input\Code\ModifierCode.hpp" />
+    <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
+    <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
+    <ClInclude Include="src\Helix\Input\Input.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
@@ -163,6 +165,7 @@
     <ClInclude Include="src\Helix\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Model\Prefab\Cube.hpp" />
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
@@ -206,7 +209,7 @@
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
     <ProjectReference Include="vendor\tinygltf\TINYGLTF.vcxproj">
-      <Project>{169a0db1-0267-68bc-2b80-566417ac9d4a}</Project>
+      <Project>{169A0DB1-0267-68BC-2B80-566417AC9D4A}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

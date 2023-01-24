@@ -15,8 +15,5 @@ namespace hlx
         OpenGLVertexBuffer(const std::span<T>& data)
             : OpenGLBuffer<T>{ GL_ARRAY_BUFFER, data }, Buffer<T>{ static_cast<unsigned int>(data.size()) } {}
         ~OpenGLVertexBuffer() = default;
-
-    protected:
-        using OpenGLBuffer<T>::m_internalTarget;
     };
 }

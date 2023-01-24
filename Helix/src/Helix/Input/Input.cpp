@@ -61,4 +61,13 @@ namespace hlx
     {
         return s_inputHandler->scrolling_horizontal();
     }
+
+    glm::vec2 Input::cursor_position()
+    {
+        return s_inputHandler->cursor_position();
+    }
+    glm::vec2 Input::cursor_position_relative()
+    {
+        return s_inputHandler->cursor_position_relative();
+    }
 }

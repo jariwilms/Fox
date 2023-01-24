@@ -18,13 +18,13 @@ namespace hlx
 
         virtual ~Buffer() = default;
 
-        void copy(const std::span<T>& data)
+        void copy_all(const std::span<T>& data)
         {
             const auto dataSize = data.size() * sizeof(T);
 
             if (data.size() * sizeof(T) != m_size) throw std::range_error{ "Data size is not equal to buffer size!" };
 
-            copy_base(data.data());
+            copy_all_void(data.data());
         }
         void copy_range(unsigned int offset, const std::span<T>& data)
         {
@@ -33,7 +33,7 @@ namespace hlx
 
             if (dataSize + offsetSize > m_size) throw std::range_error{ "Data size is greater than buffer range!" };
 
-            copy_range(dataSize, offsetSize, data.data());
+            copy_range_void(dataSize, offsetSize, data.data());
         }
 
         size_t size() const
@@ -45,8 +45,8 @@ namespace hlx
         Buffer(unsigned int count)
             : m_size{ count * sizeof(T) } {}
 
-        virtual void copy(const void* data) = 0;
-        virtual void copy_range(size_t size, size_t offset, const void* data) = 0;
+        virtual void copy_all_void(const void* data) = 0;
+        virtual void copy_range_void(size_t size, size_t offset, const void* data) = 0;
 
         size_t m_size{};
     };

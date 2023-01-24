@@ -27,16 +27,6 @@ namespace hlx
 		void unbind() const override {};
 		bool is_bound() const override { return false; }
 
-        virtual void forward(const std::string& identifier, const bool&      value) = 0;
-        virtual void forward(const std::string& identifier, const int&       value) = 0;
-        virtual void forward(const std::string& identifier, const float&     value) = 0;
-        virtual void forward(const std::string& identifier, const glm::vec2& value) = 0;
-        virtual void forward(const std::string& identifier, const glm::vec3& value) = 0;
-        virtual void forward(const std::string& identifier, const glm::vec4& value) = 0;
-        virtual void forward(const std::string& identifier, const glm::mat2& value) = 0;
-        virtual void forward(const std::string& identifier, const glm::mat3& value) = 0;
-        virtual void forward(const std::string& identifier, const glm::mat4& value) = 0;
-
 		bool valid() const
 		{
 			return m_valid;

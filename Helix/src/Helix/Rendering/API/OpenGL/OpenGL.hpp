@@ -101,20 +101,30 @@ namespace hlx
                 default:									 throw std::invalid_argument{ "Invalid wrapping!" };
             }
         }
-        static constexpr GLenum      texture_filter(Texture::Filter filter)
+        static constexpr GLenum      texture_min_filter(Texture::MinFilter filter)
         {
             switch (filter)
             {
-                case Texture::Filter::Nearest:              return GL_NEAREST;
-                case Texture::Filter::Linear:               return GL_LINEAR;
+                case Texture::MinFilter::Nearest:              return GL_NEAREST;
+                case Texture::MinFilter::Linear:               return GL_LINEAR;
 
-                case Texture::Filter::NearestMipmapNearest:	return GL_NEAREST_MIPMAP_NEAREST;
-                case Texture::Filter::LinearMipmapNearest:  return GL_LINEAR_MIPMAP_NEAREST;
-                                                            
-                case Texture::Filter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
-                case Texture::Filter::LinearMipmapLinear:   return GL_NEAREST_MIPMAP_LINEAR;
+                case Texture::MinFilter::NearestMipmapNearest: return GL_NEAREST_MIPMAP_NEAREST;
+                case Texture::MinFilter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
 
-                default:                                    throw std::invalid_argument{ "Invalid filter!" };
+                case Texture::MinFilter::LinearMipmapNearest:  return GL_LINEAR_MIPMAP_NEAREST;
+                case Texture::MinFilter::LinearMipmapLinear:   return GL_NEAREST_MIPMAP_LINEAR;
+
+                default:                                       throw std::invalid_argument{ "Invalid filter!" };
+            }
+        }
+        static constexpr GLenum      texture_mag_filter(Texture::MagFilter filter)
+        {
+            switch (filter)
+            {
+                case Texture::MagFilter::Nearest: return GL_NEAREST;
+                case Texture::MagFilter::Linear:  return GL_LINEAR;
+
+                default:                          throw std::invalid_argument{ "Invalid filter!" };
             }
         }
                                      

@@ -10,14 +10,11 @@ namespace hlx
     public:
         virtual ~UniformBuffer() = default;
 
-        void copy(const T& data)
+        virtual void copy_all(const T& data) = 0;
+        template<typename... U>
+        void copy_tuple(size_t offset, const std::tuple<U...>& data)
         {
-            Buffer<T>::copy(&data);
-        }
-        template<typename... T>
-        void copy_range(size_t offset, const std::tuple<T...>& data)
-        {
-            Buffer<T>::copy_range(sizeof(std::tuple<T...>), offset, &data);
+             //Buffer<T>::copy_range_void(sizeof(std::tuple<U...>), offset, &data);
         }
 
         virtual void bind_base(unsigned int index) = 0;

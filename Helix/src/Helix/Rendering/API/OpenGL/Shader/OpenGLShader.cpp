@@ -43,42 +43,4 @@ namespace hlx
 	{
 		glDeleteProgram(m_id);
 	}
-
-    void OpenGLShader::forward(const std::string& identifier, const bool& value)
-    {
-        glProgramUniform1i(m_id, OpenGL::program_uniform_location(m_id, identifier), value);
-    }
-    void OpenGLShader::forward(const std::string& identifier, const int& value)
-    {
-        glProgramUniform1iv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, &value);
-    }
-    void OpenGLShader::forward(const std::string& identifier, const float& value)
-    {
-        glProgramUniform1fv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, &value);
-    }
-    void OpenGLShader::forward(const std::string& identifier, const glm::vec2& value)
-    {
-        auto res = OpenGL::program_uniform_location(m_id, identifier);
-        glProgramUniform2fv(m_id, res, 1, glm::value_ptr(value));
-    }
-    void OpenGLShader::forward(const std::string& identifier, const glm::vec3& value)
-    {
-        glProgramUniform3fv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, glm::value_ptr(value));
-    }
-    void OpenGLShader::forward(const std::string& identifier, const glm::vec4& value)
-    {
-        glProgramUniform4fv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, glm::value_ptr(value));
-    }
-    void OpenGLShader::forward(const std::string& identifier, const glm::mat2& value)
-    {
-        glProgramUniformMatrix2fv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, false, glm::value_ptr(value));
-    }
-    void OpenGLShader::forward(const std::string& identifier, const glm::mat3& value)
-    {
-        glProgramUniformMatrix3fv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, false, glm::value_ptr(value));
-    }
-    void OpenGLShader::forward(const std::string& identifier, const glm::mat4& value)
-    {
-        glProgramUniformMatrix4fv(m_id, OpenGL::program_uniform_location(m_id, identifier), 1, false, glm::value_ptr(value));
-    }
 }

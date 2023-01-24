@@ -14,36 +14,30 @@ namespace hlx
     public:
         Camera()
         {
-            m_fov = 90.0f;
-            m_aspect = 16.0f / 9.0f;
+            m_fov = 60.0f;                                                     //
+            m_aspect = 16.0f / 9.0f;                                           //TODO: fetch aspect from window?
             
-            m_view = glm::lookAt(glm::vec3{ 0.0f, 0.0f, 1.0f }, glm::vec3{ 0.0f }, glm::vec3{ 0.0f, 1.0f, 0.0f });
             m_projection = Projection::create<Projection::Type::Perspective>(m_fov, m_aspect, 0.001f, 10000.0f);
         }
 
-        const glm::mat4& view() const
+        float fov() const
         {
-            return m_view;
+            return m_fov;
+        }
+        float aspect() const
+        {
+            return m_aspect;
         }
         const glm::mat4& projection() const
         {
             return m_projection;
         }
-        const glm::mat4& view_projection() const
-        {
-            return m_view * m_projection;
-        }
-
-        float aspect() const
-        {
-            return m_aspect;
-        }
         
     protected:
-        glm::mat4 m_view{};
-        glm::mat4 m_projection{};
         float m_fov{};
         float m_aspect{};
+
+        glm::mat4 m_projection{};
 
         glm::vec4 m_backgroundColor{ 0.0f, 0.0f, 0.0f, 1.0f };
     };

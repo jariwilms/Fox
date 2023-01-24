@@ -23,6 +23,7 @@ namespace hlx
 		if (!m_glfwWindow) throw std::runtime_error{ "Failed to create GLFW window!" };
 
 		glfwMakeContextCurrent(m_glfwWindow);
+        glfwSwapInterval(0);
 
         const auto load = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
         if (!load) throw std::runtime_error{ "Failed to initialize GLAD!" };
@@ -101,8 +102,6 @@ namespace hlx
         glDebugMessageCallback(forward_gl_debug_callback, nullptr);
 
 
-
-        
 
 		RenderContext::init(m_userPointer->renderContext);
 		Input::init(m_userPointer->inputHandler);

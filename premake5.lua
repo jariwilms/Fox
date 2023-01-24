@@ -57,7 +57,7 @@ project "Helix"
 	{
 		"GLAD", 
 		"GLFW", 
-		"TINYGLFT", 
+		"TINYGLTF", 
 		"opengl32.lib", 
 	}
 	
@@ -69,8 +69,9 @@ project "Helix"
 	
 	disablewarnings
 	{
-		"4250", 
-		"26451", 
+		"4250",  --Buffer Dominance
+		"6262",  --STB stack 
+		"26451", --STB overflow
 	}
 	
 	filter "system:windows"

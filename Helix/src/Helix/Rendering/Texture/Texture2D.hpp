@@ -29,11 +29,11 @@ namespace hlx
 	protected:
 		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions)
             : Texture{ format, layout }, m_dimensions{ dimensions } {}
-		Texture2D(Texture::Format format, Layout layout, Wrapping wrappingS, Wrapping wrappingT, Filter minFilter, Filter magFilter, const glm::uvec2& dimensions)
-            : Texture{ format, layout, minFilter, magFilter, 1 }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT }, m_dimensions{ dimensions } {}
+		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter, unsigned int levels)
+            : Texture{ format, layout, minFilter, magFilter, levels }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
-		Wrapping           m_wrappingS{ Wrapping::ClampToEdge };
-		Wrapping           m_wrappingT{ Wrapping::ClampToEdge };
-		const glm::uvec2   m_dimensions{};
+		const glm::uvec2 m_dimensions{};
+        Wrapping         m_wrappingS{ Wrapping::ClampToEdge };
+        Wrapping         m_wrappingT{ Wrapping::ClampToEdge };
 	};
 }

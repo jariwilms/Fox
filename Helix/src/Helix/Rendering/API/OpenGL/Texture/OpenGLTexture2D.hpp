@@ -12,8 +12,8 @@ namespace hlx
 	public:
 		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const glm::uvec2& dimensions);
 		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const glm::uvec2& dimensions, const std::span<byte>& data);
-		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::Filter minFilter, Texture::Filter magFilter, const glm::uvec2& dimensions);
-		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::Filter minFilter, Texture::Filter magFilter, const glm::uvec2& dimensions, const std::span<byte>& data);
+		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const glm::uvec2& dimensions, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter, unsigned int levels);
+		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const glm::uvec2& dimensions, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter, unsigned int levels, const std::span<byte>& data);
 		~OpenGLTexture2D() override;
 		
 		void bind() const override;

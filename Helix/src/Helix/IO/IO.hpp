@@ -14,6 +14,8 @@ namespace hlx
 		static void init()
 		{
 			std::cout << "Initializing IO";
+
+			stbi_set_flip_vertically_on_load(true);
 		}
 		
 		template<typename T>

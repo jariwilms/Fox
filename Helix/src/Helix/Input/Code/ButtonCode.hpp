@@ -9,9 +9,6 @@ namespace hlx
     class Button
     {
     public:
-        static constexpr int min = 0;
-        static constexpr int max = 7;
-
         enum : ButtonCode
         {
             Button0      =       0, 
@@ -28,5 +25,8 @@ namespace hlx
             ButtonRight  = Button1, 
             ButtonMiddle = Button2, 
         };
+
+        static constexpr int min = Button0;
+        static constexpr int max = Button7;
     };
 }

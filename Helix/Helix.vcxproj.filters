@@ -43,6 +43,9 @@
     <Filter Include="Helix\Core\Library\Semantics">
       <UniqueIdentifier>{31B58978-1D70-7924-C627-F26EB2C1C3B4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helix\Core\Library\Time">
+      <UniqueIdentifier>{59EDE23B-C524-2BD3-CE2E-8FF63AE551CC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Helix\ECS">
       <UniqueIdentifier>{E90B2B62-5576-DFD8-9EB4-907E0A5EBD2D}</UniqueIdentifier>
     </Filter>
@@ -55,17 +58,29 @@
     <Filter Include="Helix\ECS\System">
       <UniqueIdentifier>{DD5E37AC-C957-56FE-F289-3B83DEE1350A}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helix\EXP">
-      <UniqueIdentifier>{9B0E2B62-0779-DFD8-50B7-907EBC60BD2D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helix\EXP\Buffer">
-      <UniqueIdentifier>{24B4AF4D-10AD-CE9F-39DF-B3242537AEAB}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Helix\IO">
       <UniqueIdentifier>{66F18C50-52BE-E75B-7BD7-D50367031DEA}</UniqueIdentifier>
     </Filter>
     <Filter Include="Helix\IO\Filesystem">
       <UniqueIdentifier>{DA7B6E7A-46DD-4B88-CF4A-923A3BAB8247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\IO\Import">
+      <UniqueIdentifier>{B020DCAA-1CAC-496F-25BD-CC6391C7A56F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\IO\Import\Model">
+      <UniqueIdentifier>{F04DD006-5CBA-8B01-25AE-235F91D9AD69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\Input">
+      <UniqueIdentifier>{5E2B7E99-CAE0-F68E-53D5-F065BF89ED92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\Input\Code">
+      <UniqueIdentifier>{A818CF64-9411-EEB6-BD43-D33BA99BCDC2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\Input\Handler">
+      <UniqueIdentifier>{2B70E5D4-97D1-C2E2-203F-09958C9FF9A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\Input\Handler\Platform">
+      <UniqueIdentifier>{DF0C780F-CBC7-67BB-747F-E0056019B24B}</UniqueIdentifier>
     </Filter>
     <Filter Include="Helix\Rendering">
       <UniqueIdentifier>{2CDCE440-9867-5205-A178-D5F90D83AE05}</UniqueIdentifier>
@@ -109,6 +124,12 @@
     <Filter Include="Helix\Rendering\Mesh">
       <UniqueIdentifier>{68CD6F08-545C-F9D1-FD7A-0DCDE9E80978}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helix\Rendering\Model">
+      <UniqueIdentifier>{6CB66E16-D822-2A11-A116-C26E0D424C79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\Rendering\Model\Prefab">
+      <UniqueIdentifier>{2BA9A12C-1764-91D8-C01B-0A23ACB5DB68}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Helix\Rendering\Projection">
       <UniqueIdentifier>{98BC36DA-84CC-E2AA-ED85-47C9D9B4D143}</UniqueIdentifier>
     </Filter>
@@ -121,11 +142,11 @@
     <Filter Include="Helix\Window">
       <UniqueIdentifier>{26F48FE9-1257-1F8E-BBDC-5744A71EEB10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helix\Window\Platform">
-      <UniqueIdentifier>{3A3B0262-A6A7-BD5C-6F9B-55BADBC6DFC4}</UniqueIdentifier>
+    <Filter Include="Helix\Window\API">
+      <UniqueIdentifier>{0F7C345B-FB74-53AD-24A7-383210FF32B9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helix\Window\Platform\Windows">
-      <UniqueIdentifier>{747F4CDC-E097-3306-A944-C39F151CC89F}</UniqueIdentifier>
+    <Filter Include="Helix\Window\API\GLFW">
+      <UniqueIdentifier>{AE18DAE1-1A85-95DC-E378-2D3A4FA4B744}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +192,9 @@
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp">
       <Filter>Helix\Core\Library\Semantics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp">
+      <Filter>Helix\Core\Library\Time</Filter>
+    </ClInclude>
     <ClInclude Include="src\Helix\Core\Type.hpp">
       <Filter>Helix\Core</Filter>
     </ClInclude>
@@ -215,6 +239,30 @@
     </ClInclude>
     <ClInclude Include="src\Helix\IO\IO.hpp">
       <Filter>Helix\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp">
+      <Filter>Helix\IO\Import\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp">
+      <Filter>Helix\IO\Import\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp">
+      <Filter>Helix\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Input\Code\KeyCode.hpp">
+      <Filter>Helix\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Input\Code\ModifierCode.hpp">
+      <Filter>Helix\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp">
+      <Filter>Helix\Input\Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp">
+      <Filter>Helix\Input\Handler\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Input\Input.hpp">
+      <Filter>Helix\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp">
       <Filter>Helix\Rendering\API</Filter>
@@ -300,8 +348,14 @@
     <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp">
       <Filter>Helix\Rendering\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helix\Rendering\Model\Prefab\Cube.hpp">
+      <Filter>Helix\Rendering\Model\Prefab</Filter>
+    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp">
       <Filter>Helix\Rendering\Projection</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Rendering\Rendering.hpp">
+      <Filter>Helix\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp">
       <Filter>Helix\Rendering\Shader</Filter>
@@ -316,20 +370,12 @@
       <Filter>Helix\Rendering\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Window\API\GLFW\GLFWWindow.hpp">
-      <Filter>Helix\Window\Platform\Windows</Filter>
+      <Filter>Helix\Window\API\GLFW</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Window\Window.hpp">
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
-    <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
-    <ClInclude Include="src\Helix\Input\Input.hpp" />
-    <ClInclude Include="src\Helix\Input\Code\KeyCode.hpp" />
-    <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp" />
-    <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
-    <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp">
@@ -346,6 +392,12 @@
     </ClCompile>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
       <Filter>Helix\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp">
+      <Filter>Helix\Input\Handler\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Helix\Input\Input.cpp">
+      <Filter>Helix\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.cpp">
       <Filter>Helix\Rendering\API\OpenGL\Buffer</Filter>
@@ -378,14 +430,12 @@
       <Filter>Helix\Rendering\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp">
-      <Filter>Helix\Window\Platform\Windows</Filter>
+      <Filter>Helix\Window\API\GLFW</Filter>
     </ClCompile>
     <ClCompile Include="src\Helix\Window\Window.cpp">
       <Filter>Helix\Window</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
-    <ClCompile Include="src\Helix\Input\Input.cpp" />
-    <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
   </ItemGroup>
 </Project>

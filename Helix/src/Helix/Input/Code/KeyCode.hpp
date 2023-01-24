@@ -9,9 +9,6 @@ namespace hlx
     class Key
     {
     public:
-        static constexpr int min =  32;
-        static constexpr int max = 348;
-
         enum : KeyCode
         {
             Space        =  32, //  
@@ -143,5 +140,8 @@ namespace hlx
             RightSuper   = 347, 
             Menu         = 348, 
         };
+
+        static constexpr int min = Space;
+        static constexpr int max = Menu;
     };
 }

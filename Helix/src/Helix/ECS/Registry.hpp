@@ -39,16 +39,15 @@ namespace hlx
         {
             return s_registry.emplace<T>(entity.id(), std::forward<Args>(args)...);
         }
-        template<typename... T>
-        static std::tuple<T&...> get_component(const Entity& entity)
+        template<typename T>
+        static T& get_component(const Entity& entity)
         {
-            if (!has_component<T...>(entity)) throw std::runtime_error{ "Entity does not own required components!" };
-            return s_registry.get<T...>(entity.id());
+            return s_registry.get<T>(entity.id());
         }
-        template<typename ...T>
+        template<typename T>
         static void remove_component(const Entity& entity)
         {
-            s_registry.remove<T...>(entity.id());
+            s_registry.remove<T>(entity.id());
         }
         template<> static void remove_component<Transform>(const Entity& entity) = delete;
 

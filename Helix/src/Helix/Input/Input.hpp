@@ -30,6 +30,9 @@ namespace hlx
         static bool scrolling_vertical();
         static bool scrolling_horizontal();
 
+        static glm::vec2 cursor_position();
+        static glm::vec2 cursor_position_relative();
+
     private:
         static inline std::shared_ptr<InputHandlerAPI> s_inputHandler{};
     };

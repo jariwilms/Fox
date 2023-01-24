@@ -37,18 +37,22 @@ namespace hlx
 			Repeat,
 			MirroredClampToEdge,
 		};
-		enum class Filter
+		enum class MinFilter
 		{
 			Nearest,
 			Linear,
 
 			NearestMipmapNearest,
-			LinearMipmapNearest,
-
 			NearestMipmapLinear,
+
+			LinearMipmapNearest,
 			LinearMipmapLinear,
 		};
-		using Levels = unsigned int;
+		enum class MagFilter
+		{
+            Nearest, 
+            Linear, 
+		};
 
 		virtual ~Texture() = default;
 
@@ -62,11 +66,11 @@ namespace hlx
 		{
 			return m_layout;
 		}
-		Filter min_filter() const
+		MinFilter min_filter() const
 		{
 			return m_minFilter;
 		}
-		Filter mag_filter() const
+		MagFilter mag_filter() const
 		{
 			return m_magFilter;
 		}
@@ -74,13 +78,13 @@ namespace hlx
 	protected:
 		Texture(Texture::Format format, Layout layout)
 			: m_format{ format }, m_layout{ layout } {}
-		Texture(Texture::Format format, Layout layout, Filter minFilter, Filter magFilter, Levels levels)
-            : m_layout{ layout }, m_minFilter{ minFilter }, m_magFilter{ magFilter }, m_levels{ levels } {}
+		Texture(Texture::Format format, Layout layout, MinFilter minFilter, MagFilter magFilter, unsigned int levels)
+			: m_format{ format }, m_layout{ layout }, m_minFilter{ minFilter }, m_magFilter{ magFilter }, m_levels{ levels } {}
 
-		const Format m_format{};
-		const Layout m_layout{};
-		const Levels m_levels{ 1 };
-		Filter m_minFilter{ Filter::Linear };
-		Filter m_magFilter{ Filter::Linear };
+		const Format       m_format{};
+		const Layout       m_layout{};
+        MinFilter          m_minFilter{ MinFilter::LinearMipmapLinear };
+        MagFilter          m_magFilter{ MagFilter::Linear };
+		const unsigned int m_levels{ 1 };
 	};
 }
