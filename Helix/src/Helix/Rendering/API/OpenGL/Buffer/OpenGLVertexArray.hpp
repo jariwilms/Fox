@@ -2,6 +2,7 @@
 
 #include "stdafx.hpp"
 
+#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/Buffer/VertexArray.hpp"
 
 namespace hlx

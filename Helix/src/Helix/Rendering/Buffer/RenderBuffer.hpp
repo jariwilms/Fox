@@ -11,15 +11,20 @@ namespace hlx
 	class RenderBuffer : public IBindable
 	{
 	public:
-		enum class Type
-		{
-			Color, 
-			Depth, 
-			Stencil, 
-			DepthStencil, 
-		};
+        enum class Type
+        {
+            Color,
+            Depth,
+            Stencil,
+            DepthStencil,
+        };
 		enum class Layout
 		{
+			R8, 
+			RG8, 
+			RGB8, 
+			RGBA8, 
+
 			Depth16, 
 			Depth24, 
 			Depth32, 
@@ -40,22 +45,22 @@ namespace hlx
 		{
 			return m_layout;
 		}
-		unsigned int samples() const
-		{
-			return m_samples;
-		}
 		const glm::uvec2& dimensions() const
 		{
 			return m_dimensions;
 		}
+		unsigned int samples() const
+		{
+			return m_multiSamples;
+		}
 
 	protected:
-		RenderBuffer(Type type, Layout layout, unsigned int samples, const glm::uvec2& dimensions)
-			: m_type{ type }, m_layout{ layout }, m_samples{ samples }, m_dimensions{ dimensions } {}
+		RenderBuffer(Type type, Layout layout, const glm::uvec2& dimensions, unsigned int multiSamples)
+			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions }, m_multiSamples{ multiSamples } {}
 
 		const Type m_type{};
 		const Layout m_layout{};
 		const glm::uvec2 m_dimensions{};
-		const unsigned int m_samples{};
+		const unsigned int m_multiSamples{};
 	};
 }

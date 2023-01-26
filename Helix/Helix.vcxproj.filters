@@ -153,42 +153,6 @@
     <ClInclude Include="src\Helix\Core\Config.hpp">
       <Filter>Helix\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp">
-      <Filter>Helix\Core\Deprecated\Library\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Layout</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\IndexBuffer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\UniformBuffer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexArray.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexBuffer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Buffer\VertexContainer.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\Buffer</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Rendering\Layout\VertexLayout.hpp">
-      <Filter>Helix\Core\Deprecated\Rendering\Layout</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp">
       <Filter>Helix\Core\Library\Semantics</Filter>
     </ClInclude>
@@ -376,20 +340,10 @@
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Blueprint\FrameBufferBlueprint.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Blueprint\RenderBufferBlueprint.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.cpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.cpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.cpp">
-      <Filter>Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer</Filter>
-    </ClCompile>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
       <Filter>Helix\ECS\Entity</Filter>
     </ClCompile>
@@ -437,5 +391,7 @@
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Blueprint\TextureBlueprint.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Blueprint\RenderBufferBlueprint.cpp" />
   </ItemGroup>
 </Project>

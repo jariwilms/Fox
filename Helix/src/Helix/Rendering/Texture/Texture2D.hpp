@@ -25,12 +25,12 @@ namespace hlx
 		{
 			return m_dimensions;
 		}
-		//TODO: add mipmap filtering options => texture filter + mipmap filter options
+
 	protected:
-		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions)
-            : Texture{ format, layout }, m_dimensions{ dimensions } {}
-		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter, unsigned int levels)
-            : Texture{ format, layout, minFilter, magFilter, levels }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
+		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions, unsigned int mipLevels)
+            : Texture{ format, layout, mipLevels }, m_dimensions{ dimensions } {}
+		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
+            : Texture{ format, layout, mipLevels, minFilter, magFilter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
 		const glm::uvec2 m_dimensions{};
         Wrapping         m_wrappingS{ Wrapping::ClampToEdge };

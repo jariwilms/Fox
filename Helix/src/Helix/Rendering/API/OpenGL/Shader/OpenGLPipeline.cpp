@@ -21,7 +21,6 @@ namespace hlx
 
 	void OpenGLPipeline::bind() const
 	{
-		//TODO before implementing: read https://www.khronos.org/opengl/wiki/Shader_Compilation#Program_pipelines
 		glBindProgramPipeline(m_id);
 	}
 	void OpenGLPipeline::unbind() const

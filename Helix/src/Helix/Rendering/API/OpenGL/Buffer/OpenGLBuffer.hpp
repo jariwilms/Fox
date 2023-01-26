@@ -45,11 +45,11 @@ namespace hlx
         using IBindable::m_id;
         using Buffer<T>::m_size;
 
-        void copy_all_void(const void* data) override
+        void copy(const void* data) override
         {
             glNamedBufferSubData(m_id, 0, m_size, data);
         }
-        void copy_range_void(size_t size, size_t offset, const void* data) override
+        void copy_range(size_t size, size_t offset, const void* data) override
         {
             glNamedBufferSubData(m_id, offset, size, data);
         }

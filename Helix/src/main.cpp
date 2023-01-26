@@ -15,18 +15,14 @@
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
 #include "Helix/Rendering/Model/Prefab/Cube.hpp"
 #include "Helix/Window/Window.hpp"
+#include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
 
 using namespace hlx;
 
 struct Matrices
 {
-    glm::mat4 model{ 1.0f };
     glm::mat4 view{ 1.0f };
     glm::mat4 projection{ 1.0f };
-};
-struct Light
-{
-    glm::vec3 color{};
 };
 
 int main()
@@ -34,10 +30,11 @@ int main()
     IO::init();
     Time::init();
 
-    auto window = Window::create("Helix", glm::uvec2{ 1280, 720 });
-    glEnable(GL_DEPTH_TEST);
 
 
+    std::string windowTitle{ "Helix" };
+    const glm::vec2 windowDimensions{ 1280, 720 };
+    auto window = Window::create(windowTitle, windowDimensions);
 
 
 
@@ -47,20 +44,17 @@ int main()
     auto& transform = Registry::get_component<Transform>(observer);
     transform.translate(glm::vec3{ 0.0f, 0.0f, 3.0f });
 
-    Transform kiryuTransform{};
-    Transform lightTransform{};
-    lightTransform.translate(glm::vec3{ 1.0f, 0.0f, 0.0f });
+
 
     //UniformBuffer setup
-    auto localRotation = glm::vec3{};
-    auto viewMatrix = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
-    Matrices mts{ kiryuTransform.transform(), viewMatrix, camera.projection() };
-    auto ubo = GraphicsAPI::create_ubo(mts);
-    ubo->bind_base(0);
+    auto matricesUBO = GraphicsAPI::create_ubo<Matrices>();
+    matricesUBO->bind_base(0);
+    auto modelTransformUBO = GraphicsAPI::create_ubo(glm::mat4{1.0f});
+    modelTransformUBO->bind_base(1);
 
-    Light l{ glm::vec3{1.0f} };
-    auto lightUBO = GraphicsAPI::create_ubo(l);
-    lightUBO->bind_base(1);
+    auto viewPositionUBO = GraphicsAPI::create_ubo<glm::vec3>();
+    viewPositionUBO->copy(glm::vec3{ 0.0f, 0.0f, 3.0f });
+    viewPositionUBO->bind_base(4);
 
 
 
@@ -77,83 +71,134 @@ int main()
     layout2f->specify<float>(2);
     layout3f->specify<float>(3);
 
-	auto cubeVAO = GraphicsAPI::create_vao();
-	cubeVAO->tie(cubePositionsVBO, layout3f);
-    cubeVAO->tie(cubeNormalsVBO, layout3f);
-    cubeVAO->tie(cubeTexCoordsVBO, layout2f);
+	auto texturedCubeVAO = GraphicsAPI::create_vao();
+	texturedCubeVAO->tie(cubePositionsVBO, layout3f);
+    texturedCubeVAO->tie(cubeNormalsVBO, layout3f);
+    texturedCubeVAO->tie(cubeTexCoordsVBO, layout2f);
 
 
 
-    //Pipeline setup
-    const auto texVertexSource = IO::load<File>("shaders/compiled/texturevert.spv")->read(); 
-    const auto texFragmentSource = IO::load<File>("shaders/compiled/texturefrag.spv")->read();
-    auto texVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *texVertexSource);
-    if (!texVertexShader->valid()) throw std::runtime_error{ texVertexShader->error().data() };
-    auto texFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *texFragmentSource);
-    if (!texFragmentShader->valid()) throw std::runtime_error{ texFragmentShader->error().data() };
-    auto texPipeline = GraphicsAPI::create_plo({ texVertexShader, texFragmentShader });
+    std::vector<float> quadData =
+    {
+        -1.0f,  1.0f, 0.0f,   0.0f, 1.0f,
+        -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
+         1.0f,  1.0f, 0.0f,   1.0f, 1.0f,
+         1.0f, -1.0f, 0.0f,   1.0f, 0.0f,
+    };
 
-    //Pipeline setup
-    const auto lightVertexSource = IO::load<File>("shaders/compiled/lightingvert.spv")->read();
-    const auto lightFragmentSource = IO::load<File>("shaders/compiled/lightingfrag.spv")->read();
-    auto lightVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *texVertexSource);
-    if (!lightVertexShader->valid()) throw std::runtime_error{ lightVertexShader->error().data() };
-    auto lightFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *texFragmentSource);
-    if (!lightFragmentShader->valid()) throw std::runtime_error{ lightFragmentShader->error().data() };
-    auto lightPipeline = GraphicsAPI::create_plo({ lightVertexShader, lightFragmentShader });
+    auto layout3f2f = std::make_shared<VertexLayout>();
+    layout3f2f->specify<float>(3);
+    layout3f2f->specify<float>(2);
+
+    auto quadVBO = GraphicsAPI::create_vbo<float>(quadData);
+    auto quadVAO = GraphicsAPI::create_vao();
+    quadVAO->tie(quadVBO, layout3f2f);
+
+
+
+
+
+
+
+
 
     TextureBlueprint bp{};
     auto kiryuImage = IO::load<Image>("textures/Kiryu.png");
-    auto kiryuTexture = bp.build<Texture2D>(kiryuImage);
+    auto kiryuTexture = bp.build(kiryuImage, 1);
     kiryuTexture->bind(0);
 
+    auto missingImage = IO::load<Image>("textures/missing.png");
+    auto missingTexture = bp.build(missingImage, 1);
+    missingTexture->bind(1);
+
+
+
+    const auto geometryVertexSource = IO::load<File>("shaders/compiled/geometryvert.spv")->read(); 
+    const auto geometryFragmentSource = IO::load<File>("shaders/compiled/geometryfrag.spv")->read();
+    auto geometryVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *geometryVertexSource);
+    if (!geometryVertexShader->valid()) throw std::runtime_error{ geometryVertexShader->error().data() };
+    auto geometryFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *geometryFragmentSource);
+    if (!geometryFragmentShader->valid()) throw std::runtime_error{ geometryFragmentShader->error().data() };
+    auto geometryPipeline = GraphicsAPI::create_plo({ geometryVertexShader, geometryFragmentShader });
+    
+    const auto deferredVertexSource = IO::load<File>("shaders/compiled/deferredvert.spv")->read();
+    const auto deferredFragmentSource = IO::load<File>("shaders/compiled/deferredfrag.spv")->read();
+    auto deferredVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *deferredVertexSource);
+    if (!deferredVertexShader->valid()) throw std::runtime_error{ deferredVertexShader->error().data() };
+    auto deferredFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *deferredFragmentSource);
+    if (!deferredFragmentShader->valid()) throw std::runtime_error{ deferredFragmentShader->error().data() };
+    auto gBufferPipeline = GraphicsAPI::create_plo({ deferredVertexShader, deferredFragmentShader });
 
 
 
 
 
+    TextureBlueprint positionTextureBp{};
+    TextureBlueprint colorTextureBp{};
+    TextureBlueprint specularTextureBp{};
+    positionTextureBp.layout = Texture::Layout::RGB16;
+    positionTextureBp.format = Texture::Format::RGB;
+    colorTextureBp.layout = Texture::Layout::RGB16;
+    colorTextureBp.format = Texture::Format::RGB;
+    specularTextureBp.layout = Texture::Layout::RGBA8;
 
+    RenderBufferBlueprint depthRenderBufferBp{};
+    depthRenderBufferBp.type = RenderBuffer::Type::Depth;
+    depthRenderBufferBp.layout = RenderBuffer::Layout::Depth32;
+
+    std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> tbps{};
+    tbps.emplace_back(std::make_tuple("Position", FrameBuffer::Attachment::Color, positionTextureBp));
+    tbps.emplace_back(std::make_tuple("Color", FrameBuffer::Attachment::Color, colorTextureBp));
+    tbps.emplace_back(std::make_tuple("Specular", FrameBuffer::Attachment::Color, specularTextureBp));
+
+    std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> rbps{};
+    rbps.emplace_back(std::make_tuple("Depth", FrameBuffer::Attachment::Depth, depthRenderBufferBp));
+
+    FrameBufferBlueprint fbbp{};
+    fbbp.textures = tbps;
+    fbbp.renderBuffers = rbps;
+
+    const auto gBuffer = fbbp.build(windowDimensions);
 
 
 
 
 
     Time::reset();
+    const auto viewMatrix = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
+    const auto& projectionMatrix = camera.projection();
+
 	while (true)
 	{
         Time::tick();
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glEnable(GL_DEPTH_TEST);
+        gBuffer->bind(FrameBuffer::Target::Write);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
-        if (Input::key_pressed(Key::W)) transform.position += 1.0f * transform.forward() * Time::delta();
-        if (Input::key_pressed(Key::S)) transform.position -= 1.0f * transform.forward() * Time::delta();
-        if (Input::key_pressed(Key::A)) transform.position -= 1.0f * transform.right()   * Time::delta();
-        if (Input::key_pressed(Key::D)) transform.position += 1.0f * transform.right()   * Time::delta();
-        if (Input::key_pressed(Key::E)) transform.position += 1.0f * transform.up()      * Time::delta();
-        if (Input::key_pressed(Key::Q)) transform.position -= 1.0f * transform.up()      * Time::delta();
-        if (Input::button_pressed(Button::Button1))
-        {
-            auto rel = Input::cursor_position_relative();
-            localRotation -= glm::vec3{ rel.y, rel.x, 0.0f } * 100.0f * Time::delta();
-            transform.rotation = glm::quat(glm::radians(localRotation));
-        }
-
-
-
-        cubeVAO->bind();
-
-        texPipeline->bind();
-        ubo->copy_tuple(0, std::make_tuple(kiryuTransform.transform()));
+        geometryPipeline->bind();
+        matricesUBO->copy_tuple(0, std::make_tuple(viewMatrix, projectionMatrix));
+        modelTransformUBO->copy_tuple(0, std::make_tuple(glm::translate(glm::mat4{ 1.0f }, glm::vec3{0.5f, 0.0f, 0.0f})));
+        texturedCubeVAO->bind();
+        kiryuTexture->bind(0);
+        missingTexture->bind(1);
         glDrawArrays(GL_TRIANGLES, 0, 36);
-
-        lightPipeline->bind();
-        ubo->copy_tuple(0, std::make_tuple(lightTransform.transform()));
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        gBuffer->unbind();
 
 
+
+
+        gBufferPipeline->bind();
+        gBuffer->bind_texture("Position", 0);
+        gBuffer->bind_texture("Color", 1);
+        gBuffer->bind_texture("Specular", 2);
+        gBuffer->bind(FrameBuffer::Target::Read);
+        quadVAO->bind();
+        glDisable(GL_DEPTH_TEST);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		window->refresh();
 	}

@@ -39,9 +39,6 @@ namespace hlx
 		};
 		enum class MinFilter
 		{
-			Nearest,
-			Linear,
-
 			NearestMipmapNearest,
 			NearestMipmapLinear,
 
@@ -76,15 +73,16 @@ namespace hlx
 		}
 
 	protected:
-		Texture(Texture::Format format, Layout layout)
-			: m_format{ format }, m_layout{ layout } {}
-		Texture(Texture::Format format, Layout layout, MinFilter minFilter, MagFilter magFilter, unsigned int levels)
-			: m_format{ format }, m_layout{ layout }, m_minFilter{ minFilter }, m_magFilter{ magFilter }, m_levels{ levels } {}
+		Texture(Texture::Format format, Layout layout, unsigned int mipLevels)
+			: m_format{ format }, m_layout{ layout }, m_mipLevels{ mipLevels } {}
+		Texture(Texture::Format format, Layout layout, unsigned int mipLevels, MinFilter minFilter, MagFilter magFilter)
+			: m_format{ format }, m_layout{ layout }, m_mipLevels{ mipLevels }, m_minFilter{ minFilter }, m_magFilter{ magFilter } {}
 
 		const Format       m_format{};
 		const Layout       m_layout{};
-        MinFilter          m_minFilter{ MinFilter::LinearMipmapLinear };
-        MagFilter          m_magFilter{ MagFilter::Linear };
-		const unsigned int m_levels{ 1 };
+		const unsigned int m_mipLevels{};
+
+        MinFilter          m_minFilter{ MinFilter::NearestMipmapNearest };
+        MagFilter          m_magFilter{ MagFilter::Nearest };
 	};
 }

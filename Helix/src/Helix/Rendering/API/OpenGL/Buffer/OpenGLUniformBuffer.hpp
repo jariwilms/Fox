@@ -16,13 +16,13 @@ namespace hlx
         OpenGLUniformBuffer(const T& data)
             : OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, 1 }, UniformBuffer<T>{ 1 }, Buffer<T>{ 1 }
         {
-            OpenGLBuffer<T>::copy_all_void(&data);
+            OpenGLBuffer<T>::copy(&data);
         }
         ~OpenGLUniformBuffer() = default;
 
-        void copy_all(const T& data) override
+        void copy(const T& data) override
         {
-            OpenGLBuffer<T>::copy_all_void(&data);
+            OpenGLBuffer<T>::copy(&data);
         }
 
         void bind_base(unsigned int index) override
@@ -37,6 +37,11 @@ namespace hlx
     protected:
         using IBindable::m_id;
         using OpenGLBuffer<T>::m_internalTarget;
+
+        void copy_range(size_t size, size_t offset, const void* data) override
+        {
+            OpenGLBuffer<T>::copy_range(size, offset, data);
+        }
     };
 }
 

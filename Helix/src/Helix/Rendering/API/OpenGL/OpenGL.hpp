@@ -59,7 +59,7 @@ namespace hlx
                 default:			   throw std::invalid_argument{ "Invalid type!" };
             }
         }
-                                     
+
         static constexpr GLenum      texture_format(Texture::Format format)
         {
             switch (format)
@@ -72,7 +72,7 @@ namespace hlx
                 default:			        throw std::invalid_argument{ "Invalid format!" };
             }
         }
-        static constexpr GLenum      texture_layout(Texture::Layout layout)         //== InternalFormat
+        static constexpr GLenum      texture_layout(Texture::Layout layout)
         {
             switch (layout)
             {
@@ -105,9 +105,6 @@ namespace hlx
         {
             switch (filter)
             {
-                case Texture::MinFilter::Nearest:              return GL_NEAREST;
-                case Texture::MinFilter::Linear:               return GL_LINEAR;
-
                 case Texture::MinFilter::NearestMipmapNearest: return GL_NEAREST_MIPMAP_NEAREST;
                 case Texture::MinFilter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
 
@@ -127,7 +124,7 @@ namespace hlx
                 default:                          throw std::invalid_argument{ "Invalid filter!" };
             }
         }
-                                     
+
         static constexpr GLenum      renderbuffer_type(RenderBuffer::Type type)
         {
             switch (type)
@@ -144,12 +141,16 @@ namespace hlx
         {
             switch (layout)
             {
+                case RenderBuffer::Layout::R8:              return GL_R8;
+                case RenderBuffer::Layout::RG8:             return GL_RG8;
+                case RenderBuffer::Layout::RGB8:            return GL_RGB8;
+                case RenderBuffer::Layout::RGBA8:           return GL_RGBA8;
                 case RenderBuffer::Layout::Depth16:         return GL_DEPTH_COMPONENT16;
                 case RenderBuffer::Layout::Depth24:			return GL_DEPTH_COMPONENT24;
                 case RenderBuffer::Layout::Depth32:			return GL_DEPTH_COMPONENT32;
                 case RenderBuffer::Layout::Depth24Stencil8: return GL_DEPTH24_STENCIL8;
                 case RenderBuffer::Layout::Depth32Stencil8:	return GL_DEPTH32F_STENCIL8;
-                case RenderBuffer::Layout::Stencil8:		return GL_STENCIL;
+                case RenderBuffer::Layout::Stencil8:		return GL_STENCIL_INDEX8;
 
                 default:                                    throw std::invalid_argument{ "Invalid layout!" };
             }
@@ -163,6 +164,18 @@ namespace hlx
                 case FrameBuffer::Target::Write:   return GL_DRAW_FRAMEBUFFER;
 
                 default:                           throw std::invalid_argument{ "Invalid target!" };
+            }
+        }
+        static constexpr GLenum      framebuffer_attachment(FrameBuffer::Attachment attachment)
+        {
+            switch (attachment)
+            {
+                case FrameBuffer::Attachment::Color:        return GL_COLOR_ATTACHMENT0;
+                case FrameBuffer::Attachment::Depth:        return GL_DEPTH_ATTACHMENT;
+                case FrameBuffer::Attachment::Stencil:      return GL_STENCIL_ATTACHMENT;
+                case FrameBuffer::Attachment::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
+
+                default:                                    throw std::invalid_argument{ "Invalid attachment!" };
             }
         }
 

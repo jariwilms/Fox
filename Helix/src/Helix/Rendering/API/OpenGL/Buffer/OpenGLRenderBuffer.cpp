@@ -4,13 +4,13 @@
 
 namespace hlx
 {
-	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, unsigned int samples, const glm::uvec2& dimensions)
-		: RenderBuffer{ type, layout, samples, dimensions }
+	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const glm::uvec2& dimensions, unsigned int samples)
+		: RenderBuffer{ type, layout, dimensions, samples }
 	{
 		m_internalFormat = OpenGL::renderbuffer_layout(layout);
 
 		glCreateRenderbuffers(1, &m_id);
-		glNamedRenderbufferStorageMultisample(m_id, m_samples, m_internalFormat, dimensions.x, dimensions.y);
+		glNamedRenderbufferStorageMultisample(m_id, m_multiSamples, m_internalFormat, dimensions.x, dimensions.y);
 	}
 	OpenGLRenderBuffer::~OpenGLRenderBuffer()
 	{
