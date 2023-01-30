@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "glm/glm.hpp"
 #include "stb/stb_image.h"
 
 #include "File.hpp"
@@ -40,7 +39,7 @@ namespace hlx
 			throw std::logic_error{ "Not implemented!" };
 		}
 
-		glm::uvec2 dimensions() const
+		Vector2u dimensions() const
 		{
 			return m_dimensions;
 		}
@@ -50,7 +49,7 @@ namespace hlx
 		}
 
 	private:
-		glm::uvec2 m_dimensions{};
+		Vector2u m_dimensions{};
 		unsigned int m_channels{};
 
 		std::weak_ptr<std::vector<byte>> m_imageData;

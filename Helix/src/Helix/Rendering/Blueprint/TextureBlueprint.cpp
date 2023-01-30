@@ -12,7 +12,7 @@ namespace hlx
 
         return GraphicsAPI::create_tex(format, layout, image->dimensions(), mipLevels, wrappingS, wrappingT, minFilter, magFilter, data);
     }
-    std::shared_ptr<Texture2D> TextureBlueprint::build(const glm::uvec2& dimensions, unsigned int mipLevels) const
+    std::shared_ptr<Texture2D> TextureBlueprint::build(const Vector2u& dimensions, unsigned int mipLevels) const
     {
         return GraphicsAPI::create_tex(format, layout, dimensions, mipLevels, wrappingS, wrappingT, minFilter, magFilter);
     }

@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "glm/glm.hpp"
-
 #include "Helix/Input/Code/KeyCode.hpp"
 #include "Helix/Input/Code/ButtonCode.hpp"
 #include "Helix/Input/Code/ModifierCode.hpp"
@@ -36,8 +34,8 @@ namespace hlx
 
         virtual bool modifier(ModifierCode code) const = 0;
 
-        virtual glm::vec2 cursor_position() const = 0;
-        virtual glm::vec2 cursor_position_relative() const = 0;
+        virtual Vector2f cursor_position() const = 0;
+        virtual Vector2f cursor_position_relative() const = 0;
 
     protected:
         InputHandlerAPI() = default;
@@ -50,7 +48,7 @@ namespace hlx
 
         std::bitset<Modifier::max> m_modifiers{};
 
-        glm::vec2 m_cursorPosition{};
-        glm::vec2 m_lastCursorPosition{};
+        Vector2f m_cursorPosition{};
+        Vector2f m_lastCursorPosition{};
     };
 }

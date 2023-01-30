@@ -4,7 +4,7 @@
 
 namespace hlx
 {
-	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const glm::uvec2& dimensions, unsigned int samples)
+	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions, unsigned int samples)
 		: RenderBuffer{ type, layout, dimensions, samples }
 	{
 		m_internalFormat = OpenGL::renderbuffer_layout(layout);
@@ -25,7 +25,7 @@ namespace hlx
 	{
 		glBindRenderbuffer(m_internalTarget, 0);
 	}
-    bool OpenGLRenderBuffer::is_bound() const
+    bool OpenGLRenderBuffer::bound() const
 	{
 		return false;
 	}

@@ -17,7 +17,7 @@ namespace hlx
             glCreateBuffers(1, &m_id);
             glNamedBufferStorage(m_id, m_size, nullptr, GL_DYNAMIC_STORAGE_BIT);
         }
-        OpenGLBuffer(GLenum target, const std::span<T>& data)
+        OpenGLBuffer(GLenum target, std::span<const T> data)
             : Buffer<T>{ static_cast<unsigned int>(data.size()) }, m_internalTarget{ target }
         {
             glCreateBuffers(1, &m_id);
@@ -36,7 +36,7 @@ namespace hlx
         {
             glBindBuffer(m_internalTarget, 0);
         }
-        bool is_bound() const override
+        bool bound() const override
         {
             return false;
         }

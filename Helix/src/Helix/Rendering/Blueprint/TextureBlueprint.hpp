@@ -13,7 +13,7 @@ namespace hlx
 		TextureBlueprint() = default;
 
 		std::shared_ptr<Texture2D> build(const std::shared_ptr<Image> image, unsigned int mipLevels) const;
-		std::shared_ptr<Texture2D> build(const glm::uvec2& dimensions, unsigned int mipLevels) const;
+		std::shared_ptr<Texture2D> build(const Vector2u& dimensions, unsigned int mipLevels) const;
 
 		Texture::Format    format{ Texture::Format::RGBA };
 		Texture::Layout    layout{ Texture2D::Layout::RGBA8 };

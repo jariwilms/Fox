@@ -12,7 +12,7 @@ namespace hlx
     public:
         FrameBufferBlueprint() = default;
 
-        std::shared_ptr<FrameBuffer> build(const glm::uvec2& dimensions) const
+        std::shared_ptr<FrameBuffer> build(const Vector2u& dimensions) const
         {
             return GraphicsAPI::create_fbo(dimensions, textures, renderBuffers);
         }

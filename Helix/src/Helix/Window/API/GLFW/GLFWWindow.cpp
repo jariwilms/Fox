@@ -4,7 +4,7 @@
 
 namespace hlx
 {
-	GLFWWindow::GLFWWindow(const std::string& title, const glm::uvec2& dimensions)
+	GLFWWindow::GLFWWindow(const std::string& title, const Vector2u& dimensions)
 		: Window{ title, dimensions }
 	{
 		const auto init = glfwInit();
@@ -124,7 +124,7 @@ namespace hlx
 	{
 		glfwSetWindowTitle(m_glfwWindow, std::string{title}.c_str());      //TODO: cursed
 	}
-	void GLFWWindow::resize(const glm::vec2& dimensions)
+	void GLFWWindow::resize(const Vector2f& dimensions)
 	{
         glfwSetWindowSize(m_glfwWindow, static_cast<int>(dimensions.x), static_cast<int>(dimensions.y));
 		m_dimensions = dimensions;

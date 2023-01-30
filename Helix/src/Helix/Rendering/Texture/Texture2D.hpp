@@ -11,7 +11,7 @@ namespace hlx
 	public:
 		virtual ~Texture2D() = default;
 
-		virtual void copy(const glm::uvec2& dimensions, const glm::uvec2& offset, const std::span<byte>& data) const = 0;
+		virtual void copy(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data) const = 0;
 
 		Wrapping wrapping_s() const
 		{
@@ -21,18 +21,18 @@ namespace hlx
 		{
 			return m_wrappingT;
 		}
-		const glm::uvec2& dimensions() const
+		const Vector2u& dimensions() const
 		{
 			return m_dimensions;
 		}
 
 	protected:
-		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions, unsigned int mipLevels)
+		Texture2D(Texture::Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels)
             : Texture{ format, layout, mipLevels }, m_dimensions{ dimensions } {}
-		Texture2D(Texture::Format format, Layout layout, const glm::uvec2& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
+		Texture2D(Texture::Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
             : Texture{ format, layout, mipLevels, minFilter, magFilter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
-		const glm::uvec2 m_dimensions{};
+		const Vector2u m_dimensions{};
         Wrapping         m_wrappingS{ Wrapping::ClampToEdge };
         Wrapping         m_wrappingT{ Wrapping::ClampToEdge };
 	};

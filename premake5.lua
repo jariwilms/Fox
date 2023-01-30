@@ -79,8 +79,11 @@ project "Helix"
 
 		defines
 		{
+			"NOMINMAX", 
+			"STB_IMAGE_STATIC", 
+			"STB_IMAGE_IMPLEMENTATION", 
 			"HLX_PLATFORM_WINDOWS", 
-			"GLFW_INCLUDE_NONE"
+			"GLFW_INCLUDE_NONE", 
 		}
 		
 	filter "configurations:Debug"

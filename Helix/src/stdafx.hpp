@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Helix/Core/Config.hpp"
-#include "Helix/Core/Type.hpp"
+#include "Helix/Core/Typedef.hpp"
 
 #include <typeinfo>
 #include <typeindex>

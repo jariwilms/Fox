@@ -5,10 +5,10 @@
 
 namespace hlx
 {
-	Window::Window(const std::string& title, const glm::uvec2& dimensions)
+	Window::Window(const std::string& title, const Vector2u& dimensions)
 		: m_title{ title }, m_dimensions{ dimensions } {}
 
-	std::shared_ptr<Window> Window::create(const std::string& title, const glm::uvec2& dimensions)
+	std::shared_ptr<Window> Window::create(const std::string& title, const Vector2u& dimensions)
 	{
 		return std::make_shared<GLFWWindow>(title, dimensions);
 	}

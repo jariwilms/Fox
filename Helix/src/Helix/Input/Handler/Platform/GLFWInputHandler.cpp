@@ -28,8 +28,8 @@ namespace hlx
         m_activeButtons.reset();
         m_lastActiveButtons.reset();
 
-        m_cursorPosition = glm::vec2{};
-        m_lastCursorPosition = glm::vec2{};
+        m_cursorPosition = Vector2f{};
+        m_lastCursorPosition = Vector2f{};
     }
 
     bool GLFWInputHandler::any_pressed() const
@@ -89,11 +89,11 @@ namespace hlx
         return false;
     }
     
-    glm::vec2 GLFWInputHandler::cursor_position() const
+    Vector2f GLFWInputHandler::cursor_position() const
     {
         return m_cursorPosition;
     }
-    glm::vec2 GLFWInputHandler::cursor_position_relative() const
+    Vector2f GLFWInputHandler::cursor_position_relative() const
     {
         return m_cursorPosition - m_lastCursorPosition;
     }
@@ -126,7 +126,7 @@ namespace hlx
     }
     void GLFWInputHandler::glfw_input_cursor_callback(GLFWwindow* window, double x, double y)
     {
-        m_cursorPosition = glm::vec2{ x, y };
+        m_cursorPosition = Vector2f{ x, y };
     }
     void GLFWInputHandler::glfw_input_scroll_callback(GLFWwindow* window, double x, double y)
     {

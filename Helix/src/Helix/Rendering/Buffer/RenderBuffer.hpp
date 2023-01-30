@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "glm/glm.hpp"
-
 #include "Helix/Rendering/Interface/IBindable.hpp"
 
 namespace hlx
@@ -45,7 +43,7 @@ namespace hlx
 		{
 			return m_layout;
 		}
-		const glm::uvec2& dimensions() const
+		const Vector2u& dimensions() const
 		{
 			return m_dimensions;
 		}
@@ -55,12 +53,12 @@ namespace hlx
 		}
 
 	protected:
-		RenderBuffer(Type type, Layout layout, const glm::uvec2& dimensions, unsigned int multiSamples)
+		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions, unsigned int multiSamples)
 			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions }, m_multiSamples{ multiSamples } {}
 
 		const Type m_type{};
 		const Layout m_layout{};
-		const glm::uvec2 m_dimensions{};
+		const Vector2u m_dimensions{};
 		const unsigned int m_multiSamples{};
 	};
 }

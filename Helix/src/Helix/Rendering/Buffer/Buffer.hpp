@@ -18,7 +18,7 @@ namespace hlx
 
         virtual ~Buffer() = default;
 
-        void copy(const std::span<T>& data)
+        void copy(std::span<const T> data)
         {
             const auto dataSize = data.size() * sizeof(T);
 
@@ -26,7 +26,7 @@ namespace hlx
 
             copy(data.data());
         }
-        void copy_range(unsigned int offset, const std::span<T>& data)
+        void copy_range(unsigned int offset, std::span<const T> data)
         {
             const auto dataSize = data.size() * sizeof(T);
             const auto offsetSize = offset * sizeof(T);

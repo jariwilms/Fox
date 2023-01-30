@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "glm/glm.hpp"
-
 #include "Helix/Rendering/Interface/IBindable.hpp"
 
 namespace hlx

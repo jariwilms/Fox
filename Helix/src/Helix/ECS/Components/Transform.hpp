@@ -15,12 +15,12 @@ namespace hlx
     {
     public:
         Transform() = default;
-        Transform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-            : position{ position }, rotation{ glm::quat{ glm::radians(rotation) } }, scale{ scale } {}
+        Transform(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale)
+            : position{ position }, rotation{ Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
 
-        glm::mat4 transform()
+        Matrix4f transform()
         {
-            glm::mat4 result{ 1.0f };
+            Matrix4f result{ 1.0f };
             result  = glm::translate(result, position);
             result *= glm::mat4_cast(rotation);
             result  = glm::scale(result, scale);
@@ -28,15 +28,15 @@ namespace hlx
             return result;
         }
 
-        void translate(const glm::vec3& value)
+        void translate(const Vector3f& value)
         {
             position += value;
         }
-        void rotate(const glm::vec3& value)
+        void rotate(const Vector3f& value)
         {
-            rotation *= glm::quat(glm::radians(value));
+            rotation *= Quaternion{ glm::radians(value) };
         }
-        void dilate(const glm::vec3& value)
+        void dilate(const Vector3f& value)
         {
             scale *= value;
         }
@@ -47,26 +47,26 @@ namespace hlx
             rotation = glm::quatLookAt(forward, up());
         }
 
-        glm::vec3 forward() const
+        Vector3f forward() const
         {
-            return rotation * glm::vec3{ 0.0f, 0.0f, -1.0f };                  //TODO: make decision about which axis is forward
+            return rotation * Vector3f{ 0.0f, 0.0f, -1.0f };                  //TODO: make decision about which axis is forward
         }
-        glm::vec3 right() const
+        Vector3f right() const
         {
-            return rotation * glm::vec3{ 1.0f, 0.0f, 0.0f };
+            return rotation * Vector3f{ 1.0f, 0.0f, 0.0f };
         }
-        glm::vec3 up() const
+        Vector3f up() const
         {
-            return rotation * glm::vec3{ 0.0f, 1.0f, 0.0f };
+            return rotation * Vector3f{ 0.0f, 1.0f, 0.0f };
         }
 
-        glm::vec3 euler_angles() const
+        Vector3f euler_angles() const
         {
             return glm::degrees(glm::eulerAngles(rotation));
         }
 
-        glm::vec3 position{ 0.0f };
-        glm::quat rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
-        glm::vec3 scale{ 1.0f };
+        Vector3f   position{ 0.0f };
+        Quaternion rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
+        Vector3f   scale{ 1.0f };
     };
 }

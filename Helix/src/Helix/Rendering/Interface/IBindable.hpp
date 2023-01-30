@@ -7,9 +7,9 @@ namespace hlx
     class IBindable
     {
     public:
-        virtual void bind() const = 0;
-        virtual void unbind() const = 0;
-        virtual bool is_bound() const = 0;
+        virtual void bind() const { throw std::logic_error("The method or operation is not implemented."); };
+        virtual void unbind() const { throw std::logic_error("The method or operation is not implemented."); };
+        virtual bool bound() const { throw std::logic_error("The method or operation is not implemented."); };
 
         Id id() const
         {

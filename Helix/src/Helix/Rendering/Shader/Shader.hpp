@@ -25,7 +25,7 @@ namespace hlx
 
 		void bind() const override {};
 		void unbind() const override {};
-		bool is_bound() const override { return false; }
+		bool bound() const override { return false; }
 
 		bool valid() const
 		{

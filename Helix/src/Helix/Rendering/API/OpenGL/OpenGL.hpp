@@ -4,9 +4,7 @@
 
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
-#include "glm/glm.hpp"
 
-#include "Helix/Core/Type.hpp"
 #include "Helix/Rendering/Buffer/Buffer.hpp"
 #include "Helix/Rendering/Buffer/RenderBuffer.hpp"
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"

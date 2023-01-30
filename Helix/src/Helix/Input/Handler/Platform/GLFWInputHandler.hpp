@@ -36,8 +36,8 @@ namespace hlx
 
         bool modifier(ModifierCode code) const override;
 
-        glm::vec2 cursor_position() const override;
-        glm::vec2 cursor_position_relative() const override;
+        Vector2f cursor_position() const override;
+        Vector2f cursor_position_relative() const override;
 
         void glfw_input_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         void glfw_input_button_callback(GLFWwindow* window, int button, int action, int mods);

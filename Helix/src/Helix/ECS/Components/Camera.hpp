@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "glm/glm.hpp"
-
 #include "Component.hpp"
 #include "Helix/Rendering/Projection/Projection.hpp"
 
@@ -28,7 +26,7 @@ namespace hlx
         {
             return m_aspect;
         }
-        const glm::mat4& projection() const
+        const Matrix4f& projection() const
         {
             return m_projection;
         }
@@ -37,8 +35,8 @@ namespace hlx
         float m_fov{};
         float m_aspect{};
 
-        glm::mat4 m_projection{};
+        Matrix4f m_projection{};
 
-        glm::vec4 m_backgroundColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+        Vector4f m_backgroundColor{ 0.0f, 0.0f, 0.0f, 1.0f };
     };
 }

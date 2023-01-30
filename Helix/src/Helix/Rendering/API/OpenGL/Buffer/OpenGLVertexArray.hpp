@@ -27,7 +27,7 @@ namespace hlx
         {
             glBindVertexArray(0);
         }
-        bool is_bound() const override
+        bool bound() const override
         {
             return false;
         }

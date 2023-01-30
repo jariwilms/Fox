@@ -20,13 +20,13 @@ namespace hlx
 			std::shared_ptr<GLFWInputHandler>    inputHandler{};
         };
 
-		GLFWWindow(const std::string& title, const glm::uvec2& dimensions);
+		GLFWWindow(const std::string& title, const Vector2u& dimensions);
 		~GLFWWindow() override;
 
 		void refresh() override;
 
 		void rename(const std::string& title) override;
-		void resize(const glm::vec2& dimensions) override;
+		void resize(const Vector2f& dimensions) override;
 
         void glfw_error_callback(int error, const char* description);
 

@@ -4,7 +4,7 @@
 
 namespace hlx
 {
-	OpenGLShader::OpenGLShader(Type type, const std::span<byte>& binary)
+	OpenGLShader::OpenGLShader(Type type, std::span<const byte> binary)
         : Shader{ type }, m_internalStage{ OpenGL::shader_type(type) }
 	{
         m_id = glCreateProgram();

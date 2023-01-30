@@ -8,15 +8,18 @@
 namespace hlx
 {
     template<typename T>
-    class OpenGLUniformBuffer : public OpenGLBuffer<T>, public UniformBuffer<T>
+    class OpenGLUniformBuffer : public UniformBuffer<T>, public OpenGLBuffer<T>
     {
     public:
-        OpenGLUniformBuffer()
-            : OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, 1 }, UniformBuffer<T>{ 1 }, Buffer<T>{ 1 } {}
-        OpenGLUniformBuffer(const T& data)
-            : OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, 1 }, UniformBuffer<T>{ 1 }, Buffer<T>{ 1 }
+        OpenGLUniformBuffer(unsigned int binding)
+            : Buffer<T>{ 1 }, UniformBuffer<T>{ binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, 1 }
         {
-            OpenGLBuffer<T>::copy(&data);
+            bind_base(m_binding);
+        }
+        OpenGLUniformBuffer(unsigned int binding, const T& data)
+            : Buffer<T>{ 1 }, UniformBuffer<T>{ binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, std::array<T, 1>{ data } } //legit
+        {
+            bind_base(m_binding);
         }
         ~OpenGLUniformBuffer() = default;
 
@@ -25,17 +28,20 @@ namespace hlx
             OpenGLBuffer<T>::copy(&data);
         }
 
-        void bind_base(unsigned int index) override
+        void bind_base(unsigned int binding) override
         {
-            glBindBufferBase(m_internalTarget, index, m_id);
+            m_binding = binding;
+            glBindBufferBase(m_internalTarget, m_binding, m_id);
         }
-        void bind_range(unsigned int index, size_t size, size_t offset) override
+        void bind_range(unsigned int binding, size_t size, size_t offset) override
         {
-            glBindBufferRange(m_internalTarget, index, m_id, offset, size);
+            m_binding = binding;
+            glBindBufferRange(m_internalTarget, m_binding, m_id, offset, size);
         }
 
     protected:
         using IBindable::m_id;
+        using UniformBuffer<T>::m_binding;
         using OpenGLBuffer<T>::m_internalTarget;
 
         void copy_range(size_t size, size_t offset, const void* data) override

@@ -53,12 +53,12 @@ namespace hlx
                         {
                             case (TINYGLTF_TYPE_VEC2): 
                             {
-                                const auto ptr = reinterpret_cast<const glm::vec2*>(buffer.data.data() + startOffset);
-                                const auto vec = std::vector<glm::vec2>{ ptr, ptr + count };
+                                const auto ptr = reinterpret_cast<const Vector2f*>(buffer.data.data() + startOffset);
+                                const auto vec = std::vector<Vector2f>{ ptr, ptr + count };
 
                                 for (const auto& v : vec)
                                 {
-                                    auto asd = glm::vec3{ v.x, v.y, 0.0f };
+                                    auto asd = Vector3f{ v.x, v.y, 0.0f };
                                     result.push_back(asd);
                                 }
 
@@ -66,16 +66,16 @@ namespace hlx
                             }
                             case (TINYGLTF_TYPE_VEC3): 
                             {
-                                const auto ptr = reinterpret_cast<const glm::vec3*>(buffer.data.data() + startOffset);
-                                const auto vec = std::vector<glm::vec3>{ ptr, ptr + count };
+                                const auto ptr = reinterpret_cast<const Vector3f*>(buffer.data.data() + startOffset);
+                                const auto vec = std::vector<Vector3f>{ ptr, ptr + count };
                                 result = std::vector<T>{ vec.begin(), vec.end() };
 
                                 break;
                             }
                             case (TINYGLTF_TYPE_VEC4): 
                             {
-                                const auto ptr = reinterpret_cast<const glm::vec4*>(buffer.data.data() + startOffset);
-                                const auto vec = std::vector<glm::vec4>{ ptr, ptr + count };
+                                const auto ptr = reinterpret_cast<const Vector4f*>(buffer.data.data() + startOffset);
+                                const auto vec = std::vector<Vector4f>{ ptr, ptr + count };
                                 result = std::vector<T>{ vec.begin(), vec.end() };
 
                                 break;
@@ -137,9 +137,9 @@ namespace hlx
 
             bool ret = loader.LoadASCIIFromFile(&model, &err, &warn, "assets/models/cube/cube.gltf");
 
-            auto positions = load_vertices<glm::vec3>(model, 0, "POSITION");
-            auto normals = load_vertices<glm::vec3>(model, 0, "NORMAL");
-            auto texCoords = load_vertices<glm::vec2>(model, 0, "TEXCOORD_0");
+            auto positions = load_vertices<Vector3f>(model, 0, "POSITION");
+            auto normals = load_vertices<Vector3f>(model, 0, "NORMAL");
+            auto texCoords = load_vertices<Vector2f>(model, 0, "TEXCOORD_0");
             auto indices = load_indices(model);
 
 
@@ -154,9 +154,9 @@ namespace hlx
 
 
 
-            const auto positionBuffer = GraphicsAPI::create_vbo<glm::vec3>(positions);
-            const auto normalBuffer   = GraphicsAPI::create_vbo<glm::vec3>(normals);
-            const auto texCoordBuffer = GraphicsAPI::create_vbo<glm::vec2>(texCoords);
+            const auto positionBuffer = GraphicsAPI::create_vbo<Vector3f>(positions);
+            const auto normalBuffer   = GraphicsAPI::create_vbo<Vector3f>(normals);
+            const auto texCoordBuffer = GraphicsAPI::create_vbo<Vector2f>(texCoords);
             const auto indexBufer     = GraphicsAPI::create_ibo(indices);
 
             auto layout2f = std::make_shared<VertexLayout>();

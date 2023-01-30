@@ -4,7 +4,7 @@
 
 namespace hlx
 {
-	OpenGLFrameBuffer::OpenGLFrameBuffer(const glm::uvec2& dimensions, const std::vector<std::tuple<std::string, Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, Attachment, RenderBufferBlueprint>>& renderBuffers)
+	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<std::tuple<std::string, Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, Attachment, RenderBufferBlueprint>>& renderBuffers)
 		: FrameBuffer{ dimensions }
 	{
 		glCreateFramebuffers(1, &m_id);
@@ -50,19 +50,16 @@ namespace hlx
 		glDeleteFramebuffers(1, &m_id);
 	}
 
-	void OpenGLFrameBuffer::bind() const
+	void OpenGLFrameBuffer::bind(FrameBuffer::Target target)
 	{
-		throw std::logic_error{ "Method has not been implemented!" };
+		m_internalBoundTarget = OpenGL::framebuffer_target(target);
+		glBindFramebuffer(m_internalBoundTarget, m_id);
 	}
-	void OpenGLFrameBuffer::bind(FrameBuffer::Target target) const
+    void OpenGLFrameBuffer::unbind() const
 	{
-		glBindFramebuffer(OpenGL::framebuffer_target(target), m_id);
+        glBindFramebuffer(m_internalBoundTarget, 0);
 	}
-	void OpenGLFrameBuffer::unbind() const
-	{
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-	bool OpenGLFrameBuffer::is_bound() const
+	bool OpenGLFrameBuffer::bound() const
 	{
 		return false;
 	}
