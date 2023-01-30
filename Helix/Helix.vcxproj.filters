@@ -418,9 +418,11 @@
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Shader\Interface\Interface.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Shader\Interface\Uniform.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\UniformArrayBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLUniformArrayBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Shader\Uniform\Uniform.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Model\Model.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Core\Deprecated\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.cpp">

@@ -10,9 +10,9 @@ namespace hlx
     {
     public:
         OpenGLIndexBuffer(unsigned int count)
-            : OpenGLBuffer{ GL_ELEMENT_ARRAY_BUFFER, count }, Buffer{ count } {}
+            : Buffer{ count }, OpenGLBuffer{ GL_ELEMENT_ARRAY_BUFFER, count } {}
         OpenGLIndexBuffer(std::span<const unsigned int> data)
-            : OpenGLBuffer{ GL_ELEMENT_ARRAY_BUFFER, data }, Buffer{ static_cast<unsigned int>(data.size()) } {}
+            : Buffer{ static_cast<unsigned int>(data.size()) }, OpenGLBuffer{ GL_ELEMENT_ARRAY_BUFFER, data } {}
         ~OpenGLIndexBuffer() = default;
     };
 }

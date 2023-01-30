@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "OpenGLBuffer.hpp"s
+#include "OpenGLBuffer.hpp"
 #include "Helix/Rendering/Buffer/UniformArrayBuffer.hpp"
 
 namespace hlx
@@ -12,14 +12,20 @@ namespace hlx
     {
     public:
         OpenGLUniformArrayBuffer(unsigned int count, unsigned int binding)
-            : Buffer<T>{ count }, UniformArrayBuffer<T>{ count, binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, count } {}
+            : Buffer<T>{ count }, UniformArrayBuffer<T>{ count, binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, count }
+        {
+            bind_base(m_binding);
+        }
         OpenGLUniformArrayBuffer(unsigned int binding, std::span<const T> data)
-            : Buffer<T>{ count }, UniformArrayBuffer<T>{ static_cast<unsigned int>(data.size()), binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, data } {}
+            : Buffer<T>{ static_cast<unsigned int>(data.size()) }, UniformArrayBuffer<T>{ static_cast<unsigned int>(data.size()), binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, data }
+        {
+            bind_base(m_binding);
+        }
         ~OpenGLUniformArrayBuffer() = default;
 
         void copy(std::span<const T> data) override
         {
-            OpenGLBuffer<T>::copy(data);
+            OpenGLBuffer<T>::copy(data.data());
         }
         void copy_index(unsigned int index, const T& data) override
         {
@@ -43,7 +49,7 @@ namespace hlx
 
     protected:
         using IBindable::m_id;
-        using UniformArrayBuffer::m_binding;
+        using UniformArrayBuffer<T>::m_binding;
         using OpenGLBuffer<T>::m_internalTarget;
 
         void copy_range(size_t size, size_t offset, const void* data) override

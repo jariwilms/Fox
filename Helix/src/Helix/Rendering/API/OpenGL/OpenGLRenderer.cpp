@@ -37,9 +37,12 @@ namespace hlx
 
 
 
+        std::array<ULight, 32> lights{};
+        lights[0] = ULight{ Vector4f{ 1.0f, 0.2f, 1.0f, 1.0f }, Vector4f{ 1.0f, 0.0f, 1.0f, 1.0f }, 0.01f, 0.01f, 10.0f };
+
         m_matricesBuffer = std::make_shared<OpenGLUniformBuffer<UMatrices>>(0, UMatrices{});
         m_materialBuffer = std::make_shared<OpenGLUniformBuffer<UMaterial>>(1, UMaterial{});
-        m_lightBuffer = std::make_shared<OpenGLUniformBuffer<ULight>>(2, ULight{ Vector4f{ 1.0f, 0.2f, 1.0f, 1.0f }, Vector4f{ 1.0f, 0.0f, 1.0f, 1.0f }, 0.01f, 0.01f, 10.0f });
+        m_lightBuffer = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(2, lights);
         m_cameraBuffer = std::make_shared<OpenGLUniformBuffer<UCamera>>(3, UCamera{});
 
 
@@ -55,14 +58,14 @@ namespace hlx
         auto geometryPipeline = GraphicsAPI::create_plo({ geometryVertexShader, geometryFragmentShader });
         m_pipelines.emplace("Geometry", geometryPipeline);
 
-        const auto lightingPassVertexSource = IO::load<File>("shaders/compiled/lightingpassvert.spv")->read();
-        const auto lightingPassFragmentSource = IO::load<File>("shaders/compiled/lightingpassfrag.spv")->read();
-        auto lightingPassVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *lightingPassVertexSource);
-        if (!lightingPassVertexShader->valid()) throw std::runtime_error{ lightingPassVertexShader->error().data() };
-        auto lightingPassFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *lightingPassFragmentSource);
-        if (!lightingPassFragmentShader->valid()) throw std::runtime_error{ lightingPassFragmentShader->error().data() };
-        auto lightingPassPipeline = GraphicsAPI::create_plo({ lightingPassVertexShader, lightingPassFragmentShader });
-        m_pipelines.emplace("Lighting", lightingPassPipeline);
+        const auto lightingVertexSource = IO::load<File>("shaders/compiled/lightingvert.spv")->read();
+        const auto lightingFragmentSource = IO::load<File>("shaders/compiled/lightingfrag.spv")->read();
+        auto lightingVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *lightingVertexSource);
+        if (!lightingVertexShader->valid()) throw std::runtime_error{ lightingVertexShader->error().data() };
+        auto lightingFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *lightingFragmentSource);
+        if (!lightingFragmentShader->valid()) throw std::runtime_error{ lightingFragmentShader->error().data() };
+        auto lightingPipeline = GraphicsAPI::create_plo({ lightingVertexShader, lightingFragmentShader });
+        m_pipelines.emplace("Lighting", lightingPipeline);
     }
 
     void OpenGLRenderer::start(const RenderInfo& renderInfo)

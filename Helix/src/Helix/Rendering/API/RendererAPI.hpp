@@ -8,7 +8,7 @@
 #include "Helix/Rendering/Buffer/UniformBuffer.hpp"
 #include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
 #include "Helix/ECS/Components/Light.hpp"
-#include "Helix/Rendering/Shader/Interface/Interface.hpp"
+#include "Helix/Rendering/Shader/Uniform/Uniform.hpp"
 
 namespace hlx
 {

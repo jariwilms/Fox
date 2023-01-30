@@ -11,13 +11,13 @@
 #include "Helix/Input/Input.hpp"
 #include "Helix/IO/Import/Model/GLTFImporter.hpp"
 #include "Helix/IO/IO.hpp"
+#include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
+#include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
 #include "Helix/Rendering/Model/Prefab/Cube.hpp"
-#include "Helix/Window/Window.hpp"
-#include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
 #include "Helix/Rendering/Renderer.hpp"
-#include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
+#include "Helix/Window/Window.hpp"
 
 using namespace hlx;
 
@@ -36,13 +36,13 @@ int main()
     Geometry::init();
     Renderer::init();
 
-
-
     //Component setup
     auto observer = Registry::create();
     auto& camera = Registry::add_component<Camera>(observer);
     auto& transform = Registry::get_component<Transform>(observer);
     transform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
+
+
 
 
 
@@ -66,6 +66,20 @@ int main()
 
 
 
+
+
+    //auto backpackModel = IO::load<Model>();
+
+
+
+
+
+
+
+
+
+
+
     TextureBlueprint bp{};
     auto kiryuImage = IO::load<Image>("textures/kiryu.png");
     auto kiryuTexture = bp.build(kiryuImage, 1);
@@ -75,12 +89,16 @@ int main()
 
 
 
+
+
     auto mat = std::make_shared<Material>();
     mat->albedo = kiryuTexture;
     mat->normal = normalTexture;
     auto kiryuMesh = std::make_shared<Mesh>(texturedCubeVAO, mat);
 
     
+
+
 
     Time::reset();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

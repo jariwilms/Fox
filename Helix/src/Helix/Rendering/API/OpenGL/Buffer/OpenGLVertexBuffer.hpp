@@ -11,9 +11,9 @@ namespace hlx
     {
     public:
         OpenGLVertexBuffer(unsigned int count)
-            : OpenGLBuffer<T>{ GL_ARRAY_BUFFER, count }, Buffer<T>{ count } {}
+            : Buffer<T>{ count }, OpenGLBuffer<T>{ GL_ARRAY_BUFFER, count } {}
         OpenGLVertexBuffer(std::span<const T> data)
-            : OpenGLBuffer<T>{ GL_ARRAY_BUFFER, data }, Buffer<T>{ static_cast<unsigned int>(data.size()) } {}
+            : Buffer<T>{ static_cast<unsigned int>(data.size()) }, OpenGLBuffer<T>{ GL_ARRAY_BUFFER, data } {}
         ~OpenGLVertexBuffer() = default;
     };
 }

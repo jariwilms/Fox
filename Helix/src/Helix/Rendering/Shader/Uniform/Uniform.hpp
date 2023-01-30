@@ -19,7 +19,7 @@ namespace hlx
     struct ULight //std140, binding 2
     {
         Vector4f position{};
-        Vector4f color{ 1.0f };
+        Vector4f color{};
         float linear{};
         float quadratic{};
         float radius{ 1.0f };
