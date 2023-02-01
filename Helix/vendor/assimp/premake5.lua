@@ -1,7 +1,7 @@
 project "ASSIMP"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++17"
+	cppdialect "C++20"
 	staticruntime "On"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
@@ -98,9 +98,9 @@ project "ASSIMP"
 		
 		"code/AssetLib/3DS/**", 
 		"code/AssetLib/3MF/**", 
-		"code/AssetLib/M3D/**", 
-		"code/AssetLib/IQM/**", 
 		"code/AssetLib/FBX/**", 
+		"code/AssetLib/IQM/**", 
+		"code/AssetLib/M3D/**", 
 		"code/AssetLib/Obj/**", 
 		"code/AssetLib/STL/**", 
 		"code/AssetLib/X3D/**", 
@@ -119,6 +119,7 @@ project "ASSIMP"
 	includedirs 
 	{
 		"./", 
+		
 		"include", 
 		"code", 
 		"contrib", 
@@ -133,6 +134,12 @@ project "ASSIMP"
 	defines
 	{
 		"_CRT_SECURE_NO_WARNINGS", 
+	}
+	
+	disablewarnings
+	{
+		"4244", 
+		"4996", 
 	}
 
 	filter "system:windows"

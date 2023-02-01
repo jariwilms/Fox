@@ -12,11 +12,11 @@ workspace "Helix"
 	
 	includedir = {}
 	includedir["ASSIMP"]   = "Helix/vendor/assimp/include"
+	includedir["ENTT"]     = "Helix/vendor/entt/include"
 	includedir["GLAD"]     = "Helix/vendor/glad/include"
 	includedir["GLFW"]     = "Helix/vendor/glfw/include"
-	includedir["STB"]      = "Helix/vendor/stb/include"
 	includedir["GLM"]      = "Helix/vendor/glm/include"
-	includedir["ENTT"]     = "Helix/vendor/entt/include"
+	includedir["STB"]      = "Helix/vendor/stb/include"
 	includedir["TINYGLTF"] = "Helix/vendor/tinygltf/include"
 	
 	include "Helix/vendor/assimp"
@@ -48,11 +48,11 @@ project "Helix"
 	{
 		"%{prj.name}/src", 
 		"%{includedir.ASSIMP}", 
+		"%{includedir.ENTT}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
-		"%{includedir.STB}", 
 		"%{includedir.GLM}", 
-		"%{includedir.ENTT}", 
+		"%{includedir.STB}", 
 		"%{includedir.TINYGLTF}", 
 	}
 	
@@ -62,20 +62,21 @@ project "Helix"
 		"GLAD", 
 		"GLFW", 
 		"TINYGLTF", 
+		
 		"opengl32.lib", 
 	}
 	
 	defines
 	{
+		"GLFW_INCLUDE_NONE", 
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
-		"GLFW_INCLUDE_NONE", 
 	}
 	
 	disablewarnings
 	{
-		"4250",  --Buffer Dominance
-		"6262",  --STB stack 
+		" 4250",  --Buffer Dominance
+		" 6262",  --STB stack 
 		"26451", --STB overflow
 	}
 	

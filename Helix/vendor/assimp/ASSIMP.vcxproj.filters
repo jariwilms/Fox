@@ -1108,12 +1108,6 @@
     <None Include="contrib\zlib\ALL_BUILD.vcxproj.filters">
       <Filter>contrib\zlib</Filter>
     </None>
-    <None Include="contrib\zlib\CMakeLists.txt">
-      <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="contrib\zlib\CTestTestfile.cmake">
-      <Filter>contrib\zlib</Filter>
-    </None>
     <None Include="contrib\zlib\INSTALL.vcxproj">
       <Filter>contrib\zlib</Filter>
     </None>
@@ -1123,12 +1117,6 @@
     <None Include="contrib\zlib\README">
       <Filter>contrib\zlib</Filter>
     </None>
-    <None Include="contrib\zlib\cmake_install.cmake">
-      <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="contrib\zlib\zconf.h.cmakein">
-      <Filter>contrib\zlib</Filter>
-    </None>
     <None Include="contrib\zlib\zconf.h.in">
       <Filter>contrib\zlib</Filter>
     </None>
@@ -1136,9 +1124,6 @@
       <Filter>contrib\zlib</Filter>
     </None>
     <None Include="contrib\zlib\zlib.pc">
-      <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="contrib\zlib\zlib.pc.cmakein">
       <Filter>contrib\zlib</Filter>
     </None>
     <None Include="contrib\zlib\zlib.sln">
