@@ -11,13 +11,15 @@ workspace "Helix"
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
-	includedir["GLAD"] = "Helix/vendor/glad/include"
-	includedir["GLFW"] = "Helix/vendor/glfw/include"
-	includedir["STB"] = "Helix/vendor/stb/include"
-	includedir["GLM"] = "Helix/vendor/glm/include"
-	includedir["ENTT"] = "Helix/vendor/entt/include"
+	includedir["ASSIMP"]   = "Helix/vendor/assimp/include"
+	includedir["GLAD"]     = "Helix/vendor/glad/include"
+	includedir["GLFW"]     = "Helix/vendor/glfw/include"
+	includedir["STB"]      = "Helix/vendor/stb/include"
+	includedir["GLM"]      = "Helix/vendor/glm/include"
+	includedir["ENTT"]     = "Helix/vendor/entt/include"
 	includedir["TINYGLTF"] = "Helix/vendor/tinygltf/include"
 	
+	include "Helix/vendor/assimp"
 	include "Helix/vendor/glad"
 	include "Helix/vendor/glfw"
 	include "Helix/vendor/tinygltf"
@@ -45,6 +47,7 @@ project "Helix"
 	includedirs
 	{
 		"%{prj.name}/src", 
+		"%{includedir.ASSIMP}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.STB}", 
@@ -55,6 +58,7 @@ project "Helix"
 	
 	links
 	{
+		"ASSIMP", 
 		"GLAD", 
 		"GLFW", 
 		"TINYGLTF", 
@@ -65,6 +69,7 @@ project "Helix"
 	{
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
+		"GLFW_INCLUDE_NONE", 
 	}
 	
 	disablewarnings
@@ -79,11 +84,8 @@ project "Helix"
 
 		defines
 		{
-			"NOMINMAX", 
-			"STB_IMAGE_STATIC", 
-			"STB_IMAGE_IMPLEMENTATION", 
 			"HLX_PLATFORM_WINDOWS", 
-			"GLFW_INCLUDE_NONE", 
+			"NOMINMAX", 
 		}
 		
 	filter "configurations:Debug"

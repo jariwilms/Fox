@@ -22,9 +22,13 @@ namespace hlx
         }
         virtual void tie(const std::shared_ptr<IndexBuffer> indices) = 0;
 
+        const std::shared_ptr<const IndexBuffer> indices() const
+        {
+            return m_indices;
+        }
         bool indexed() const
         {
-            return m_indexed;
+            return m_indices != nullptr;
         }
 
     protected:
@@ -32,7 +36,7 @@ namespace hlx
 
         virtual void tie(Id bufferId, const std::shared_ptr<VertexLayout> layout) = 0;
 
+        std::shared_ptr<const IndexBuffer> m_indices{};
         unsigned int m_attributes{};
-        bool m_indexed{};
     };
 }

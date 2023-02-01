@@ -127,20 +127,23 @@ namespace hlx
             return result;
         }
 
-        static auto import(const std::filesystem::path& path = "")
+        static std::shared_ptr<Model> import(const std::filesystem::path& path = "")
         {
-            tinygltf::Model model;
-            tinygltf::TinyGLTF loader;
+            auto model = std::make_shared<Model>();
+
+
+            tinygltf::Model gltfModel;
+            tinygltf::TinyGLTF gltfLoader;
             std::string err;
             std::string warn;
 
-            bool success = loader.LoadASCIIFromFile(&model, &err, &warn, "assets/models/cube/cube.gltf");
+            bool success = gltfLoader.LoadASCIIFromFile(&gltfModel, &err, &warn, "assets/models/cube/cube.gltf");
             if (!success) throw std::runtime_error{ "Failed to load model!" };
 
-            auto positions = load_vertices<Vector3f>(model, 0, "POSITION");
-            auto normals = load_vertices<Vector3f>(model, 0, "NORMAL");
-            auto texCoords = load_vertices<Vector2f>(model, 0, "TEXCOORD_0");
-            auto indices = load_indices(model);
+            auto positions = load_vertices<Vector3f>(gltfModel, 0, "POSITION");
+            auto normals = load_vertices<Vector3f>(gltfModel, 0, "NORMAL");
+            auto texCoords = load_vertices<Vector2f>(gltfModel, 0, "TEXCOORD_0");
+            auto indices = load_indices(gltfModel);
 
 
 
@@ -160,8 +163,6 @@ namespace hlx
             vao->tie(normalBuffer, layout3f);
             vao->tie(texCoordBuffer, layout2f);
             vao->tie(indexBufer);
-
-            return vao;
         }
     };
 }

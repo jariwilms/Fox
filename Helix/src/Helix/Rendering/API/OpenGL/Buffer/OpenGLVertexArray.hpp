@@ -56,8 +56,8 @@ namespace hlx
         }
         void tie(const std::shared_ptr<IndexBuffer> indices) override
         {
-            glVertexArrayElementBuffer(m_id, indices->id());
-            m_indexed = true;
+            m_indices = indices;
+            glVertexArrayElementBuffer(m_id, m_indices->id());
         }
     };
 }
