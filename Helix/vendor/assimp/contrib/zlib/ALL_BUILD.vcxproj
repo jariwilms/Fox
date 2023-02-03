@@ -3,6 +3,9 @@
   <PropertyGroup>
     <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
+  <PropertyGroup>
+    <ResolveNugetPackages>false</ResolveNugetPackages>
+  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -22,9 +25,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{B95C3B44-F654-37F1-BD00-77837DCAA96D}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+    <ProjectGuid>{7BCDACD7-E811-3FB7-8C93-4F13FEA92136}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <Platform>x64</Platform>
     <ProjectName>ALL_BUILD</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
@@ -66,7 +69,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jariw\Downloads\New folder\include;C:\Users\jariw\Downloads\New folder;C:\Users\jariw\Downloads\assimp-5.2.4\include;C:\Users\jariw\Downloads\assimp-5.2.4\code;C:\Users\jariw\Downloads\assimp-5.2.4\.;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib;C:\Users\jariw\Downloads\New folder\contrib\zlib;C:\Users\jariw\Downloads\assimp-5.2.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jariw\Desktop\ws\include;C:\Users\jariw\Desktop\ws;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\include;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\code;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\.;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib;C:\Users\jariw\Desktop\ws\contrib\zlib;C:\Users\jariw\Desktop\workspace\assimp-5.2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -76,7 +79,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jariw\Downloads\New folder\include;C:\Users\jariw\Downloads\New folder;C:\Users\jariw\Downloads\assimp-5.2.4\include;C:\Users\jariw\Downloads\assimp-5.2.4\code;C:\Users\jariw\Downloads\assimp-5.2.4\.;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib;C:\Users\jariw\Downloads\New folder\contrib\zlib;C:\Users\jariw\Downloads\assimp-5.2.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jariw\Desktop\ws\include;C:\Users\jariw\Desktop\ws;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\include;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\code;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\.;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib;C:\Users\jariw\Desktop\ws\contrib\zlib;C:\Users\jariw\Desktop\workspace\assimp-5.2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -86,7 +89,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jariw\Downloads\New folder\include;C:\Users\jariw\Downloads\New folder;C:\Users\jariw\Downloads\assimp-5.2.4\include;C:\Users\jariw\Downloads\assimp-5.2.4\code;C:\Users\jariw\Downloads\assimp-5.2.4\.;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib;C:\Users\jariw\Downloads\New folder\contrib\zlib;C:\Users\jariw\Downloads\assimp-5.2.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jariw\Desktop\ws\include;C:\Users\jariw\Desktop\ws;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\include;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\code;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\.;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib;C:\Users\jariw\Desktop\ws\contrib\zlib;C:\Users\jariw\Desktop\workspace\assimp-5.2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -96,7 +99,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <Midl>
-      <AdditionalIncludeDirectories>C:\Users\jariw\Downloads\New folder\include;C:\Users\jariw\Downloads\New folder;C:\Users\jariw\Downloads\assimp-5.2.4\include;C:\Users\jariw\Downloads\assimp-5.2.4\code;C:\Users\jariw\Downloads\assimp-5.2.4\.;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib;C:\Users\jariw\Downloads\New folder\contrib\zlib;C:\Users\jariw\Downloads\assimp-5.2.4;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jariw\Desktop\ws\include;C:\Users\jariw\Desktop\ws;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\include;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\code;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\.;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib;C:\Users\jariw\Desktop\ws\contrib\zlib;C:\Users\jariw\Desktop\workspace\assimp-5.2.5;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -105,11 +108,11 @@
     </Midl>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\CMakeLists.txt">
+    <CustomBuild Include="C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/jariw/Downloads/assimp-5.2.4/contrib/zlib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Users/jariw/Desktop/workspace/assimp-5.2.5/contrib/zlib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Downloads/assimp-5.2.4 "-BC:/Users/jariw/Downloads/New folder" --check-stamp-file "C:/Users/jariw/Downloads/New folder/contrib/zlib/CMakeFiles/generate.stamp"
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Desktop/workspace/assimp-5.2.5 -BC:/Users/jariw/Desktop/ws --check-stamp-file C:/Users/jariw/Desktop/ws/contrib/zlib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -117,12 +120,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\jariw\Downloads\New folder\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.25\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Users\jariw\Desktop\ws\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/jariw/Downloads/assimp-5.2.4/contrib/zlib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Users/jariw/Desktop/workspace/assimp-5.2.5/contrib/zlib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Downloads/assimp-5.2.4 "-BC:/Users/jariw/Downloads/New folder" --check-stamp-file "C:/Users/jariw/Downloads/New folder/contrib/zlib/CMakeFiles/generate.stamp"
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Desktop/workspace/assimp-5.2.5 -BC:/Users/jariw/Desktop/ws --check-stamp-file C:/Users/jariw/Desktop/ws/contrib/zlib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -130,12 +133,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\jariw\Downloads\New folder\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.25\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Users\jariw\Desktop\ws\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/jariw/Downloads/assimp-5.2.4/contrib/zlib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Users/jariw/Desktop/workspace/assimp-5.2.5/contrib/zlib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Downloads/assimp-5.2.4 "-BC:/Users/jariw/Downloads/New folder" --check-stamp-file "C:/Users/jariw/Downloads/New folder/contrib/zlib/CMakeFiles/generate.stamp"
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Desktop/workspace/assimp-5.2.5 -BC:/Users/jariw/Desktop/ws --check-stamp-file C:/Users/jariw/Desktop/ws/contrib/zlib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -143,12 +146,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\jariw\Downloads\New folder\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.25\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Users\jariw\Desktop\ws\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/jariw/Downloads/assimp-5.2.4/contrib/zlib/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Users/jariw/Desktop/workspace/assimp-5.2.5/contrib/zlib/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Downloads/assimp-5.2.4 "-BC:/Users/jariw/Downloads/New folder" --check-stamp-file "C:/Users/jariw/Downloads/New folder/contrib/zlib/CMakeFiles/generate.stamp"
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/jariw/Desktop/workspace/assimp-5.2.5 -BC:/Users/jariw/Desktop/ws --check-stamp-file C:/Users/jariw/Desktop/ws/contrib/zlib/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -156,22 +159,22 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.22\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.22\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Downloads\assimp-5.2.4\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\jariw\Downloads\New folder\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.25\Modules\CheckCSourceCompiles.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckFunctionExists.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFile.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckIncludeFileCXX.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\CheckTypeSize.cmake;C:\Program Files\CMake\share\cmake-3.25\Modules\Internal\CheckSourceCompiles.cmake;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zconf.h.cmakein;C:\Users\jariw\Desktop\workspace\assimp-5.2.5\contrib\zlib\zlib.pc.cmakein;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Users\jariw\Desktop\ws\contrib\zlib\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="C:\Users\jariw\Downloads\New folder\ZERO_CHECK.vcxproj">
-      <Project>{78EB288E-7B07-3045-B2E3-8C73E131557E}</Project>
+    <ProjectReference Include="C:\Users\jariw\Desktop\ws\ZERO_CHECK.vcxproj">
+      <Project>{D884F103-0B54-3A3B-BE8A-19704B991B7B}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="C:\Users\jariw\Downloads\New folder\contrib\zlib\zlibstatic.vcxproj">
-      <Project>{0B95685D-4CB6-326F-9C59-4719D3A70CBB}</Project>
+    <ProjectReference Include="C:\Users\jariw\Desktop\ws\contrib\zlib\zlibstatic.vcxproj">
+      <Project>{CD87381F-12DA-303A-A56E-F11149F21985}</Project>
       <Name>zlibstatic</Name>
     </ProjectReference>
   </ItemGroup>

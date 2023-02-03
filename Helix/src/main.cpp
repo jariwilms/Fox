@@ -9,7 +9,6 @@
 #include "Helix/ECS/Entity/Entity.hpp"
 #include "Helix/ECS/Registry.hpp"
 #include "Helix/Input/Input.hpp"
-#include "Helix/IO/Import/Model/GLTFImporter.hpp"
 #include "Helix/IO/IO.hpp"
 #include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
@@ -20,8 +19,6 @@
 #include "Helix/Window/Window.hpp"
 
 using namespace hlx;
-
-
 
 int main()
 {

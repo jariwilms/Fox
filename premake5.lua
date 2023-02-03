@@ -17,12 +17,13 @@ workspace "Helix"
 	includedir["GLFW"]     = "Helix/vendor/glfw/include"
 	includedir["GLM"]      = "Helix/vendor/glm/include"
 	includedir["STB"]      = "Helix/vendor/stb/include"
-	includedir["TINYGLTF"] = "Helix/vendor/tinygltf/include"
+	--includedir["TINYGLTF"] = "Helix/vendor/tinygltf/include"
 	
 	include "Helix/vendor/assimp"
+	include "Helix/vendor/zlib"
 	include "Helix/vendor/glad"
 	include "Helix/vendor/glfw"
-	include "Helix/vendor/tinygltf"
+	--include "Helix/vendor/tinygltf"
 	
 project "Helix"
 	location "Helix"
@@ -53,7 +54,7 @@ project "Helix"
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
 		"%{includedir.STB}", 
-		"%{includedir.TINYGLTF}", 
+		--"%{includedir.TINYGLTF}", 
 	}
 	
 	links
@@ -61,7 +62,7 @@ project "Helix"
 		"ASSIMP", 
 		"GLAD", 
 		"GLFW", 
-		"TINYGLTF", 
+		--"TINYGLTF", 
 		
 		"opengl32.lib", 
 	}

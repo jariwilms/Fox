@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLAD", "Helix\vendor\glad\G
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GLFW", "Helix\vendor\glfw\GLFW.vcxproj", "{154B857C-0182-860D-AA6E-6C109684020F}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TINYGLTF", "Helix\vendor\tinygltf\TINYGLTF.vcxproj", "{169A0DB1-0267-68BC-2B80-566417AC9D4A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZLIB", "Helix\vendor\zlib\ZLIB.vcxproj", "{96B68F7C-82ED-900D-2BDA-761017F00C0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,10 @@ Global
 		{154B857C-0182-860D-AA6E-6C109684020F}.Debug|x64.Build.0 = Debug|x64
 		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.ActiveCfg = Release|x64
 		{154B857C-0182-860D-AA6E-6C109684020F}.Release|x64.Build.0 = Release|x64
-		{169A0DB1-0267-68BC-2B80-566417AC9D4A}.Debug|x64.ActiveCfg = Debug|x64
-		{169A0DB1-0267-68BC-2B80-566417AC9D4A}.Debug|x64.Build.0 = Debug|x64
-		{169A0DB1-0267-68BC-2B80-566417AC9D4A}.Release|x64.ActiveCfg = Release|x64
-		{169A0DB1-0267-68BC-2B80-566417AC9D4A}.Release|x64.Build.0 = Release|x64
+		{96B68F7C-82ED-900D-2BDA-761017F00C0F}.Debug|x64.ActiveCfg = Debug|x64
+		{96B68F7C-82ED-900D-2BDA-761017F00C0F}.Debug|x64.Build.0 = Debug|x64
+		{96B68F7C-82ED-900D-2BDA-761017F00C0F}.Release|x64.ActiveCfg = Release|x64
+		{96B68F7C-82ED-900D-2BDA-761017F00C0F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
