@@ -5,6 +5,7 @@
 #include "Helix/Rendering/API/RendererAPI.hpp"
 #include "Helix/ECS/Components/Camera.hpp"
 #include "Helix/Rendering/API/OpenGL/OpenGLRenderer.hpp"
+#include "Helix/ECS/Components/Transform.hpp"
 
 namespace hlx
 {
@@ -25,10 +26,9 @@ namespace hlx
             s_rendererAPI->finish();
         }
 
-        //TODO: remove names => overload methods
-        static void render_mesh(const std::shared_ptr<Mesh> mesh)
+        static void render(const std::shared_ptr<const Model> model, const Transform& transform)
         {
-            s_rendererAPI->render_mesh(mesh);
+            s_rendererAPI->render(model, transform);
         }
 
     private:

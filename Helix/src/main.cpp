@@ -10,6 +10,7 @@
 #include "Helix/ECS/Registry.hpp"
 #include "Helix/Input/Input.hpp"
 #include "Helix/IO/IO.hpp"
+#include "Helix/IO/Import/Model/ModelImporter.hpp"
 #include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
@@ -33,88 +34,50 @@ int main()
     Geometry::init();
     Renderer::init();
 
-    //Component setup
+
+
+    auto model = ModelImporter::load("assets/models/backpack/scene.gltf");
+    Transform modelTransform{};
+    modelTransform.rotate(Vector3f{ -90.0f, 0.0f, 0.0f });
+
     auto observer = Registry::create();
     auto& camera = Registry::add_component<Camera>(observer);
-    auto& transform = Registry::get_component<Transform>(observer);
-    transform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
-
-
-
-
-
-    //Model setup
-    std::vector<float> cubeVertices  = Cube::positions;
-    std::vector<float> cubeNormals   = Cube::normals;
-    std::vector<float> cubeTexCoords = Cube::texCoords;
-	auto cubePositionsVBO = GraphicsAPI::create_vbo<float>(cubeVertices);
-    auto cubeNormalsVBO   = GraphicsAPI::create_vbo<float>(cubeNormals);
-    auto cubeTexCoordsVBO = GraphicsAPI::create_vbo<float>(cubeTexCoords);
-
-    auto layout2f = std::make_shared<VertexLayout>();
-    auto layout3f = std::make_shared<VertexLayout>();
-    layout2f->specify<float>(2);
-    layout3f->specify<float>(3);
-
-	auto texturedCubeVAO = GraphicsAPI::create_vao();
-	texturedCubeVAO->tie(cubePositionsVBO, layout3f);
-    texturedCubeVAO->tie(cubeNormalsVBO, layout3f);
-    texturedCubeVAO->tie(cubeTexCoordsVBO, layout2f);
-
-
-
-
-
-    //auto backpackModel = IO::load<Model>();
-
-
-
-
-
-
-
-
-
-
-
-    TextureBlueprint bp{};
-    auto kiryuImage = IO::load<Image>("textures/kiryu.png");
-    auto kiryuTexture = bp.build(kiryuImage, 1);
-
-    auto normalImage = IO::load<Image>("textures/normal.png");
-    auto normalTexture = bp.build(normalImage, 1);
-
-
-
-
-
-    auto mat = std::make_shared<Material>();
-    mat->albedo = kiryuTexture;
-    mat->normal = normalTexture;
-    auto kiryuMesh = std::make_shared<Mesh>(texturedCubeVAO, mat);
-
-    
+    auto& cameraTransform = Registry::get_component<Transform>(observer);
+    cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
 
 
 
     Time::reset();
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    RendererAPI::RenderInfo ri{ camera, transform, {} };
+    std::array<std::tuple<Light, Vector3f>, 32> lights{};
+    Light l{};
+    l.color = Vector3f{ 1.0f, 0.0f, 1.0f };
+    lights[0] = std::make_tuple(l, Vector3f{ 0.5f, 0.5f, 0.5f });
 
 	while (true)
 	{
         Time::tick();
 
-        if (Input::key_pressed(Key::W)) transform.position += 1.0f * transform.forward() * Time::delta();
-        if (Input::key_pressed(Key::S)) transform.position -= 1.0f * transform.forward() * Time::delta();
-        if (Input::key_pressed(Key::A)) transform.position -= 1.0f * transform.right()   * Time::delta();
-        if (Input::key_pressed(Key::D)) transform.position += 1.0f * transform.right()   * Time::delta();
-        if (Input::key_pressed(Key::E)) transform.position += 1.0f * transform.up()      * Time::delta();
-        if (Input::key_pressed(Key::Q)) transform.position -= 1.0f * transform.up()      * Time::delta();
+        const auto mul = Input::key_pressed(Key::LeftShift) ? 10.0f : 1.0f;
+        if (Input::key_pressed(Key::W)) cameraTransform.position += 1.0f * cameraTransform.forward() * Time::delta() * mul;
+        if (Input::key_pressed(Key::S)) cameraTransform.position -= 1.0f * cameraTransform.forward() * Time::delta() * mul;
+        if (Input::key_pressed(Key::A)) cameraTransform.position -= 1.0f * cameraTransform.right()   * Time::delta() * mul;
+        if (Input::key_pressed(Key::D)) cameraTransform.position += 1.0f * cameraTransform.right()   * Time::delta() * mul;
+        if (Input::key_pressed(Key::E)) cameraTransform.position += 1.0f * cameraTransform.up()      * Time::delta() * mul;
+        if (Input::key_pressed(Key::Q)) cameraTransform.position -= 1.0f * cameraTransform.up()      * Time::delta() * mul;
 
-        Renderer::start(ri);
-        Renderer::render_mesh(kiryuMesh);
+
+
+        auto& [testLight, testPosition] = lights.at(0);
+        testPosition.x = glm::cos(glfwGetTime());
+
+
+
+        Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
+
+        Renderer::render(model, modelTransform);
+
         Renderer::finish();
 		window->refresh();
 	}

@@ -7,11 +7,23 @@
 
 namespace hlx
 {
+    //enum Binding : unsigned int;
+
+    //void a(Binding binding)
+    //{
+
+    //}
+    //void b()
+    //{
+    //    a(Binding{ 2u });
+    //    a(2u);
+    //}
+
     template<typename T>
     class OpenGLUniformArrayBuffer : public UniformArrayBuffer<T>, public OpenGLBuffer<T>
     {
     public:
-        OpenGLUniformArrayBuffer(unsigned int count, unsigned int binding)
+        OpenGLUniformArrayBuffer(unsigned int count, unsigned int binding)     //TODO: specify binding before count?
             : Buffer<T>{ count }, UniformArrayBuffer<T>{ count, binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, count }
         {
             bind_base(m_binding);

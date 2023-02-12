@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "entt/entt.hpp"
+#include <entt/entt.hpp>
 
 #include "Helix/ECS/Components/Transform.hpp"
 

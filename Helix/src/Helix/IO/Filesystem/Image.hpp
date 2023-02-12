@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "stb/stb_image.h"
+#include <stb_image.h>
 
 #include "File.hpp"
 
@@ -12,10 +12,7 @@ namespace hlx
 	{
 	public:
 		explicit Image(const std::filesystem::path& path)
-			: File{ path }
-		{
-
-		}
+			: File{ path } {}
 
 		const std::shared_ptr<std::vector<byte>> read(bool flip = false)
 		{

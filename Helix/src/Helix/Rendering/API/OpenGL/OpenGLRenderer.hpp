@@ -7,6 +7,7 @@
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLUniformArrayBuffer.hpp"
 #include "Helix/Rendering/API/RendererAPI.hpp"
 #include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
+#include "Helix/Rendering/Model/Model.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 #include "Helix/Rendering/Shader/Pipeline.hpp"
 
@@ -21,7 +22,7 @@ namespace hlx
         void start(const RenderInfo& renderInfo) override;
         void finish() override;
 
-        void render_mesh(const std::shared_ptr<Mesh> mesh) override;
+        void render(const std::shared_ptr<const Model> model, const Transform& transform) override;
 
     private:
         std::shared_ptr<FrameBuffer> m_gBuffer{};
@@ -32,6 +33,6 @@ namespace hlx
         std::shared_ptr<UniformArrayBuffer<ULight>> m_lightBuffer{};
         std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};              //TODO: Remove?
 
-        std::span<const Light> m_lights{};
+        //std::span<const Light> m_lights{};
     };
 }

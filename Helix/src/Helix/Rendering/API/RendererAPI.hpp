@@ -9,6 +9,8 @@
 #include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
 #include "Helix/ECS/Components/Light.hpp"
 #include "Helix/Rendering/Shader/Uniform/Uniform.hpp"
+#include "Helix/ECS/Components/Transform.hpp"
+#include "Helix/Rendering/Model/Model.hpp"
 
 namespace hlx
 {
@@ -19,7 +21,7 @@ namespace hlx
         {
             const Camera& camera{};
             const Transform& viewPosition{};
-            std::span<const Light> lights{};
+            std::array<std::tuple<Light, glm::vec3>, 32>& lights;
         };
 
         virtual ~RendererAPI() = default;
@@ -27,7 +29,7 @@ namespace hlx
         virtual void start(const RenderInfo& renderInfo) = 0;
         virtual void finish() = 0;
 
-        virtual void render_mesh(const std::shared_ptr<Mesh> mesh) = 0;
+        virtual void render(const std::shared_ptr<const Model> model, const Transform& transform) = 0;
 
     protected:
         RendererAPI() = default;

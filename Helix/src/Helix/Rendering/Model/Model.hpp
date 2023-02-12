@@ -11,6 +11,6 @@ namespace hlx
     public:
         Model() = default;
 
-        std::vector<Mesh> meshes{};
+        std::vector<std::shared_ptr<Mesh>> meshes{};
     };
 }

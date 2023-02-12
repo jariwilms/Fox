@@ -2,10 +2,10 @@
 
 #include "stdafx.hpp"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/quaternion.hpp"
-#include "glm/gtx/quaternion.hpp"
-#include "glm/gtx/matrix_decompose.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 #include "Component.hpp"
 
@@ -18,7 +18,7 @@ namespace hlx
         Transform(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale)
             : position{ position }, rotation{ Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
 
-        Matrix4f transform()
+        Matrix4f transform() const
         {
             Matrix4f result{ 1.0f };
             result  = glm::translate(result, position);
@@ -27,7 +27,7 @@ namespace hlx
 
             return result;
         }
-
+        
         void translate(const Vector3f& value)
         {
             position += value;

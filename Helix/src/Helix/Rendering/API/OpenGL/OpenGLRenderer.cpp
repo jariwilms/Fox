@@ -37,12 +37,12 @@ namespace hlx
 
 
 
-        std::array<ULight, 32> lights{};
-        lights[0] = ULight{ Vector4f{ 1.0f, 0.2f, 1.0f, 1.0f }, Vector4f{ 1.0f, 0.0f, 1.0f, 1.0f }, 0.01f, 0.01f, 10.0f };
+        //std::array<ULight, 32> lights{};
+        constexpr auto lightCount = 32;
 
         m_matricesBuffer = std::make_shared<OpenGLUniformBuffer<UMatrices>>(0, UMatrices{});
         m_materialBuffer = std::make_shared<OpenGLUniformBuffer<UMaterial>>(1, UMaterial{});
-        m_lightBuffer = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(2, lights);
+        m_lightBuffer = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(lightCount, 2);
         m_cameraBuffer = std::make_shared<OpenGLUniformBuffer<UCamera>>(3, UCamera{});
 
 
@@ -71,18 +71,48 @@ namespace hlx
     void OpenGLRenderer::start(const RenderInfo& renderInfo)
     {
         const auto& camera = renderInfo.camera;
-        const auto& transform = renderInfo.viewPosition;
-        m_lights = renderInfo.lights;
+        const auto& position = renderInfo.viewPosition;
+        //m_lights = renderInfo.lights;
 
-        const auto viewMatrix = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
+        const auto viewMatrix = glm::lookAt(position.position, position.position + position.forward(), position.up());
         const auto& projectionMatrix = camera.projection();
+
+
+
+        auto index = 0u;
+        std::array<ULight, 32> uLights{};
+
+        for (const auto& [light, position] : renderInfo.lights)
+        {
+            ULight uLight;
+            uLight.position = Vector4f{ position, 0.0f };
+            uLight.color = Vector4f{ light.color, 0.0f };
+            uLight.linear = 0.1f;
+            uLight.quadratic = 0.1f;
+            uLight.radius = 10.0f;
+
+            uLights[index] = uLight;
+
+            ++index;
+        }
+
+        m_lightBuffer->copy(uLights);
+
+
+
+
+
+
+
+
+
 
         m_gBuffer->bind(FrameBuffer::Target::Write);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
 
         m_matricesBuffer->copy_tuple(offsetof(UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
-        m_cameraBuffer->copy(UCamera{ Vector4f{ transform.position, 0.0f } });
+        m_cameraBuffer->copy(UCamera{ Vector4f{ position.position, 0.0f } });
 
         m_pipelines.find("Geometry")->second->bind();
     }
@@ -102,15 +132,22 @@ namespace hlx
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 
-    void OpenGLRenderer::render_mesh(const std::shared_ptr<Mesh> mesh)
+    void OpenGLRenderer::render(const std::shared_ptr<const Model> model, const Transform& transform)
     {
-        mesh->vao()->bind();
+        m_matricesBuffer->copy_tuple(0, std::make_tuple(transform.transform()));
 
-        const auto& material = mesh->material();
-        m_materialBuffer->copy(UMaterial{ material->color, material->metallic, material->roughness });
-        material->albedo->bind(0);
-        material->normal->bind(1);
+        for (const auto& mesh : model->meshes)
+        {
+            const auto vao = mesh->vao();
+            vao->bind();
+            if (vao->indexed()) vao->indices()->bind();
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+            const auto& material = mesh->material();
+            m_materialBuffer->copy(UMaterial{ material->color, material->metallic, material->roughness });
+            material->albedo->bind(0);
+            material->normal->bind(1);
+
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->size() / sizeof(unsigned int)), GL_UNSIGNED_INT, nullptr);
+        }
     }
 }

@@ -11,19 +11,11 @@ workspace "Helix"
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
-	includedir["ASSIMP"]   = "Helix/vendor/assimp/include"
-	includedir["ENTT"]     = "Helix/vendor/entt/include"
-	includedir["GLAD"]     = "Helix/vendor/glad/include"
-	includedir["GLFW"]     = "Helix/vendor/glfw/include"
-	includedir["GLM"]      = "Helix/vendor/glm/include"
-	includedir["STB"]      = "Helix/vendor/stb/include"
-	--includedir["TINYGLTF"] = "Helix/vendor/tinygltf/include"
+	includedir["GLAD"]   = "Helix/vendor/glad/include"
+	includedir["GLFW"]   = "Helix/vendor/glfw/include"
 	
-	include "Helix/vendor/assimp"
-	include "Helix/vendor/zlib"
 	include "Helix/vendor/glad"
 	include "Helix/vendor/glfw"
-	--include "Helix/vendor/tinygltf"
 	
 project "Helix"
 	location "Helix"
@@ -40,7 +32,6 @@ project "Helix"
 	
 	files
 	{
-		"%{prj.name}/src/**.h", 
 		"%{prj.name}/src/**.hpp", 
 		"%{prj.name}/src/**.cpp"
 	}
@@ -48,21 +39,14 @@ project "Helix"
 	includedirs
 	{
 		"%{prj.name}/src", 
-		"%{includedir.ASSIMP}", 
-		"%{includedir.ENTT}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
-		"%{includedir.GLM}", 
-		"%{includedir.STB}", 
-		--"%{includedir.TINYGLTF}", 
 	}
 	
 	links
 	{
-		"ASSIMP", 
 		"GLAD", 
 		"GLFW", 
-		--"TINYGLTF", 
 		
 		"opengl32.lib", 
 	}
@@ -76,8 +60,8 @@ project "Helix"
 	
 	disablewarnings
 	{
-		" 4250",  --Buffer Dominance
-		" 6262",  --STB stack 
+		" 4250", --Buffer Dominance
+		" 6262", --STB stack 
 		"26451", --STB overflow
 	}
 	
