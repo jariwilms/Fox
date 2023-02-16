@@ -27,13 +27,13 @@ namespace hlx
 		}
 
 	protected:
-		Texture2D(Texture::Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels)
+		Texture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels)
             : Texture{ format, layout, mipLevels }, m_dimensions{ dimensions } {}
-		Texture2D(Texture::Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
+		Texture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
             : Texture{ format, layout, mipLevels, minFilter, magFilter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
 		const Vector2u m_dimensions{};
-        Wrapping         m_wrappingS{ Wrapping::ClampToEdge };
-        Wrapping         m_wrappingT{ Wrapping::ClampToEdge };
+        Wrapping       m_wrappingS{ Wrapping::ClampToEdge };
+        Wrapping       m_wrappingT{ Wrapping::ClampToEdge };
 	};
 }

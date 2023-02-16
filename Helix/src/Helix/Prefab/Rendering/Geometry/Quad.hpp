@@ -19,11 +19,10 @@ namespace hlx
             const auto layout2f = std::make_shared<VertexLayout>();
             layout2f->specify<float>(2);
 
-            const auto positionsVBO = GraphicsAPI::create_vbo<float>(positions);
-            const auto normalsVBO = GraphicsAPI::create_vbo<float>(normals);
+            const auto positionsVBO   = GraphicsAPI::create_vbo<float>(positions);
+            const auto normalsVBO     = GraphicsAPI::create_vbo<float>(normals);
             const auto coordinatesVBO = GraphicsAPI::create_vbo<float>(coordinates);
-
-            const auto indicesIBO = GraphicsAPI::create_ibo(indices);
+            const auto indicesIBO     = GraphicsAPI::create_ibo(indices);
 
             vao = GraphicsAPI::create_vao();
             vao->tie(positionsVBO, layout3f);
@@ -32,33 +31,33 @@ namespace hlx
             vao->tie(indicesIBO);
         }
 
-        const std::array<float, 12> positions =
+        static inline const std::array<float, 12> positions
         {
-             1.0f, 1.0f,  0.0f,
-            -1.0f, 1.0f,  0.0f,
-            -1.0f, -1.0f, 0.0f,
-             1.0f, -1.0f, 0.0f,
+             1.0f,  1.0f,  0.0f,
+            -1.0f,  1.0f,  0.0f,
+            -1.0f, -1.0f,  0.0f,
+             1.0f, -1.0f,  0.0f,
         };
-        const std::array<float, 12> normals =
+        static inline const std::array<float, 12> normals
         {
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
         };
-        const std::array<float, 12> coordinates =
+        static inline const std::array<float, 12> coordinates
         {
             1.0f, 1.0f,
             0.0f, 1.0f,
             0.0f, 0.0f,
             1.0f, 0.0f,
         };
-        const std::array<unsigned int, 6> indices =
+        static inline const std::array<unsigned int, 6> indices
         {
             0, 1, 2,
             0, 2, 3,
         };
 
-        std::shared_ptr<VertexArray> vao{};
+        static inline std::shared_ptr<VertexArray> vao{};
     };
 }

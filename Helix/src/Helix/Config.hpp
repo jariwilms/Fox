@@ -5,18 +5,30 @@ namespace hlx
 	class Config
 	{
 	public:
-		class Core
+		void init()
 		{
 
+		}
+
+		class Core
+		{
+		public:
+		};
+
+		class IO
+		{
+		public:
+			static inline bool flipImages{ true };
 		};
 
 		class Rendering
 		{
+		public:
 			enum class RenderAPI
 			{
-				DirectX,
-				OpenGL,
-				Vulkan,
+				DirectX, 
+				OpenGL, 
+				Vulkan, 
 			};
 
 			static inline RenderAPI renderAPI{ RenderAPI::OpenGL };

@@ -10,30 +10,52 @@ namespace hlx
 	{
 	public:
 		explicit File(const std::filesystem::path& path)
-			: Entry{ path }, m_size{ std::filesystem::file_size(m_path) } {}
+			: Entry{ path }
+		{
+            if (!std::filesystem::is_regular_file(path)) throw std::invalid_argument{ "The given path does not reference a file!" };
 
-		virtual const std::shared_ptr<std::vector<byte>> read()
+			m_extension = m_path.extension().string();
+			m_lastWriteTime = std::filesystem::last_write_time(m_path);
+			m_size = std::filesystem::file_size(m_path);
+		}
+
+		virtual std::shared_ptr<const std::vector<byte>> read()
 		{
 			if (!m_data.expired()) return m_data.lock();
 
 			std::ifstream file(m_path, std::ios::binary);
-			auto result = std::make_shared<std::vector<byte>>(std::istreambuf_iterator<char>{ file }, std::istreambuf_iterator<char>{});
-			m_data = result;
+			auto ptr = std::make_shared<const std::vector<byte>>(std::istreambuf_iterator<char>{ file }, std::istreambuf_iterator<char>{});
+			m_data = ptr;
 
-			return result;
+			return ptr;
 		}
-		virtual void write(const std::vector<byte>& data)
+		virtual void write(const std::span<byte>& data)
 		{
-			throw std::logic_error{ "The method or operation has not been implemented!" };
+			std::ofstream output{ m_path };
+			std::ostream_iterator<byte> outputIterator{ output };
+			std::copy(data.begin(), data.end(), outputIterator);
+
+            m_lastWriteTime = std::filesystem::last_write_time(m_path);
 		}
 
+		const std::filesystem::path& extension() const
+		{
+			return m_extension;
+		}
+		const std::filesystem::file_time_type& last_write_time() const
+		{
+			return m_lastWriteTime;
+		}
         size_t size() const
         {
             return m_size;
         }
 
     protected:
-        std::weak_ptr<std::vector<byte>> m_data{};
+		std::filesystem::path m_extension{};
+		std::filesystem::file_time_type m_lastWriteTime{};
 		size_t m_size{};
+
+		std::weak_ptr<const std::vector<byte>> m_data{};
 	};
 }

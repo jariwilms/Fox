@@ -18,11 +18,13 @@ namespace hlx
         static std::shared_ptr<Model> load(const std::filesystem::path& path)
         {
             const auto directory = path.parent_path();
+            const auto aggregate = (IO::root() / path.string());
+            const auto agp = aggregate.parent_path();
 
             Assimp::Importer importer{};
             const auto pFlags = aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FixInfacingNormals | aiProcess_SortByPType | aiProcess_OptimizeGraph | aiProcess_OptimizeMeshes; //gensmoothnormals?
 
-            const auto aiScene = importer.ReadFile(path.string(), pFlags);
+            const auto aiScene = importer.ReadFile(aggregate.string(), pFlags);
             if (!aiScene || aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiScene->mRootNode) throw std::runtime_error{ "Failed to load model!" };
 
 
@@ -47,7 +49,7 @@ namespace hlx
                     aiMaterial.Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), materialDiffuse);
                     if (materialDiffuse.length)
                     {
-                        const auto diffuseImage = std::make_shared<Image>(directory / materialDiffuse.C_Str());
+                        const auto diffuseImage = std::make_shared<Image>(agp / materialDiffuse.C_Str());
                         const auto diffuseTexture = bp.build(diffuseImage);
                         material->albedo = diffuseTexture;
                     }
@@ -55,7 +57,7 @@ namespace hlx
                     aiMaterial.Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0), materialNormal);
                     if (materialNormal.length)
                     {
-                        const auto normalImage = std::make_shared<Image>(directory / materialNormal.C_Str());
+                        const auto normalImage = std::make_shared<Image>(agp / materialNormal.C_Str());
                         const auto normalTexture = bp.build(normalImage);
                         material->normal = normalTexture;
                     }

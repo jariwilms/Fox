@@ -13,7 +13,7 @@ namespace hlx
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(Type type, std::span<const byte> binary);
+		OpenGLShader(Type type, const std::span<const byte> binary);
 		~OpenGLShader();
 
     private:

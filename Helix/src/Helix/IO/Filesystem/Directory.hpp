@@ -10,53 +10,85 @@ namespace hlx
 	class Directory : public Entry
 	{
 	public:
-		explicit Directory(const std::filesystem::path& path)
+		using Children = std::tuple<std::vector<std::shared_ptr<Directory>>, std::vector<std::shared_ptr<File>>>;
+
+		explicit Directory(const std::filesystem::path& path, bool explore = false)
 			: Entry{ path }
 		{
-			const auto valid = std::filesystem::is_directory(path) && std::filesystem::exists(path);
-			if (!valid) throw std::invalid_argument{ "The given path is not valid!" };
+			if (!std::filesystem::is_directory(path)) throw std::invalid_argument{ "The given path does not reference a directory!" };
+
+			if (explore) this->explore();
 		}
 
 		void refresh()
 		{
-			//update values
-			//recursively refresh children as well
-			//explore
+			explore();
 		}
+        void explore()
+        {
+            auto& [directories, files] = m_children;
+            directories.clear();
+            files.clear();
 
-		Directory& create_directory(std::string_view name)
+            std::filesystem::directory_iterator it{ m_path };
+            for (const auto& entry : it)
+            {
+                if (entry.is_directory())    directories.emplace_back(std::make_shared<Directory>(entry.path()));
+                if (entry.is_regular_file()) files.emplace_back(std::make_shared<File>(entry.path()));
+            }
+
+            m_count = directories.size() + files.size();
+        }
+
+		template<typename T, typename... Args>
+		std::shared_ptr<T> create(Args... args) = delete;
+        template<> std::shared_ptr<Directory> create(const std::string& identifier)
+        {
+            const auto aggregatePath = m_path / identifier;
+			if (!std::filesystem::exists(aggregatePath)) std::filesystem::create_directory(aggregatePath);
+
+            return std::make_shared<Directory>(aggregatePath);
+        }
+		template<> std::shared_ptr<File> create(const std::string& identifier, const std::string& extension)
 		{
+            const auto aggregatePath = m_path / identifier;
+			if (!std::filesystem::exists(aggregatePath)) std::ofstream{ aggregatePath };
 
+            return std::make_shared<File>(aggregatePath);
 		}
-		File& create_file(std::string_view name)
+
+		template<typename T, typename... Args>
+		bool remove(Args... args) = delete;
+		template<> bool remove<Directory>(const std::filesystem::path& path, bool recursive)
 		{
+			if (!std::filesystem::is_directory(path)) throw std::invalid_argument{ "The given path is not a directory!" };
 
+			if (recursive) return std::filesystem::remove_all(path);
+			else           return std::filesystem::remove(path);
 		}
+        template<> bool remove<File>(const std::filesystem::path& path)
+        {
+			if (!std::filesystem::is_regular_file(path)) throw std::invalid_argument{ "The given path is not a file!" };
 
-		void delete_directory(std::string_view name)
+			return std::filesystem::remove(path);
+        }
+
+		const Children& children() const
 		{
-			//TODO: single directory string
-			//TODO: string with subdir => "assets/models" deletes models
-			//TODO: confirmation in program if multiple or directory not empty
+			return m_children;
 		}
-		void delete_file(std::string_view name)
-		{
-
-		}
-
 		size_t count() const
 		{
-			return 0;
-			//Returns amount of children (recursive?)
+			return m_count;
+		}
+
+		std::filesystem::path operator/(const std::filesystem::path& rhs)
+		{
+			return m_path / rhs;
 		}
 
 	private:
-		void explore()
-		{
-			
-		}
-
-		std::vector<std::shared_ptr<Entry>> m_children{};
+		Children m_children{};
 		size_t m_count{};
 	};
 }

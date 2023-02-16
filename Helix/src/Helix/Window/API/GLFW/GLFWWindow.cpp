@@ -30,7 +30,7 @@ namespace hlx
 
         //TODO: move above context into these classes
         m_userPointer = std::make_shared<UserPointer>();
-        m_userPointer->glfwWindow    = std::shared_ptr<GLFWWindow>(this);
+        m_userPointer->glfwWindow = std::shared_ptr<GLFWWindow>(this, [](const GLFWWindow* window) {});
         m_userPointer->renderContext = std::make_shared<OpenGLRenderContext>();
         m_userPointer->inputHandler  = std::make_shared<GLFWInputHandler>();
         glfwSetWindowUserPointer(m_glfwWindow, m_userPointer.get());
@@ -122,7 +122,7 @@ namespace hlx
 
 	void GLFWWindow::rename(const std::string& title)
 	{
-		glfwSetWindowTitle(m_glfwWindow, std::string{title}.c_str());      //TODO: cursed
+		glfwSetWindowTitle(m_glfwWindow, title.c_str());
 	}
 	void GLFWWindow::resize(const Vector2f& dimensions)
 	{

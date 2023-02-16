@@ -55,11 +55,11 @@ namespace hlx
 	}
 	void OpenGLTexture2D::unbind() const
 	{
-
+        throw std::logic_error("The method or operation is not implemented.");
 	}
 	bool OpenGLTexture2D::bound() const
 	{
-		return false;
+        throw std::logic_error("The method or operation is not implemented.");
 	}
 	
 	void OpenGLTexture2D::copy(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data) const

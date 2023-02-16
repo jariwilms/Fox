@@ -12,8 +12,8 @@ namespace hlx
     class GLFWInputHandler : public InputHandlerAPI
     {
     public:
-        GLFWInputHandler();
-        ~GLFWInputHandler() override;
+        GLFWInputHandler() = default;
+        ~GLFWInputHandler() override = default;
 
         void update() override;
         void reset() override;

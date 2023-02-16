@@ -144,7 +144,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Helix\Core\Config.hpp">
+    <ClInclude Include="src\Helix\Config.hpp">
       <Filter>Helix\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp">
@@ -345,7 +345,7 @@
     <ClInclude Include="src\Helix\Rendering\Model\Model.hpp">
       <Filter>Helix\Rendering\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\Model\Prefab\Cube.hpp">
+    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Cube.hpp">
       <Filter>Helix\Rendering\Model\Prefab</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp">
@@ -379,6 +379,11 @@
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Helix\Rendering\PostProcessing\AmbientOcclusion.hpp" />
+    <ClInclude Include="src\Helix\Rendering\PostProcessing\PostProcessing.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLCubemapTexture.hpp" />
+    <ClInclude Include="src\Helix\Test\Test.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\CubemapTexture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
@@ -431,5 +436,6 @@
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLCubemapTexture.cpp" />
   </ItemGroup>
 </Project>

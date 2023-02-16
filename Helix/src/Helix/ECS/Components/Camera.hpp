@@ -15,7 +15,7 @@ namespace hlx
             m_fov = 60.0f;                                                     //
             m_aspect = 16.0f / 9.0f;                                           //TODO: fetch aspect from window?
             
-            m_projection = Projection::create<Projection::Type::Perspective>(m_fov, m_aspect, 0.001f, 10000.0f);
+            m_projection = Projection::create<Projection::Type::Perspective>(m_fov, m_aspect, 0.01f, 100.0f);
         }
 
         float fov() const

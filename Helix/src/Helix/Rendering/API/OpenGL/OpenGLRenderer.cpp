@@ -31,21 +31,18 @@ namespace hlx
         fbbp.textures = tbps;
         fbbp.renderBuffers = rbps;
 
-        m_gBuffer = fbbp.build(Vector2f{ 1280, 720 });                         //TODO: fetch target window from application
+        m_gBuffers[0] = fbbp.build(Vector2f{ 1280, 720 });                         //TODO: fetch target window from application
+        m_gBuffers[1] = fbbp.build(Vector2f{ 1280, 720 });
 
 
 
 
 
-        //std::array<ULight, 32> lights{};
         constexpr auto lightCount = 32;
-
         m_matricesBuffer = std::make_shared<OpenGLUniformBuffer<UMatrices>>(0, UMatrices{});
         m_materialBuffer = std::make_shared<OpenGLUniformBuffer<UMaterial>>(1, UMaterial{});
         m_lightBuffer = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(lightCount, 2);
         m_cameraBuffer = std::make_shared<OpenGLUniformBuffer<UCamera>>(3, UCamera{});
-
-
 
 
 
@@ -58,6 +55,15 @@ namespace hlx
         auto geometryPipeline = GraphicsAPI::create_plo({ geometryVertexShader, geometryFragmentShader });
         m_pipelines.emplace("Geometry", geometryPipeline);
 
+        const auto skyboxVertexSource = IO::load<File>("shaders/compiled/skyboxvert.spv")->read();
+        const auto skyboxFragmentSource = IO::load<File>("shaders/compiled/skyboxfrag.spv")->read();
+        auto skyboxVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *skyboxVertexSource);
+        if (!skyboxVertexShader->valid()) throw std::runtime_error{ skyboxVertexShader->error().data() };
+        auto skyboxFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *skyboxFragmentSource);
+        if (!skyboxFragmentShader->valid()) throw std::runtime_error{ skyboxFragmentShader->error().data() };
+        auto skyboxPipeline = GraphicsAPI::create_plo({ skyboxVertexShader, skyboxFragmentShader });
+        m_pipelines.emplace("Skybox", skyboxPipeline);
+
         const auto lightingVertexSource = IO::load<File>("shaders/compiled/lightingvert.spv")->read();
         const auto lightingFragmentSource = IO::load<File>("shaders/compiled/lightingfrag.spv")->read();
         auto lightingVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *lightingVertexSource);
@@ -66,13 +72,28 @@ namespace hlx
         if (!lightingFragmentShader->valid()) throw std::runtime_error{ lightingFragmentShader->error().data() };
         auto lightingPipeline = GraphicsAPI::create_plo({ lightingVertexShader, lightingFragmentShader });
         m_pipelines.emplace("Lighting", lightingPipeline);
+
+        const auto postProcessingVertexSource = IO::load<File>("shaders/compiled/sharpenvert.spv")->read();
+        const auto postProcessingFragmentSource = IO::load<File>("shaders/compiled/sharpenfrag.spv")->read();
+        auto postProcessingVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *postProcessingVertexSource);
+        if (!postProcessingVertexShader->valid()) throw std::runtime_error{ postProcessingVertexShader->error().data() };
+        auto postProcessingFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *postProcessingFragmentSource);
+        if (!postProcessingFragmentShader->valid()) throw std::runtime_error{ postProcessingFragmentShader->error().data() };
+        auto postProcessingPipeline = GraphicsAPI::create_plo({ postProcessingVertexShader, postProcessingFragmentShader });
+        m_postProcessingPipelines.emplace("SharpenKernel", postProcessingPipeline);
+
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glDepthFunc(GL_LEQUAL);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CCW);
     }
 
     void OpenGLRenderer::start(const RenderInfo& renderInfo)
     {
+        m_renderInfo = renderInfo;
+
         const auto& camera = renderInfo.camera;
         const auto& position = renderInfo.viewPosition;
-        //m_lights = renderInfo.lights;
 
         const auto viewMatrix = glm::lookAt(position.position, position.position + position.forward(), position.up());
         const auto& projectionMatrix = camera.projection();
@@ -107,9 +128,11 @@ namespace hlx
 
 
 
-        m_gBuffer->bind(FrameBuffer::Target::Write);
+        m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
 
         m_matricesBuffer->copy_tuple(offsetof(UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
         m_cameraBuffer->copy(UCamera{ Vector4f{ position.position, 0.0f } });
@@ -118,13 +141,26 @@ namespace hlx
     }
     void OpenGLRenderer::finish()
     {
-        m_gBuffer->unbind();
+        glDisable(GL_CULL_FACE);
+
+        m_pipelines.find("Skybox")->second->bind();
+        Cube::vao->bind();
+        m_renderInfo.skybox->bind(0);
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
+
+
+
+
+
+        m_gBuffers[m_pingpong]->unbind();
+        m_pingpong = !m_pingpong;
+
         m_pipelines.find("Lighting")->second->bind();
 
-        m_gBuffer->bind_texture("Position", 0);
-        m_gBuffer->bind_texture("Color", 1);
-        m_gBuffer->bind_texture("Specular", 2);
-        m_gBuffer->bind(FrameBuffer::Target::Read);
+        m_gBuffers[m_pingpong]->bind_texture("Position", 0);
+        m_gBuffers[m_pingpong]->bind_texture("Color", 1);
+        m_gBuffers[m_pingpong]->bind_texture("Specular", 2);
+        m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Read);
 
         Geometry::quad->vao->bind();
 

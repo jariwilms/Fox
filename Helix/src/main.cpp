@@ -15,28 +15,66 @@
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
-#include "Helix/Rendering/Model/Prefab/Cube.hpp"
+#include "Helix/Prefab/Rendering/Geometry/Cube.hpp"
 #include "Helix/Rendering/Renderer.hpp"
 #include "Helix/Window/Window.hpp"
+#include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
+
+#include "Helix/Test/Test.hpp"
 
 using namespace hlx;
 
 int main()
 {
-    IO::init();
-    Time::init();
-
     std::string windowTitle{ "Helix" };
     const Vector2f windowDimensions{ 1280, 720 };
     auto window = Window::create(windowTitle, windowDimensions);
 
-    //TODO: move into rendercontext?
+    IO::init();
     Geometry::init();
     Renderer::init();
 
 
 
-    auto model = ModelImporter::load("assets/models/backpack/scene.gltf");
+
+
+    const Vector2u dimensions{ 2048, 2048 };
+    const std::initializer_list<std::string> skyboxIdentifiers =
+    {
+        "right",
+        "left", 
+        "bottom", 
+        "top", 
+        "front", 
+        "back", 
+    };
+
+    std::array<std::vector<byte>, 6> result{};
+    std::array<std::span<byte>, 6> result2{};
+    unsigned int index{};
+    for (const auto& identifier : skyboxIdentifiers)
+    {
+        const auto image = IO::load<Image>("textures/skybox/" + identifier + ".png");
+        result[index] = *image->read();
+        result2[index] = result[index];
+        ++index;
+    }
+
+    const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::Layout::RGBA8, dimensions, 1u, result2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+    auto model = ModelImporter::load(R"(models\backpack\scene.gltf)");
     Transform modelTransform{};
     modelTransform.rotate(Vector3f{ -90.0f, 0.0f, 0.0f });
 
@@ -45,40 +83,48 @@ int main()
     auto& cameraTransform = Registry::get_component<Transform>(observer);
     cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
 
+    Camera camera2 = camera;
 
 
-    Time::reset();
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     std::array<std::tuple<Light, Vector3f>, 32> lights{};
     Light l{};
-    l.color = Vector3f{ 1.0f, 0.0f, 1.0f };
+    l.color = Vector3f{ 0.01f, 0.0f, 0.01f };
     lights[0] = std::make_tuple(l, Vector3f{ 0.5f, 0.5f, 0.5f });
 
-	while (true)
+
+
+    Time::reset();
+
+    const auto native = window->native_window();
+	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(native)))
 	{
-        Time::tick();
-
-        const auto mul = Input::key_pressed(Key::LeftShift) ? 10.0f : 1.0f;
-        if (Input::key_pressed(Key::W)) cameraTransform.position += 1.0f * cameraTransform.forward() * Time::delta() * mul;
-        if (Input::key_pressed(Key::S)) cameraTransform.position -= 1.0f * cameraTransform.forward() * Time::delta() * mul;
-        if (Input::key_pressed(Key::A)) cameraTransform.position -= 1.0f * cameraTransform.right()   * Time::delta() * mul;
-        if (Input::key_pressed(Key::D)) cameraTransform.position += 1.0f * cameraTransform.right()   * Time::delta() * mul;
-        if (Input::key_pressed(Key::E)) cameraTransform.position += 1.0f * cameraTransform.up()      * Time::delta() * mul;
-        if (Input::key_pressed(Key::Q)) cameraTransform.position -= 1.0f * cameraTransform.up()      * Time::delta() * mul;
+        Time::advance();
 
 
 
-        auto& [testLight, testPosition] = lights.at(0);
-        testPosition.x = glm::cos(glfwGetTime());
+        const auto shift = Input::key_pressed(Key::LeftShift) ? 10.0f : 1.0f;
+        if (Input::key_pressed(Key::W)) cameraTransform.position += cameraTransform.forward() * shift * Time::delta();
+        if (Input::key_pressed(Key::S)) cameraTransform.position -= cameraTransform.forward() * shift * Time::delta();
+        if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right()   * shift * Time::delta();
+        if (Input::key_pressed(Key::D)) cameraTransform.position += cameraTransform.right()   * shift * Time::delta();
+        if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up()      * shift * Time::delta();
+        if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up()      * shift * Time::delta();
 
+        if (Input::button_pressed(Button::Button1))
+        {
+            const auto rel = Input::cursor_position_relative() / 10.0f;
+            cameraTransform.rotate({ rel.y, rel.x, 0.0f });
+        }
 
-
-        Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
-
+        Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, skyboxTexture, lights, {} });
         Renderer::render(model, modelTransform);
-
         Renderer::finish();
+
+
+
 		window->refresh();
 	}
+
+    return 0;
 }

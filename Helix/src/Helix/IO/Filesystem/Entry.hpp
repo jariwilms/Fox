@@ -8,22 +8,24 @@ namespace hlx
 	{
 	public:
 		Entry(const std::filesystem::path& path)
-			: m_path{ path }, m_name{ m_path.filename().string() }
 		{
+			if (!std::filesystem::exists(path)) throw std::runtime_error{ "Path does not exist!" };
 
+			m_path = path.lexically_normal();
+			m_name = m_path.filename().string();
 		}
 
 		const std::filesystem::path& path() const
 		{
 			return m_path;
 		}
-		std::string_view name() const
+		const std::filesystem::path& name() const
 		{
 			return m_name;
 		}
 
 	protected:
 		std::filesystem::path m_path{};
-		std::string m_name{};
+		std::filesystem::path m_name{};
 	};
 }

@@ -25,14 +25,17 @@ namespace hlx
         void render(const std::shared_ptr<const Model> model, const Transform& transform) override;
 
     private:
-        std::shared_ptr<FrameBuffer> m_gBuffer{};
+        std::array<std::shared_ptr<FrameBuffer>, 2> m_gBuffers{};
+        bool m_pingpong{ false };
+
         std::unordered_map<std::string, std::shared_ptr<Pipeline>> m_pipelines{}; 
+        std::unordered_map<std::string, std::shared_ptr<Pipeline>> m_postProcessingPipelines{};
 
         std::shared_ptr<UniformBuffer<UMatrices>> m_matricesBuffer{};
         std::shared_ptr<UniformBuffer<UMaterial>> m_materialBuffer{};          //TODO: Convert UniformArrayBuffer
         std::shared_ptr<UniformArrayBuffer<ULight>> m_lightBuffer{};
         std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};              //TODO: Remove?
 
-        //std::span<const Light> m_lights{};
+        RenderInfo m_renderInfo;
     };
 }

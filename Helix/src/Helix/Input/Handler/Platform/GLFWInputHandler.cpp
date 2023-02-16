@@ -5,15 +5,6 @@
 
 namespace hlx
 {
-    GLFWInputHandler::GLFWInputHandler()
-    {
-
-    }
-    GLFWInputHandler::~GLFWInputHandler()
-    {
-
-    }
-
     void GLFWInputHandler::update()
     {
         m_lastActiveKeys = m_activeKeys;

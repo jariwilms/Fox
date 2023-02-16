@@ -22,6 +22,7 @@ namespace hlx
         {
             return std::make_shared<OpenGLVertexArray>();
         }
+
         template<typename T>                          
         static std::shared_ptr<VertexBuffer<T>>       create_vbo(unsigned int count)
         {
@@ -70,7 +71,7 @@ namespace hlx
             return std::make_shared<OpenGLRenderBuffer>(type, layout, dimensions, multiSamples);
         }
                                                       
-        static std::shared_ptr<Shader>                create_sho(Shader::Type type, std::span<const byte> binary)
+        static std::shared_ptr<Shader>                create_sho(Shader::Type type, const std::span<const byte> binary)
         {
             return std::make_shared<OpenGLShader>(type, binary);
         }

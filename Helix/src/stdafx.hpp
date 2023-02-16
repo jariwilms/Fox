@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Helix/Core/Config.hpp"
+#include "Helix/Config.hpp"
 #include "Helix/Core/Typedef.hpp"
 
 #include <typeinfo>
