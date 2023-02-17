@@ -36,6 +36,7 @@
 #include <ranges>
 #include <random>
 #include <utility>
+#include <numeric>
 #include <algorithm>
 #include <functional>
 

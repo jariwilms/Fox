@@ -101,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="src\Helix\Config.hpp" />
     <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
     <ClInclude Include="src\Helix\Core\Typedef.hpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="src\Helix\ECS\Registry.hpp" />
     <ClInclude Include="src\Helix\ECS\System\Render.hpp" />
     <ClInclude Include="src\Helix\ECS\System\System.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />

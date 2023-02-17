@@ -384,6 +384,8 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLCubemapTexture.hpp" />
     <ClInclude Include="src\Helix\Test\Test.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\CubemapTexture.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Texture\Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">

@@ -14,6 +14,7 @@ namespace hlx
 
         static void reset()
         {
+            s_tr = Clock::now();
             s_t0 = Clock::now();
             s_t1 = Clock::now();
         }
@@ -21,7 +22,7 @@ namespace hlx
         static void advance()
         {
             s_t1 = Clock::now();
-            s_deltaTime = std::chrono::duration_cast<Duration>(s_t1 - s_t0).count();
+            s_delta = std::chrono::duration_cast<Duration>(s_t1 - s_t0).count();
             s_t0 = s_t1;
         }
 
@@ -36,12 +37,20 @@ namespace hlx
         }
         static const DeltaTime& delta()
         {
-            return s_deltaTime;
+            return s_delta;
+        }
+        static const DeltaTime& delta_c()
+        {
+            s_deltaC = std::chrono::duration<float>{ Clock::now() - s_tr }.count();
+
+            return s_deltaC;
         }
 
     private:
-        static inline TimePoint s_t0{};
-        static inline TimePoint s_t1{};
-        static inline DeltaTime s_deltaTime{};
+        static inline TimePoint s_t0{};                                        //Previous TimePoint
+        static inline TimePoint s_t1{};                                        //Current  TimePoint
+        static inline TimePoint s_tr{};                                        //Reset    TimePoint
+        static inline DeltaTime s_delta{};                                     //DeltaTime as difference of (t1, t0)
+        static inline DeltaTime s_deltaC{};                                    //DeltaTime starting from reset
     };
 }

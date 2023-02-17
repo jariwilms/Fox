@@ -21,7 +21,7 @@ namespace hlx
 
 		virtual std::shared_ptr<const std::vector<byte>> read()
 		{
-			if (!m_data.expired()) return m_data.lock();
+			if (loaded()) return m_data.lock();
 
 			std::ifstream file(m_path, std::ios::binary);
 			auto ptr = std::make_shared<const std::vector<byte>>(std::istreambuf_iterator<char>{ file }, std::istreambuf_iterator<char>{});
@@ -36,6 +36,11 @@ namespace hlx
 			std::copy(data.begin(), data.end(), outputIterator);
 
             m_lastWriteTime = std::filesystem::last_write_time(m_path);
+		}
+
+		virtual bool loaded() const
+		{
+			return !m_data.expired();
 		}
 
 		const std::filesystem::path& extension() const
@@ -57,5 +62,6 @@ namespace hlx
 		size_t m_size{};
 
 		std::weak_ptr<const std::vector<byte>> m_data{};
+		bool m_loaded{};
 	};
 }

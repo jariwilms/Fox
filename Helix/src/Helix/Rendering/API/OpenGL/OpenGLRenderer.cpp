@@ -31,7 +31,7 @@ namespace hlx
         fbbp.textures = tbps;
         fbbp.renderBuffers = rbps;
 
-        m_gBuffers[0] = fbbp.build(Vector2f{ 1280, 720 });                         //TODO: fetch target window from application
+        m_gBuffers[0] = fbbp.build(Vector2f{ 1280, 720 });                     //TODO: fetch target window from application
         m_gBuffers[1] = fbbp.build(Vector2f{ 1280, 720 });
 
 

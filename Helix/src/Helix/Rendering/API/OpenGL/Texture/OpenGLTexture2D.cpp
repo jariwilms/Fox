@@ -16,6 +16,7 @@ namespace hlx
 		glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, OpenGL::texture_min_filter(m_minFilter));
 		glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, OpenGL::texture_mag_filter(m_magFilter));
 		glTextureStorage2D(m_id, m_mipLevels, m_internalLayout, m_dimensions.x, m_dimensions.y);
+		//glTextureStorage2DMultisample(m_id, m_samples, )
 	}
 	OpenGLTexture2D::OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, std::span<const byte> data)
 		: OpenGLTexture2D{ format, layout, dimensions, mipLevels }

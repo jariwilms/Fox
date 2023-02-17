@@ -19,13 +19,24 @@
 #include "Helix/Rendering/Renderer.hpp"
 #include "Helix/Window/Window.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
+#include "Helix/Core/Library/Array/CycleArray.hpp"
 
 #include "Helix/Test/Test.hpp"
+#include "Helix/Experimental/Texture/Texture.hpp"
 
 using namespace hlx;
 
 int main()
 {
+    exp::test();
+
+
+
+
+
+
+
+
     std::string windowTitle{ "Helix" };
     const Vector2f windowDimensions{ 1280, 720 };
     auto window = Window::create(windowTitle, windowDimensions);
@@ -43,8 +54,8 @@ int main()
     {
         "right",
         "left", 
-        "bottom", 
         "top", 
+        "bottom", 
         "front", 
         "back", 
     };
@@ -55,22 +66,13 @@ int main()
     for (const auto& identifier : skyboxIdentifiers)
     {
         const auto image = IO::load<Image>("textures/skybox/" + identifier + ".png");
-        result[index] = *image->read();
+        auto [dimensions, channels, size, data] = image->read_c(4, false);     //Bandaid fix
+        result[index] = data;
         result2[index] = result[index];
         ++index;
     }
 
     const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::Layout::RGBA8, dimensions, 1u, result2);
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -83,7 +85,7 @@ int main()
     auto& cameraTransform = Registry::get_component<Transform>(observer);
     cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
 
-    Camera camera2 = camera;
+
 
 
 
@@ -94,7 +96,10 @@ int main()
 
 
 
+
+
     Time::reset();
+    CycleArray<float, 128> frametimes{};
 
     const auto native = window->native_window();
 	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(native)))
@@ -113,8 +118,11 @@ int main()
 
         if (Input::button_pressed(Button::Button1))
         {
+            static Vector3f rotation{};
             const auto rel = Input::cursor_position_relative() / 10.0f;
-            cameraTransform.rotate({ rel.y, rel.x, 0.0f });
+            rotation += Vector3f{ rel.y, rel.x, 0.0f };
+
+            cameraTransform.rotation = Quaternion{ glm::radians(rotation) };
         }
 
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, skyboxTexture, lights, {} });
@@ -124,6 +132,7 @@ int main()
 
 
 		window->refresh();
+        frametimes.push_back(Time::delta());
 	}
 
     return 0;
