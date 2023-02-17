@@ -31,7 +31,7 @@ namespace hlx
 		const auto attach_renderbuffer = [this](const std::tuple<std::string, Attachment, RenderBufferBlueprint>& attachee)
 		{
 			const auto& [name, attachment, blueprint] = attachee;
-			const auto renderBuffer = blueprint.build(m_dimensions, 0);
+			const auto renderBuffer = blueprint.build(m_dimensions);
 
 			auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
 

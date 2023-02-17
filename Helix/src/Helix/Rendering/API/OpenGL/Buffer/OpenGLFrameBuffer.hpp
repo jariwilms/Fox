@@ -20,7 +20,7 @@ namespace hlx
 		bool bound() const override;
 
 		void bind_texture(const std::string identifier, unsigned int slot) override;
-
+		
 	private:
 		GLenum m_internalBoundTarget{};
 	};

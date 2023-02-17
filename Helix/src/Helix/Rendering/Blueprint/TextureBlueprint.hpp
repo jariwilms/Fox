@@ -3,6 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Helix/Rendering/Texture/Texture2D.hpp"
+#include "Helix/Rendering/Texture/Texture2DMultisample.hpp"
 #include "Helix/IO/Filesystem/Image.hpp"
 
 namespace hlx
@@ -14,6 +15,7 @@ namespace hlx
 
 		std::shared_ptr<Texture2D> build(const std::shared_ptr<Image> image, unsigned int mipLevels = 1) const;
 		std::shared_ptr<Texture2D> build(const Vector2u& dimensions, unsigned int mipLevels = 1) const;
+		std::shared_ptr<Texture2DMultisample> build_ms(const Vector2u& dimensions, unsigned int mipLevels = 1, unsigned int samples = 0) const;
 
 		Texture::Format    format{ Texture::Format::RGBA };
 		Texture::Layout    layout{ Texture2D::Layout::RGBA8 };

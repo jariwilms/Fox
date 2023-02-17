@@ -8,7 +8,7 @@ namespace hlx
 	class OpenGLRenderBuffer : public RenderBuffer
 	{
 	public:
-		OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions, unsigned int samples);
+		OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions);
 		~OpenGLRenderBuffer();
 
 		void bind() const override;

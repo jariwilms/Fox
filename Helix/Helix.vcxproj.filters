@@ -386,6 +386,12 @@
     <ClInclude Include="src\Helix\Rendering\Texture\CubemapTexture.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
     <ClInclude Include="src\Helix\Experimental\Texture\Texture.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\Texture2DMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2DMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\RenderBufferMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBufferMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\FrameBufferMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
@@ -439,5 +445,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLCubemapTexture.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2DMultisample.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBufferMultisample.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.cpp" />
   </ItemGroup>
 </Project>

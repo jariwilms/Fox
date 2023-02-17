@@ -100,7 +100,7 @@ namespace hlx
         glEnable(GL_DEBUG_OUTPUT);
         glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
         glDebugMessageCallback(forward_gl_debug_callback, nullptr);
-
+        glEnable(GL_MULTISAMPLE);
 
 
 		RenderContext::init(m_userPointer->renderContext);

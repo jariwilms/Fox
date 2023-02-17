@@ -47,18 +47,13 @@ namespace hlx
 		{
 			return m_dimensions;
 		}
-		unsigned int samples() const
-		{
-			return m_multiSamples;
-		}
 
 	protected:
-		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions, unsigned int multiSamples)
-			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions }, m_multiSamples{ multiSamples } {}
+		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions)
+			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions } {}
 
 		const Type m_type{};
 		const Layout m_layout{};
 		const Vector2u m_dimensions{};
-		const unsigned int m_multiSamples{};
 	};
 }

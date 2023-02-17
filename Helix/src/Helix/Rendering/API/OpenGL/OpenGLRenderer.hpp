@@ -7,6 +7,7 @@
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLUniformArrayBuffer.hpp"
 #include "Helix/Rendering/API/RendererAPI.hpp"
 #include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
+
 #include "Helix/Rendering/Model/Model.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 #include "Helix/Rendering/Shader/Pipeline.hpp"
@@ -25,6 +26,7 @@ namespace hlx
         void render(const std::shared_ptr<const Model> model, const Transform& transform) override;
 
     private:
+        std::shared_ptr<FrameBufferMultisample> m_fbm{};
         std::array<std::shared_ptr<FrameBuffer>, 2> m_gBuffers{};
         bool m_pingpong{ false };
 

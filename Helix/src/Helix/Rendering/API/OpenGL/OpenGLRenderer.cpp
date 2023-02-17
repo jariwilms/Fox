@@ -31,6 +31,7 @@ namespace hlx
         fbbp.textures = tbps;
         fbbp.renderBuffers = rbps;
 
+        m_fbm = fbbp.build_ms(Vector2f{ 1280, 720 }, 4);
         m_gBuffers[0] = fbbp.build(Vector2f{ 1280, 720 });                     //TODO: fetch target window from application
         m_gBuffers[1] = fbbp.build(Vector2f{ 1280, 720 });
 
@@ -127,10 +128,10 @@ namespace hlx
 
 
 
+        m_fbm->bind(FrameBuffer::Target::Write);
+        //m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
 
-        m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
 
@@ -150,8 +151,19 @@ namespace hlx
 
 
 
+        const auto width = 1280;
+        const auto height = 720;
+        m_fbm->bind(FrameBuffer::Target::Read);
+        m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
 
+        for (auto i = 0u; i < 3; ++i)
+        {
+            glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
+            glDrawBuffer(GL_COLOR_ATTACHMENT0 + i);
+            glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        }
 
+        m_fbm->unbind();
         m_gBuffers[m_pingpong]->unbind();
         m_pingpong = !m_pingpong;
 

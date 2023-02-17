@@ -99,6 +99,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBufferMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2DMultisample.hpp" />
     <ClInclude Include="src\Helix\Config.hpp" />
     <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
@@ -156,8 +159,10 @@
     <ClInclude Include="src\Helix\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\BufferComponent.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\FrameBufferMultisample.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\IndexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\RenderBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Buffer\RenderBufferMultisample.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\UniformArrayBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
@@ -181,12 +186,16 @@
     <ClInclude Include="src\Helix\Rendering\Texture\CubemapTexture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\Texture2DMultisample.hpp" />
     <ClInclude Include="src\Helix\Test\Test.hpp" />
     <ClInclude Include="src\Helix\Window\API\GLFW\GLFWWindow.hpp" />
     <ClInclude Include="src\Helix\Window\Window.hpp" />
     <ClInclude Include="src\stdafx.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBufferMultisample.cpp" />
+    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2DMultisample.cpp" />
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Helix\Input\Input.cpp" />
