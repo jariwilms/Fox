@@ -26,17 +26,8 @@
 
 using namespace hlx;
 
-int main()
+int main(int argc, char** argv)
 {
-    exp::test();
-
-
-
-
-
-
-
-
     std::string windowTitle{ "Helix" };
     const Vector2f windowDimensions{ 1280, 720 };
     auto window = Window::create(windowTitle, windowDimensions);

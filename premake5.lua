@@ -11,8 +11,8 @@ workspace "Helix"
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
-	includedir["GLAD"]   = "Helix/vendor/glad/include"
-	includedir["GLFW"]   = "Helix/vendor/glfw/include"
+	includedir["GLAD"]    = "Helix/vendor/glad/include"
+	includedir["GLFW"]    = "Helix/vendor/glfw/include"
 	
 	include "Helix/vendor/glad"
 	include "Helix/vendor/glfw"
@@ -43,21 +43,29 @@ project "Helix"
 		"%{includedir.GLFW}", 
 	}
 	
+	libdirs
+	{
+	
+	}
+	
 	links
 	{
 		"GLAD", 
 		"GLFW", 
+	
 		
 		"opengl32.lib", 
 	}
 	
 	defines
 	{
+		"HLX_PLATFORM_WINDOWS", 
 		"GLFW_INCLUDE_NONE", 
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
-		"PROJECT_DIR=R'($(ProjectDir).)'", 
-		"ASSET_DIR=R'($(ProjectDir)assets\.)'"
+		"NOMINMAX", 		
+		'PROJECT_DIR=R"($(ProjectDir).)"', 
+		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 	}
 	
 	disablewarnings
