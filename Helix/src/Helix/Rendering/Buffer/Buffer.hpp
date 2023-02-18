@@ -40,6 +40,10 @@ namespace hlx
         {
             return m_size;
         }
+        unsigned int count() const
+        {
+            return static_cast<unsigned int>(m_size / sizeof(T));
+        }
 
     protected:
         Buffer(unsigned int count)

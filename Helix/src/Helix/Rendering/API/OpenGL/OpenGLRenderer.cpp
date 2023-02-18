@@ -129,7 +129,6 @@ namespace hlx
 
 
         m_fbm->bind(FrameBuffer::Target::Write);
-        //m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
@@ -163,21 +162,20 @@ namespace hlx
             glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
 
-        m_fbm->unbind();
-        m_gBuffers[m_pingpong]->unbind();
-        m_pingpong = !m_pingpong;
+        m_fbm->unbind();                                                      
 
-        m_pipelines.find("Lighting")->second->bind();
-
+        m_gBuffers[m_pingpong]->unbind();                                     
         m_gBuffers[m_pingpong]->bind_texture("Position", 0);
         m_gBuffers[m_pingpong]->bind_texture("Color", 1);
         m_gBuffers[m_pingpong]->bind_texture("Specular", 2);
-        m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Read);
 
+        m_pipelines.find("Lighting")->second->bind();
         Geometry::quad->vao->bind();
 
         glDisable(GL_DEPTH_TEST);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        //m_pingpong = !m_pingpong;
     }
 
     void OpenGLRenderer::render(const std::shared_ptr<const Model> model, const Transform& transform)
@@ -194,8 +192,8 @@ namespace hlx
             m_materialBuffer->copy(UMaterial{ material->color, material->metallic, material->roughness });
             material->albedo->bind(0);
             material->normal->bind(1);
-
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->size() / sizeof(unsigned int)), GL_UNSIGNED_INT, nullptr);
+            
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->count()), GL_UNSIGNED_INT, nullptr);
         }
     }
 }

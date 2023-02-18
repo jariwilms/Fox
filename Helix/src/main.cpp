@@ -76,9 +76,15 @@ int main()
 
 
 
-    auto model = ModelImporter::load(R"(models\backpack\scene.gltf)");
+    auto model = ModelImporter::load(R"(models/backpack/scene.gltf)");
     Transform modelTransform{};
     modelTransform.rotate(Vector3f{ -90.0f, 0.0f, 0.0f });
+
+    //auto plane = ModelImporter::load(R"(models/plane/plane.glb)");
+    //Transform planeTransform{};
+    //planeTransform.translate({ 0.0f, -2.0f, 0.0f });
+    //planeTransform.dilate({ 2.0f, 2.0f, 2.0f });
+
 
     auto observer = Registry::create();
     auto& camera = Registry::add_component<Camera>(observer);
@@ -127,6 +133,7 @@ int main()
 
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, skyboxTexture, lights, {} });
         Renderer::render(model, modelTransform);
+        //Renderer::render(plane, planeTransform);
         Renderer::finish();
 
 
