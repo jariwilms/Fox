@@ -5,7 +5,7 @@
 namespace hlx
 {
 	GLFWWindow::GLFWWindow(const std::string& title, const Vector2u& dimensions)
-		: Window{ title, dimensions }
+        : Window{ title, dimensions }
 	{
 		const auto init = glfwInit();
 		if (!init) throw std::runtime_error{ "Failed to initialize GLFW!" };

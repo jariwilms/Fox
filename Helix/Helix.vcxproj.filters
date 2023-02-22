@@ -430,6 +430,7 @@
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Helix\Core\RenderAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">

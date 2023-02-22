@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Helix/Core/RenderAPI.hpp"
+
 namespace hlx
 {
 	class Config
@@ -24,13 +26,6 @@ namespace hlx
 		class Rendering
 		{
 		public:
-			enum class RenderAPI
-			{
-				DirectX, 
-				OpenGL, 
-				Vulkan, 
-			};
-
 			static inline RenderAPI renderAPI{ RenderAPI::OpenGL };
 		};
 	};

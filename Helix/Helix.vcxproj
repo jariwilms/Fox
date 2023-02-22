@@ -104,6 +104,7 @@
     <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
+    <ClInclude Include="src\Helix\Core\RenderAPI.hpp" />
     <ClInclude Include="src\Helix\Core\Typedef.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Camera.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />

@@ -2,6 +2,7 @@
 
 #include "stdafx.hpp"
 
+#include "Helix/Core/RenderAPI.hpp"
 #include "Helix/Rendering/Context/RenderContext.hpp"
 #include "Helix/Input/Handler/InputHandlerAPI.hpp"
 
@@ -37,6 +38,6 @@ namespace hlx
         Vector2f   m_dimensions{};
         DisplayMode m_displayMode{ DisplayMode::Windowed };
 
-		static inline NativeWindow* s_nativeWindow{};
+		static inline NativeWindow* s_nativeWindow{};                          //TODO: make not static
 	};
 }
