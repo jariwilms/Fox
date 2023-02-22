@@ -8,6 +8,7 @@
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLRenderBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLRenderBufferMultisample.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLUniformBuffer.hpp"
+#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLUniformArrayBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLVertexArray.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLVertexBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Shader/OpenGLPipeline.hpp"
