@@ -37,6 +37,9 @@ namespace hlx
 		};
         enum class MinFilter //GL_LINEAR is bilinear, and GL_LINEAR_MIPMAP_LINEAR is trilinear filtering.
 		{
+			Nearest, 
+			Linear, 
+
 			NearestMipmapNearest,
 			NearestMipmapLinear,
 

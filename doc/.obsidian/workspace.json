@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "rendering/Texture.md",
+                "file": "Vulkan.md",
                 "mode": "source",
                 "source": false
               }
@@ -65,8 +65,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -86,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "rendering/Texture.md",
+                "file": "Vulkan.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -103,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "rendering/Texture.md",
+                "file": "Vulkan.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -126,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "rendering/Texture.md"
+                "file": "Vulkan.md"
               }
             }
           }
@@ -148,5 +147,9 @@
     }
   },
   "active": "3da657eb0328daf5",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "Vulkan.md",
+    "Rendering/Texture.md",
+    "IO/IO.md"
+  ]
 }
