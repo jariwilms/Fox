@@ -3,6 +3,7 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
+#include "Helix/Application.hpp"
 #include "Helix/Core/Library/Time/Time.hpp"
 #include "Helix/ECS/Components/Camera.hpp"
 #include "Helix/ECS/Components/Transform.hpp"
@@ -28,6 +29,8 @@ using namespace hlx;
 
 int main(int argc, char** argv)
 {
+    Application application{argc, argv};
+
     std::string windowTitle{ "Helix" };
     const Vector2f windowDimensions{ 1280, 720 };
     auto window = Window::create(windowTitle, windowDimensions);
@@ -71,10 +74,6 @@ int main(int argc, char** argv)
     Transform modelTransform{};
     modelTransform.rotate(Vector3f{ -90.0f, 0.0f, 0.0f });
 
-    //auto plane = ModelImporter::load(R"(models/plane/plane.glb)");
-    //Transform planeTransform{};
-    //planeTransform.translate({ 0.0f, -2.0f, 0.0f });
-    //planeTransform.dilate({ 2.0f, 2.0f, 2.0f });
 
 
     auto observer = Registry::create();

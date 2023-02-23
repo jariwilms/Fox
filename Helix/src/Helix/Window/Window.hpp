@@ -13,7 +13,7 @@ namespace hlx
 	class Window
 	{
 	public:
-		enum class DisplayMode
+		enum class Mode
 		{
 			Windowed,
 			Borderless,
@@ -35,8 +35,8 @@ namespace hlx
 		Window(const std::string& title, const Vector2u& dimensions);
 
         std::string m_title{};
-        Vector2f   m_dimensions{};
-        DisplayMode m_displayMode{ DisplayMode::Windowed };
+        Vector2f    m_dimensions{};
+        Mode        m_displayMode{};
 
 		static inline NativeWindow* s_nativeWindow{};                          //TODO: make not static
 	};

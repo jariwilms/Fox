@@ -159,9 +159,6 @@
     <ClInclude Include="src\Helix\Config.hpp">
       <Filter>Helix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp">
-      <Filter>Helix\Core\Deprecated\Library\Interface</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp">
       <Filter>Helix\Core\Library\Array</Filter>
     </ClInclude>
@@ -431,6 +428,8 @@
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
     <ClInclude Include="src\Helix\Core\RenderAPI.hpp" />
+    <ClInclude Include="src\Helix\Application.hpp" />
+    <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
@@ -495,5 +494,7 @@
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\Helix\Application.cpp" />
+    <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
   </ItemGroup>
 </Project>

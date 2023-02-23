@@ -99,8 +99,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Helix\Application.hpp" />
     <ClInclude Include="src\Helix\Config.hpp" />
-    <ClInclude Include="src\Helix\Core\Deprecated\Library\Interface\IStaticBindable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
@@ -192,8 +192,10 @@
     <ClInclude Include="src\Helix\Window\API\GLFW\GLFWWindow.hpp" />
     <ClInclude Include="src\Helix\Window\Window.hpp" />
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Helix\Application.cpp" />
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Helix\Input\Input.cpp" />
@@ -218,6 +220,7 @@
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glad\GLAD.vcxproj">
