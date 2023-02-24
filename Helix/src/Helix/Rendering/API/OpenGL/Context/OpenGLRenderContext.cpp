@@ -5,12 +5,28 @@
 
 #include "OpenGLRenderContext.hpp"
 #include "Helix/Window/API/GLFW/GLFWWindow.hpp"
+#include "Helix/Window/WindowManager.hpp"
 
 namespace hlx
 {
 	OpenGLRenderContext::OpenGLRenderContext()
 	{
+        static auto self = this;
+        const auto forward_gl_debug_callback = [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* param)
+        {
+            //const auto glfwWindow = reinterpret_cast<GLFWwindow*>(WindowManager::find("Window 1")->native_window()); //TODO: fix how UserPointer is fetched
+            //const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
 
+            //const auto& context = userPointer->renderContext;
+            self->gl_debug_callback(source, type, id, severity, length, message, param);
+        };
+
+#ifdef HLX_DEBUG
+        glEnable(GL_DEBUG_OUTPUT);
+        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+        glDebugMessageCallback(forward_gl_debug_callback, nullptr);
+#endif
+        glEnable(GL_MULTISAMPLE); //TODO: move to renderer ctor?
 	}
 	OpenGLRenderContext::~OpenGLRenderContext()
 	{

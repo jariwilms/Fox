@@ -489,9 +489,6 @@
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp">
       <Filter>Helix\Window\API\GLFW</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\Window\Window.cpp">
-      <Filter>Helix\Window</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Application.cpp" />

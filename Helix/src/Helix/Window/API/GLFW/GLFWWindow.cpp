@@ -1,6 +1,7 @@
 #include "stdafx.hpp"
 
 #include "GLFWWindow.hpp"
+#include "Helix/Window/WindowManager.hpp"
 
 namespace hlx
 {
@@ -35,58 +36,45 @@ namespace hlx
         m_userPointer->inputHandler  = std::make_shared<GLFWInputHandler>();
         glfwSetWindowUserPointer(m_glfwWindow, m_userPointer.get());
 
-        s_nativeWindow = m_glfwWindow;
+        m_nativeWindow = m_glfwWindow;
 
 
 
-
-
+        static const auto user_pointer = [this]() -> GLFWWindow::UserPointer*
+        {
+            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(WindowManager::find(this)->native_window());
+            const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
+            
+            return userPointer;
+        };
         const auto forward_glfw_error_callback        = [](int error, const char* description)
         {
-            const auto glfwWindow  = reinterpret_cast<GLFWwindow*>(Window::native_window());
-            const auto userPointer = reinterpret_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-            const auto& window     = userPointer->glfwWindow;
-
+            const auto& window = user_pointer()->glfwWindow;
             window->glfw_error_callback(error, description);
         };
         const auto forward_gl_debug_callback          = [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* param)
         {
-            const auto glfwWindow  = reinterpret_cast<GLFWwindow*>(Window::native_window());
-            const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-            const auto& context    = userPointer->renderContext;
-
+            const auto& context = user_pointer()->renderContext;
             context->gl_debug_callback(source, type, id, severity, length, message, param);
         };
         const auto forward_glfw_input_key_callback    = [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
-            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(Window::native_window());
-            const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-            const auto& handler = userPointer->inputHandler;
-
+            const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_key_callback(window, key, scancode, action, mods);
         };
         const auto forward_glfw_button_callback       = [](GLFWwindow* window, int button, int action, int mods)
         {
-            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(Window::native_window());
-            const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-            const auto& handler = userPointer->inputHandler;
-
+            const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_button_callback(window, button, action, mods);
         };
         const auto forward_glfw_input_cursor_callback = [](GLFWwindow* window, double x, double y)
         {
-            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(Window::native_window());
-            const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-            const auto& handler = userPointer->inputHandler;
-
+            const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_cursor_callback(window, x, y);
         };
         const auto forward_glfw_input_scroll_callback = [](GLFWwindow* window, double x, double y)
         {
-            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(Window::native_window());
-            const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-            const auto& handler = userPointer->inputHandler;
-
+            const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_scroll_callback(window, x, y);
         };
 
@@ -96,11 +84,6 @@ namespace hlx
         glfwSetCursorPosCallback(m_glfwWindow, forward_glfw_input_cursor_callback);
         glfwSetScrollCallback(m_glfwWindow, forward_glfw_input_scroll_callback);
 
-        //TODO: let context also handle this
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        glDebugMessageCallback(forward_gl_debug_callback, nullptr);
-        glEnable(GL_MULTISAMPLE);
 
 
 		RenderContext::init(m_userPointer->renderContext);

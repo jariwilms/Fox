@@ -31,15 +31,14 @@ int main(int argc, char** argv)
 {
     Application application{argc, argv};
 
-    std::string windowTitle{ "Helix" };
-    const Vector2f windowDimensions{ 1280, 720 };
-    auto window = Window::create(windowTitle, windowDimensions);
+    const std::string windowIdentifier{ "Window 1" };
+    const std::string windowTitle{ "Helix" };
+    const Vector2u windowDimensions{ 1280, 720 };
+    const auto window = WindowManager::create(windowIdentifier, windowTitle, windowDimensions);
 
     IO::init();
     Geometry::init();
     Renderer::init();
-
-
 
 
 
