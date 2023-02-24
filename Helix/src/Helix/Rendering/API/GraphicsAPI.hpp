@@ -96,26 +96,13 @@ namespace hlx
             return std::make_shared<OpenGLPipeline>(shaders);
         }
                                                        
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels)
+        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::Filter filter, std::span<const byte> data = {})
         {
-            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, mipLevels);
+            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, mipLevels, wrappingS, wrappingT, filter, data);
         }
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, std::span<const byte> data)
+        static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::Filter filter, std::span<const byte> data = {})
         {
-            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, mipLevels, data);
-        }
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter)
-        {
-            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, mipLevels, wrappingS, wrappingT, minFilter, magFilter);
-        }
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter, std::span<const byte> data)
-        {
-            return std::make_shared<OpenGLTexture2D>(format, layout, dimensions, mipLevels, wrappingS, wrappingT, minFilter, magFilter, data);
-        }
-                                                       
-        static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter)
-        {
-            return std::make_shared<OpenGLTexture2DMultisample>(format, layout, dimensions, mipLevels, samples, wrappingS, wrappingT, minFilter, magFilter);
+            return std::make_shared<OpenGLTexture2DMultisample>(format, layout, dimensions, mipLevels, samples, wrappingS, wrappingT, filter, data);
         }
     };
 }

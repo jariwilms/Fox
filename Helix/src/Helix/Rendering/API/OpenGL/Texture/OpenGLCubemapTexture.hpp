@@ -10,8 +10,7 @@ namespace hlx
     class OpenGLCubemapTexture : public CubemapTexture
     {
     public:
-        OpenGLCubemapTexture(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels);
-        OpenGLCubemapTexture(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, std::array<std::span<byte>, 6>& data);
+        OpenGLCubemapTexture(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Wrapping wrappingR, Filter filter, const std::array<std::span<const byte>, 6>& data = {});
         ~OpenGLCubemapTexture();
 
         void bind() const override;
@@ -19,7 +18,8 @@ namespace hlx
         void unbind() const override;
         bool bound() const override;
 
-        void copy(const Vector2u dimensions, const Vector2u& offset, std::array<std::span<byte>, 6>& data) const override;
+        void copy(const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) override;
+        void copy_range(const Vector2u dimensions, const Vector2u& offset, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) override;
 
     private:
         GLenum m_internalTarget{ GL_TEXTURE_CUBE_MAP };

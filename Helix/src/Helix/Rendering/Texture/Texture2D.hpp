@@ -11,8 +11,13 @@ namespace hlx
 	public:
 		virtual ~Texture2D() = default;
 
-		virtual void copy(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data) const = 0;
+		virtual void copy(std::span<const byte> data, unsigned int mipLevel = 0, bool generate = true) = 0;
+		virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
 
+		const Vector2u& dimensions() const
+		{
+			return m_dimensions;
+		}
 		Wrapping wrapping_s() const
 		{
 			return m_wrappingS;
@@ -21,19 +26,13 @@ namespace hlx
 		{
 			return m_wrappingT;
 		}
-		const Vector2u& dimensions() const
-		{
-			return m_dimensions;
-		}
 
 	protected:
-		Texture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels)
-            : Texture{ format, layout, mipLevels }, m_dimensions{ dimensions } {}
-		Texture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
-            : Texture{ format, layout, mipLevels, minFilter, magFilter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
+		Texture2D(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Filter filter)
+            : Texture{ format, layout, mipLevels, filter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
 		const Vector2u m_dimensions{};
-        Wrapping       m_wrappingS{ Wrapping::ClampToEdge };
-        Wrapping       m_wrappingT{ Wrapping::ClampToEdge };
+        const Wrapping m_wrappingS{};
+        const Wrapping m_wrappingT{};
 	};
 }

@@ -54,7 +54,7 @@ int main(int argc, char** argv)
     };
 
     std::array<std::vector<byte>, 6> result{};
-    std::array<std::span<byte>, 6> result2{};
+    std::array<std::span<const byte>, 6> result2{};
     unsigned int index{};
     for (const auto& identifier : skyboxIdentifiers)
     {
@@ -65,7 +65,7 @@ int main(int argc, char** argv)
         ++index;
     }
 
-    const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::Layout::RGBA8, dimensions, 1u, result2);
+    const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::Layout::RGBA8, dimensions, 1u, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Filter::Point, result2);
 
 
 

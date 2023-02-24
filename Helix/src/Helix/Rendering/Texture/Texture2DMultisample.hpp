@@ -17,10 +17,8 @@ namespace hlx
         }
 
     protected:
-        Texture2DMultisample(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples)
-            : Texture2D{ format, layout, dimensions, mipLevels }, m_samples{ samples } {}
-        Texture2DMultisample(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, Wrapping wrappingS, Wrapping wrappingT, MinFilter minFilter, MagFilter magFilter)
-            : Texture2D{ format, layout, dimensions, mipLevels, wrappingS, wrappingT, minFilter, magFilter }, m_samples{ samples } {}
+        Texture2DMultisample(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, Wrapping wrappingS, Wrapping wrappingT, Filter filter)
+            : Texture2D{ format, layout, dimensions, mipLevels, wrappingS, wrappingT, filter }, m_samples{ samples } {}
 
         const unsigned int m_samples{};
     };

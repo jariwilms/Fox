@@ -17,11 +17,10 @@ namespace hlx
 		std::shared_ptr<Texture2D> build(const Vector2u& dimensions, unsigned int mipLevels = 1) const;
 		std::shared_ptr<Texture2DMultisample> build_ms(const Vector2u& dimensions, unsigned int mipLevels = 1, unsigned int samples = 0) const;
 
-		Texture::Format    format{ Texture::Format::RGBA };
-		Texture::Layout    layout{ Texture2D::Layout::RGBA8 };
-		Texture::Wrapping  wrappingS{ Texture2D::Wrapping::ClampToEdge };
-		Texture::Wrapping  wrappingT{ Texture2D::Wrapping::ClampToEdge };
-		Texture::MinFilter minFilter{ Texture2D::MinFilter::NearestMipmapNearest };
-		Texture::MagFilter magFilter{ Texture2D::MagFilter::Nearest };
+		Texture::Format   format{ Texture::Format::RGBA };
+		Texture::Layout   layout{ Texture::Layout::RGBA8 };
+		Texture::Wrapping wrappingS{ Texture::Wrapping::ClampToEdge };
+		Texture::Wrapping wrappingT{ Texture::Wrapping::ClampToEdge };
+		Texture::Filter   filter{ Texture::Filter::Point };
 	};
 }

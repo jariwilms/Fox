@@ -35,55 +35,41 @@ namespace hlx
 			Repeat,
 			MirroredClampToEdge,
 		};
-        enum class MinFilter //GL_LINEAR is bilinear, and GL_LINEAR_MIPMAP_LINEAR is trilinear filtering.
+        enum class Filter
 		{
-			Nearest, 
-			Linear, 
-
-			NearestMipmapNearest,
-			NearestMipmapLinear,
-
-			LinearMipmapNearest,
-			LinearMipmapLinear,
-		};
-		enum class MagFilter
-		{
-            Nearest, 
-            Linear, 
+			Point, 
+			Bilinear, 
+			Trilinear, 
 		};
 
 		virtual ~Texture() = default;
 
 		virtual void bind(unsigned int slot) const = 0;
 
-		Format format() const
+		Format       format() const
 		{
 			return m_format;
 		}
-		Layout layout() const
+		Layout       layout() const
 		{
 			return m_layout;
 		}
-		MinFilter min_filter() const
+        Filter       filter() const
+        {
+            return m_filter;
+        }
+		unsigned int mip_levels() const
 		{
-			return m_minFilter;
-		}
-		MagFilter mag_filter() const
-		{
-			return m_magFilter;
+			return m_mipLevels;
 		}
 
 	protected:
-		Texture(Texture::Format format, Layout layout, unsigned int mipLevels)
-			: m_format{ format }, m_layout{ layout }, m_mipLevels{ mipLevels } {}
-		Texture(Texture::Format format, Layout layout, unsigned int mipLevels, MinFilter minFilter, MagFilter magFilter)
-			: m_format{ format }, m_layout{ layout }, m_mipLevels{ mipLevels }, m_minFilter{ minFilter }, m_magFilter{ magFilter } {}
+		Texture(Texture::Format format, Layout layout, unsigned int mipLevels, Filter filter)
+			: m_format{ format }, m_layout{ layout }, m_mipLevels{ mipLevels }, m_filter{ filter } {}
 
 		const Format       m_format{};
 		const Layout       m_layout{};
+		const Filter       m_filter{};
 		const unsigned int m_mipLevels{};
-
-        MinFilter          m_minFilter{ MinFilter::NearestMipmapNearest };
-        MagFilter          m_magFilter{ MagFilter::Nearest };
 	};
 }

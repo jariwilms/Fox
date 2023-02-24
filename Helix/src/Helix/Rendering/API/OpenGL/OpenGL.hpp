@@ -99,27 +99,26 @@ namespace hlx
                 default:									 throw std::invalid_argument{ "Invalid wrapping!" };
             }
         }
-        static constexpr GLenum      texture_min_filter(Texture::MinFilter filter)
+        static constexpr GLenum      texture_min_filter(Texture::Filter filter)
         {
             switch (filter)
             {
-                case Texture::MinFilter::NearestMipmapNearest: return GL_NEAREST_MIPMAP_NEAREST;
-                case Texture::MinFilter::NearestMipmapLinear:  return GL_NEAREST_MIPMAP_LINEAR;
+                case Texture::Filter::Point:     return GL_NEAREST_MIPMAP_NEAREST;
+                case Texture::Filter::Bilinear:  return GL_LINEAR;
+                case Texture::Filter::Trilinear: return GL_LINEAR_MIPMAP_LINEAR;
 
-                case Texture::MinFilter::LinearMipmapNearest:  return GL_LINEAR_MIPMAP_NEAREST;
-                case Texture::MinFilter::LinearMipmapLinear:   return GL_NEAREST_MIPMAP_LINEAR;
-
-                default:                                       throw std::invalid_argument{ "Invalid filter!" };
+                default:                         throw std::invalid_argument{ "Invalid filter!" };
             }
         }
-        static constexpr GLenum      texture_mag_filter(Texture::MagFilter filter)
+        static constexpr GLenum      texture_mag_filter(Texture::Filter filter)
         {
             switch (filter)
             {
-                case Texture::MagFilter::Nearest: return GL_NEAREST;
-                case Texture::MagFilter::Linear:  return GL_LINEAR;
+                case Texture::Filter::Point:     return GL_NEAREST;
+                case Texture::Filter::Bilinear:  return GL_LINEAR;
+                case Texture::Filter::Trilinear: return GL_LINEAR;
 
-                default:                          throw std::invalid_argument{ "Invalid filter!" };
+                default:                         throw std::invalid_argument{ "Invalid filter!" };
             }
         }
 

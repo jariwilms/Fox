@@ -10,10 +10,7 @@ namespace hlx
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels);
-		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, std::span<const byte> data);
-		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter);
-		OpenGLTexture2D(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, Texture::MinFilter minFilter, Texture::MagFilter magFilter, std::span<const byte> data);
+		OpenGLTexture2D(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Filter filter, std::span<const byte> data = {});
 		~OpenGLTexture2D() override;
 		
 		void bind() const override;
@@ -21,7 +18,8 @@ namespace hlx
 		void unbind() const override;
 		bool bound() const override;
 		
-		void copy(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data) const override;
+        void copy(std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) override;
+		void copy_range(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) override;
 
 	private:
 		GLenum m_internalTarget{ GL_TEXTURE_2D };

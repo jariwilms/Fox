@@ -11,8 +11,13 @@ namespace hlx
     public:
         virtual ~CubemapTexture() = default;
 
-        virtual void copy(const Vector2u dimensions, const Vector2u& offset, std::array<std::span<byte>, 6>& data) const = 0;
+        virtual void copy(const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+        virtual void copy_range(const Vector2u dimensions, const Vector2u& offset, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
 
+        const Vector2u& dimensions() const
+        {
+            return m_dimensions;
+        }
         Wrapping wrapping_s() const
         {
             return m_wrappingS;
@@ -25,20 +30,14 @@ namespace hlx
         {
             return m_wrappingR;
         }
-        const Vector2u& dimensions() const
-        {
-            return m_dimensions;
-        }
 
     protected:
-        CubemapTexture(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels)
-            : Texture{ format, layout, mipLevels }, m_dimensions{ dimensions } {}
-        CubemapTexture(Texture::Format format, Texture::Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Wrapping wrappingR, MinFilter minFilter, MagFilter magFilter)
-            : Texture{ format, layout, mipLevels, minFilter, magFilter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT }, m_wrappingR{ wrappingR } {}
+        CubemapTexture(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Wrapping wrappingR, Filter filter)
+            : Texture{ format, layout, mipLevels, filter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT }, m_wrappingR{ wrappingR } {}
 
         const Vector2u m_dimensions{};
-        Wrapping       m_wrappingS{ Wrapping::ClampToEdge };
-        Wrapping       m_wrappingT{ Wrapping::ClampToEdge };
-        Wrapping       m_wrappingR{ Wrapping::ClampToEdge };
+        const Wrapping m_wrappingS{};
+        const Wrapping m_wrappingT{};
+        const Wrapping m_wrappingR{};
     };
 }
