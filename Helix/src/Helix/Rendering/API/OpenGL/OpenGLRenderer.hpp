@@ -28,6 +28,7 @@ namespace hlx
     private:
         std::shared_ptr<FrameBufferMultisample> m_fbm{};
         std::array<std::shared_ptr<FrameBuffer>, 2> m_gBuffers{};
+        std::shared_ptr<FrameBuffer> m_depthMap{};
         bool m_pingpong{ false };
 
         std::unordered_map<std::string, std::shared_ptr<Pipeline>> m_pipelines{}; 

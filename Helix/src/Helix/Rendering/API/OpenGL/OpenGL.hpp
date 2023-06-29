@@ -16,7 +16,7 @@ namespace hlx
     class OpenGL
     {
     public:
-        static GLenum                type_enum(size_t tHash)
+        static GLenum                type_enum(size_t tHash)                   //Typeid compile vs runtime shenanigans
         {
             if (tHash == typeid(char)          .hash_code()) return GL_BYTE;
             if (tHash == typeid(unsigned char) .hash_code()) return GL_UNSIGNED_BYTE;
@@ -67,22 +67,77 @@ namespace hlx
                 case Texture::Format::RGB:	return GL_RGB;
                 case Texture::Format::RGBA:	return GL_RGBA;
 
+                case Texture::Format::D:    return GL_DEPTH_COMPONENT; //TODO: this does not work prob
+
                 default:			        throw std::invalid_argument{ "Invalid format!" };
             }
         }
-        static constexpr GLenum      texture_layout(Texture::Layout layout)
+        static constexpr GLenum      texture_layout(Texture::Format format, Texture::ColorDepth colorDepth, bool sRGB = false)
         {
-            switch (layout)
+            switch (colorDepth)
             {
-                case Texture::Layout::RGB8:   return GL_RGB8;
-                case Texture::Layout::RGB16:  return GL_RGB16F;
-                case Texture::Layout::RGB32:  return GL_RGB32F;
-                                              
-                case Texture::Layout::RGBA8:  return GL_RGBA8;
-                case Texture::Layout::RGBA16: return GL_RGBA16F;
-                case Texture::Layout::RGBA32: return GL_RGBA32F;
+                case Texture::ColorDepth::_8Bit:
+                {
+                    switch (format)
+                    {
+                        case Texture::Format::R:    return GL_R8;
+                        case Texture::Format::RG:   return GL_RG8;
+                        case Texture::Format::RGB:  
+                        {
+                            if (sRGB) return GL_SRGB8;
+                            else      return GL_RGB8;
+                        }
+                        case Texture::Format::RGBA: 
+                        {
+                            if (sRGB) return GL_SRGB8_ALPHA8;
+                            else      return GL_RGBA8;
+                        }
 
-                default:                      throw std::invalid_argument{ "Invalid layout!" };
+                        //case Texture::Format::D:    return GL_DEPTH_COMPONENT;
+
+                        default: throw std::invalid_argument{ "Invalid format!" };
+                    }
+                }
+                case Texture::ColorDepth::_16Bit:
+                {
+                    switch (format)
+                    {
+                        case Texture::Format::R:    return GL_R16F;
+                        case Texture::Format::RG:   return GL_RG16F;
+                        case Texture::Format::RGB:  return GL_RGB16F;
+                        case Texture::Format::RGBA: return GL_RGBA16F;
+
+                        case Texture::Format::D:    return GL_DEPTH_COMPONENT16;
+
+                        default: throw std::invalid_argument{ "Invalid format!" };
+                    }
+                }
+                case Texture::ColorDepth::_24Bit:
+                {
+                    switch (format)
+                    {
+                        case Texture::Format::D:  return GL_DEPTH_COMPONENT24;
+                        case Texture::Format::DS: return GL_DEPTH24_STENCIL8;
+                        
+                        default: throw std::invalid_argument{ "Invalid format!" };
+                    }
+                }
+                case Texture::ColorDepth::_32Bit:
+                {
+                    switch (format)
+                    {
+                        case Texture::Format::R:    return GL_R32F;
+                        case Texture::Format::RG:   return GL_RG32F;
+                        case Texture::Format::RGB:  return GL_RGB32F;
+                        case Texture::Format::RGBA: return GL_RGBA32F;
+
+                        case Texture::Format::D:    return GL_DEPTH_COMPONENT32;
+
+                        default: throw std::invalid_argument{ "Invalid format!" };
+                    }
+                }
+
+                default: throw std::invalid_argument{ "Invalid color depth!" };
             }
         }
         static constexpr GLenum      texture_wrapping(Texture::Wrapping wrapping)
@@ -134,9 +189,9 @@ namespace hlx
                 default:                               throw std::invalid_argument{ "Invalid type!" };
             }
         }
-        static constexpr GLenum      renderbuffer_layout(RenderBuffer::Layout layout)
+        static constexpr GLenum      renderbuffer_layout(RenderBuffer::Layout colorDepth)
         {
-            switch (layout)
+            switch (colorDepth)
             {
                 case RenderBuffer::Layout::R8:              return GL_R8;
                 case RenderBuffer::Layout::RG8:             return GL_RG8;

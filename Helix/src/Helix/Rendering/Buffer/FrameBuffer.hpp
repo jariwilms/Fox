@@ -4,8 +4,8 @@
 
 #include "Helix/Rendering/Interface/IBindable.hpp"
 #include "Helix/Rendering/Texture/Texture2D.hpp"
-#include "Helix/Rendering/Buffer/RenderBuffer.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
+#include "Helix/Rendering/Blueprint/RenderBufferBlueprint.hpp"
 #include "BufferComponent.hpp"
 
 namespace hlx
@@ -13,19 +13,31 @@ namespace hlx
 	class FrameBuffer : public IBindable
 	{
 	public:
-		enum class Target
-		{
-			Default, 
-			Read, 
-			Write, 
-		};
-		enum class Attachment
-		{
-			Color, 
-			Depth, 
-			Stencil, 
-			DepthStencil, 
-		};
+        enum class Target
+        {
+            Default,
+            Read,
+            Write,
+        };
+        enum class Attachment
+        {
+            Color,
+            Depth,
+            Stencil,
+            DepthStencil,
+        };
+        enum class Option
+        {
+            None, 
+
+            NoRead,
+            NoDraw, 
+        };
+
+        using Texture2DSpec = std::tuple<std::string, Attachment, Texture2D>;
+        using RenderBufferSpec = std::tuple<std::string, Attachment, RenderBuffer>;
+        using Texture2DBlueprintSpec = std::tuple<std::string, Attachment, TextureBlueprint>;
+        using RenderBufferBlueprintSpec = std::tuple<std::string, Attachment, RenderBufferBlueprint>;
 
 		virtual ~FrameBuffer() = default;
 

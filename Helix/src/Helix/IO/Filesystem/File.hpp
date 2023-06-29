@@ -29,7 +29,7 @@ namespace hlx
 
 			return ptr;
 		}
-		virtual void write(const std::span<byte>& data)
+		virtual void write(std::span<const byte>& data)
 		{
 			std::ofstream output{ m_path };
 			std::ostream_iterator<byte> outputIterator{ output };

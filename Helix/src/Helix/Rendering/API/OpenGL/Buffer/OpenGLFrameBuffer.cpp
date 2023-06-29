@@ -4,14 +4,26 @@
 
 namespace hlx
 {
-	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<std::tuple<std::string, Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, Attachment, RenderBufferBlueprint>>& renderBuffers)
+  //  OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<Texture2DSpec>& textures, const std::vector<RenderBufferSpec> renderBuffers)
+		//: FrameBuffer{ dimensions }
+  //  {
+		//glCreateFramebuffers(1, &m_id);
+
+		//std::vector<GLenum> drawBuffers{};
+		//unsigned int textureAttachmentIndex{};
+		//const auto attach_texture = [this, &drawBuffers, &textureAttachmentIndex]()
+		//{
+
+		//};
+  //  }
+	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<Texture2DBlueprintSpec>& textures, const std::vector<RenderBufferBlueprintSpec>& renderBuffers, Option options)
 		: FrameBuffer{ dimensions }
 	{
 		glCreateFramebuffers(1, &m_id);
 
-		unsigned int colorAttachmentIndex{};
 		std::vector<GLenum> drawBuffers{};
-		const auto attach_texture = [this, &drawBuffers, &colorAttachmentIndex](const std::tuple<std::string, Attachment, TextureBlueprint>& value)
+		unsigned int textureAttachmentIndex{};
+		const auto attach_texture = [this, &drawBuffers, &textureAttachmentIndex](const std::tuple<std::string, Attachment, TextureBlueprint>& value)
 		{
 			const auto& [name, attachment, blueprint] = value;
 			const auto texture = blueprint.build(m_dimensions, 1);
@@ -19,8 +31,8 @@ namespace hlx
 			auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
 			if (attachment == Attachment::Color)
 			{
-				internalAttachment += colorAttachmentIndex;
-				++colorAttachmentIndex;
+				internalAttachment += textureAttachmentIndex;
+				++textureAttachmentIndex;
 
 				drawBuffers.emplace_back(internalAttachment);
 			}
@@ -40,12 +52,15 @@ namespace hlx
 
 		std::for_each(textures.begin(), textures.end(), attach_texture);
 		std::for_each(renderBuffers.begin(), renderBuffers.end(), attach_renderbuffer);
-		glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+		if (!drawBuffers.empty() || options == FrameBuffer::Option::NoDraw) glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+		//if (options == Framebuffer::Options::None) glNamedFramebufferReadBuffers(); ...
+
+		//2 == Option::NoDraw;
 
 		const auto status = glCheckNamedFramebufferStatus(m_id, GL_FRAMEBUFFER);
 		if (status != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Failed to create framebuffer!" };
 	}
-	OpenGLFrameBuffer::~OpenGLFrameBuffer()
+    OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &m_id);
 	}

@@ -4,11 +4,11 @@
 
 namespace hlx
 {
-    OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Wrapping wrappingR, Filter filter, const std::array<std::span<const byte>, 6>& data)
-    : CubemapTexture{ format, layout, dimensions, mipLevels, wrappingR, wrappingS, wrappingT, filter }
+    OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB)
+        : CubemapTexture{ format, colorDepth, dimensions, filter, wrappingR, wrappingS, wrappingT, mipLevels, sRGB }
     {
         m_internalFormat = OpenGL::texture_format(m_format);
-        m_internalLayout = OpenGL::texture_layout(m_layout);
+        m_internalLayout = OpenGL::texture_layout(m_format, m_colorDepth);
 
         glCreateTextures(m_internalTarget, 1, &m_id);
         glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, OpenGL::texture_wrapping(m_wrappingS));
@@ -17,8 +17,11 @@ namespace hlx
         glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, OpenGL::texture_min_filter(m_filter));
         glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, OpenGL::texture_mag_filter(m_filter));
         glTextureStorage2D(m_id, m_mipLevels, m_internalLayout, m_dimensions.x, m_dimensions.y);
-
-        copy(data);
+    }
+    OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB, Format dataFormat, const std::array<std::span<const byte>, 6>& data)
+        : OpenGLCubemapTexture{ format, colorDepth, dimensions, filter, wrappingR, wrappingS, wrappingT, mipLevels, sRGB }
+    {
+        copy(format, data);
     }
     OpenGLCubemapTexture::~OpenGLCubemapTexture()
     {
@@ -42,9 +45,9 @@ namespace hlx
         throw std::logic_error("The method or operation is not implemented.");
     }
 
-    void OpenGLCubemapTexture::copy(const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel, bool generateMips)
+    void OpenGLCubemapTexture::copy(Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel, bool generateMips)
     {
-        const auto size = m_dimensions.x * m_dimensions.y * 4;
+        const auto size = m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat);
         const auto size_check = [size](std::span<const byte> subData)
         {
             return size == subData.size();
@@ -54,15 +57,15 @@ namespace hlx
         if (!std::all_of(data.begin(), data.end(), size_check)) throw std::invalid_argument{ "Data length does not match texture size!" };
 
         unsigned int zOffset{};
+        const auto format = OpenGL::texture_format(dataFormat);
         for (const auto& subData : data)
         {
-            glTextureSubImage3D(m_id, mipLevel, 0, 0, zOffset, m_dimensions.x, m_dimensions.y, 1, m_internalFormat, GL_UNSIGNED_BYTE, subData.data());
+            glTextureSubImage3D(m_id, mipLevel, 0, 0, zOffset, m_dimensions.x, m_dimensions.y, 1, format, GL_UNSIGNED_BYTE, subData.data());
             ++zOffset;
         }
-
         if (generateMips) glGenerateTextureMipmap(m_id);
     }
-    void OpenGLCubemapTexture::copy_range(const Vector2u dimensions, const Vector2u& offset, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel, bool generateMips)
+    void OpenGLCubemapTexture::copy_range(const Vector2u dimensions, const Vector2u& offset, Format DataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel, bool generateMips)
     {
         throw std::runtime_error{ "The method or operation is not implemented." };
     }

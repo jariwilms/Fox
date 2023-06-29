@@ -6,7 +6,7 @@
 
 namespace hlx
 {
-    struct Layout
+    struct ColorDepth
     {
 
     };

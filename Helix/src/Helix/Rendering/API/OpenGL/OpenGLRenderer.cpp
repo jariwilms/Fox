@@ -9,15 +9,16 @@ namespace hlx
         TextureBlueprint positionTextureBp{};
         TextureBlueprint colorTextureBp{};
         TextureBlueprint specularTextureBp{};
-        positionTextureBp.layout = Texture::Layout::RGB16;
+
         positionTextureBp.format = Texture::Format::RGB;
-        colorTextureBp.layout = Texture::Layout::RGB16;
         colorTextureBp.format = Texture::Format::RGB;
-        specularTextureBp.layout = Texture::Layout::RGBA8;
+        positionTextureBp.colorDepth = Texture::ColorDepth::_16Bit;
+        colorTextureBp.colorDepth = Texture::ColorDepth::_16Bit;
+        specularTextureBp.colorDepth = Texture::ColorDepth::_8Bit;
 
         RenderBufferBlueprint depthRenderBufferBp{};
         depthRenderBufferBp.type = RenderBuffer::Type::Depth;
-        depthRenderBufferBp.layout = RenderBuffer::Layout::Depth32;
+        depthRenderBufferBp.colorDepth = RenderBuffer::Layout::Depth32;
 
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> tbps{};
         tbps.emplace_back(std::make_tuple("Position", FrameBuffer::Attachment::Color, positionTextureBp));
@@ -31,9 +32,37 @@ namespace hlx
         fbbp.textures = tbps;
         fbbp.renderBuffers = rbps;
 
-        m_fbm = fbbp.build_ms(Vector2f{ 1280, 720 }, 4);
+        m_fbm = fbbp.build_ms(Vector2f{ 1280, 720 }, 2);
         m_gBuffers[0] = fbbp.build(Vector2f{ 1280, 720 });                     //TODO: fetch target window from application
         m_gBuffers[1] = fbbp.build(Vector2f{ 1280, 720 });
+
+
+
+
+
+
+        const auto sz = Vector2u{ 1024, 1024 };
+        TextureBlueprint depthTexture{};
+        depthTexture.format = Texture::Format::D;
+        depthTexture.colorDepth = Texture::ColorDepth::_32Bit;
+        depthTexture.filter = Texture::Filter::Point;
+        depthTexture.wrappingS = Texture::Wrapping::Repeat;
+        depthTexture.wrappingT = Texture::Wrapping::Repeat;
+
+        FrameBufferBlueprint depthBp{};
+        depthBp.textures.emplace_back(std::make_tuple("Depth", FrameBuffer::Attachment::Depth, depthTexture));
+        m_depthMap = depthBp.build(sz);
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -44,44 +73,22 @@ namespace hlx
         m_materialBuffer = std::make_shared<OpenGLUniformBuffer<UMaterial>>(1, UMaterial{});
         m_lightBuffer = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(lightCount, 2);
         m_cameraBuffer = std::make_shared<OpenGLUniformBuffer<UCamera>>(3, UCamera{});
+        
 
 
-
-        const auto geometryVertexSource = IO::load<File>("shaders/compiled/geometryvert.spv")->read();
-        const auto geometryFragmentSource = IO::load<File>("shaders/compiled/geometryfrag.spv")->read();
-        auto geometryVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *geometryVertexSource);
-        if (!geometryVertexShader->valid()) throw std::runtime_error{ geometryVertexShader->error().data() };
-        auto geometryFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *geometryFragmentSource);
-        if (!geometryFragmentShader->valid()) throw std::runtime_error{ geometryFragmentShader->error().data() };
-        auto geometryPipeline = GraphicsAPI::create_plo({ geometryVertexShader, geometryFragmentShader });
+        auto geometryPipeline = GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv");
         m_pipelines.emplace("Geometry", geometryPipeline);
 
-        const auto skyboxVertexSource = IO::load<File>("shaders/compiled/skyboxvert.spv")->read();
-        const auto skyboxFragmentSource = IO::load<File>("shaders/compiled/skyboxfrag.spv")->read();
-        auto skyboxVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *skyboxVertexSource);
-        if (!skyboxVertexShader->valid()) throw std::runtime_error{ skyboxVertexShader->error().data() };
-        auto skyboxFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *skyboxFragmentSource);
-        if (!skyboxFragmentShader->valid()) throw std::runtime_error{ skyboxFragmentShader->error().data() };
-        auto skyboxPipeline = GraphicsAPI::create_plo({ skyboxVertexShader, skyboxFragmentShader });
+        auto skyboxPipeline = GraphicsAPI::create_plo("shaders/compiled/skyboxvert.spv", "shaders/compiled/skyboxfrag.spv");
         m_pipelines.emplace("Skybox", skyboxPipeline);
 
-        const auto lightingVertexSource = IO::load<File>("shaders/compiled/lightingvert.spv")->read();
-        const auto lightingFragmentSource = IO::load<File>("shaders/compiled/lightingfrag.spv")->read();
-        auto lightingVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *lightingVertexSource);
-        if (!lightingVertexShader->valid()) throw std::runtime_error{ lightingVertexShader->error().data() };
-        auto lightingFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *lightingFragmentSource);
-        if (!lightingFragmentShader->valid()) throw std::runtime_error{ lightingFragmentShader->error().data() };
-        auto lightingPipeline = GraphicsAPI::create_plo({ lightingVertexShader, lightingFragmentShader });
+        auto lightingPipeline = GraphicsAPI::create_plo("shaders/compiled/lightingvert.spv", "shaders/compiled/lightingfrag.spv");
         m_pipelines.emplace("Lighting", lightingPipeline);
 
-        const auto postProcessingVertexSource = IO::load<File>("shaders/compiled/sharpenvert.spv")->read();
-        const auto postProcessingFragmentSource = IO::load<File>("shaders/compiled/sharpenfrag.spv")->read();
-        auto postProcessingVertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *postProcessingVertexSource);
-        if (!postProcessingVertexShader->valid()) throw std::runtime_error{ postProcessingVertexShader->error().data() };
-        auto postProcessingFragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *postProcessingFragmentSource);
-        if (!postProcessingFragmentShader->valid()) throw std::runtime_error{ postProcessingFragmentShader->error().data() };
-        auto postProcessingPipeline = GraphicsAPI::create_plo({ postProcessingVertexShader, postProcessingFragmentShader });
+        auto postProcessingPipeline = GraphicsAPI::create_plo("shaders/compiled/sharpenvert.spv", "shaders/compiled/sharpenfrag.spv");
         m_postProcessingPipelines.emplace("SharpenKernel", postProcessingPipeline);
+
+
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glDepthFunc(GL_LEQUAL);
@@ -143,10 +150,13 @@ namespace hlx
     {
         glDisable(GL_CULL_FACE);
 
-        m_pipelines.find("Skybox")->second->bind();
-        Cube::vao->bind();
-        m_renderInfo.skybox->bind(0);
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
+        if (m_renderInfo.skybox != nullptr)
+        {
+            m_pipelines.find("Skybox")->second->bind();
+            Cube::vao->bind();
+            m_renderInfo.skybox->bind(0);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
+        }
 
 
 

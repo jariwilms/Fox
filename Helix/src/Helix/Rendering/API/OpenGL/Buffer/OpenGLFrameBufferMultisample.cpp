@@ -7,6 +7,8 @@ namespace hlx
     OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, const std::vector<std::tuple<std::string, Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, Attachment, RenderBufferBlueprint>>& renderBuffers)
         : FrameBufferMultisample{ dimensions, samples }
     {
+        if (m_samples == 0) throw std::invalid_argument{ "Samples must be greater than zero!" };
+
         glCreateFramebuffers(1, &m_id);
 
         unsigned int colorAttachmentIndex{};

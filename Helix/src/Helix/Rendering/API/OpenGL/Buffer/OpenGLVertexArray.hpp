@@ -32,14 +32,14 @@ namespace hlx
             return false;
         }
 
-        void tie(Id bufferId, const std::shared_ptr<VertexLayout> layout) override
+        void tie(Id bufferId, const std::shared_ptr<VertexLayout> colorDepth) override
         {
             static int bindingIndex{};
 
-            glVertexArrayVertexBuffer(m_id, bindingIndex, bufferId, 0, static_cast<GLsizei>(layout->stride()));
+            glVertexArrayVertexBuffer(m_id, bindingIndex, bufferId, 0, static_cast<GLsizei>(colorDepth->stride()));
             
             GLint offset{};
-            for (const auto& attribute : layout->attributes())
+            for (const auto& attribute : colorDepth->attributes())
             {
                 const auto internalType = OpenGL::type_enum(attribute.hash());
                 const auto typeSize = OpenGL::type_size(attribute.hash());

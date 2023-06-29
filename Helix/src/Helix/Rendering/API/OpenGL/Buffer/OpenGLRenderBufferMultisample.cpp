@@ -4,10 +4,10 @@
 
 namespace hlx
 {
-    OpenGLRenderBufferMultisample::OpenGLRenderBufferMultisample(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions, unsigned int samples)
-        : RenderBufferMultisample{ type, layout, dimensions, samples }
+    OpenGLRenderBufferMultisample::OpenGLRenderBufferMultisample(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions, unsigned int samples)
+        : RenderBufferMultisample{ type, colorDepth, dimensions, samples }
     {
-        m_internalFormat = OpenGL::renderbuffer_layout(layout);
+        m_internalFormat = OpenGL::renderbuffer_layout(colorDepth);
 
         glCreateRenderbuffers(1, &m_id);
         glNamedRenderbufferStorageMultisample(m_id, m_samples, m_internalFormat, m_dimensions.x, m_dimensions.y);

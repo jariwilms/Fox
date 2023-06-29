@@ -11,12 +11,16 @@ namespace hlx
     public:
         virtual ~CubemapTexture() = default;
 
-        virtual void copy(const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
-        virtual void copy_range(const Vector2u dimensions, const Vector2u& offset, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+        virtual void copy(Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+        virtual void copy_range(const Vector2u dimensions, const Vector2u& offset, Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
 
         const Vector2u& dimensions() const
         {
             return m_dimensions;
+        }
+        Wrapping wrapping_r() const
+        {
+            return m_wrappingR;
         }
         Wrapping wrapping_s() const
         {
@@ -26,18 +30,14 @@ namespace hlx
         {
             return m_wrappingT;
         }
-        Wrapping wrapping_r() const
-        {
-            return m_wrappingR;
-        }
 
     protected:
-        CubemapTexture(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Wrapping wrappingR, Filter filter)
-            : Texture{ format, layout, mipLevels, filter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT }, m_wrappingR{ wrappingR } {}
+        CubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB)
+            : Texture{ format, colorDepth, filter, mipLevels, sRGB }, m_dimensions{ dimensions }, m_wrappingR{ wrappingR }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
         const Vector2u m_dimensions{};
+        const Wrapping m_wrappingR{};
         const Wrapping m_wrappingS{};
         const Wrapping m_wrappingT{};
-        const Wrapping m_wrappingR{};
     };
 }

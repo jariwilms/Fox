@@ -10,7 +10,7 @@ namespace hlx
     class OpenGLRenderBufferMultisample : public RenderBufferMultisample
     {
     public:
-        OpenGLRenderBufferMultisample(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions, unsigned int samples);
+        OpenGLRenderBufferMultisample(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions, unsigned int samples);
         ~OpenGLRenderBufferMultisample();
 
         void bind() const override;

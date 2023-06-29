@@ -10,7 +10,8 @@ namespace hlx
     class OpenGLCubemapTexture : public CubemapTexture
     {
     public:
-        OpenGLCubemapTexture(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Wrapping wrappingR, Filter filter, const std::array<std::span<const byte>, 6>& data = {});
+        OpenGLCubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB);
+        OpenGLCubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB, Format dataFormat, const std::array<std::span<const byte>, 6>& data);
         ~OpenGLCubemapTexture();
 
         void bind() const override;
@@ -18,8 +19,8 @@ namespace hlx
         void unbind() const override;
         bool bound() const override;
 
-        void copy(const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) override;
-        void copy_range(const Vector2u dimensions, const Vector2u& offset, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) override;
+        void copy(Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) override;
+        void copy_range(const Vector2u dimensions, const Vector2u& offset, Format DataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) override;
 
     private:
         GLenum m_internalTarget{ GL_TEXTURE_CUBE_MAP };

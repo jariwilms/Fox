@@ -16,9 +16,9 @@ namespace hlx
         virtual ~VertexArray() = default;
 
         template<typename T>
-        void tie(const std::shared_ptr<Buffer<T>> vertices, const std::shared_ptr<VertexLayout> layout)
+        void tie(const std::shared_ptr<Buffer<T>> vertices, const std::shared_ptr<VertexLayout> colorDepth)
         {
-            tie(vertices->id(), layout);
+            tie(vertices->id(), colorDepth);
         }
         virtual void tie(const std::shared_ptr<IndexBuffer> indices) = 0;
 
@@ -34,7 +34,7 @@ namespace hlx
     protected:
         VertexArray() = default;
 
-        virtual void tie(Id bufferId, const std::shared_ptr<VertexLayout> layout) = 0;
+        virtual void tie(Id bufferId, const std::shared_ptr<VertexLayout> colorDepth) = 0;
 
         std::shared_ptr<const IndexBuffer> m_indices{};
         unsigned int m_attributes{};

@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     IO::init();
     Geometry::init();
     Renderer::init();
-
+    ModelImporter::init();
 
 
     const Vector2u dimensions{ 2048, 2048 };
@@ -59,13 +59,13 @@ int main(int argc, char** argv)
     for (const auto& identifier : skyboxIdentifiers)
     {
         const auto image = IO::load<Image>("textures/skybox/" + identifier + ".png");
-        auto [dimensions, channels, size, data] = image->read_c(4, false);     //Bandaid fix
+        auto [dimensions, size, channels, data] = image->read_c(4, false);     //Bandaid fix
         result[index] = data;
         result2[index] = result[index];
         ++index;
     }
 
-    const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::Layout::RGBA8, dimensions, 1u, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Filter::Point, result2);
+    const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, dimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4u, false, Texture::Format::RGBA, result2);
 
 
 

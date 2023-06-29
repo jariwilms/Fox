@@ -11,8 +11,8 @@ namespace hlx
 	public:
 		virtual ~Texture2D() = default;
 
-		virtual void copy(std::span<const byte> data, unsigned int mipLevel = 0, bool generate = true) = 0;
-		virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+		virtual void copy(Format dataFormat, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+		virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, Format dataFormat, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
 
 		const Vector2u& dimensions() const
 		{
@@ -28,8 +28,8 @@ namespace hlx
 		}
 
 	protected:
-		Texture2D(Format format, Layout layout, const Vector2u& dimensions, unsigned int mipLevels, Wrapping wrappingS, Wrapping wrappingT, Filter filter)
-            : Texture{ format, layout, mipLevels, filter }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
+		Texture2D(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB)
+            : Texture{ format, colorDepth, filter, mipLevels, sRGB }, m_dimensions{ dimensions }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
 
 		const Vector2u m_dimensions{};
         const Wrapping m_wrappingS{};

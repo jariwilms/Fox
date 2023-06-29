@@ -39,7 +39,7 @@ namespace hlx
 		{
 			return m_type;
 		}
-		Layout layout() const
+		Layout colorDepth() const
 		{
 			return m_layout;
 		}
@@ -49,8 +49,8 @@ namespace hlx
 		}
 
 	protected:
-		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions)
-			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions } {}
+		RenderBuffer(Type type, Layout colorDepth, const Vector2u& dimensions)
+			: m_type{ type }, m_layout{ colorDepth }, m_dimensions{ dimensions } {}
 
 		const Type m_type{};
 		const Layout m_layout{};

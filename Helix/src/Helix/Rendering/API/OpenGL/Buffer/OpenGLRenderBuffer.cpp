@@ -4,10 +4,10 @@
 
 namespace hlx
 {
-	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions)
-		: RenderBuffer{ type, layout, dimensions }
+	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions)
+		: RenderBuffer{ type, colorDepth, dimensions }
 	{
-		m_internalFormat = OpenGL::renderbuffer_layout(layout);
+		m_internalFormat = OpenGL::renderbuffer_layout(colorDepth);
 
 		glCreateRenderbuffers(1, &m_id);
 		glNamedRenderbufferStorage(m_id, m_internalFormat, m_dimensions.x, m_dimensions.y);

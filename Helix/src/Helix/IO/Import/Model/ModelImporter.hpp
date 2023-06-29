@@ -15,10 +15,20 @@ namespace hlx
     class ModelImporter
     {
     public:
+        static void init()
+        {
+            defaultAlbedoTexture = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::R, std::vector<byte>{ 0xFF });
+            defaultNormalTexture = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0xFF });
+
+            defaultMaterial = std::make_shared<Material>();
+            defaultMaterial->albedo = defaultAlbedoTexture;
+            defaultMaterial->normal = defaultNormalTexture;
+        }
+
         static std::shared_ptr<Model> load(const std::filesystem::path& path)
         {
             const auto directory = path.parent_path();
-            const auto aggregate = (IO::root() / path.string());
+            const auto aggregate = IO::root() / path.string();
             const auto agp = aggregate.parent_path();
 
             Assimp::Importer importer{};
@@ -31,10 +41,14 @@ namespace hlx
 
             std::vector<std::shared_ptr<Material>> materials{};
             TextureBlueprint bp{};
+            bp.filter = Texture::Filter::Trilinear;
 
             for (auto i = 0u; i < aiScene->mNumMaterials; ++i)
             {
                 auto material = std::make_shared<Material>();
+                material->albedo = defaultAlbedoTexture;
+                material->normal = defaultNormalTexture;
+
                 const auto& aiMaterial = *aiScene->mMaterials[i];
                 aiString materialName{};
 
@@ -50,7 +64,7 @@ namespace hlx
                     if (materialDiffuse.length)
                     {
                         const auto diffuseImage = std::make_shared<Image>(agp / materialDiffuse.C_Str());
-                        const auto diffuseTexture = bp.build(diffuseImage);
+                        const auto diffuseTexture = bp.build(diffuseImage, 1u, true);
                         material->albedo = diffuseTexture;
                     }
 
@@ -130,5 +144,10 @@ namespace hlx
 
             return model;
         }
+
+        private:
+            static inline std::shared_ptr<Texture2D> defaultAlbedoTexture{};
+            static inline std::shared_ptr<Texture2D> defaultNormalTexture{};
+            static inline std::shared_ptr<Material> defaultMaterial{};
     };
 }

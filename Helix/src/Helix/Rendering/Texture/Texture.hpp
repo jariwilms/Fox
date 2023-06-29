@@ -15,25 +15,17 @@ namespace hlx
 			RG, 
 			RGB, 
 			RGBA, 
-		};
-		enum class Layout
-		{
-			RGB8,
-			RGB16,
-			RGB32,
 
-			RGBA8,
-			RGBA16,
-			RGBA32,
+			D, 
+			S, 
+			DS, 
 		};
-		enum class Wrapping
+		enum class ColorDepth
 		{
-			ClampToEdge,
-			ClampToBorder,
-
-			MirroredRepeat,
-			Repeat,
-			MirroredClampToEdge,
+			_8Bit, 
+			_16Bit, 
+			_24Bit, 
+			_32Bit, 
 		};
         enum class Filter
 		{
@@ -41,20 +33,29 @@ namespace hlx
 			Bilinear, 
 			Trilinear, 
 		};
+		enum class Wrapping
+		{
+			ClampToEdge,
+			ClampToBorder,
+
+			Repeat,
+			MirroredRepeat,
+			MirroredClampToEdge,
+		};
 
 		virtual ~Texture() = default;
 
 		virtual void bind(unsigned int slot) const = 0;
 
-		Format       format() const
+		Format format() const
 		{
 			return m_format;
 		}
-		Layout       layout() const
+		ColorDepth color_depth() const
 		{
-			return m_layout;
+			return m_colorDepth;
 		}
-        Filter       filter() const
+        Filter filter() const
         {
             return m_filter;
         }
@@ -62,14 +63,19 @@ namespace hlx
 		{
 			return m_mipLevels;
 		}
+		bool standard_rgb() const
+		{
+			return m_sRGB;
+		}
 
 	protected:
-		Texture(Texture::Format format, Layout layout, unsigned int mipLevels, Filter filter)
-			: m_format{ format }, m_layout{ layout }, m_mipLevels{ mipLevels }, m_filter{ filter } {}
+		Texture(Texture::Format format, ColorDepth colorDepth, Filter filter, unsigned int mipLevels, bool sRGB)
+			: m_format{ format }, m_colorDepth{ colorDepth }, m_filter{ filter }, m_mipLevels{ mipLevels }, m_sRGB{ sRGB } {}
 
 		const Format       m_format{};
-		const Layout       m_layout{};
+		const ColorDepth   m_colorDepth{};
 		const Filter       m_filter{};
 		const unsigned int m_mipLevels{};
+		const bool         m_sRGB{};
 	};
 }
