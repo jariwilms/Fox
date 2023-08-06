@@ -20,7 +20,7 @@
 #include "Helix/Rendering/Renderer.hpp"
 #include "Helix/Window/Window.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
-#include "Helix/Core/Library/Array/CycleArray.hpp"
+#include "Helix/Core/Library/Array/CyclicBuffer.hpp"
 
 #include "Helix/Test/Test.hpp"
 #include "Helix/Experimental/Texture/Texture.hpp"
@@ -29,7 +29,7 @@ using namespace hlx;
 
 int main(int argc, char** argv)
 {
-    Application application{argc, argv};
+    Application application{ argc, argv };
 
     const std::string windowIdentifier{ "Window 1" };
     const std::string windowTitle{ "Helix" };
@@ -40,7 +40,6 @@ int main(int argc, char** argv)
     Geometry::init();
     Renderer::init();
     ModelImporter::init();
-
 
     const Vector2u dimensions{ 2048, 2048 };
     const std::initializer_list<std::string> skyboxIdentifiers =
@@ -82,9 +81,8 @@ int main(int argc, char** argv)
 
 
 
-
-
     std::array<std::tuple<Light, Vector3f>, 32> lights{};
+
     Light l{};
     l.color = Vector3f{ 0.01f, 0.0f, 0.01f };
     lights[0] = std::make_tuple(l, Vector3f{ 0.5f, 0.5f, 0.5f });
@@ -94,7 +92,7 @@ int main(int argc, char** argv)
 
 
     Time::reset();
-    CycleArray<float, 128> frametimes{};
+    CyclicBuffer<float, 128> frametimes{};
 
     const auto native = window->native_window();
 	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(native)))

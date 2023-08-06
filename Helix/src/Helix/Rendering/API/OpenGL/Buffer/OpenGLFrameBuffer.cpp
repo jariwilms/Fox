@@ -53,8 +53,8 @@ namespace hlx
 		std::for_each(textures.begin(), textures.end(), attach_texture);
 		std::for_each(renderBuffers.begin(), renderBuffers.end(), attach_renderbuffer);
 		if (!drawBuffers.empty() || options == FrameBuffer::Option::NoDraw) glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
-		//if (options == Framebuffer::Options::None) glNamedFramebufferReadBuffers(); ...
 
+		//if (options == Framebuffer::Options::None) glNamedFramebufferReadBuffers(); ...
 		//2 == Option::NoDraw;
 
 		const auto status = glCheckNamedFramebufferStatus(m_id, GL_FRAMEBUFFER);

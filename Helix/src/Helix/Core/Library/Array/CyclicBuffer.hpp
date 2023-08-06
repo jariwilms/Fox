@@ -5,7 +5,7 @@
 namespace hlx
 {
     template<class _Ty, size_t _Size>
-    class CycleArray
+    class CyclicBuffer
     {
     public:
         using value_type      = _Ty;
@@ -22,7 +22,7 @@ namespace hlx
         using reverse_iterator       = std::reverse_iterator<iterator>;
         using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-        CycleArray() = default;
+        CyclicBuffer() = default;
 
         constexpr void fill(const _Ty& value)
         {

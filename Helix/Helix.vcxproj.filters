@@ -159,7 +159,7 @@
     <ClInclude Include="src\Helix\Config.hpp">
       <Filter>Helix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp">
+    <ClInclude Include="src\Helix\Core\Library\Array\CyclicBuffer.hpp">
       <Filter>Helix\Core\Library\Array</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp">
@@ -430,6 +430,7 @@
     <ClInclude Include="src\Helix\Core\RenderAPI.hpp" />
     <ClInclude Include="src\Helix\Application.hpp" />
     <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
@@ -493,5 +494,8 @@
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Application.cpp" />
     <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Helix\Config\Config.ini" />
   </ItemGroup>
 </Project>

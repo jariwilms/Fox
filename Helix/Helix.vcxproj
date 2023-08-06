@@ -101,7 +101,7 @@
   <ItemGroup>
     <ClInclude Include="src\Helix\Application.hpp" />
     <ClInclude Include="src\Helix\Config.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Array\CycleArray.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Array\CyclicBuffer.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
     <ClInclude Include="src\Helix\Core\RenderAPI.hpp" />
@@ -181,6 +181,7 @@
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Uniform\Uniform.hpp" />
@@ -228,6 +229,9 @@
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Helix\Config\Config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
