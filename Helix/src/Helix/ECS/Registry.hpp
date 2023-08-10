@@ -54,4 +54,10 @@ namespace hlx
     private:
         static inline entt::basic_registry<Id> s_registry;
     };
+
+    //class EnttRegistry : public Registry //Move the above code into this class, then create instance of this as registry
+    //{
+
+    //};
+
 }

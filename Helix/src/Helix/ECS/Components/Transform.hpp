@@ -49,7 +49,7 @@ namespace hlx
 
         Vector3f forward() const
         {
-            return rotation * Vector3f{ 0.0f, 0.0f, -1.0f };                  //TODO: make decision about which axis is forward
+            return rotation * Vector3f{ 0.0f, 0.0f, -1.0f };                   //TODO: make decision about which axis is forward
         }
         Vector3f right() const
         {

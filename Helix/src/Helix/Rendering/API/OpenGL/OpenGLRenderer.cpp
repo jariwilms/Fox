@@ -98,10 +98,8 @@ namespace hlx
 
     void OpenGLRenderer::start(const RenderInfo& renderInfo)
     {
-        m_renderInfo = renderInfo;
-
         const auto& camera = renderInfo.camera;
-        const auto& position = renderInfo.viewPosition;
+        const auto& position = renderInfo.cameraPosition;
 
         const auto viewMatrix = glm::lookAt(position.position, position.position + position.forward(), position.up());
         const auto& projectionMatrix = camera.projection();
@@ -150,13 +148,13 @@ namespace hlx
     {
         glDisable(GL_CULL_FACE);
 
-        if (m_renderInfo.skybox != nullptr)
-        {
-            m_pipelines.find("Skybox")->second->bind();
-            Cube::vao->bind();
-            m_renderInfo.skybox->bind(0);
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
-        }
+        //if (m_renderInfo.skybox != nullptr)
+        //{
+        //    m_pipelines.find("Skybox")->second->bind();
+        //    Cube::vao->bind();
+        //    m_renderInfo.skybox->bind(0);
+        //    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
+        //}
 
 
 

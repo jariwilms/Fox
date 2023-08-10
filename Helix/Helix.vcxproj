@@ -99,6 +99,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Helix\ECS\Components\MeshFilter.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Scene\Scene.hpp" />
     <ClInclude Include="src\Helix\Application.hpp" />
     <ClInclude Include="src\Helix\Config.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Array\CyclicBuffer.hpp" />
@@ -196,6 +199,7 @@
     <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Helix\Rendering\Scene\Scene.cpp" />
     <ClCompile Include="src\Helix\Application.cpp" />
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />

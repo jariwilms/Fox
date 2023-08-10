@@ -29,4 +29,20 @@ namespace hlx
                 normal    == other.normal     ;
         }
     };
+
+    class StandardMaterial
+    {
+
+    };
+
+    class TestMaterial
+    {
+    public:
+        std::string name{};
+        //Shader shader{};
+        //Shaderproperties properties
+        //mixed key/value map? (json)
+
+        //void add_key(name: string, value: any);
+    };
 }

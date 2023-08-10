@@ -431,6 +431,9 @@
     <ClInclude Include="src\Helix\Application.hpp" />
     <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Scene\Scene.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\MeshFilter.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
@@ -494,6 +497,7 @@
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Application.cpp" />
     <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Scene\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\Helix\Config\Config.ini" />

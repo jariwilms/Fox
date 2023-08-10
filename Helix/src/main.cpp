@@ -41,39 +41,6 @@ int main(int argc, char** argv)
     Renderer::init();
     ModelImporter::init();
 
-    const Vector2u dimensions{ 2048, 2048 };
-    const std::initializer_list<std::string> skyboxIdentifiers =
-    {
-        "right",
-        "left", 
-        "top", 
-        "bottom", 
-        "front", 
-        "back", 
-    };
-
-    std::array<std::vector<byte>, 6> result{};
-    std::array<std::span<const byte>, 6> result2{};
-    unsigned int index{};
-    for (const auto& identifier : skyboxIdentifiers)
-    {
-        const auto image = IO::load<Image>("textures/skybox/" + identifier + ".png");
-        auto [dimensions, size, channels, data] = image->read_c(4, false);     //Bandaid fix
-        result[index] = data;
-        result2[index] = result[index];
-        ++index;
-    }
-
-    const auto skyboxTexture = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, dimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4u, false, Texture::Format::RGBA, result2);
-
-
-
-    auto model = ModelImporter::load(R"(models/backpack/scene.gltf)");
-    Transform modelTransform{};
-    modelTransform.rotate(Vector3f{ -90.0f, 0.0f, 0.0f });
-
-
-
     auto observer = Registry::create();
     auto& camera = Registry::add_component<Camera>(observer);
     auto& cameraTransform = Registry::get_component<Transform>(observer);
@@ -81,8 +48,12 @@ int main(int argc, char** argv)
 
 
 
-    std::array<std::tuple<Light, Vector3f>, 32> lights{};
 
+    //auto planeModel = ModelImporter::load(R"(models/plane/plane.glb)");
+    //Transform planeTransform{};
+
+    std::vector<std::tuple<Light, Vector3f>> lights{};
+    lights.resize(32);
     Light l{};
     l.color = Vector3f{ 0.01f, 0.0f, 0.01f };
     lights[0] = std::make_tuple(l, Vector3f{ 0.5f, 0.5f, 0.5f });
@@ -109,7 +80,7 @@ int main(int argc, char** argv)
         if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up()      * shift * Time::delta();
         if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up()      * shift * Time::delta();
 
-        if (Input::button_pressed(Button::Button1))
+        if (Input::button_pressed(Button::Button1)) //RMB
         {
             static Vector3f rotation{};
             const auto rel = Input::cursor_position_relative() / 10.0f;
@@ -118,9 +89,8 @@ int main(int argc, char** argv)
             cameraTransform.rotation = Quaternion{ glm::radians(rotation) };
         }
 
-        Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, skyboxTexture, lights, {} });
-        Renderer::render(model, modelTransform);
-        //Renderer::render(plane, planeTransform);
+        Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
+        //The render system starts running here and submits all models/meshes to the renderer
         Renderer::finish();
 
 

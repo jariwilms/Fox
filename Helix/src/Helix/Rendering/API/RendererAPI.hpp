@@ -13,6 +13,7 @@
 #include "Helix/Rendering/Model/Model.hpp"
 #include "Helix/Rendering/PostProcessing/PostProcessing.hpp"
 #include "Helix/Rendering/Texture/CubemapTexture.hpp"
+//#include "Helix/"
 
 namespace hlx
 {
@@ -21,11 +22,13 @@ namespace hlx
     public:
         struct RenderInfo
         {
-            Camera camera{};
-            Transform viewPosition{};
-            std::shared_ptr<const CubemapTexture> skybox{};
-            std::array<std::tuple<Light, glm::vec3>, 32> lights{};
-            std::vector<PostProcessing::Option> postProcessingOptions{};
+        public:
+            RenderInfo(const Camera& camera, const Transform& cameraPosition, const std::vector<std::tuple<Light, Vector3f>>& lights)
+                : camera{ camera }, cameraPosition{ cameraPosition }, lights{ lights } {}
+
+            const Camera& camera{};
+            const Transform& cameraPosition{};
+            const std::vector<std::tuple<Light, Vector3f>>& lights{};
         };
 
         virtual ~RendererAPI() = default;
