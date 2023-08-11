@@ -15,12 +15,17 @@ namespace hlx
     class ModelImporter
     {
     public:
+        static inline std::shared_ptr<Pipeline> dpl{};
+
         static void init()
         {
+            const std::string materialName{ "Default" };
+            dpl = GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv");
+            
             defaultAlbedoTexture = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::R, std::vector<byte>{ 0xFF });
             defaultNormalTexture = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0xFF });
 
-            defaultMaterial = std::make_shared<Material>();
+            defaultMaterial = std::make_shared<DefaultMaterial>(materialName, dpl);
             defaultMaterial->albedo = defaultAlbedoTexture;
             defaultMaterial->normal = defaultNormalTexture;
         }
@@ -39,13 +44,13 @@ namespace hlx
 
 
 
-            std::vector<std::shared_ptr<Material>> materials{};
+            std::vector<std::shared_ptr<DefaultMaterial>> materials{};
             TextureBlueprint bp{};
             bp.filter = Texture::Filter::Trilinear;
 
             for (auto i = 0u; i < aiScene->mNumMaterials; ++i)
             {
-                auto material = std::make_shared<Material>();
+                auto material = std::make_shared<DefaultMaterial>(path.string(), dpl);
                 material->albedo = defaultAlbedoTexture;
                 material->normal = defaultNormalTexture;
 
@@ -79,6 +84,7 @@ namespace hlx
                     materials.emplace_back(std::move(material));
                 }
             }
+            if (materials.empty()) materials.emplace_back(defaultMaterial);
 
 
 
@@ -148,6 +154,6 @@ namespace hlx
         private:
             static inline std::shared_ptr<Texture2D> defaultAlbedoTexture{};
             static inline std::shared_ptr<Texture2D> defaultNormalTexture{};
-            static inline std::shared_ptr<Material> defaultMaterial{};
+            static inline std::shared_ptr<DefaultMaterial> defaultMaterial{};
     };
 }

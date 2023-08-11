@@ -26,7 +26,7 @@ namespace hlx
         void render(const std::shared_ptr<const Model> model, const Transform& transform) override;
 
     private:
-        std::shared_ptr<FrameBufferMultisample> m_fbm{};
+        std::shared_ptr<FrameBufferMultisample> m_frameBufferMultisample{};
         std::array<std::shared_ptr<FrameBuffer>, 2> m_gBuffers{};
         std::shared_ptr<FrameBuffer> m_depthMap{};
         bool m_pingpong{ false };

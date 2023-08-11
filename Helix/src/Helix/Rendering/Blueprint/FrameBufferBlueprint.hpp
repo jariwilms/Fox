@@ -11,8 +11,6 @@ namespace hlx
     struct FrameBufferBlueprint
     {
     public:
-        FrameBufferBlueprint() = default;
-
         std::shared_ptr<FrameBuffer> build(const Vector2u& dimensions) const
         {
             return GraphicsAPI::create_fbo(dimensions, textures, renderBuffers);

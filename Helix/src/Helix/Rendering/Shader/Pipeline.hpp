@@ -15,7 +15,7 @@ namespace hlx
 
 		virtual void stage(const std::shared_ptr<Shader> shader) = 0;
 		
-		std::shared_ptr<Shader> shader(Shader::Type type) const
+		const std::shared_ptr<Shader> shader(Shader::Type type) const
 		{
 			switch (type)
 			{

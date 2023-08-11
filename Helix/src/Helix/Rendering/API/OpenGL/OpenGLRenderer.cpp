@@ -6,68 +6,37 @@ namespace hlx
 {
     OpenGLRenderer::OpenGLRenderer()
     {
-        TextureBlueprint positionTextureBp{};
-        TextureBlueprint colorTextureBp{};
-        TextureBlueprint specularTextureBp{};
+        //Create FrameBuffer and RenderBuffer textures
+        TextureBlueprint positionTextureBp{ Texture::Format::RGB, Texture::ColorDepth::_16Bit, };
+        TextureBlueprint colorTextureBp{ Texture::Format::RGB, Texture::ColorDepth::_16Bit, };
+        TextureBlueprint specularTextureBp{ .colorDepth = Texture::ColorDepth::_8Bit, };
 
-        positionTextureBp.format = Texture::Format::RGB;
-        colorTextureBp.format = Texture::Format::RGB;
-        positionTextureBp.colorDepth = Texture::ColorDepth::_16Bit;
-        colorTextureBp.colorDepth = Texture::ColorDepth::_16Bit;
-        specularTextureBp.colorDepth = Texture::ColorDepth::_8Bit;
+        RenderBufferBlueprint depthRenderBufferBp{ RenderBuffer::Type::Depth, RenderBuffer::Layout::Depth32 };
 
-        RenderBufferBlueprint depthRenderBufferBp{};
-        depthRenderBufferBp.type = RenderBuffer::Type::Depth;
-        depthRenderBufferBp.colorDepth = RenderBuffer::Layout::Depth32;
+        std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> textureBlueprints{};
+        textureBlueprints.emplace_back(std::make_tuple("Position", FrameBuffer::Attachment::Color, positionTextureBp));
+        textureBlueprints.emplace_back(std::make_tuple("Color", FrameBuffer::Attachment::Color, colorTextureBp));
+        textureBlueprints.emplace_back(std::make_tuple("Specular", FrameBuffer::Attachment::Color, specularTextureBp));
 
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> tbps{};
-        tbps.emplace_back(std::make_tuple("Position", FrameBuffer::Attachment::Color, positionTextureBp));
-        tbps.emplace_back(std::make_tuple("Color", FrameBuffer::Attachment::Color, colorTextureBp));
-        tbps.emplace_back(std::make_tuple("Specular", FrameBuffer::Attachment::Color, specularTextureBp));
+        std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> renderBufferBlueprints{};
+        renderBufferBlueprints.emplace_back(std::make_tuple("Depth", FrameBuffer::Attachment::Depth, depthRenderBufferBp));
 
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> rbps{};
-        rbps.emplace_back(std::make_tuple("Depth", FrameBuffer::Attachment::Depth, depthRenderBufferBp));
+        FrameBufferBlueprint frameBufferBlueprint{ textureBlueprints, renderBufferBlueprints };
 
-        FrameBufferBlueprint fbbp{};
-        fbbp.textures = tbps;
-        fbbp.renderBuffers = rbps;
+        m_frameBufferMultisample = frameBufferBlueprint.build_ms(Vector2f{ 1280, 720 }, 2);
+        m_gBuffers[0] = frameBufferBlueprint.build(Vector2f{ 1280, 720 });     //TODO: fetch target window resolution from WindowManager
+        m_gBuffers[1] = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
-        m_fbm = fbbp.build_ms(Vector2f{ 1280, 720 }, 2);
-        m_gBuffers[0] = fbbp.build(Vector2f{ 1280, 720 });                     //TODO: fetch target window from application
-        m_gBuffers[1] = fbbp.build(Vector2f{ 1280, 720 });
-
-
-
-
-
-
-        const auto sz = Vector2u{ 1024, 1024 };
-        TextureBlueprint depthTexture{};
-        depthTexture.format = Texture::Format::D;
-        depthTexture.colorDepth = Texture::ColorDepth::_32Bit;
-        depthTexture.filter = Texture::Filter::Point;
-        depthTexture.wrappingS = Texture::Wrapping::Repeat;
-        depthTexture.wrappingT = Texture::Wrapping::Repeat;
-
+        TextureBlueprint depthTexture{ Texture::Format::D, Texture::ColorDepth::_32Bit, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, };
         FrameBufferBlueprint depthBp{};
         depthBp.textures.emplace_back(std::make_tuple("Depth", FrameBuffer::Attachment::Depth, depthTexture));
-        m_depthMap = depthBp.build(sz);
+        m_depthMap = depthBp.build(Vector2u{ 1024, 1024 });
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+        //Buffer for lights, TODO: pass actual light count to lighting shader instead of const value
         constexpr auto lightCount = 32;
         m_matricesBuffer = std::make_shared<OpenGLUniformBuffer<UMatrices>>(0, UMatrices{});
         m_materialBuffer = std::make_shared<OpenGLUniformBuffer<UMaterial>>(1, UMaterial{});
@@ -76,20 +45,18 @@ namespace hlx
         
 
 
-        auto geometryPipeline = GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv");
-        m_pipelines.emplace("Geometry", geometryPipeline);
 
-        auto skyboxPipeline = GraphicsAPI::create_plo("shaders/compiled/skyboxvert.spv", "shaders/compiled/skyboxfrag.spv");
-        m_pipelines.emplace("Skybox", skyboxPipeline);
 
-        auto lightingPipeline = GraphicsAPI::create_plo("shaders/compiled/lightingvert.spv", "shaders/compiled/lightingfrag.spv");
-        m_pipelines.emplace("Lighting", lightingPipeline);
-
-        auto postProcessingPipeline = GraphicsAPI::create_plo("shaders/compiled/sharpenvert.spv", "shaders/compiled/sharpenfrag.spv");
-        m_postProcessingPipelines.emplace("SharpenKernel", postProcessingPipeline);
+        //TODO: maybe predefined pipeline names (constexpr?), these will probably not change anyways
+        m_pipelines.emplace("Geometry", GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv"));
+        m_pipelines.emplace("Lighting", GraphicsAPI::create_plo("shaders/compiled/lightingvert.spv", "shaders/compiled/lightingfrag.spv"));
+        m_pipelines.emplace("Skybox", GraphicsAPI::create_plo("shaders/compiled/skyboxvert.spv", "shaders/compiled/skyboxfrag.spv"));
+        //m_postProcessingPipelines.emplace("SharpenKernel", GraphicsAPI::create_plo("shaders/compiled/sharpenvert.spv", "shaders/compiled/sharpenfrag.spv"));
 
 
 
+
+        //TODO: global state control class (set + remember current state so unnecessary (and maybe expensive) changes do not need to be made
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glDepthFunc(GL_LEQUAL);
         glCullFace(GL_BACK);
@@ -116,7 +83,7 @@ namespace hlx
             uLight.color = Vector4f{ light.color, 0.0f };
             uLight.linear = 0.1f;
             uLight.quadratic = 0.1f;
-            uLight.radius = 10.0f;
+            uLight.radius = 100.0f;
 
             uLights[index] = uLight;
 
@@ -133,7 +100,7 @@ namespace hlx
 
 
 
-        m_fbm->bind(FrameBuffer::Target::Write);
+        m_frameBufferMultisample->bind(FrameBuffer::Target::Write);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
@@ -142,12 +109,13 @@ namespace hlx
         m_matricesBuffer->copy_tuple(offsetof(UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
         m_cameraBuffer->copy(UCamera{ Vector4f{ position.position, 0.0f } });
 
-        m_pipelines.find("Geometry")->second->bind();
+        m_pipelines.find("Geometry")->second->bind(); //TODO: move to render func? It may be safer to call this every render, bind state is remembered anyways
     }
     void OpenGLRenderer::finish()
     {
         glDisable(GL_CULL_FACE);
 
+        //Render the skybox last  so unnecessary fragments are not drawn
         //if (m_renderInfo.skybox != nullptr)
         //{
         //    m_pipelines.find("Skybox")->second->bind();
@@ -160,9 +128,10 @@ namespace hlx
 
         const auto width = 1280;
         const auto height = 720;
-        m_fbm->bind(FrameBuffer::Target::Read);
+        m_frameBufferMultisample->bind(FrameBuffer::Target::Read);
         m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
 
+        //TODO: render manually to texture instead of blitting?
         for (auto i = 0u; i < 3; ++i)
         {
             glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
@@ -170,7 +139,7 @@ namespace hlx
             glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
 
-        m_fbm->unbind();                                                      
+        m_frameBufferMultisample->unbind();                                                      
 
         m_gBuffers[m_pingpong]->unbind();                                     
         m_gBuffers[m_pingpong]->bind_texture("Position", 0);
@@ -182,8 +151,6 @@ namespace hlx
 
         glDisable(GL_DEPTH_TEST);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-
-        //m_pingpong = !m_pingpong;
     }
 
     void OpenGLRenderer::render(const std::shared_ptr<const Model> model, const Transform& transform)

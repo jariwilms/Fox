@@ -11,8 +11,6 @@ namespace hlx
 	struct TextureBlueprint
 	{
 	public:
-		TextureBlueprint() = default;
-
 		std::shared_ptr<Texture2D> build(const std::shared_ptr<Image> image, unsigned int mipLevels = 1u, bool sRGB = false) const;
 		std::shared_ptr<Texture2D> build(const Vector2u& dimensions, unsigned int mipLevels = 1u, bool sRGB = false) const;
 		std::shared_ptr<Texture2DMultisample> build_ms(const Vector2u& dimensions, unsigned int mipLevels = 1u, unsigned int samples = 0u, bool sRGB = false) const;

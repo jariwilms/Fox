@@ -50,12 +50,13 @@ int main(int argc, char** argv)
 
 
     //auto planeModel = ModelImporter::load(R"(models/plane/plane.glb)");
-    //Transform planeTransform{};
+    auto planeModel = ModelImporter::load(R"(models/backpack/scene.gltf)");
+    Transform planeTransform{};
 
     std::vector<std::tuple<Light, Vector3f>> lights{};
     lights.resize(32);
     Light l{};
-    l.color = Vector3f{ 0.01f, 0.0f, 0.01f };
+    l.color = Vector3f{ 0.0f, 0.01f, 0.0f };
     lights[0] = std::make_tuple(l, Vector3f{ 0.5f, 0.5f, 0.5f });
 
 
@@ -91,6 +92,7 @@ int main(int argc, char** argv)
 
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
         //The render system starts running here and submits all models/meshes to the renderer
+        Renderer::render(planeModel, planeTransform);
         Renderer::finish();
 
 
