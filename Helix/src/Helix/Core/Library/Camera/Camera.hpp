@@ -1,20 +1,17 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Component.hpp"
 #include "Helix/Rendering/Projection/Projection.hpp"
 
 namespace hlx
 {
-    class Camera : public Component
+    class Camera
     {
     public:
         Camera()
         {
-            m_fov = 60.0f;                                                     
+            m_fov = 60.0f;
             m_aspect = 16.0f / 9.0f;                                           //TODO: pass window perspective into ctor
-            
+
             m_projection = Projection::create<Projection::Type::Perspective>(m_fov, m_aspect, 0.01f, 100.0f);
         }
 
@@ -30,7 +27,7 @@ namespace hlx
         {
             return m_projection;
         }
-        
+
     protected:
         float m_fov{};
         float m_aspect{};

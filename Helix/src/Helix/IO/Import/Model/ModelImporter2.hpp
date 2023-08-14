@@ -38,10 +38,10 @@ namespace hlx
             const auto baseDirectory = absolutePath.parent_path();
 
             const auto pFlags = aiProcess_Triangulate | aiProcess_SortByPType | aiProcess_OptimizeGraph | aiProcess_OptimizeMeshes | aiProcess_GenNormals | aiProcess_FixInfacingNormals | aiProcess_CalcTangentSpace;
-            const auto aiScene = importer.ReadFile(absolutePath.string(), pFlags);
+            const auto aiScene = importer.ReadFile(absolutePath.string(), 0);
             if (!aiScene || !aiScene->mRootNode || aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) throw std::runtime_error{"Failed to load model!"};
 
-
+            
 
             auto model = std::make_shared<Model>();
             model->meshes = get_meshes(aiScene);
@@ -55,7 +55,7 @@ namespace hlx
 
             return model;
         }
-
+        
     private:
         static std::vector<std::shared_ptr<Mesh>> get_meshes(const aiScene* aiScene)
         {

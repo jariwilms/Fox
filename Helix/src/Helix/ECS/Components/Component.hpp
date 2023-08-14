@@ -6,20 +6,15 @@
 
 namespace hlx
 {
-    class Component
+    struct Component
     {
     public:
         virtual ~Component() = default;
 
+        Entity entity{};
+
     protected:
-        Component() = default;
-
-        template<typename T>
-        void find_sibling()
-        {
-
-        }
-
-        std::shared_ptr<Entity> m_parent{};
+        Component(Entity entity)
+            : entity{ entity } {}
     };
 }

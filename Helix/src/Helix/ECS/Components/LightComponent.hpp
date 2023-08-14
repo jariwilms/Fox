@@ -6,7 +6,7 @@
 
 namespace hlx
 {
-    class Light
+    struct LightComponent
     {
     public:
         enum class Type

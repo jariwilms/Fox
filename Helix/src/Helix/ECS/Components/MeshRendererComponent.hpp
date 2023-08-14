@@ -9,7 +9,7 @@
 
 namespace hlx
 {
-    struct MeshRenderer : public Component
+    struct MeshRendererComponent : public Component
     {
     public:
         struct LightingOptions

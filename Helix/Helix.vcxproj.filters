@@ -159,7 +159,7 @@
     <ClInclude Include="src\Helix\Config.hpp">
       <Filter>Helix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Core\Library\Array\CyclicBuffer.hpp">
+    <ClInclude Include="src\Helix\Core\Library\Data\CyclicBuffer.hpp">
       <Filter>Helix\Core\Library\Array</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp">
@@ -174,7 +174,7 @@
     <ClInclude Include="src\Helix\Core\Typedef.hpp">
       <Filter>Helix\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\ECS\Components\Camera.hpp">
+    <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp">
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp">
@@ -183,13 +183,13 @@
     <ClInclude Include="src\Helix\ECS\Components\Components.hpp">
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\ECS\Components\Light.hpp">
+    <ClInclude Include="src\Helix\ECS\Components\LightComponent.hpp">
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp">
+    <ClInclude Include="src\Helix\ECS\Components\MeshRendererComponent.hpp">
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\ECS\Components\Transform.hpp">
+    <ClInclude Include="src\Helix\Core\Library\Transform\Transform.hpp">
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\ECS\Entity\Entity.hpp">
@@ -443,6 +443,9 @@
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter2.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Camera\Camera.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

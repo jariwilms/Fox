@@ -2,10 +2,11 @@
 
 namespace hlx
 {
+    //TODO: subclass to actor? => scene creates actors instead of entity => can just be passed to registry by polymorphism
     class Entity
     {
     public:
-        explicit Entity(Id id)
+        explicit Entity(Id id = 0, std::shared_ptr<Entity> parent = {})
             : m_id{ id } {}
         virtual ~Entity() = default;
 
@@ -14,24 +15,9 @@ namespace hlx
             return m_id;
         }
 
-        const std::shared_ptr<Entity> parent() const
-        {
-            return m_parent;
-        }
-        const std::vector<std::shared_ptr<Entity>>& children() const
-        {
-            return m_children;
-        }
-
-        bool operator==(const Entity& other) const
-        {
-            return m_id == other.m_id;
-        }
+        bool operator==(const Entity& other) const = default;
 
     private:
         Id m_id{};
-
-        std::shared_ptr<Entity> m_parent{};
-        std::vector<std::shared_ptr<Entity>> m_children{};
     };
 }

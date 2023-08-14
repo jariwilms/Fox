@@ -3,9 +3,9 @@
 #include "stdafx.hpp"
 
 #include "Helix/Rendering/API/RendererAPI.hpp"
-#include "Helix/ECS/Components/Camera.hpp"
+#include "Helix/ECS/Components/CameraComponent.hpp"
 #include "Helix/Rendering/API/OpenGL/OpenGLRenderer.hpp"
-#include "Helix/ECS/Components/Transform.hpp"
+#include "Helix/Core/Library/Transform/Transform.hpp"
 
 namespace hlx
 {

@@ -2,18 +2,17 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/ECS/Components/Camera.hpp"
+#include "Helix/ECS/Components/CameraComponent.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 #include "Helix/ECS/Components/Components.hpp"
 #include "Helix/Rendering/Buffer/UniformBuffer.hpp"
 #include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
-#include "Helix/ECS/Components/Light.hpp"
+#include "Helix/ECS/Components/LightComponent.hpp"
 #include "Helix/Rendering/Shader/Uniform/Uniform.hpp"
-#include "Helix/ECS/Components/Transform.hpp"
+#include "Helix/Core/Library/Transform/Transform.hpp"
 #include "Helix/Rendering/Model/Model.hpp"
 #include "Helix/Rendering/PostProcessing/PostProcessing.hpp"
 #include "Helix/Rendering/Texture/CubemapTexture.hpp"
-//#include "Helix/"
 
 namespace hlx
 {
@@ -23,12 +22,12 @@ namespace hlx
         struct RenderInfo
         {
         public:
-            RenderInfo(const Camera& camera, const Transform& cameraPosition, const std::vector<std::tuple<Light, Vector3f>>& lights)
+            RenderInfo(const Camera& camera, const Transform& cameraPosition, const std::vector<std::tuple<LightComponent, Vector3f>>& lights)
                 : camera{ camera }, cameraPosition{ cameraPosition }, lights{ lights } {}
 
             const Camera& camera{};
             const Transform& cameraPosition{};
-            const std::vector<std::tuple<Light, Vector3f>>& lights{};
+            const std::vector<std::tuple<LightComponent, Vector3f>>& lights{};
         };
 
         virtual ~RendererAPI() = default;

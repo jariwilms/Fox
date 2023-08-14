@@ -20,7 +20,7 @@
 #include "Helix/Scene/Scene.hpp"
 #include "Helix/Window/Window.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
-#include "Helix/Core/Library/Array/CyclicBuffer.hpp"
+#include "Helix/Core/Library/Data/CyclicBuffer.hpp"
 
 #include "Helix/Test/Test.hpp"
 #include "Helix/Experimental/Texture/Texture.hpp"
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     auto scene = std::make_shared<Scene>();
 
     auto observer = scene->create_entity();
-    auto& camera = Registry::add_component<Camera>(observer);
+    auto& camera = Registry::add_component<CameraComponent>(observer);
     auto& cameraTransform = Registry::get_component<Transform>(observer);
     cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
 
@@ -84,7 +84,9 @@ int main(int argc, char** argv)
     for (const auto& mesh : model->meshes)
     {
         auto obj = scene->create_entity();
-        auto& meshRenderer = Registry::add_component<MeshRenderer>(obj);
+        //backpackObject.
+
+        auto& meshRenderer = Registry::add_component<MeshRendererComponent>(obj);
 
         meshRenderer.mesh = mesh;
         meshRenderer.material = model->materialMap[mesh];
@@ -97,9 +99,10 @@ int main(int argc, char** argv)
 
 
 
-    std::vector<std::tuple<Light, Vector3f>> lights{};
+
+    std::vector<std::tuple<LightComponent, Vector3f>> lights{};
     lights.resize(32);
-    Light l{};
+    LightComponent l{};
     l.color = Vector3f{ 0.01f, 0.01f, 0.01f };
     lights[0] = std::make_tuple(l, Vector3f{ 0.0f, 0.0f, 0.0f });
 
@@ -137,8 +140,8 @@ int main(int argc, char** argv)
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
 
         //The render system starts running here and submits all models/meshes to the renderer
-        auto group = Registry::view<Transform, MeshRenderer>();
-        group.each([](auto entity, Transform& transform, MeshRenderer& meshRenderer)
+        auto group = Registry::view<Transform, MeshRendererComponent>();
+        group.each([](auto entity, Transform& transform, MeshRendererComponent& meshRenderer)
             {
                 Renderer::render(meshRenderer.mesh, meshRenderer.material, transform);
             });

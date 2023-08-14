@@ -7,16 +7,22 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 
-#include "Component.hpp"
-
 namespace hlx
 {
-    class Transform : public Component
+    class Transform
     {
     public:
         Transform() = default;
         Transform(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale)
             : position{ position }, rotation{ Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
+        Transform(const Matrix4f& prs)
+        {
+            Vector3f skew{};
+            Vector4f perspective{};
+
+            glm::decompose(prs, scale, rotation, position, skew, perspective);
+            rotation = glm::conjugate(rotation);
+        }
 
         Matrix4f transform() const
         {
@@ -63,6 +69,11 @@ namespace hlx
         Vector3f euler_angles() const
         {
             return glm::degrees(glm::eulerAngles(rotation));
+        }
+
+        friend Transform operator*(const Transform& left, const Transform& right)
+        {
+            return Transform{ left.transform() * right.transform() };
         }
 
         Vector3f   position{ 0.0f };

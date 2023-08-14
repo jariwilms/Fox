@@ -4,7 +4,7 @@
 
 #include <entt/entt.hpp>
 
-#include "Helix/ECS/Components/Transform.hpp"
+#include "Helix/ECS/Components/TransformComponent.hpp"
 
 namespace hlx
 {
@@ -19,7 +19,7 @@ namespace hlx
         static Entity create()
         {
             Entity entity{ s_registry.create() };
-            add_component<Transform>(entity);
+            add_component<TransformComponent>(entity);
 
             return entity;
         }
@@ -49,9 +49,9 @@ namespace hlx
         {
             s_registry.remove<T>(entity.id());
         }
-        template<> static void remove_component<Transform>(const Entity& entity) = delete;
+        template<> static void remove_component<TransformComponent>(const Entity& entity) = delete;
 
-        //TODO: wrapper for entity group
+        //TODO: wrapper for entity group (using my_view = entt::basic_view ofzoiets)
         template<typename... T>
         static auto view()
         {
