@@ -36,10 +36,10 @@ namespace hlx
         {
             glBindBuffer(m_internalTarget, 0);
         }
-        bool bound() const override
-        {
-            return false;
-        }
+        //bool is_bound() const override
+        //{
+        //    throw std::runtime_error{ "Method has not been implemented!" };
+        //}
 
     protected:
         using IBindable::m_id;

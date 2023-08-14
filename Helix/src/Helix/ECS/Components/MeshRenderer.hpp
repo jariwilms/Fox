@@ -4,6 +4,9 @@
 
 #include "Component.hpp"
 
+#include "Helix/Rendering/Mesh/Mesh.hpp"
+#include "Helix/Rendering/Material/Material.hpp"
+
 namespace hlx
 {
     struct MeshRenderer : public Component
@@ -22,15 +25,12 @@ namespace hlx
             LightingOptions() = default;
 
             ShadowCasting shadowCasting{ ShadowCasting::On };
+            unsigned int maxShadowCastingLights{ 8 }; //TODO: global config setting
             bool receiveShadows{ true };
         };
 
-        MeshRenderer()
-        {
-
-        }
-
-        //std::shared_ptr<Material> material{};
-        LightingOptions lightingOptions{};
+        std::shared_ptr<Mesh> mesh{};
+        std::shared_ptr<DefaultMaterial> material{};
+        //LightingOptions lightingOptions{};
     };
 }

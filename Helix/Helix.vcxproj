@@ -99,9 +99,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Helix\ECS\Components\MeshFilter.hpp" />
-    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Scene\Scene.hpp" />
     <ClInclude Include="src\Helix\Application.hpp" />
     <ClInclude Include="src\Helix\Config.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Array\CyclicBuffer.hpp" />
@@ -113,6 +110,7 @@
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Components.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Light.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Transform.hpp" />
     <ClInclude Include="src\Helix\ECS\Entity\Entity.hpp" />
     <ClInclude Include="src\Helix\ECS\Registry.hpp" />
@@ -124,6 +122,7 @@
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
+    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter2.hpp" />
     <ClInclude Include="src\Helix\IO\IO.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
@@ -192,14 +191,14 @@
     <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2DMultisample.hpp" />
+    <ClInclude Include="src\Helix\Scene\Scene.hpp" />
     <ClInclude Include="src\Helix\Test\Test.hpp" />
     <ClInclude Include="src\Helix\Window\API\GLFW\GLFWWindow.hpp" />
     <ClInclude Include="src\Helix\Window\Window.hpp" />
-    <ClInclude Include="src\stdafx.hpp" />
     <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
+    <ClInclude Include="src\stdafx.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Helix\Rendering\Scene\Scene.cpp" />
     <ClCompile Include="src\Helix\Application.cpp" />
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
@@ -219,12 +218,13 @@
     <ClCompile Include="src\Helix\Rendering\Blueprint\TextureBlueprint.cpp" />
     <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
     <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp" />
+    <ClCompile Include="src\Helix\Scene\Scene.cpp" />
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp" />
+    <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="vendor\glad\GLAD.vcxproj">
@@ -233,9 +233,6 @@
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Helix\Config\Config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -40,7 +40,7 @@ namespace hlx
     {
         throw std::logic_error("The method or operation is not implemented.");
     }
-    bool OpenGLCubemapTexture::bound() const
+    bool OpenGLCubemapTexture::is_bound() const
     {
         throw std::logic_error("The method or operation is not implemented.");
     }

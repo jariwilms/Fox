@@ -25,7 +25,7 @@ namespace hlx
 	{
 		glBindRenderbuffer(m_internalTarget, 0);
 	}
-    bool OpenGLRenderBuffer::bound() const
+    bool OpenGLRenderBuffer::is_bound() const
 	{
 		return false;
 	}

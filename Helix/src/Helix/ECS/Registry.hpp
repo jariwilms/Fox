@@ -51,13 +51,19 @@ namespace hlx
         }
         template<> static void remove_component<Transform>(const Entity& entity) = delete;
 
+        //TODO: wrapper for entity group
+        template<typename... T>
+        static auto view()
+        {
+            return s_registry.view<T...>();
+        }
+        template<typename... T>
+        static auto group()
+        {
+            return s_registry.group<T...>();
+        }
+
     private:
         static inline entt::basic_registry<Id> s_registry;
     };
-
-    //class EnttRegistry : public Registry //Move the above code into this class, then create instance of this as registry
-    //{
-
-    //};
-
 }

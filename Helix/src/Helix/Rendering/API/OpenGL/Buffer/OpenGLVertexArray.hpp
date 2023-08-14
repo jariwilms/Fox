@@ -27,16 +27,16 @@ namespace hlx
         {
             glBindVertexArray(0);
         }
-        bool bound() const override
+        bool is_bound() const override
         {
             return false;
         }
 
         void tie(Id bufferId, const std::shared_ptr<VertexLayout> colorDepth) override
         {
-            static int bindingIndex{};
+            if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex must be less than 16!" };
 
-            glVertexArrayVertexBuffer(m_id, bindingIndex, bufferId, 0, static_cast<GLsizei>(colorDepth->stride()));
+            glVertexArrayVertexBuffer(m_id, m_bindingIndex, bufferId, 0, static_cast<GLsizei>(colorDepth->stride()));
             
             GLint offset{};
             for (const auto& attribute : colorDepth->attributes())
@@ -46,18 +46,20 @@ namespace hlx
 
                 glEnableVertexArrayAttrib(m_id, m_attributes);
                 glVertexArrayAttribFormat(m_id, m_attributes, attribute.count(), internalType, attribute.is_normalized(), offset);
-                glVertexArrayAttribBinding(m_id, m_attributes, bindingIndex);
+                glVertexArrayAttribBinding(m_id, m_attributes, m_bindingIndex);
 
                 offset += static_cast<GLint>(attribute.count() * typeSize);
                 ++m_attributes;
             }
 
-            ++bindingIndex;
+            ++m_bindingIndex;
         }
         void tie(const std::shared_ptr<IndexBuffer> indices) override
         {
             m_indices = indices;
             glVertexArrayElementBuffer(m_id, m_indices->id());
         }
+
+        unsigned int m_bindingIndex{};
     };
 }

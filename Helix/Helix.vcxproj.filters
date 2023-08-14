@@ -7,15 +7,6 @@
     <Filter Include="Helix\Core">
       <UniqueIdentifier>{D72F8CA7-C3E7-CDF4-2CEF-A65018C668E5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Helix\Core\Deprecated">
-      <UniqueIdentifier>{F7818C3D-63EE-4738-2CE2-DF95980D6AA0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helix\Core\Deprecated\Library">
-      <UniqueIdentifier>{FBE10959-67FA-F082-30A7-801C9C7E851C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Helix\Core\Deprecated\Library\Interface">
-      <UniqueIdentifier>{9B3F7884-07CF-396F-10CB-1A877CD9747B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Helix\Core\Library">
       <UniqueIdentifier>{DB6F4957-C753-0AAD-30B4-04001CB7F42E}</UniqueIdentifier>
     </Filter>
@@ -133,6 +124,9 @@
     <Filter Include="Helix\Rendering\Projection">
       <UniqueIdentifier>{98BC36DA-84CC-E2AA-ED85-47C9D9B4D143}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Helix\Rendering\Renderpass">
+      <UniqueIdentifier>{F2FCE73E-DE0C-940F-47C6-F82D33F582A8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Helix\Rendering\Shader">
       <UniqueIdentifier>{5222C4F1-3E1C-ED43-2789-8354132253B0}</UniqueIdentifier>
     </Filter>
@@ -141,6 +135,9 @@
     </Filter>
     <Filter Include="Helix\Rendering\Texture">
       <UniqueIdentifier>{8C6DEC71-F8A4-3409-01AF-982C6D655B02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helix\Scene">
+      <UniqueIdentifier>{7CE82C9A-E89D-A58F-7192-9F66DD469C93}</UniqueIdentifier>
     </Filter>
     <Filter Include="Helix\Test">
       <UniqueIdentifier>{EE5795A7-DA0F-D7F4-4317-B0502FEE71E5}</UniqueIdentifier>
@@ -156,6 +153,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Helix\Application.hpp">
+      <Filter>Helix</Filter>
+    </ClInclude>
     <ClInclude Include="src\Helix\Config.hpp">
       <Filter>Helix</Filter>
     </ClInclude>
@@ -167,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp">
       <Filter>Helix\Core\Library\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\Core\RenderAPI.hpp">
+      <Filter>Helix\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Core\Typedef.hpp">
       <Filter>Helix\Core</Filter>
@@ -181,6 +184,9 @@
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\ECS\Components\Light.hpp">
+      <Filter>Helix\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp">
       <Filter>Helix\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\ECS\Components\Transform.hpp">
@@ -396,6 +402,9 @@
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp">
       <Filter>Helix\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp">
+      <Filter>Helix\Rendering\Renderpass</Filter>
+    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp">
       <Filter>Helix\Rendering\Shader</Filter>
     </ClInclude>
@@ -417,6 +426,9 @@
     <ClInclude Include="src\Helix\Rendering\Texture\Texture2DMultisample.hpp">
       <Filter>Helix\Rendering\Texture</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helix\Scene\Scene.hpp">
+      <Filter>Helix\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Helix\Test\Test.hpp">
       <Filter>Helix\Test</Filter>
     </ClInclude>
@@ -426,16 +438,16 @@
     <ClInclude Include="src\Helix\Window\Window.hpp">
       <Filter>Helix\Window</Filter>
     </ClInclude>
+    <ClInclude Include="src\Helix\Window\WindowManager.hpp">
+      <Filter>Helix\Window</Filter>
+    </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Helix\Core\RenderAPI.hpp" />
-    <ClInclude Include="src\Helix\Application.hpp" />
-    <ClInclude Include="src\Helix\Window\WindowManager.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Scene\Scene.hpp" />
-    <ClInclude Include="src\Helix\ECS\Components\MeshRenderer.hpp" />
-    <ClInclude Include="src\Helix\ECS\Components\MeshFilter.hpp" />
+    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter2.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Helix\Application.cpp">
+      <Filter>Helix</Filter>
+    </ClCompile>
     <ClCompile Include="src\Helix\ECS\Entity\Entity.cpp">
       <Filter>Helix\ECS\Entity</Filter>
     </ClCompile>
@@ -490,16 +502,16 @@
     <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp">
       <Filter>Helix\Rendering\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="src\Helix\Scene\Scene.cpp">
+      <Filter>Helix\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp">
       <Filter>Helix\Window\API\GLFW</Filter>
     </ClCompile>
+    <ClCompile Include="src\Helix\Window\WindowManager.cpp">
+      <Filter>Helix\Window</Filter>
+    </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
-    <ClCompile Include="src\Helix\Application.cpp" />
-    <ClCompile Include="src\Helix\Window\WindowManager.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Scene\Scene.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="src\Helix\Config\Config.ini" />
   </ItemGroup>
 </Project>

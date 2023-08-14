@@ -12,5 +12,9 @@ namespace hlx
         Model() = default;
 
         std::vector<std::shared_ptr<Mesh>> meshes{};
+        std::vector<std::shared_ptr<DefaultMaterial>> materials{};
+
+        std::unordered_map<std::shared_ptr<Mesh>, std::shared_ptr<DefaultMaterial>> materialMap{};
+        std::unordered_map<std::shared_ptr<DefaultMaterial>, std::vector<std::shared_ptr<Mesh>>> meshMap{};
     };
 }

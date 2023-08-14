@@ -14,10 +14,10 @@ namespace hlx
 		template<typename T>
 		void specify(unsigned int count)
 		{
-			const auto& tId = typeid(T);
-			const auto tHash = tId.hash_code();
+			const auto& typeId = typeid(T);
+			const auto typeHash = typeId.hash_code();
 
-			m_attributes.emplace_back(count, tHash);
+			m_attributes.emplace_back(count, typeHash);
 			m_stride += count * sizeof(T);
 		}
 

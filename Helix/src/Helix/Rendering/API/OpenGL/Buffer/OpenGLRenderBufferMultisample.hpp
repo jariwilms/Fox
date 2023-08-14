@@ -15,7 +15,7 @@ namespace hlx
 
         void bind() const override;
         void unbind() const override;
-        bool bound() const override;
+        bool is_bound() const override;
 
     private:
         GLenum m_internalTarget{ GL_RENDERBUFFER };

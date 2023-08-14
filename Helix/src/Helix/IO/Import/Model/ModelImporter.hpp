@@ -22,12 +22,9 @@ namespace hlx
             const std::string materialName{ "Default" };
             dpl = GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv");
             
-            defaultAlbedoTexture = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::R, std::vector<byte>{ 0xFF });
-            defaultNormalTexture = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0xFF });
-
             defaultMaterial = std::make_shared<DefaultMaterial>(materialName, dpl);
-            defaultMaterial->albedo = defaultAlbedoTexture;
-            defaultMaterial->normal = defaultNormalTexture;
+            defaultMaterial->albedo = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::R, std::vector<byte>{ 0xFF });
+            defaultMaterial->normal = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8Bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0xFF });
         }
 
         static std::shared_ptr<Model> load(const std::filesystem::path& path)
@@ -37,7 +34,7 @@ namespace hlx
             const auto agp = aggregate.parent_path();
 
             Assimp::Importer importer{};
-            const auto pFlags = aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_GenNormals | aiProcess_FixInfacingNormals | aiProcess_SortByPType | aiProcess_OptimizeGraph | aiProcess_OptimizeMeshes; //gensmoothnormals?
+            const auto pFlags = aiProcess_CalcTangentSpace | aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FixInfacingNormals | aiProcess_SortByPType | aiProcess_OptimizeGraph | aiProcess_OptimizeMeshes;
 
             const auto aiScene = importer.ReadFile(aggregate.string(), pFlags);
             if (!aiScene || aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !aiScene->mRootNode) throw std::runtime_error{ "Failed to load model!" };
@@ -141,9 +138,9 @@ namespace hlx
                 vertexArray->tie(indicesBuffer);
 
 
-
-                auto mesh = std::make_shared<Mesh>(vertexArray, materials[aiMesh.mMaterialIndex]);
-                model->meshes.emplace_back(std::move(mesh));
+                __debugbreak();
+                //auto mesh = std::make_shared<Mesh>(vertexArray, materials[aiMesh.mMaterialIndex]);
+                //model->meshes.emplace_back(std::move(mesh));
             }
 
 

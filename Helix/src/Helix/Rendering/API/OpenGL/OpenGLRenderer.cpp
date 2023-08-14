@@ -153,22 +153,18 @@ namespace hlx
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 
-    void OpenGLRenderer::render(const std::shared_ptr<const Model> model, const Transform& transform)
+    void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform)
     {
         m_matricesBuffer->copy_tuple(0, std::make_tuple(transform.transform()));
 
-        for (const auto& mesh : model->meshes)
-        {
-            const auto vao = mesh->vao();
-            vao->bind();
-            if (vao->indexed()) vao->indices()->bind();
+        const auto vao = mesh->vao();
+        vao->bind();
+        if (vao->indexed()) vao->indices()->bind();
 
-            const auto& material = mesh->material();
-            m_materialBuffer->copy(UMaterial{ material->color, material->metallic, material->roughness });
-            material->albedo->bind(0);
-            material->normal->bind(1);
-            
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->count()), GL_UNSIGNED_INT, nullptr);
-        }
+        m_materialBuffer->copy(UMaterial{ material->color, material->metallic, material->roughness });
+        material->albedo->bind(0);
+        material->normal->bind(1);
+
+        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->count()), GL_UNSIGNED_INT, nullptr);
     }
 }

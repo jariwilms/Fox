@@ -39,7 +39,7 @@ namespace hlx
 	{
         throw std::logic_error("The method or operation is not implemented.");
 	}
-	bool OpenGLTexture2D::bound() const
+	bool OpenGLTexture2D::is_bound() const
 	{
         throw std::logic_error("The method or operation is not implemented.");
 	}

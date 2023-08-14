@@ -23,6 +23,11 @@ namespace hlx
             return m_children;
         }
 
+        bool operator==(const Entity& other) const
+        {
+            return m_id == other.m_id;
+        }
+
     private:
         Id m_id{};
 

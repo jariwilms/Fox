@@ -23,7 +23,7 @@ namespace hlx
         void start(const RenderInfo& renderInfo) override;
         void finish() override;
 
-        void render(const std::shared_ptr<const Model> model, const Transform& transform) override;
+        void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform) override;
 
     private:
         std::shared_ptr<FrameBufferMultisample> m_frameBufferMultisample{};

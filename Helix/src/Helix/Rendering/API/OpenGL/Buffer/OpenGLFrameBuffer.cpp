@@ -74,7 +74,7 @@ namespace hlx
 	{
         glBindFramebuffer(m_internalBoundTarget, 0);
 	}
-	bool OpenGLFrameBuffer::bound() const
+	bool OpenGLFrameBuffer::is_bound() const
 	{
 		return false;
 	}

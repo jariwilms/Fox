@@ -17,7 +17,7 @@ namespace hlx
 
 		void bind() const override;
 		void unbind() const override;
-		bool bound() const override;
+		bool is_bound() const override;
 
 		void stage(const std::shared_ptr<Shader> shader) override;
 	};

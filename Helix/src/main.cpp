@@ -5,25 +5,27 @@
 
 #include "Helix/Application.hpp"
 #include "Helix/Core/Library/Time/Time.hpp"
-#include "Helix/ECS/Components/Camera.hpp"
-#include "Helix/ECS/Components/Transform.hpp"
+#include "Helix/ECS/Components/Components.hpp"
 #include "Helix/ECS/Entity/Entity.hpp"
 #include "Helix/ECS/Registry.hpp"
 #include "Helix/Input/Input.hpp"
 #include "Helix/IO/IO.hpp"
 #include "Helix/IO/Import/Model/ModelImporter.hpp"
 #include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
+#include "Helix/Prefab/Rendering/Geometry/Cube.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
-#include "Helix/Prefab/Rendering/Geometry/Cube.hpp"
 #include "Helix/Rendering/Renderer.hpp"
+#include "Helix/Scene/Scene.hpp"
 #include "Helix/Window/Window.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
 #include "Helix/Core/Library/Array/CyclicBuffer.hpp"
 
 #include "Helix/Test/Test.hpp"
 #include "Helix/Experimental/Texture/Texture.hpp"
+
+#include "Helix/IO/Import/Model/ModelImporter2.hpp"
 
 using namespace hlx;
 
@@ -39,25 +41,67 @@ int main(int argc, char** argv)
     IO::init();
     Geometry::init();
     Renderer::init();
-    ModelImporter::init();
+    ModelImporter2::init();
 
-    auto observer = Registry::create();
+
+
+
+
+
+
+
+
+
+
+    hlx::ModelImporter2 test{};
+    auto model = test.import(R"(models/backpack/scene.gltf)");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    auto scene = std::make_shared<Scene>();
+
+    auto observer = scene->create_entity();
     auto& camera = Registry::add_component<Camera>(observer);
     auto& cameraTransform = Registry::get_component<Transform>(observer);
     cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
 
 
 
+    auto backpackObject = scene->create_entity();
 
-    //auto planeModel = ModelImporter::load(R"(models/plane/plane.glb)");
-    auto planeModel = ModelImporter::load(R"(models/backpack/scene.gltf)");
-    Transform planeTransform{};
+    for (const auto& mesh : model->meshes)
+    {
+        auto obj = scene->create_entity();
+        auto& meshRenderer = Registry::add_component<MeshRenderer>(obj);
+
+        meshRenderer.mesh = mesh;
+        meshRenderer.material = model->materialMap[mesh];
+    }
+
+
+
+
+
+
+
 
     std::vector<std::tuple<Light, Vector3f>> lights{};
     lights.resize(32);
     Light l{};
-    l.color = Vector3f{ 0.0f, 0.01f, 0.0f };
-    lights[0] = std::make_tuple(l, Vector3f{ 0.5f, 0.5f, 0.5f });
+    l.color = Vector3f{ 0.01f, 0.01f, 0.01f };
+    lights[0] = std::make_tuple(l, Vector3f{ 0.0f, 0.0f, 0.0f });
 
 
 
@@ -91,8 +135,14 @@ int main(int argc, char** argv)
         }
 
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
+
         //The render system starts running here and submits all models/meshes to the renderer
-        Renderer::render(planeModel, planeTransform);
+        auto group = Registry::view<Transform, MeshRenderer>();
+        group.each([](auto entity, Transform& transform, MeshRenderer& meshRenderer)
+            {
+                Renderer::render(meshRenderer.mesh, meshRenderer.material, transform);
+            });
+        
         Renderer::finish();
 
 
@@ -100,6 +150,9 @@ int main(int argc, char** argv)
 		window->refresh();
         frametimes.push_back(Time::delta());
 	}
+
+    float avgFrameTime = std::accumulate(frametimes.begin(), frametimes.end(), 0.0f) / static_cast<float>(frametimes.size());
+    std::cout << "Average frametime: " << avgFrameTime;
 
     return 0;
 }

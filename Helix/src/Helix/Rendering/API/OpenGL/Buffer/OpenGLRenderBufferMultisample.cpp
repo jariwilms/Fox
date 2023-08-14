@@ -25,7 +25,7 @@ namespace hlx
     {
         glBindRenderbuffer(m_internalTarget, 0);
     }
-    bool OpenGLRenderBufferMultisample::bound() const
+    bool OpenGLRenderBufferMultisample::is_bound() const
     {
         return false;
     }

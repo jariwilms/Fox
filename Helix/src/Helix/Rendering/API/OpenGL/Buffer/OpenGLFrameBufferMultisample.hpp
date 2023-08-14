@@ -17,7 +17,7 @@ namespace hlx
 
         void bind(Target target) override;
         void unbind() const override;
-        bool bound() const override;
+        bool is_bound() const override;
 
         void bind_texture(const std::string identifier, unsigned int slot) override;
 

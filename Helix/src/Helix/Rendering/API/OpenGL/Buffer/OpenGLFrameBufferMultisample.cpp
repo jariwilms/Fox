@@ -61,7 +61,7 @@ namespace hlx
     {
         glBindFramebuffer(m_internalBoundTarget, 0);
     }
-    bool OpenGLFrameBufferMultisample::bound() const
+    bool OpenGLFrameBufferMultisample::is_bound() const
     {
         return false;
     }

@@ -27,7 +27,7 @@ namespace hlx
 	{
 		glBindProgramPipeline(0);
 	}
-	bool OpenGLPipeline::bound() const
+	bool OpenGLPipeline::is_bound() const
 	{
 		return false;
 	}

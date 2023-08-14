@@ -17,7 +17,7 @@ namespace hlx
         void bind() const override;
         void bind(unsigned int slot) const override;
         void unbind() const override;
-        bool bound() const override;
+        bool is_bound() const override;
 
         void copy(Format dataFormat, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) override;
         void copy_range(const Vector2u& dimensions, const Vector2u& offset, Format dataFormat, std::span<const byte> data, unsigned int mipLevel = 0, bool generateMips = true) override;
