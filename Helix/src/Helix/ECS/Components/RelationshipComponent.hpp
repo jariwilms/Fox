@@ -1,13 +1,13 @@
 #pragma once
 
+#include "stdafx.hpp"
+
 #include "Component.hpp"
 
 namespace hlx
 {
     struct RelationshipComponent : public Component
     {
-    public:
-        Entity parent{};
-        std::vector<Entity> children{};
+        std::optional<Id> parent{};
     };
 }

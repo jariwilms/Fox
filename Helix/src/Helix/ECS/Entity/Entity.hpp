@@ -1,13 +1,14 @@
 #pragma once
 
+#include "stdafx.hpp"
+
 namespace hlx
 {
-    //TODO: subclass to actor? => scene creates actors instead of entity => can just be passed to registry by polymorphism
     class Entity
     {
     public:
-        explicit Entity(Id id = 0, std::shared_ptr<Entity> parent = {})
-            : m_id{ id } {}
+        Entity(Id id, std::weak_ptr<Entity> parent = {}, const std::vector<std::shared_ptr<Entity>>& children = {})
+            : m_id{ id }, parent{ parent }, children{ children } {}
         virtual ~Entity() = default;
 
         Id id() const
@@ -17,7 +18,10 @@ namespace hlx
 
         bool operator==(const Entity& other) const = default;
 
-    private:
+        std::weak_ptr<Entity> parent{};
+        std::vector<std::shared_ptr<Entity>> children{};
+
+    protected:
         Id m_id{};
     };
 }

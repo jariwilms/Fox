@@ -1,20 +1,17 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Helix/ECS/Entity/Entity.hpp"
-
 namespace hlx
 {
+    class Entity;
     struct Component
     {
     public:
         virtual ~Component() = default;
 
-        Entity entity{};
+        Entity& owner;
 
     protected:
-        Component(Entity entity)
-            : entity{ entity } {}
+        Component(Entity& parent)
+            : owner{ parent } {}
     };
 }

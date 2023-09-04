@@ -2,6 +2,7 @@
 
 #include "stdafx.hpp"
 
+#include "Helix/Core/Library/Lighting/Light.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 
 namespace hlx
@@ -9,39 +10,38 @@ namespace hlx
     class Model
     {
     public:
-        Model() = default;
+        Model()
+        {
+            rootNode = std::make_unique<Node>();
+        }
 
-        std::vector<std::shared_ptr<Mesh>> meshes{};
-        std::vector<std::shared_ptr<DefaultMaterial>> materials{};
-
-        std::unordered_map<std::shared_ptr<Mesh>, std::shared_ptr<DefaultMaterial>> materialMap{};
-        std::unordered_map<std::shared_ptr<DefaultMaterial>, std::vector<std::shared_ptr<Mesh>>> meshMap{};
-    };
-    class TestModel
-    {
-    public:
         struct Node
         {
-            Transform transform{};
-            std::shared_ptr<Mesh> mesh{};
-            CameraComponent camera{};
+        public:
+            struct Primitive
+            {
+                unsigned int meshIndex{};
+                unsigned int materialIndex{};
+            };
+
+            bool empty() const
+            { 
+                return !(localTransform.has_value() ||
+                         meshPrimitive.has_value() || 
+                         cameraIndex.has_value());
+            }
+
+            std::optional<Matrix4f> localTransform{};
+            std::optional<unsigned int> cameraIndex{};
+            std::optional<Primitive> meshPrimitive{};
 
             std::vector<Node> children{};
         };
 
-        TestModel() = default;
-
-        void build_from_root()
-        {
-
-        }
-
-        Node rootNode{};
+        std::unique_ptr<Node> rootNode{};
         std::vector<std::shared_ptr<Mesh>> meshes{};
-        std::vector<std::shared_ptr<LightComponent>> lights{};
-        std::vector<std::shared_ptr<Material>> materials{};
-
-        std::unordered_map<std::shared_ptr<Mesh>, std::shared_ptr<DefaultMaterial>> materialMap{};
-        std::unordered_map<std::shared_ptr<DefaultMaterial>, std::vector<std::shared_ptr<Mesh>>> meshMap{};
+        std::vector<std::shared_ptr<Light>> lights{};
+        std::vector<std::shared_ptr<Camera>> cameras{};
+        std::vector<std::shared_ptr<DefaultMaterial>> materials{};
     };
 }

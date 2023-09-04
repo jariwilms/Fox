@@ -7,9 +7,9 @@ namespace hlx
     OpenGLRenderer::OpenGLRenderer()
     {
         //Create FrameBuffer and RenderBuffer textures
-        TextureBlueprint positionTextureBp{ Texture::Format::RGB, Texture::ColorDepth::_16Bit, };
-        TextureBlueprint colorTextureBp{ Texture::Format::RGB, Texture::ColorDepth::_16Bit, };
-        TextureBlueprint specularTextureBp{ .colorDepth = Texture::ColorDepth::_8Bit, };
+        TextureBlueprint positionTextureBp{ Texture::Format::RGB, Texture::ColorDepth::_16bit, };
+        TextureBlueprint colorTextureBp{ Texture::Format::RGB, Texture::ColorDepth::_16bit, };
+        TextureBlueprint specularTextureBp{ .colorDepth = Texture::ColorDepth::_8bit, };
 
         RenderBufferBlueprint depthRenderBufferBp{ RenderBuffer::Type::Depth, RenderBuffer::Layout::Depth32 };
 
@@ -27,7 +27,7 @@ namespace hlx
         m_gBuffers[0] = frameBufferBlueprint.build(Vector2f{ 1280, 720 });     //TODO: fetch target window resolution from WindowManager
         m_gBuffers[1] = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
-        TextureBlueprint depthTexture{ Texture::Format::D, Texture::ColorDepth::_32Bit, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, };
+        TextureBlueprint depthTexture{ Texture::Format::D, Texture::ColorDepth::_32bit, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, };
         FrameBufferBlueprint depthBp{};
         depthBp.textures.emplace_back(std::make_tuple("Depth", FrameBuffer::Attachment::Depth, depthTexture));
         m_depthMap = depthBp.build(Vector2u{ 1024, 1024 });
@@ -69,7 +69,7 @@ namespace hlx
         const auto& position = renderInfo.cameraPosition;
 
         const auto viewMatrix = glm::lookAt(position.position, position.position + position.forward(), position.up());
-        const auto& projectionMatrix = camera.projection();
+        const auto& projectionMatrix = camera.projection_matrix();
 
 
 
@@ -155,7 +155,8 @@ namespace hlx
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform)
     {
-        m_matricesBuffer->copy_tuple(0, std::make_tuple(transform.transform()));
+        auto res = transform.product().matrix();
+        m_matricesBuffer->copy_tuple(0, std::make_tuple(res));
 
         const auto vao = mesh->vao();
         vao->bind();

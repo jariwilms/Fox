@@ -22,10 +22,10 @@ namespace hlx
 		};
 		enum class ColorDepth
 		{
-			_8Bit, 
-			_16Bit, 
-			_24Bit, 
-			_32Bit, 
+			_8bit, 
+			_16bit, 
+			_24bit, 
+			_32bit, 
 		};
         enum class Filter
 		{

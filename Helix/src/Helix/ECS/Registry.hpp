@@ -4,8 +4,6 @@
 
 #include <entt/entt.hpp>
 
-#include "Helix/ECS/Components/TransformComponent.hpp"
-
 namespace hlx
 {
     class Registry
@@ -16,44 +14,38 @@ namespace hlx
 
         }
 
-        static Entity create()
+        static Id create()
         {
-            Entity entity{ s_registry.create() };
-            add_component<TransformComponent>(entity);
-
-            return entity;
+            return s_registry.create();
         }
-        static void destroy(const Entity& entity)
+        static void destroy(Id id)
         {
-            throw std::runtime_error{ "TODO: destroy entity" };
-            s_registry.destroy(entity.id());
+            s_registry.destroy(id);
         }
 
         template<typename... T>
-        static bool has_component(const Entity& entity)
+        static bool has_component(Id id)
         {
-            return s_registry.all_of<T...>(entity.id());
+            return s_registry.all_of<T...>(id);
         }
         template<typename T, typename... Args>
-        static T& add_component(const Entity& entity, Args&&... args)
+        static T& add_component(Id id, Args&&... args)
         {
-            return s_registry.emplace<T>(entity.id(), std::forward<Args>(args)...);
+            return s_registry.emplace<T>(id, std::forward<Args>(args)...);
         }
         template<typename T>
-        static T& get_component(const Entity& entity)
+        static T& get_component(Id id)
         {
-            return s_registry.get<T>(entity.id());
+            return s_registry.get<T>(id);
         }
         template<typename T>
-        static void remove_component(const Entity& entity)
+        static void remove_component(Id id)
         {
-            s_registry.remove<T>(entity.id());
+            s_registry.remove<T>(id);
         }
-        template<> static void remove_component<TransformComponent>(const Entity& entity) = delete;
 
-        //TODO: wrapper for entity group (using my_view = entt::basic_view ofzoiets)
         template<typename... T>
-        static auto view()
+        static auto view() //TODO: wrapper for entity group (using my_view = entt::basic_view ofzoiets)
         {
             return s_registry.view<T...>();
         }
@@ -64,6 +56,6 @@ namespace hlx
         }
 
     private:
-        static inline entt::basic_registry<Id> s_registry;
+        static inline entt::basic_registry<Id> s_registry{};
     };
 }

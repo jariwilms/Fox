@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Helix/ECS/Registry.hpp"
-#include "Helix/ECS/Components/Components.hpp"
+#include "Actor.hpp"
 
 namespace hlx
 {
@@ -10,34 +9,12 @@ namespace hlx
     public:
         Scene() = default;
 
-        Entity create_entity();
-        void destroy_entity(Entity entity);
+        std::shared_ptr<Actor> create_actor();
+        void destroy_actor(std::shared_ptr<Actor> actor);
+        //std::shared_ptr<Actor> duplicate_actor(std::shared_ptr<Actor> actor, std::shared_ptr<Actor> parent = {});
 
-        Entity add_child(Entity parent);
-        void set_child(Entity parent, Entity child);
-        void remove_child(Entity parent, Entity child);
-
-        std::vector<Entity> entities{};
-    };
-
-    class Actor : public Entity
-    {
-    public:
-        Actor() = default;
-
-        std::weak_ptr<Actor> parent{};
-        std::vector<std::shared_ptr<Actor>> children{};
-    };
-
-    class TestScene
-    {
-    public:
-        TestScene() = default;
-
-        std::shared_ptr<Actor> create_actor()
-        {
-
-        }
+        void set_parent(std::shared_ptr<Actor> parent, std::shared_ptr<Actor> child);
+        void unset_parent(std::shared_ptr<Actor> child);
 
         std::vector<std::shared_ptr<Actor>> actors{};
     };

@@ -6,22 +6,10 @@
 
 namespace hlx
 {
-    struct CameraComponent : public Component
+    class CameraComponent : public Camera, public Component
     {
     public:
-        CameraComponent() = default;
-        virtual ~CameraComponent() = default;
-
-        operator Camera&()
-        {
-            return m_camera;
-        }
-        operator const Camera&() const
-        {
-            return m_camera;
-        }
-        
-    protected:
-        Camera m_camera{};
+        CameraComponent(Entity& parent)
+            : Component{ parent } {}
     };
 }

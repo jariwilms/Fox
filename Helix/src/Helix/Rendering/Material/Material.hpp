@@ -45,8 +45,9 @@ namespace hlx
     public:
         DefaultMaterial(const std::string& name, std::shared_ptr<const Pipeline> pipeline)
             : Material{ name, pipeline } {}
+        DefaultMaterial(const DefaultMaterial& other) = default;
 
-        Vector4u color{ 1.0f, 1.0f, 1.0f, 1.0f }; //Required to be vec4 because of GPU alignment
+        Vector4f color{ 1.0f, 1.0f, 1.0f, 1.0f }; //Required to be vec4 because of GPU alignment
         std::shared_ptr<Texture2D> albedo{};
         std::shared_ptr<Texture2D> normal{};
         float metallic{ 0.0f };

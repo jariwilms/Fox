@@ -12,6 +12,9 @@ namespace hlx
     struct MeshRendererComponent : public Component
     {
     public:
+        MeshRendererComponent(Entity& parent)
+            : Component{ parent } {}
+
         struct LightingOptions
         {
             enum class ShadowCasting

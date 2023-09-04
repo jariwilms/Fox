@@ -29,6 +29,35 @@
 
 using namespace hlx;
 
+std::shared_ptr<Actor> dfs_test(Scene* scene, std::shared_ptr<Model> model, std::shared_ptr<Actor> parent, Model::Node* node)
+{
+    auto actor = scene->create_actor();
+    scene->set_parent(parent, actor);
+    
+    auto& transformComponent = actor->get_component<TransformComponent>();
+    if (node->localTransform.has_value())
+    {
+        Transform& t = transformComponent;
+        t = node->localTransform.value();
+    }
+
+    if (node->meshPrimitive.has_value())
+    {
+        const auto& mp = node->meshPrimitive.value();
+        auto& meshR = actor->add_component<MeshRendererComponent>();
+        meshR.mesh = model->meshes[mp.meshIndex];
+        meshR.material = model->materials[mp.materialIndex];
+    }
+
+    for (auto& child : node->children)
+    {
+        dfs_test(scene, model, actor, &child);
+    }
+
+    return actor;
+};
+
+
 int main(int argc, char** argv)
 {
     Application application{ argc, argv };
@@ -47,50 +76,23 @@ int main(int argc, char** argv)
 
 
 
-
-
-
-
-
-
-    hlx::ModelImporter2 test{};
-    auto model = test.import(R"(models/backpack/scene.gltf)");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     auto scene = std::make_shared<Scene>();
-
-    auto observer = scene->create_entity();
-    auto& camera = Registry::add_component<CameraComponent>(observer);
-    auto& cameraTransform = Registry::get_component<Transform>(observer);
+    auto observer = scene->create_actor();
+    auto& camera = observer->add_component<CameraComponent>();
+    auto& cameraTransform = observer->get_component<TransformComponent>();
     cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
 
 
 
-    auto backpackObject = scene->create_entity();
 
-    for (const auto& mesh : model->meshes)
-    {
-        auto obj = scene->create_entity();
-        //backpackObject.
 
-        auto& meshRenderer = Registry::add_component<MeshRendererComponent>(obj);
+    hlx::ModelImporter2 testImporter{};
+    auto model = testImporter.import(R"(models/backpack/scene.gltf)");
+    auto modelActor = scene->create_actor();
 
-        meshRenderer.mesh = mesh;
-        meshRenderer.material = model->materialMap[mesh];
-    }
+
+
+    auto res = dfs_test(scene.get(), model, nullptr, model->rootNode.get());
 
 
 
@@ -98,11 +100,14 @@ int main(int argc, char** argv)
 
 
 
+    //TODO: fix component include in gameobject!!!
 
 
-    std::vector<std::tuple<LightComponent, Vector3f>> lights{};
+
+
+    std::vector<std::tuple<Light, Vector3f>> lights{};
     lights.resize(32);
-    LightComponent l{};
+    Light l{};
     l.color = Vector3f{ 0.01f, 0.01f, 0.01f };
     lights[0] = std::make_tuple(l, Vector3f{ 0.0f, 0.0f, 0.0f });
 
@@ -112,9 +117,7 @@ int main(int argc, char** argv)
 
     Time::reset();
     CyclicBuffer<float, 128> frametimes{};
-
-    const auto native = window->native_window();
-	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(native)))
+	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window->native_window())))
 	{
         Time::advance();
 
@@ -137,11 +140,12 @@ int main(int argc, char** argv)
             cameraTransform.rotation = Quaternion{ glm::radians(rotation) };
         }
 
+        //The render system starts running here and submits all models/meshes to the renderer
+        //So, TODO: RenderSystem::update, which calls the code below
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
 
-        //The render system starts running here and submits all models/meshes to the renderer
-        auto group = Registry::view<Transform, MeshRendererComponent>();
-        group.each([](auto entity, Transform& transform, MeshRendererComponent& meshRenderer)
+        auto group = Registry::view<TransformComponent, MeshRendererComponent>();
+        group.each([](auto entity, TransformComponent& transform, MeshRendererComponent& meshRenderer)
             {
                 Renderer::render(meshRenderer.mesh, meshRenderer.material, transform);
             });

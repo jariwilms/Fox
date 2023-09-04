@@ -76,7 +76,7 @@ namespace hlx
         {
             switch (colorDepth)
             {
-                case Texture::ColorDepth::_8Bit:
+                case Texture::ColorDepth::_8bit:
                 {
                     switch (format)
                     {
@@ -98,7 +98,7 @@ namespace hlx
                         default: throw std::invalid_argument{ "Invalid format!" };
                     }
                 }
-                case Texture::ColorDepth::_16Bit:
+                case Texture::ColorDepth::_16bit:
                 {
                     switch (format)
                     {
@@ -112,7 +112,7 @@ namespace hlx
                         default: throw std::invalid_argument{ "Invalid format!" };
                     }
                 }
-                case Texture::ColorDepth::_24Bit:
+                case Texture::ColorDepth::_24bit:
                 {
                     switch (format)
                     {
@@ -122,7 +122,7 @@ namespace hlx
                         default: throw std::invalid_argument{ "Invalid format!" };
                     }
                 }
-                case Texture::ColorDepth::_32Bit:
+                case Texture::ColorDepth::_32bit:
                 {
                     switch (format)
                     {

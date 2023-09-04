@@ -4,43 +4,48 @@
 
 namespace hlx
 {
-    Entity Scene::create_entity()
+    std::shared_ptr<hlx::Actor> Scene::create_actor()
     {
-        return entities.emplace_back(Registry::create());
+        return actors.emplace_back(std::make_shared<Actor>());
     }
-    void Scene::destroy_entity(Entity entity)
+    void Scene::destroy_actor(std::shared_ptr<Actor> actor)
     {
-        const auto it = std::find(entities.begin(), entities.end(), entity);
-        if (it == entities.end()) return;
-
-        auto& relationship = Registry::get_component<RelationshipComponent>(entity);
-        for (const auto& child : relationship.children) destroy_entity(child); //TODO: BFS instead of recursion
-
-        entities.erase(it);
-        Registry::destroy(entity);
+        auto it = std::find(actors.begin(), actors.end(), actor);
+        if (it != actors.end()) actors.erase(it);
     }
 
-    Entity Scene::add_child(Entity parent)
+    void Scene::set_parent(std::shared_ptr<Actor> parent, std::shared_ptr<Actor> child)
     {
-        auto childEntity = create_entity();
-        set_child(parent, childEntity);
+        if (!parent || !child) return;
 
-        return childEntity;
+        unset_parent(child);
+        parent->children.emplace_back(child);
+        child->parent = parent;
+
+        auto& parentTransform = parent->get_component<TransformComponent>();
+        Transform& t = parentTransform;
+        auto& childTransform = child->get_component<TransformComponent>();
+
+        childTransform.parent = &t;
     }
-    void Scene::set_child(Entity parent, Entity child)
+    void Scene::unset_parent(std::shared_ptr<Actor> child)
     {
-        auto it = std::find(entities.begin(), entities.end(), child);
-        if (it != entities.end()) entities.erase(it);
+        auto& parent = child->parent;
+        if (!parent.expired())
+        {
+            auto parentPtr = parent.lock();
+            auto& children = parentPtr->children;
+            auto it = std::find(children.begin(), children.end(), child);
+            if (it != children.end()) children.erase(it);
 
-        auto& parentRelationship = Registry::get_component<RelationshipComponent>(parent);
-        it = std::find(parentRelationship.children.begin(), parentRelationship.children.end(), child);
-        if (it == entities.end()) parentRelationship.children.emplace_back(child);
+            actors.emplace_back(child);
 
-        auto& childRelationship = Registry::get_component<RelationshipComponent>(child);
-        childRelationship.parent = parent;
-    }
-    void Scene::remove_child(Entity parent, Entity child)
-    {
-
+            auto& transform = child->get_component<TransformComponent>();
+            auto& parentTransform = Registry::get_component<TransformComponent>(parentPtr->id());
+            
+            
+            //transform.parent = std::shared_ptr<TransformComponent>(&parentTransform);
+            transform.parent = &parentTransform;
+        }
     }
 }

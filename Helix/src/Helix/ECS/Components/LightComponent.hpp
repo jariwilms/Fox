@@ -1,34 +1,15 @@
-#pragma once
-
-#include "stdafx.hpp"
-
-#include "Component.hpp"
-
-namespace hlx
-{
-    struct LightComponent
-    {
-    public:
-        enum class Type
-        {
-            Point, 
-            Directional, 
-            Spot, 
-            //Area, 
-        };
-        enum class Mode
-        {
-            Realtime, 
-            //Mixed, 
-            //Baked, 
-        };
-
-        Type type{};
-        Mode mode{};
-        Vector3f color{};
-
-        float range{};
-        float angle{};
-        float intensity{};
-    };
-}
+//#pragma once
+//
+//#include "Component.hpp"
+//
+//#include "Helix/Core/Library/Lighting/Light.hpp"
+//
+//namespace hlx
+//{
+//    class LightComponent : public Light, public Component
+//    {
+//    public:
+//        LightComponent(std::shared_ptr<Entity> parent)
+//            : Component{ parent } {}
+//    };
+//}

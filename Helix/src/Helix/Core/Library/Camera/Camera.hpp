@@ -10,20 +10,21 @@ namespace hlx
         Camera()
         {
             m_fov = 60.0f;
-            m_aspect = 16.0f / 9.0f;                                           //TODO: pass window perspective into ctor
+            m_aspect = 16.0f / 9.0f;                                           //TODO: pass window perspective into ctor / get perspective from config?
 
             m_projection = Projection::create<Projection::Type::Perspective>(m_fov, m_aspect, 0.01f, 100.0f);
         }
+        virtual ~Camera() = default;
 
-        float fov() const
+        float field_of_view() const
         {
             return m_fov;
         }
-        float aspect() const
+        float aspect_ratio() const
         {
             return m_aspect;
         }
-        const Matrix4f& projection() const
+        const Matrix4f& projection_matrix() const
         {
             return m_projection;
         }
@@ -34,6 +35,6 @@ namespace hlx
 
         Matrix4f m_projection{};
 
-        Vector4f m_backgroundColor{ 0.0f, 0.0f, 0.0f, 1.0f };
+        Vector4f m_clearColor{ 0.0f, 0.0f, 0.0f, 1.0f };
     };
 }

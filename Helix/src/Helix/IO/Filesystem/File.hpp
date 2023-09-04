@@ -23,8 +23,9 @@ namespace hlx
 		{
 			if (loaded()) return m_data.lock();
 
-			std::ifstream file(m_path, std::ios::binary);
-			auto ptr = std::make_shared<const std::vector<byte>>(std::istreambuf_iterator<char>{ file }, std::istreambuf_iterator<char>{});
+			//TODO: custom input buffer size?
+			std::ifstream input{ m_path, std::ios::binary };
+			auto ptr = std::make_shared<const std::vector<byte>>(std::istreambuf_iterator<char>{ input }, std::istreambuf_iterator<char>{});
 			m_data = ptr;
 
 			return ptr;
@@ -62,6 +63,5 @@ namespace hlx
 		size_t m_size{};
 
 		std::weak_ptr<const std::vector<byte>> m_data{};
-		bool m_loaded{};
 	};
 }

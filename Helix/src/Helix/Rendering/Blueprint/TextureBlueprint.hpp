@@ -16,7 +16,7 @@ namespace hlx
 		std::shared_ptr<Texture2DMultisample> build_ms(const Vector2u& dimensions, unsigned int mipLevels = 1u, unsigned int samples = 0u, bool sRGB = false) const;
 
 		Texture::Format     format{ Texture::Format::RGBA };
-		Texture::ColorDepth colorDepth{ Texture::ColorDepth::_8Bit };
+		Texture::ColorDepth colorDepth{ Texture::ColorDepth::_8bit };
 		Texture::Filter     filter{ Texture::Filter::Point };
 		Texture::Wrapping   wrappingS{ Texture::Wrapping::ClampToEdge };
 		Texture::Wrapping   wrappingT{ Texture::Wrapping::ClampToEdge };
