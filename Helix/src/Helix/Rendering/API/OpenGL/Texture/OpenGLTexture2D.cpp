@@ -47,7 +47,7 @@ namespace hlx
 	void OpenGLTexture2D::copy(Format dataFormat, std::span<const byte> data, unsigned int mipLevel, bool generateMips)
 	{
         if (data.empty()) return;
-        if (const auto size = m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat); size != data.size()) throw std::invalid_argument{ "Data length does not match texture size!" };
+		if (const auto size{ m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat) }; size != data.size()) throw std::invalid_argument{ "Data length does not match texture size!" };
 
 		const auto format = OpenGL::texture_format(dataFormat);
 		glTextureSubImage2D(m_id, mipLevel, 0, 0, m_dimensions.x, m_dimensions.y, format, GL_UNSIGNED_BYTE, data.data());

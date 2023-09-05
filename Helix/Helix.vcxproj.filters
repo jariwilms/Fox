@@ -225,9 +225,6 @@
     <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp">
       <Filter>Helix\IO\Import\Model</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp">
-      <Filter>Helix\IO\Import\Model</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp">
       <Filter>Helix\Input\Code</Filter>
     </ClInclude>
@@ -439,13 +436,17 @@
       <Filter>Helix\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter2.hpp" />
+    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Camera\Camera.hpp" />
     <ClInclude Include="src\Helix\Scene\Actor.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\LightComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
+    <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
+    <ClInclude Include="src\Helix\Rendering\State\RenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

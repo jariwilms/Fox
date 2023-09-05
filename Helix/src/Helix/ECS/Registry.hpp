@@ -26,6 +26,7 @@ namespace hlx
         template<typename... T>
         static bool has_component(Id id)
         {
+            //static_assert(std::is_base_of_v<Component, T>);
             return s_registry.all_of<T...>(id);
         }
         template<typename T, typename... Args>

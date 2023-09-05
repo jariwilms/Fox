@@ -22,7 +22,7 @@ namespace hlx
         };
 
         Type type{};
-        Mode mode{};
+        //Mode mode{};
         Vector3f color{};
 
         float range{};

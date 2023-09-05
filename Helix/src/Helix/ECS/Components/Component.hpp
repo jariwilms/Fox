@@ -11,7 +11,7 @@ namespace hlx
         Entity& owner;
 
     protected:
-        Component(Entity& parent)
-            : owner{ parent } {}
+        Component(Entity& owner)
+            : owner{ owner } {}
     };
 }

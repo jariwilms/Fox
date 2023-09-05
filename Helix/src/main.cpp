@@ -25,11 +25,26 @@
 #include "Helix/Test/Test.hpp"
 #include "Helix/Experimental/Texture/Texture.hpp"
 
-#include "Helix/IO/Import/Model/ModelImporter2.hpp"
+#include "Helix/IO/Import/Model/ModelImporter.hpp"
 
 using namespace hlx;
 
-std::shared_ptr<Actor> dfs_test(Scene* scene, std::shared_ptr<Model> model, std::shared_ptr<Actor> parent, Model::Node* node)
+Transform transform_product(TransformComponent& tc)
+{
+    auto& owner = tc.owner;
+    auto& rc = Registry::get_component<RelationshipComponent>(owner.id());
+
+    if (rc.parent.has_value())
+    {
+        auto& ptc = Registry::get_component<TransformComponent>(rc.parent.value());
+        return transform_product(ptc) * tc;
+    }
+    else
+    {
+        return tc;
+    }
+};
+std::shared_ptr<Actor> model_to_scene_graph(Scene* scene, std::shared_ptr<Model> model, std::shared_ptr<Actor> parent, Model::Node* node)
 {
     auto actor = scene->create_actor();
     scene->set_parent(parent, actor);
@@ -51,12 +66,11 @@ std::shared_ptr<Actor> dfs_test(Scene* scene, std::shared_ptr<Model> model, std:
 
     for (auto& child : node->children)
     {
-        dfs_test(scene, model, actor, &child);
+        model_to_scene_graph(scene, model, actor, &child);
     }
 
     return actor;
 };
-
 
 int main(int argc, char** argv)
 {
@@ -70,7 +84,7 @@ int main(int argc, char** argv)
     IO::init();
     Geometry::init();
     Renderer::init();
-    ModelImporter2::init();
+    ModelImporter::init();
 
 
 
@@ -86,30 +100,22 @@ int main(int argc, char** argv)
 
 
 
-    hlx::ModelImporter2 testImporter{};
-    auto model = testImporter.import(R"(models/backpack/scene.gltf)");
-    auto modelActor = scene->create_actor();
-
-
-
-    auto res = dfs_test(scene.get(), model, nullptr, model->rootNode.get());
-
+    hlx::ModelImporter modelImporter{};
+    //auto box = modelImporter.import(R"(models/box/scene.gltf)");
+    auto box = modelImporter.import(R"(models/cubetest.glb)");
+    auto boxActor = model_to_scene_graph(scene.get(), box, nullptr, box->rootNode.get());
 
 
 
 
 
 
-    //TODO: fix component include in gameobject!!!
 
 
 
 
-    std::vector<std::tuple<Light, Vector3f>> lights{};
-    lights.resize(32);
-    Light l{};
-    l.color = Vector3f{ 0.01f, 0.01f, 0.01f };
-    lights[0] = std::make_tuple(l, Vector3f{ 0.0f, 0.0f, 0.0f });
+    std::vector<std::tuple<Light, Vector3f>> lights{ 32 };
+    //lights.at(0) = std::make_tuple(Light{ Light::Type::Point, Vector3f{ 0.1f, 0.1f, 0.1f } }, Vector3f{ -3.0f, 3.0f, 3.0f });
 
 
 
@@ -121,15 +127,14 @@ int main(int argc, char** argv)
 	{
         Time::advance();
 
-
-
-        const auto shift = Input::key_pressed(Key::LeftShift) ? 10.0f : 1.0f;
-        if (Input::key_pressed(Key::W)) cameraTransform.position += cameraTransform.forward() * shift * Time::delta();
-        if (Input::key_pressed(Key::S)) cameraTransform.position -= cameraTransform.forward() * shift * Time::delta();
-        if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right()   * shift * Time::delta();
-        if (Input::key_pressed(Key::D)) cameraTransform.position += cameraTransform.right()   * shift * Time::delta();
-        if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up()      * shift * Time::delta();
-        if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up()      * shift * Time::delta();
+        auto speed{ 5.0f };
+        if (Input::key_pressed(Key::LeftShift)) speed *= 10.0f;
+        if (Input::key_pressed(Key::W)) cameraTransform.position += cameraTransform.forward() * speed * Time::delta();
+        if (Input::key_pressed(Key::S)) cameraTransform.position -= cameraTransform.forward() * speed * Time::delta();
+        if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right()   * speed * Time::delta();
+        if (Input::key_pressed(Key::D)) cameraTransform.position += cameraTransform.right()   * speed * Time::delta();
+        if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up()      * speed * Time::delta();
+        if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up()      * speed * Time::delta();
 
         if (Input::button_pressed(Button::Button1)) //RMB
         {
@@ -143,15 +148,13 @@ int main(int argc, char** argv)
         //The render system starts running here and submits all models/meshes to the renderer
         //So, TODO: RenderSystem::update, which calls the code below
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
-
         auto group = Registry::view<TransformComponent, MeshRendererComponent>();
         group.each([](auto entity, TransformComponent& transform, MeshRendererComponent& meshRenderer)
             {
-                Renderer::render(meshRenderer.mesh, meshRenderer.material, transform);
+                Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
             });
-        
         Renderer::finish();
-
+        
 
 
 		window->refresh();
@@ -159,7 +162,9 @@ int main(int argc, char** argv)
 	}
 
     float avgFrameTime = std::accumulate(frametimes.begin(), frametimes.end(), 0.0f) / static_cast<float>(frametimes.size());
-    std::cout << "Average frametime: " << avgFrameTime;
+    std::system("CLS");
+    std::cout << "Average frametime: " << avgFrameTime << '\n';
+    std::cout << "Average framerate: " << 1.0f / avgFrameTime << '\n';
 
     return 0;
 }

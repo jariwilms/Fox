@@ -21,12 +21,9 @@ namespace hlx
         struct RenderInfo
         {
         public:
-            //RenderInfo(const Camera& camera, const Transform& cameraPosition, const std::vector<std::tuple<Light, Vector3f>>& lights)
-            //    : camera{ camera }, cameraPosition{ cameraPosition }, lights{ lights } {}
-
             const Camera& camera{};
             const Transform& cameraPosition{};
-            const std::vector<std::tuple<Light, Vector3f>>& lights{};
+            std::span<std::tuple<Light, Vector3f> const> lights{};
         };
 
         virtual ~RendererAPI() = default;

@@ -155,14 +155,13 @@ namespace hlx
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform)
     {
-        auto res = transform.product().matrix();
-        m_matricesBuffer->copy_tuple(0, std::make_tuple(res));
+        m_matricesBuffer->copy_tuple(0, std::make_tuple(transform.matrix()));
 
         const auto vao = mesh->vao();
         vao->bind();
         if (vao->indexed()) vao->indices()->bind();
 
-        m_materialBuffer->copy(UMaterial{ material->color, material->metallic, material->roughness });
+        m_materialBuffer->copy(UMaterial{ Vector4f{ material->color, 1.0f }, material->metallic, material->roughness });
         material->albedo->bind(0);
         material->normal->bind(1);
 

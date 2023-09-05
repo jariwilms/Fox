@@ -23,6 +23,8 @@ namespace hlx
     class GraphicsAPI
     {
     public:
+        //TODO: complete refactor of all these methods => single create<typename T> func?
+
         static std::shared_ptr<VertexArray>            create_vao()
         {
             return std::make_shared<OpenGLVertexArray>();

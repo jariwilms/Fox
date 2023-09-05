@@ -6,12 +6,24 @@ namespace hlx
 {
     std::shared_ptr<hlx::Actor> Scene::create_actor()
     {
-        return actors.emplace_back(std::make_shared<Actor>());
+        return m_actors.emplace_back(std::make_shared<Actor>());
     }
     void Scene::destroy_actor(std::shared_ptr<Actor> actor)
     {
-        auto it = std::find(actors.begin(), actors.end(), actor);
-        if (it != actors.end()) actors.erase(it);
+        auto it = std::find(m_actors.begin(), m_actors.end(), actor);
+        if (it != m_actors.end())
+        {
+            unset_parent(actor);
+
+            auto& rc = actor->get_component<RelationshipComponent>();
+            for (auto& id : rc.children)
+            {
+                auto it = std::find_if(m_actors.begin(), m_actors.end(), [&](std::shared_ptr<Actor> actor) { return actor->id() == id; });
+                if (it != m_actors.end()) destroy_actor(*it);
+            }
+
+            m_actors.erase(it);
+        }
     }
 
     void Scene::set_parent(std::shared_ptr<Actor> parent, std::shared_ptr<Actor> child)
@@ -19,33 +31,29 @@ namespace hlx
         if (!parent || !child) return;
 
         unset_parent(child);
-        parent->children.emplace_back(child);
-        child->parent = parent;
 
-        auto& parentTransform = parent->get_component<TransformComponent>();
-        Transform& t = parentTransform;
-        auto& childTransform = child->get_component<TransformComponent>();
+        auto& rc = child->get_component<RelationshipComponent>();
+        auto& prc = parent->get_component<RelationshipComponent>();
 
-        childTransform.parent = &t;
+        prc.children.emplace_back(child->id());
+        rc.parent = parent->id();
     }
     void Scene::unset_parent(std::shared_ptr<Actor> child)
     {
-        auto& parent = child->parent;
-        if (!parent.expired())
+        if (!child) return;
+
+        auto& rc = child->get_component<RelationshipComponent>();
+        if (rc.parent.has_value())
         {
-            auto parentPtr = parent.lock();
-            auto& children = parentPtr->children;
-            auto it = std::find(children.begin(), children.end(), child);
-            if (it != children.end()) children.erase(it);
+            const auto& parent = rc.parent.value();
+            auto& prc = Registry::get_component<RelationshipComponent>(parent);
 
-            actors.emplace_back(child);
+            if (auto it = std::find(prc.children.begin(), prc.children.end(), child->id()); it != prc.children.end())
+            {
+                prc.children.erase(it);
+            }
 
-            auto& transform = child->get_component<TransformComponent>();
-            auto& parentTransform = Registry::get_component<TransformComponent>(parentPtr->id());
-            
-            
-            //transform.parent = std::shared_ptr<TransformComponent>(&parentTransform);
-            transform.parent = &parentTransform;
+            rc.parent = std::nullopt;
         }
     }
 }

@@ -13,30 +13,29 @@ namespace hlx
     {
     public:
         Transform() = default;
-        Transform(const Transform& transform)
-            : position{ transform.position }, rotation{ transform.rotation }, scale{ transform.scale } {}
+        Transform(const Transform& transform) = default;
         Transform(const Vector3f& position, const Vector3f& rotation, const Vector3f& scale)
             : position{ position }, rotation{ Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
-        Transform(const Matrix4f& prs)
+        Transform(const Matrix4f& matrix)
         {
             Vector3f skew{};
             Vector4f perspective{};
 
-            glm::decompose(prs, scale, rotation, position, skew, perspective);
+            glm::decompose(matrix, scale, rotation, position, skew, perspective);
             rotation = glm::conjugate(rotation);
         }
 
-        void translate(const Vector3f& value)
+        void translate(const Vector3f& translation)
         {
-            position += value;
+            position += translation;
         }
-        void rotate(const Vector3f& value)
+        void rotate(const Vector3f& rotation)
         {
-            rotation *= Quaternion{ glm::radians(value) };
+            this->rotation *= Quaternion{ glm::radians(rotation) };
         }
-        void dilate(const Vector3f& value)
+        void dilate(const Vector3f& scale)
         {
-            scale *= value;
+            this->scale *= scale;
         }
 
         void look_at(const Transform& target)
@@ -47,7 +46,7 @@ namespace hlx
 
         Vector3f forward() const
         {
-            return rotation * Vector3f{ 0.0f, 0.0f, -1.0f };                   //TODO: make decision about which axis is forward
+            return rotation * Vector3f{ 0.0f, 0.0f, -1.0f }; //Inwards to the screen
         }
         Vector3f right() const
         {
@@ -72,27 +71,14 @@ namespace hlx
 
             return result;
         }
-        Transform product() const
-        {
-            if (parent)
-            {
-                auto res = parent->product() * (*this);
-                return res;
-            }
-
-            return *this;
-        }
 
         friend Transform operator*(const Transform& lhs, const Transform& rhs)
         {
-            auto res = Transform{ lhs.matrix() * rhs.matrix() };
-            return res;
+            return Transform{ lhs.matrix() * rhs.matrix() };
         }
 
         Vector3f   position{ 0.0f };
         Quaternion rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
         Vector3f   scale{ 1.0f };
-
-        Transform* parent{};
     };
 }

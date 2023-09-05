@@ -40,6 +40,7 @@ namespace hlx
             if (tHash == typeid(long long)         .hash_code()) return sizeof(GLint64);
             if (tHash == typeid(unsigned long long).hash_code()) return sizeof(GLuint64);
             if (tHash == typeid(float)             .hash_code()) return sizeof(GLfloat);
+            if (tHash == typeid(double)            .hash_code()) return sizeof(GLdouble);
 
             throw std::invalid_argument{ "Invalid type!" };
         }

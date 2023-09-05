@@ -10,8 +10,8 @@ namespace hlx
     class Actor : public Entity
     {
     public:
-        explicit Actor(std::weak_ptr<Entity> parent = {})
-            : Entity{ Registry::create(), parent }
+        explicit Actor()
+            : Entity{ Registry::create() }
         {
             add_component<RelationshipComponent>();
             add_component<TransformComponent>();
@@ -19,7 +19,6 @@ namespace hlx
         virtual ~Actor() override
         {
             Registry::destroy(m_id);
-
         }
 
         template<typename... T>
@@ -42,6 +41,7 @@ namespace hlx
         {
             Registry::remove_component<T>(m_id);
         }
+        template<> void remove_component<RelationshipComponent>() = delete;
         template<> void remove_component<TransformComponent>() = delete;
     };
 }

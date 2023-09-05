@@ -34,7 +34,7 @@ namespace hlx
 
         void tie(Id bufferId, const std::shared_ptr<VertexLayout> colorDepth) override
         {
-            if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex must be less than 16!" };
+            if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex may not exceed 16!" };
 
             glVertexArrayVertexBuffer(m_id, m_bindingIndex, bufferId, 0, static_cast<GLsizei>(colorDepth->stride()));
             

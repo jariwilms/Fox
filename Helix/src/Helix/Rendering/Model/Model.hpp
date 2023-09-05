@@ -27,8 +27,8 @@ namespace hlx
             bool empty() const
             { 
                 return !(localTransform.has_value() ||
-                         meshPrimitive.has_value() || 
-                         cameraIndex.has_value());
+                        meshPrimitive.has_value() || 
+                        cameraIndex.has_value());
             }
 
             std::optional<Matrix4f> localTransform{};
