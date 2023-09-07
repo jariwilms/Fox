@@ -135,8 +135,6 @@ namespace hlx
 
             TextureBlueprint textureBlueprint{};
             textureBlueprint.filter = Texture::Filter::Trilinear;
-            textureBlueprint.wrappingS = Texture::Wrapping::Repeat;
-            textureBlueprint.wrappingT = Texture::Wrapping::Repeat;
 
             std::span<aiMaterial*> aiMaterials{ aiScene->mMaterials, aiScene->mNumMaterials };
             for (auto index{ 0u }; const auto & aiMaterial : aiMaterials)

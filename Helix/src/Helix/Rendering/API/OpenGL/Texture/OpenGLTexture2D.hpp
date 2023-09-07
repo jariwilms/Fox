@@ -26,5 +26,7 @@ namespace hlx
 		GLenum m_internalTarget{ GL_TEXTURE_2D };
 		GLenum m_internalFormat{};
 		GLenum m_internalLayout{};
+
+		static inline std::unordered_map<unsigned int, Id> s_boundTextureIds{};
 	};
 }

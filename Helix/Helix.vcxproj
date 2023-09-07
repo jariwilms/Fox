@@ -107,6 +107,9 @@
     <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderSettings.hpp" />
     <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
     <ClInclude Include="src\Helix\Scene\Actor.hpp" />
     <ClInclude Include="src\Helix\Application.hpp" />

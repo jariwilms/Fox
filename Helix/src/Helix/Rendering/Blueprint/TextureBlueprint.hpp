@@ -18,7 +18,7 @@ namespace hlx
 		Texture::Format     format{ Texture::Format::RGBA };
 		Texture::ColorDepth colorDepth{ Texture::ColorDepth::_8bit };
 		Texture::Filter     filter{ Texture::Filter::Point };
-		Texture::Wrapping   wrappingS{ Texture::Wrapping::ClampToEdge };
-		Texture::Wrapping   wrappingT{ Texture::Wrapping::ClampToEdge };
+        Texture::Wrapping   wrappingS{ Texture::Wrapping::Repeat };
+        Texture::Wrapping   wrappingT{ Texture::Wrapping::Repeat };
 	};
 }

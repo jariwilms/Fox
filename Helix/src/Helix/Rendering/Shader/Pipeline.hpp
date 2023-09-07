@@ -19,11 +19,11 @@ namespace hlx
 		{
 			switch (type)
 			{
-				case Shader::Type::Vertex:                 return m_shaders[0];
-				case Shader::Type::TessellationControl:	   return m_shaders[1];
-				case Shader::Type::TessellationEvaluation: return m_shaders[2];
-				case Shader::Type::Geometry:			   return m_shaders[3];
-				case Shader::Type::Fragment:			   return m_shaders[4];
+				case Shader::Type::Vertex:                 return m_shaders.at(0);
+				case Shader::Type::TessellationControl:	   return m_shaders.at(1);
+				case Shader::Type::TessellationEvaluation: return m_shaders.at(2);
+				case Shader::Type::Geometry:			   return m_shaders.at(3);
+				case Shader::Type::Fragment:			   return m_shaders.at(4);
 
 				default:								   throw std::invalid_argument{ "Invalid stage!" };
 			}

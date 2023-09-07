@@ -21,6 +21,8 @@ namespace hlx
 
 	void OpenGLPipeline::bind() const
 	{
+		if (m_id == s_boundPipelineId) return;
+
 		glBindProgramPipeline(m_id);
 	}
 	void OpenGLPipeline::unbind() const
@@ -39,11 +41,11 @@ namespace hlx
 
 		switch (shader->type())
 		{
-			case Shader::Type::Vertex:                 m_shaders[0] = shader; break;
-			case Shader::Type::TessellationControl:    m_shaders[1] = shader; break;
-			case Shader::Type::TessellationEvaluation: m_shaders[2] = shader; break;
-			case Shader::Type::Geometry:               m_shaders[3] = shader; break;
-			case Shader::Type::Fragment:               m_shaders[4] = shader; break;
+			case Shader::Type::Vertex:                 m_shaders.at(0) = shader; break;
+			case Shader::Type::TessellationControl:    m_shaders.at(1) = shader; break;
+			case Shader::Type::TessellationEvaluation: m_shaders.at(2) = shader; break;
+			case Shader::Type::Geometry:               m_shaders.at(3) = shader; break;
+			case Shader::Type::Fragment:               m_shaders.at(4) = shader; break;
 
 			default:                                   throw std::invalid_argument{ "Invalid shader stage!" };
 		}

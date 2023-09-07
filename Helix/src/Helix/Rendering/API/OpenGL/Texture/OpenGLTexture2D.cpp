@@ -32,8 +32,12 @@ namespace hlx
 		bind(0);
 	}
 	void OpenGLTexture2D::bind(unsigned int slot) const
-	{
+    {
+		const auto& pair = s_boundTextureIds.try_emplace(slot, 0);
+		if (pair.first->second == m_id) return;
+
 		glBindTextureUnit(slot, m_id);
+		s_boundTextureIds.at(slot) = m_id;
 	}
 	void OpenGLTexture2D::unbind() const
 	{

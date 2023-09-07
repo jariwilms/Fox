@@ -3,6 +3,7 @@
 #include "OpenGLRenderer.hpp"
 
 #include "Helix/Core/Library/Utility/Utility.hpp"
+#include "Helix/Rendering/RenderSettings.hpp"
 
 namespace hlx
 {
@@ -58,54 +59,6 @@ namespace hlx
 
 
 
-
-
-
-
-
-
-
-        const Vector2u skyboxDimensions{ 2048, 2048 };
-        TextureBlueprint skyboxBlueprint{};
-        std::string skyboxDirectory{ "textures/skybox2/" };
-        std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
-        std::array<std::shared_ptr<const std::vector<byte>>, 6> skyboxImages
-        {
-            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(0))->read(),
-            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(1))->read(),
-            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(2))->read(),
-            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(3))->read(),
-            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(),
-            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(),
-        };
-        std::array<std::span<const byte>, 6> def
-        {
-            *skyboxImages[0],
-            *skyboxImages[1],
-            *skyboxImages[2],
-            *skyboxImages[3],
-            *skyboxImages[4],
-            *skyboxImages[5],
-        };
-
-        m_skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ColorDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, def);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //TODO: global state control class (set + remember current state so unnecessary (and maybe expensive) changes do not need to be made
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glDepthFunc(GL_LEQUAL);
@@ -123,28 +76,25 @@ namespace hlx
 
 
 
-        auto index = 0u;
-        std::array<ULight, 32> uLights{};
 
-        for (const auto& [light, position] : renderInfo.lights)
+
+        std::array<ULight, 32> uLights{};
+        for (auto index{ 0u }; const auto& [light, position] : renderInfo.lights)
         {
-            ULight uLight;
-            uLight.position = Vector4f{ position, 0.0f };
-            uLight.color = Vector4f{ light.color, 0.0f };
-            uLight.linear = 0.1f;
-            uLight.quadratic = 0.1f;
-            uLight.radius = 100.0f;
+            ULight uLight
+            {
+                .position  = Vector4f{ position, 0.0f },
+                .color     = Vector4f{ light.color, 0.0f },
+                .linear    = 0.1f,
+                .quadratic = 0.1f,
+                .radius    = 100.0f,
+            };
 
             uLights[index] = uLight;
-
             ++index;
         }
 
         m_lightBuffer->copy(uLights);
-
-
-
-
 
 
 
@@ -174,13 +124,15 @@ namespace hlx
 
 
         //Render the skybox last  so unnecessary fragments are not drawn
-        //if (m_renderInfo.skybox != nullptr)
-        //{
-            m_pipelines.find("Skybox")->second->bind();
+        const auto& skybox = RenderSettings::lighting.skybox;
+        const auto& skyboxPipeline = m_pipelines.find("Skybox");
+        if (skybox && skyboxPipeline != m_pipelines.end())
+        {
             Cube::vao->bind();
-            m_skybox->bind(0);
+            skyboxPipeline->second->bind();
+            skybox->bind(0);
             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
-        //}
+        }
 
 
 

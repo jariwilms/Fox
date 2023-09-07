@@ -22,6 +22,7 @@
 #include "Helix/Window/Window.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
 #include "Helix/Core/Library/Data/CyclicBuffer.hpp"
+#include "Helix/Rendering/RenderSettings.hpp"
 
 #include "Helix/Test/Test.hpp"
 #include "Helix/Experimental/Texture/Texture.hpp"
@@ -97,7 +98,8 @@ int main(int argc, char** argv)
     Renderer::init();
     ModelImporter::init();
 
-
+    //unsigned int id{};
+    //glCreateTextures(GL_TEXTURE_2D, 1, &id);
 
 
 
@@ -110,18 +112,37 @@ int main(int argc, char** argv)
 
 
     hlx::ModelImporter modelImporter{};
-    //auto box = modelImporter.import(R"(models/box/scene.gltf)");
-    //auto box = modelImporter.import(R"(models/cubetest.glb)");
     auto box = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
     auto boxActor = model_to_scene_graph(scene.get(), box, nullptr, box->rootNode.get());
 
 
 
 
+    
+    const Vector2u skyboxDimensions{ 2048, 2048 };
+    TextureBlueprint skyboxBlueprint{};
+    std::string skyboxDirectory{ "textures/skybox2/" };
+    std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
+    std::array<std::shared_ptr<const std::vector<byte>>, 6> skyboxImages
+    {
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(0))->read(),
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(1))->read(),
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(2))->read(),
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(3))->read(),
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(),
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(),
+    };
+    std::array<std::span<const byte>, 6> def
+    {
+        *skyboxImages[0],
+        *skyboxImages[1],
+        *skyboxImages[2],
+        *skyboxImages[3],
+        *skyboxImages[4],
+        *skyboxImages[5],
+    };
 
-
-
-
+    RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ColorDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, def);
 
 
 

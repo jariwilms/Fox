@@ -20,5 +20,8 @@ namespace hlx
 		bool is_bound() const override;
 
 		void stage(const std::shared_ptr<Shader> shader) override;
+
+	private:
+		static inline Id s_boundPipelineId{};
 	};
 }

@@ -12,8 +12,8 @@ namespace hlx
         Cube()
         {
             const auto layout3f = std::make_shared<VertexLayout>();
-            layout3f->specify<float>(3);
             const auto layout2f = std::make_shared<VertexLayout>();
+            layout3f->specify<float>(3);
             layout2f->specify<float>(2);
 
             const auto positionsVBO = GraphicsAPI::create_vbo<float>(positions);

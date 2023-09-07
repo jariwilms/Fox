@@ -40,13 +40,5 @@ namespace hlx
         std::shared_ptr<UniformBuffer<UMaterial>> m_materialBuffer{};          //TODO: Convert UniformArrayBuffer
         std::shared_ptr<UniformArrayBuffer<ULight>> m_lightBuffer{};
         std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};              //TODO: Remove?
-
-
-
-
-        std::shared_ptr<OpenGLCubemapTexture> m_skybox{};
-
-
-
     };
 }
