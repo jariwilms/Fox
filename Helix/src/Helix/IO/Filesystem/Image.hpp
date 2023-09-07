@@ -2,7 +2,9 @@
 
 #include "stdafx.hpp"
 
+#pragma warning(push, 0)
 #include <stb_image.h>
+#pragma warning(pop)
 
 #include "File.hpp"
 
@@ -11,12 +13,12 @@ namespace hlx
 	struct Image : public File
 	{
 	public:
-		struct Data
+		struct Properties
 		{
-			Vector2u dimensions;
-			size_t size;
-			unsigned int channels;
-			const std::vector<byte> data;
+			Vector2u dimensions{};
+			size_t size{};
+			unsigned int channels{};
+			const std::vector<byte> data{};
 		};
 
 		explicit Image(const std::filesystem::path& path)
@@ -45,7 +47,7 @@ namespace hlx
 
 			return ptr;
 		}
-		Data read_c(unsigned int channels, bool flip = false) //Dimensions, channels, size, data
+		Properties read_c(unsigned int channels, bool flip = false)
 		{
             stbi_set_flip_vertically_on_load(flip);
 
@@ -57,7 +59,7 @@ namespace hlx
             size = (static_cast<size_t>(dimensions.x) * static_cast<size_t>(dimensions.y)) * channels;
 
 			const std::vector<byte> data{ imageData, imageData + size };
-			auto result = Data{ dimensions, size, channels, data };
+			auto result = Properties{ dimensions, size, channels, data };
 
             stbi_image_free(imageData);
 

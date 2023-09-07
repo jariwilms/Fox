@@ -94,7 +94,7 @@ namespace hlx
                             else      return GL_RGBA8;
                         }
 
-                        //case Texture::Format::D:    return GL_DEPTH_COMPONENT;
+                        case Texture::Format::D:    return GL_DEPTH_COMPONENT;
 
                         default: throw std::invalid_argument{ "Invalid format!" };
                     }

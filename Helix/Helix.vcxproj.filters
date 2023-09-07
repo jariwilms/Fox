@@ -444,9 +444,10 @@
     <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
     <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
-    <ClInclude Include="src\Helix\Rendering\State\RenderState.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Utility\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

@@ -5,6 +5,7 @@
 
 #include "Helix/Application.hpp"
 #include "Helix/Core/Library/Time/Time.hpp"
+#include "Helix/Core/Library/Utility/Utility.hpp"
 #include "Helix/ECS/Components/Components.hpp"
 #include "Helix/ECS/Entity/Entity.hpp"
 #include "Helix/ECS/Registry.hpp"
@@ -28,6 +29,16 @@
 #include "Helix/IO/Import/Model/ModelImporter.hpp"
 
 using namespace hlx;
+
+
+
+//Mip levels with base included (+1)
+unsigned int mip_count(const Vector2u& dimensions)
+{
+    return static_cast<unsigned int>(std::floor(std::log2(std::max(dimensions.x, dimensions.y)))) + 1u;
+}
+
+
 
 Transform transform_product(TransformComponent& tc)
 {
@@ -98,11 +109,10 @@ int main(int argc, char** argv)
 
 
 
-
-
     hlx::ModelImporter modelImporter{};
     //auto box = modelImporter.import(R"(models/box/scene.gltf)");
-    auto box = modelImporter.import(R"(models/cubetest.glb)");
+    //auto box = modelImporter.import(R"(models/cubetest.glb)");
+    auto box = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
     auto boxActor = model_to_scene_graph(scene.get(), box, nullptr, box->rootNode.get());
 
 
@@ -114,10 +124,16 @@ int main(int argc, char** argv)
 
 
 
+
+
+
+
+
+
+
+
+
     std::vector<std::tuple<Light, Vector3f>> lights{ 32 };
-    //lights.at(0) = std::make_tuple(Light{ Light::Type::Point, Vector3f{ 0.1f, 0.1f, 0.1f } }, Vector3f{ -3.0f, 3.0f, 3.0f });
-
-
 
 
 
@@ -127,8 +143,9 @@ int main(int argc, char** argv)
 	{
         Time::advance();
 
-        auto speed{ 5.0f };
+        auto speed{ 10.0f };
         if (Input::key_pressed(Key::LeftShift)) speed *= 10.0f;
+        if (Input::key_pressed(Key::LeftControl)) speed /= 5.0f;
         if (Input::key_pressed(Key::W)) cameraTransform.position += cameraTransform.forward() * speed * Time::delta();
         if (Input::key_pressed(Key::S)) cameraTransform.position -= cameraTransform.forward() * speed * Time::delta();
         if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right()   * speed * Time::delta();

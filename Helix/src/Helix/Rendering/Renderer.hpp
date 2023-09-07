@@ -5,6 +5,7 @@
 #include "Helix/ECS/Components/Components.hpp"
 #include "Helix/Rendering/API/RendererAPI.hpp"
 #include "Helix/Rendering/API/OpenGL/OpenGLRenderer.hpp"
+#include "Helix/Rendering/RenderState.hpp"
 
 namespace hlx
 {
@@ -13,6 +14,7 @@ namespace hlx
     public:
         static void init()
         {
+            RenderState::init();
             s_rendererAPI = std::make_shared<OpenGLRenderer>();
         }
 

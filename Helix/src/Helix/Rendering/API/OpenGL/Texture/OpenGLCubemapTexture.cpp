@@ -18,7 +18,7 @@ namespace hlx
         glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, OpenGL::texture_mag_filter(m_filter));
         glTextureStorage2D(m_id, m_mipLevels, m_internalLayout, m_dimensions.x, m_dimensions.y);
     }
-    OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB, Format dataFormat, const std::array<std::span<const byte>, 6>& data)
+    OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB, Format dataFormat, std::span<std::span<const byte>, 6> data)
         : OpenGLCubemapTexture{ format, colorDepth, dimensions, filter, wrappingR, wrappingS, wrappingT, mipLevels, sRGB }
     {
         copy(format, data);
@@ -45,7 +45,7 @@ namespace hlx
         throw std::logic_error("The method or operation is not implemented.");
     }
 
-    void OpenGLCubemapTexture::copy(Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel, bool generateMips)
+    void OpenGLCubemapTexture::copy(Format dataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel, bool generateMips)
     {
         const auto size = m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat);
         const auto size_check = [size](std::span<const byte> subData)
@@ -65,7 +65,7 @@ namespace hlx
         }
         if (generateMips) glGenerateTextureMipmap(m_id);
     }
-    void OpenGLCubemapTexture::copy_range(const Vector2u dimensions, const Vector2u& offset, Format DataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel, bool generateMips)
+    void OpenGLCubemapTexture::copy_range(const Vector2u& dimensions, const Vector2u& offset, Format DataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel, bool generateMips)
     {
         throw std::runtime_error{ "The method or operation is not implemented." };
     }

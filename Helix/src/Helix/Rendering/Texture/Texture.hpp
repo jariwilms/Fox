@@ -17,7 +17,6 @@ namespace hlx
 			RGBA, 
 
 			D, 
-			S, 
 			DS, 
 		};
 		enum class ColorDepth

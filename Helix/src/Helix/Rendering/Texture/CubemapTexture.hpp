@@ -11,8 +11,8 @@ namespace hlx
     public:
         virtual ~CubemapTexture() = default;
 
-        virtual void copy(Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
-        virtual void copy_range(const Vector2u dimensions, const Vector2u& offset, Format dataFormat, const std::array<std::span<const byte>, 6>& data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+        virtual void copy(Format dataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+        virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, Format dataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
 
         const Vector2u& dimensions() const
         {

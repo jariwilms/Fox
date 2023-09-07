@@ -40,21 +40,21 @@ namespace hlx
 
 
             //Presets: aiProcessPreset_TargetRealtime_Fast or aiProcessPreset_TargetRealtime_Quality
-            const auto pFlags = 
-            aiProcess_FindInvalidData       | //Removes/fixes invalid mesh data
-            aiProcess_JoinIdenticalVertices | //Let each mesh contain unique vertices
-            aiProcess_SplitLargeMeshes      | //Split up larges meshes into smaller meshes
-            aiProcess_ImproveCacheLocality  | //Reorder triangles for better vertex cache locality
-            aiProcess_Triangulate           | //Split up faces with >3 indices into triangles
-            aiProcess_SortByPType           | //Split meshes with >1 primitive type into submeshes
-            aiProcess_GenUVCoords           | //Converts non UV-mappings to texture coordinates channels
-            aiProcess_TransformUVCoords     | //Applies per-texture UV transformations
-            aiProcess_GenSmoothNormals      | //Generate normals for all faces of all meshes
-            aiProcess_CalcTangentSpace      | //Calculate tangents and bitangents
-            aiProcess_FixInfacingNormals    | //Inverts inwards facing normals
-            aiProcess_OptimizeMeshes        | //Reduces the number of meshes
-            aiProcess_OptimizeGraph         | //Nodes without animations, bones etc. are collapsed and joined
-            aiProcess_GenBoundingBoxes      ; //Generates AABB's for each mesh
+            const auto pFlags = aiProcessPreset_TargetRealtime_Fast;
+                aiProcess_FindInvalidData       | //Removes/fixes invalid mesh data
+                aiProcess_JoinIdenticalVertices | //Let each mesh contain unique vertices
+                aiProcess_SplitLargeMeshes      | //Split up larges meshes into smaller meshes
+                aiProcess_ImproveCacheLocality  | //Reorder triangles for better vertex cache locality
+                aiProcess_Triangulate           | //Split up faces with >3 indices into triangles
+                aiProcess_SortByPType           | //Split meshes with >1 primitive type into submeshes
+                aiProcess_GenUVCoords           | //Converts non UV-mappings to texture coordinates channels
+                aiProcess_TransformUVCoords     | //Applies per-texture UV transformations
+                aiProcess_GenSmoothNormals      | //Generate normals for all faces of all meshes
+                aiProcess_CalcTangentSpace      | //Calculate tangents and bitangents
+                aiProcess_FixInfacingNormals    | //Inverts inwards facing normals
+                aiProcess_OptimizeMeshes        | //Reduces the number of meshes
+                aiProcess_OptimizeGraph         | //Nodes without animations, bones etc. are collapsed and joined
+                aiProcess_GenBoundingBoxes      ; //Generates AABB's for each mesh
 
             //For left handed coordinate systems (=> aiProcess_ConvertLeftHanded)
             //aiProcess_MakeLeftHanded   | 
@@ -135,6 +135,9 @@ namespace hlx
 
             TextureBlueprint textureBlueprint{};
             textureBlueprint.filter = Texture::Filter::Trilinear;
+            textureBlueprint.wrappingS = Texture::Wrapping::Repeat;
+            textureBlueprint.wrappingT = Texture::Wrapping::Repeat;
+
             std::span<aiMaterial*> aiMaterials{ aiScene->mMaterials, aiScene->mNumMaterials };
             for (auto index{ 0u }; const auto & aiMaterial : aiMaterials)
             {
@@ -148,7 +151,7 @@ namespace hlx
                 if (aiString aiMaterialDiffuse; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), aiMaterialDiffuse) == aiReturn_SUCCESS)
                 {
                     const auto aiMaterialDiffuseImage = std::make_shared<Image>(baseDirectory / aiMaterialDiffuse.C_Str());
-                    const auto aiMaterialDiffuseTexture = textureBlueprint.build(aiMaterialDiffuseImage, 1u, true);
+                    const auto aiMaterialDiffuseTexture = textureBlueprint.build(aiMaterialDiffuseImage, 4u, true);
                     material->albedo = aiMaterialDiffuseTexture;
                 }
 

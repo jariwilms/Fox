@@ -2,6 +2,8 @@
 
 #include "OpenGLRenderer.hpp"
 
+#include "Helix/Core/Library/Utility/Utility.hpp"
+
 namespace hlx
 {
     OpenGLRenderer::OpenGLRenderer()
@@ -51,7 +53,55 @@ namespace hlx
         m_pipelines.emplace("Geometry", GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv"));
         m_pipelines.emplace("Lighting", GraphicsAPI::create_plo("shaders/compiled/lightingvert.spv", "shaders/compiled/lightingfrag.spv"));
         m_pipelines.emplace("Skybox", GraphicsAPI::create_plo("shaders/compiled/skyboxvert.spv", "shaders/compiled/skyboxfrag.spv"));
-        //m_postProcessingPipelines.emplace("SharpenKernel", GraphicsAPI::create_plo("shaders/compiled/sharpenvert.spv", "shaders/compiled/sharpenfrag.spv"));
+
+
+
+
+
+
+
+
+
+
+
+
+        const Vector2u skyboxDimensions{ 2048, 2048 };
+        TextureBlueprint skyboxBlueprint{};
+        std::string skyboxDirectory{ "textures/skybox2/" };
+        std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
+        std::array<std::shared_ptr<const std::vector<byte>>, 6> skyboxImages
+        {
+            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(0))->read(),
+            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(1))->read(),
+            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(2))->read(),
+            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(3))->read(),
+            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(),
+            IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(),
+        };
+        std::array<std::span<const byte>, 6> def
+        {
+            *skyboxImages[0],
+            *skyboxImages[1],
+            *skyboxImages[2],
+            *skyboxImages[3],
+            *skyboxImages[4],
+            *skyboxImages[5],
+        };
+
+        m_skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ColorDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, def);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -115,14 +165,30 @@ namespace hlx
     {
         glDisable(GL_CULL_FACE);
 
+
+
+
+
+
+
+
+
         //Render the skybox last  so unnecessary fragments are not drawn
         //if (m_renderInfo.skybox != nullptr)
         //{
-        //    m_pipelines.find("Skybox")->second->bind();
-        //    Cube::vao->bind();
-        //    m_renderInfo.skybox->bind(0);
-        //    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
+            m_pipelines.find("Skybox")->second->bind();
+            Cube::vao->bind();
+            m_skybox->bind(0);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
         //}
+
+
+
+
+
+
+
+
 
 
 
