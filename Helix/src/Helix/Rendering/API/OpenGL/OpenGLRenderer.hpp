@@ -7,12 +7,11 @@
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLUniformArrayBuffer.hpp"
 #include "Helix/Rendering/API/RendererAPI.hpp"
 #include "Helix/Rendering/Blueprint/FrameBufferBlueprint.hpp"
+#include "Helix/Rendering/RenderSettings.hpp"
 
 #include "Helix/Rendering/Model/Model.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 #include "Helix/Rendering/Shader/Pipeline.hpp"
-
-#include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
 
 namespace hlx
 {
@@ -28,6 +27,11 @@ namespace hlx
         void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform) override;
 
     private:
+        void draw_elements()
+        {
+
+        }
+
         std::shared_ptr<FrameBufferMultisample> m_frameBufferMultisample{};
         std::array<std::shared_ptr<FrameBuffer>, 2> m_gBuffers{};
         std::shared_ptr<FrameBuffer> m_depthMap{};

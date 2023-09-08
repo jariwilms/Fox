@@ -5,7 +5,7 @@
 #include "Helix/Core/Library/Camera/Camera.hpp"
 #include "Helix/Core/Library/Lighting/Light.hpp"
 #include "Helix/ECS/Components/Components.hpp"
-#include "Helix/Prefab/Rendering/Geometry/Geometry.hpp"
+#include "Helix/Rendering/Geometry/Geometry.hpp"
 #include "Helix/Rendering/Buffer/UniformBuffer.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 #include "Helix/Rendering/Model/Model.hpp"

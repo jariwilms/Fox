@@ -4,18 +4,6 @@
 
 namespace hlx
 {
-  //  OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<Texture2DSpec>& textures, const std::vector<RenderBufferSpec> renderBuffers)
-		//: FrameBuffer{ dimensions }
-  //  {
-		//glCreateFramebuffers(1, &m_id);
-
-		//std::vector<GLenum> drawBuffers{};
-		//unsigned int textureAttachmentIndex{};
-		//const auto attach_texture = [this, &drawBuffers, &textureAttachmentIndex]()
-		//{
-
-		//};
-  //  }
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<Texture2DBlueprintSpec>& textures, const std::vector<RenderBufferBlueprintSpec>& renderBuffers, Option options)
 		: FrameBuffer{ dimensions }
 	{

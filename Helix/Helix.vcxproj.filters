@@ -243,18 +243,6 @@
     <ClInclude Include="src\Helix\Input\Input.hpp">
       <Filter>Helix\Input</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Cube.hpp">
-      <Filter>Helix\Prefab\Rendering\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Geometry.hpp">
-      <Filter>Helix\Prefab\Rendering\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Quad.hpp">
-      <Filter>Helix\Prefab\Rendering\Geometry</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Prefab\Rendering\Layout\Layout.hpp">
-      <Filter>Helix\Prefab\Rendering\Layout</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp">
       <Filter>Helix\Rendering\API</Filter>
     </ClInclude>
@@ -451,6 +439,7 @@
     <ClInclude Include="src\Helix\Rendering\RenderSettings.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

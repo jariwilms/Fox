@@ -7,7 +7,7 @@ namespace hlx
 {
     std::shared_ptr<Window> WindowManager::create(const std::string& identifier, const std::string& title, const Vector2u& dimensions)
     {
-        const auto window = std::make_shared<GLFWWindow>(title, dimensions);
+        const auto& window = std::make_shared<GLFWWindow>(title, dimensions);
         s_windows.emplace(std::hash<std::string>{}(identifier), window);
 
         return window;

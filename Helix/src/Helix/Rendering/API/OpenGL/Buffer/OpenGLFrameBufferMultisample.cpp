@@ -44,7 +44,7 @@ namespace hlx
         std::for_each(renderBuffers.begin(), renderBuffers.end(), attach_renderbuffer);
         glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
 
-        const auto status = glCheckNamedFramebufferStatus(m_id, GL_FRAMEBUFFER);
+        const auto& status = glCheckNamedFramebufferStatus(m_id, GL_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Failed to create framebuffer!" };
     }
     OpenGLFrameBufferMultisample::~OpenGLFrameBufferMultisample()

@@ -108,6 +108,7 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
     <ClInclude Include="src\Helix\Rendering\RenderSettings.hpp" />
     <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
@@ -144,10 +145,6 @@
     <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
     <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
     <ClInclude Include="src\Helix\Input\Input.hpp" />
-    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Cube.hpp" />
-    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Geometry.hpp" />
-    <ClInclude Include="src\Helix\Prefab\Rendering\Geometry\Quad.hpp" />
-    <ClInclude Include="src\Helix\Prefab\Rendering\Layout\Layout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />

@@ -24,6 +24,7 @@ namespace hlx
 		if (m_id == s_boundPipelineId) return;
 
 		glBindProgramPipeline(m_id);
+		s_boundPipelineId = m_id;
 	}
 	void OpenGLPipeline::unbind() const
 	{

@@ -13,6 +13,7 @@ namespace hlx
     {
     public:
         Plane()
+            : vao{ GraphicsAPI::create_vao() }
         {
             const auto layout3f = std::make_shared<VertexLayout>();
             const auto layout2f = std::make_shared<VertexLayout>();
@@ -24,40 +25,39 @@ namespace hlx
             const auto coordinatesVBO = GraphicsAPI::create_vbo<float>(coordinates);
             const auto indicesIBO     = GraphicsAPI::create_ibo(indices);
 
-            vao = GraphicsAPI::create_vao();
             vao->tie(positionsVBO,   layout3f);
             vao->tie(normalsVBO,     layout3f);
             vao->tie(coordinatesVBO, layout2f);
             vao->tie(indicesIBO);
         }
 
-        static inline const std::array<float, 12> positions
+        const std::array<float, 12> positions
         {
              1.0f,  1.0f,  0.0f,
             -1.0f,  1.0f,  0.0f,
             -1.0f, -1.0f,  0.0f,
              1.0f, -1.0f,  0.0f,
         };
-        static inline const std::array<float, 12> normals
+        const std::array<float, 12> normals
         {
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
             0.0f, 0.0f, 1.0f,
         };
-        static inline const std::array<float, 12> coordinates
+        const std::array<float, 12> coordinates
         {
             1.0f, 1.0f,
             0.0f, 1.0f,
             0.0f, 0.0f,
             1.0f, 0.0f,
         };
-        static inline const std::array<unsigned int, 6> indices
+        const std::array<unsigned int, 6> indices
         {
             0, 1, 2,
             0, 2, 3,
         };
 
-        static inline std::shared_ptr<VertexArray> vao{};
+        const std::shared_ptr<VertexArray> vao{};
     };
 }

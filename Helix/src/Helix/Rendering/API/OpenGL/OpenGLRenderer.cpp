@@ -2,9 +2,6 @@
 
 #include "OpenGLRenderer.hpp"
 
-#include "Helix/Core/Library/Utility/Utility.hpp"
-#include "Helix/Rendering/RenderSettings.hpp"
-
 namespace hlx
 {
     OpenGLRenderer::OpenGLRenderer()
@@ -26,7 +23,7 @@ namespace hlx
 
         FrameBufferBlueprint frameBufferBlueprint{ textureBlueprints, renderBufferBlueprints };
 
-        m_frameBufferMultisample = frameBufferBlueprint.build_ms(Vector2f{ 1280, 720 }, 2);
+        m_frameBufferMultisample = frameBufferBlueprint.build_ms(Vector2f{ 1280, 720 }, 4);
         m_gBuffers[0] = frameBufferBlueprint.build(Vector2f{ 1280, 720 });     //TODO: fetch target window resolution from WindowManager
         m_gBuffers[1] = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
@@ -40,11 +37,11 @@ namespace hlx
 
 
         //Buffer for lights, TODO: pass actual light count to lighting shader instead of const value
-        constexpr auto lightCount = 32;
+        const auto lightCount = 32;
         m_matricesBuffer = std::make_shared<OpenGLUniformBuffer<UMatrices>>(0, UMatrices{});
         m_materialBuffer = std::make_shared<OpenGLUniformBuffer<UMaterial>>(1, UMaterial{});
-        m_lightBuffer = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(lightCount, 2);
-        m_cameraBuffer = std::make_shared<OpenGLUniformBuffer<UCamera>>(3, UCamera{});
+        m_lightBuffer    = std::make_shared<OpenGLUniformArrayBuffer<ULight>>(lightCount, 2);
+        m_cameraBuffer   = std::make_shared<OpenGLUniformBuffer<UCamera>>(3, UCamera{});
         
 
 
@@ -100,45 +97,18 @@ namespace hlx
 
 
 
+
+        m_matricesBuffer->copy_tuple(offsetof(UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
+        m_cameraBuffer->copy(UCamera{ Vector4f{ position.position, 0.0f } });
         m_frameBufferMultisample->bind(FrameBuffer::Target::Write);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_CULL_FACE);
-
-        m_matricesBuffer->copy_tuple(offsetof(UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
-        m_cameraBuffer->copy(UCamera{ Vector4f{ position.position, 0.0f } });
-
-        m_pipelines.find("Geometry")->second->bind(); //TODO: move to render func? It may be safer to call this every render, bind state is remembered anyways
     }
     void OpenGLRenderer::finish()
     {
         glDisable(GL_CULL_FACE);
-
-
-
-
-
-
-
-
-
-        //Render the skybox last  so unnecessary fragments are not drawn
-        const auto& skybox = RenderSettings::lighting.skybox;
-        const auto& skyboxPipeline = m_pipelines.find("Skybox");
-        if (skybox && skyboxPipeline != m_pipelines.end())
-        {
-            Cube::vao->bind();
-            skyboxPipeline->second->bind();
-            skybox->bind(0);
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Cube::vao->indices()->size()), GL_UNSIGNED_INT, nullptr);
-        }
-
-
-
-
-
-
 
 
 
@@ -150,6 +120,7 @@ namespace hlx
         m_gBuffers[m_pingpong]->bind(FrameBuffer::Target::Write);
 
         //TODO: render manually to texture instead of blitting?
+        //Multisampled framebuffer textures can not be sampled like a regular framebuffer, so we copy it
         for (auto i = 0u; i < 3; ++i)
         {
             glReadBuffer(GL_COLOR_ATTACHMENT0 + i);
@@ -157,22 +128,40 @@ namespace hlx
             glBlitFramebuffer(0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
 
-        m_frameBufferMultisample->unbind();                                                      
+        m_frameBufferMultisample->unbind();
 
-        m_gBuffers[m_pingpong]->unbind();                                     
+        m_gBuffers[m_pingpong]->unbind();
         m_gBuffers[m_pingpong]->bind_texture("Position", 0);
         m_gBuffers[m_pingpong]->bind_texture("Color", 1);
         m_gBuffers[m_pingpong]->bind_texture("Specular", 2);
 
-        m_pipelines.find("Lighting")->second->bind();
-        Geometry::quad->vao->bind();
+        m_pipelines.at("Lighting")->bind();
+        Geometry::Plane::vao()->bind();
 
         glDisable(GL_DEPTH_TEST);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+
+
+
+
+
+        ////Render the skybox last so unnecessary fragments are not drawn
+        //const auto& skybox = RenderSettings::lighting.skybox;
+        //if (skybox)
+        //{
+        //    Geometry::Cube::vao()->bind();
+
+        //    m_pipelines.at("Skybox")->bind();
+        //    skybox->bind(0);
+
+        //    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Geometry::Cube::vao()->indices()->size()), GL_UNSIGNED_INT, nullptr);
+        //}
     }
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform)
     {
+        m_pipelines.at("Geometry")->bind();
         m_matricesBuffer->copy_tuple(0, std::make_tuple(transform.matrix()));
 
         const auto vao = mesh->vao();

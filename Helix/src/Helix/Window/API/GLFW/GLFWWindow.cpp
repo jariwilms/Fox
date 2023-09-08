@@ -17,8 +17,9 @@ namespace hlx
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
+        glfwWindowHint(GLFW_REFRESH_RATE, 0);
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+        //Note to self: do not enable Multisampling, it will not work. Off-screen MSAA is used
 
 		m_glfwWindow = glfwCreateWindow(static_cast<int>(dimensions.x), static_cast<int>(dimensions.y), m_title.c_str(), nullptr, nullptr);
 		if (!m_glfwWindow) throw std::runtime_error{ "Failed to create GLFW window!" };
