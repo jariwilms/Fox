@@ -19,7 +19,9 @@ namespace hlx
         void unbind() const override;
         bool is_bound() const override;
 
-        void bind_texture(const std::string identifier, unsigned int slot) override;
+        void bind_texture(const std::string& identifier, unsigned int slot) override;
+
+        std::shared_ptr<Texture2D> texture(const std::string& identifier) override;
 
     private:
         GLenum m_internalBoundTarget{};

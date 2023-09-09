@@ -42,6 +42,6 @@ namespace hlx
         std::vector<std::shared_ptr<Mesh>> meshes{};
         std::vector<std::shared_ptr<Light>> lights{};
         std::vector<std::shared_ptr<Camera>> cameras{};
-        std::vector<std::shared_ptr<DefaultMaterial>> materials{};
+        std::vector<std::shared_ptr<Material>> materials{};
     };
 }

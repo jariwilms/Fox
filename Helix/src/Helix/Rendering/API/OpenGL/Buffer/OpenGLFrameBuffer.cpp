@@ -67,11 +67,17 @@ namespace hlx
 		return false;
 	}
 
-    void OpenGLFrameBuffer::bind_texture(const std::string identifier, unsigned int slot)
+    void OpenGLFrameBuffer::bind_texture(const std::string& identifier, unsigned int slot)
     {
 		auto texture = m_attachedTextures.find(identifier);
 		if (texture == m_attachedTextures.end()) throw std::runtime_error{ "Given texture identifier does not exist!" };
 
 		texture->second->bind(slot);
     }
+
+    std::shared_ptr<hlx::Texture2D> OpenGLFrameBuffer::texture(const std::string& identifier)
+    {
+		return m_attachedTextures.at(identifier);
+    }
+
 }

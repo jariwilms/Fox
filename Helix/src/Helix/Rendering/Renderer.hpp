@@ -29,7 +29,7 @@ namespace hlx
             s_rendererAPI->finish();
         }
 
-        static void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform)
+        static void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform)
         {
             s_rendererAPI->render(mesh, material, transform);
         }

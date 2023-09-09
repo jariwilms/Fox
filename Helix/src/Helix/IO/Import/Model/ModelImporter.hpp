@@ -18,10 +18,10 @@ namespace hlx
 
         static void init()
         {
-            m_defaultPipeline = GraphicsAPI::create_plo("shaders/compiled/geometryvert.spv", "shaders/compiled/geometryfrag.spv");
-            m_defaultMaterial = std::make_shared<DefaultMaterial>("Default", m_defaultPipeline);
-            m_defaultMaterial->albedo = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
-            m_defaultMaterial->normal = GraphicsAPI::create_tex(Texture::Format::RGB, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0xFF });
+            m_defaultMaterial = std::make_shared<Material>("Default");
+            m_defaultMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
+            m_defaultMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
+            m_defaultMaterial->metallicMap = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
 
             m_layout3f = std::make_shared<VertexLayout>();
             m_layout3f->specify<float>(3);
@@ -40,7 +40,7 @@ namespace hlx
 
 
             //Presets: aiProcessPreset_TargetRealtime_Fast or aiProcessPreset_TargetRealtime_Quality
-            const auto pFlags = aiProcessPreset_TargetRealtime_Fast;
+            const auto pFlags = //aiProcessPreset_TargetRealtime_Fast;
                 aiProcess_FindInvalidData       | //Removes/fixes invalid mesh data
                 aiProcess_JoinIdenticalVertices | //Let each mesh contain unique vertices
                 aiProcess_SplitLargeMeshes      | //Split up larges meshes into smaller meshes
@@ -139,25 +139,32 @@ namespace hlx
             std::span<aiMaterial*> aiMaterials{ aiScene->mMaterials, aiScene->mNumMaterials };
             for (auto index{ 0u }; const auto & aiMaterial : aiMaterials)
             {
-                auto material = std::make_shared<DefaultMaterial>(*m_defaultMaterial);
+                auto material = std::make_shared<Material>(*m_defaultMaterial);
 
                 if (aiString aiMaterialName; aiMaterial->Get(AI_MATKEY_NAME, aiMaterialName) == aiReturn_SUCCESS && aiMaterialName.length > 0) material->name = aiMaterialName.C_Str();
                 else material->name = "Default";
 
-                if (aiColor3D aiBaseColor; aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiBaseColor) == aiReturn_SUCCESS) material->color = Vector3f{ aiBaseColor.r, aiBaseColor.g, aiBaseColor.b };
-
+                if (aiColor3D aiDiffuseColor;  aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuseColor) == aiReturn_SUCCESS)
+                {
+                    material->color = Vector3f{ aiDiffuseColor.r, aiDiffuseColor.g, aiDiffuseColor.b };
+                }
                 if (aiString aiMaterialDiffuse; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), aiMaterialDiffuse) == aiReturn_SUCCESS)
                 {
                     const auto aiMaterialDiffuseImage = std::make_shared<Image>(baseDirectory / aiMaterialDiffuse.C_Str());
                     const auto aiMaterialDiffuseTexture = textureBlueprint.build(aiMaterialDiffuseImage, 4u, true);
-                    material->albedo = aiMaterialDiffuseTexture;
+                    material->albedoMap = aiMaterialDiffuseTexture;
                 }
-
                 if (aiString aiMaterialNormal; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0), aiMaterialNormal) == aiReturn_SUCCESS)
                 {
                     const auto aiMaterialNormalImage = std::make_shared<Image>(baseDirectory / aiMaterialNormal.C_Str());
                     const auto aiMaterialNormalTexture = textureBlueprint.build(aiMaterialNormalImage);
-                    material->normal = aiMaterialNormalTexture;
+                    material->normalMap = aiMaterialNormalTexture;
+                }
+                if (aiString aiMaterialMetallic; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_METALNESS, 0), aiMaterialMetallic) == aiReturn_SUCCESS)
+                {
+                    const auto aiMaterialMetallicImage = std::make_shared<Image>(baseDirectory / aiMaterialMetallic.C_Str());
+                    const auto aiMaterialMetallicTexture = textureBlueprint.build(aiMaterialMetallicImage);
+                    material->metallicMap = aiMaterialMetallicTexture;
                 }
 
                 model->materials.emplace_back(material);
@@ -224,8 +231,7 @@ namespace hlx
         }
         
     private:
-        static inline std::shared_ptr<Pipeline> m_defaultPipeline{};
-        static inline std::shared_ptr<DefaultMaterial> m_defaultMaterial{};
+        static inline std::shared_ptr<Material> m_defaultMaterial{};
         static inline std::shared_ptr<VertexLayout> m_layout3f{};
         static inline std::shared_ptr<VertexLayout> m_layout2f{};
     };

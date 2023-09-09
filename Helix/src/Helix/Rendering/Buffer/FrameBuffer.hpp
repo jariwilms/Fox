@@ -43,7 +43,10 @@ namespace hlx
 
 		virtual void bind() = delete;
 		virtual void bind(Target target) = 0;
-		virtual void bind_texture(const std::string identifier, unsigned int slot) = 0;
+
+		virtual void bind_texture(const std::string& identifier, unsigned int slot) = 0;
+
+        virtual std::shared_ptr<Texture2D> texture(const std::string& identifier) = 0;
 
 	protected:
 		FrameBuffer(const Vector2u& dimensions)

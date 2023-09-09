@@ -24,25 +24,27 @@ namespace hlx
         void start(const RenderInfo& renderInfo) override;
         void finish() override;
 
-        void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform) override;
+        void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform) override;
 
     private:
-        void draw_elements()
+        void swap_buffer()
         {
+            static unsigned int bufferIndex{};
+            static const unsigned int bufferCount = m_ppBuffers.size();
+
+            ++bufferIndex %= bufferCount;
 
         }
 
-        std::shared_ptr<FrameBufferMultisample> m_frameBufferMultisample{};
-        std::array<std::shared_ptr<FrameBuffer>, 2> m_gBuffers{};
-        std::shared_ptr<FrameBuffer> m_depthMap{};
-        bool m_pingpong{ false };
+        std::shared_ptr<FrameBufferMultisample> m_gBufferMultisample{};
+        std::shared_ptr<FrameBuffer> m_gBuffer{};
+        std::array<std::shared_ptr<FrameBuffer>, 2> m_ppBuffers{};
 
         std::unordered_map<std::string, std::shared_ptr<Pipeline>> m_pipelines{}; 
-        std::unordered_map<std::string, std::shared_ptr<Pipeline>> m_postProcessingPipelines{};
 
         std::shared_ptr<UniformBuffer<UMatrices>> m_matricesBuffer{};
         std::shared_ptr<UniformBuffer<UMaterial>> m_materialBuffer{};          //TODO: Convert UniformArrayBuffer
         std::shared_ptr<UniformArrayBuffer<ULight>> m_lightBuffer{};
-        std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};              //TODO: Remove?
+        std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};
     };
 }

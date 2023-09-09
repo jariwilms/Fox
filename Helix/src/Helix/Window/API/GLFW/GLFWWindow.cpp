@@ -17,7 +17,7 @@ namespace hlx
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        glfwWindowHint(GLFW_REFRESH_RATE, 0);
+        glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
         //Note to self: do not enable Multisampling, it will not work. Off-screen MSAA is used
 

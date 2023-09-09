@@ -7,25 +7,21 @@
 
 namespace hlx
 {
-    struct Material
+    class Material
     {
     public:
-        Material(const std::string& name, std::shared_ptr<const Pipeline> pipeline)
-            : name{ name }, pipeline{ pipeline } {}
+        Material(const std::string& name)
+            : name{ name } {}
+        Material(const Material& other) = default;
 
         std::string name{};
-        std::shared_ptr<const Pipeline> pipeline{};
-    };
-    class DefaultMaterial : public Material
-    {
-    public:
-        DefaultMaterial(const std::string& name, std::shared_ptr<const Pipeline> pipeline)
-            : Material{ name, pipeline } {}
-        DefaultMaterial(const DefaultMaterial& other) = default;
 
-        Vector3f color{ 1.0f, 1.0f, 1.0f }; //Required to be vec4 because of GPU alignment
-        std::shared_ptr<Texture2D> albedo{};
-        std::shared_ptr<Texture2D> normal{};
+        Vector3f color{ 1.0f, 1.0f, 1.0f };
+
+        std::shared_ptr<Texture2D> albedoMap{};
+        std::shared_ptr<Texture2D> normalMap{};
+        std::shared_ptr<Texture2D> metallicMap{};
+
         float metallic{ 0.0f };
         float roughness{ 0.0f };
     };

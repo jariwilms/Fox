@@ -21,9 +21,9 @@ namespace hlx
         struct RenderInfo
         {
         public:
-            const Camera& camera{};
-            const Transform& cameraPosition{};
-            std::span<std::tuple<Light, Vector3f> const> lights{};
+            const Camera& camera;
+            const Transform& cameraTransform;
+            std::span<const std::tuple<Light, Vector3f>, 32> lights;
         };
 
         virtual ~RendererAPI() = default;
@@ -31,7 +31,7 @@ namespace hlx
         virtual void start(const RenderInfo& renderInfo) = 0;
         virtual void finish() = 0;
 
-        virtual void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const DefaultMaterial> material, const Transform& transform) = 0;
+        virtual void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform) = 0;
 
     protected:
         RendererAPI() = default;

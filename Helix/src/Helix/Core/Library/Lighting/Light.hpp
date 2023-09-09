@@ -22,11 +22,11 @@ namespace hlx
         };
 
         Type type{};
-        //Mode mode{};
         Vector3f color{};
-
-        float range{};
-        float angle{};
-        float intensity{};
+        float radius{};
     };
+    //struct DirectionalLight : Light
+    //{
+    //    float angle{};
+    //};
 }

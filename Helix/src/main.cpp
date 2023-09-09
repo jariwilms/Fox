@@ -109,8 +109,12 @@ int main(int argc, char** argv)
 
 
     hlx::ModelImporter modelImporter{};
-    auto box = modelImporter.import(R"(models/cube.glb)");
-    //auto box = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
+#ifdef _DEBUG
+    auto box = modelImporter.import(R"(models/cube_textured/scene.gltf)");
+#endif
+#ifndef _DEBUG
+    auto box = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
+#endif
     auto boxActor = model_to_scene_graph(scene.get(), box, nullptr, box->rootNode.get());
 
 
@@ -147,12 +151,26 @@ int main(int argc, char** argv)
 
 
 
+    //Testing
+    auto lightingCubeMaterial = std::make_shared<Material>("Default");
+    lightingCubeMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
+    lightingCubeMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
+    lightingCubeMaterial->metallicMap = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
+
+    auto lightingCubeMesh = std::make_shared<Mesh>(Geometry::Cube::vao());
+    Transform lightingCubeTransform{};
+    lightingCubeTransform.translate(Vector3f{ 1.0f, 1.0f, 0.0f });
+    lightingCubeTransform.dilate(Vector3f{ 0.1f, 0.1f, 0.1f });
+    //#######
 
 
 
 
 
-    std::vector<std::tuple<Light, Vector3f>> lights{ 32 };
+
+
+
+    std::array<std::tuple<Light, Vector3f>, 32> lights{};
 
 
 
@@ -181,6 +199,19 @@ int main(int argc, char** argv)
             cameraTransform.rotation = Quaternion{ glm::radians(rotation) };
         }
 
+
+
+
+
+
+        lightingCubeTransform.position += Time::delta() * Vector3f{ 0.2f, 0.0f, 0.0f };
+        lights.at(0) = std::make_tuple(Light{ .color = {1.0f, 0.0f, 0.0f}, .radius = 10.0f }, lightingCubeTransform.position);
+
+
+
+
+
+
         //The render system starts running here and submits all models/meshes to the renderer
         //So, TODO: RenderSystem::update, which calls the code below
         Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
@@ -189,8 +220,19 @@ int main(int argc, char** argv)
             {
                 Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
             });
+        Renderer::render(lightingCubeMesh, lightingCubeMaterial, lightingCubeTransform);
         Renderer::finish();
         
+
+
+
+
+        
+
+
+
+
+
 
 
 		window->refresh();

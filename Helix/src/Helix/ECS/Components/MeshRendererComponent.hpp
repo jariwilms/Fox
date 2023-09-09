@@ -33,7 +33,7 @@ namespace hlx
         };
 
         std::shared_ptr<Mesh> mesh{};
-        std::shared_ptr<DefaultMaterial> material{};
+        std::shared_ptr<Material> material{};
         //LightingOptions lightingOptions{};
     };
 }

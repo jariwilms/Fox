@@ -22,7 +22,7 @@ namespace hlx
         Vector4f color{};
         float linear{};
         float quadratic{};
-        float radius{ 1.0f };
+        float radius{};
     };
     struct UCamera //std140, binding 3
     {

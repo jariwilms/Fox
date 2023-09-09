@@ -12,7 +12,6 @@ namespace hlx
 	class OpenGLFrameBuffer : public FrameBuffer
 	{
 	public:
-		//OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<Texture2DSpec>& textures, const std::vector<RenderBufferSpec> renderBuffers);
 		OpenGLFrameBuffer(const Vector2u& dimensions, const std::vector<Texture2DBlueprintSpec>& textures, const std::vector<RenderBufferBlueprintSpec>& renderBuffers, Option options = Option::None);
 		~OpenGLFrameBuffer();
 
@@ -20,8 +19,10 @@ namespace hlx
 		void unbind() const override;
 		bool is_bound() const override;
 
-		void bind_texture(const std::string identifier, unsigned int slot) override; //TODO: string& ?
-		
+		void bind_texture(const std::string& identifier, unsigned int slot) override;
+
+		std::shared_ptr<Texture2D> texture(const std::string& identifier) override;
+
 	private:
 		GLenum m_internalBoundTarget{};
 	};
