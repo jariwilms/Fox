@@ -105,6 +105,16 @@ namespace hlx
 
         
 
+
+
+
+        m_mmt.clear();
+
+
+
+
+
+
         m_gBufferMultisample->bind(FrameBuffer::Target::Write);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -113,11 +123,30 @@ namespace hlx
     }
     void OpenGLRenderer::finish()
     {
+        m_pipelines.at("Mesh")->bind();
+        for (const auto& mmt : m_mmt)
+        {
+            const auto& [mesh, material, transform] = mmt;
+
+            m_matricesBuffer->copy_tuple(offsetof(UMatrices, model), std::make_tuple(transform.matrix()));
+            m_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
+
+            const auto& vao = mesh->vao();
+            vao->bind();
+            if (vao->indexed()) vao->indices()->bind();
+
+            m_materialBuffer->copy(UMaterial{ material->color, material->roughness, material->metallic });
+            material->albedoMap->bind(0);
+            material->normalMap->bind(1);
+            material->armMap->bind(2);
+            material->emissionMap->bind(3);
+
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->count()), GL_UNSIGNED_INT, nullptr);
+        }
+
+        
+
         glDisable(GL_CULL_FACE);
-
-
-        
-        
 
 
 
@@ -178,20 +207,6 @@ namespace hlx
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform)
     {
-        m_pipelines.at("Mesh")->bind();
-        m_matricesBuffer->copy_tuple(offsetof(UMatrices, model),  std::make_tuple(transform.matrix()));
-        m_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
-
-        const auto& vao = mesh->vao();
-        vao->bind();
-        if (vao->indexed()) vao->indices()->bind();
-
-        m_materialBuffer->copy(UMaterial{ material->color, material->roughness, material->metallic });
-        material->albedoMap->bind(0);
-        material->normalMap->bind(1);
-        material->armMap->bind(2);
-        material->emissionMap->bind(3);
-
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->count()), GL_UNSIGNED_INT, nullptr);
+        m_mmt.emplace_back(mesh, material, transform);
     }
 }

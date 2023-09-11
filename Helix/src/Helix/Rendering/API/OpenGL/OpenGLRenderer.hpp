@@ -39,6 +39,6 @@ namespace hlx
         std::shared_ptr<UniformArrayBuffer<ULight>> m_lightBuffer{};
         std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};
 
-        std::vector<std::tuple<const std::shared_ptr<const Mesh>, const std::shared_ptr<const Material>, const Transform&>> m_meshes{};
+        std::vector<std::tuple<const std::shared_ptr<const Mesh>, const std::shared_ptr<const Material>, const Transform>> m_mmt{};
     };
 }
