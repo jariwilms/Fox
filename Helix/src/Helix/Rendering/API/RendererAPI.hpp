@@ -23,7 +23,7 @@ namespace hlx
         public:
             const Camera& camera;
             const Transform& cameraTransform;
-            std::span<const std::tuple<Light, Vector3f>, 32> lights;
+            std::span<const std::tuple<Light, Vector3f>, 8> lights;
         };
 
         virtual ~RendererAPI() = default;

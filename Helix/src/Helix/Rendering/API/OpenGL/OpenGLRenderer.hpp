@@ -27,15 +27,6 @@ namespace hlx
         void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform) override;
 
     private:
-        void swap_buffer()
-        {
-            static unsigned int bufferIndex{};
-            static const unsigned int bufferCount = m_ppBuffers.size();
-
-            ++bufferIndex %= bufferCount;
-
-        }
-
         std::shared_ptr<FrameBufferMultisample> m_gBufferMultisample{};
         std::shared_ptr<FrameBuffer> m_gBuffer{};
         std::array<std::shared_ptr<FrameBuffer>, 2> m_ppBuffers{};

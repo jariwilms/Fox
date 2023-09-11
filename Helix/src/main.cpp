@@ -104,18 +104,20 @@ int main(int argc, char** argv)
     auto observer = scene->create_actor();
     auto& camera = observer->add_component<CameraComponent>();
     auto& cameraTransform = observer->get_component<TransformComponent>();
-    cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 3.0f });
+    cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
 
 
 
     hlx::ModelImporter modelImporter{};
 #ifdef _DEBUG
-    auto box = modelImporter.import(R"(models/cube_textured/scene.gltf)");
+    //auto model = modelImporter.import(R"(models/cube_textured/scene.gltf)");
+    auto model = modelImporter.import(R"(models/fish/scene.gltf)");
 #endif
 #ifndef _DEBUG
-    auto box = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
+    //auto model = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
+    auto model = modelImporter.import(R"(models/fish/scene.gltf)");
 #endif
-    auto boxActor = model_to_scene_graph(scene.get(), box, nullptr, box->rootNode.get());
+    auto modelActor = model_to_scene_graph(scene.get(), model, nullptr, model->rootNode.get());
 
 
 
@@ -151,26 +153,27 @@ int main(int argc, char** argv)
 
 
 
-    //Testing
-    auto lightingCubeMaterial = std::make_shared<Material>("Default");
-    lightingCubeMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
-    lightingCubeMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
-    lightingCubeMaterial->metallicMap = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
+    ////Testing
+    //auto lightingCubeMaterial = std::make_shared<Material>("Default");
+    //lightingCubeMaterial->albedoMap = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
+    //lightingCubeMaterial->normalMap = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
+    //lightingCubeMaterial->armMap    = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
 
-    auto lightingCubeMesh = std::make_shared<Mesh>(Geometry::Cube::vao());
-    Transform lightingCubeTransform{};
-    lightingCubeTransform.translate(Vector3f{ 1.0f, 1.0f, 0.0f });
-    lightingCubeTransform.dilate(Vector3f{ 0.1f, 0.1f, 0.1f });
-    //#######
+    //auto lightingCubeMesh = std::make_shared<Mesh>(Geometry::Cube::vao());
+    //Transform lightingCubeTransform{};
+    //lightingCubeTransform.translate(Vector3f{ 1.0f, 1.0f, 0.0f });
+    //lightingCubeTransform.dilate(Vector3f{ 0.1f, 0.1f, 0.1f });
+    ////#######
 
-
-
-
-
+    std::array<std::tuple<Light, Vector3f>, 8> lights{};
+    lights.at(0) = std::make_tuple(Light{ .color = { 20.0f, 20.0f, 20.0f } }, Vector3f{ 5.0f, 0.0f, 0.0f });
 
 
 
-    std::array<std::tuple<Light, Vector3f>, 32> lights{};
+
+
+
+
 
 
 
@@ -204,8 +207,8 @@ int main(int argc, char** argv)
 
 
 
-        lightingCubeTransform.position += Time::delta() * Vector3f{ 0.2f, 0.0f, 0.0f };
-        lights.at(0) = std::make_tuple(Light{ .color = {1.0f, 0.0f, 0.0f}, .radius = 10.0f }, lightingCubeTransform.position);
+        //lightingCubeTransform.position += Time::delta() * Vector3f{ 0.2f, 0.0f, 0.0f };
+        //lights.at(0) = std::make_tuple(Light{ .color = {1.0f, 0.0f, 0.0f}, .radius = 10.0f }, lightingCubeTransform.position);
 
 
 
@@ -220,7 +223,7 @@ int main(int argc, char** argv)
             {
                 Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
             });
-        Renderer::render(lightingCubeMesh, lightingCubeMaterial, lightingCubeTransform);
+        //Renderer::render(lightingCubeMesh, lightingCubeMaterial, lightingCubeTransform);
         Renderer::finish();
         
 

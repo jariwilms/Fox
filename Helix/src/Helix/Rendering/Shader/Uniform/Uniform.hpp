@@ -9,20 +9,18 @@ namespace hlx
         Matrix4f model{ 1.0f };
         Matrix4f view{ 1.0f };
         Matrix4f projection{ 1.0f };
+        Matrix4f normal{ 1.0f };
     };
     struct UMaterial //std140, binding 1
     {
-        Vector4f color{ 1.0f };
-        float metallic{};
+        Vector4f color{};
         float roughness{};
+        float metallic{};
     };
     struct ULight //std140, binding 2
     {
         Vector4f position{};
         Vector4f color{};
-        float linear{};
-        float quadratic{};
-        float radius{};
     };
     struct UCamera //std140, binding 3
     {

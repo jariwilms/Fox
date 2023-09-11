@@ -21,12 +21,13 @@ namespace hlx
             m_defaultMaterial = std::make_shared<Material>("Default");
             m_defaultMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
             m_defaultMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
-            m_defaultMaterial->metallicMap = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
+            m_defaultMaterial->armMap      = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x00, 0x00, 0x00 });
+            m_defaultMaterial->emissionMap = GraphicsAPI::create_tex(Texture::Format::RGB, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0x00 });
 
             m_layout3f = std::make_shared<VertexLayout>();
-            m_layout3f->specify<float>(3);
-
             m_layout2f = std::make_shared<VertexLayout>();
+
+            m_layout3f->specify<float>(3);
             m_layout2f->specify<float>(2);
         }
 
@@ -141,31 +142,52 @@ namespace hlx
             {
                 auto material = std::make_shared<Material>(*m_defaultMaterial);
 
-                if (aiString aiMaterialName; aiMaterial->Get(AI_MATKEY_NAME, aiMaterialName) == aiReturn_SUCCESS && aiMaterialName.length > 0) material->name = aiMaterialName.C_Str();
+                if (aiString aiMaterialName{}; aiMaterial->Get(AI_MATKEY_NAME, aiMaterialName) == aiReturn_SUCCESS && aiMaterialName.length > 0) material->name = aiMaterialName.C_Str();
                 else material->name = "Default";
 
-                if (aiColor3D aiDiffuseColor;  aiMaterial->Get(AI_MATKEY_COLOR_DIFFUSE, aiDiffuseColor) == aiReturn_SUCCESS)
+                if (aiColor3D aiBaseColor{}; aiMaterial->Get(AI_MATKEY_BASE_COLOR, aiBaseColor) == aiReturn_SUCCESS)
                 {
-                    material->color = Vector3f{ aiDiffuseColor.r, aiDiffuseColor.g, aiDiffuseColor.b };
+                    material->color = Vector4f{ aiBaseColor.r, aiBaseColor.g, aiBaseColor.b, 1.0f };
                 }
-                if (aiString aiMaterialDiffuse; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), aiMaterialDiffuse) == aiReturn_SUCCESS)
+                if (aiString aiAlbedoTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_BASE_COLOR_TEXTURE, &aiAlbedoTexturePath) == aiReturn_SUCCESS)
                 {
-                    const auto aiMaterialDiffuseImage = std::make_shared<Image>(baseDirectory / aiMaterialDiffuse.C_Str());
-                    const auto aiMaterialDiffuseTexture = textureBlueprint.build(aiMaterialDiffuseImage, 4u, true);
-                    material->albedoMap = aiMaterialDiffuseTexture;
+                    const auto albedoImage   = std::make_shared<Image>(baseDirectory / aiAlbedoTexturePath.C_Str());
+                    const auto albedoTexture = textureBlueprint.build(albedoImage, 4u, true);
+                    material->albedoMap = albedoTexture;
                 }
-                if (aiString aiMaterialNormal; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_NORMALS, 0), aiMaterialNormal) == aiReturn_SUCCESS)
+                if (aiString aiNormalTexturePath{}; aiMaterial->GetTexture(aiTextureType_NORMALS, 0, &aiNormalTexturePath) == aiReturn_SUCCESS)
                 {
-                    const auto aiMaterialNormalImage = std::make_shared<Image>(baseDirectory / aiMaterialNormal.C_Str());
-                    const auto aiMaterialNormalTexture = textureBlueprint.build(aiMaterialNormalImage);
-                    material->normalMap = aiMaterialNormalTexture;
+                    const auto normalImage = std::make_shared<Image>(baseDirectory / aiNormalTexturePath.C_Str());
+                    const auto normalTexture = textureBlueprint.build(normalImage, 4u, true);
+                    material->normalMap = normalTexture;
                 }
-                if (aiString aiMaterialMetallic; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_METALNESS, 0), aiMaterialMetallic) == aiReturn_SUCCESS)
+                if (ai_real aiRoughnessFactor{}; aiMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, aiRoughnessFactor) == aiReturn_SUCCESS)
                 {
-                    const auto aiMaterialMetallicImage = std::make_shared<Image>(baseDirectory / aiMaterialMetallic.C_Str());
-                    const auto aiMaterialMetallicTexture = textureBlueprint.build(aiMaterialMetallicImage);
-                    material->metallicMap = aiMaterialMetallicTexture;
+                    material->roughness = aiRoughnessFactor;
                 }
+                if (ai_real aiMetallicFactor{}; aiMaterial->Get(AI_MATKEY_METALLIC_FACTOR, aiMetallicFactor) == aiReturn_SUCCESS)
+                {
+                    material->metallic = aiMetallicFactor;
+                }
+                if (aiString aiRoughnessMetallicTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_METALLIC_TEXTURE, &aiRoughnessMetallicTexturePath) == aiReturn_SUCCESS)
+                {
+                    const auto aiRoughnessMetallicImage = std::make_shared<Image>(baseDirectory / aiRoughnessMetallicTexturePath.C_Str());
+                    const auto aiRoughnessMetallicTexture = textureBlueprint.build(aiRoughnessMetallicImage, 4u, true);
+                    material->armMap = aiRoughnessMetallicTexture;
+                }
+                //if (aiString aiAmbientTexturePath{}; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0), aiAmbientTexturePath) == aiReturn_SUCCESS)
+                //{
+                //    const auto aiAmbientImage = std::make_shared<Image>(baseDirectory / aiAmbientTexturePath.C_Str());
+                //    const auto aiAmbientTexture = textureBlueprint.build(aiAmbientImage, 4u, true);
+                //    //material-> = aiRoughnessTexture;
+                //    static_assert(false);
+                //}
+                //if (aiString aiEmissionTexturePath{}; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_EMISSIVE, 0), aiEmissionTexturePath) == aiReturn_SUCCESS)
+                //{
+                //    const auto emissionImage = std::make_shared<Image>(baseDirectory / aiEmissionTexturePath.C_Str());
+                //    const auto emissionTexture = textureBlueprint.build(emissionImage, 4u, true);
+                //    material->emissionMap = emissionTexture;
+                //}
 
                 model->materials.emplace_back(material);
             }

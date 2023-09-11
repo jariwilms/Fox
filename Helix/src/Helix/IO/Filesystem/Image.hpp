@@ -2,7 +2,8 @@
 
 #include "stdafx.hpp"
 
-#pragma warning(push, 0)
+#pragma warning(push)
+#pragma warning(disable: 6262 26827 26819 26451)
 #include <stb_image.h>
 #pragma warning(pop)
 
