@@ -158,7 +158,7 @@ namespace hlx
                 if (aiString aiNormalTexturePath{}; aiMaterial->GetTexture(aiTextureType_NORMALS, 0, &aiNormalTexturePath) == aiReturn_SUCCESS)
                 {
                     const auto normalImage = std::make_shared<Image>(baseDirectory / aiNormalTexturePath.C_Str());
-                    const auto normalTexture = textureBlueprint.build(normalImage, 4u, true);
+                    const auto normalTexture = textureBlueprint.build(normalImage, 4u, false);
                     material->normalMap = normalTexture;
                 }
                 if (ai_real aiRoughnessFactor{}; aiMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, aiRoughnessFactor) == aiReturn_SUCCESS)
@@ -172,7 +172,7 @@ namespace hlx
                 if (aiString aiRoughnessMetallicTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_METALLIC_TEXTURE, &aiRoughnessMetallicTexturePath) == aiReturn_SUCCESS)
                 {
                     const auto aiRoughnessMetallicImage = std::make_shared<Image>(baseDirectory / aiRoughnessMetallicTexturePath.C_Str());
-                    const auto aiRoughnessMetallicTexture = textureBlueprint.build(aiRoughnessMetallicImage, 4u, true);
+                    const auto aiRoughnessMetallicTexture = textureBlueprint.build(aiRoughnessMetallicImage, 4u, false);
                     material->armMap = aiRoughnessMetallicTexture;
                 }
                 //if (aiString aiAmbientTexturePath{}; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0), aiAmbientTexturePath) == aiReturn_SUCCESS)

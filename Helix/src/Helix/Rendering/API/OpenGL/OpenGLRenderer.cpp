@@ -23,6 +23,15 @@ namespace hlx
         m_gBuffer = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
 
+        std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> shadowMapBufferTextureBlueprint
+        {
+            std::make_tuple("Color", FrameBuffer::Attachment::Depth, TextureBlueprint{ Texture::Format::D, Texture::ColorDepth::_24bit, }),
+        };
+
+        FrameBufferBlueprint shadowMapBufferBlueprint{ shadowMapBufferTextureBlueprint, {} };
+        m_shadowMapBuffer = shadowMapBufferBlueprint.build(Vector2f{ 1024, 1024 });
+
+
 
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> ppBufferTextureBlueprint
         {
@@ -30,7 +39,7 @@ namespace hlx
         };
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> ppBufferRenderBufferBlueprint
         {
-            std::make_tuple("Depth", FrameBuffer::Attachment::Depth, RenderBufferBlueprint{ RenderBuffer::Type::Depth, RenderBuffer::Layout::Depth24 }),
+            std::make_tuple("Depth", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 }),
         };
 
         FrameBufferBlueprint ppBufferBlueprint{ ppBufferTextureBlueprint, ppBufferRenderBufferBlueprint };
@@ -55,9 +64,9 @@ namespace hlx
 
 
         //TODO: maybe predefined pipeline names (constexpr?), these will probably not change anyways
-        m_pipelines.emplace("Geometry", GraphicsAPI::create_plo("shaders/compiled/geometry_pbrvert.spv", "shaders/compiled/geometry_pbrfrag.spv"));
-        m_pipelines.emplace("Lighting", GraphicsAPI::create_plo("shaders/compiled/lighting_pbrvert.spv", "shaders/compiled/lighting_pbrfrag.spv"));
-        m_pipelines.emplace("Skybox",   GraphicsAPI::create_plo("shaders/compiled/skyboxvert.spv",       "shaders/compiled/skyboxfrag.spv"));
+        m_pipelines.emplace("Mesh", GraphicsAPI::create_plo("shaders/compiled/mesh.vert.spv",    "shaders/compiled/mesh.frag.spv"));
+        m_pipelines.emplace("Lighting", GraphicsAPI::create_plo("shaders/compiled/lighting.vert.spv", "shaders/compiled/lighting.frag.spv"));
+        m_pipelines.emplace("Skybox",   GraphicsAPI::create_plo("shaders/compiled/skybox.vert.spv",  "shaders/compiled/skybox.frag.spv"));
 
 
 
@@ -94,7 +103,7 @@ namespace hlx
         m_cameraBuffer->copy(UCamera{ Vector4f{ transform.position, 0.0f } });
         m_lightBuffer->copy(uLights);
 
-
+        
 
         m_gBufferMultisample->bind(FrameBuffer::Target::Write);
 
@@ -169,7 +178,7 @@ namespace hlx
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform)
     {
-        m_pipelines.at("Geometry")->bind();
+        m_pipelines.at("Mesh")->bind();
         m_matricesBuffer->copy_tuple(offsetof(UMatrices, model),  std::make_tuple(transform.matrix()));
         m_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 

@@ -29,6 +29,7 @@ namespace hlx
     private:
         std::shared_ptr<FrameBufferMultisample> m_gBufferMultisample{};
         std::shared_ptr<FrameBuffer> m_gBuffer{};
+        std::shared_ptr<FrameBuffer> m_shadowMapBuffer{};
         std::array<std::shared_ptr<FrameBuffer>, 2> m_ppBuffers{};
 
         std::unordered_map<std::string, std::shared_ptr<Pipeline>> m_pipelines{}; 
@@ -37,5 +38,7 @@ namespace hlx
         std::shared_ptr<UniformBuffer<UMaterial>> m_materialBuffer{};          //TODO: Convert UniformArrayBuffer
         std::shared_ptr<UniformArrayBuffer<ULight>> m_lightBuffer{};
         std::shared_ptr<UniformBuffer<UCamera>> m_cameraBuffer{};
+
+        std::vector<std::tuple<const std::shared_ptr<const Mesh>, const std::shared_ptr<const Material>, const Transform&>> m_meshes{};
     };
 }
