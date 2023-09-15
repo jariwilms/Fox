@@ -32,14 +32,6 @@ using namespace hlx;
 
 
 
-//Mip levels with base included (+1)
-unsigned int mip_count(const Vector2u& dimensions)
-{
-    return static_cast<unsigned int>(std::floor(std::log2(std::max(dimensions.x, dimensions.y)))) + 1u;
-}
-
-
-
 Transform transform_product(TransformComponent& tc)
 {
     auto& owner = tc.owner;
@@ -98,8 +90,6 @@ int main(int argc, char** argv)
 
 
 
-
-
     auto scene = std::make_shared<Scene>();
     auto observer = scene->create_actor();
     auto& camera = observer->add_component<CameraComponent>();
@@ -136,7 +126,7 @@ int main(int argc, char** argv)
         IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(),
         IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(),
     };
-    std::array<std::span<const byte>, 6> def
+    std::array<std::span<const byte>, 6> skyboxImageData
     {
         *skyboxImages[0],
         *skyboxImages[1],
@@ -146,8 +136,8 @@ int main(int argc, char** argv)
         *skyboxImages[5],
     };
 
-    RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ColorDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, def);
-
+    //RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ChannelDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, skyboxImageData);
+    RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, typeid(byte), skyboxImageData);
 
 
 

@@ -77,18 +77,18 @@ namespace hlx
         {
             return std::make_shared<OpenGLFrameBufferMultisample>(dimensions, samples, textures, renderBuffers);
         }
-        static std::shared_ptr<RenderBuffer>           create_rbo(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions)
+        static std::shared_ptr<RenderBuffer>           create_rbo(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions)
         {
-            return std::make_shared<OpenGLRenderBuffer>(type, colorDepth, dimensions);
+            return std::make_shared<OpenGLRenderBuffer>(type, layout, dimensions);
         }
-        static std::shared_ptr<RenderBuffer>           create_rbo_ms(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions, unsigned int multiSamples)
+        static std::shared_ptr<RenderBuffer>           create_rbo_ms(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions, unsigned int samples)
         {
-            return std::make_shared<OpenGLRenderBufferMultisample>(type, colorDepth, dimensions, multiSamples);
+            return std::make_shared<OpenGLRenderBufferMultisample>(type, layout, dimensions, samples);
         }
                                                        
-        static std::shared_ptr<Shader>                 create_sho(Shader::Type type, std::span<const byte> binary)
+        static std::shared_ptr<Shader>                 create_sho(Shader::Stage stage, std::span<const byte> binary)
         {
-            return std::make_shared<OpenGLShader>(type, binary);
+            return std::make_shared<OpenGLShader>(stage, binary);
         }
         static std::shared_ptr<Pipeline>               create_plo()
         {
@@ -102,30 +102,36 @@ namespace hlx
         {
             const auto vertexSource = IO::load<File>(vertexPath)->read();
             const auto fragmentSource = IO::load<File>(fragmentPath)->read();
-            auto vertexShader = GraphicsAPI::create_sho(Shader::Type::Vertex, *vertexSource);
-            if (!vertexShader->valid()) throw std::runtime_error{ vertexShader->error().data() };
-            auto fragmentShader = GraphicsAPI::create_sho(Shader::Type::Fragment, *fragmentSource);
-            if (!fragmentShader->valid()) throw std::runtime_error{ fragmentShader->error().data() };
+            auto vertexShader = GraphicsAPI::create_sho(Shader::Stage::Vertex, *vertexSource);
+            auto fragmentShader = GraphicsAPI::create_sho(Shader::Stage::Fragment, *fragmentSource);
 
             return create_plo({ vertexShader, fragmentShader });
         }
 
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::ColorDepth colorDepth, const Vector2u& dimensions, Texture::Filter filter, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, unsigned int mipLevels, bool sRGB)
+        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector2u& dimensions)
         {
-            return std::make_shared<OpenGLTexture2D>(format, colorDepth, dimensions, filter, wrappingS, wrappingT, mipLevels, sRGB);
+            return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions);
         }
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::ColorDepth colorDepth, const Vector2u& dimensions, Texture::Filter filter, Texture::Wrapping wrappingS, Texture::Wrapping wrappingT, unsigned int mipLevels, bool sRGB, Texture::Format dataFormat, std::span<const byte> data)
+        template<typename T>
+        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector2u& dimensions, Texture::Components dataComponents, std::span<const T> data)
         {
-            return std::make_shared<OpenGLTexture2D>(format, colorDepth, dimensions, filter, wrappingS, wrappingT, mipLevels, sRGB, dataFormat, data);
+            return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions, dataComponents, typeid(T), std::as_bytes(data));
         }
-        
-        static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, Texture::ColorDepth colorDepth, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, bool sRGB)
+        static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, const Vector2u& dimensions, unsigned int samples)
         {
-            return std::make_shared<OpenGLTexture2DMultisample>(format, colorDepth, dimensions, mipLevels, samples, sRGB);
-        }
-        static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, Texture::ColorDepth colorDepth, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, bool sRGB, Texture::Format dataFormat, std::span<const byte> data)
-        {
-            return std::make_shared<OpenGLTexture2DMultisample>(format, colorDepth, dimensions, mipLevels, samples, sRGB, dataFormat, data);
+            return std::make_shared<OpenGLTexture2DMultisample>(format, dimensions, samples);
         }
     };
+    //class Test
+    //{
+    //    template<typename T, typename... Args> std::shared_ptr<T> create(Args... args) = delete;
+    //    template<> std::shared_ptr<Shader> create<Shader>(int a, int b)
+    //    {
+
+    //    }
+    //    template<> std::shared_ptr<Pipeline> create<Pipeline>(int a, int b)
+    //    {
+
+    //    }
+    //};
 }

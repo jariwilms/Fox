@@ -7,6 +7,22 @@ using word  = unsigned short;
 using dword = unsigned int;
 using qword = unsigned long long;
 
+enum class FundamentalType
+{
+    Void, 
+
+    Bool, 
+
+    Byte,     UnsignedByte, 
+    Short,    UnsignedShort, 
+    Int,      UnsignedInt, 
+    Long,     UnsignedLong, 
+    LongLong, UnsignedLongLong, 
+
+    Float, 
+    Double, 
+};
+
 using Vector2i = glm::ivec2;
 using Vector3i = glm::ivec3;
 using Vector4i = glm::ivec4;
@@ -21,4 +37,5 @@ using Matrix3f = glm::mat3;
 using Matrix4f = glm::mat4;
 using Quaternion = glm::quat;
 
+using t_hash = size_t;
 using Id = unsigned int;

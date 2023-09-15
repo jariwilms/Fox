@@ -4,29 +4,32 @@
 
 namespace hlx
 {
-    OpenGLRenderBufferMultisample::OpenGLRenderBufferMultisample(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions, unsigned int samples)
-        : RenderBufferMultisample{ type, colorDepth, dimensions, samples }
+    OpenGLRenderBufferMultisample::OpenGLRenderBufferMultisample(Type type, Layout layout, const Vector2u& dimensions, unsigned int samples)
+        : RenderBufferMultisample{ type, layout, dimensions, samples }
     {
-        m_internalFormat = OpenGL::renderbuffer_layout(colorDepth);
+        m_internalTarget = GL_RENDERBUFFER;
+        m_internalFormat = OpenGL::renderbuffer_layout(layout);
 
-        glCreateRenderbuffers(1, &m_id);
-        glNamedRenderbufferStorageMultisample(m_id, m_samples, m_internalFormat, m_dimensions.x, m_dimensions.y);
+        glCreateRenderbuffers(1, &m_internalId);
+        glNamedRenderbufferStorageMultisample(m_internalId, m_samples, m_internalFormat, m_dimensions.x, m_dimensions.y);
     }
     OpenGLRenderBufferMultisample::~OpenGLRenderBufferMultisample()
     {
-        glDeleteRenderbuffers(1, &m_id);
+        glDeleteRenderbuffers(1, &m_internalId);
     }
 
-    void OpenGLRenderBufferMultisample::bind() const
+    void OpenGLRenderBufferMultisample::bind()     const
     {
-        glBindRenderbuffer(m_internalTarget, m_id);
+        glBindRenderbuffer(m_internalTarget, m_internalId);
     }
-    void OpenGLRenderBufferMultisample::unbind() const
+    void OpenGLRenderBufferMultisample::unbind()   const
     {
+        if (m_internalId != s_boundRenderBufferId) return;
+
         glBindRenderbuffer(m_internalTarget, 0);
     }
     bool OpenGLRenderBufferMultisample::is_bound() const
     {
-        return false;
+        return m_internalId == s_boundRenderBufferId;
     }
 }

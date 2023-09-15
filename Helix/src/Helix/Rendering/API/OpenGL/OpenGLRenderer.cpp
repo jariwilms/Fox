@@ -8,10 +8,10 @@ namespace hlx
     {
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> gBufferTextureBlueprints
         {
-            std::make_tuple("Position", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB,  Texture::ColorDepth::_16bit, }),
-            std::make_tuple("Albedo",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA, Texture::ColorDepth::_8bit, }),
-            std::make_tuple("Normal",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB,  Texture::ColorDepth::_16bit, }),
-            std::make_tuple("ARM",      FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA, Texture::ColorDepth::_8bit, }),
+            std::make_tuple("Position", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
+            std::make_tuple("Albedo",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
+            std::make_tuple("Normal",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
+            std::make_tuple("ARM",      FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
         };
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> gBufferRenderBufferBlueprints
         {
@@ -25,7 +25,7 @@ namespace hlx
 
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> shadowMapBufferTextureBlueprint
         {
-            std::make_tuple("Color", FrameBuffer::Attachment::Depth, TextureBlueprint{ Texture::Format::D, Texture::ColorDepth::_24bit, }),
+            std::make_tuple("Color", FrameBuffer::Attachment::Depth, TextureBlueprint{ Texture::Format::D24_UNORM }),
         };
 
         FrameBufferBlueprint shadowMapBufferBlueprint{ shadowMapBufferTextureBlueprint, {} };
@@ -35,7 +35,7 @@ namespace hlx
 
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> ppBufferTextureBlueprint
         {
-            std::make_tuple("Color", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB, Texture::ColorDepth::_16bit, }),
+            std::make_tuple("Color", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA16_UNORM }),
         };
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> ppBufferRenderBufferBlueprint
         {
@@ -64,9 +64,9 @@ namespace hlx
 
 
         //TODO: maybe predefined pipeline names (constexpr?), these will probably not change anyways
-        m_pipelines.emplace("Mesh", GraphicsAPI::create_plo("shaders/compiled/mesh.vert.spv",    "shaders/compiled/mesh.frag.spv"));
+        m_pipelines.emplace("Mesh",     GraphicsAPI::create_plo("shaders/compiled/mesh.vert.spv",     "shaders/compiled/mesh.frag.spv"));
         m_pipelines.emplace("Lighting", GraphicsAPI::create_plo("shaders/compiled/lighting.vert.spv", "shaders/compiled/lighting.frag.spv"));
-        m_pipelines.emplace("Skybox",   GraphicsAPI::create_plo("shaders/compiled/skybox.vert.spv",  "shaders/compiled/skybox.frag.spv"));
+        m_pipelines.emplace("Skybox",   GraphicsAPI::create_plo("shaders/compiled/skybox.vert.spv",   "shaders/compiled/skybox.frag.spv"));
 
 
 
@@ -151,15 +151,18 @@ namespace hlx
 
 
         //Multisampled framebuffer textures can not be sampled like a regular framebuffer, so we have to copy it into a regular framebuffer
+        const auto& glBufferMultisample = std::static_pointer_cast<OpenGLFrameBufferMultisample>(m_gBufferMultisample);
+        const auto& glBuffer            = std::static_pointer_cast<OpenGLFrameBuffer>(m_gBuffer);
+
         const auto width{ 1280 };
         const auto height{ 720 };
         for (auto i{ 0u }; i < 4; ++i)
         {
-            glNamedFramebufferReadBuffer(m_gBufferMultisample->id(), GL_COLOR_ATTACHMENT0 + i);
-            glNamedFramebufferDrawBuffer(m_gBuffer->id(), GL_COLOR_ATTACHMENT0 + i);
-            glBlitNamedFramebuffer(m_gBufferMultisample->id(), m_gBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            glNamedFramebufferReadBuffer(glBufferMultisample->internal_id(), GL_COLOR_ATTACHMENT0 + i);
+            glNamedFramebufferDrawBuffer(glBuffer->internal_id(), GL_COLOR_ATTACHMENT0 + i);
+            glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->internal_id(), 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
-        glBlitNamedFramebuffer(m_gBufferMultisample->id(), m_gBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->internal_id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 
         
@@ -192,17 +195,19 @@ namespace hlx
             m_pipelines.at("Skybox")->bind();
             skybox->bind(0);
 
+            const auto& glPPBuffer = std::static_pointer_cast<OpenGLFrameBuffer>(m_ppBuffers[0]);
+
             glEnable(GL_DEPTH_TEST);
-            glBlitNamedFramebuffer(m_gBuffer->id(), m_ppBuffers[0]->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBlitNamedFramebuffer(glBuffer->internal_id(), glPPBuffer->internal_id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Geometry::Cube::vao()->indices()->size()), GL_UNSIGNED_INT, nullptr);
             glDisable(GL_DEPTH_TEST);
         }
 
 
 
-        glBlitNamedFramebuffer(m_ppBuffers[0]->id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        //glNamedFramebufferReadBuffer(m_gBuffer->id(), GL_COLOR_ATTACHMENT0 + 3);
-        //glBlitNamedFramebuffer(m_gBuffer->id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        //glBlitNamedFramebuffer(m_ppBuffers[0]->id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glNamedFramebufferReadBuffer(glBuffer->internal_id(), GL_COLOR_ATTACHMENT0 + 0);
+        glBlitNamedFramebuffer(glBuffer->internal_id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     }
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform)

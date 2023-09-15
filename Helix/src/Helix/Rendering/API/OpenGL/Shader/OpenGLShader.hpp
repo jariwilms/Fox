@@ -13,10 +13,30 @@ namespace hlx
 	class OpenGLShader : public Shader
 	{
 	public:
-		OpenGLShader(Type type, std::span<const byte> binary);
+		OpenGLShader(Stage stage, std::span<const byte> binary);
 		~OpenGLShader();
 
+		GLuint internal_program() const
+		{
+			return m_internalProgram;
+		}
+		GLuint internal_shader()  const
+		{
+			return m_internalShader;
+		}
+		GLenum internal_stage()   const
+		{
+			return m_internalStage;
+		}
+		GLenum internal_type()    const
+		{
+			return m_internalType;
+		}
+
     private:
+		GLuint m_internalProgram{};
+		GLuint m_internalShader{};
 		GLenum m_internalStage{};
+		GLenum m_internalType{};
 	};
 }

@@ -2,11 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Interface/IBindable.hpp"
-
 namespace hlx
 {
-	class RenderBuffer : public IBindable
+	class RenderBuffer
 	{
 	public:
         enum class Type
@@ -35,11 +33,15 @@ namespace hlx
 
 		virtual ~RenderBuffer() = default;
 
-		Type type() const
+		virtual void bind() const = 0;
+		virtual void unbind() const = 0;
+		virtual bool is_bound() const = 0;
+
+		Type type()                  const
 		{
 			return m_type;
 		}
-		Layout colorDepth() const
+		Layout layout()              const
 		{
 			return m_layout;
 		}
@@ -49,11 +51,11 @@ namespace hlx
 		}
 
 	protected:
-		RenderBuffer(Type type, Layout colorDepth, const Vector2u& dimensions)
-			: m_type{ type }, m_layout{ colorDepth }, m_dimensions{ dimensions } {}
+		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions)
+			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions } {}
 
-		const Type m_type{};
-		const Layout m_layout{};
-		const Vector2u m_dimensions{};
+		Type m_type{};
+		Layout m_layout{};
+		Vector2u m_dimensions{};
 	};
 }

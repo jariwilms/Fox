@@ -31,18 +31,18 @@ namespace hlx
         void bind_base(unsigned int binding) override
         {
             m_binding = binding;
-            glBindBufferBase(m_internalTarget, m_binding, m_id);
+            glBindBufferBase(m_internalTarget, m_binding, m_internalId);
         }
         void bind_range(unsigned int binding, size_t size, size_t offset) override
         {
             m_binding = binding;
-            glBindBufferRange(m_internalTarget, m_binding, m_id, offset, size);
+            glBindBufferRange(m_internalTarget, m_binding, m_internalId, offset, size);
         }
 
     protected:
-        using IBindable::m_id;
-        using UniformBuffer<T>::m_binding;
+        using OpenGLBuffer<T>::m_internalId;
         using OpenGLBuffer<T>::m_internalTarget;
+        using UniformBuffer<T>::m_binding;
 
         void copy_range(size_t size, size_t offset, const void* data) override
         {

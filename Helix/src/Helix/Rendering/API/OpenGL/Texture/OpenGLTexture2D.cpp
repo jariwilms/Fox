@@ -4,67 +4,73 @@
 
 namespace hlx
 {
-    OpenGLTexture2D::OpenGLTexture2D(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB)
-		: Texture2D{ format, colorDepth, dimensions, filter, wrappingS, wrappingT, mipLevels, sRGB }
+    OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions)
+		: Texture2D{ format, filter, wrapping, dimensions }
     {
-        m_internalFormat = OpenGL::texture_format(m_format);
-        m_internalLayout = OpenGL::texture_layout(m_format, m_colorDepth, m_sRGB);
+		m_internalTarget    = GL_TEXTURE_2D;
+        m_internalFormat    = OpenGL::texture_format(m_format);
+		m_internalMinFilter = OpenGL::texture_min_filter(m_filter);
+		m_internalMagFilter = OpenGL::texture_mag_filter(m_filter);
+		m_internalWrapping  = OpenGL::texture_wrapping(m_wrapping);
 
-        glCreateTextures(m_internalTarget, 1, &m_id);
-        glTextureParameteri(m_id, GL_TEXTURE_WRAP_S, OpenGL::texture_wrapping(m_wrappingS));
-        glTextureParameteri(m_id, GL_TEXTURE_WRAP_T, OpenGL::texture_wrapping(m_wrappingT));
-        glTextureParameteri(m_id, GL_TEXTURE_MIN_FILTER, OpenGL::texture_min_filter(m_filter));
-        glTextureParameteri(m_id, GL_TEXTURE_MAG_FILTER, OpenGL::texture_mag_filter(m_filter));
-        glTextureStorage2D(m_id, m_mipLevels, m_internalLayout, m_dimensions.x, m_dimensions.y);
+        glCreateTextures(m_internalTarget, 1, &m_internalId);
+        glTextureParameteri(m_internalId, GL_TEXTURE_MIN_FILTER, m_internalMinFilter);
+        glTextureParameteri(m_internalId, GL_TEXTURE_MAG_FILTER, m_internalMagFilter);
+        glTextureParameteri(m_internalId, GL_TEXTURE_WRAP_S, m_internalWrapping);
+        glTextureParameteri(m_internalId, GL_TEXTURE_WRAP_T, m_internalWrapping);
+		glTextureStorage2D(m_internalId, m_mipLevels, m_internalFormat, m_dimensions.x, m_dimensions.y);
     }
-    OpenGLTexture2D::OpenGLTexture2D(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB, Format dataFormat, std::span<const byte> data)
-        : OpenGLTexture2D{ format, colorDepth, dimensions, filter, wrappingS, wrappingT, mipLevels, sRGB }
+    OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+        : OpenGLTexture2D{ format, filter, wrapping, dimensions }
     {
-        copy(dataFormat, data);
+        _copy(dataComponents, dataType, data);
     }
     OpenGLTexture2D::~OpenGLTexture2D()
 	{
-		glDeleteTextures(1, &m_id);
+		glDeleteTextures(1, &m_internalId);
 	}
 
-	void OpenGLTexture2D::bind() const
-	{
-		bind(0);
-	}
 	void OpenGLTexture2D::bind(unsigned int slot) const
     {
-		const auto& pair = s_boundTextureIds.try_emplace(slot, 0);
-		if (pair.first->second == m_id) return;
+		const auto& pair = s_slotToIdMap.try_emplace(slot, 0);
+		if (pair.first->second == m_internalId) return;
 
-		glBindTextureUnit(slot, m_id);
-		s_boundTextureIds.at(slot) = m_id;
+		glBindTextureUnit(slot, m_internalId);
+		s_slotToIdMap.at(slot) = m_internalId;
+		s_idToSlotMap.insert_or_assign(m_internalId, slot);
 	}
 	void OpenGLTexture2D::unbind() const
 	{
-        throw std::logic_error("The method or operation is not implemented.");
+		const auto& it = s_idToSlotMap.find(m_internalId);
+		if (it == s_idToSlotMap.end()) return;
+
+		const auto& slot = it->first;
+		glBindTextureUnit(slot, 0);
+		s_slotToIdMap.at(slot) = 0;
+		s_idToSlotMap.at(m_internalId) = 0;
 	}
 	bool OpenGLTexture2D::is_bound() const
 	{
-        throw std::logic_error("The method or operation is not implemented.");
+		const auto& it = s_idToSlotMap.find(m_internalId);
+		if (it == s_idToSlotMap.end()) return false;
+
+		return it->first != 0;
 	}
 	
-	void OpenGLTexture2D::copy(Format dataFormat, std::span<const byte> data, unsigned int mipLevel, bool generateMips)
+	void OpenGLTexture2D::_copy(Components dataComponents, const std::type_info& typeInfo, std::span<const byte> data)
 	{
-        if (data.empty()) return;
-		if (const auto size{ m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat) }; size != data.size()) throw std::invalid_argument{ "Data length does not match texture size!" };
-
-		const auto format = OpenGL::texture_format(dataFormat);
-		glTextureSubImage2D(m_id, mipLevel, 0, 0, m_dimensions.x, m_dimensions.y, format, GL_UNSIGNED_BYTE, data.data());
-		if (generateMips) glGenerateTextureMipmap(m_id);
+		_copy_range(m_dimensions, Vector2u{ 0u, 0u }, dataComponents, typeInfo, data);
 	}
-	void OpenGLTexture2D::copy_range(const Vector2u& dimensions, const Vector2u& offset, Format dataFormat, std::span<const byte> data, unsigned int mipLevel, bool generateMips)
+	void OpenGLTexture2D::_copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
 	{
         if (data.empty()) return;
-        if (const auto size = m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat); size != data.size()) throw std::invalid_argument{ "Data length does not match texture size!" };
-		if (const auto totalSize = Vector2u{ offset.x + dimensions.x, offset.y + dimensions.y }; totalSize.x > m_dimensions.x || totalSize.y > m_dimensions.y) throw std::out_of_range{ "Image dimensions are not within texture bounds!" };
+
+        const auto& format    = OpenGL::texture_format(dataComponents);
+        const auto& type      = OpenGL::type_enum(dataType.hash_code());
+		const auto& totalSize = offset + dimensions;
+		if (glm::any(glm::greaterThan(m_dimensions, totalSize))) throw std::invalid_argument{ "The total size exceeds texture bounds!" };
 		
-        const auto format = OpenGL::texture_format(dataFormat);
-		glTextureSubImage2D(m_id, mipLevel, offset.x, offset.y, dimensions.x, dimensions.y, format, GL_UNSIGNED_BYTE, data.data());
-		if (generateMips) glGenerateTextureMipmap(m_id);
+		glTextureSubImage2D(m_internalId, 0, offset.x, offset.y, dimensions.x, dimensions.y, format, type, data.data());
+		if (m_mipLevels > 1) glGenerateTextureMipmap(m_internalId);
 	}
 }

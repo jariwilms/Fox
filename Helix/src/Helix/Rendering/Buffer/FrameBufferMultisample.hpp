@@ -13,6 +13,11 @@ namespace hlx
     public:
         virtual ~FrameBufferMultisample() = default;
 
+        const std::shared_ptr<Texture2DMultisample> texture(const std::string& identifier)
+        {
+            return m_attachedTextures.at(identifier);
+        }
+
     protected:
         FrameBufferMultisample(const Vector2u& dimensions, unsigned int samples)
             : FrameBuffer{ dimensions }, m_samples{ samples } {}

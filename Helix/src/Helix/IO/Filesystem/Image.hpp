@@ -36,9 +36,9 @@ namespace hlx
 
 			stbi_set_flip_vertically_on_load(Config::IO::flipImages);
 
-			const auto channels  = 4;
-			const auto fileData  = File::read();
-			const auto imageData = stbi_load_from_memory(fileData->data(), static_cast<int>(m_size), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels), channels);
+			const auto& channels  = 4;
+			const auto& fileData  = File::read();
+			const auto& imageData = stbi_load_from_memory(fileData->data(), static_cast<int>(m_size), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels), channels);
 			m_imageSize = (static_cast<size_t>(m_dimensions.x) * static_cast<size_t>(m_dimensions.y)) * channels;
 
 			auto ptr = std::make_shared<const std::vector<byte>>(imageData, imageData + m_imageSize);
@@ -55,8 +55,8 @@ namespace hlx
 			Vector2u dimensions{};
 			size_t size{};
 
-            const auto fileData = File::read();
-            const auto imageData = stbi_load_from_memory(fileData->data(), static_cast<int>(fileData->size()), reinterpret_cast<int*>(&dimensions.x), reinterpret_cast<int*>(&dimensions.y), nullptr, channels);
+            const auto& fileData = File::read();
+            const auto& imageData = stbi_load_from_memory(fileData->data(), static_cast<int>(fileData->size()), reinterpret_cast<int*>(&dimensions.x), reinterpret_cast<int*>(&dimensions.y), nullptr, channels);
             size = (static_cast<size_t>(dimensions.x) * static_cast<size_t>(dimensions.y)) * channels;
 
 			const std::vector<byte> data{ imageData, imageData + size };

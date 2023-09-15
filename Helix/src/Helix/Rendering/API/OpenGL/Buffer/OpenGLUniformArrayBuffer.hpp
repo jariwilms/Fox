@@ -7,18 +7,6 @@
 
 namespace hlx
 {
-    //enum Binding : unsigned int;
-
-    //void a(Binding binding)
-    //{
-
-    //}
-    //void b()
-    //{
-    //    a(Binding{ 2u });
-    //    a(2u);
-    //}
-
     template<typename T>
     class OpenGLUniformArrayBuffer : public UniformArrayBuffer<T>, public OpenGLBuffer<T>
     {
@@ -51,18 +39,18 @@ namespace hlx
         void bind_base(unsigned int binding) override
         {
             m_binding = binding;
-            glBindBufferBase(m_internalTarget, m_binding, m_id);
+            glBindBufferBase(m_internalTarget, m_binding, m_internalId);
         }
         void bind_range(unsigned int count, unsigned int binding, unsigned int index, size_t offset) override
         {
             m_binding = binding;
-            glBindBufferRange(m_internalTarget, m_binding, m_id, index * sizeof(T) + offset, count * sizeof(T));
+            glBindBufferRange(m_internalTarget, m_binding, m_internalId, index * sizeof(T) + offset, count * sizeof(T));
         }
 
     protected:
-        using IBindable::m_id;
-        using UniformArrayBuffer<T>::m_binding;
+        using OpenGLBuffer<T>::m_internalId;
         using OpenGLBuffer<T>::m_internalTarget;
+        using UniformArrayBuffer<T>::m_binding;
 
         void copy_range(size_t size, size_t offset, const void* data) override
         {

@@ -18,11 +18,11 @@ namespace hlx
 
         static void init()
         {
-            m_defaultMaterial = std::make_shared<Material>("Default");
-            m_defaultMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
-            m_defaultMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
-            m_defaultMaterial->armMap      = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x00, 0x00, 0x00 });
-            m_defaultMaterial->emissionMap = GraphicsAPI::create_tex(Texture::Format::RGB, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB, std::vector<byte>{ 0x00, 0x00, 0x00 });
+            m_defaultMaterial              = std::make_shared<Material>("Default");
+            m_defaultMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGBA, utl::to_span(std::vector<const byte>{ 0xFF, 0xFF, 0xFF, 0xFF }));
+            m_defaultMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<const byte>{ 0x80, 0x80, 0xFF }));
+            m_defaultMaterial->armMap      = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<const byte>{ 0x00, 0x00, 0x00 }));
+            m_defaultMaterial->emissionMap = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<const byte>{ 0x00, 0x00, 0x00 }));
 
             m_layout3f = std::make_shared<VertexLayout>();
             m_layout2f = std::make_shared<VertexLayout>();
@@ -113,14 +113,14 @@ namespace hlx
                     }
                 }
 
-                const auto meshVertexArray = GraphicsAPI::create_vao();
-                const auto meshVertexBuffer = GraphicsAPI::create_vbo<Vector3f>(meshVertices); //TODO: vbo move impl
-                const auto meshNormalsBuffer = GraphicsAPI::create_vbo<Vector3f>(meshNormals);
-                const auto meshTexCoordsBuffer = GraphicsAPI::create_vbo<Vector2f>(meshTexCoords);
-                const auto meshIndicesBuffer = GraphicsAPI::create_ibo(meshIndices);
+                const auto& meshVertexArray     = GraphicsAPI::create_vao();
+                const auto& meshVertexBuffer    = GraphicsAPI::create_vbo<Vector3f>(meshVertices); //TODO: vbo move impl
+                const auto& meshNormalsBuffer   = GraphicsAPI::create_vbo<Vector3f>(meshNormals);
+                const auto& meshTexCoordsBuffer = GraphicsAPI::create_vbo<Vector2f>(meshTexCoords);
+                const auto& meshIndicesBuffer   = GraphicsAPI::create_ibo(meshIndices);
 
-                meshVertexArray->tie(meshVertexBuffer, m_layout3f);
-                meshVertexArray->tie(meshNormalsBuffer, m_layout3f);
+                meshVertexArray->tie(meshVertexBuffer,    m_layout3f);
+                meshVertexArray->tie(meshNormalsBuffer,   m_layout3f);
                 meshVertexArray->tie(meshTexCoordsBuffer, m_layout2f);
                 meshVertexArray->tie(meshIndicesBuffer);
 
@@ -134,8 +134,8 @@ namespace hlx
             //Create instance of every material and add to model
             if (!aiScene->HasMaterials()) throw std::runtime_error{ "Model requires at least one material!" };
 
-            TextureBlueprint textureBlueprint{};
-            textureBlueprint.filter = Texture::Filter::Trilinear;
+            //TextureBlueprint textureBlueprint{};
+            //textureBlueprint.filter = Texture::Filter::Trilinear;
 
             std::span<aiMaterial*> aiMaterials{ aiScene->mMaterials, aiScene->mNumMaterials };
             for (auto index{ 0u }; const auto & aiMaterial : aiMaterials)
@@ -151,14 +151,14 @@ namespace hlx
                 }
                 if (aiString aiAlbedoTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_BASE_COLOR_TEXTURE, &aiAlbedoTexturePath) == aiReturn_SUCCESS)
                 {
-                    const auto albedoImage   = std::make_shared<Image>(baseDirectory / aiAlbedoTexturePath.C_Str());
-                    const auto albedoTexture = textureBlueprint.build(albedoImage, 4u, true);
+                    const auto& albedoImage   = std::make_shared<Image>(baseDirectory / aiAlbedoTexturePath.C_Str());
+                    const auto& albedoTexture = GraphicsAPI::create_tex(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, albedoImage->dimensions(), Texture::Components::RGBA, utl::to_span(*albedoImage->read()));
                     material->albedoMap = albedoTexture;
                 }
                 if (aiString aiNormalTexturePath{}; aiMaterial->GetTexture(aiTextureType_NORMALS, 0, &aiNormalTexturePath) == aiReturn_SUCCESS)
                 {
-                    const auto normalImage = std::make_shared<Image>(baseDirectory / aiNormalTexturePath.C_Str());
-                    const auto normalTexture = textureBlueprint.build(normalImage, 4u, false);
+                    const auto& normalImage = std::make_shared<Image>(baseDirectory / aiNormalTexturePath.C_Str());
+                    const auto& normalTexture = GraphicsAPI::create_tex(Texture::Format::RGBA8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, normalImage->dimensions(), Texture::Components::RGBA, utl::to_span(*normalImage->read()));
                     material->normalMap = normalTexture;
                 }
                 if (ai_real aiRoughnessFactor{}; aiMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, aiRoughnessFactor) == aiReturn_SUCCESS)
@@ -171,9 +171,9 @@ namespace hlx
                 }
                 if (aiString aiRoughnessMetallicTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_METALLIC_TEXTURE, &aiRoughnessMetallicTexturePath) == aiReturn_SUCCESS)
                 {
-                    const auto aiRoughnessMetallicImage = std::make_shared<Image>(baseDirectory / aiRoughnessMetallicTexturePath.C_Str());
-                    const auto aiRoughnessMetallicTexture = textureBlueprint.build(aiRoughnessMetallicImage, 4u, false);
-                    material->armMap = aiRoughnessMetallicTexture;
+                    const auto& roughnessMetallicImage = std::make_shared<Image>(baseDirectory / aiRoughnessMetallicTexturePath.C_Str());
+                    const auto& roughnessMetallicTexture = GraphicsAPI::create_tex(Texture::Format::RGBA8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, roughnessMetallicImage->dimensions(), Texture::Components::RGBA, utl::to_span(*roughnessMetallicImage->read()));
+                    material->armMap = roughnessMetallicTexture;
                 }
                 //if (aiString aiAmbientTexturePath{}; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0), aiAmbientTexturePath) == aiReturn_SUCCESS)
                 //{
@@ -208,7 +208,7 @@ namespace hlx
                 const auto& aiFrontNode = aiNodeQueue.front();
 
                 std::span<aiNode*> aiFrontNodeChildren{ aiFrontNode->mChildren, aiFrontNode->mNumChildren };
-                const auto totalChildren = aiFrontNode->mNumMeshes == 1 ? 0 : aiFrontNodeChildren.size() + aiFrontNode->mNumMeshes;
+                const auto& totalChildren = aiFrontNode->mNumMeshes == 1 ? 0 : aiFrontNodeChildren.size() + aiFrontNode->mNumMeshes;
                 frontNode->children.reserve(totalChildren);
 
                 const auto& aiFrontNodeTransform = *reinterpret_cast<Matrix4f*>(&aiFrontNode->mTransformation);

@@ -10,15 +10,31 @@ namespace hlx
     class OpenGLRenderBufferMultisample : public RenderBufferMultisample
     {
     public:
-        OpenGLRenderBufferMultisample(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions, unsigned int samples);
+        OpenGLRenderBufferMultisample(Type type, Layout layout, const Vector2u& dimensions, unsigned int samples);
         ~OpenGLRenderBufferMultisample();
 
-        void bind() const override;
-        void unbind() const override;
+        void bind()     const override;
+        void unbind()   const override;
         bool is_bound() const override;
 
+        GLuint internal_id()     const
+        {
+            return m_internalId;
+        }
+        GLenum internal_target() const
+        {
+            return m_internalTarget;
+        }
+        GLenum internal_format() const
+        {
+            return m_internalFormat;
+        }
+
     private:
-        GLenum m_internalTarget{ GL_RENDERBUFFER };
+        GLuint m_internalId{};
+        GLenum m_internalTarget{};
         GLenum m_internalFormat{};
+
+        static inline GLuint s_boundRenderBufferId{};
     };
 }

@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Texture.hpp"
+#include "Texture2D.hpp"
 
 namespace hlx
 {
@@ -11,15 +11,24 @@ namespace hlx
     public:
         virtual ~Texture2DMultisample() = default;
 
+        template<typename T>
+        void copy(Components components, std::span<const T> data) = delete;
+        template<typename T>
+        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data) = delete;
+
         unsigned int samples() const
         {
             return m_samples;
         }
 
     protected:
-        Texture2DMultisample(Format format, ColorDepth colorDepth, const Vector2u& dimensions, unsigned int mipLevels, unsigned int samples, bool sRGB)
-            : Texture2D{ format, colorDepth, dimensions, Filter::Point, Wrapping::ClampToEdge, Wrapping::ClampToEdge, mipLevels, sRGB }, m_samples{ samples } {}
+        Texture2DMultisample(Format format, const Vector2u& dimensions, unsigned int samples)
+            : Texture2D{ format, Filter::None, Wrapping::ClampToBorder, dimensions }, m_samples{ samples } {}
 
-        const unsigned int m_samples{};
+        unsigned int m_samples{};
+
+    private:
+        void _copy(Components components, const std::type_info& typeInfo, std::span<const byte> data) final {}
+        void _copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) final {}
     };
 }

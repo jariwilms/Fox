@@ -63,10 +63,10 @@ namespace hlx
                 layout3f->specify<float>(3);
                 layout2f->specify<float>(2);
 
-                const auto positionsVBO = GraphicsAPI::create_vbo<float>(positions);
-                const auto normalsVBO = GraphicsAPI::create_vbo<float>(normals);
+                const auto positionsVBO   = GraphicsAPI::create_vbo<float>(positions);
+                const auto normalsVBO     = GraphicsAPI::create_vbo<float>(normals);
                 const auto coordinatesVBO = GraphicsAPI::create_vbo<float>(coordinates);
-                const auto indicesIBO = GraphicsAPI::create_ibo(indices);
+                const auto indicesIBO     = GraphicsAPI::create_ibo(indices);
 
                 s_vao = GraphicsAPI::create_vao();
                 s_vao->tie(positionsVBO, layout3f);
@@ -212,10 +212,10 @@ namespace hlx
                 layout3f->specify<float>(3);
                 layout2f->specify<float>(2);
 
-                const auto positionsVBO = GraphicsAPI::create_vbo<float>(positions);
-                const auto normalsVBO = GraphicsAPI::create_vbo<float>(normals);
+                const auto positionsVBO   = GraphicsAPI::create_vbo<float>(positions);
+                const auto normalsVBO     = GraphicsAPI::create_vbo<float>(normals);
                 const auto coordinatesVBO = GraphicsAPI::create_vbo<float>(coordinates);
-                const auto indicesIBO = GraphicsAPI::create_ibo(indices);
+                const auto indicesIBO     = GraphicsAPI::create_ibo(indices);
 
                 s_vao = GraphicsAPI::create_vao();
                 s_vao->tie(positionsVBO, layout3f);

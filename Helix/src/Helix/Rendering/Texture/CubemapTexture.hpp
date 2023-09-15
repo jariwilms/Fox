@@ -9,35 +9,56 @@ namespace hlx
     class CubemapTexture : public Texture
     {
     public:
+        enum class Face
+        {
+            PositiveX, 
+            NegativeX, 
+            PositiveY, 
+            NegativeY, 
+            PositiveZ, 
+            NegativeZ, 
+        };
+
         virtual ~CubemapTexture() = default;
 
-        virtual void copy(Format dataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
-        virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, Format dataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel = 0, bool generateMips = true) = 0;
+        template<typename T>
+        void copy(Components dataComponents, std::span<std::span<const T>, 6> data)
+        {
+            _copy(dataComponents, typeid(T), data);
+        }
+        template<typename T>
+        void copy_face(Face face, Components dataComponents, std::span<const T> data)
+        {
+            _copy_face(face, dataComponents, typeid(T), std::as_bytes(data));
+        }
+        template<typename T>
+        void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data)
+        {
+            _copy_face_range(face, dimensions, offset, dataComponents, typeid(T), std::as_bytes(data));
+        }
 
         const Vector2u& dimensions() const
         {
             return m_dimensions;
         }
-        Wrapping wrapping_r() const
+        unsigned int    mip_levels() const
         {
-            return m_wrappingR;
-        }
-        Wrapping wrapping_s() const
-        {
-            return m_wrappingS;
-        }
-        Wrapping wrapping_t() const
-        {
-            return m_wrappingT;
+            return m_mipLevels;
         }
 
     protected:
-        CubemapTexture(Format format, ColorDepth colorDepth, const Vector2u& dimensions, Filter filter, Wrapping wrappingR, Wrapping wrappingS, Wrapping wrappingT, unsigned int mipLevels, bool sRGB)
-            : Texture{ format, colorDepth, filter, mipLevels, sRGB }, m_dimensions{ dimensions }, m_wrappingR{ wrappingR }, m_wrappingS{ wrappingS }, m_wrappingT{ wrappingT } {}
+        CubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions)
+            : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
+        {
+            if (m_filter != Filter::None) m_mipLevels = static_cast<unsigned int>(std::floor(std::log2(std::max(m_dimensions.x, m_dimensions.y)))) + 1u;
+            else                          m_mipLevels = 1u;
+        }
 
-        const Vector2u m_dimensions{};
-        const Wrapping m_wrappingR{};
-        const Wrapping m_wrappingS{};
-        const Wrapping m_wrappingT{};
+        virtual void _copy(Components dataComponents, const std::type_info& typeInfo, std::span<std::span<const byte>, 6> data) = 0;
+        virtual void _copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
+        virtual void _copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
+
+        Vector2u     m_dimensions{};
+        unsigned int m_mipLevels{};
     };
 }

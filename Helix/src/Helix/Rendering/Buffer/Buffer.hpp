@@ -7,7 +7,7 @@
 namespace hlx
 {
     template<typename T>
-    class Buffer : public IBindable
+    class Buffer
     {
     public:
         enum class AccessFlag
@@ -17,6 +17,10 @@ namespace hlx
         };
 
         virtual ~Buffer() = default;
+
+        virtual void bind()     const = 0;
+        virtual void unbind()   const = 0;
+        virtual bool is_bound() const = 0;
 
         void copy(std::span<const T> data)
         {
@@ -36,7 +40,7 @@ namespace hlx
             copy_range(dataSize, offsetSize, data.data());
         }
 
-        size_t size() const
+        size_t       size()  const
         {
             return m_size;
         }
@@ -46,8 +50,8 @@ namespace hlx
         }
 
     protected:
-        Buffer(unsigned int count)
-            : m_size{ count * sizeof(T) } {}
+        Buffer(unsigned int tCount)
+            : m_size{ tCount * sizeof(T) } {}
 
         virtual void copy(const void* data) = 0;
         virtual void copy_range(size_t size, size_t offset, const void* data) = 0;

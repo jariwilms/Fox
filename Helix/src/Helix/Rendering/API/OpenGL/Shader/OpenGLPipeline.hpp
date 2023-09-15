@@ -21,7 +21,14 @@ namespace hlx
 
 		void stage(const std::shared_ptr<Shader> shader) override;
 
+		GLuint internal_program() const
+		{
+			return m_internalProgram;
+		}
+
 	private:
-		static inline Id s_boundPipelineId{};
+        GLuint m_internalProgram{};
+
+		static inline GLuint s_boundPipelineId{};
 	};
 }

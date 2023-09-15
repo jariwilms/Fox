@@ -4,29 +4,32 @@
 
 namespace hlx
 {
-	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout colorDepth, const Vector2u& dimensions)
-		: RenderBuffer{ type, colorDepth, dimensions }
+	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions)
+		: RenderBuffer{ type, layout, dimensions }
 	{
-		m_internalFormat = OpenGL::renderbuffer_layout(colorDepth);
+		m_internalTarget = GL_RENDERBUFFER;
+		m_internalFormat = OpenGL::renderbuffer_layout(layout);
 
-		glCreateRenderbuffers(1, &m_id);
-		glNamedRenderbufferStorage(m_id, m_internalFormat, m_dimensions.x, m_dimensions.y);
+		glCreateRenderbuffers(1, &m_internalId);
+		glNamedRenderbufferStorage(m_internalId, m_internalFormat, m_dimensions.x, m_dimensions.y);
 	}
 	OpenGLRenderBuffer::~OpenGLRenderBuffer()
 	{
-		glDeleteRenderbuffers(1, &m_id);
+		glDeleteRenderbuffers(1, &m_internalId);
 	}
 
-	void OpenGLRenderBuffer::bind() const
+	void OpenGLRenderBuffer::bind()     const
 	{
-		glBindRenderbuffer(m_internalTarget, m_id);
+		glBindRenderbuffer(m_internalTarget, m_internalId);
 	}
-    void OpenGLRenderBuffer::unbind() const
+    void OpenGLRenderBuffer::unbind()   const
 	{
+		if (m_internalId != s_boundRenderBufferId) return;
+
 		glBindRenderbuffer(m_internalTarget, 0);
 	}
     bool OpenGLRenderBuffer::is_bound() const
 	{
-		return false;
+		return m_internalId == s_boundRenderBufferId;
 	}
 }

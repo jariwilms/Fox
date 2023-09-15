@@ -2,15 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Interface/IBindable.hpp"
-#include "Helix/Core/Library/Semantics/NonCopyable.hpp"
-
 namespace hlx
 {
-	class Shader : public IBindable
+	class Shader
 	{
 	public:
-		enum class Type
+		enum class Stage
 		{
 			Vertex,
 			TessellationControl, 
@@ -23,30 +20,15 @@ namespace hlx
 
 		virtual ~Shader() = default;
 
-		void bind() const override {};
-		void unbind() const override {};
-		bool is_bound() const override { return false; }
-
-		bool valid() const
+		Stage stage() const
 		{
-			return m_valid;
-		}
-		std::string_view error() const
-		{
-			return m_error;
-		}
-
-		Type type() const
-		{
-			return m_type;
+			return m_stage;
 		}
 
 	protected:
-		Shader(Type type)
-			: m_type{ type } {}
+		Shader(Stage stage)
+			: m_stage{ stage } {}
 
-		const Type m_type{};
-		std::string m_error{};
-		bool m_valid{};
+		Stage m_stage{};
 	};
 }
