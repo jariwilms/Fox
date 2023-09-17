@@ -19,10 +19,10 @@ namespace hlx
         static void init()
         {
             m_defaultMaterial              = std::make_shared<Material>("Default");
-            m_defaultMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGBA, utl::to_span(std::vector<const byte>{ 0xFF, 0xFF, 0xFF, 0xFF }));
-            m_defaultMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<const byte>{ 0x80, 0x80, 0xFF }));
-            m_defaultMaterial->armMap      = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<const byte>{ 0x00, 0x00, 0x00 }));
-            m_defaultMaterial->emissionMap = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<const byte>{ 0x00, 0x00, 0x00 }));
+            m_defaultMaterial->albedoMap   = GraphicsAPI::create_tex(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGBA, utl::to_span(std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF }));
+            m_defaultMaterial->normalMap   = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x80, 0x80, 0xFF }));
+            m_defaultMaterial->armMap      = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x00, 0x00 }));
+            m_defaultMaterial->emissionMap = GraphicsAPI::create_tex(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x00, 0x00 }));
 
             m_layout3f = std::make_shared<VertexLayout>();
             m_layout2f = std::make_shared<VertexLayout>();

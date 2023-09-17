@@ -57,9 +57,9 @@ namespace hlx
 		return it->first != 0;
 	}
 	
-	void OpenGLTexture2D::_copy(Components dataComponents, const std::type_info& typeInfo, std::span<const byte> data)
+	void OpenGLTexture2D::_copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
 	{
-		_copy_range(m_dimensions, Vector2u{ 0u, 0u }, dataComponents, typeInfo, data);
+		_copy_range(m_dimensions, Vector2u{ 0u, 0u }, dataComponents, dataType, data);
 	}
 	void OpenGLTexture2D::_copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
 	{

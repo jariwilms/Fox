@@ -146,7 +146,6 @@
     <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
     <ClInclude Include="src\Helix\Input\Input.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />

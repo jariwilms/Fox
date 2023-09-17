@@ -4,7 +4,7 @@
 
 namespace hlx
 {
-    OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, const std::vector<std::tuple<std::string, Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, Attachment, RenderBufferBlueprint>>& renderBuffers)
+    OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const FrameBuffer::Texture2DBlueprintSpec> textures, std::span<const FrameBuffer::RenderBufferBlueprintSpec> renderBuffers)
         : FrameBufferMultisample{ dimensions, samples }
     {
         if (m_samples == 0) throw std::invalid_argument{ "Samples must be greater than zero!" };
@@ -42,7 +42,7 @@ namespace hlx
             glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->internal_id());
         };
 
-        std::for_each(textures.begin(), textures.end(), attach_texture);
+        std::for_each(textures.begin(),      textures.end(),      attach_texture);
         std::for_each(renderBuffers.begin(), renderBuffers.end(), attach_renderbuffer);
         glNamedFramebufferDrawBuffers(m_internalId, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
 

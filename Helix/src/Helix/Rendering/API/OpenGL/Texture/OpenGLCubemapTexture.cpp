@@ -58,12 +58,12 @@ namespace hlx
         return it->first != 0;
     }
 
-    void OpenGLCubemapTexture::_copy(Components dataComponents, const std::type_info& typeInfo, std::span<std::span<const byte>, 6> data)
+    void OpenGLCubemapTexture::_copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data)
     {
         unsigned int index{};
         std::for_each(data.begin(), data.end(), [&](const auto& faceData) 
             { 
-                _copy_face(static_cast<Face>(index), dataComponents, typeInfo, faceData); 
+                _copy_face(static_cast<Face>(index), dataComponents, dataType, faceData); 
                 ++index; 
             });
     }

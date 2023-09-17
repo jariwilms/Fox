@@ -30,15 +30,14 @@ namespace hlx
             return std::make_shared<OpenGLVertexArray>();
         }
                                                        
-        template<typename T>                           
-        static std::shared_ptr<VertexBuffer<T>>        create_vbo(unsigned int count)
+        static std::shared_ptr<VertexBuffer>        create_vbo(unsigned int count)
         {
-            return std::make_shared<OpenGLVertexBuffer<T>>(count);
+            return std::make_shared<OpenGLVertexBuffer>(count);
         }
         template<typename T>                           
-        static std::shared_ptr<VertexBuffer<T>>        create_vbo(std::span<const T> data)
+        static std::shared_ptr<VertexBuffer>        create_vbo(std::span<const T> data)
         {
-            return std::make_shared<OpenGLVertexBuffer<T>>(data);
+            return std::make_shared<OpenGLVertexBuffer>(data);
         }
         static std::shared_ptr<IndexBuffer>            create_ibo(unsigned int count)
         {
@@ -69,11 +68,11 @@ namespace hlx
             return std::make_shared<OpenGLUniformArrayBuffer<T>>(binding, data);
         }
                                                        
-        static std::shared_ptr<FrameBuffer>            create_fbo(const Vector2u& dimensions, const std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>>& renderBuffers)
+        static std::shared_ptr<FrameBuffer>            create_fbo(const Vector2u& dimensions, std::span<const std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> textures, std::span<const std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> renderBuffers)
         {
             return std::make_shared<OpenGLFrameBuffer>(dimensions, textures, renderBuffers);
         }
-        static std::shared_ptr<FrameBufferMultisample> create_fbo_ms(const Vector2u& dimensions, unsigned int samples, const std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>>& textures, const std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>>& renderBuffers)
+        static std::shared_ptr<FrameBufferMultisample> create_fbo_ms(const Vector2u& dimensions, unsigned int samples, std::span<const std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> textures, std::span<const std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> renderBuffers)
         {
             return std::make_shared<OpenGLFrameBufferMultisample>(dimensions, samples, textures, renderBuffers);
         }
@@ -115,7 +114,7 @@ namespace hlx
         template<typename T>
         static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector2u& dimensions, Texture::Components dataComponents, std::span<const T> data)
         {
-            return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions, dataComponents, typeid(T), std::as_bytes(data));
+            return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions, dataComponents, typeid(T), utl::as_bytes(data));
         }
         static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, const Vector2u& dimensions, unsigned int samples)
         {

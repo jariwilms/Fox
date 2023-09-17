@@ -23,12 +23,12 @@ namespace hlx
 
     protected:
         Texture2DMultisample(Format format, const Vector2u& dimensions, unsigned int samples)
-            : Texture2D{ format, Filter::None, Wrapping::ClampToBorder, dimensions }, m_samples{ samples } {}
+            : Texture2D{ format, Filter::None, Wrapping::Repeat, dimensions }, m_samples{ samples } {}
 
         unsigned int m_samples{};
 
     private:
-        void _copy(Components components, const std::type_info& typeInfo, std::span<const byte> data) final {}
+        void _copy(Components components, const std::type_info& dataType, std::span<const byte> data) final {}
         void _copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) final {}
     };
 }

@@ -4,6 +4,8 @@
 
 #include "Texture.hpp"
 
+#include "Helix/Core/Library/Utility/Utility.hpp"
+
 namespace hlx
 {
 	class Texture2D : public Texture
@@ -14,12 +16,12 @@ namespace hlx
 		template<typename T>
 		void copy(Components dataComponents, std::span<const T> data)
 		{
-			_copy(dataComponents, typeid(T), std::as_bytes(data));
+			_copy(dataComponents, typeid(T), utl::as_bytes(data));
 		}
 		template<typename T>
 		void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data)
 		{
-			_copy_range(dimensions, offset, dataComponents, typeid(T), std::as_bytes(data));
+			_copy_range(dimensions, offset, dataComponents, typeid(T), utl::as_bytes(data));
 		}
 
 		const Vector2u& dimensions() const

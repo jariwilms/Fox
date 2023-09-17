@@ -4,6 +4,7 @@
 
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/Buffer/VertexArray.hpp"
+#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLVertexBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLIndexBuffer.hpp"
 
 namespace hlx
@@ -36,11 +37,12 @@ namespace hlx
             return m_internalId == s_boundVertexArrayId;
         }
 
-        void tie(Id bufferId, const std::shared_ptr<VertexLayout> layout) override
+        void tie(const std::shared_ptr<VertexBuffer> vertices, const std::shared_ptr<VertexLayout> layout) override
         {
             if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex may not exceed 16!" };
 
-            glVertexArrayVertexBuffer(m_internalId, m_bindingIndex, bufferId, 0, static_cast<GLsizei>(layout->stride()));
+            const auto& glBuffer = std::static_pointer_cast<OpenGLVertexBuffer>(vertices);
+            glVertexArrayVertexBuffer(m_internalId, m_bindingIndex, glBuffer->internal_id(), 0, static_cast<GLsizei>(layout->stride()));
             
             GLint offset{};
             for (const auto& attribute : layout->attributes())
@@ -58,7 +60,7 @@ namespace hlx
 
             ++m_bindingIndex;
         }
-        void tie(const std::shared_ptr<IndexBuffer> indices)              override
+        void tie(const std::shared_ptr<IndexBuffer> indices)                                               override
         {
             m_indices = indices;
             const auto& glIndices = std::static_pointer_cast<OpenGLIndexBuffer>(indices);

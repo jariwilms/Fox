@@ -18,7 +18,7 @@ namespace hlx
         void unbind()                const override;
         bool is_bound()              const override;
 
-        void _copy(Components dataComponents, const std::type_info& typeInfo, std::span<std::span<const byte>, 6> data) override;
+        void _copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data) override;
         void _copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
         void _copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
 

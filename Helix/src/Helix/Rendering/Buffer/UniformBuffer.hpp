@@ -7,12 +7,15 @@
 namespace hlx
 {
     template<typename T>
-    class UniformBuffer : public virtual Buffer<T>
+    class UniformBuffer : public Buffer
     {
     public:
         virtual ~UniformBuffer() = default;
 
-        virtual void copy(const T& data) = 0;
+        void copy(const T& data)
+        {
+            copy(sizeof(T), 0, static_cast<const void*>(&data));
+        }
         template<typename... U>
         void copy_tuple(size_t offset, const std::tuple<U...>& data)
         {
@@ -25,17 +28,16 @@ namespace hlx
             };
 
             std::apply(convert_byte_array, data);
-            copy_range(result.size(), offset, result.data());
+            copy(result.size(), offset, static_cast<const void*>(result.data()));
         }
 
-        virtual void bind_base(unsigned int binding) = 0;
-        virtual void bind_range(unsigned int binding, size_t size, size_t offset) = 0;
+        virtual void bind(unsigned int binding) = 0;
 
     protected:
         UniformBuffer(unsigned int binding)
-            : Buffer<T>{ 1 }, m_binding{ binding } {}
+            : Buffer{ sizeof(T) }, m_binding{ binding } {}
 
-        virtual void copy_range(size_t size, size_t offset, const void* data) = 0;
+        virtual void copy(size_t size, size_t offset, const void* data) = 0;
 
         unsigned int m_binding{};
     };

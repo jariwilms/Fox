@@ -29,12 +29,12 @@ namespace hlx
         template<typename T>
         void copy_face(Face face, Components dataComponents, std::span<const T> data)
         {
-            _copy_face(face, dataComponents, typeid(T), std::as_bytes(data));
+            _copy_face(face, dataComponents, typeid(T), utl::as_bytes(data));
         }
         template<typename T>
         void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data)
         {
-            _copy_face_range(face, dimensions, offset, dataComponents, typeid(T), std::as_bytes(data));
+            _copy_face_range(face, dimensions, offset, dataComponents, typeid(T), utl::as_bytes(data));
         }
 
         const Vector2u& dimensions() const
@@ -54,7 +54,7 @@ namespace hlx
             else                          m_mipLevels = 1u;
         }
 
-        virtual void _copy(Components dataComponents, const std::type_info& typeInfo, std::span<std::span<const byte>, 6> data) = 0;
+        virtual void _copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data) = 0;
         virtual void _copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
         virtual void _copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
 

@@ -22,7 +22,6 @@ namespace hlx
         m_gBufferMultisample = frameBufferBlueprint.build_ms(Vector2f{ 1280, 720 }, 2);
         m_gBuffer = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
-
         std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> shadowMapBufferTextureBlueprint
         {
             std::make_tuple("Color", FrameBuffer::Attachment::Depth, TextureBlueprint{ Texture::Format::D24_UNORM }),

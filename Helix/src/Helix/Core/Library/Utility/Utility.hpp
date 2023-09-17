@@ -23,4 +23,13 @@ namespace hlx::utl
 
         return to_span(r);
     }
+
+    template<typename T, size_t extent>
+    auto as_bytes(std::span<T, extent> s)
+    {
+        constexpr auto dynamic_extent = static_cast<size_t>(-1); //no idea
+        using return_type = std::span<const byte, extent == dynamic_extent ? dynamic_extent : sizeof(T) * extent>;
+
+        return return_type{ reinterpret_cast<const byte*>(s.data()), s.size_bytes() };
+    }
 }

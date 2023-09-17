@@ -9,12 +9,9 @@ namespace hlx
     {
         m_internalTarget   = GL_TEXTURE_2D_MULTISAMPLE;
         m_internalFormat   = OpenGL::texture_format(m_format);
-        m_internalWrapping = OpenGL::texture_wrapping(m_wrapping);
-        m_samples          = std::min<unsigned int>(m_samples, OpenGL::max_samples());
+        //m_samples          = std::min<unsigned int>(m_samples, OpenGL::max_samples());
 
         glCreateTextures(m_internalTarget, 1, &m_internalId);
-        glTextureParameteri(m_internalId, GL_TEXTURE_WRAP_S, m_internalWrapping);
-        glTextureParameteri(m_internalId, GL_TEXTURE_WRAP_T, m_internalWrapping);
         glTextureStorage2DMultisample(m_internalId, m_samples, m_internalFormat, m_dimensions.x, m_dimensions.y, GL_TRUE);
     }
     OpenGLTexture2DMultisample::~OpenGLTexture2DMultisample()

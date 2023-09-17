@@ -246,9 +246,6 @@
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp">
       <Filter>Helix\Rendering\API</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp">
-      <Filter>Helix\Rendering\API\OpenGL\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp">
       <Filter>Helix\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>

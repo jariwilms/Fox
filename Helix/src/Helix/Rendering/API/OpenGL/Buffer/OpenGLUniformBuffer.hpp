@@ -2,52 +2,51 @@
 
 #include "stdafx.hpp"
 
-#include "OpenGLBuffer.hpp"
 #include "Helix/Rendering/Buffer/UniformBuffer.hpp"
 
 namespace hlx
 {
     template<typename T>
-    class OpenGLUniformBuffer : public UniformBuffer<T>, public OpenGLBuffer<T>
+    class OpenGLUniformBuffer : public UniformBuffer<T>
     {
     public:
         OpenGLUniformBuffer(unsigned int binding)
-            : Buffer<T>{ 1 }, UniformBuffer<T>{ binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, 1 }
+            : UniformBuffer<T>{ binding }
         {
-            bind_base(m_binding);
+            m_internalTarget = GL_UNIFORM_BUFFER;
+            glCreateBuffers(1, &m_internalId);
+
+            bind(m_binding);
         }
         OpenGLUniformBuffer(unsigned int binding, const T& data)
-            : Buffer<T>{ 1 }, UniformBuffer<T>{ binding }, OpenGLBuffer<T>{ GL_UNIFORM_BUFFER, std::array<T, 1>{ data } } //legit
+            : OpenGLUniformBuffer{ binding }
         {
-            bind_base(m_binding);
+            UniformBuffer<T>::copy(data);
         }
         ~OpenGLUniformBuffer() = default;
 
-        void copy(const T& data) override
-        {
-            OpenGLBuffer<T>::copy(&data);
-        }
-
-        void bind_base(unsigned int binding) override
+        void bind(unsigned int binding) override
         {
             m_binding = binding;
             glBindBufferBase(m_internalTarget, m_binding, m_internalId);
         }
-        void bind_range(unsigned int binding, size_t size, size_t offset) override
-        {
-            m_binding = binding;
-            glBindBufferRange(m_internalTarget, m_binding, m_internalId, offset, size);
-        }
 
     protected:
-        using OpenGLBuffer<T>::m_internalId;
-        using OpenGLBuffer<T>::m_internalTarget;
+        void copy(size_t size, size_t offset, const void* data) override
+        {
+            if (size + offset > m_size) throw std::invalid_argument{ "Data exceeds buffer size!" };
+
+            glNamedBufferSubData(m_internalId, offset, size, data);
+        }
+
+    private:
+        using Buffer::m_size;
         using UniformBuffer<T>::m_binding;
 
-        void copy_range(size_t size, size_t offset, const void* data) override
-        {
-            OpenGLBuffer<T>::copy_range(size, offset, data);
-        }
+        GLuint m_internalId{};
+        GLuint m_internalTarget{};
+
+        //static inline std::unordered_map<unsigned int, GLuint> s_bindingToIdMap{};
     };
 }
 
