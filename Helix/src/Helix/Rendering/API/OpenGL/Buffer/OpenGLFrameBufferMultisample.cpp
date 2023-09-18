@@ -57,7 +57,7 @@ namespace hlx
     void OpenGLFrameBufferMultisample::bind(FrameBuffer::Target target) const
     {
         const auto& internalTarget = OpenGL::framebuffer_target(target);
-        const auto& pair = s_targetToIdMap.try_emplace(internalTarget, 0);
+        //const auto& pair = s_targetToIdMap.try_emplace(internalTarget, 0);
         //if (pair.first->second == m_internalId) return;
 
         glBindFramebuffer(internalTarget, m_internalId);
@@ -66,13 +66,13 @@ namespace hlx
     }
     void OpenGLFrameBufferMultisample::unbind() const
     {
-        const auto& it = s_idToTargetMap.find(m_internalId);
-        if (it == s_idToTargetMap.end()) return;
+        //const auto& it = s_idToTargetMap.find(m_internalId);
+        //if (it == s_idToTargetMap.end()) return;
 
-        const auto& target = it->first;
-        glBindFramebuffer(target, 0);
-        s_targetToIdMap.at(target) = 0;
-        s_idToTargetMap.at(m_internalId) = 0;
+        //const auto& target = it->first;
+        //glBindFramebuffer(target, 0);
+        //s_targetToIdMap.at(target) = 0;
+        //s_idToTargetMap.at(m_internalId) = 0;
     }
     bool OpenGLFrameBufferMultisample::is_bound() const
     {

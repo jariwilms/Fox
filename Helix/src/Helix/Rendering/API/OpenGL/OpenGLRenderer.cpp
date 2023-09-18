@@ -209,7 +209,7 @@ namespace hlx
 
 
         glBlitNamedFramebuffer(glPPBuffer->internal_id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        //glNamedFramebufferReadBuffer(glBuffer->internal_id(), GL_COLOR_ATTACHMENT0 + 0);
+        //glNamedFramebufferReadBuffer(glBuffer->internal_id(), GL_COLOR_ATTACHMENT0 + 2);
         //glBlitNamedFramebuffer(glBuffer->internal_id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     }
 
