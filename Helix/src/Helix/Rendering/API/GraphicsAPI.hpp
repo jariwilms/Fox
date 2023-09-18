@@ -112,9 +112,9 @@ namespace hlx
             return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions);
         }
         template<typename T>
-        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector2u& dimensions, Texture::Components dataComponents, std::span<const T> data)
+        static std::shared_ptr<Texture2D>              create_tex(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector2u& dimensions, Texture::Components components, std::span<const T> data)
         {
-            return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions, dataComponents, typeid(T), utl::as_bytes(data));
+            return std::make_shared<OpenGLTexture2D>(format, filter, wrapping, dimensions, components, utl::as_bytes(data));
         }
         static std::shared_ptr<Texture2DMultisample>   create_tex_ms(Texture::Format format, const Vector2u& dimensions, unsigned int samples)
         {

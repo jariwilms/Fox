@@ -21,8 +21,4 @@ namespace hlx
         Vector3f min{};
         Vector3f max{};
     };
-    struct AABS
-    {
-
-    };
 }

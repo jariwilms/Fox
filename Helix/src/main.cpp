@@ -137,7 +137,7 @@ int main(int argc, char** argv)
     };
 
     //RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ChannelDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, skyboxImageData);
-    RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, typeid(byte), skyboxImageData);
+    RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, skyboxImageData);
 
 
 

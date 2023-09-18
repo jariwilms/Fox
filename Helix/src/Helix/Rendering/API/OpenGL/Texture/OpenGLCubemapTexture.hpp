@@ -11,7 +11,7 @@ namespace hlx
     {
     public:
         OpenGLCubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions);
-        OpenGLCubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data);
+        OpenGLCubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components components, std::span<std::span<const byte>, 6> data);
         ~OpenGLCubemapTexture();
 
         void bind(unsigned int slot) const override;
@@ -44,9 +44,9 @@ namespace hlx
         }
 
     protected:
-        void copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data) override;
-        void copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
-        void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
+        void copy(Components components, std::span<std::span<const byte>, 6> data) override;
+        void copy_face(Face face, Components components, std::span<const byte> data) override;
+        void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) override;
 
     private:
         GLenum m_internalId{};

@@ -14,7 +14,7 @@ namespace hlx
         template<typename T>
         void copy(Components components, std::span<const T> data) = delete;
         template<typename T>
-        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data) = delete;
+        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const T> data) = delete;
 
         unsigned int samples() const
         {
@@ -28,7 +28,7 @@ namespace hlx
         unsigned int m_samples{};
 
     private:
-        void copy(Components components, const std::type_info& dataType, std::span<const byte> data) final {}
-        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) final {}
+        void copy(Components components, std::span<const byte> data) final {}
+        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) final {}
     };
 }

@@ -11,7 +11,7 @@ namespace hlx
 	{
 	public:
 		OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions);
-		OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components dataComponents, const std::type_info& dataType, std::span<const byte> data);
+		OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components components, std::span<const byte> data);
 		~OpenGLTexture2D() override;
 		
 		void bind(unsigned int slot) const override;
@@ -44,8 +44,8 @@ namespace hlx
 		}
 
 	protected:
-        void copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
-        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
+        void copy(Components components, std::span<const byte> data) override;
+        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) override;
 
 	private:
 		GLuint m_internalId{};

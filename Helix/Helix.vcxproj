@@ -105,6 +105,7 @@
     <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
     <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPITest.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />

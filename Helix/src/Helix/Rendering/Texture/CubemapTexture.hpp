@@ -22,19 +22,19 @@ namespace hlx
         virtual ~CubemapTexture() = default;
 
         template<typename T>
-        void copy(Components dataComponents, std::span<std::span<const T>, 6> data)
+        void copy(Components components, std::span<std::span<const T>, 6> data)
         {
-            copy(dataComponents, typeid(T), data);
+            copy(components, data);
         }
         template<typename T>
-        void copy_face(Face face, Components dataComponents, std::span<const T> data)
+        void copy_face(Face face, Components components, std::span<const T> data)
         {
-            copy_face(face, dataComponents, typeid(T), utl::as_bytes(data));
+            copy_face(face, components, utl::as_bytes(data));
         }
         template<typename T>
-        void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data)
+        void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const T> data)
         {
-            copy_face_range(face, dimensions, offset, dataComponents, typeid(T), utl::as_bytes(data));
+            copy_face_range(face, dimensions, offset, components, utl::as_bytes(data));
         }
 
         const Vector2u& dimensions() const
@@ -54,9 +54,9 @@ namespace hlx
             else                          m_mipLevels = 1u;
         }
 
-        virtual void copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data) = 0;
-        virtual void copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
-        virtual void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
+        virtual void copy(Components components, std::span<std::span<const byte>, 6> data) = 0;
+        virtual void copy_face(Face face, Components components, std::span<const byte> data) = 0;
+        virtual void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) = 0;
 
         Vector2u     m_dimensions{};
         unsigned int m_mipLevels{};

@@ -14,14 +14,14 @@ namespace hlx
 		virtual ~Texture2D() = default;
 		
 		template<typename T>
-		void copy(Components dataComponents, std::span<const T> data)
+		void copy(Components components, std::span<const T> data)
 		{
-			copy(dataComponents, typeid(T), utl::as_bytes(data));
+			copy(components, utl::as_bytes(data));
 		}
 		template<typename T>
-		void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data)
+		void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const T> data)
 		{
-			copy_range(dimensions, offset, dataComponents, typeid(T), utl::as_bytes(data));
+			copy_range(dimensions, offset, components, utl::as_bytes(data));
 		}
 
 		const Vector2u& dimensions() const
@@ -41,8 +41,8 @@ namespace hlx
 			else                          m_mipLevels = 1u;
 		}
 
-        virtual void copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
-        virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
+        virtual void copy(Components components, std::span<const byte> data) = 0;
+        virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) = 0;
 
 		Vector2u     m_dimensions{};
 		unsigned int m_mipLevels{};

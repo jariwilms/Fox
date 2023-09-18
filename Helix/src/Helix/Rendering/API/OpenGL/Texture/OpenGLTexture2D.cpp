@@ -20,10 +20,10 @@ namespace hlx
         glTextureParameteri(m_internalId, GL_TEXTURE_WRAP_T, m_internalWrapping);
 		glTextureStorage2D(m_internalId, m_mipLevels, m_internalFormat, m_dimensions.x, m_dimensions.y);
     }
-    OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+    OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components components, std::span<const byte> data)
         : OpenGLTexture2D{ format, filter, wrapping, dimensions }
     {
-        copy(dataComponents, dataType, data);
+        copy(components, data);
     }
     OpenGLTexture2D::~OpenGLTexture2D()
 	{
@@ -57,16 +57,16 @@ namespace hlx
 		return it->first != 0;
 	}
 	
-	void OpenGLTexture2D::copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+	void OpenGLTexture2D::copy(Components components, std::span<const byte> data)
 	{
-		copy_range(m_dimensions, Vector2u{ 0u, 0u }, dataComponents, dataType, data);
+		copy_range(m_dimensions, Vector2u{ 0u, 0u }, components, data);
 	}
-	void OpenGLTexture2D::copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+	void OpenGLTexture2D::copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data)
 	{
         if (data.empty()) return;
 		if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
-        const auto& format = OpenGL::texture_format(dataComponents);
+        const auto& format = OpenGL::texture_format(components);
 		glTextureSubImage2D(m_internalId, 0, offset.x, offset.y, dimensions.x, dimensions.y, format, GL_UNSIGNED_BYTE, data.data());
 		if (m_mipLevels > 1) glGenerateTextureMipmap(m_internalId);
 	}
