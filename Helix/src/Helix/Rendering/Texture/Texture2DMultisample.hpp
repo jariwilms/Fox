@@ -28,7 +28,7 @@ namespace hlx
         unsigned int m_samples{};
 
     private:
-        void _copy(Components components, const std::type_info& dataType, std::span<const byte> data) final {}
-        void _copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) final {}
+        void copy(Components components, const std::type_info& dataType, std::span<const byte> data) final {}
+        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) final {}
     };
 }

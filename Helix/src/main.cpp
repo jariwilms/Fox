@@ -94,14 +94,14 @@ int main(int argc, char** argv)
     auto observer = scene->create_actor();
     auto& camera = observer->add_component<CameraComponent>();
     auto& cameraTransform = observer->get_component<TransformComponent>();
-    cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
+    cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 10.0f });
 
 
 
     hlx::ModelImporter modelImporter{};
 #ifdef _DEBUG
-    //auto model = modelImporter.import(R"(models/cube_textured/scene.gltf)");
-    auto model = modelImporter.import(R"(models/fish/scene.gltf)");
+    auto model = modelImporter.import(R"(models/cube_textured/scene.gltf)");
+    //auto model = modelImporter.import(R"(models/fish/scene.gltf)");
 #endif
 #ifndef _DEBUG
     //auto model = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");

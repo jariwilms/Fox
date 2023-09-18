@@ -64,12 +64,12 @@ namespace hlx
 	void OpenGLFrameBuffer::bind(Target target) const
 	{
 		const auto& internalTarget = OpenGL::framebuffer_target(target);
-        const auto& pair = s_targetToIdMap.try_emplace(internalTarget, 0);
-        if (pair.first->second == m_internalId) return;
+        //const auto& pair = s_targetToIdMap.try_emplace(internalTarget, 0);
+        //if (pair.first->second == m_internalId) return;
 
 		glBindFramebuffer(internalTarget, m_internalId);
-		s_targetToIdMap.at(internalTarget) = m_internalId;
-		s_idToTargetMap.insert_or_assign(m_internalId, internalTarget);
+		//s_targetToIdMap.at(internalTarget) = m_internalId;
+		//s_idToTargetMap.insert_or_assign(m_internalId, internalTarget);
 	}
     void OpenGLFrameBuffer::unbind() const
 	{

@@ -24,7 +24,7 @@ namespace hlx
     OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data)
         : OpenGLCubemapTexture{ format, filter, wrapping, dimensions }
     {
-        _copy(dataComponents, dataType, data);
+        copy(dataComponents, dataType, data);
     }
     OpenGLCubemapTexture::~OpenGLCubemapTexture()
     {
@@ -58,57 +58,26 @@ namespace hlx
         return it->first != 0;
     }
 
-    void OpenGLCubemapTexture::_copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data)
+    void OpenGLCubemapTexture::copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data)
     {
         unsigned int index{};
         std::for_each(data.begin(), data.end(), [&](const auto& faceData) 
             { 
-                _copy_face(static_cast<Face>(index), dataComponents, dataType, faceData); 
+                copy_face(static_cast<Face>(index), dataComponents, dataType, faceData); 
                 ++index; 
             });
     }
-    void OpenGLCubemapTexture::_copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+    void OpenGLCubemapTexture::copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
     {
-        //const auto& area = m_dimensions.x * m_dimensions.y;
-        //const auto& componentCount = dataComponents < Components::D ? static_cast<int>(dataComponents) : 1;
-        //const auto& componentSize = OpenGL::type_enum(dataType.hash_code());
-        throw std::logic_error{ "Method has not been implemented!" };
-
-        _copy_face_range(face, m_dimensions, Vector2u{ 0u, 0u }, dataComponents, dataType, data);
+        copy_face_range(face, m_dimensions, Vector2u{ 0u, 0u }, dataComponents, dataType, data);
     }
-    void OpenGLCubemapTexture::_copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+    void OpenGLCubemapTexture::copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
     {
         if (data.empty()) return;
+        if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
-        const auto& format    = OpenGL::texture_format(dataComponents);
-        const auto& type      = OpenGL::type_enum(dataType.hash_code());
-        const auto& totalSize = offset + dimensions;
-        if (glm::any(glm::greaterThan(m_dimensions, totalSize))) throw std::invalid_argument{ "The total size exceeds texture bounds!" };
-        
-        glTextureSubImage3D(m_internalId, 0, offset.x, offset.y, static_cast<GLint>(face), dimensions.x, dimensions.y, 1, format, type, data.data());
+        const auto& format = OpenGL::texture_format(dataComponents);
+        glTextureSubImage3D(m_internalId, 0, offset.x, offset.y, static_cast<GLint>(face), dimensions.x, dimensions.y, 1, format, GL_UNSIGNED_BYTE, data.data());
         if (m_mipLevels > 1) glGenerateTextureMipmap(m_internalId);
     }
-
-    //void OpenGLCubemapTexture::copy(Format dataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel, bool generateMips)
-    //{
-    //    const auto size = m_dimensions.x * m_dimensions.y * static_cast<unsigned int>(dataFormat);
-    //    const auto size_check = [size](std::span<const byte> subData)
-    //    {
-    //        return size == subData.size();
-    //    };
-    //    if (data.empty()) return;
-    //    if (!std::all_of(data.begin(), data.end(), size_check)) throw std::invalid_argument{ "Data length does not match texture size!" };
-    //    unsigned int zOffset{};
-    //    const auto format = OpenGL::texture_format(dataFormat);
-    //    for (const auto& subData : data)
-    //    {
-    //        glTextureSubImage3D(m_id, mipLevel, 0, 0, zOffset, m_dimensions.x, m_dimensions.y, 1, format, GL_UNSIGNED_BYTE, subData.data());
-    //        ++zOffset;
-    //    }
-    //    if (generateMips) glGenerateTextureMipmap(m_id);
-    //}
-    //void OpenGLCubemapTexture::copy_range(const Vector2u& dimensions, const Vector2u& offset, Format DataFormat, std::span<std::span<const byte>, 6> data, unsigned int mipLevel, bool generateMips)
-    //{
-    //    throw std::runtime_error{ "The method or operation is not implemented." };
-    //}
 }

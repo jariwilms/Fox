@@ -16,12 +16,12 @@ namespace hlx
 		template<typename T>
 		void copy(Components dataComponents, std::span<const T> data)
 		{
-			_copy(dataComponents, typeid(T), utl::as_bytes(data));
+			copy(dataComponents, typeid(T), utl::as_bytes(data));
 		}
 		template<typename T>
 		void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, std::span<const T> data)
 		{
-			_copy_range(dimensions, offset, dataComponents, typeid(T), utl::as_bytes(data));
+			copy_range(dimensions, offset, dataComponents, typeid(T), utl::as_bytes(data));
 		}
 
 		const Vector2u& dimensions() const
@@ -41,8 +41,8 @@ namespace hlx
 			else                          m_mipLevels = 1u;
 		}
 
-        virtual void _copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
-        virtual void _copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
+        virtual void copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
+        virtual void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) = 0;
 
 		Vector2u     m_dimensions{};
 		unsigned int m_mipLevels{};

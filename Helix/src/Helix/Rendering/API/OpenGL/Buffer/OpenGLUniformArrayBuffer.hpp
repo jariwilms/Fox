@@ -15,6 +15,7 @@ namespace hlx
         {
             m_internalTarget = GL_UNIFORM_BUFFER;
             glCreateBuffers(1, &m_internalId);
+            glNamedBufferStorage(m_internalId, count * sizeof(T), nullptr, GL_DYNAMIC_STORAGE_BIT);
 
             bind(m_binding);
         }

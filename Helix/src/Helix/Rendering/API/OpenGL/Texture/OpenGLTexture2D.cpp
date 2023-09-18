@@ -23,7 +23,7 @@ namespace hlx
     OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
         : OpenGLTexture2D{ format, filter, wrapping, dimensions }
     {
-        _copy(dataComponents, dataType, data);
+        copy(dataComponents, dataType, data);
     }
     OpenGLTexture2D::~OpenGLTexture2D()
 	{
@@ -57,20 +57,17 @@ namespace hlx
 		return it->first != 0;
 	}
 	
-	void OpenGLTexture2D::_copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+	void OpenGLTexture2D::copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
 	{
-		_copy_range(m_dimensions, Vector2u{ 0u, 0u }, dataComponents, dataType, data);
+		copy_range(m_dimensions, Vector2u{ 0u, 0u }, dataComponents, dataType, data);
 	}
-	void OpenGLTexture2D::_copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
+	void OpenGLTexture2D::copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data)
 	{
         if (data.empty()) return;
+		if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
-        const auto& format    = OpenGL::texture_format(dataComponents);
-        const auto& type      = OpenGL::type_enum(dataType.hash_code());
-		const auto& totalSize = offset + dimensions;
-		if (glm::any(glm::greaterThan(m_dimensions, totalSize))) throw std::invalid_argument{ "The total size exceeds texture bounds!" };
-		
-		glTextureSubImage2D(m_internalId, 0, offset.x, offset.y, dimensions.x, dimensions.y, format, type, data.data());
+        const auto& format = OpenGL::texture_format(dataComponents);
+		glTextureSubImage2D(m_internalId, 0, offset.x, offset.y, dimensions.x, dimensions.y, format, GL_UNSIGNED_BYTE, data.data());
 		if (m_mipLevels > 1) glGenerateTextureMipmap(m_internalId);
 	}
 }

@@ -54,15 +54,15 @@ namespace hlx
         glDeleteFramebuffers(1, &m_internalId);
     }
 
-    void OpenGLFrameBufferMultisample::bind(Target target) const
+    void OpenGLFrameBufferMultisample::bind(FrameBuffer::Target target) const
     {
         const auto& internalTarget = OpenGL::framebuffer_target(target);
         const auto& pair = s_targetToIdMap.try_emplace(internalTarget, 0);
-        if (pair.first->second == m_internalId) return;
+        //if (pair.first->second == m_internalId) return;
 
         glBindFramebuffer(internalTarget, m_internalId);
-        s_targetToIdMap.at(internalTarget) = m_internalId;
-        s_idToTargetMap.insert_or_assign(m_internalId, internalTarget);
+        //s_targetToIdMap.at(internalTarget) = m_internalId;
+        //s_idToTargetMap.insert_or_assign(m_internalId, internalTarget);
     }
     void OpenGLFrameBufferMultisample::unbind() const
     {

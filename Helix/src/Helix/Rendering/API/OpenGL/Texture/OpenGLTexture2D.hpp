@@ -18,9 +18,6 @@ namespace hlx
 		void unbind()                const override;
 		bool is_bound()              const override;
 		
-        void _copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
-        void _copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
-
 		GLuint internal_id()         const
 		{
 			return m_internalId;
@@ -45,6 +42,10 @@ namespace hlx
 		{
 			return m_internalWrapping;
 		}
+
+	protected:
+        void copy(Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
+        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
 
 	private:
 		GLuint m_internalId{};

@@ -14,8 +14,8 @@ namespace hlx
     struct UMaterial //std140, binding 1
     {
         Vector4f color{};
-        float roughness{};
-        float metallic{};
+        float    roughness{};
+        float    metallic{};
     };
     struct ULight //std140, binding 2
     {

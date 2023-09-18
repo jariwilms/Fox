@@ -18,10 +18,6 @@ namespace hlx
         void unbind()                const override;
         bool is_bound()              const override;
 
-        void _copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data) override;
-        void _copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
-        void _copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
-
         GLenum internal_id()         const
         {
             return m_internalId;
@@ -46,6 +42,11 @@ namespace hlx
         {
             return m_internalWrapping;
         }
+
+    protected:
+        void copy(Components dataComponents, const std::type_info& dataType, std::span<std::span<const byte>, 6> data) override;
+        void copy_face(Face face, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
+        void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components dataComponents, const std::type_info& dataType, std::span<const byte> data) override;
 
     private:
         GLenum m_internalId{};
