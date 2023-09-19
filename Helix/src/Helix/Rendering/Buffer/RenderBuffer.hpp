@@ -33,15 +33,15 @@ namespace hlx
 
 		virtual ~RenderBuffer() = default;
 
-		virtual void bind() const = 0;
-		virtual void unbind() const = 0;
+		virtual void bind()     const = 0;
+		virtual void unbind()   const = 0;
 		virtual bool is_bound() const = 0;
 
-		Type type()                  const
+		Type            type()       const
 		{
 			return m_type;
 		}
-		Layout layout()              const
+		Layout          layout()     const
 		{
 			return m_layout;
 		}
@@ -54,8 +54,8 @@ namespace hlx
 		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions)
 			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions } {}
 
-		Type m_type{};
-		Layout m_layout{};
+		Type     m_type{};
+		Layout   m_layout{};
 		Vector2u m_dimensions{};
 	};
 }
