@@ -26,10 +26,24 @@ namespace hlx
             DepthStencil,
         };
 
-        using Texture2DSpec = std::tuple<std::string, Attachment, Texture2D>;
-        using RenderBufferSpec = std::tuple<std::string, Attachment, RenderBuffer>;
-        using Texture2DBlueprintSpec = std::tuple<std::string, Attachment, TextureBlueprint>;
-        using RenderBufferBlueprintSpec = std::tuple<std::string, Attachment, RenderBufferBlueprint>;
+        struct TextureManifest
+        {
+            TextureManifest(const std::string& name, Attachment attachment, TextureBlueprint blueprint)
+                : name{ name }, attachment{ attachment }, blueprint{ blueprint } {}
+
+            std::string      name{};
+            Attachment       attachment{};
+            TextureBlueprint blueprint{};
+        };
+        struct RenderBufferManifest
+        {
+            RenderBufferManifest(const std::string& name, Attachment attachment, RenderBufferBlueprint blueprint)
+                : name{ name }, attachment{ attachment }, blueprint{ blueprint } {}
+
+            std::string           name{};
+            Attachment            attachment{};
+            RenderBufferBlueprint blueprint{};
+        };
 
 		virtual ~FrameBuffer() = default;
 
@@ -43,7 +57,6 @@ namespace hlx
         {
             return m_attachedTextures.at(identifier);
         }
-
         const Vector2u& dimensions() const
         {
             return m_dimensions;

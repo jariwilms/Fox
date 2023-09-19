@@ -4,7 +4,7 @@
 
 namespace hlx
 {
-    OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const FrameBuffer::Texture2DBlueprintSpec> textures, std::span<const FrameBuffer::RenderBufferBlueprintSpec> renderBuffers)
+    OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest)
         : FrameBufferMultisample{ dimensions, samples }
     {
         if (m_samples == 0) throw std::invalid_argument{ "Samples must be greater than zero!" };
@@ -13,7 +13,7 @@ namespace hlx
 
         unsigned int colorAttachmentIndex{};
         std::vector<GLenum> drawBuffers{};
-        const auto attach_texture = [this, &drawBuffers, &colorAttachmentIndex](const std::tuple<std::string, Attachment, TextureBlueprint>& value)
+        const auto attach_texture = [this, &drawBuffers, &colorAttachmentIndex](const TextureManifest& value)
         {
             const auto& [name, attachment, blueprint] = value;
             const auto& texture = blueprint.build_ms(m_dimensions, m_samples);
@@ -31,7 +31,7 @@ namespace hlx
             glNamedFramebufferTexture(m_internalId, internalAttachment, glTexture->internal_id(), 0);
             m_attachedTextures.emplace(name, texture);
         };
-        const auto attach_renderbuffer = [this](const std::tuple<std::string, Attachment, RenderBufferBlueprint>& attachee)
+        const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
         {
             const auto& [name, attachment, blueprint] = attachee;
             const auto& renderBuffer = blueprint.build_ms(m_dimensions, m_samples);
@@ -42,8 +42,8 @@ namespace hlx
             glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->internal_id());
         };
 
-        std::for_each(textures.begin(),      textures.end(),      attach_texture);
-        std::for_each(renderBuffers.begin(), renderBuffers.end(), attach_renderbuffer);
+        std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);
+        std::for_each(renderBufferManifest.begin(), renderBufferManifest.end(), attach_renderbuffer);
         glNamedFramebufferDrawBuffers(m_internalId, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
 
         const auto& status = glCheckNamedFramebufferStatus(m_internalId, GL_FRAMEBUFFER);

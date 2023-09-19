@@ -30,12 +30,12 @@ namespace hlx
             return std::make_shared<OpenGLVertexArray>();
         }
                                                        
-        static std::shared_ptr<VertexBuffer>        create_vbo(unsigned int count)
+        static std::shared_ptr<VertexBuffer>           create_vbo(unsigned int count)
         {
             return std::make_shared<OpenGLVertexBuffer>(count);
         }
         template<typename T>                           
-        static std::shared_ptr<VertexBuffer>        create_vbo(std::span<const T> data)
+        static std::shared_ptr<VertexBuffer>           create_vbo(std::span<const T> data)
         {
             return std::make_shared<OpenGLVertexBuffer>(data);
         }
@@ -68,13 +68,13 @@ namespace hlx
             return std::make_shared<OpenGLUniformArrayBuffer<T>>(binding, data);
         }
                                                        
-        static std::shared_ptr<FrameBuffer>            create_fbo(const Vector2u& dimensions, std::span<const std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> textures, std::span<const std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> renderBuffers)
+        static std::shared_ptr<FrameBuffer>            create_fbo(const Vector2u& dimensions, std::span<const FrameBuffer::TextureManifest> textureManifest, std::span<const FrameBuffer::RenderBufferManifest> renderBufferManifest)
         {
-            return std::make_shared<OpenGLFrameBuffer>(dimensions, textures, renderBuffers);
+            return std::make_shared<OpenGLFrameBuffer>(dimensions, textureManifest, renderBufferManifest);
         }
-        static std::shared_ptr<FrameBufferMultisample> create_fbo_ms(const Vector2u& dimensions, unsigned int samples, std::span<const std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> textures, std::span<const std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> renderBuffers)
+        static std::shared_ptr<FrameBufferMultisample> create_fbo_ms(const Vector2u& dimensions, unsigned int samples, std::span<const FrameBuffer::TextureManifest> textureManifest, std::span<const FrameBuffer::RenderBufferManifest> renderBufferManifest)
         {
-            return std::make_shared<OpenGLFrameBufferMultisample>(dimensions, samples, textures, renderBuffers);
+            return std::make_shared<OpenGLFrameBufferMultisample>(dimensions, samples, textureManifest, renderBufferManifest);
         }
         static std::shared_ptr<RenderBuffer>           create_rbo(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions)
         {

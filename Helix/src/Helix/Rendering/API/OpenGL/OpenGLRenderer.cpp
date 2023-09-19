@@ -6,44 +6,44 @@ namespace hlx
 {
     OpenGLRenderer::OpenGLRenderer()
     {
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> gBufferTextureBlueprints
+        std::vector<FrameBuffer::TextureManifest> gBufferTextureManifest
         {
-            std::make_tuple("Position", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
-            std::make_tuple("Albedo",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA8_SRGB,  Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
-            std::make_tuple("Normal",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
-            std::make_tuple("ARM",      FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat }),
+            { "Position", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "Albedo",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA8_SRGB,  Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "Normal",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "ARM",      FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
         };
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> gBufferRenderBufferBlueprints
+        std::vector<FrameBuffer::RenderBufferManifest> gBufferRenderBufferManifest
         {
-            std::make_tuple("DepthStencil", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 }), 
+            { "DepthStencil", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 } }, 
         };
         
-        FrameBufferBlueprint frameBufferBlueprint{ gBufferTextureBlueprints, gBufferRenderBufferBlueprints };
+        FrameBufferBlueprint frameBufferBlueprint{ gBufferTextureManifest, gBufferRenderBufferManifest };
         m_gBufferMultisample = frameBufferBlueprint.build_ms(Vector2f{ 1280, 720 }, 2);
         m_gBuffer            = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
 
 
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> shadowMapBufferTextureBlueprint
+        std::vector<FrameBuffer::TextureManifest> shadowMapBufferTextureManifest
         {
-            std::make_tuple("Color", FrameBuffer::Attachment::Depth, TextureBlueprint{ Texture::Format::D24_UNORM }),
+            { "Color", FrameBuffer::Attachment::Depth, TextureBlueprint{ Texture::Format::D24_UNORM } }, 
         };
 
-        FrameBufferBlueprint shadowMapBufferBlueprint{ shadowMapBufferTextureBlueprint, {} };
+        FrameBufferBlueprint shadowMapBufferBlueprint{ shadowMapBufferTextureManifest, {} };
         m_shadowMapBuffer = shadowMapBufferBlueprint.build(Vector2f{ 1024, 1024 });
 
 
 
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, TextureBlueprint>> ppBufferTextureBlueprint
+        std::vector<FrameBuffer::TextureManifest> ppBufferTextureManifest
         {
-            std::make_tuple("Color", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA16_UNORM }),
+            { "Color", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA16_UNORM } }, 
         };
-        std::vector<std::tuple<std::string, FrameBuffer::Attachment, RenderBufferBlueprint>> ppBufferRenderBufferBlueprint
+        std::vector<FrameBuffer::RenderBufferManifest> ppBufferRenderBufferManifest
         {
-            std::make_tuple("Depth", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 }),
+            { "Depth", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 } }, 
         };
 
-        FrameBufferBlueprint ppBufferBlueprint{ ppBufferTextureBlueprint, ppBufferRenderBufferBlueprint };
+        FrameBufferBlueprint ppBufferBlueprint{ ppBufferTextureManifest, ppBufferRenderBufferManifest };
         for (auto& ppBuffer : m_ppBuffers)
         {
             ppBuffer = ppBufferBlueprint.build({ 1280, 720 });

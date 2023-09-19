@@ -14,7 +14,7 @@ namespace hlx
     class OpenGLFrameBufferMultisample : public FrameBufferMultisample
     {
     public:
-        OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const FrameBuffer::Texture2DBlueprintSpec> textures, std::span<const FrameBuffer::RenderBufferBlueprintSpec> renderBuffers);
+        OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest);
         ~OpenGLFrameBufferMultisample();
 
         void bind(Target target) const override;

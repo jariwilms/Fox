@@ -4,14 +4,14 @@
 
 namespace hlx
 {
-	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const Texture2DBlueprintSpec>& textures, std::span<const RenderBufferBlueprintSpec>& renderBuffers)
+	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest)
 		: FrameBuffer{ dimensions }
 	{
 		glCreateFramebuffers(1, &m_internalId);
 
 		std::vector<GLenum> drawBuffers{};
 		unsigned int textureAttachmentIndex{};
-		const auto attach_texture = [this, &drawBuffers, &textureAttachmentIndex](const std::tuple<std::string, Attachment, TextureBlueprint>& value)
+		const auto attach_texture = [this, &drawBuffers, &textureAttachmentIndex](const TextureManifest& value)
 		{
 			const auto& [name, attachment, blueprint] = value;
 			const auto& texture = blueprint.build(m_dimensions);
@@ -29,7 +29,7 @@ namespace hlx
 			glNamedFramebufferTexture(m_internalId, internalAttachment, glTexture->internal_id(), 0);
 			m_attachedTextures.emplace(name, texture);
 		};
-		const auto attach_renderbuffer = [this](const std::tuple<std::string, Attachment, RenderBufferBlueprint>& attachee)
+		const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
 		{
 			const auto& [name, attachment, blueprint] = attachee;
 			const auto& renderBuffer = blueprint.build(m_dimensions);
@@ -40,8 +40,8 @@ namespace hlx
             glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->internal_id());
 		};
 
-		std::for_each(textures.begin(), textures.end(), attach_texture);
-		std::for_each(renderBuffers.begin(), renderBuffers.end(), attach_renderbuffer);
+		std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);
+		std::for_each(renderBufferManifest.begin(), renderBufferManifest.end(), attach_renderbuffer);
 
 		if (drawBuffers.empty()) 
 		{

@@ -14,7 +14,7 @@ namespace hlx
 	class OpenGLFrameBuffer : public FrameBuffer
 	{
 	public:
-		OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const Texture2DBlueprintSpec>& textures, std::span<const RenderBufferBlueprintSpec>& renderBuffers);
+		OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest);
 		~OpenGLFrameBuffer();
 
 		void bind(Target target) const override;

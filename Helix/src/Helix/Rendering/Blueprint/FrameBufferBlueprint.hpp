@@ -20,7 +20,7 @@ namespace hlx
             return GraphicsAPI::create_fbo_ms(dimensions, samples, utl::to_span(textures), utl::to_span(renderBuffers));
         }
 
-        std::vector<FrameBuffer::Texture2DBlueprintSpec> textures{};
-        std::vector<FrameBuffer::RenderBufferBlueprintSpec> renderBuffers{};
+        std::vector<FrameBuffer::TextureManifest>      textures{};
+        std::vector<FrameBuffer::RenderBufferManifest> renderBuffers{};
     };
 }

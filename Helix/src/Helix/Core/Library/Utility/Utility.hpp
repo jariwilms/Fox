@@ -10,6 +10,11 @@ namespace hlx::utl
     {
         return std::span{ v };
     }
+    template<typename T, typename U>
+    std::span<const U> to_span(const std::vector<T>& v)
+    {
+        return std::span{ reinterpret_cast<const U*>(v.data()), v.size() * sizeof(U) };
+    }
     template<typename T>
     auto to_span(const std::vector<std::vector<T>>& v)
     {

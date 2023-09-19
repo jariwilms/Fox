@@ -75,8 +75,15 @@ std::shared_ptr<Actor> model_to_scene_graph(Scene* scene, std::shared_ptr<Model>
     return actor;
 };
 
+#include "Helix/Rendering/API/GraphicsAPITest.hpp"
 int main(int argc, char** argv)
 {
+
+
+
+
+
+
     Application application{ argc, argv };
 
     const std::string windowIdentifier{ "Window 1" };
