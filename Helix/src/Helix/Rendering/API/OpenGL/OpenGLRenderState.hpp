@@ -9,6 +9,6 @@ namespace hlx
     class OpenGLRenderState : public RenderStateAPI
     {
     public:
-
+        Vector4f clearColor{};
     };
 }

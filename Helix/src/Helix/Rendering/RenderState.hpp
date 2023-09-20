@@ -28,23 +28,23 @@ namespace hlx
             s_renderStateAPI = std::make_unique<OpenGLRenderState>();
         }
 
-        template<Option option> static auto query() = delete;
+        template<Option O, typename... Args> static auto query(Args... args) = delete;
         template<> static auto query<Option::ClearColor>()
         {
-            return Vector4f{ 1.0f, 1.0f, 1.0f, 1.0f };
+            return Vector4f{ 0.0f };
         }
         template<> static auto query<Option::CullingFace>()
         {
             return CullingFace::Back;
         }
 
-        static bool dirty()
+        template<Option O, typename... Args> static auto apply(Args... args) = delete;
+        template<> static auto apply<Option::ClearColor>(const Vector4f& value)
         {
-            return s_dirty;
+            return 2;
         }
 
     private:
         static inline std::unique_ptr<RenderStateAPI> s_renderStateAPI{};
-        static inline bool s_dirty{};
     };
 }

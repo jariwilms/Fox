@@ -10,6 +10,7 @@
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"
 #include "Helix/Rendering/Shader/Shader.hpp"
 #include "Helix/Rendering/Texture/Texture.hpp"
+
 namespace hlx
 {
     class OpenGL
@@ -58,24 +59,6 @@ namespace hlx
             }
         }
                                      
-        static constexpr GLenum      texture_target()
-        {
-            return GL_TEXTURE_2D;
-
-            //Texture2D targets
-            //GL_PROXY_TEXTURE_2D;
-            //GL_TEXTURE_1D_ARRAY;
-            //GL_PROXY_TEXTURE_1D_ARRAY;
-            //GL_TEXTURE_RECTANGLE;
-            //GL_PROXY_TEXTURE_RECTANGLE;
-            //GL_TEXTURE_CUBE_MAP_POSITIVE_X;
-            //GL_TEXTURE_CUBE_MAP_NEGATIVE_X;
-            //GL_TEXTURE_CUBE_MAP_POSITIVE_Y;
-            //GL_TEXTURE_CUBE_MAP_NEGATIVE_Y;
-            //GL_TEXTURE_CUBE_MAP_POSITIVE_Z;
-            //GL_TEXTURE_CUBE_MAP_NEGATIVE_Z;
-            //GL_PROXY_TEXTURE_CUBE_MAP;
-        }
         static constexpr GLenum      texture_format(Texture::Format format)
         {
             switch (format)
@@ -262,10 +245,10 @@ namespace hlx
         }
         static constexpr std::string shader_infolog(GLuint shader)
         {
-            std::string infolog{};
             GLsizei length = shader_parameter(shader, GL_INFO_LOG_LENGTH);
             GLsizei bufSize{length};
 
+            std::string infolog{};
             infolog.resize(length);
             glGetShaderInfoLog(shader, bufSize, nullptr, infolog.data());
 
@@ -295,12 +278,18 @@ namespace hlx
             return infolog;
         }
 
-        static constexpr GLint       max_samples()
-        {
-            GLint maxSamples{};
-            glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
 
-            return maxSamples;
+
+        static GLuint create_framebuffer()
+        {
+            GLuint id{};
+            glCreateFramebuffers(1, &id);
+
+            return id;
+        }
+        static void attach_framebuffer_texture(GLuint framebufferId, GLuint textureId, GLenum attachment, GLuint level = 0)
+        {
+            glNamedFramebufferTexture(framebufferId, attachment, textureId, level);
         }
     };
 }

@@ -6,6 +6,7 @@ namespace hlx
 {
     class RenderStateAPI
     {
+    public:
 
     };
 }

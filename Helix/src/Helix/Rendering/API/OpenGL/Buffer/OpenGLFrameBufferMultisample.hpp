@@ -30,8 +30,5 @@ namespace hlx
 
     private:
         GLuint m_internalId{};
-
-        static inline std::unordered_map<GLuint, GLenum> s_idToTargetMap{};
-        static inline std::unordered_map<GLenum, GLuint> s_targetToIdMap{};
     };
 }
