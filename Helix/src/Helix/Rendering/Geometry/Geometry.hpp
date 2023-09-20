@@ -63,12 +63,12 @@ namespace hlx
                 layout3f->specify<float>(3);
                 layout2f->specify<float>(2);
 
-                const auto positionsVBO   = GraphicsAPI::create_vbo<float>(positions);
-                const auto normalsVBO     = GraphicsAPI::create_vbo<float>(normals);
-                const auto coordinatesVBO = GraphicsAPI::create_vbo<float>(coordinates);
-                const auto indicesIBO     = GraphicsAPI::create_ibo(indices);
+                const auto positionsVBO   = gfx::create_vertex_buffer<float>(positions);
+                const auto normalsVBO     = gfx::create_vertex_buffer<float>(normals);
+                const auto coordinatesVBO = gfx::create_vertex_buffer<float>(coordinates);
+                const auto indicesIBO     = gfx::create_index_buffer(indices);
 
-                s_vao = GraphicsAPI::create_vao();
+                s_vao = gfx::create_vertex_array();
                 s_vao->tie(positionsVBO, layout3f);
                 s_vao->tie(normalsVBO, layout3f);
                 s_vao->tie(coordinatesVBO, layout2f);
@@ -212,12 +212,12 @@ namespace hlx
                 layout3f->specify<float>(3);
                 layout2f->specify<float>(2);
 
-                const auto positionsVBO   = GraphicsAPI::create_vbo<float>(positions);
-                const auto normalsVBO     = GraphicsAPI::create_vbo<float>(normals);
-                const auto coordinatesVBO = GraphicsAPI::create_vbo<float>(coordinates);
-                const auto indicesIBO     = GraphicsAPI::create_ibo(indices);
+                const auto positionsVBO   = gfx::create_vertex_buffer<float>(positions);
+                const auto normalsVBO     = gfx::create_vertex_buffer<float>(normals);
+                const auto coordinatesVBO = gfx::create_vertex_buffer<float>(coordinates);
+                const auto indicesIBO     = gfx::create_index_buffer(indices);
 
-                s_vao = GraphicsAPI::create_vao();
+                s_vao = gfx::create_vertex_array();
                 s_vao->tie(positionsVBO, layout3f);
                 s_vao->tie(normalsVBO, layout3f);
                 s_vao->tie(coordinatesVBO, layout2f);

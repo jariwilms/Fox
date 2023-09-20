@@ -75,15 +75,8 @@ std::shared_ptr<Actor> model_to_scene_graph(Scene* scene, std::shared_ptr<Model>
     return actor;
 };
 
-#include "Helix/Rendering/API/GraphicsAPITest.hpp"
 int main(int argc, char** argv)
 {
-
-
-
-
-
-
     Application application{ argc, argv };
 
     const std::string windowIdentifier{ "Window 1" };
@@ -152,9 +145,9 @@ int main(int argc, char** argv)
 
     ////Testing
     //auto lightingCubeMaterial = std::make_shared<Material>("Default");
-    //lightingCubeMaterial->albedoMap = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
-    //lightingCubeMaterial->normalMap = GraphicsAPI::create_tex(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
-    //lightingCubeMaterial->armMap    = GraphicsAPI::create_tex(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
+    //lightingCubeMaterial->albedoMap = gfx::create_texture(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
+    //lightingCubeMaterial->normalMap = gfx::create_texture(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
+    //lightingCubeMaterial->armMap    = gfx::create_texture(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
 
     //auto lightingCubeMesh = std::make_shared<Mesh>(Geometry::Cube::vao());
     //Transform lightingCubeTransform{};

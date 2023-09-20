@@ -13,11 +13,11 @@ namespace hlx
     public:
         std::shared_ptr<FrameBuffer> build(const Vector2u& dimensions) const
         {
-            return GraphicsAPI::create_fbo(dimensions, utl::to_span(textures), utl::to_span(renderBuffers));
+            return gfx::create_framebuffer(dimensions, utl::to_span(textures), utl::to_span(renderBuffers));
         }
         std::shared_ptr<FrameBufferMultisample> build_ms(const Vector2u& dimensions, unsigned int samples) const
         {
-            return GraphicsAPI::create_fbo_ms(dimensions, samples, utl::to_span(textures), utl::to_span(renderBuffers));
+            return gfx::create_framebuffer_multisample(dimensions, samples, utl::to_span(textures), utl::to_span(renderBuffers));
         }
 
         std::vector<FrameBuffer::TextureManifest>      textures{};

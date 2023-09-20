@@ -105,7 +105,7 @@
     <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
     <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPITest.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
@@ -146,7 +146,6 @@
     <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
     <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
     <ClInclude Include="src\Helix\Input\Input.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />

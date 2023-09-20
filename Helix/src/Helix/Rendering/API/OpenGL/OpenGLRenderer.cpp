@@ -65,9 +65,9 @@ namespace hlx
 
 
         //TODO: maybe predefined pipeline names (constexpr?), these will probably not change anyways
-        m_pipelines.emplace("Mesh",     GraphicsAPI::create_plo("shaders/compiled/mesh.vert.spv",     "shaders/compiled/mesh.frag.spv"));
-        m_pipelines.emplace("Lighting", GraphicsAPI::create_plo("shaders/compiled/lighting.vert.spv", "shaders/compiled/lighting.frag.spv"));
-        m_pipelines.emplace("Skybox",   GraphicsAPI::create_plo("shaders/compiled/skybox.vert.spv",   "shaders/compiled/skybox.frag.spv"));
+        m_pipelines.emplace("Mesh",     gfx::create_pipeline("shaders/compiled/mesh.vert.spv",     "shaders/compiled/mesh.frag.spv"));
+        m_pipelines.emplace("Lighting", gfx::create_pipeline("shaders/compiled/lighting.vert.spv", "shaders/compiled/lighting.frag.spv"));
+        m_pipelines.emplace("Skybox",   gfx::create_pipeline("shaders/compiled/skybox.vert.spv",   "shaders/compiled/skybox.frag.spv"));
 
 
 

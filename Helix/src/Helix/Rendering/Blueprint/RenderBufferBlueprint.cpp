@@ -7,10 +7,10 @@ namespace hlx
 {
     std::shared_ptr<RenderBuffer> RenderBufferBlueprint::build(const Vector2u& dimensions) const
     {
-        return GraphicsAPI::create_rbo(type, layout, dimensions);
+        return gfx::create_renderbuffer(type, layout, dimensions);
     }
     std::shared_ptr<RenderBuffer> RenderBufferBlueprint::build_ms(const Vector2u& dimensions, unsigned int samples) const
     {
-        return GraphicsAPI::create_rbo_ms(type, layout, dimensions, samples);
+        return gfx::create_renderbuffer_multisample(type, layout, dimensions, samples);
     }
 }
