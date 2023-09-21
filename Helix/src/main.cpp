@@ -23,10 +23,6 @@
 #include "Helix/Scene/Scene.hpp"
 #include "Helix/Window/Window.hpp"
 
-#include "Helix/Test/Test.hpp"
-#include "Helix/Experimental/Texture/Texture.hpp"
-
-#include "Helix/IO/Import/Model/ModelImporter.hpp"
 
 using namespace hlx;
 

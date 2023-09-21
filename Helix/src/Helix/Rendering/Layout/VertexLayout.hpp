@@ -14,14 +14,13 @@ namespace hlx
 		template<typename T>
 		void specify(unsigned int count)
 		{
-			const auto& typeId = typeid(T);
-			const auto& typeHash = typeId.hash_code();
+			const auto& tHash = typeid(T).hash_code();
 
-			m_attributes.emplace_back(count, typeHash);
+			m_attributes.emplace_back(count, tHash);
 			m_stride += count * sizeof(T);
 		}
 
-		const std::vector<VertexAttribute>& attributes() const
+		std::span<const VertexAttribute> attributes() const
 		{
 			return m_attributes;
 		}

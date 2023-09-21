@@ -7,25 +7,27 @@ namespace hlx
     struct VertexAttribute
     {
     public:
-        VertexAttribute(unsigned int count, size_t tHash)
+        VertexAttribute(unsigned int count, t_hash tHash)
             : m_count{ count }, m_tHash{ tHash } {}
 
         unsigned int count() const
         {
             return m_count;
         }
-        size_t hash() const
-        {
-            return m_tHash;
-        }
         bool normalized() const
         {
             return m_normalized;
         }
 
+        t_hash hash() const
+        {
+            return m_tHash;
+        }
+
     private:
-        const unsigned int m_count{};
-        const size_t m_tHash{};
+        unsigned int m_count{};
         bool m_normalized{};
+
+        t_hash m_tHash{};
     };
 }
