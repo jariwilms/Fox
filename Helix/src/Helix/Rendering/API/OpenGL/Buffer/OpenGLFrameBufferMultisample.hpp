@@ -6,8 +6,6 @@
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture2DMultisample.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLRenderBufferMultisample.hpp"
 #include "Helix/Rendering/Buffer/FrameBufferMultisample.hpp"
-#include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
-#include "Helix/Rendering/Blueprint/RenderBufferBlueprint.hpp"
 
 namespace hlx
 {
@@ -18,15 +16,17 @@ namespace hlx
         ~OpenGLFrameBufferMultisample();
 
         void bind(Target target) const override;
-
         void bind_texture(const std::string& identifier, unsigned int slot) const override;
 
-        GLuint internal_id() const
+        GLuint id() const
         {
-            return m_internalId;
+            return m_id;
         }
 
     private:
-        GLuint m_internalId{};
+        GLuint m_id{};
+
+        std::unordered_map<std::string, std::shared_ptr<OpenGLTexture2DMultisample>>    m_textures{};
+        std::unordered_map<std::string, std::shared_ptr<OpenGLRenderBufferMultisample>> m_renderBuffers{};
     };
 }

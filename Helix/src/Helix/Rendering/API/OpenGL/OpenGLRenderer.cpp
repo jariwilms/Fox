@@ -160,11 +160,11 @@ namespace hlx
         const auto height{ 720 };
         for (auto i{ 0u }; i < 4; ++i)
         {
-            glNamedFramebufferReadBuffer(glBufferMultisample->internal_id(), GL_COLOR_ATTACHMENT0 + i);
+            glNamedFramebufferReadBuffer(glBufferMultisample->id(), GL_COLOR_ATTACHMENT0 + i);
             glNamedFramebufferDrawBuffer(glBuffer->id(), GL_COLOR_ATTACHMENT0 + i);
-            glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            glBlitNamedFramebuffer(glBufferMultisample->id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
-        glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBlitNamedFramebuffer(glBufferMultisample->id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 
         

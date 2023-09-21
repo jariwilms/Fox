@@ -8,15 +8,7 @@
 
 namespace hlx
 {
-    namespace impl
-    {
-        class FrameBuffer
-        {
-
-        };
-    }
-
-	class FrameBuffer : impl::FrameBuffer
+	class FrameBuffer
 	{
 	public:
         enum class Target
@@ -55,16 +47,11 @@ namespace hlx
 		virtual ~FrameBuffer() = default;
 
 		virtual void bind(Target target) const = 0;
-
 		virtual void bind_texture(const std::string& identifier, unsigned int slot) const = 0;
 
         const Vector2u& dimensions() const
         {
             return m_dimensions;
-        }
-        const std::shared_ptr<Texture2D> texture(const std::string& identifier) const
-        {
-            return m_attachedTextures.at(identifier);
         }
 
 	protected:
@@ -73,7 +60,5 @@ namespace hlx
 
 		Vector2u m_dimensions{};
 
-		std::unordered_map<std::string, std::shared_ptr<Texture2D>>    m_attachedTextures{};
-		std::unordered_map<std::string, std::shared_ptr<RenderBuffer>> m_attachedRenderBuffers{};
 	};
 }

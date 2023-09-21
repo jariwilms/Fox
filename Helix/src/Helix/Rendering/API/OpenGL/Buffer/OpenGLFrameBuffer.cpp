@@ -27,7 +27,7 @@ namespace hlx
 			}
 
 			OpenGL::attach_framebuffer_texture(m_id, glTexture->internal_id(), internalAttachment, 0);
-			m_attachedTextures.emplace(name, texture);
+			m_textures.emplace(name, texture);
 		};
 		const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
 		{
@@ -63,12 +63,8 @@ namespace hlx
 	{
 		OpenGL::bind_framebuffer(m_id, target);
 	}
-
     void OpenGLFrameBuffer::bind_texture(const std::string& identifier, unsigned int slot) const
     {
-		auto texture = m_attachedTextures.find(identifier);
-		if (texture == m_attachedTextures.end()) throw std::runtime_error{ "Texture identifier does not exist!" };
-
-		texture->second->bind(slot);
+		m_textures.at(identifier)->bind(slot);
     }
 }

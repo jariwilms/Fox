@@ -13,17 +13,9 @@ namespace hlx
     public:
         virtual ~FrameBufferMultisample() = default;
 
-        const std::shared_ptr<Texture2DMultisample> texture(const std::string& identifier)
-        {
-            return m_attachedTextures.at(identifier);
-        }
-
     protected:
         FrameBufferMultisample(const Vector2u& dimensions, unsigned int samples)
             : FrameBuffer{ dimensions }, m_samples{ samples } {}
-
-        std::unordered_map<std::string, std::shared_ptr<Texture2DMultisample>> m_attachedTextures{};
-        std::unordered_map<std::string, std::shared_ptr<RenderBufferMultisample>> m_attachedRenderBuffers{};
 
         unsigned int m_samples{};
     };

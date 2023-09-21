@@ -6,8 +6,6 @@
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture2D.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLRenderBuffer.hpp"
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
-#include "Helix/Rendering/Blueprint/RenderBufferBlueprint.hpp"
 
 namespace hlx
 {
@@ -18,7 +16,6 @@ namespace hlx
 		~OpenGLFrameBuffer();
 
 		void bind(Target target) const override;
-
 		void bind_texture(const std::string& identifier, unsigned int slot) const override;
 
 		GLuint id() const
@@ -28,5 +25,8 @@ namespace hlx
 
 	private:
 		GLuint m_id{};
+
+        std::unordered_map<std::string, std::shared_ptr<OpenGLTexture2D>>    m_textures{};
+        std::unordered_map<std::string, std::shared_ptr<OpenGLRenderBuffer>> m_renderBuffers{};
 	};
 }

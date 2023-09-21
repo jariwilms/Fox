@@ -9,7 +9,7 @@ namespace hlx
     {
         if (m_samples == 0) throw std::invalid_argument{ "Samples must be greater than zero!" };
 
-        glCreateFramebuffers(1, &m_internalId);
+        glCreateFramebuffers(1, &m_id);
 
         unsigned int colorAttachmentIndex{};
         std::vector<GLenum> drawBuffers{};
@@ -28,8 +28,8 @@ namespace hlx
                 drawBuffers.emplace_back(internalAttachment);
             }
 
-            glNamedFramebufferTexture(m_internalId, internalAttachment, glTexture->internal_id(), 0);
-            m_attachedTextures.emplace(name, texture);
+            glNamedFramebufferTexture(m_id, internalAttachment, glTexture->internal_id(), 0);
+            m_textures.emplace(name, texture);
         };
         const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
         {
@@ -39,31 +39,27 @@ namespace hlx
 
             auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
 
-            glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->id());
+            glNamedFramebufferRenderbuffer(m_id, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->id());
         };
 
         std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);
         std::for_each(renderBufferManifest.begin(), renderBufferManifest.end(), attach_renderbuffer);
-        glNamedFramebufferDrawBuffers(m_internalId, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+        glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
 
-        const auto& status = glCheckNamedFramebufferStatus(m_internalId, GL_FRAMEBUFFER);
+        const auto& status = glCheckNamedFramebufferStatus(m_id, GL_FRAMEBUFFER);
         if (status != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Failed to create framebuffer!" };
     }
     OpenGLFrameBufferMultisample::~OpenGLFrameBufferMultisample()
     {
-        glDeleteFramebuffers(1, &m_internalId);
+        glDeleteFramebuffers(1, &m_id);
     }
 
     void OpenGLFrameBufferMultisample::bind(FrameBuffer::Target target) const
     {
-        OpenGL::bind_framebuffer(m_internalId, target);
+        OpenGL::bind_framebuffer(m_id, target);
     }
-
     void OpenGLFrameBufferMultisample::bind_texture(const std::string& identifier, unsigned int slot) const
     {
-        const auto& it = m_attachedTextures.find(identifier);
-        if (it == m_attachedTextures.end()) throw std::runtime_error{ "Given texture identifier does not exist!" };
-
-        it->second->bind(slot);
+        m_textures.at(identifier)->bind(slot);
     }
 }
