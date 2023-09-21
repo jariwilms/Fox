@@ -6,7 +6,7 @@ namespace hlx
 {
 	OpenGLPipeline::OpenGLPipeline()
 	{
-		glCreateProgramPipelines(1, &m_internalProgram);
+		m_id = OpenGL::create_program_pipeline();
 	}
 	OpenGLPipeline::OpenGLPipeline(std::initializer_list<const std::shared_ptr<Shader>> shaders)
 		: OpenGLPipeline{}
@@ -18,41 +18,42 @@ namespace hlx
 	}
 	OpenGLPipeline::~OpenGLPipeline()
 	{
-		glDeleteProgramPipelines(1, &m_internalProgram);
+		OpenGL::delete_program_pipeline(m_id);
 	}
 
 	void OpenGLPipeline::bind() const
 	{
-		if (m_internalProgram == s_boundPipelineId) return;
-
-		glBindProgramPipeline(m_internalProgram);
-		s_boundPipelineId = m_internalProgram;
-	}
-	void OpenGLPipeline::unbind() const
-	{
-		if (m_internalProgram != s_boundPipelineId) return;
-		
-		glBindProgramPipeline(0);
-	}
-	bool OpenGLPipeline::is_bound() const
-	{
-		return m_internalProgram == s_boundPipelineId;
+		OpenGL::bind_program_pipeline(m_id);
 	}
 
 	void OpenGLPipeline::stage(const std::shared_ptr<Shader> shader)
 	{
 		const auto& glShader = std::static_pointer_cast<OpenGLShader>(shader);
-		glUseProgramStages(m_internalProgram, glShader->internal_stage(), glShader->internal_program());
+		OpenGL::use_program_stages(m_id, glShader->id(), glShader->internal_stage());
 
 		switch (shader->stage())
 		{
-			case Shader::Stage::Vertex:                 m_shaders.at(0) = shader; break;
-			case Shader::Stage::TessellationControl:    m_shaders.at(1) = shader; break;
-			case Shader::Stage::TessellationEvaluation: m_shaders.at(2) = shader; break;
-			case Shader::Stage::Geometry:               m_shaders.at(3) = shader; break;
-			case Shader::Stage::Fragment:               m_shaders.at(4) = shader; break;
+			case Shader::Stage::Vertex:                 m_shaders.at(0) = glShader; break;
+			case Shader::Stage::TessellationControl:    m_shaders.at(1) = glShader; break;
+			case Shader::Stage::TessellationEvaluation: m_shaders.at(2) = glShader; break;
+			case Shader::Stage::Geometry:               m_shaders.at(3) = glShader; break;
+			case Shader::Stage::Fragment:               m_shaders.at(4) = glShader; break;
 
 			default: throw std::invalid_argument{ "Invalid shader stage!" };
 		}
 	}
+
+    const std::shared_ptr<hlx::Shader> OpenGLPipeline::shader(Shader::Stage stage) const
+    {
+        switch (stage)
+        {
+            case Shader::Stage::Vertex:                 return m_shaders.at(0);
+            case Shader::Stage::TessellationControl:	return m_shaders.at(1);
+            case Shader::Stage::TessellationEvaluation: return m_shaders.at(2);
+            case Shader::Stage::Geometry:			    return m_shaders.at(3);
+            case Shader::Stage::Fragment:			    return m_shaders.at(4);
+
+            default: throw std::invalid_argument{ "Invalid stage!" };
+        }
+    }
 }

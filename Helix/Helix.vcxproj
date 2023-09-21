@@ -189,7 +189,6 @@
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Uniform\Uniform.hpp" />

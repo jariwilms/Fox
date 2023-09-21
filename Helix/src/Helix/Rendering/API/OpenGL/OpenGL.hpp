@@ -466,5 +466,33 @@ namespace hlx
         {
             glNamedRenderbufferStorageMultisample(renderBufferId, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
         }
+
+        static GLuint create_program_pipeline()
+        {
+            GLuint id{};
+            glCreateProgramPipelines(1, &id);
+
+            return id;
+        }
+        static void   delete_program_pipeline(GLuint pipelineId)
+        {
+            glDeleteProgramPipelines(1, &pipelineId);
+        }
+        static void   bind_program_pipeline(GLuint pipelineId)
+        {
+            if (OpenGLRenderState::boundProgramPipelineId == pipelineId) return;
+
+            glBindProgramPipeline(pipelineId);
+            OpenGLRenderState::boundProgramPipelineId = pipelineId;
+        }
+        static void   use_program_stages(GLuint pipelineId, GLuint shaderId, GLbitfield stage)
+        {
+            glUseProgramStages(pipelineId, stage, shaderId);
+        }
+
+        static GLuint  create_program()
+        {
+            return glCreateProgram();
+        }
     };
 }

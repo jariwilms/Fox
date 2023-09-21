@@ -369,9 +369,6 @@
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp">
       <Filter>Helix\Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\Renderpass\Renderpass.hpp">
-      <Filter>Helix\Rendering\Renderpass</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp">
       <Filter>Helix\Rendering\Shader</Filter>
     </ClInclude>

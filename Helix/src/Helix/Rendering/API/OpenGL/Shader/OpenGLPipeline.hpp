@@ -16,19 +16,19 @@ namespace hlx
 		~OpenGLPipeline();
 
 		void bind() const override;
-		void unbind() const override;
-		bool is_bound() const override;
 
 		void stage(const std::shared_ptr<Shader> shader) override;
 
-		GLuint internal_program() const
+		GLuint id() const
 		{
-			return m_internalProgram;
+			return m_id;
 		}
 
-	private:
-        GLuint m_internalProgram{};
+		const std::shared_ptr<Shader> shader(Shader::Stage stage) const override;
 
-		static inline GLuint s_boundPipelineId{};
+	private:
+        GLuint m_id{};
+
+        std::array<std::shared_ptr<OpenGLShader>, 5> m_shaders{};
 	};
 }

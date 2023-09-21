@@ -20,6 +20,7 @@ namespace hlx
         static inline GLuint boundIndexBufferId{};
         static inline GLuint boundFrameBufferReadTargetId{};
         static inline GLuint boundFrameBufferWriteTargetId{};
+        static inline GLuint boundProgramPipelineId{};
         static inline std::unordered_map<unsigned int, GLuint> slotToBoundTextureMapId{};
     };
 }
