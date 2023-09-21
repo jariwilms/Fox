@@ -66,6 +66,30 @@ namespace hlx
             }
         }
                                      
+        static constexpr GLenum      framebuffer_target(FrameBuffer::Target target)
+        {
+            switch (target)
+            {
+                case FrameBuffer::Target::Default: return GL_FRAMEBUFFER;
+                case FrameBuffer::Target::Read:	   return GL_READ_FRAMEBUFFER;
+                case FrameBuffer::Target::Write:   return GL_DRAW_FRAMEBUFFER;
+
+                default:                           throw std::invalid_argument{ "Invalid target!" };
+            }
+        }
+        static constexpr GLenum      framebuffer_attachment(FrameBuffer::Attachment attachment)
+        {
+            switch (attachment)
+            {
+                case FrameBuffer::Attachment::Color:        return GL_COLOR_ATTACHMENT0;
+                case FrameBuffer::Attachment::Depth:        return GL_DEPTH_ATTACHMENT;
+                case FrameBuffer::Attachment::Stencil:      return GL_STENCIL_ATTACHMENT;
+                case FrameBuffer::Attachment::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
+
+                default:                                    throw std::invalid_argument{ "Invalid attachment!" };
+            }
+        }
+
         static constexpr GLenum      texture_format(Texture::Format format)
         {
             switch (format)
@@ -161,57 +185,22 @@ namespace hlx
             }
         }
 
-        static constexpr GLenum      renderbuffer_type(RenderBuffer::Type type)
+        static constexpr GLenum      renderbuffer_format(RenderBuffer::Format format)
         {
-            switch (type)
+            switch (format)
             {
-                case RenderBuffer::Type::Color:		   return GL_COLOR_ATTACHMENT0;
-                case RenderBuffer::Type::Depth:		   return GL_DEPTH_ATTACHMENT;
-                case RenderBuffer::Type::Stencil:	   return GL_STENCIL_ATTACHMENT;
-                case RenderBuffer::Type::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
-
-                default:                               throw std::invalid_argument{ "Invalid type!" };
-            }
-        }
-        static constexpr GLenum      renderbuffer_layout(RenderBuffer::Layout colorDepth)
-        {
-            switch (colorDepth)
-            {
-                case RenderBuffer::Layout::R8:              return GL_R8;
-                case RenderBuffer::Layout::RG8:             return GL_RG8;
-                case RenderBuffer::Layout::RGB8:            return GL_RGB8;
-                case RenderBuffer::Layout::RGBA8:           return GL_RGBA8;
-                case RenderBuffer::Layout::Depth16:         return GL_DEPTH_COMPONENT16;
-                case RenderBuffer::Layout::Depth24:			return GL_DEPTH_COMPONENT24;
-                case RenderBuffer::Layout::Depth32:			return GL_DEPTH_COMPONENT32;
-                case RenderBuffer::Layout::Depth24Stencil8: return GL_DEPTH24_STENCIL8;
-                case RenderBuffer::Layout::Depth32Stencil8:	return GL_DEPTH32F_STENCIL8;
-                case RenderBuffer::Layout::Stencil8:		return GL_STENCIL_INDEX8;
+                case RenderBuffer::Format::R8:              return GL_R8;
+                case RenderBuffer::Format::RG8:             return GL_RG8;
+                case RenderBuffer::Format::RGB8:            return GL_RGB8;
+                case RenderBuffer::Format::RGBA8:           return GL_RGBA8;
+                case RenderBuffer::Format::Depth16:         return GL_DEPTH_COMPONENT16;
+                case RenderBuffer::Format::Depth24:			return GL_DEPTH_COMPONENT24;
+                case RenderBuffer::Format::Depth32:			return GL_DEPTH_COMPONENT32;
+                case RenderBuffer::Format::Depth24Stencil8: return GL_DEPTH24_STENCIL8;
+                case RenderBuffer::Format::Depth32Stencil8:	return GL_DEPTH32F_STENCIL8;
+                case RenderBuffer::Format::Stencil8:		return GL_STENCIL_INDEX8;
 
                 default:                                    throw std::invalid_argument{ "Invalid layout!" };
-            }
-        }
-        static constexpr GLenum      framebuffer_target(FrameBuffer::Target target)
-        {
-            switch (target)
-            {
-                case FrameBuffer::Target::Default: return GL_FRAMEBUFFER;
-                case FrameBuffer::Target::Read:	   return GL_READ_FRAMEBUFFER;
-                case FrameBuffer::Target::Write:   return GL_DRAW_FRAMEBUFFER;
-
-                default:                           throw std::invalid_argument{ "Invalid target!" };
-            }
-        }
-        static constexpr GLenum      framebuffer_attachment(FrameBuffer::Attachment attachment)
-        {
-            switch (attachment)
-            {
-                case FrameBuffer::Attachment::Color:        return GL_COLOR_ATTACHMENT0;
-                case FrameBuffer::Attachment::Depth:        return GL_DEPTH_ATTACHMENT;
-                case FrameBuffer::Attachment::Stencil:      return GL_STENCIL_ATTACHMENT;
-                case FrameBuffer::Attachment::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
-
-                default:                                    throw std::invalid_argument{ "Invalid attachment!" };
             }
         }
                                      
@@ -452,6 +441,30 @@ namespace hlx
         static void   generate_texture_mipmap(GLuint textureId)
         {
             glGenerateTextureMipmap(textureId);
+        }
+
+        static GLuint create_renderbuffer()
+        {
+            GLuint id{};
+            glCreateRenderbuffers(1, &id);
+
+            return id;
+        }
+        static void   delete_renderbuffer(GLuint renderBufferId)
+        {
+            glDeleteRenderbuffers(1, &renderBufferId);
+        }
+        static void   bind_renderbuffer(GLuint renderBufferId)
+        {
+            glBindRenderbuffer(GL_RENDERBUFFER, renderBufferId);
+        }
+        static void   renderbuffer_storage(GLuint renderBufferId, GLenum format, const Vector2u& dimensions)
+        {
+            glNamedRenderbufferStorage(renderBufferId, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
+        }
+        static void   renderbuffer_storage_multisample(GLuint renderBufferId, GLenum format, const Vector2u& dimensions, unsigned int samples)
+        {
+            glNamedRenderbufferStorageMultisample(renderBufferId, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
         }
     };
 }

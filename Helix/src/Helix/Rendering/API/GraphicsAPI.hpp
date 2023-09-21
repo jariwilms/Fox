@@ -71,13 +71,13 @@ namespace hlx::gfx
     {
         return std::make_shared<OpenGLFrameBufferMultisample>(dimensions, samples, textureManifest, renderBufferManifest);
     }
-    inline std::shared_ptr<RenderBuffer>           create_renderbuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions)
+    inline std::shared_ptr<RenderBuffer>           create_renderbuffer(RenderBuffer::Format format, const Vector2u& dimensions)
     {
-        return std::make_shared<OpenGLRenderBuffer>(type, layout, dimensions);
+        return std::make_shared<OpenGLRenderBuffer>(format, dimensions);
     }
-    inline std::shared_ptr<RenderBuffer>           create_renderbuffer_multisample(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions, unsigned int samples)
+    inline std::shared_ptr<RenderBuffer>           create_renderbuffer_multisample(RenderBuffer::Format format, const Vector2u& dimensions, unsigned int samples)
     {
-        return std::make_shared<OpenGLRenderBufferMultisample>(type, layout, dimensions, samples);
+        return std::make_shared<OpenGLRenderBufferMultisample>(format, dimensions, samples);
     }
 
     inline std::shared_ptr<Shader>                 create_shader(Shader::Stage stage, std::span<const byte> binary)

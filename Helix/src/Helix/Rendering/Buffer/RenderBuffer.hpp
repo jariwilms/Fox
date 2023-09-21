@@ -7,14 +7,7 @@ namespace hlx
 	class RenderBuffer
 	{
 	public:
-        enum class Type
-        {
-            Color,
-            Depth,
-            Stencil,
-            DepthStencil,
-        };
-		enum class Layout
+		enum class Format
 		{
 			R8, 
 			RG8, 
@@ -34,16 +27,10 @@ namespace hlx
 		virtual ~RenderBuffer() = default;
 
 		virtual void bind()     const = 0;
-		virtual void unbind()   const = 0;
-		virtual bool is_bound() const = 0;
 
-		Type            type()       const
+		Format          format()     const
 		{
-			return m_type;
-		}
-		Layout          layout()     const
-		{
-			return m_layout;
+			return m_format;
 		}
 		const Vector2u& dimensions() const
 		{
@@ -51,11 +38,10 @@ namespace hlx
 		}
 
 	protected:
-		RenderBuffer(Type type, Layout layout, const Vector2u& dimensions)
-			: m_type{ type }, m_layout{ layout }, m_dimensions{ dimensions } {}
+		RenderBuffer(Format format, const Vector2u& dimensions)
+			: m_format{ format }, m_dimensions{ dimensions } {}
 
-		Type     m_type{};
-		Layout   m_layout{};
+		Format   m_format{};
 		Vector2u m_dimensions{};
 	};
 }

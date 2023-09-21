@@ -4,32 +4,21 @@
 
 namespace hlx
 {
-	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Type type, RenderBuffer::Layout layout, const Vector2u& dimensions)
-		: RenderBuffer{ type, layout, dimensions }
+	OpenGLRenderBuffer::OpenGLRenderBuffer(RenderBuffer::Format format, const Vector2u& dimensions)
+		: RenderBuffer{ format, dimensions }
 	{
-		m_internalTarget = GL_RENDERBUFFER;
-		m_internalFormat = OpenGL::renderbuffer_layout(layout);
+		m_id = OpenGL::create_renderbuffer();
 
-		glCreateRenderbuffers(1, &m_internalId);
-		glNamedRenderbufferStorage(m_internalId, m_internalFormat, m_dimensions.x, m_dimensions.y);
+		const auto& internalFormat = OpenGL::renderbuffer_format(format);
+		OpenGL::renderbuffer_storage(m_id, internalFormat, dimensions);
 	}
 	OpenGLRenderBuffer::~OpenGLRenderBuffer()
 	{
-		glDeleteRenderbuffers(1, &m_internalId);
+		OpenGL::delete_renderbuffer(m_id);
 	}
 
 	void OpenGLRenderBuffer::bind()     const
 	{
-		glBindRenderbuffer(m_internalTarget, m_internalId);
-	}
-    void OpenGLRenderBuffer::unbind()   const
-	{
-		if (m_internalId != s_boundRenderBufferId) return;
-
-		glBindRenderbuffer(m_internalTarget, 0);
-	}
-    bool OpenGLRenderBuffer::is_bound() const
-	{
-		return m_internalId == s_boundRenderBufferId;
+		OpenGL::bind_renderbuffer(m_id);
 	}
 }

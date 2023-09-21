@@ -34,12 +34,12 @@ namespace hlx
         const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
         {
             const auto& [name, attachment, blueprint] = attachee;
-            const auto& renderBuffer = blueprint.build_ms(m_dimensions, m_samples);
+            const auto& renderBuffer = blueprint.build_multisample(m_dimensions, m_samples);
             const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBufferMultisample>(renderBuffer);
 
             auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
 
-            glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->internal_id());
+            glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->id());
         };
 
         std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);

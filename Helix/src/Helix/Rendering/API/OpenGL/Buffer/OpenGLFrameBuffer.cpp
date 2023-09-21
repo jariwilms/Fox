@@ -36,8 +36,7 @@ namespace hlx
 			const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBuffer>(renderBuffer);
 
 			auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
-
-			OpenGL::attach_framebuffer_renderbuffer(m_id, glRenderBuffer->internal_id(), internalAttachment);
+			OpenGL::attach_framebuffer_renderbuffer(m_id, glRenderBuffer->id(), internalAttachment);
 		};
 
 		std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);

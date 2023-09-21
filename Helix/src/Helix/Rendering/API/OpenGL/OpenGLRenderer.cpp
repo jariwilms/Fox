@@ -15,11 +15,11 @@ namespace hlx
         };
         std::vector<FrameBuffer::RenderBufferManifest> gBufferRenderBufferManifest
         {
-            { "DepthStencil", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 } }, 
+            { "DepthStencil", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Format::Depth24Stencil8 } }, 
         };
-        
+
         FrameBufferBlueprint frameBufferBlueprint{ gBufferTextureManifest, gBufferRenderBufferManifest };
-        m_gBufferMultisample = frameBufferBlueprint.build_ms(Vector2f{ 1280, 720 }, 2);
+        m_gBufferMultisample = frameBufferBlueprint.build_multisample(Vector2f{ 1280, 720 }, 2u);
         m_gBuffer            = frameBufferBlueprint.build(Vector2f{ 1280, 720 });
 
 
@@ -40,7 +40,7 @@ namespace hlx
         };
         std::vector<FrameBuffer::RenderBufferManifest> ppBufferRenderBufferManifest
         {
-            { "Depth", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Type::DepthStencil, RenderBuffer::Layout::Depth24Stencil8 } }, 
+            { "Depth", FrameBuffer::Attachment::DepthStencil, RenderBufferBlueprint{ RenderBuffer::Format::Depth24Stencil8 } }, 
         };
 
         FrameBufferBlueprint ppBufferBlueprint{ ppBufferTextureManifest, ppBufferRenderBufferManifest };

@@ -503,5 +503,6 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Scene\Actor.cpp" />
+    <ClCompile Include="src\Helix\Rendering\Blueprint\FrameBufferBlueprint.cpp" />
   </ItemGroup>
 </Project>

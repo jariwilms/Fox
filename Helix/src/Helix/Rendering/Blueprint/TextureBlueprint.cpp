@@ -1,6 +1,8 @@
 #include "stdafx.hpp"
 
 #include "TextureBlueprint.hpp"
+
+#include "Helix/Core/Library/Utility/Utility.hpp"
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
 
 namespace hlx
@@ -14,7 +16,7 @@ namespace hlx
     {
         return gfx::create_texture(format, filter, wrapping, dimensions);
     }
-    std::shared_ptr<Texture2DMultisample> TextureBlueprint::build_ms(const Vector2u& dimensions, unsigned int samples) const
+    std::shared_ptr<Texture2DMultisample> TextureBlueprint::build_multisample(const Vector2u& dimensions, unsigned int samples) const
     {
         return gfx::create_texture_multisample(format, dimensions, samples);
     }
