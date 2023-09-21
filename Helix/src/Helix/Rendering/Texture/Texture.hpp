@@ -94,14 +94,12 @@ namespace hlx
 		virtual ~Texture() = default;
 
 		virtual void bind(unsigned int slot) const = 0;
-		virtual void unbind()                const = 0;
-		virtual bool is_bound()              const = 0;
 
-		Format   format() const
+		Format   format()   const
 		{
 			return m_format;
 		}
-        Filter   filter() const
+        Filter   filter()   const
         {
             return m_filter;
         }

@@ -15,16 +15,10 @@ namespace hlx
 		~OpenGLTexture2D() override;
 		
 		void bind(unsigned int slot) const override;
-		void unbind()                const override;
-		bool is_bound()              const override;
 		
 		GLuint internal_id()         const
 		{
 			return m_internalId;
-		}
-		GLenum internal_target()     const
-		{
-			return m_internalTarget;
 		}
 		GLenum internal_format()     const
 		{
@@ -49,13 +43,9 @@ namespace hlx
 
 	private:
 		GLuint m_internalId{};
-		GLenum m_internalTarget{};
 		GLenum m_internalFormat{};
 		GLenum m_internalMinFilter{};
 		GLenum m_internalMagFilter{};
 		GLenum m_internalWrapping{};
-
-		static inline std::unordered_map<unsigned int, GLenum> s_slotToIdMap{};
-		static inline std::unordered_map<GLenum, unsigned int> s_idToSlotMap{};
 	};
 }

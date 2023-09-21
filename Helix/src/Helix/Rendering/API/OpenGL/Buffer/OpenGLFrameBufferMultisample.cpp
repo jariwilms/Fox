@@ -56,16 +56,7 @@ namespace hlx
 
     void OpenGLFrameBufferMultisample::bind(FrameBuffer::Target target) const
     {
-        const auto& internalTarget = OpenGL::framebuffer_target(target);
-        glBindFramebuffer(internalTarget, m_internalId);
-    }
-    void OpenGLFrameBufferMultisample::unbind() const
-    {
-        throw std::logic_error{ "Method has not been implemented!" };
-    }
-    bool OpenGLFrameBufferMultisample::is_bound() const
-    {
-        throw std::logic_error{ "Method has not been implemented!" };
+        OpenGL::bind_framebuffer(m_internalId, target);
     }
 
     void OpenGLFrameBufferMultisample::bind_texture(const std::string& identifier, unsigned int slot) const

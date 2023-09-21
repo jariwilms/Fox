@@ -48,8 +48,6 @@ namespace hlx
 		virtual ~FrameBuffer() = default;
 
 		virtual void bind(Target target) const = 0;
-        virtual void unbind()            const = 0;
-        virtual bool is_bound()          const = 0;
 
 		virtual void bind_texture(const std::string& identifier, unsigned int slot) const = 0;
 

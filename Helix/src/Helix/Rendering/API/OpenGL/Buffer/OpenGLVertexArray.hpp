@@ -14,27 +14,16 @@ namespace hlx
     public:
         OpenGLVertexArray()
         {
-            glCreateVertexArrays(1, &m_internalId);
+            m_internalId = OpenGL::create_vertex_array();
         }
         ~OpenGLVertexArray()
         {
-            glDeleteVertexArrays(1, &m_internalId);
+            OpenGL::delete_vertex_array(m_internalId);
         }
 
         void bind()     const override
         {
-            glBindVertexArray(m_internalId);
-            s_boundVertexArrayId = m_internalId;
-        }
-        void unbind()   const override
-        {
-            if (s_boundVertexArrayId != m_internalId) return;
-
-            glBindVertexArray(0);
-        }
-        bool is_bound() const override
-        {
-            return m_internalId == s_boundVertexArrayId;
+            OpenGL::bind_vertex_array(m_internalId);
         }
 
         void tie(const std::shared_ptr<VertexBuffer> vertices, const std::shared_ptr<VertexLayout> layout) override
@@ -42,7 +31,7 @@ namespace hlx
             if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex may not exceed 16!" };
 
             const auto& glBuffer = std::static_pointer_cast<OpenGLVertexBuffer>(vertices);
-            glVertexArrayVertexBuffer(m_internalId, m_bindingIndex, glBuffer->internal_id(), 0, static_cast<GLsizei>(layout->stride()));
+            OpenGL::vertex_array_vertex_buffer(m_internalId, glBuffer->internal_id(), m_bindingIndex, static_cast<GLsizei>(layout->stride()));
             
             GLint offset{};
             for (const auto& attribute : layout->attributes())
@@ -50,22 +39,22 @@ namespace hlx
                 const auto internalType = OpenGL::type_enum(attribute.hash());
                 const auto typeSize = OpenGL::type_size(attribute.hash());
 
-                glEnableVertexArrayAttrib(m_internalId, m_attributes);
-                glVertexArrayAttribFormat(m_internalId, m_attributes, attribute.count(), internalType, attribute.is_normalized(), offset);
-                glVertexArrayAttribBinding(m_internalId, m_attributes, m_bindingIndex);
+                OpenGL::enable_vertex_array_attribute(m_internalId, m_attributeIndex);
+                OpenGL::vertex_array_attribute_format(m_internalId, m_attributeIndex, attribute.count(), internalType, offset, attribute.is_normalized());
+                OpenGL::vertex_array_attribute_binding(m_internalId, m_attributeIndex, m_bindingIndex);
 
                 offset += static_cast<GLint>(attribute.count() * typeSize);
-                ++m_attributes;
+                ++m_attributeIndex;
             }
 
             ++m_bindingIndex;
         }
         void tie(const std::shared_ptr<IndexBuffer> indices)                                               override
         {
-            m_indices = indices;
-            const auto& glIndices = std::static_pointer_cast<OpenGLIndexBuffer>(indices);
+            const auto& glIndexBuffer = std::static_pointer_cast<OpenGLIndexBuffer>(indices);
+            OpenGL::vertex_array_element_buffer(m_internalId, glIndexBuffer->internal_id());
 
-            glVertexArrayElementBuffer(m_internalId, glIndices->internal_id());
+            m_indices = indices;
         }
 
         GLuint internal_id() const
@@ -75,8 +64,7 @@ namespace hlx
 
     private:
         GLuint       m_internalId{};
+        GLuint       m_attributeIndex{};
         unsigned int m_bindingIndex{};
-
-        static inline GLuint s_boundVertexArrayId{};
     };
 }

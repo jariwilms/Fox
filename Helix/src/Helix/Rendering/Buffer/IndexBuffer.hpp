@@ -11,9 +11,7 @@ namespace hlx
     public:
         virtual ~IndexBuffer() = default;
 
-        virtual void bind()     const = 0;
-        virtual void unbind()   const = 0;
-        virtual bool is_bound() const = 0;
+        virtual void bind() const = 0;
 
         void copy(std::span<const unsigned int> data)
         {

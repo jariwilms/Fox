@@ -8,10 +8,10 @@ namespace hlx
     {
         std::vector<FrameBuffer::TextureManifest> gBufferTextureManifest
         {
-            { "Position", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
-            { "Albedo",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA8_SRGB,  Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
-            { "Normal",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
-            { "ARM",      FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "Position", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_SFLOAT, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "Albedo",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA8_SRGB,   Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "Normal",   FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_SFLOAT, Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
+            { "ARM",      FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM,  Texture::Filter::Trilinear, Texture::Wrapping::Repeat } },
         };
         std::vector<FrameBuffer::RenderBufferManifest> gBufferRenderBufferManifest
         {
@@ -36,7 +36,7 @@ namespace hlx
 
         std::vector<FrameBuffer::TextureManifest> ppBufferTextureManifest
         {
-            { "Color", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGBA16_UNORM } }, 
+            { "Color", FrameBuffer::Attachment::Color, TextureBlueprint{ Texture::Format::RGB16_UNORM } }, 
         };
         std::vector<FrameBuffer::RenderBufferManifest> ppBufferRenderBufferManifest
         {
@@ -130,7 +130,7 @@ namespace hlx
         {
             const auto& [mesh, material, transform] = mmt;
 
-            m_matricesBuffer->copy_tuple(offsetof(UMatrices, model), std::make_tuple(transform.matrix()));
+            m_matricesBuffer->copy_tuple(offsetof(UMatrices, model),  std::make_tuple(transform.matrix()));
             m_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
             const auto& vao = mesh->vao();
@@ -161,13 +161,13 @@ namespace hlx
         for (auto i{ 0u }; i < 4; ++i)
         {
             glNamedFramebufferReadBuffer(glBufferMultisample->internal_id(), GL_COLOR_ATTACHMENT0 + i);
-            glNamedFramebufferDrawBuffer(glBuffer->internal_id(), GL_COLOR_ATTACHMENT0 + i);
-            glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->internal_id(), 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            glNamedFramebufferDrawBuffer(glBuffer->id(), GL_COLOR_ATTACHMENT0 + i);
+            glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
-        glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->internal_id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+        glBlitNamedFramebuffer(glBufferMultisample->internal_id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 
-
+        
         //Lighting pass render into ppBuffer
         glDisable(GL_BLEND);
 
@@ -201,16 +201,16 @@ namespace hlx
 
 
             glEnable(GL_DEPTH_TEST);
-            glBlitNamedFramebuffer(glBuffer->internal_id(), glPPBuffer->internal_id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBlitNamedFramebuffer(glBuffer->id(), glPPBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Geometry::Cube::vao()->indices()->size()), GL_UNSIGNED_INT, nullptr);
             glDisable(GL_DEPTH_TEST);
         }
 
 
 
-        glBlitNamedFramebuffer(glPPBuffer->internal_id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-        //glNamedFramebufferReadBuffer(glBuffer->internal_id(), GL_COLOR_ATTACHMENT0 + 2);
-        //glBlitNamedFramebuffer(glBuffer->internal_id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        glBlitNamedFramebuffer(glPPBuffer->id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+        //glNamedFramebufferReadBuffer(glBuffer->id(), GL_COLOR_ATTACHMENT0 + 1);
+        //glBlitNamedFramebuffer(glBuffer->id(), 0, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
     }
 
     void OpenGLRenderer::render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform)

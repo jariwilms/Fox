@@ -136,27 +136,9 @@ int main(int argc, char** argv)
         *skyboxImages[5],
     };
 
-    //RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA, Texture::ChannelDepth::_8bit, skyboxDimensions, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, Texture::Wrapping::ClampToEdge, 4, false, Texture::Format::RGBA, skyboxImageData);
     RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, skyboxImageData);
 
-
-
-
-
-    ////Testing
-    //auto lightingCubeMaterial = std::make_shared<Material>("Default");
-    //lightingCubeMaterial->albedoMap = gfx::create_texture(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF });
-    //lightingCubeMaterial->normalMap = gfx::create_texture(Texture::Format::RGB,  Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGB,  std::vector<byte>{ 0x80, 0x80, 0xFF });
-    //lightingCubeMaterial->armMap    = gfx::create_texture(Texture::Format::RGBA, Texture::ColorDepth::_8bit, Vector2u{ 1, 1 }, Texture::Filter::Point, Texture::Wrapping::Repeat, Texture::Wrapping::Repeat, 1, true, Texture::Format::RGBA, std::vector<byte>{ 0x00, 0x00, 0x00, 0x00 });
-
-    //auto lightingCubeMesh = std::make_shared<Mesh>(Geometry::Cube::vao());
-    //Transform lightingCubeTransform{};
-    //lightingCubeTransform.translate(Vector3f{ 1.0f, 1.0f, 0.0f });
-    //lightingCubeTransform.dilate(Vector3f{ 0.1f, 0.1f, 0.1f });
-    ////#######
-
     std::array<std::tuple<Light, Vector3f>, 8> lights{};
-    lights.at(0) = std::make_tuple(Light{ .color = { 20.0f, 20.0f, 20.0f } }, Vector3f{ 5.0f, 0.0f, 0.0f });
 
 
 
@@ -197,10 +179,7 @@ int main(int argc, char** argv)
 
 
 
-        //lightingCubeTransform.position += Time::delta() * Vector3f{ 0.2f, 0.0f, 0.0f };
-        //lights.at(0) = std::make_tuple(Light{ .color = {1.0f, 0.0f, 0.0f}, .radius = 10.0f }, lightingCubeTransform.position);
-
-
+        lights.at(0) = std::make_tuple(Light{ .color = { 50.0f, 50.0f, 50.0f }, .radius = 10.0f }, Vector3f{ glm::cos(glfwGetTime() / 2.0f) * 5.0f, 0.0f, glm::sin(glfwGetTime() / 2.0f) * 5.0f });
 
 
 
@@ -213,7 +192,7 @@ int main(int argc, char** argv)
             {
                 Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
             });
-        //Renderer::render(lightingCubeMesh, lightingCubeMaterial, lightingCubeTransform);
+        const auto& temp = modelActor->get_component<MeshRendererComponent>();
         Renderer::finish();
         
 

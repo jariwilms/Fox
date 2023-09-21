@@ -7,7 +7,7 @@ namespace hlx
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest)
 		: FrameBuffer{ dimensions }
 	{
-		m_internalId = OpenGL::create_framebuffer();
+		m_id = OpenGL::create_framebuffer();
 
 		std::vector<GLenum> drawBuffers{};
 		unsigned int textureAttachmentIndex{};
@@ -26,7 +26,7 @@ namespace hlx
 				drawBuffers.emplace_back(internalAttachment);
 			}
 
-			glNamedFramebufferTexture(m_internalId, internalAttachment, glTexture->internal_id(), 0);
+			OpenGL::attach_framebuffer_texture(m_id, glTexture->internal_id(), internalAttachment, 0);
 			m_attachedTextures.emplace(name, texture);
 		};
 		const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
@@ -37,7 +37,7 @@ namespace hlx
 
 			auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
 
-            glNamedFramebufferRenderbuffer(m_internalId, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->internal_id());
+			OpenGL::attach_framebuffer_renderbuffer(m_id, glRenderBuffer->internal_id(), internalAttachment);
 		};
 
 		std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);
@@ -45,34 +45,24 @@ namespace hlx
 
 		if (drawBuffers.empty()) 
 		{
-			glNamedFramebufferDrawBuffer(m_internalId, GL_NONE);
-			glNamedFramebufferReadBuffer(m_internalId, GL_NONE);
+			glNamedFramebufferDrawBuffer(m_id, GL_NONE);
+			glNamedFramebufferReadBuffer(m_id, GL_NONE);
 		}
 		else
 		{
-			glNamedFramebufferDrawBuffers(m_internalId, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+			glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
 		}
 
-		const auto& status = glCheckNamedFramebufferStatus(m_internalId, GL_FRAMEBUFFER);
-		if (status != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Failed to create framebuffer!" };
+		OpenGL::check_framebuffer_status(m_id);
 	}
     OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
-		glDeleteFramebuffers(1, &m_internalId);
+		OpenGL::delete_framebuffer(m_id);
 	}
 
 	void OpenGLFrameBuffer::bind(Target target) const
 	{
-		const auto& internalTarget = OpenGL::framebuffer_target(target);
-		glBindFramebuffer(internalTarget, m_internalId);
-	}
-    void OpenGLFrameBuffer::unbind() const
-	{
-		throw std::logic_error{ "Method has not been implemented!" };
-	}
-	bool OpenGLFrameBuffer::is_bound() const
-	{
-        throw std::logic_error{ "Method has not been implemented!" };
+		OpenGL::bind_framebuffer(m_id, target);
 	}
 
     void OpenGLFrameBuffer::bind_texture(const std::string& identifier, unsigned int slot) const

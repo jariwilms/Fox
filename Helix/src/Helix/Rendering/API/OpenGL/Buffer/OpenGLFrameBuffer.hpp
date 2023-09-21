@@ -18,17 +18,15 @@ namespace hlx
 		~OpenGLFrameBuffer();
 
 		void bind(Target target) const override;
-		void unbind()            const override;
-		bool is_bound()          const override;
 
 		void bind_texture(const std::string& identifier, unsigned int slot) const override;
 
-		GLuint internal_id() const
+		GLuint id() const
 		{
-			return m_internalId;
+			return m_id;
 		}
 
 	private:
-		GLuint m_internalId{};
+		GLuint m_id{};
 	};
 }

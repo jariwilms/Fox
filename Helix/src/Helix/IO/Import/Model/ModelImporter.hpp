@@ -21,7 +21,7 @@ namespace hlx
             m_defaultMaterial              = std::make_shared<Material>("Default");
             m_defaultMaterial->albedoMap   = gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGBA, utl::to_span(std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF }));
             m_defaultMaterial->normalMap   = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x80, 0x80, 0xFF }));
-            m_defaultMaterial->armMap      = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x00, 0x00 }));
+            m_defaultMaterial->armMap      = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x80, 0x80 }));
             m_defaultMaterial->emissionMap = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x00, 0x00 }));
 
             m_layout3f = std::make_shared<VertexLayout>();

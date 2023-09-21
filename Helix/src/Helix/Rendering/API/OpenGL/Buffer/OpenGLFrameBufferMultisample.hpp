@@ -18,8 +18,6 @@ namespace hlx
         ~OpenGLFrameBufferMultisample();
 
         void bind(Target target) const override;
-        void unbind()            const override;
-        bool is_bound()          const override;
 
         void bind_texture(const std::string& identifier, unsigned int slot) const override;
 
