@@ -12,7 +12,6 @@ namespace hlx
     public:
         Material(const std::string& name)
             : name{ name } {}
-        Material(const Material& other) = default;
 
         std::string name{};
 
