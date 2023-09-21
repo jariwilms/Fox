@@ -17,6 +17,6 @@ namespace hlx
         }
 
     private:
-        const std::shared_ptr<VertexArray> m_vertexArray{};
+        std::shared_ptr<VertexArray> m_vertexArray{};
     };
 }

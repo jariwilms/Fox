@@ -224,7 +224,6 @@
     <ClCompile Include="src\Helix\Rendering\Blueprint\RenderBufferBlueprint.cpp" />
     <ClCompile Include="src\Helix\Rendering\Blueprint\TextureBlueprint.cpp" />
     <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp" />
     <ClCompile Include="src\Helix\Scene\Scene.cpp" />
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp" />
     <ClCompile Include="src\Helix\Window\WindowManager.cpp" />

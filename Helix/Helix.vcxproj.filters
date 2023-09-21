@@ -479,9 +479,6 @@
     <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp">
       <Filter>Helix\Rendering\Context</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\Rendering\Mesh\Mesh.cpp">
-      <Filter>Helix\Rendering\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="src\Helix\Scene\Scene.cpp">
       <Filter>Helix\Scene</Filter>
     </ClCompile>
