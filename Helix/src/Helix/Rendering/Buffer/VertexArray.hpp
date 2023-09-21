@@ -5,7 +5,6 @@
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "Helix/Rendering/Layout/VertexLayout.hpp"
-#include "Helix/Rendering/Interface/IBindable.hpp"
 
 namespace hlx
 {

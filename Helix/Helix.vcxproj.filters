@@ -201,9 +201,6 @@
     <ClInclude Include="src\Helix\ECS\System\System.hpp">
       <Filter>Helix\ECS\System</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Experimental\Texture\Texture.hpp">
-      <Filter>Helix\Experimental\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp">
       <Filter>Helix\IO\Filesystem</Filter>
     </ClInclude>
@@ -341,9 +338,6 @@
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Context\RenderContext.hpp">
       <Filter>Helix\Rendering\Context</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\Interface\IBindable.hpp">
-      <Filter>Helix\Rendering\Interface</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Layout\VertexAttribute.hpp">
       <Filter>Helix\Rendering\Layout</Filter>

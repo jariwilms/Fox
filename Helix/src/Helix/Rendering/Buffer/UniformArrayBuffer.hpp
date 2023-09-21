@@ -12,6 +12,9 @@ namespace hlx
     public:
         virtual ~UniformArrayBuffer() = default;
 
+        virtual void bind(unsigned int binding) = 0;
+        virtual void bind_range(unsigned int binding, unsigned int index, unsigned int count) = 0;
+
         void copy(std::span<const T> data)
         {
             copy(data.size_bytes(), 0, static_cast<const void*>(data.data()));
@@ -20,9 +23,6 @@ namespace hlx
         {
             copy(sizeof(T), index * sizeof(T), static_cast<const void*>(&data));
         }
-
-        virtual void bind(unsigned int binding) = 0;
-        virtual void bind_range(unsigned int binding, unsigned int index, unsigned int count) = 0;
 
     protected:
         UniformArrayBuffer(unsigned int binding, unsigned int count)

@@ -132,7 +132,6 @@
     <ClInclude Include="src\Helix\ECS\Registry.hpp" />
     <ClInclude Include="src\Helix\ECS\System\RenderSystem.hpp" />
     <ClInclude Include="src\Helix\ECS\System\System.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
@@ -180,7 +179,6 @@
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Context\RenderContext.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Interface\IBindable.hpp" />
     <ClInclude Include="src\Helix\Rendering\Layout\VertexAttribute.hpp" />
     <ClInclude Include="src\Helix\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />

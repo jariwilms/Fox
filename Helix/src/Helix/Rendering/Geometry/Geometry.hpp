@@ -23,9 +23,9 @@ namespace hlx
         public:
             friend Geometry;
 
-            static const std::shared_ptr<VertexArray> vao()
+            static const std::shared_ptr<Mesh> mesh()
             {
-                return s_vao;
+                return s_mesh;
             }
 
             static inline const std::array<float, 12> positions
@@ -68,23 +68,25 @@ namespace hlx
                 const auto coordinatesVBO = gfx::create_vertex_buffer<float>(coordinates);
                 const auto indicesIBO     = gfx::create_index_buffer(indices);
 
-                s_vao = gfx::create_vertex_array();
-                s_vao->tie(positionsVBO, layout3f);
-                s_vao->tie(normalsVBO, layout3f);
-                s_vao->tie(coordinatesVBO, layout2f);
-                s_vao->tie(indicesIBO);
+                auto vertexArray = gfx::create_vertex_array();
+                vertexArray->tie(positionsVBO, layout3f);
+                vertexArray->tie(normalsVBO, layout3f);
+                vertexArray->tie(coordinatesVBO, layout2f);
+                vertexArray->tie(indicesIBO);
+
+                s_mesh = std::make_shared<Mesh>(vertexArray);
             }
 
-            static inline std::shared_ptr<VertexArray> s_vao{};
+            static inline std::shared_ptr<Mesh> s_mesh{};
         };
         struct Cube
         {
         public:
             friend Geometry;
 
-            static const std::shared_ptr<VertexArray> vao()
+            static const std::shared_ptr<Mesh> mesh()
             {
-                return s_vao;
+                return s_mesh;
             }
 
             static inline const std::array<float, 72> positions
@@ -217,14 +219,16 @@ namespace hlx
                 const auto coordinatesVBO = gfx::create_vertex_buffer<float>(coordinates);
                 const auto indicesIBO     = gfx::create_index_buffer(indices);
 
-                s_vao = gfx::create_vertex_array();
-                s_vao->tie(positionsVBO, layout3f);
-                s_vao->tie(normalsVBO, layout3f);
-                s_vao->tie(coordinatesVBO, layout2f);
-                s_vao->tie(indicesIBO);
+                auto vertexArray = gfx::create_vertex_array();
+                vertexArray->tie(positionsVBO, layout3f);
+                vertexArray->tie(normalsVBO, layout3f);
+                vertexArray->tie(coordinatesVBO, layout2f);
+                vertexArray->tie(indicesIBO);
+
+                s_mesh = std::make_shared<Mesh>(vertexArray);
             }
 
-            static inline std::shared_ptr<VertexArray> s_vao{};
+            static inline std::shared_ptr<Mesh> s_mesh{};
         };
     };
 }

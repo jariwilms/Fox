@@ -133,7 +133,7 @@ namespace hlx
             m_matricesBuffer->copy_tuple(offsetof(UMatrices, model),  std::make_tuple(transform.matrix()));
             m_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
-            const auto& vao = mesh->vao();
+            const auto& vao = mesh->vertex_array();
             vao->bind();
             if (vao->indexed()) vao->index_buffer()->bind();
 
@@ -178,7 +178,7 @@ namespace hlx
         m_gBuffer->bind_texture("ARM",      3);
 
         m_pipelines.at("Lighting")->bind();
-        Geometry::Plane::vao()->bind();
+        Geometry::Plane::mesh()->vertex_array()->bind();
 
         glDisable(GL_DEPTH_TEST);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -194,7 +194,8 @@ namespace hlx
         const auto& skybox = RenderSettings::lighting.skybox;
         if (skybox)
         {
-            Geometry::Cube::vao()->bind();
+            const auto& vertexArray = Geometry::Cube::mesh()->vertex_array();
+            vertexArray->bind();
 
             m_pipelines.at("Skybox")->bind();
             skybox->bind(0);
@@ -202,7 +203,7 @@ namespace hlx
 
             glEnable(GL_DEPTH_TEST);
             glBlitNamedFramebuffer(glBuffer->id(), glPPBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Geometry::Cube::vao()->index_buffer()->size()), GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vertexArray->index_buffer()->size()), GL_UNSIGNED_INT, nullptr);
             glDisable(GL_DEPTH_TEST);
         }
 

@@ -11,7 +11,7 @@ namespace hlx
         Mesh(const std::shared_ptr<VertexArray> vertexArray)
             : m_vertexArray{ vertexArray } {}
 
-        const std::shared_ptr<VertexArray> vao() const
+        const std::shared_ptr<VertexArray> vertex_array() const
         {
             return m_vertexArray;
         }

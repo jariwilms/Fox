@@ -179,7 +179,7 @@ int main(int argc, char** argv)
 
 
 
-        lights.at(0) = std::make_tuple(Light{ .color = { 50.0f, 50.0f, 50.0f }, .radius = 10.0f }, Vector3f{ glm::cos(glfwGetTime() / 2.0f) * 5.0f, 0.0f, glm::sin(glfwGetTime() / 2.0f) * 5.0f });
+        lights.at(0) = std::make_tuple(Light{ .color = { 50.0f, 50.0f, 50.0f }, .radius = 100.0f }, Vector3f{ glm::cos(glfwGetTime()) * 10.0f, 0.0f, glm::sin(glfwGetTime()) * 10.0f });
 
 
 
@@ -192,7 +192,6 @@ int main(int argc, char** argv)
             {
                 Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
             });
-        const auto& temp = modelActor->get_component<MeshRendererComponent>();
         Renderer::finish();
         
 

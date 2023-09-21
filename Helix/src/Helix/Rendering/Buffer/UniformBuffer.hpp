@@ -12,6 +12,8 @@ namespace hlx
     public:
         virtual ~UniformBuffer() = default;
 
+        virtual void bind(unsigned int binding) = 0;
+
         void copy(const T& data)
         {
             copy(sizeof(T), 0, static_cast<const void*>(&data));
@@ -30,8 +32,6 @@ namespace hlx
             std::apply(convert_byte_array, data);
             copy(result.size(), offset, static_cast<const void*>(result.data()));
         }
-
-        virtual void bind(unsigned int binding) = 0;
 
     protected:
         UniformBuffer(unsigned int binding)
