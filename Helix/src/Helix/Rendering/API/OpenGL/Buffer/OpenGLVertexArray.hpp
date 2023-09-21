@@ -31,7 +31,7 @@ namespace hlx
             if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex may not exceed 16!" };
 
             const auto& glBuffer = std::static_pointer_cast<OpenGLVertexBuffer>(vertexBuffer);
-            OpenGL::vertex_array_vertex_buffer(m_id, glBuffer->internal_id(), m_bindingIndex, static_cast<GLsizei>(vertexLayout->stride()));
+            OpenGL::vertex_array_vertex_buffer(m_id, glBuffer->id(), m_bindingIndex, static_cast<GLsizei>(vertexLayout->stride()));
             
             GLint offset{};
             for (const auto& attribute : vertexLayout->attributes())
@@ -51,10 +51,10 @@ namespace hlx
 
             ++m_bindingIndex;
         }
-        void tie(const std::shared_ptr<IndexBuffer>  indexBuffer)                                                     override
+        void tie(const std::shared_ptr<IndexBuffer>  indexBuffer)                                                    override
         {
             m_indexBuffer = std::static_pointer_cast<OpenGLIndexBuffer>(indexBuffer);
-            OpenGL::vertex_array_element_buffer(m_id, m_indexBuffer->internal_id());
+            OpenGL::vertex_array_element_buffer(m_id, m_indexBuffer->id());
         }
 
         unsigned int primitive_count() const override

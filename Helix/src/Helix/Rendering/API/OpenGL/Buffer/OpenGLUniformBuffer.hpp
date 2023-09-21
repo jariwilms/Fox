@@ -46,8 +46,6 @@ namespace hlx
 
         GLuint m_internalId{};
         GLuint m_internalTarget{};
-
-        //static inline std::unordered_map<unsigned int, GLuint> s_bindingToIdMap{};
     };
 }
 

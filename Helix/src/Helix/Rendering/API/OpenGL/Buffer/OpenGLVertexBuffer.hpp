@@ -12,8 +12,8 @@ namespace hlx
         OpenGLVertexBuffer(size_t size)
             : VertexBuffer{ size }
         {
-            m_internalId = OpenGL::create_vertex_buffer();
-            OpenGL::buffer_storage(m_internalId, m_size);
+            m_id = OpenGL::create_vertex_buffer();
+            OpenGL::buffer_storage(m_id, m_size);
         }
         template<typename T>
         OpenGLVertexBuffer(std::span<const T> data)
@@ -23,27 +23,27 @@ namespace hlx
         }
         ~OpenGLVertexBuffer()
         {
-            OpenGL::delete_vertex_buffer(m_internalId);
+            OpenGL::delete_vertex_buffer(m_id);
         }
 
         void bind() const override
         {
-            OpenGL::bind_vertex_buffer(m_internalId);
+            OpenGL::bind_vertex_buffer(m_id);
         }
 
-        GLuint internal_id()     const
+        GLuint id() const
         {
-            return m_internalId;
+            return m_id;
         }
 
     protected:
         void copy(size_t size, size_t offset, const void* data) override
         {
             if (size + offset > m_size) throw std::runtime_error{ "Data size exceeds buffer size!" };
-            OpenGL::buffer_sub_data(m_internalId, size, offset, data);
+            OpenGL::buffer_sub_data(m_id, size, offset, data);
         }
 
     private:
-        GLuint m_internalId{};
+        GLuint m_id{};
     };
 }
