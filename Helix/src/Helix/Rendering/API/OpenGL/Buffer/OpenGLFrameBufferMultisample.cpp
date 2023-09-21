@@ -16,7 +16,7 @@ namespace hlx
         const auto attach_texture = [this, &drawBuffers, &colorAttachmentIndex](const TextureManifest& value)
         {
             const auto& [name, attachment, blueprint] = value;
-            const auto& texture = blueprint.build_ms(m_dimensions, m_samples);
+            const auto& texture = blueprint.build_multisample(m_dimensions, m_samples);
             const auto& glTexture = std::static_pointer_cast<OpenGLTexture2DMultisample>(texture);
 
             auto internalAttachment = OpenGL::framebuffer_attachment(attachment);

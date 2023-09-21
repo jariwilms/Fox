@@ -170,7 +170,6 @@
     <ClInclude Include="src\Helix\Rendering\Blueprint\RenderBufferBlueprint.hpp" />
     <ClInclude Include="src\Helix\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\BufferComponent.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\FrameBufferMultisample.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\IndexBuffer.hpp" />

@@ -5,11 +5,18 @@
 #include "Helix/Rendering/Texture/Texture2D.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
 #include "Helix/Rendering/Blueprint/RenderBufferBlueprint.hpp"
-#include "BufferComponent.hpp"
 
 namespace hlx
 {
-	class FrameBuffer
+    namespace impl
+    {
+        class FrameBuffer
+        {
+
+        };
+    }
+
+	class FrameBuffer : impl::FrameBuffer
 	{
 	public:
         enum class Target
@@ -51,13 +58,13 @@ namespace hlx
 
 		virtual void bind_texture(const std::string& identifier, unsigned int slot) const = 0;
 
-        const std::shared_ptr<Texture2D> texture(const std::string& identifier) const
-        {
-            return m_attachedTextures.at(identifier);
-        }
         const Vector2u& dimensions() const
         {
             return m_dimensions;
+        }
+        const std::shared_ptr<Texture2D> texture(const std::string& identifier) const
+        {
+            return m_attachedTextures.at(identifier);
         }
 
 	protected:
