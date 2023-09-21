@@ -135,7 +135,7 @@ namespace hlx
 
             const auto& vao = mesh->vao();
             vao->bind();
-            if (vao->indexed()) vao->indices()->bind();
+            if (vao->indexed()) vao->index_buffer()->bind();
 
             m_materialBuffer->copy(UMaterial{ material->color, material->roughness, material->metallic });
             material->albedoMap->bind(0);
@@ -143,7 +143,7 @@ namespace hlx
             material->armMap->bind(2);
             material->emissionMap->bind(3);
 
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->indices()->count()), GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->index_buffer()->count()), GL_UNSIGNED_INT, nullptr);
         }
 
         
@@ -202,7 +202,7 @@ namespace hlx
 
             glEnable(GL_DEPTH_TEST);
             glBlitNamedFramebuffer(glBuffer->id(), glPPBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Geometry::Cube::vao()->indices()->size()), GL_UNSIGNED_INT, nullptr);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(Geometry::Cube::vao()->index_buffer()->size()), GL_UNSIGNED_INT, nullptr);
             glDisable(GL_DEPTH_TEST);
         }
 

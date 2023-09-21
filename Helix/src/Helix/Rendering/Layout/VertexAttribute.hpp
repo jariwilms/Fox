@@ -18,14 +18,14 @@ namespace hlx
         {
             return m_tHash;
         }
-        bool is_normalized() const
+        bool normalized() const
         {
-            return m_isNormalized;
+            return m_normalized;
         }
 
     private:
         const unsigned int m_count{};
         const size_t m_tHash{};
-        bool m_isNormalized{};
+        bool m_normalized{};
     };
 }
