@@ -6,7 +6,7 @@
 
 namespace hlx
 {
-    class Texture2DMultisample : public Texture2D
+    class Texture2DMultisample : public Texture
     {
     public:
         virtual ~Texture2DMultisample() = default;
@@ -16,19 +16,20 @@ namespace hlx
         template<typename T>
         void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const T> data) = delete;
 
-        unsigned int samples() const
+        const Vector2u& dimensions() const
+        {
+            return m_dimensions;
+        }
+        unsigned int    samples()   const
         {
             return m_samples;
         }
 
     protected:
         Texture2DMultisample(Format format, const Vector2u& dimensions, unsigned int samples)
-            : Texture2D{ format, Filter::None, Wrapping::Repeat, dimensions }, m_samples{ samples } {}
+            : Texture{ format, Filter::None, Wrapping::Repeat }, m_dimensions{ dimensions }, m_samples{ samples } {}
 
+        Vector2u     m_dimensions{};
         unsigned int m_samples{};
-
-    private:
-        void copy(Components components, std::span<const byte> data) final {}
-        void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) final {}
     };
 }
