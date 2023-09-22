@@ -9,29 +9,29 @@ namespace hlx
 	OpenGLShader::OpenGLShader(Stage stage, std::span<const byte> binary)
         : Shader{ stage }
 	{
-        m_id = glCreateProgram();
-        m_internalStage   = OpenGL::shader_stage(stage);
-        m_internalType    = OpenGL::shader_type(stage);
-        m_internalShader  = glCreateShader(m_internalType);
+        m_id               = OpenGL::create_program();
+        m_internalStage    = OpenGL::shader_stage(stage);
+        m_internalType     = OpenGL::shader_type(stage);
+        const auto& shader = OpenGL::create_shader(m_internalType);
 
-        glProgramParameteri(m_id, GL_PROGRAM_SEPARABLE, GL_TRUE);
-        glShaderBinary(1, &m_internalShader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size()));
-        glSpecializeShader(m_internalShader, "main", 0, nullptr, nullptr);
+        OpenGL::program_parameter(m_id, GL_PROGRAM_SEPARABLE, GL_TRUE);
+        OpenGL::shader_binary(shader, binary);
+        OpenGL::specialize_shader(shader, "main");
 
-        const auto& compiled = OpenGL::shader_parameter(m_internalShader, GL_COMPILE_STATUS);
-        if (!compiled) throw std::runtime_error{ OpenGL::shader_infolog(m_internalShader) };
+        const auto& compiled = OpenGL::shader_iv(shader, GL_COMPILE_STATUS);
+        if (!compiled) throw std::runtime_error{ OpenGL::shader_infolog(shader) };
 
-        glAttachShader(m_id, m_internalShader);
-        glLinkProgram(m_id);
+        OpenGL::attach_shader(m_id, shader);
+        OpenGL::link_program(m_id);
 
-        const auto& linked = OpenGL::program_parameter(m_id, GL_LINK_STATUS);
+        const auto& linked = OpenGL::program_iv(m_id, GL_LINK_STATUS);
         if (!linked) throw std::runtime_error{ OpenGL::program_infolog(m_id) };
 
-        glDetachShader(m_id, m_internalShader);
-        glDeleteShader(m_internalShader);
+        OpenGL::detach_shader(m_id, shader);
+        OpenGL::delete_shader(shader);
 	}
     OpenGLShader::~OpenGLShader()
 	{
-		glDeleteProgram(m_id);
+        OpenGL::delete_program(m_id);
 	}
 }

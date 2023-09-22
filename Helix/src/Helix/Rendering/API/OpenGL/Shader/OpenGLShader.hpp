@@ -16,26 +16,21 @@ namespace hlx
 		OpenGLShader(Stage stage, std::span<const byte> binary);
 		~OpenGLShader();
 
-		GLuint id() const
+		GLuint id()             const
 		{
 			return m_id;
 		}
-		GLuint internal_shader()  const
-		{
-			return m_internalShader;
-		}
-		GLenum internal_stage()   const
+		GLenum internal_stage() const
 		{
 			return m_internalStage;
 		}
-		GLenum internal_type()    const
+		GLenum internal_type()  const
 		{
 			return m_internalType;
 		}
 
     private:
 		GLuint m_id{};
-		GLuint m_internalShader{};
 		GLenum m_internalStage{};
 		GLenum m_internalType{};
 	};

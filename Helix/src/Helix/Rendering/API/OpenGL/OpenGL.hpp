@@ -204,6 +204,33 @@ namespace hlx
             }
         }
                                      
+        static constexpr void        program_parameter(GLuint programId, GLenum parameter, GLint value)
+        {
+            glProgramParameteri(programId, parameter, value);
+        }
+        static constexpr GLint       program_iv(GLuint program, GLenum parameter)
+        {
+            GLint result{};
+            glGetProgramiv(program, parameter, &result);
+
+            return result;
+        }
+        static constexpr GLint       program_uniform_location(Id shaderId, const std::string& identifier)
+        {
+            return glGetUniformLocation(shaderId, identifier.c_str());
+        }
+        static constexpr std::string program_infolog(GLuint program)
+        {
+            std::string infolog{};
+            GLsizei length = program_iv(program, GL_INFO_LOG_LENGTH);
+            GLsizei bufSize{ length };
+
+            infolog.resize(length);
+            glGetProgramInfoLog(program, bufSize, nullptr, infolog.data());
+
+            return infolog;
+        }
+
         static constexpr GLenum      shader_type(Shader::Stage stage)
         {
             switch (stage)
@@ -232,7 +259,7 @@ namespace hlx
                 default: throw std::invalid_argument{ "Invalid stage!" };
             }
         }
-        static constexpr GLint       shader_parameter(GLuint shader, GLenum parameter)
+        static constexpr GLint       shader_iv(GLuint shader, GLenum parameter)
         {
             GLint result{};
             glGetShaderiv(shader, parameter, &result);
@@ -241,35 +268,12 @@ namespace hlx
         }
         static constexpr std::string shader_infolog(GLuint shader)
         {
-            GLsizei length = shader_parameter(shader, GL_INFO_LOG_LENGTH);
+            GLsizei length = shader_iv(shader, GL_INFO_LOG_LENGTH);
             GLsizei bufSize{length};
 
             std::string infolog{};
             infolog.resize(length);
             glGetShaderInfoLog(shader, bufSize, nullptr, infolog.data());
-
-            return infolog;
-        }
-                                     
-        static constexpr GLint       program_parameter(GLuint program, GLenum parameter)
-        {
-            GLint result{};
-            glGetProgramiv(program, parameter, &result);
-
-            return result;
-        }
-        static constexpr GLint       program_uniform_location(Id shaderId, const std::string& identifier)
-        {
-            return glGetUniformLocation(shaderId, identifier.c_str());
-        }
-        static constexpr std::string program_infolog(GLuint program)
-        {
-            std::string infolog{};
-            GLsizei length = program_parameter(program, GL_INFO_LOG_LENGTH);
-            GLsizei bufSize{ length };
-
-            infolog.resize(length);
-            glGetProgramInfoLog(program, bufSize, nullptr, infolog.data());
 
             return infolog;
         }
@@ -490,9 +494,41 @@ namespace hlx
             glUseProgramStages(pipelineId, stage, shaderId);
         }
 
-        static GLuint  create_program()
+        static GLuint create_program()
         {
             return glCreateProgram();
+        }
+        static void   delete_program(GLuint programId)
+        {
+            glDeleteProgram(programId);
+        }
+        static GLuint create_shader(GLenum shaderType)
+        {
+            return glCreateShader(shaderType);
+        }
+        static void   delete_shader(GLuint shaderId)
+        {
+            glDeleteShader(shaderId);
+        }
+        static void   shader_binary(GLuint shaderId, std::span<const byte> binary)
+        {
+            glShaderBinary(1, &shaderId, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size()));
+        }
+        static void   specialize_shader(GLuint shaderId, const char* entry)
+        {
+            glSpecializeShader(shaderId, entry, 0, nullptr, nullptr);
+        }
+        static void   attach_shader(GLuint programId, GLuint shaderId)
+        {
+            glAttachShader(programId, shaderId);
+        }
+        static void   detach_shader(GLuint programId, GLuint shaderId)
+        {
+            glDetachShader(programId, shaderId);
+        }
+        static void   link_program(GLuint programId)
+        {
+            glLinkProgram(programId);
         }
     };
 }
