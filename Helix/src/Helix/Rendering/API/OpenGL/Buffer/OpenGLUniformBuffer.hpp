@@ -13,9 +13,8 @@ namespace hlx
         OpenGLUniformBuffer(unsigned int binding)
             : UniformBuffer<T>{ binding }
         {
-            m_internalTarget = GL_UNIFORM_BUFFER;
-            glCreateBuffers(1, &m_internalId);
-            glNamedBufferStorage(m_internalId, sizeof(T), nullptr, GL_DYNAMIC_STORAGE_BIT);
+            m_id = OpenGL::create_buffer();
+            OpenGL::buffer_storage(m_id, sizeof(T));
 
             bind(m_binding);
         }
@@ -24,12 +23,20 @@ namespace hlx
         {
             UniformBuffer<T>::copy(data);
         }
-        ~OpenGLUniformBuffer() = default;
+        ~OpenGLUniformBuffer()
+        {
+            OpenGL::delete_buffer(m_id);
+        }
 
         void bind(unsigned int binding) override
         {
             m_binding = binding;
-            glBindBufferBase(m_internalTarget, m_binding, m_internalId);
+            OpenGL::bind_buffer_base(m_id, m_binding, GL_UNIFORM_BUFFER);
+        }
+
+        GLuint id() const
+        {
+            return m_id;
         }
 
     protected:
@@ -37,15 +44,14 @@ namespace hlx
         {
             if (size + offset > m_size) throw std::invalid_argument{ "Data exceeds buffer size!" };
 
-            glNamedBufferSubData(m_internalId, offset, size, data);
+            OpenGL::buffer_sub_data(m_id, size, offset, data);
         }
 
     private:
         using Buffer::m_size;
         using UniformBuffer<T>::m_binding;
 
-        GLuint m_internalId{};
-        GLuint m_internalTarget{};
+        GLuint m_id{};
     };
 }
 

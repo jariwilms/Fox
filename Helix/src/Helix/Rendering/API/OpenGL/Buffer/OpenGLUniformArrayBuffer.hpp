@@ -13,7 +13,7 @@ namespace hlx
         OpenGLUniformArrayBuffer(unsigned int binding, unsigned int count)
             : UniformArrayBuffer<T>{ binding, count }
         {
-            m_id = OpenGL::create_uniform_buffer();
+            m_id = OpenGL::create_buffer();
             OpenGL::buffer_storage(m_id, count * sizeof(T));
 
             bind(m_binding);
@@ -23,7 +23,10 @@ namespace hlx
         {
             UniformArrayBuffer<T>::copy(data);
         }
-        ~OpenGLUniformArrayBuffer() = default;
+        ~OpenGLUniformArrayBuffer()
+        {
+            OpenGL::delete_buffer(m_id);
+        }
 
         void bind(unsigned int binding) override
         {
