@@ -13,16 +13,14 @@ namespace hlx
         OpenGLRenderBufferMultisample(Format format, const Vector2u& dimensions, unsigned int samples);
         ~OpenGLRenderBufferMultisample();
 
-        void bind()     const override;
+        void bind() const override;
 
-        GLuint id()     const
+        GLuint id() const
         {
             return m_id;
         }
 
     private:
         GLuint m_id{};
-
-        static inline GLuint s_boundRenderBufferId{};
     };
 }

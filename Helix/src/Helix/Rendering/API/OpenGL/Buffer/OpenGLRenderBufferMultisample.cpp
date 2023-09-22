@@ -17,7 +17,7 @@ namespace hlx
         OpenGL::delete_renderbuffer(m_id);
     }
 
-    void OpenGLRenderBufferMultisample::bind()     const
+    void OpenGLRenderBufferMultisample::bind() const
     {
         OpenGL::bind_renderbuffer(m_id);
     }
