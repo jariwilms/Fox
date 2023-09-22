@@ -407,7 +407,7 @@ namespace hlx
             const auto& internalTarget = framebuffer_target(target);
             glBindFramebuffer(internalTarget, frameBufferId);
         }
-        static void   attach_framebuffer_texture(GLuint frameBufferId, GLuint textureId, GLenum attachment, GLuint level = 0)
+        static void   attach_framebuffer_texture(GLuint frameBufferId, GLuint textureId, GLenum attachment, GLuint level)
         {
             glNamedFramebufferTexture(frameBufferId, attachment, textureId, level);
         }

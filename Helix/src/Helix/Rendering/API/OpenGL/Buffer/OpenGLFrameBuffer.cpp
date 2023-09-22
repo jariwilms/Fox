@@ -8,27 +8,18 @@ namespace hlx
 		: FrameBuffer{ dimensions }
 	{
 		m_id = OpenGL::create_framebuffer();
+		
+		std::for_each(textureManifests.begin(), textureManifests.end(), std::bind(std::mem_fn(&OpenGLFrameBuffer::attach_texture), this, std::placeholders::_1));
+		std::for_each(renderBufferManifests.begin(), renderBufferManifests.end(), std::bind(std::mem_fn(&OpenGLFrameBuffer::attach_renderbuffer), this, std::placeholders::_1));
 
-		std::vector<GLenum> buffers{};
-		unsigned int textureAttachmentIndex{};
-		for (const auto& textureManifest : textureManifests)
-		{
-			const auto& drawBuffer = attach_texture(textureManifest, textureAttachmentIndex);
-			buffers.push_back(drawBuffer);
-		}
-		for (const auto& renderBufferManifest : renderBufferManifests)
-		{
-			attach_renderbuffer(renderBufferManifest);
-		}
-
-		if (buffers.empty()) 
+		if (m_colorBuffers.empty()) 
 		{
 			OpenGL::framebuffer_readbuffer(m_id, GL_NONE);
 			OpenGL::framebuffer_drawbuffer(m_id, GL_NONE);
 		}
 		else
 		{
-			OpenGL::framebuffer_drawbuffers(m_id, buffers);
+			OpenGL::framebuffer_drawbuffers(m_id, m_colorBuffers);
 		}
 
 		OpenGL::check_framebuffer_status(m_id);
@@ -47,24 +38,22 @@ namespace hlx
 		m_textures.at(identifier)->bind(slot);
     }
 
-    GLenum OpenGLFrameBuffer::attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex)
+    void OpenGLFrameBuffer::attach_texture(const TextureManifest& textureManifest)
     {
 		const auto& [name, attachment, blueprint] = textureManifest;
         const auto& glTexture = std::static_pointer_cast<OpenGLTexture2D>(blueprint.build(m_dimensions));
 
-        auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
-        if (attachment == Attachment::Color)
-        {
-            internalAttachment += attachmentIndex;
-            ++attachmentIndex;
-        }
+		auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
+		if (attachment == Attachment::Color)
+		{
+			internalAttachment += static_cast<GLenum>(m_colorBuffers.size());
+			m_colorBuffers.push_back(internalAttachment);
+		}
 
         OpenGL::attach_framebuffer_texture(m_id, glTexture->id(), internalAttachment, 0);
         m_textures.emplace(name, glTexture);
-
-		return internalAttachment;
     }
-    void   OpenGLFrameBuffer::attach_renderbuffer(const RenderBufferManifest& renderBufferManifest)
+    void OpenGLFrameBuffer::attach_renderbuffer(const RenderBufferManifest& renderBufferManifest)
     {
 		const auto& [name, attachment, blueprint] = renderBufferManifest;
 		const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBuffer>(blueprint.build(m_dimensions));

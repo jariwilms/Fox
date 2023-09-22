@@ -46,6 +46,6 @@ namespace hlx
 
         const auto& format = OpenGL::texture_format(components);
 		OpenGL::texture_sub_image_2d(m_id, format, dimensions, offset, 0, data.data());
-		if (m_mipLevels > 1) OpenGL::generate_texture_mipmap(m_id);
+		if (m_mipLevels > 1u) OpenGL::generate_texture_mipmap(m_id);
 	}
 }

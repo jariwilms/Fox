@@ -24,11 +24,12 @@ namespace hlx
         }
 
     private:
-        GLenum attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex);
-        void   attach_renderbuffer(const RenderBufferManifest& renderBufferManifest);
+        void attach_texture(const TextureManifest& textureManifest);
+        void attach_renderbuffer(const RenderBufferManifest& renderBufferManifest);
 
         GLuint m_id{};
 
+        std::vector<GLenum> m_colorBuffers{};
         std::unordered_map<std::string, std::shared_ptr<OpenGLTexture2DMultisample>>    m_textures{};
         std::unordered_map<std::string, std::shared_ptr<OpenGLRenderBufferMultisample>> m_renderBuffers{};
     };
