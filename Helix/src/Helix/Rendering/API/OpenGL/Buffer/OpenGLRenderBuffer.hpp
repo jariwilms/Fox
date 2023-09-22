@@ -13,14 +13,12 @@ namespace hlx
 
 		void bind() const override;
 
-		GLuint id()     const
+		GLuint id() const
 		{
 			return m_id;
 		}
 
 	private:
 		GLuint m_id{};
-
-		static inline GLuint s_boundRenderBufferId{};
 	};
 }
