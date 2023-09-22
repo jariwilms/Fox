@@ -16,9 +16,9 @@ namespace hlx
 		
 		void bind(unsigned int slot) const override;
 		
-		GLuint internal_id()         const
+		GLuint id()         const
 		{
-			return m_internalId;
+			return m_id;
 		}
 		GLenum internal_format()     const
 		{
@@ -42,7 +42,7 @@ namespace hlx
         void copy_range(const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) override;
 
 	private:
-		GLuint m_internalId{};
+		GLuint m_id{};
 		GLenum m_internalFormat{};
 		GLenum m_internalMinFilter{};
 		GLenum m_internalMagFilter{};

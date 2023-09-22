@@ -396,6 +396,19 @@ namespace hlx
         {
             glNamedFramebufferRenderbuffer(frameBufferId, attachment, GL_RENDERBUFFER, renderBufferId);
         }
+        static void   framebuffer_readbuffer(GLuint frameBufferId, GLenum buffer)
+        {
+            glNamedFramebufferDrawBuffer(frameBufferId, buffer);
+
+        }
+        static void   framebuffer_drawbuffer(GLuint frameBufferId, GLenum buffer)
+        {
+            glNamedFramebufferDrawBuffer(frameBufferId, buffer);
+        }
+        static void   framebuffer_drawbuffers(GLuint frameBufferId, std::span<const GLenum> buffers)
+        {
+            glNamedFramebufferDrawBuffers(frameBufferId, static_cast<GLsizei>(buffers.size()), static_cast<const GLenum*>(buffers.data()));
+        }
         static void   check_framebuffer_status(GLuint frameBufferId)
         {
             const auto& status = glCheckNamedFramebufferStatus(frameBufferId, GL_FRAMEBUFFER);

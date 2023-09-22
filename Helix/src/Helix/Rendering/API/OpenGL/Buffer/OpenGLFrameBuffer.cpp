@@ -4,53 +4,31 @@
 
 namespace hlx
 {
-	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest)
+	OpenGLFrameBuffer::OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifests, std::span<const RenderBufferManifest> renderBufferManifests)
 		: FrameBuffer{ dimensions }
 	{
 		m_id = OpenGL::create_framebuffer();
 
-		std::vector<GLenum> drawBuffers{};
+		std::vector<GLenum> buffers{};
 		unsigned int textureAttachmentIndex{};
-		const auto attach_texture = [this, &drawBuffers, &textureAttachmentIndex](const TextureManifest& value)
+		for (const auto& textureManifest : textureManifests)
 		{
-			const auto& [name, attachment, blueprint] = value;
-			const auto& texture = blueprint.build(m_dimensions);
-			const auto& glTexture = std::static_pointer_cast<OpenGLTexture2D>(texture);
-
-			auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
-			if (attachment == Attachment::Color)
-			{
-				internalAttachment += textureAttachmentIndex;
-				++textureAttachmentIndex;
-
-				drawBuffers.emplace_back(internalAttachment);
-			}
-
-			OpenGL::attach_framebuffer_texture(m_id, glTexture->internal_id(), internalAttachment, 0);
-			m_textures.emplace(name, glTexture);
-		};
-		const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
+			const auto& drawBuffer = attach_texture(textureManifest, textureAttachmentIndex);
+			buffers.push_back(drawBuffer);
+		}
+		for (const auto& renderBufferManifest : renderBufferManifests)
 		{
-			const auto& [name, attachment, blueprint] = attachee;
-			const auto& renderBuffer = blueprint.build(m_dimensions);
-			const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBuffer>(renderBuffer);
+			attach_renderbuffer(renderBufferManifest);
+		}
 
-			auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
-			OpenGL::attach_framebuffer_renderbuffer(m_id, glRenderBuffer->id(), internalAttachment);
-			m_renderBuffers.emplace(name, glRenderBuffer);
-		};
-
-		std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);
-		std::for_each(renderBufferManifest.begin(), renderBufferManifest.end(), attach_renderbuffer);
-
-		if (drawBuffers.empty()) 
+		if (buffers.empty()) 
 		{
-			glNamedFramebufferDrawBuffer(m_id, GL_NONE);
-			glNamedFramebufferReadBuffer(m_id, GL_NONE);
+			OpenGL::framebuffer_readbuffer(m_id, GL_NONE);
+			OpenGL::framebuffer_drawbuffer(m_id, GL_NONE);
 		}
 		else
 		{
-			glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
+			OpenGL::framebuffer_drawbuffers(m_id, buffers);
 		}
 
 		OpenGL::check_framebuffer_status(m_id);
@@ -67,5 +45,33 @@ namespace hlx
     void OpenGLFrameBuffer::bind_texture(const std::string& identifier, unsigned int slot) const
     {
 		m_textures.at(identifier)->bind(slot);
+    }
+
+    GLenum OpenGLFrameBuffer::attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex)
+    {
+		const auto& [name, attachment, blueprint] = textureManifest;
+        const auto& glTexture = std::static_pointer_cast<OpenGLTexture2D>(blueprint.build(m_dimensions));
+
+        auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
+        if (attachment == Attachment::Color)
+        {
+            internalAttachment += attachmentIndex;
+            ++attachmentIndex;
+        }
+
+        OpenGL::attach_framebuffer_texture(m_id, glTexture->id(), internalAttachment, 0);
+        m_textures.emplace(name, glTexture);
+
+		return internalAttachment;
+    }
+    void   OpenGLFrameBuffer::attach_renderbuffer(const RenderBufferManifest& renderBufferManifest)
+    {
+		const auto& [name, attachment, blueprint] = renderBufferManifest;
+		const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBuffer>(blueprint.build(m_dimensions));
+
+		const auto& internalAttachment = OpenGL::framebuffer_attachment(attachment);
+
+		OpenGL::attach_framebuffer_renderbuffer(m_id, glRenderBuffer->id(), internalAttachment);
+		m_renderBuffers.emplace(name, glRenderBuffer);
     }
 }

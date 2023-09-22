@@ -12,7 +12,7 @@ namespace hlx
 	class OpenGLFrameBuffer : public FrameBuffer
 	{
 	public:
-		OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest);
+		OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const TextureManifest> textureManifests, std::span<const RenderBufferManifest> renderBufferManifests);
 		~OpenGLFrameBuffer();
 
 		void bind(Target target) const override;
@@ -22,6 +22,10 @@ namespace hlx
 		{
 			return m_id;
 		}
+
+	protected:
+		GLenum attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex);
+		void   attach_renderbuffer(const RenderBufferManifest& renderBufferManifest);
 
 	private:
 		GLuint m_id{};
