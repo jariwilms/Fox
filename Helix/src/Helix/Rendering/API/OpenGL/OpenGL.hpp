@@ -354,6 +354,22 @@ namespace hlx
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBufferId);
         }
 
+        static GLuint create_uniform_buffer()
+        {
+            GLuint id{};
+            glCreateBuffers(1, &id);
+
+            return id;
+        }
+        static void   bind_buffer_base(GLuint uniformBufferId, GLuint binding, GLenum target)
+        {
+            glBindBufferBase(target, binding, uniformBufferId);
+        }
+        static void   bind_buffer_range(GLuint uniformBufferId, GLuint binding, GLenum target, GLsizeiptr size, GLintptr offset)
+        {
+            glBindBufferRange(target, binding, uniformBufferId, offset, size);
+        }
+
         static void   buffer_storage(GLuint bufferId, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
         {
             glNamedBufferStorage(bufferId, size, nullptr, GL_DYNAMIC_STORAGE_BIT);
