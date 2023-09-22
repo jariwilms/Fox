@@ -16,25 +16,9 @@ namespace hlx
 		
 		void bind(unsigned int slot) const override;
 		
-		GLuint id()         const
+		GLuint id() const
 		{
 			return m_id;
-		}
-		GLenum internal_format()     const
-		{
-			return m_internalFormat;
-		}
-		GLenum internal_min_filter() const
-		{
-			return m_internalMinFilter;
-		}
-		GLenum internal_mag_filter() const
-		{
-			return m_internalMagFilter;
-		}
-		GLenum internal_wrapping()   const
-		{
-			return m_internalWrapping;
 		}
 
 	protected:
@@ -43,9 +27,5 @@ namespace hlx
 
 	private:
 		GLuint m_id{};
-		GLenum m_internalFormat{};
-		GLenum m_internalMinFilter{};
-		GLenum m_internalMagFilter{};
-		GLenum m_internalWrapping{};
 	};
 }

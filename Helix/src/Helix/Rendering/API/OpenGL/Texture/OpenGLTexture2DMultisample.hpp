@@ -15,17 +15,12 @@ namespace hlx
 
         void bind(unsigned int slot) const override;
 
-        GLenum id()       const
+        GLenum id() const
         {
             return m_id;
-        }
-        GLenum internal_format()   const
-        {
-            return m_internalFormat;
         }
 
     private:
         GLenum m_id{};
-        GLenum m_internalFormat{};
     };
 }

@@ -40,6 +40,7 @@ namespace hlx
         void copy(size_t size, size_t offset, const void* data) override
         {
             if (size + offset > m_size) throw std::runtime_error{ "Data size exceeds buffer size!" };
+
             OpenGL::buffer_sub_data(m_id, size, offset, data);
         }
 

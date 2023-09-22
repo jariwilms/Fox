@@ -16,25 +16,9 @@ namespace hlx
 
         void bind(unsigned int slot) const override;
 
-        GLenum internal_id()         const
+        GLenum internal_id() const
         {
-            return m_internalId;
-        }
-        GLenum internal_format()     const
-        {
-            return m_internalFormat;
-        }
-        GLenum internal_min_filter() const
-        {
-            return m_internalMinFilter;
-        }
-        GLenum internal_mag_filter() const
-        {
-            return m_internalMagFilter;
-        }
-        GLenum internal_wrapping()   const
-        {
-            return m_internalWrapping;
+            return m_id;
         }
 
     protected:
@@ -43,10 +27,6 @@ namespace hlx
         void copy_face_range(Face face, const Vector2u& dimensions, const Vector2u& offset, Components components, std::span<const byte> data) override;
 
     private:
-        GLenum m_internalId{};
-        GLenum m_internalFormat{};
-        GLenum m_internalMinFilter{};
-        GLenum m_internalMagFilter{};
-        GLenum m_internalWrapping{};
+        GLenum m_id{};
     };
 }

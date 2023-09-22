@@ -7,18 +7,19 @@ namespace hlx
     OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions)
         : CubemapTexture{ format, filter, wrapping, dimensions }
     {
-        m_internalId        = OpenGL::create_texture(GL_TEXTURE_CUBE_MAP);
-        m_internalFormat    = OpenGL::texture_format(m_format);
-        m_internalMinFilter = OpenGL::texture_min_filter(m_filter);
-        m_internalMagFilter = OpenGL::texture_mag_filter(m_filter);
-        m_internalWrapping  = OpenGL::texture_wrapping(m_wrapping);
+        m_id = OpenGL::create_texture(GL_TEXTURE_CUBE_MAP);
 
-        OpenGL::texture_parameter(m_internalId, GL_TEXTURE_MIN_FILTER, m_internalMinFilter);
-        OpenGL::texture_parameter(m_internalId, GL_TEXTURE_MAG_FILTER, m_internalMagFilter);
-        OpenGL::texture_parameter(m_internalId, GL_TEXTURE_WRAP_S, m_internalWrapping);
-        OpenGL::texture_parameter(m_internalId, GL_TEXTURE_WRAP_T, m_internalWrapping);
-        OpenGL::texture_parameter(m_internalId, GL_TEXTURE_WRAP_R, m_internalWrapping);
-        OpenGL::texture_storage_2d(m_internalId, m_internalFormat, m_dimensions, m_mipLevels);
+        const auto& internalFormat    = OpenGL::texture_format(m_format);
+        const auto& internalMinFilter = OpenGL::texture_min_filter(m_filter);
+        const auto& internalMagFilter = OpenGL::texture_mag_filter(m_filter);
+        const auto& internalWrappping = OpenGL::texture_wrapping(m_wrapping);
+
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_MIN_FILTER, internalMinFilter);
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_MAG_FILTER, internalMagFilter);
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_S, internalWrappping);
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_T, internalWrappping);
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_R, internalWrappping);
+        OpenGL::texture_storage_2d(m_id, internalFormat, m_dimensions, m_mipLevels);
     }
     OpenGLCubemapTexture::OpenGLCubemapTexture(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components components, std::span<std::span<const byte>, 6> data)
         : OpenGLCubemapTexture{ format, filter, wrapping, dimensions }
@@ -27,12 +28,12 @@ namespace hlx
     }
     OpenGLCubemapTexture::~OpenGLCubemapTexture()
     {
-        OpenGL::delete_texture(m_internalId);
+        OpenGL::delete_texture(m_id);
     }
 
     void OpenGLCubemapTexture::bind(unsigned int slot) const
     {
-        OpenGL::bind_texture(m_internalId, slot);
+        OpenGL::bind_texture(m_id, slot);
     }
 
     void OpenGLCubemapTexture::copy(Components components, std::span<std::span<const byte>, 6> data)
@@ -54,7 +55,7 @@ namespace hlx
         if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
         const auto& format = OpenGL::texture_format(components);
-        OpenGL::texture_sub_image_3d(m_internalId, format, Vector3u{ dimensions, 1u }, Vector3u{ offset, static_cast<GLint>(face) }, 0, data.data());
-        if (m_mipLevels > 1) OpenGL::generate_texture_mipmap(m_internalId);
+        OpenGL::texture_sub_image_3d(m_id, format, Vector3u{ dimensions, 1u }, Vector3u{ offset, static_cast<GLint>(face) }, 0, data.data());
+        if (m_mipLevels > 1) OpenGL::generate_texture_mipmap(m_id);
     }
 }

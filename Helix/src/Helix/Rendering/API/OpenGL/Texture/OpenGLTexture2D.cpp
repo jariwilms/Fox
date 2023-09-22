@@ -7,17 +7,18 @@ namespace hlx
     OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions)
 		: Texture2D{ format, filter, wrapping, dimensions }
     {
-		m_id                = OpenGL::create_texture(GL_TEXTURE_2D);
-        m_internalFormat    = OpenGL::texture_format(m_format);
-		m_internalMinFilter = OpenGL::texture_min_filter(m_filter);
-		m_internalMagFilter = OpenGL::texture_mag_filter(m_filter);
-		m_internalWrapping  = OpenGL::texture_wrapping(m_wrapping);
+		m_id = OpenGL::create_texture(GL_TEXTURE_2D);
 
-        OpenGL::texture_parameter(m_id, GL_TEXTURE_MIN_FILTER, m_internalMinFilter);
-        OpenGL::texture_parameter(m_id, GL_TEXTURE_MAG_FILTER, m_internalMagFilter);
-        OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_S, m_internalWrapping);
-		OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_T, m_internalWrapping);
-		OpenGL::texture_storage_2d(m_id, m_internalFormat, m_dimensions, m_mipLevels);
+        const auto& internalFormat    = OpenGL::texture_format(m_format);
+		const auto& internalMinFilter = OpenGL::texture_min_filter(m_filter);
+		const auto& internalMagFilter = OpenGL::texture_mag_filter(m_filter);
+		const auto& internalWrapping  = OpenGL::texture_wrapping(m_wrapping);
+
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_MIN_FILTER, internalMinFilter);
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_MAG_FILTER, internalMagFilter);
+        OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_S, internalWrapping);
+		OpenGL::texture_parameter(m_id, GL_TEXTURE_WRAP_T, internalWrapping);
+		OpenGL::texture_storage_2d(m_id, internalFormat, m_dimensions, m_mipLevels);
     }
     OpenGLTexture2D::OpenGLTexture2D(Format format, Filter filter, Wrapping wrapping, const Vector2u& dimensions, Components components, std::span<const byte> data)
         : OpenGLTexture2D{ format, filter, wrapping, dimensions }

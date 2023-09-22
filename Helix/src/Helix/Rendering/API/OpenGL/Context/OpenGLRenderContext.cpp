@@ -11,13 +11,9 @@ namespace hlx
 {
 	OpenGLRenderContext::OpenGLRenderContext()
 	{
-        static auto self = this;
+        static auto self = this; //yeah
         const auto forward_gl_debug_callback = [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* param)
         {
-            //const auto glfwWindow = reinterpret_cast<GLFWwindow*>(WindowManager::find("Window 1")->native_window()); //TODO: fix how UserPointer is fetched
-            //const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
-
-            //const auto& context = userPointer->renderContext;
             self->gl_debug_callback(source, type, id, severity, length, message, param);
         };
 
@@ -35,7 +31,7 @@ namespace hlx
 
     void OpenGLRenderContext::gl_debug_callback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* user_param)
     {
-        const auto sourceMessage = [source]() -> std::string
+        const auto sourceMessage   = [source]() -> std::string
         {
             switch (source)
             {
@@ -49,7 +45,7 @@ namespace hlx
                 default:                              throw std::invalid_argument{ "Invalid source!" };
             }
         }();
-        const auto typeMessage = [type]() -> std::string
+        const auto typeMessage     = [type]() -> std::string
         {
             switch (type)
             {
