@@ -12,7 +12,7 @@ namespace hlx
     class OpenGLFrameBufferMultisample : public FrameBufferMultisample
     {
     public:
-        OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest);
+        OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const TextureManifest> textureManifests, std::span<const RenderBufferManifest> renderBufferManifests);
         ~OpenGLFrameBufferMultisample();
 
         void bind(Target target) const override;
@@ -24,6 +24,9 @@ namespace hlx
         }
 
     private:
+        GLenum attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex);
+        void   attach_renderbuffer(const RenderBufferManifest& renderBufferManifest);
+
         GLuint m_id{};
 
         std::unordered_map<std::string, std::shared_ptr<OpenGLTexture2DMultisample>>    m_textures{};

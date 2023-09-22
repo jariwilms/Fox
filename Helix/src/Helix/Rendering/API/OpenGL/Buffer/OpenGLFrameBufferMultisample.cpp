@@ -4,51 +4,36 @@
 
 namespace hlx
 {
-    OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const TextureManifest> textureManifest, std::span<const RenderBufferManifest> renderBufferManifest)
+    OpenGLFrameBufferMultisample::OpenGLFrameBufferMultisample(const Vector2u& dimensions, unsigned int samples, std::span<const TextureManifest> textureManifests, std::span<const RenderBufferManifest> renderBufferManifests)
         : FrameBufferMultisample{ dimensions, samples }
     {
         if (m_samples == 0) throw std::invalid_argument{ "Samples must be greater than zero!" };
 
-        glCreateFramebuffers(1, &m_id);
+        m_id = OpenGL::create_framebuffer();
 
-        unsigned int colorAttachmentIndex{};
-        std::vector<GLenum> drawBuffers{};
-        const auto attach_texture = [this, &drawBuffers, &colorAttachmentIndex](const TextureManifest& value)
+        std::vector<GLenum> buffers{};
+        unsigned int textureAttachmentIndex{};
+        for (const auto& textureManifest : textureManifests)
         {
-            const auto& [name, attachment, blueprint] = value;
-            const auto& texture = blueprint.build_multisample(m_dimensions, m_samples);
-            const auto& glTexture = std::static_pointer_cast<OpenGLTexture2DMultisample>(texture);
-
-            auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
-            if (attachment == Attachment::Color)
-            {
-                internalAttachment += colorAttachmentIndex;
-                ++colorAttachmentIndex;
-
-                drawBuffers.emplace_back(internalAttachment);
-            }
-
-            glNamedFramebufferTexture(m_id, internalAttachment, glTexture->internal_id(), 0);
-            m_textures.emplace(name, glTexture);
-        };
-        const auto attach_renderbuffer = [this](const RenderBufferManifest& attachee)
+            const auto& drawBuffer = attach_texture(textureManifest, textureAttachmentIndex);
+            buffers.push_back(drawBuffer);
+        }
+        for (const auto& renderBufferManifest : renderBufferManifests)
         {
-            const auto& [name, attachment, blueprint] = attachee;
-            const auto& renderBuffer = blueprint.build_multisample(m_dimensions, m_samples);
-            const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBufferMultisample>(renderBuffer);
+            attach_renderbuffer(renderBufferManifest);
+        }
 
-            auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
+        if (buffers.empty())
+        {
+            OpenGL::framebuffer_readbuffer(m_id, GL_NONE);
+            OpenGL::framebuffer_drawbuffer(m_id, GL_NONE);
+        }
+        else
+        {
+            OpenGL::framebuffer_drawbuffers(m_id, buffers);
+        }
 
-            glNamedFramebufferRenderbuffer(m_id, internalAttachment, GL_RENDERBUFFER, glRenderBuffer->id());
-            m_renderBuffers.emplace(name, glRenderBuffer);
-        };
-
-        std::for_each(textureManifest.begin(),      textureManifest.end(),      attach_texture);
-        std::for_each(renderBufferManifest.begin(), renderBufferManifest.end(), attach_renderbuffer);
-        glNamedFramebufferDrawBuffers(m_id, static_cast<GLsizei>(drawBuffers.size()), drawBuffers.data());
-
-        const auto& status = glCheckNamedFramebufferStatus(m_id, GL_FRAMEBUFFER);
-        if (status != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Failed to create framebuffer!" };
+        OpenGL::check_framebuffer_status(m_id);
     }
     OpenGLFrameBufferMultisample::~OpenGLFrameBufferMultisample()
     {
@@ -62,5 +47,33 @@ namespace hlx
     void OpenGLFrameBufferMultisample::bind_texture(const std::string& identifier, unsigned int slot) const
     {
         m_textures.at(identifier)->bind(slot);
+    }
+
+    GLenum OpenGLFrameBufferMultisample::attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex)
+    {
+        const auto& [name, attachment, blueprint] = textureManifest;
+        const auto& glTexture = std::static_pointer_cast<OpenGLTexture2DMultisample>(blueprint.build_multisample(m_dimensions, m_samples));
+
+        auto internalAttachment = OpenGL::framebuffer_attachment(attachment);
+        if (attachment == Attachment::Color)
+        {
+            internalAttachment += attachmentIndex;
+            ++attachmentIndex;
+        }
+
+        OpenGL::attach_framebuffer_texture(m_id, glTexture->id(), internalAttachment, 0);
+        m_textures.emplace(name, glTexture);
+
+        return internalAttachment;
+    }
+    void   OpenGLFrameBufferMultisample::attach_renderbuffer(const RenderBufferManifest& renderBufferManifest)
+    {
+        const auto& [name, attachment, blueprint] = renderBufferManifest;
+        const auto& glRenderBuffer = std::static_pointer_cast<OpenGLRenderBufferMultisample>(blueprint.build_multisample(m_dimensions, m_samples));
+
+        const auto& internalAttachment = OpenGL::framebuffer_attachment(attachment);
+
+        OpenGL::attach_framebuffer_renderbuffer(m_id, glRenderBuffer->id(), internalAttachment);
+        m_renderBuffers.emplace(name, glRenderBuffer);
     }
 }

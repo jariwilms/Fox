@@ -23,11 +23,10 @@ namespace hlx
 			return m_id;
 		}
 
-	protected:
+	private:
 		GLenum attach_texture(const TextureManifest& textureManifest, unsigned int& attachmentIndex);
 		void   attach_renderbuffer(const RenderBufferManifest& renderBufferManifest);
 
-	private:
 		GLuint m_id{};
 
         std::unordered_map<std::string, std::shared_ptr<OpenGLTexture2D>>    m_textures{};
