@@ -43,7 +43,7 @@ namespace hlx
 
         static const auto user_pointer = [this]() -> GLFWWindow::UserPointer*
         {
-            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(WindowManager::find(this)->native_window());
+            const auto glfwWindow = reinterpret_cast<GLFWwindow*>(WindowManager::find(this)->native_handle());
             const auto userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
             
             return userPointer;

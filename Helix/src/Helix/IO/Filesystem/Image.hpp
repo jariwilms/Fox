@@ -11,61 +11,61 @@
 
 namespace hlx
 {
-	struct Image : public File
+	class Image : protected File
 	{
 	public:
 		explicit Image(const std::filesystem::path& path)
 			: File{ path }
 		{
-			const auto fileData = File::read();
-			stbi_info_from_memory(fileData->data(), static_cast<int>(m_size), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels));
-
-			//stbi_info(path.string().c_str(), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels));
+			update_meta_data();
 		}
-		~Image() = default;
+		virtual ~Image() = default;
 
-		std::shared_ptr<const std::vector<byte>> read()
+		std::unique_ptr<const std::vector<byte>> read(unsigned int components = 0u)
 		{
-			if (loaded()) return m_imageData.lock();
-
 			stbi_set_flip_vertically_on_load(Config::IO::flipImages);
 
-			const auto& channels  = 4;
-			const auto& fileData  = File::read();
-			const auto& imageData = stbi_load_from_memory(fileData->data(), static_cast<int>(m_size), reinterpret_cast<int*>(&m_dimensions.x), reinterpret_cast<int*>(&m_dimensions.y), reinterpret_cast<int*>(&m_channels), channels);
-			m_imageSize = (static_cast<size_t>(m_dimensions.x) * static_cast<size_t>(m_dimensions.y)) * channels;
+			if (components == 0) components = m_channels;
+			else                 components = std::min(components, 4u);
 
-			auto ptr = std::make_shared<const std::vector<byte>>(imageData, imageData + m_imageSize);
-			m_imageData = ptr;
+			int x{}, y{}, c{};
+			const auto& str     = m_path.string();
+			const auto& rawSize = static_cast<size_t>(m_dimensions.x * m_dimensions.y * components);
+			auto* image         = reinterpret_cast<byte*>(stbi_load(str.c_str(), &x, &y, &c, components));
 
-			stbi_image_free(imageData);
+            auto buffer = std::make_unique<const std::vector<byte>>(image, image + rawSize);
+			stbi_image_free(image);
 
-			return ptr;
+			return buffer;
 		}
-		void write(std::span<const byte>& data) override
+		void write(std::span<const byte> data)
 		{
-			throw std::logic_error{ "Not implemented!" };
+			throw std::logic_error{ "The method or operation has not been implemented!" };
 		}
 
-		bool loaded() const override
-		{
-			return !m_imageData.expired();
-		}
-
-		Vector2u dimensions() const
+		const Vector2u& dimensions() const
 		{
 			return m_dimensions;
 		}
-		unsigned int channels() const
+		unsigned int    channels()   const
 		{
 			return m_channels;
 		}
 
-	private:
+	protected:
+		virtual void update_meta_data() override
+		{
+            int x{}, y{}, c{};
+            const auto& str     = m_path.string();
+            const auto& success = stbi_info(str.c_str(), &x, &y, &c);
+
+            if (!success) throw std::runtime_error{ std::format("Image info could not be retrieved! reason: {}", stbi_failure_reason()) };
+
+            m_dimensions = { x, y };
+            m_channels = c;
+		}
+
 		Vector2u     m_dimensions{};
 		unsigned int m_channels{};
-
-		std::weak_ptr<const std::vector<byte>> m_imageData{};
-		size_t m_imageSize{};
 	};
 }

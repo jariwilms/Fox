@@ -423,6 +423,7 @@
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

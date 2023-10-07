@@ -24,6 +24,7 @@
 #include "Helix/Window/Window.hpp"
 
 
+
 using namespace hlx;
 
 
@@ -71,14 +72,16 @@ std::shared_ptr<Actor> model_to_scene_graph(Scene* scene, std::shared_ptr<Model>
     return actor;
 };
 
-int main(int argc, char** argv)
+int main(int argc, char* argv[])
 {
     Application application{ argc, argv };
 
     const std::string windowIdentifier{ "Window 1" };
     const std::string windowTitle{ "Helix" };
     const Vector2u windowDimensions{ 1280, 720 };
-    const auto window = WindowManager::create(windowIdentifier, windowTitle, windowDimensions);
+    const auto& window = WindowManager::create(windowIdentifier, windowTitle, windowDimensions);
+
+
 
     IO::init();
     Renderer::init();
@@ -96,8 +99,9 @@ int main(int argc, char** argv)
 
     hlx::ModelImporter modelImporter{};
 #ifdef _DEBUG
-    auto model = modelImporter.import(R"(models/cube_textured/scene.gltf)");
+    //auto model = modelImporter.import(R"(models/cube_textured/scene.gltf)");
     //auto model = modelImporter.import(R"(models/fish/scene.gltf)");
+    auto model = modelImporter.import(R"(models/earth/earth.glb)");
 #endif
 #ifndef _DEBUG
     //auto model = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
@@ -113,23 +117,23 @@ int main(int argc, char** argv)
     TextureBlueprint skyboxBlueprint{};
     std::string skyboxDirectory{ "textures/skybox2/" };
     std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
-    std::array<std::shared_ptr<const std::vector<byte>>, 6> skyboxImages
+    std::array<std::unique_ptr<const std::vector<byte>>, 6> skyboxImages
     {
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(0))->read(),
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(1))->read(),
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(2))->read(),
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(3))->read(),
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(),
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(),
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(0))->read(4u), 
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(1))->read(4u), 
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(2))->read(4u), 
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(3))->read(4u), 
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(4u), 
+        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(4u), 
     };
     std::array<std::span<const byte>, 6> skyboxImageData
     {
-        *skyboxImages[0],
-        *skyboxImages[1],
-        *skyboxImages[2],
-        *skyboxImages[3],
-        *skyboxImages[4],
-        *skyboxImages[5],
+        *skyboxImages[0], 
+        *skyboxImages[1], 
+        *skyboxImages[2], 
+        *skyboxImages[3], 
+        *skyboxImages[4], 
+        *skyboxImages[5], 
     };
 
     RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, skyboxImageData);
@@ -142,12 +146,9 @@ int main(int argc, char** argv)
 
 
 
-
-
-
     Time::reset();
     CyclicBuffer<float, 128> frametimes{};
-	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window->native_window())))
+	while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(window->native_handle())))
 	{
         Time::advance();
 

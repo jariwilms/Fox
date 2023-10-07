@@ -39,12 +39,6 @@ namespace hlx
         {
             return s_delta;
         }
-        static const DeltaTime& delta_c()
-        {
-            s_deltaC = std::chrono::duration<float>{ Clock::now() - s_tr }.count();
-
-            return s_deltaC;
-        }
 
     private:
         static inline TimePoint s_t0{};                                        //Previous TimePoint

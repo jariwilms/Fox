@@ -129,13 +129,8 @@ namespace hlx
 
 
 
-
-
             //Create instance of every material and add to model
             if (!aiScene->HasMaterials()) throw std::runtime_error{ "Model requires at least one material!" };
-
-            //TextureBlueprint textureBlueprint{};
-            //textureBlueprint.filter = Texture::Filter::Trilinear;
 
             std::span<aiMaterial*> aiMaterials{ aiScene->mMaterials, aiScene->mNumMaterials };
             for (auto index{ 0u }; const auto & aiMaterial : aiMaterials)
@@ -151,15 +146,13 @@ namespace hlx
                 }
                 if (aiString aiAlbedoTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_BASE_COLOR_TEXTURE, &aiAlbedoTexturePath) == aiReturn_SUCCESS)
                 {
-                    const auto& albedoImage   = std::make_shared<Image>(baseDirectory / aiAlbedoTexturePath.C_Str());
-                    const auto& albedoTexture = gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, albedoImage->dimensions(), Texture::Components::RGBA, utl::to_span(*albedoImage->read()));
-                    material->albedoMap = albedoTexture;
+                    material->albedoMap = create_texture(aiScene, std::string{ aiAlbedoTexturePath.C_Str() });
                 }
                 if (aiString aiNormalTexturePath{}; aiMaterial->GetTexture(aiTextureType_NORMALS, 0, &aiNormalTexturePath) == aiReturn_SUCCESS)
                 {
                     const auto& normalImage = std::make_shared<Image>(baseDirectory / aiNormalTexturePath.C_Str());
-                    const auto& normalTexture = gfx::create_texture(Texture::Format::RGBA8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, normalImage->dimensions(), Texture::Components::RGBA, utl::to_span(*normalImage->read()));
-                    material->normalMap = normalTexture;
+                    const auto& normalTexture = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, normalImage->dimensions(), Texture::Components::RGB, utl::to_span(*normalImage->read(3u)));
+                    material->normalMap = normalTexture; static_assert(false, "      Texture formats are not changed yet in 'create_texture' func");
                 }
                 if (ai_real aiRoughnessFactor{}; aiMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, aiRoughnessFactor) == aiReturn_SUCCESS)
                 {
@@ -172,7 +165,7 @@ namespace hlx
                 if (aiString aiRoughnessMetallicTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_METALLIC_TEXTURE, &aiRoughnessMetallicTexturePath) == aiReturn_SUCCESS)
                 {
                     const auto& roughnessMetallicImage = std::make_shared<Image>(baseDirectory / aiRoughnessMetallicTexturePath.C_Str());
-                    const auto& roughnessMetallicTexture = gfx::create_texture(Texture::Format::RGBA8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, roughnessMetallicImage->dimensions(), Texture::Components::RGBA, utl::to_span(*roughnessMetallicImage->read()));
+                    const auto& roughnessMetallicTexture = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, roughnessMetallicImage->dimensions(), Texture::Components::RGB, utl::to_span(*roughnessMetallicImage->read(3u)));
                     material->armMap = roughnessMetallicTexture;
                 }
                 //if (aiString aiAmbientTexturePath{}; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0), aiAmbientTexturePath) == aiReturn_SUCCESS)
@@ -253,6 +246,31 @@ namespace hlx
         }
         
     private:
+        static std::shared_ptr<const Texture2D> create_texture(const aiScene* const aiScene, const std::filesystem::path& root, const std::string& path)
+        {
+            if (path.at(0) == '*')
+            {
+                const auto& aiTextureIndex = std::stoi(path.substr(1));
+                const auto& aiAlbedoTexture = aiScene->mTextures[aiTextureIndex];
+
+                int size{};
+                if (aiAlbedoTexture->mHeight == 0) size = aiAlbedoTexture->mWidth;
+                else                               size = aiAlbedoTexture->mWidth * aiAlbedoTexture->mHeight;
+                size *= 4; //Convert assimp pixels (rgba) to bytes
+
+                int x{}, y{}, c{};
+                const stbi_uc* img = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(aiAlbedoTexture->pcData), size, &x, &y, &c, 4);
+                const auto& span = std::span<const byte>{ img, static_cast<size_t>(size) };
+
+                return gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ x, y }, Texture::Components::RGBA, span);
+            }
+            else
+            {
+                const auto& albedoImage = std::make_shared<Image>(root / path);
+                return gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, albedoImage->dimensions(), Texture::Components::RGBA, utl::to_span(*albedoImage->read(4u)));
+            }
+        }
+
         static inline std::shared_ptr<Material> m_defaultMaterial{};
         static inline std::shared_ptr<VertexLayout> m_layout3f{};
         static inline std::shared_ptr<VertexLayout> m_layout2f{};

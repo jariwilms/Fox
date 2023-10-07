@@ -7,12 +7,21 @@ namespace hlx
 	class Entry
 	{
 	public:
-		Entry(const std::filesystem::path& path)
+		enum class Type
 		{
-			if (!std::filesystem::exists(path)) throw std::runtime_error{ "Path does not exist!" };
+			File, 
+			Directory, 
 
-			m_path = path.lexically_normal();
-			m_name = m_path.filename().string();
+            SymbolicLink,
+            HardLink,
+		};
+
+		Entry(const Entry&) = delete;
+		virtual ~Entry() = default;
+
+		static bool exists(const std::filesystem::path& path)
+		{
+			return std::filesystem::exists(path);
 		}
 
 		const std::filesystem::path& path() const
@@ -24,7 +33,15 @@ namespace hlx
 			return m_name;
 		}
 
+		Entry& operator=(const Entry&) = delete;
+
 	protected:
+		explicit Entry(const std::filesystem::path& path)
+		{
+            m_path = path.lexically_normal();
+            m_name = m_path.filename();
+		}
+
 		std::filesystem::path m_path{};
 		std::filesystem::path m_name{};
 	};

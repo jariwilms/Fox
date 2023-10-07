@@ -5,11 +5,10 @@
 #include "Entry.hpp"
 #include "Directory.hpp"
 #include "File.hpp"
-#include "Helix/Core/Library/Semantics/NonCopyable.hpp"
 
 namespace hlx
 {
-	class Handle : public NonCopyable
+	class Handle
 	{
 	public:
 		Handle(const std::filesystem::path& path)                              //TODO: single if statement?
@@ -39,31 +38,21 @@ namespace hlx
 			return m_entry->name();
 		}
 
-		template<typename T>
-		bool is() const
+		template<Entry::Type T>
+		bool is() const = delete;
+		template<> 
+		bool is<Entry::Type::Directory>() const
 		{
-
+			return m_entryType == Entry::Type::Directory;
 		}
-		template<> bool is<Directory>() const
+		template<> 
+		bool is<Entry::Type::File>() const
 		{
-			return m_entryType == EntryType::Directory;
-		}
-		template<> bool is<File>() const
-		{
-			return m_entryType == EntryType::File;
+			return m_entryType == Entry::Type::File;
 		}
 
 	private:
-		enum class EntryType
-		{
-			Directory,
-			File, 
-
-			SymbolicLink, 
-			HardLink, 
-		};
-
 		std::shared_ptr<Entry> m_entry;
-		EntryType m_entryType;
+		Entry::Type m_entryType;
 	};
 }

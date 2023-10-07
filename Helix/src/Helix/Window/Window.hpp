@@ -27,11 +27,7 @@ namespace hlx
 		virtual void rename(const std::string& title) = 0;
 		virtual void resize(const Vector2f& dimensions) = 0;
 
-		NativeWindow* native_window()
-        {
-            return m_nativeWindow;
-        }
-        NativeWindow* const native_window() const
+        NativeWindow* const native_handle() const
         {
             return m_nativeWindow;
         }
