@@ -11,36 +11,49 @@
 
 namespace hlx
 {
-	class Image : protected File
+	class Image
 	{
 	public:
-		explicit Image(const std::filesystem::path& path)
-			: File{ path }
+		enum class Format
 		{
-			update_meta_data();
+			GIF, 
+			JPEG, 
+			JPG, 
+			PNG, 
+			WEBP, 
+		};
+
+		Image() = default;
+		explicit Image(std::span<const byte> data)
+			: m_data{ data.begin(), data.end() }
+		{
+            int x{}, y{}, c{};
+            const auto& success = stbi_info_from_memory(m_data.data(), static_cast<int>(data.size_bytes()), & x, &y, &c);
+            if (!success) throw std::runtime_error{ std::format("Image info could not be retrieved! reason: {}", stbi_failure_reason()) };
+
+            m_dimensions = { x, y };
+            m_channels = c;
 		}
+		explicit Image(std::shared_ptr<File> file)
+			: Image{ utl::to_span(*file->read()) } {}
+		explicit Image(const Image& other) = delete;
 		virtual ~Image() = default;
 
 		std::unique_ptr<const std::vector<byte>> read(unsigned int components = 0u)
 		{
-			stbi_set_flip_vertically_on_load(Config::IO::flipImages);
+            stbi_set_flip_vertically_on_load(Config::IO::flipImages);
 
-			if (components == 0) components = m_channels;
-			else                 components = std::min(components, 4u);
+            if (components == 0) components = m_channels;
+            else                 components = std::min(components, 4u);
 
-			int x{}, y{}, c{};
-			const auto& str     = m_path.string();
-			const auto& rawSize = static_cast<size_t>(m_dimensions.x * m_dimensions.y * components);
-			auto* image         = reinterpret_cast<byte*>(stbi_load(str.c_str(), &x, &y, &c, components));
+            int x{}, y{}, c{};
+            const auto& len = static_cast<int>(m_dimensions.x * m_dimensions.y * components);
+            auto* image = reinterpret_cast<byte*>(stbi_load_from_memory(m_data.data(), len, &x, &y, &c, components));
 
-            auto buffer = std::make_unique<const std::vector<byte>>(image, image + rawSize);
-			stbi_image_free(image);
+            auto buffer = std::make_unique<const std::vector<byte>>(image, image + len);
+            stbi_image_free(image);
 
-			return buffer;
-		}
-		void write(std::span<const byte> data)
-		{
-			throw std::logic_error{ "The method or operation has not been implemented!" };
+            return buffer;
 		}
 
 		const Vector2u& dimensions() const
@@ -52,20 +65,25 @@ namespace hlx
 			return m_channels;
 		}
 
-	protected:
-		virtual void update_meta_data() override
-		{
-            int x{}, y{}, c{};
-            const auto& str     = m_path.string();
-            const auto& success = stbi_info(str.c_str(), &x, &y, &c);
+		Image& operator=(const Image&) = delete;
 
-            if (!success) throw std::runtime_error{ std::format("Image info could not be retrieved! reason: {}", stbi_failure_reason()) };
-
-            m_dimensions = { x, y };
-            m_channels = c;
-		}
+	private:
+		std::vector<byte> m_data{};
 
 		Vector2u     m_dimensions{};
 		unsigned int m_channels{};
 	};
+
+	class Image2
+	{
+	public:
+		Image2() = default;
+
+
+	private:
+		Vector2u     m_dimensions{};
+		unsigned int m_channels{};
+	};
+
+
 }

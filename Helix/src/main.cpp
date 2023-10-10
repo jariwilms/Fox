@@ -119,12 +119,12 @@ int main(int argc, char* argv[])
     std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
     std::array<std::unique_ptr<const std::vector<byte>>, 6> skyboxImages
     {
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(0))->read(4u), 
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(1))->read(4u), 
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(2))->read(4u), 
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(3))->read(4u), 
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(4))->read(4u), 
-        IO::load<Image>(skyboxDirectory + skyboxFileNames.at(5))->read(4u), 
+        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(0)) }.read(4u), 
+        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(1)) }.read(4u), 
+        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(2)) }.read(4u), 
+        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(3)) }.read(4u), 
+        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(4)) }.read(4u), 
+        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(5)) }.read(4u), 
     };
     std::array<std::span<const byte>, 6> skyboxImageData
     {

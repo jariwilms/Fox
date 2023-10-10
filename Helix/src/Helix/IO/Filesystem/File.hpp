@@ -27,6 +27,11 @@ namespace hlx
             return std::make_shared<File>(path);
         }
 
+        void save()
+        {
+            m_stream.flush();
+        }
+
         std::unique_ptr<const std::vector<byte>> read()
         {
             //The vector allocator default-initializes all data when resizing. This is redundant and costly on larger files, so a custom allocator is used

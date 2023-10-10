@@ -146,13 +146,30 @@ namespace hlx
                 }
                 if (aiString aiAlbedoTexturePath{}; aiMaterial->GetTexture(AI_MATKEY_BASE_COLOR_TEXTURE, &aiAlbedoTexturePath) == aiReturn_SUCCESS)
                 {
-                    material->albedoMap = create_texture(aiScene, std::string{ aiAlbedoTexturePath.C_Str() });
+                    const std::string albedoTexturePath{ aiAlbedoTexturePath.C_Str() };
+                    if (albedoTexturePath.at(0) == '*')
+                    {
+                        const auto& aiTextureIndex  = std::stoi(albedoTexturePath.substr(1));
+                        const auto& aiAlbedoTexture = aiScene->mTextures[aiTextureIndex];
+
+                        const auto& aiSize = (aiAlbedoTexture->mWidth * std::max(aiAlbedoTexture->mHeight, 1u)) * 4u;
+                        const auto& image    = std::make_shared<Image>(std::span<const byte>{ reinterpret_cast<const byte*>(aiAlbedoTexture->pcData), aiSize });
+
+                        material->albedoMap = gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image->dimensions(), Texture::Components::RGBA, utl::to_span(*image->read()));
+                    }
+                    else
+                    {
+                        const auto& imageFile = IO::load<File>(baseDirectory / albedoTexturePath);
+                        const auto& image = std::make_shared<Image>(imageFile);
+
+                        material->albedoMap = gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image->dimensions(), Texture::Components::RGBA, utl::to_span(*image->read()));
+                    }
                 }
                 if (aiString aiNormalTexturePath{}; aiMaterial->GetTexture(aiTextureType_NORMALS, 0, &aiNormalTexturePath) == aiReturn_SUCCESS)
                 {
                     const auto& normalImage = std::make_shared<Image>(baseDirectory / aiNormalTexturePath.C_Str());
                     const auto& normalTexture = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, normalImage->dimensions(), Texture::Components::RGB, utl::to_span(*normalImage->read(3u)));
-                    material->normalMap = normalTexture; static_assert(false, "      Texture formats are not changed yet in 'create_texture' func");
+                    //material->normalMap = normalTexture; static_assert(false, "      Texture formats are not changed yet in 'create_texture' func");
                 }
                 if (ai_real aiRoughnessFactor{}; aiMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, aiRoughnessFactor) == aiReturn_SUCCESS)
                 {
