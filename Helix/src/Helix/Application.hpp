@@ -10,6 +10,9 @@ namespace hlx
         Application(int argc, char* argv[]);
         virtual ~Application();
 
+        int run();
+
     private:
+        std::shared_ptr<Window> m_window{};
     };
 }

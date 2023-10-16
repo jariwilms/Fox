@@ -11,59 +11,52 @@
 
 namespace hlx
 {
-    //TODO: complete rework
-	class Image
-	{
-	public:
-        explicit Image(std::shared_ptr<const std::vector<byte>> data)
-            : m_data{ data }
-        {
-            gather_info();
-        }
-        explicit Image(std::shared_ptr<File> file)
-            : m_data{ file->read() }
-        {
-            gather_info();
-        }
+    class Image
+    {
+    public:
+        Image(const Vector2u& dimensions, unsigned int channels, const std::vector<byte>& data)
+            : m_dimensions{ dimensions }, m_channels{ channels }, m_data{ data } {}
+        Image(const Vector2u& dimensions, unsigned int channels, std::vector<byte>&& data)
+            : m_dimensions{ dimensions }, m_channels{ channels }, m_data{ std::move(data) } {}
 
-        std::shared_ptr<const std::vector<byte>> read(unsigned int components = 0u)
+        virtual ~Image() = default;
+
+        static Image decode(std::span<const byte> data, unsigned int channels = 0u)
         {
             stbi_set_flip_vertically_on_load(Config::IO::flipImages);
-            components = std::min(components, 4u);
+            channels = std::min(channels, 4u);
 
             int x{}, y{}, c{};
-            const auto& size      = m_dimensions.x * m_dimensions.y * components;
-            const auto& imageData = std::span<byte>{ reinterpret_cast<byte*>(stbi_load_from_memory(m_data->data(), static_cast<int>(m_data->size()), &x, &y, &c, components)), size };
+            auto* decodedData = reinterpret_cast<byte*>(stbi_load_from_memory(data.data(), static_cast<int>(data.size_bytes()), &x, &y, &c, channels));
 
-            auto buffer = std::make_unique<const std::vector<byte>>(imageData.begin(), imageData.end());
-            stbi_image_free(imageData.data());
+            const auto& size = x * y * channels;
+            std::vector<byte> a{ decodedData, decodedData + size };
+            stbi_image_free(decodedData);
 
-            return buffer;
-		}
+            return Image{ Vector2u{ x, y }, channels, std::move(a)};
+        }
 
-        const Vector2u& dimensions() const
+        size_t size() const
+        {
+            return data().size_bytes();
+        }
+
+        const Vector2u&       dimensions() const
         {
             return m_dimensions;
         }
-        unsigned int    channels()   const
+        unsigned int          channels()   const
         {
             return m_channels;
         }
-
-    private:
-        void gather_info()
+        std::span<const byte> data()       const
         {
-            int x{}, y{}, c{};
-            const auto& success = stbi_info_from_memory(m_data->data(), static_cast<int>(m_data->size()), &x, &y, &c);
-            if (!success) throw std::runtime_error{ std::format("Failed to get image properties! reason: {}", stbi_failure_reason()) };
-
-            m_dimensions = { x, y };
-            m_channels = c;
+            return m_data;
         }
 
-        Vector2u     m_dimensions{};
-        unsigned int m_channels{};
-
-        std::shared_ptr<const std::vector<byte>> m_data{};
-	};
+    private:
+        Vector2u          m_dimensions{};
+        unsigned int      m_channels{};
+        std::vector<byte> m_data{};
+    };
 }
