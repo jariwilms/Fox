@@ -64,11 +64,11 @@ namespace hlx
 
 
 
-        //TODO: maybe predefined pipeline names (constexpr?), these will probably not change anyways
-        m_pipelines.emplace("Mesh",     gfx::create_pipeline("shaders/compiled/mesh.vert.spv",     "shaders/compiled/mesh.frag.spv"));
-        m_pipelines.emplace("Lighting", gfx::create_pipeline("shaders/compiled/lighting.vert.spv", "shaders/compiled/lighting.frag.spv"));
-        m_pipelines.emplace("Skybox",   gfx::create_pipeline("shaders/compiled/skybox.vert.spv",   "shaders/compiled/skybox.frag.spv"));
-
+        m_pipelines.emplace("Mesh",     gfx::create_pipeline("shaders/compiled/mesh.vert.spv",         "shaders/compiled/mesh.frag.spv"));
+        /*m_pipelines.emplace("Lighting", gfx::create_pipeline("shaders/compiled/lighting_pbr.vert.spv", "shaders/compiled/lighting_pbr.frag.spv"));*/
+        m_pipelines.emplace("Lighting", gfx::create_pipeline("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv"));
+        m_pipelines.emplace("Skybox",   gfx::create_pipeline("shaders/compiled/skybox.vert.spv",       "shaders/compiled/skybox.frag.spv"));
+        m_pipelines.emplace("Shadow",   gfx::create_pipeline("shaders/compiled/shadow.vert.spv",       "shaders/compiled/shadow.frag.spv"));
 
 
 
@@ -130,7 +130,7 @@ namespace hlx
         {
             const auto& [mesh, material, transform] = mmt;
 
-            m_matricesBuffer->copy_tuple(offsetof(UMatrices, model),  std::make_tuple(transform.matrix()));
+            m_matricesBuffer->copy_tuple(offsetof(UMatrices, model), std::make_tuple(transform.matrix()));
             m_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
             const auto& vao = mesh->vertex_array();
@@ -145,12 +145,12 @@ namespace hlx
 
             glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->index_buffer()->count()), GL_UNSIGNED_INT, nullptr);
         }
-
         
 
+
+
+        
         glDisable(GL_CULL_FACE);
-
-
 
         //Multisampled framebuffer textures can not be sampled like a regular framebuffer, so we have to copy it into a regular framebuffer
         const auto& glBufferMultisample = std::static_pointer_cast<OpenGLFrameBufferMultisample>(m_gBufferMultisample);
@@ -167,20 +167,21 @@ namespace hlx
         glBlitNamedFramebuffer(glBufferMultisample->id(), glBuffer->id(), 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 
+
+
         
         //Lighting pass render into ppBuffer
         glDisable(GL_BLEND);
 
+        m_pipelines.at("Lighting")->bind();
         m_ppBuffers[0]->bind(FrameBuffer::Target::Write);
         m_gBuffer->bind_texture("Position", 0);
         m_gBuffer->bind_texture("Albedo",   1);
         m_gBuffer->bind_texture("Normal",   2);
         m_gBuffer->bind_texture("ARM",      3);
 
-        m_pipelines.at("Lighting")->bind();
-        Geometry::Plane::mesh()->vertex_array()->bind();
-
         glDisable(GL_DEPTH_TEST);
+        Geometry::Plane::mesh()->vertex_array()->bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         glEnable(GL_BLEND);
 

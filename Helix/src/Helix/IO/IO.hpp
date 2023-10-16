@@ -33,13 +33,13 @@ namespace hlx
         //template<> static std::shared_ptr<Image> load(const std::filesystem::path& path)
         //{
         //    const auto cumulativePath = s_root / path;
-
+        //
         //    const auto it = m_images.find(cumulativePath);
         //    if (it != m_images.end() && !it->second.expired()) return it->second.lock();
-
+        //
         //    const auto image = std::make_shared<Image>(cumulativePath);
         //    m_images.emplace(cumulativePath, image);
-
+        //
         //    return image;
         //}
 

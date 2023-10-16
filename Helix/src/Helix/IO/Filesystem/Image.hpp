@@ -11,79 +11,59 @@
 
 namespace hlx
 {
+    //TODO: complete rework
 	class Image
 	{
 	public:
-		enum class Format
-		{
-			GIF, 
-			JPEG, 
-			JPG, 
-			PNG, 
-			WEBP, 
-		};
+        explicit Image(std::shared_ptr<const std::vector<byte>> data)
+            : m_data{ data }
+        {
+            gather_info();
+        }
+        explicit Image(std::shared_ptr<File> file)
+            : m_data{ file->read() }
+        {
+            gather_info();
+        }
 
-		Image() = default;
-		explicit Image(std::span<const byte> data)
-			: m_data{ data.begin(), data.end() }
-		{
-            int x{}, y{}, c{};
-            const auto& success = stbi_info_from_memory(m_data.data(), static_cast<int>(data.size_bytes()), & x, &y, &c);
-            if (!success) throw std::runtime_error{ std::format("Image info could not be retrieved! reason: {}", stbi_failure_reason()) };
-
-            m_dimensions = { x, y };
-            m_channels = c;
-		}
-		explicit Image(std::shared_ptr<File> file)
-			: Image{ utl::to_span(*file->read()) } {}
-		explicit Image(const Image& other) = delete;
-		virtual ~Image() = default;
-
-		std::unique_ptr<const std::vector<byte>> read(unsigned int components = 0u)
-		{
+        std::shared_ptr<const std::vector<byte>> read(unsigned int components = 0u)
+        {
             stbi_set_flip_vertically_on_load(Config::IO::flipImages);
-
-            if (components == 0) components = m_channels;
-            else                 components = std::min(components, 4u);
+            components = std::min(components, 4u);
 
             int x{}, y{}, c{};
-            const auto& len = static_cast<int>(m_dimensions.x * m_dimensions.y * components);
-            auto* image = reinterpret_cast<byte*>(stbi_load_from_memory(m_data.data(), len, &x, &y, &c, components));
+            const auto& size      = m_dimensions.x * m_dimensions.y * components;
+            const auto& imageData = std::span<byte>{ reinterpret_cast<byte*>(stbi_load_from_memory(m_data->data(), static_cast<int>(m_data->size()), &x, &y, &c, components)), size };
 
-            auto buffer = std::make_unique<const std::vector<byte>>(image, image + len);
-            stbi_image_free(image);
+            auto buffer = std::make_unique<const std::vector<byte>>(imageData.begin(), imageData.end());
+            stbi_image_free(imageData.data());
 
             return buffer;
 		}
 
-		const Vector2u& dimensions() const
-		{
-			return m_dimensions;
-		}
-		unsigned int    channels()   const
-		{
-			return m_channels;
-		}
+        const Vector2u& dimensions() const
+        {
+            return m_dimensions;
+        }
+        unsigned int    channels()   const
+        {
+            return m_channels;
+        }
 
-		Image& operator=(const Image&) = delete;
+    private:
+        void gather_info()
+        {
+            int x{}, y{}, c{};
+            const auto& success = stbi_info_from_memory(m_data->data(), static_cast<int>(m_data->size()), &x, &y, &c);
+            if (!success) throw std::runtime_error{ std::format("Failed to get image properties! reason: {}", stbi_failure_reason()) };
 
-	private:
-		std::vector<byte> m_data{};
+            m_dimensions = { x, y };
+            m_channels = c;
+        }
 
-		Vector2u     m_dimensions{};
-		unsigned int m_channels{};
+        Vector2u     m_dimensions{};
+        unsigned int m_channels{};
+
+        std::shared_ptr<const std::vector<byte>> m_data{};
 	};
-
-	class Image2
-	{
-	public:
-		Image2() = default;
-
-
-	private:
-		Vector2u     m_dimensions{};
-		unsigned int m_channels{};
-	};
-
-
 }

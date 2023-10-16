@@ -100,16 +100,15 @@ int main(int argc, char* argv[])
     hlx::ModelImporter modelImporter{};
 #ifdef _DEBUG
     //auto model = modelImporter.import(R"(models/cube_textured/scene.gltf)");
-    //auto model = modelImporter.import(R"(models/fish/scene.gltf)");
-    auto model = modelImporter.import(R"(models/earth/earth.glb)");
+    auto model = modelImporter.import(R"(models/backpack/scene.gltf)");
 #endif
 #ifndef _DEBUG
     //auto model = modelImporter.import(R"(models/sponza_gltf/glTF/Sponza.gltf)");
     auto model = modelImporter.import(R"(models/fish/scene.gltf)");
 #endif
     auto modelActor = model_to_scene_graph(scene.get(), model, nullptr, model->rootNode.get());
-
-
+    auto& t = modelActor->get_component<TransformComponent>();
+    t.dilate(Vector3f{ 0.01f });
 
 
     
@@ -117,14 +116,14 @@ int main(int argc, char* argv[])
     TextureBlueprint skyboxBlueprint{};
     std::string skyboxDirectory{ "textures/skybox2/" };
     std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
-    std::array<std::unique_ptr<const std::vector<byte>>, 6> skyboxImages
+    std::array<std::shared_ptr<const std::vector<byte>>, 6> skyboxImages
     {
-        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(0)) }.read(4u), 
-        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(1)) }.read(4u), 
-        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(2)) }.read(4u), 
-        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(3)) }.read(4u), 
-        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(4)) }.read(4u), 
-        Image{ std::make_shared<File>(skyboxDirectory + skyboxFileNames.at(5)) }.read(4u), 
+        Image{ IO::load<File>(skyboxDirectory + skyboxFileNames.at(0)) }.read(4u), 
+        Image{ IO::load<File>(skyboxDirectory + skyboxFileNames.at(1)) }.read(4u), 
+        Image{ IO::load<File>(skyboxDirectory + skyboxFileNames.at(2)) }.read(4u), 
+        Image{ IO::load<File>(skyboxDirectory + skyboxFileNames.at(3)) }.read(4u), 
+        Image{ IO::load<File>(skyboxDirectory + skyboxFileNames.at(4)) }.read(4u), 
+        Image{ IO::load<File>(skyboxDirectory + skyboxFileNames.at(5)) }.read(4u),
     };
     std::array<std::span<const byte>, 6> skyboxImageData
     {
@@ -139,6 +138,8 @@ int main(int argc, char* argv[])
     RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, skyboxImageData);
 
     std::array<std::tuple<Light, Vector3f>, 8> lights{};
+    //lights.at(0) = std::make_tuple(Light{ .color = { 500.0f, 500.0f, 500.0f }, .radius = 100.0f }, Vector3f{ glm::cos(glfwGetTime()) * 10.0f, 0.0f, glm::sin(glfwGetTime()) * 10.0f });
+    lights.at(0) = std::make_tuple(Light{ .color = { 1.0f, 0.0f, 1.0f }, .radius = 100.0f }, Vector3f{ 0.0f, 0.0f, 1.0f });
 
 
 
@@ -176,7 +177,6 @@ int main(int argc, char* argv[])
 
 
 
-        lights.at(0) = std::make_tuple(Light{ .color = { 50.0f, 50.0f, 50.0f }, .radius = 100.0f }, Vector3f{ glm::cos(glfwGetTime()) * 10.0f, 0.0f, glm::sin(glfwGetTime()) * 10.0f });
 
 
 

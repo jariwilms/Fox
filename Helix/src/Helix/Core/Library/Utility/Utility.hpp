@@ -44,9 +44,10 @@ namespace hlx::utl
     template <typename T, typename A = std::allocator<T>>
     class default_init_allocator : public A
     {
-        typedef std::allocator_traits<A> a_t;
+        using a_t = std::allocator_traits<A>;
     public:
-        template <typename U> struct rebind
+        template <typename U> 
+        struct rebind
         {
             using other = default_init_allocator<U, typename a_t::template rebind_alloc<U>>;
         };
@@ -56,7 +57,7 @@ namespace hlx::utl
         template <typename U>
         void construct(U* ptr) noexcept(std::is_nothrow_default_constructible<U>::value)
         {
-            ::new(static_cast<void*>(ptr)) U;
+            ::new (static_cast<void*>(ptr)) U;
         }
         template <typename U, typename...Args>
         void construct(U* ptr, Args&&... args)
