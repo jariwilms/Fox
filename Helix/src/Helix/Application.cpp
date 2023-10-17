@@ -141,14 +141,14 @@ namespace hlx
             Time::advance();
 
             auto speed{ 10.0f };
-            if (Input::key_pressed(Key::LeftShift)) speed *= 10.0f;
-            if (Input::key_pressed(Key::LeftControl)) speed /= 5.0f;
+            if (Input::key_pressed(Key::LeftShift))   speed *= 10.0f;
+            if (Input::key_pressed(Key::LeftControl)) speed /=  5.0f;
             if (Input::key_pressed(Key::W)) cameraTransform.position += cameraTransform.forward() * speed * Time::delta();
             if (Input::key_pressed(Key::S)) cameraTransform.position -= cameraTransform.forward() * speed * Time::delta();
-            if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right() * speed * Time::delta();
-            if (Input::key_pressed(Key::D)) cameraTransform.position += cameraTransform.right() * speed * Time::delta();
-            if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up() * speed * Time::delta();
-            if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up() * speed * Time::delta();
+            if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right()   * speed * Time::delta();
+            if (Input::key_pressed(Key::D)) cameraTransform.position += cameraTransform.right()   * speed * Time::delta();
+            if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up()      * speed * Time::delta();
+            if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up()      * speed * Time::delta();
 
             if (Input::button_pressed(Button::Button1)) //RMB
             {
@@ -177,6 +177,10 @@ namespace hlx
                     Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
                 });
             Renderer::finish();
+
+
+
+
 
 
 
