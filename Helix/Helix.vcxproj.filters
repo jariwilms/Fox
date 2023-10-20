@@ -424,6 +424,12 @@
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Experimental.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Texture.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Renderer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\OpenGLTexture.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Def.hpp" />
+    <ClInclude Include="src\Helix\Experimental\OpenGL.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

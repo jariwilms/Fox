@@ -74,6 +74,17 @@ namespace hlx
 
     int Application::run()
     {
+
+
+
+
+
+
+
+
+
+
+
         auto scene = std::make_shared<Scene>();
         auto observer = scene->create_actor();
         auto& camera = observer->add_component<CameraComponent>();

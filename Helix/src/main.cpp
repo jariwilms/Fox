@@ -2,11 +2,16 @@
 
 #include "Helix/Application.hpp"
 
+#include "Helix/Experimental/Experimental.hpp"
+
 using namespace hlx;
 
 int main(int argc, char* argv[])
 {
-    Application application{ argc, argv };
+    experimental();
 
-    return application.run();
+    //Application application{ argc, argv };
+    //return application.run();
+
+    return EXIT_SUCCESS;
 }

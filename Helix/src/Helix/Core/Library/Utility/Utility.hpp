@@ -38,8 +38,6 @@ namespace hlx::utl
         return return_type{ reinterpret_cast<const byte*>(s.data()), s.size_bytes() };
     }
 
-
-
     //https://stackoverflow.com/a/21028912
     template <typename T, typename A = std::allocator<T>>
     class default_init_allocator : public A
@@ -75,4 +73,9 @@ namespace hlx::utl
         typedef std::vector<vt, typename std::allocator_traits<typename V::allocator_type>::template rebind_alloc<vt>> V2;
         reinterpret_cast<V2&>(v).resize(newSize);
     }
+
+    //auto mip_l(const Vector2u& dimensions)
+    //{
+    //    return static_cast<unsigned int>(std::floor(std::log2(std::max(dimensions.x, dimensions.y)))) + 1u;
+    //}
 }
