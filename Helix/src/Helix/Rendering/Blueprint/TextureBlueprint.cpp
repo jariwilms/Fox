@@ -9,14 +9,14 @@ namespace hlx
 {
     std::shared_ptr<Texture2D>            TextureBlueprint::build(const std::shared_ptr<Image> image) const
     {
-        return gfx::create_texture(format, filter, wrapping, image->dimensions(), Texture::Components::RGBA, image->data());
+        return GFX_DEPRECATED::create_texture(format, filter, wrapping, image->dimensions(), Texture::Components::RGBA, image->data());
     }
     std::shared_ptr<Texture2D>            TextureBlueprint::build(const Vector2u& dimensions) const
     {
-        return gfx::create_texture(format, filter, wrapping, dimensions);
+        return GFX_DEPRECATED::create_texture(format, filter, wrapping, dimensions);
     }
     std::shared_ptr<Texture2DMultisample> TextureBlueprint::build_multisample(const Vector2u& dimensions, unsigned int samples) const
     {
-        return gfx::create_texture_multisample(format, dimensions, samples);
+        return GFX_DEPRECATED::create_texture_multisample(format, dimensions, samples);
     }
 }

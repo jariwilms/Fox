@@ -63,12 +63,12 @@ namespace hlx
                 layout3f->specify<float>(3);
                 layout2f->specify<float>(2);
 
-                const auto positionsVBO   = gfx::create_vertex_buffer<float>(positions);
-                const auto normalsVBO     = gfx::create_vertex_buffer<float>(normals);
-                const auto coordinatesVBO = gfx::create_vertex_buffer<float>(coordinates);
-                const auto indicesIBO     = gfx::create_index_buffer(indices);
+                const auto positionsVBO   = GFX_DEPRECATED::create_vertex_buffer<float>(positions);
+                const auto normalsVBO     = GFX_DEPRECATED::create_vertex_buffer<float>(normals);
+                const auto coordinatesVBO = GFX_DEPRECATED::create_vertex_buffer<float>(coordinates);
+                const auto indicesIBO     = GFX_DEPRECATED::create_index_buffer(indices);
 
-                auto vertexArray = gfx::create_vertex_array();
+                auto vertexArray = GFX_DEPRECATED::create_vertex_array();
                 vertexArray->tie(positionsVBO, layout3f);
                 vertexArray->tie(normalsVBO, layout3f);
                 vertexArray->tie(coordinatesVBO, layout2f);
@@ -214,12 +214,12 @@ namespace hlx
                 layout3f->specify<float>(3);
                 layout2f->specify<float>(2);
 
-                const auto positionsVBO   = gfx::create_vertex_buffer<float>(positions);
-                const auto normalsVBO     = gfx::create_vertex_buffer<float>(normals);
-                const auto coordinatesVBO = gfx::create_vertex_buffer<float>(coordinates);
-                const auto indicesIBO     = gfx::create_index_buffer(indices);
+                const auto positionsVBO   = GFX_DEPRECATED::create_vertex_buffer<float>(positions);
+                const auto normalsVBO     = GFX_DEPRECATED::create_vertex_buffer<float>(normals);
+                const auto coordinatesVBO = GFX_DEPRECATED::create_vertex_buffer<float>(coordinates);
+                const auto indicesIBO     = GFX_DEPRECATED::create_index_buffer(indices);
 
-                auto vertexArray = gfx::create_vertex_array();
+                auto vertexArray = GFX_DEPRECATED::create_vertex_array();
                 vertexArray->tie(positionsVBO, layout3f);
                 vertexArray->tie(normalsVBO, layout3f);
                 vertexArray->tie(coordinatesVBO, layout2f);

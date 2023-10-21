@@ -14,6 +14,14 @@ namespace hlx
     class Image
     {
     public:
+        enum class Format
+        {
+            R8, 
+            RG8, 
+            RGB8, 
+            RGBA8, 
+        };
+
         Image(const Vector2u& dimensions, unsigned int channels, const std::vector<byte>& data)
             : m_dimensions{ dimensions }, m_channels{ channels }, m_data{ data } {}
         Image(const Vector2u& dimensions, unsigned int channels, std::vector<byte>&& data)

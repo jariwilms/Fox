@@ -18,51 +18,51 @@ namespace hlx
 			//UFLOAT  => stored as   floating point, sampled as   floating point in range [      0,  UFLOAT_MAX]
 			//SFLOAT  => stored as   floating point, sampled as   floating point in range [FLOAT_MIN, FLOAT-MAX]
 			//SRGB    => stored as unsigned integer, sampled as   floating point in range [      0,    UINT_MAX]
-			//Note that the Red, Green and Blue components of SRGB values use nonlinear encoding
+			//Note: The Red, Green and Blue components of SRGB formats are nonlinear
 
-			R8_UNORM, 
-			RG8_UNORM, 
-			RGB8_UNORM,
-			RGBA8_UNORM,
-
-			R16_UNORM,
-			RG16_UNORM,
-			RGB16_UNORM,
-			RGBA16_UNORM,
-
-			R8_SNORM,
-			RG8_SNORM,
-			RGB8_SNORM,
-			RGBA8_SNORM,
-
-			R16_SNORM,
-			RG16_SNORM,
-			RGB16_SNORM,
-			RGBA16_SNORM,
-
-			R8_SRGB,
-			RG8_SRGB,
-			RGB8_SRGB,
-			RGBA8_SRGB,
-
-			R16_SFLOAT,
-			RG16_SFLOAT,
-			RGB16_SFLOAT,
-			RGBA16_SFLOAT,
-
-			R32_SFLOAT,
-			RG32_SFLOAT,
-			RGB32_SFLOAT,
-			RGBA32_SFLOAT,
-
-			D16_UNORM,
-			D24_UNORM,
-			D32_FLOAT,
-
-			D24_UNORM_S8_UINT, 
-			D32_FLOAT_S8_UINT, 
-
-			S8_UINT, 
+			R8_UNORM,          //0x08'00'00
+			RG8_UNORM, 		   //0x08'00'01
+			RGB8_UNORM,		   //0x08'00'02
+			RGBA8_UNORM,	   //0x08'00'03
+			
+			R16_UNORM,		   //0x10'00'04
+			RG16_UNORM,		   //0x10'00'05
+			RGB16_UNORM,	   //0x10'00'06
+			RGBA16_UNORM,      //0x10'00'07
+			
+			R8_SNORM,          //0x08'00'08
+			RG8_SNORM,		   //0x08'00'09
+			RGB8_SNORM,		   //0x08'00'0A
+			RGBA8_SNORM,	   //0x08'00'0B
+			
+			R16_SNORM,         //0x10'00'0C
+			RG16_SNORM,		   //0x10'00'0D
+			RGB16_SNORM,	   //0x10'00'0E
+			RGBA16_SNORM,	   //0x10'00'0F
+			
+			R8_SRGB,           //0x08'00'10
+			RG8_SRGB,		   //0x08'00'11
+			RGB8_SRGB,		   //0x08'00'12
+			RGBA8_SRGB,		   //0x08'00'13
+			
+			R16_SFLOAT,        //0x10'00'14
+			RG16_SFLOAT,	   //0x10'00'15
+			RGB16_SFLOAT,	   //0x10'00'16
+			RGBA16_SFLOAT,	   //0x10'00'17
+			
+			R32_SFLOAT,        //0x20'00'18
+			RG32_SFLOAT,	   //0x20'00'19
+			RGB32_SFLOAT,	   //0x20'00'1A
+			RGBA32_SFLOAT,	   //0x20'00'1B
+			
+			D16_UNORM,         //0x10'00'1C
+			D24_UNORM,		   //0x18'00'1D
+			D32_FLOAT,		   //0x20'00'1E
+			
+			D24_UNORM_S8_UINT, //0x18'08'1F
+			D32_FLOAT_S8_UINT, //0x20'08'20
+			
+			S8_UINT,           //0x08'00'21
 		};
         enum class Filter
 		{

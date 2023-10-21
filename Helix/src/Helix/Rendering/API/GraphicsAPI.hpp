@@ -18,7 +18,7 @@
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture2DMultisample.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLCubemapTexture.hpp"
 
-namespace hlx::gfx
+namespace hlx::GFX_DEPRECATED
 {
     inline std::shared_ptr<VertexArray>            create_vertex_array()
     {

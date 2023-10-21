@@ -64,11 +64,11 @@ namespace hlx
 
 
 
-        m_pipelines.emplace("Mesh",     gfx::create_pipeline("shaders/compiled/mesh.vert.spv",         "shaders/compiled/mesh.frag.spv"));
+        m_pipelines.emplace("Mesh",     GFX_DEPRECATED::create_pipeline("shaders/compiled/mesh.vert.spv",         "shaders/compiled/mesh.frag.spv"));
         /*m_pipelines.emplace("Lighting", gfx::create_pipeline("shaders/compiled/lighting_pbr.vert.spv", "shaders/compiled/lighting_pbr.frag.spv"));*/
-        m_pipelines.emplace("Lighting", gfx::create_pipeline("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv"));
-        m_pipelines.emplace("Skybox",   gfx::create_pipeline("shaders/compiled/skybox.vert.spv",       "shaders/compiled/skybox.frag.spv"));
-        m_pipelines.emplace("Shadow",   gfx::create_pipeline("shaders/compiled/shadow.vert.spv",       "shaders/compiled/shadow.frag.spv"));
+        m_pipelines.emplace("Lighting", GFX_DEPRECATED::create_pipeline("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv"));
+        m_pipelines.emplace("Skybox",   GFX_DEPRECATED::create_pipeline("shaders/compiled/skybox.vert.spv",       "shaders/compiled/skybox.frag.spv"));
+        m_pipelines.emplace("Shadow",   GFX_DEPRECATED::create_pipeline("shaders/compiled/shadow.vert.spv",       "shaders/compiled/shadow.frag.spv"));
 
 
 

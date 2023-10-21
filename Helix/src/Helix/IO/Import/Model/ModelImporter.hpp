@@ -27,10 +27,10 @@ namespace hlx
         static void init()
         {
             m_defaultMaterial              = std::make_shared<Material>("Default");
-            m_defaultMaterial->albedoMap   = gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGBA, utl::to_span(std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF }));
-            m_defaultMaterial->normalMap   = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x80, 0x80, 0xFF }));
-            m_defaultMaterial->armMap      = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x80, 0x80 }));
-            m_defaultMaterial->emissionMap = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x00, 0x00 }));
+            m_defaultMaterial->albedoMap   = GFX_DEPRECATED::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGBA, utl::to_span(std::vector<byte>{ 0xFF, 0xFF, 0xFF, 0xFF }));
+            m_defaultMaterial->normalMap   = GFX_DEPRECATED::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x80, 0x80, 0xFF }));
+            m_defaultMaterial->armMap      = GFX_DEPRECATED::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x80, 0x80 }));
+            m_defaultMaterial->emissionMap = GFX_DEPRECATED::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, Vector2u{ 1u, 1u }, Texture::Components::RGB,  utl::to_span(std::vector<byte>{ 0x00, 0x00, 0x00 }));
 
             m_layout3f = std::make_shared<VertexLayout>();
             m_layout2f = std::make_shared<VertexLayout>();
@@ -122,11 +122,11 @@ namespace hlx
                     }
                 }
 
-                const auto& meshVertexArray     = gfx::create_vertex_array();
-                const auto& meshVertexBuffer    = gfx::create_vertex_buffer<Vector3f>(meshVertices); //TODO: vbo move impl
-                const auto& meshNormalsBuffer   = gfx::create_vertex_buffer<Vector3f>(meshNormals);
-                const auto& meshTexCoordsBuffer = gfx::create_vertex_buffer<Vector2f>(meshTexCoords);
-                const auto& meshIndicesBuffer   = gfx::create_index_buffer(meshIndices);
+                const auto& meshVertexArray     = GFX_DEPRECATED::create_vertex_array();
+                const auto& meshVertexBuffer    = GFX_DEPRECATED::create_vertex_buffer<Vector3f>(meshVertices); //TODO: vbo move impl
+                const auto& meshNormalsBuffer   = GFX_DEPRECATED::create_vertex_buffer<Vector3f>(meshNormals);
+                const auto& meshTexCoordsBuffer = GFX_DEPRECATED::create_vertex_buffer<Vector2f>(meshTexCoords);
+                const auto& meshIndicesBuffer   = GFX_DEPRECATED::create_index_buffer(meshIndices);
 
                 meshVertexArray->tie(meshVertexBuffer,    m_layout3f);
                 meshVertexArray->tie(meshNormalsBuffer,   m_layout3f);
@@ -156,12 +156,12 @@ namespace hlx
                 if (aiString  aiTexturePath{};     aiMaterial->GetTexture(AI_MATKEY_BASE_COLOR_TEXTURE, &aiTexturePath) == aiReturn_SUCCESS)
                 {
                     const auto& image = _load_img(aiScene, baseDirectory, aiTexturePath, 4u);
-                    material->albedoMap = gfx::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image.dimensions(), Texture::Components::RGBA, image.data());
+                    material->albedoMap = GFX_DEPRECATED::create_texture(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image.dimensions(), Texture::Components::RGBA, image.data());
                 }
                 if (aiString  aiTexturePath{};     aiMaterial->GetTexture(aiTextureType_NORMALS, 0, &aiTexturePath)     == aiReturn_SUCCESS)
                 {
                     const auto& image = _load_img(aiScene, baseDirectory, aiTexturePath, 3u);
-                    material->normalMap = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image.dimensions(), Texture::Components::RGB, image.data());
+                    material->normalMap = GFX_DEPRECATED::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image.dimensions(), Texture::Components::RGB, image.data());
                 }
                 if (ai_real   aiRoughnessFactor{}; aiMaterial->Get(AI_MATKEY_ROUGHNESS_FACTOR, aiRoughnessFactor)       == aiReturn_SUCCESS)
                 {
@@ -174,7 +174,7 @@ namespace hlx
                 if (aiString  aiTexturePath{};     aiMaterial->GetTexture(AI_MATKEY_METALLIC_TEXTURE, &aiTexturePath)   == aiReturn_SUCCESS)
                 {
                     const auto& image = _load_img(aiScene, baseDirectory, aiTexturePath, 3u);
-                    material->armMap = gfx::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image.dimensions(), Texture::Components::RGB, image.data());
+                    material->armMap = GFX_DEPRECATED::create_texture(Texture::Format::RGB8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, image.dimensions(), Texture::Components::RGB, image.data());
                 }
                 
                 //if (aiString aiTexturePath{}; aiMaterial->Get(AI_MATKEY_TEXTURE(aiTextureType_LIGHTMAP, 0), aiTexturePath) == aiReturn_SUCCESS)

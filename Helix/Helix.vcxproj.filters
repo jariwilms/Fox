@@ -425,11 +425,16 @@
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
     <ClInclude Include="src\Helix\Experimental\Experimental.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Texture.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Renderer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\OpenGLTexture.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Def.hpp" />
-    <ClInclude Include="src\Helix\Experimental\OpenGL.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Texture\Texture.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Renderer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Def.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGL.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Base.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">
