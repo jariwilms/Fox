@@ -106,11 +106,13 @@
     <ClInclude Include="src\Helix\ECS\Components\LightComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Base.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Def.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Helix\Experimental\Experimental.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />

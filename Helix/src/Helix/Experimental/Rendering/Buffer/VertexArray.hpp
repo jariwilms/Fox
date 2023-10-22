@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Helix/Experimental/Rendering/Def.hpp"
-#include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
+#include "Helix/Experimental/Rendering/Base.hpp"
 
-namespace hlx::gfx::imp
+namespace hlx::gfx::api
 {
     template<GraphicsAPI>
     class GVertexArray;

@@ -59,6 +59,5 @@ namespace hlx
 			: m_dimensions{ dimensions } {}
 
 		Vector2u m_dimensions{};
-
 	};
 }

@@ -1,6 +1,8 @@
 #pragma once
 
-namespace hlx::gfx::imp
+#define HELIX_GRAPHICS_API GraphicsAPI::OpenGL
+
+namespace hlx::gfx::api
 {
     enum class GraphicsAPI
     {
@@ -21,5 +23,5 @@ namespace hlx::gfx::imp
         MSAA,
     };
 
-    constexpr auto GRAPHICS_API = GraphicsAPI::OpenGL;
+    constexpr auto GRAPHICS_API = HELIX_GRAPHICS_API;
 }

@@ -4,7 +4,7 @@
 
 #include "Helix/Experimental/Rendering/Base.hpp"
 
-namespace hlx::gfx::imp
+namespace hlx::gfx::api
 {
     template<Dimensions D>
     struct DimensionToVector {};

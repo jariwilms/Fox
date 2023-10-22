@@ -4,7 +4,7 @@
 
 #include "Helix/Experimental/Rendering/Base.hpp"
 
-namespace hlx::gfx::imp
+namespace hlx::gfx::api
 {
     class Buffer
     {
@@ -16,13 +16,23 @@ namespace hlx::gfx::imp
         };
         enum class Type
         {
-            Storage,
-
             Vertex,
             Index,
 
             Uniform,
+            UniformArray, 
         };
+
+        Buffer(size_t size)
+            : m_size{ size } {}
+
+        size_t size() const
+        {
+            return m_size;
+        }
+
+    protected:
+        size_t m_size{};
     };
 
     template<GraphicsAPI, Buffer::Type, typename>

@@ -5,7 +5,7 @@
 #include "Helix/Experimental/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Experimental/Rendering/Texture/Texture.hpp"
 
-namespace hlx::gfx::imp
+namespace hlx::gfx::api
 {
     template<Dimensions D, AntiAliasing A>
     class GTexture<GraphicsAPI::OpenGL, D, A> : public DTexture<D>
@@ -14,8 +14,6 @@ namespace hlx::gfx::imp
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions) requires (D == Dimensions::_1D && A == AntiAliasing::None)
             : DTexture<D>{ format, filter, wrapping, dimensions }
         {
-            using namespace hlx::gfx::api;
-
             m_glId        = gl::create_texture(GL_TEXTURE_1D);
             m_glFormat    = gl::texture_format(this->m_format);
             m_glMinFilter = gl::texture_min_filter(this->m_filter);
@@ -37,8 +35,6 @@ namespace hlx::gfx::imp
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions) requires (D == Dimensions::_2D)
             : DTexture<D>{ format, filter, wrapping, dimensions }
         {
-            using namespace hlx::gfx::api;
-
             m_glId        = gl::create_texture(GL_TEXTURE_2D);
             m_glFormat    = gl::texture_format(this->m_format);
             m_glMinFilter = gl::texture_min_filter(this->m_filter);
@@ -62,8 +58,6 @@ namespace hlx::gfx::imp
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions) requires (D == Dimensions::_3D)
             : DTexture<D>{ format, filter, wrapping, dimensions }
         {
-            using namespace hlx::gfx::api;
-
             m_glId        = gl::create_texture(GL_TEXTURE_3D);
             m_glFormat    = gl::texture_format(this->m_format);
             m_glMinFilter = gl::texture_min_filter(this->m_filter);
@@ -87,15 +81,11 @@ namespace hlx::gfx::imp
         }
         ~GTexture()
         {
-            using namespace hlx::gfx::api;
-
             gl::delete_texture(m_glId);
         }
 
         void bind(u32 slot)
         {
-            using namespace hlx::gfx::api;
-
             gl::bind_texture(m_glId, slot);
         }
 

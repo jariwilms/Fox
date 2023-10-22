@@ -3,7 +3,7 @@
 #include "Helix/Experimental/Rendering/Buffer/VertexArray.hpp"
 #include "OpenGLBuffer.hpp"
 
-namespace hlx::gfx::imp
+namespace hlx::gfx::api
 {
     template<>
     class GVertexArray<GraphicsAPI::OpenGL>
@@ -17,7 +17,7 @@ namespace hlx::gfx::imp
         template<typename T>
         void tie(const GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Vertex, T>& vertexBuffer)
         {
-            vertexBuffer.m_glId;
+
         }
     };
 }
