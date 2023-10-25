@@ -7,14 +7,10 @@
 
 #include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
 #include "Helix/Experimental/Rendering/Texture/Texture.hpp"
+#include "Helix/Experimental/Rendering/Buffer/FrameBuffer.hpp"
 
 namespace hlx::gfx::api::gl
 {
-    void init()
-    {
-        //query max available texture slots => check that slot does not exceed limit in bind_texture();
-    }
-
     template<typename T>
     constexpr GLenum      type_enum()
     {
@@ -48,108 +44,130 @@ namespace hlx::gfx::api::gl
 
 
 
-    constexpr GLenum      texture_format(hlx::gfx::api::Texture::Format format)
+    GLint get_integer_v(GLenum parameter)
+    {
+        GLint result{};
+        //glGetIntegerv(parameter, &result);
+
+        return result;
+    }
+
+
+
+    constexpr GLenum      texture_format(Texture::Format format)
     {
         switch (format)
         {
-            case hlx::gfx::api::Texture::Format::R8_UNORM:          return GL_R8;
-            case hlx::gfx::api::Texture::Format::RG8_UNORM:         return GL_RG8;
-            case hlx::gfx::api::Texture::Format::RGB8_UNORM:        return GL_RGB8;
-            case hlx::gfx::api::Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
-            case hlx::gfx::api::Texture::Format::R16_UNORM:         return GL_R16;
-            case hlx::gfx::api::Texture::Format::RG16_UNORM:        return GL_RG16;
-            case hlx::gfx::api::Texture::Format::RGB16_UNORM:       return GL_RGB16;
-            case hlx::gfx::api::Texture::Format::RGBA16_UNORM:      return GL_RGBA16;
-            case hlx::gfx::api::Texture::Format::R8_SNORM:          return GL_R8_SNORM;
-            case hlx::gfx::api::Texture::Format::RG8_SNORM:         return GL_RG8_SNORM;
-            case hlx::gfx::api::Texture::Format::RGB8_SNORM:        return GL_RGB8_SNORM;
-            case hlx::gfx::api::Texture::Format::RGBA8_SNORM:       return GL_RGBA8_SNORM;
-            case hlx::gfx::api::Texture::Format::R16_SNORM:         return GL_R16_SNORM;
-            case hlx::gfx::api::Texture::Format::RG16_SNORM:        return GL_RG16_SNORM;
-            case hlx::gfx::api::Texture::Format::RGB16_SNORM:       return GL_RGB16_SNORM;
-            case hlx::gfx::api::Texture::Format::RGBA16_SNORM:      return GL_RGBA16_SNORM;
-            case hlx::gfx::api::Texture::Format::R8_SRGB:           throw std::invalid_argument{ "This format is not supported in OpenGL!" };
-            case hlx::gfx::api::Texture::Format::RG8_SRGB:          throw std::invalid_argument{ "This format is not supported in OpenGL!" };
-            case hlx::gfx::api::Texture::Format::RGB8_SRGB:         return GL_SRGB8;
-            case hlx::gfx::api::Texture::Format::RGBA8_SRGB:        return GL_SRGB8_ALPHA8;
-            case hlx::gfx::api::Texture::Format::R16_SFLOAT:        return GL_R16F;
-            case hlx::gfx::api::Texture::Format::RG16_SFLOAT:       return GL_RG16F;
-            case hlx::gfx::api::Texture::Format::RGB16_SFLOAT:      return GL_RGB16F;
-            case hlx::gfx::api::Texture::Format::RGBA16_SFLOAT:     return GL_RGBA16F;
-            case hlx::gfx::api::Texture::Format::R32_SFLOAT:        return GL_R32F;
-            case hlx::gfx::api::Texture::Format::RG32_SFLOAT:       return GL_RG32F;
-            case hlx::gfx::api::Texture::Format::RGB32_SFLOAT:      return GL_RGB32F;
-            case hlx::gfx::api::Texture::Format::RGBA32_SFLOAT:     return GL_RGBA32F;
-            case hlx::gfx::api::Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
-            case hlx::gfx::api::Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
-            case hlx::gfx::api::Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32F;
-            case hlx::gfx::api::Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
-            case hlx::gfx::api::Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
-            case hlx::gfx::api::Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
+            case Texture::Format::R8_UNORM:          return GL_R8;
+            case Texture::Format::RG8_UNORM:         return GL_RG8;
+            case Texture::Format::RGB8_UNORM:        return GL_RGB8;
+            case Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
+            case Texture::Format::R16_UNORM:         return GL_R16;
+            case Texture::Format::RG16_UNORM:        return GL_RG16;
+            case Texture::Format::RGB16_UNORM:       return GL_RGB16;
+            case Texture::Format::RGBA16_UNORM:      return GL_RGBA16;
+            case Texture::Format::R8_SNORM:          return GL_R8_SNORM;
+            case Texture::Format::RG8_SNORM:         return GL_RG8_SNORM;
+            case Texture::Format::RGB8_SNORM:        return GL_RGB8_SNORM;
+            case Texture::Format::RGBA8_SNORM:       return GL_RGBA8_SNORM;
+            case Texture::Format::R16_SNORM:         return GL_R16_SNORM;
+            case Texture::Format::RG16_SNORM:        return GL_RG16_SNORM;
+            case Texture::Format::RGB16_SNORM:       return GL_RGB16_SNORM;
+            case Texture::Format::RGBA16_SNORM:      return GL_RGBA16_SNORM;
+            case Texture::Format::R8_SRGB:           throw std::invalid_argument{ "This format is not supported in OpenGL!" };
+            case Texture::Format::RG8_SRGB:          throw std::invalid_argument{ "This format is not supported in OpenGL!" };
+            case Texture::Format::RGB8_SRGB:         return GL_SRGB8;
+            case Texture::Format::RGBA8_SRGB:        return GL_SRGB8_ALPHA8;
+            case Texture::Format::R16_SFLOAT:        return GL_R16F;
+            case Texture::Format::RG16_SFLOAT:       return GL_RG16F;
+            case Texture::Format::RGB16_SFLOAT:      return GL_RGB16F;
+            case Texture::Format::RGBA16_SFLOAT:     return GL_RGBA16F;
+            case Texture::Format::R32_SFLOAT:        return GL_R32F;
+            case Texture::Format::RG32_SFLOAT:       return GL_RG32F;
+            case Texture::Format::RGB32_SFLOAT:      return GL_RGB32F;
+            case Texture::Format::RGBA32_SFLOAT:     return GL_RGBA32F;
+            case Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
+            case Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
+            case Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32F;
+            case Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
+            case Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
+            case Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    constexpr GLenum      texture_min_filter(hlx::gfx::api::Texture::Filter filter)
+    constexpr GLenum      texture_min_filter(Texture::Filter filter)
     {
         switch (filter)
         {
-            case hlx::gfx::api::Texture::Filter::None:      return GL_NEAREST;
-            case hlx::gfx::api::Texture::Filter::Point:     return GL_NEAREST_MIPMAP_NEAREST;
-            case hlx::gfx::api::Texture::Filter::Bilinear:  return GL_LINEAR_MIPMAP_NEAREST;
-            case hlx::gfx::api::Texture::Filter::Trilinear: return GL_LINEAR_MIPMAP_LINEAR;
+            case Texture::Filter::None:      return GL_NEAREST;
+            case Texture::Filter::Point:     return GL_NEAREST_MIPMAP_NEAREST;
+            case Texture::Filter::Bilinear:  return GL_LINEAR_MIPMAP_NEAREST;
+            case Texture::Filter::Trilinear: return GL_LINEAR_MIPMAP_LINEAR;
 
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    constexpr GLenum      texture_mag_filter(hlx::gfx::api::Texture::Filter filter)
+    constexpr GLenum      texture_mag_filter(Texture::Filter filter)
     {
         switch (filter)
         {
-            case hlx::gfx::api::Texture::Filter::None:      return GL_NEAREST;
-            case hlx::gfx::api::Texture::Filter::Point:     return GL_NEAREST;
-            case hlx::gfx::api::Texture::Filter::Bilinear:  return GL_LINEAR;
-            case hlx::gfx::api::Texture::Filter::Trilinear: return GL_LINEAR;
+            case Texture::Filter::None:      return GL_NEAREST;
+            case Texture::Filter::Point:     return GL_NEAREST;
+            case Texture::Filter::Bilinear:  return GL_LINEAR;
+            case Texture::Filter::Trilinear: return GL_LINEAR;
 
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    constexpr GLenum      texture_wrapping(hlx::gfx::api::Texture::Wrapping wrapping)
+    constexpr GLenum      texture_wrapping(Texture::Wrapping wrapping)
     {
         switch (wrapping)
         {
-            case hlx::gfx::api::Texture::Wrapping::ClampToEdge:         return GL_CLAMP_TO_EDGE;
-            case hlx::gfx::api::Texture::Wrapping::ClampToBorder:       return GL_CLAMP_TO_BORDER;
-            case hlx::gfx::api::Texture::Wrapping::MirroredRepeat:      return GL_MIRRORED_REPEAT;
-            case hlx::gfx::api::Texture::Wrapping::Repeat:              return GL_REPEAT;
-            case hlx::gfx::api::Texture::Wrapping::MirroredClampToEdge: return GL_MIRROR_CLAMP_TO_EDGE;
+            case Texture::Wrapping::ClampToEdge:         return GL_CLAMP_TO_EDGE;
+            case Texture::Wrapping::ClampToBorder:       return GL_CLAMP_TO_BORDER;
+            case Texture::Wrapping::MirroredRepeat:      return GL_MIRRORED_REPEAT;
+            case Texture::Wrapping::Repeat:              return GL_REPEAT;
+            case Texture::Wrapping::MirroredClampToEdge: return GL_MIRROR_CLAMP_TO_EDGE;
 
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
 
-    constexpr GLbitfield  buffer_usage(hlx::gfx::api::Buffer::Usage usage)
+    constexpr GLbitfield  buffer_usage(Buffer::Usage usage)
     {
         switch (usage)
         {
-            case hlx::gfx::api::Buffer::Usage::Static:  return {};
-            case hlx::gfx::api::Buffer::Usage::Dynamic: return GL_DYNAMIC_STORAGE_BIT;
+            case Buffer::Usage::Static:  return {};
+            case Buffer::Usage::Dynamic: return GL_DYNAMIC_STORAGE_BIT;
 
             default: throw std::invalid_argument{ "Invalid usage!" };
         }
     }
-    constexpr GLenum      buffer_target(hlx::gfx::api::Buffer::Type type)
+    constexpr GLenum      buffer_target(Buffer::Type type)
     {
         switch (type)
         {
-            case hlx::gfx::api::Buffer::Type::Vertex:  return GL_ARRAY_BUFFER;
-            case hlx::gfx::api::Buffer::Type::Index:   return GL_ELEMENT_ARRAY_BUFFER;
-            case hlx::gfx::api::Buffer::Type::Uniform: return GL_UNIFORM_BUFFER;
+            case Buffer::Type::Vertex:  return GL_ARRAY_BUFFER;
+            case Buffer::Type::Index:   return GL_ELEMENT_ARRAY_BUFFER;
+            case Buffer::Type::Uniform: return GL_UNIFORM_BUFFER;
 
             default: throw std::invalid_argument{ "Invalid type!" };
         }
     }
 
+    constexpr GLenum      frame_buffer_attachment(FrameBuffer::Attachment attachment)
+    {
+        switch (attachment)
+        {
+            case FrameBuffer::Attachment::Color:        return GL_COLOR_ATTACHMENT0;
+            case FrameBuffer::Attachment::Depth:        return GL_DEPTH_ATTACHMENT;
+            case FrameBuffer::Attachment::Stencil:      return GL_STENCIL_ATTACHMENT;
+            case FrameBuffer::Attachment::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
+
+            default: throw std::invalid_argument{ "Invalid attachment!" };
+        }
+    }
 
 
 
@@ -164,21 +182,21 @@ namespace hlx::gfx::api::gl
     {
         //glDeleteBuffers(1, &id);
     }
-    void   bind_buffer(GLuint id, hlx::gfx::api::Buffer::Type type)
+    void   bind_buffer(GLuint id, Buffer::Type type)
     {
         const auto& target = buffer_target(type);
         //glBindBuffer(target, id);
     }
     template<typename T>
-    void   buffer_storage(GLuint id, hlx::gfx::api::Buffer::Usage usage, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void   buffer_storage(GLuint id, Buffer::Usage usage, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
         const auto& flags = buffer_usage(usage);
 
         //glNamedBufferStorage(id, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
     }
-    void   buffer_storage(GLuint id, hlx::gfx::api::Buffer::Usage usage, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void   buffer_storage(GLuint id, Buffer::Usage usage, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
-        const auto& flags = buffer_usage(usage);
+        //const auto& flags = buffer_usage(usage);
 
         //glNamedBufferStorage(id, static_cast<GLsizeiptr>(size), nullptr, flags);
     }
@@ -188,10 +206,79 @@ namespace hlx::gfx::api::gl
         //glNamedBufferSubData(id, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
     }
 
+    GLuint create_vertex_array()
+    {
+        GLuint id{};
+        //glCreateVertexArrays(1, &id);
+
+        return id;
+    }
+    void   delete_vertex_array(GLuint id)
+    {
+        //glDeleteVertexArrays(1, &id);
+    }
+    void   bind_vertex_array(GLuint id)
+    {
+        //glBindVertexArray(id);
+    }
+    void   vertex_array_vertex_buffer(GLuint arrayId, GLuint bufferId, GLuint index, GLsizei stride)
+    {
+        //glVertexArrayVertexBuffer(arrayId, index, bufferId, 0, stride);
+    }
+    void   enable_vertex_array_attribute(GLuint id, GLuint index)
+    {
+        //glEnableVertexArrayAttrib(id, index);
+    }
+    void   vertex_array_attribute_format(GLuint id, GLuint index, GLuint offset, GLenum type, GLint size, GLboolean normalized)
+    {
+        //glVertexArrayAttribFormat(id, index, size, type, normalized, offset);
+    }
+    void   vertex_array_attribute_binding(GLuint id, GLuint index, GLuint binding)
+    {
+        //glVertexArrayAttribBinding(id, index, binding);
+    }
 
 
 
+    GLuint create_frame_buffer()
+    {
+        GLuint id{};
+        glCreateFramebuffers(1, &id);
 
+        return id;
+    }
+    void   delete_frame_buffer(GLuint id)
+    {
+        glDeleteFramebuffers(1, &id);
+    }
+    void   bind_frame_buffer(GLuint id, GLenum target)
+    {
+        glBindFramebuffer(target, id);
+    }
+    void   frame_buffer_read_buffer(GLuint id, GLenum buffer)
+    {
+        glNamedFramebufferReadBuffer(id, buffer);
+    }
+    void   frame_buffer_draw_buffer(GLuint id, GLenum buffer)
+    {
+        glNamedFramebufferDrawBuffer(id, buffer);
+    }
+    void   frame_buffer_draw_buffers(GLuint id, std::span<const GLenum> buffers)
+    {
+        glNamedFramebufferDrawBuffers(id, static_cast<GLsizei>(buffers.size()), buffers.data());
+    }
+    void   frame_buffer_texture(GLuint frameBufferId, GLuint textureId, GLenum attachment, GLint level)
+    {
+        glNamedFramebufferTexture(frameBufferId, attachment, textureId, level);
+    }
+    void   frame_buffer_render_buffer(GLuint frameBufferId, GLuint renderBufferId, GLenum attachment)
+    {
+        glNamedFramebufferRenderbuffer(frameBufferId, attachment, GL_RENDERBUFFER, renderBufferId);
+    }
+    GLenum check_frame_buffer_status(GLuint id)
+    {
+        return glCheckNamedFramebufferStatus(id, GL_FRAMEBUFFER);
+    }
 
 
 

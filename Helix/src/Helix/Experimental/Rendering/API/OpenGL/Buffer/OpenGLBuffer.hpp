@@ -8,7 +8,7 @@
 namespace hlx::gfx::api
 {
     template<Buffer::Type S, typename T>
-    class GBuffer<GraphicsAPI::OpenGL, S, T> : public Buffer
+    class GBuffer<GraphicsAPI::OpenGL, S, T> final : public Buffer
     {
     public:
         GBuffer(std::span<const T> data)
@@ -44,6 +44,16 @@ namespace hlx::gfx::api
             gl::buffer_sub_data(m_glId, offset * sizeof(T), data);
         }
 
+        std::span<T> map(u32 count)
+        {
+            //if (count * sizeof(T) > m_size) ...
+            //if (!mapped) ...
+        }
+        void unmap()
+        {
+            //glunmap...
+        }
+
         GLuint id() const
         {
             return m_glId;
@@ -54,7 +64,7 @@ namespace hlx::gfx::api
     };
 
     template<typename T>
-    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, T> : public Buffer
+    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, T> final : public Buffer
     {
     public:
         GBuffer()

@@ -79,6 +79,7 @@ namespace hlx::gfx::api
         {
 
         }
+        GTexture(GTexture&&) = default;
         ~GTexture()
         {
             gl::delete_texture(m_glId);
@@ -87,6 +88,11 @@ namespace hlx::gfx::api
         void bind(u32 slot)
         {
             gl::bind_texture(m_glId, slot);
+        }
+
+        GLuint id() const
+        {
+            return m_glId;
         }
 
     private:

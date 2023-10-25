@@ -4,6 +4,11 @@
 
 namespace hlx::gfx::api
 {
+    class VertexArray
+    {
+
+    };
+
     template<GraphicsAPI>
     class GVertexArray;
 }

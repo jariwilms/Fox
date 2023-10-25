@@ -94,6 +94,7 @@ namespace hlx::gfx::api
     protected:
         Texture(Format format, Filter filter, Wrapping wrapping)
             : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping } {}
+        Texture(Texture&&) = default;
         ~Texture() = default;
 
         Format   m_format{};
@@ -117,6 +118,7 @@ namespace hlx::gfx::api
     protected:
         DTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector& dimensions)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions } {}
+        DTexture(DTexture&&) = default;
         ~DTexture<D>() = default;
 
         Vector m_dimensions{};

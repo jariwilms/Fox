@@ -78,7 +78,7 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>EnableAllWarnings</WarningLevel>
       <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -100,6 +100,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Helix\Core\Library\Template\Concept.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Utility.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp" />
@@ -109,9 +110,13 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Base.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Helix\Experimental\Experimental.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGL.hpp" />

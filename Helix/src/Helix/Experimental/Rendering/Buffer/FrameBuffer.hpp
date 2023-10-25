@@ -4,10 +4,10 @@
 
 #include "Helix/Experimental/Rendering/Base.hpp"
 #include "Helix/Experimental/Rendering/Texture/Texture.hpp"
+#include "Helix/Experimental/Rendering/Blueprint/TextureBlueprint.hpp"
 
 namespace hlx::gfx::api
 {
-    template<AntiAliasing A>
     class FrameBuffer
     {
     public:
@@ -23,11 +23,32 @@ namespace hlx::gfx::api
             Stencil, 
             DepthStencil, 
         };
+        enum class Resample
+        {
+            No, 
+            Yes, 
+        };
         struct Manifest
         {
-            FrameBuffer::Attachment attachment;
-            const GTexture<GraphicsAPI::OpenGL, Dimensions::_2D, A>& texture;
+            Manifest(const std::string& identifier, const TextureBlueprint& blueprint, FrameBuffer::Attachment attachment, FrameBuffer::Resample resample)
+                : identifier{ identifier }, blueprint{ blueprint }, attachment{ attachment }, resample{ resample } {}
+
+            const std::string&      identifier{};
+            const TextureBlueprint& blueprint{};
+            FrameBuffer::Attachment attachment{};
+            FrameBuffer::Resample   resample{};
         };
+
+        const Vector2u& dimensions() const
+        {
+            return m_dimensions;
+        }
+
+    protected:
+        FrameBuffer(const Vector2u& dimensions)
+            : m_dimensions{ dimensions } {}
+
+        Vector2u m_dimensions{};
     };
 
     template<GraphicsAPI, AntiAliasing>
