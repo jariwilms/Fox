@@ -42,7 +42,7 @@ namespace hlx::gfx::api
         template<typename T, typename... U>
         void tie(const_vertex_pointer<T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
-            if (m_glArrayBindingIndex > static_cast<GLuint>(gl::get_integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
+            if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 
             gl::vertex_array_vertex_buffer(m_glId, buffer->id(), m_glArrayBindingIndex, static_cast<GLsizei>(layout.stride()));
 
@@ -66,10 +66,14 @@ namespace hlx::gfx::api
             m_indexBuffer = buffer;
         }
 
-
         unsigned int primitive_count() const
         {
             return m_primitiveCount;
+        }
+
+        GLuint id() const
+        {
+            return m_glId;
         }
 
     private:

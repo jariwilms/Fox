@@ -4,6 +4,7 @@
 
 #include "Helix/Experimental/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
+#include "Helix/Experimental/Rendering/Buffer/VertexArray.hpp"
 
 namespace hlx::gfx::api
 {

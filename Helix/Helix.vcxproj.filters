@@ -442,6 +442,10 @@
     <ClInclude Include="src\Helix\Core\Library\Template\Concept.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Blueprint\TextureBlueprint.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Shader.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Pipeline.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

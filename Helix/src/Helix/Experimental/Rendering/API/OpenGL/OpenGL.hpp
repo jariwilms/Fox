@@ -8,6 +8,8 @@
 #include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
 #include "Helix/Experimental/Rendering/Texture/Texture.hpp"
 #include "Helix/Experimental/Rendering/Buffer/FrameBuffer.hpp"
+#include "Helix/Experimental/Rendering/Shader/Pipeline.hpp"
+#include "Helix/Experimental/Rendering/Shader/Shader.hpp"
 
 namespace hlx::gfx::api::gl
 {
@@ -40,16 +42,6 @@ namespace hlx::gfx::api::gl
         if constexpr (std::is_same_v<T, double>)             return sizeof(GLdouble);
 
         throw std::invalid_argument{ "Invalid type!" };
-    }
-
-
-
-    GLint get_integer_v(GLenum parameter)
-    {
-        GLint result{};
-        //glGetIntegerv(parameter, &result);
-
-        return result;
     }
 
 
@@ -169,6 +161,80 @@ namespace hlx::gfx::api::gl
         }
     }
 
+    constexpr GLenum      shader_type(Shader::Stage stage)
+    {
+        switch (stage)
+        {
+            case Shader::Stage::Vertex:                 return GL_VERTEX_SHADER;
+            case Shader::Stage::TessellationControl:    return GL_TESS_CONTROL_SHADER;
+            case Shader::Stage::TessellationEvaluation: return GL_TESS_EVALUATION_SHADER;
+            case Shader::Stage::Geometry:               return GL_GEOMETRY_SHADER;
+            case Shader::Stage::Fragment:			    return GL_FRAGMENT_SHADER;
+            case Shader::Stage::Compute:				return GL_COMPUTE_SHADER;
+
+            default: throw std::invalid_argument{ "Invalid stage!" };
+        }
+    }
+    constexpr GLenum      shader_stage(Shader::Stage stage)
+    {
+        switch (stage)
+        {
+            case Shader::Stage::Vertex:                 return GL_VERTEX_SHADER_BIT;
+            case Shader::Stage::TessellationControl:    return GL_TESS_CONTROL_SHADER_BIT;
+            case Shader::Stage::TessellationEvaluation: return GL_TESS_EVALUATION_SHADER_BIT;
+            case Shader::Stage::Geometry:               return GL_GEOMETRY_SHADER_BIT;
+            case Shader::Stage::Fragment:			    return GL_FRAGMENT_SHADER_BIT;
+            case Shader::Stage::Compute:				return GL_COMPUTE_SHADER_BIT;
+
+            default: throw std::invalid_argument{ "Invalid stage!" };
+        }
+    }
+
+
+
+    GLint       integer_v(GLenum parameter)
+    {
+        GLint result{};
+        //glGetIntegerv(parameter, &result);
+
+        return result;
+    }
+    GLint       shader_iv(GLuint shader, GLenum parameter)
+    {
+        GLint result{};
+        glGetShaderiv(shader, parameter, &result);
+
+        return result;
+    }
+    GLint       program_iv(GLuint program, GLenum parameter)
+    {
+        GLint result{};
+        glGetProgramiv(program, parameter, &result);
+
+        return result;
+    }
+    std::string shader_infolog(GLuint shader)
+    {
+        const GLsizei length = shader_iv(shader, GL_INFO_LOG_LENGTH);
+
+        std::string infolog{};
+        infolog.resize(length);
+        
+        glGetShaderInfoLog(shader, length, nullptr, infolog.data());
+
+        return infolog;
+    }
+    std::string program_infolog(GLuint program)
+    {
+        std::string infolog{};
+        GLsizei length = program_iv(program, GL_INFO_LOG_LENGTH);
+        GLsizei bufSize{ length };
+
+        infolog.resize(length);
+        glGetProgramInfoLog(program, bufSize, nullptr, infolog.data());
+
+        return infolog;
+    }
 
 
     GLuint create_buffer()
@@ -282,7 +348,6 @@ namespace hlx::gfx::api::gl
 
 
 
-
     GLuint create_texture(GLenum target)
     {
         GLuint id{};
@@ -325,5 +390,68 @@ namespace hlx::gfx::api::gl
     void   texture_sub_image_2d(GLuint id, GLenum format, const Vector2u& dimensions, const Vector2u& offset, GLuint level, const void* data)
     {
         //glTextureSubImage2D(id, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
+    }
+
+
+
+    GLuint create_program()
+    {
+        return glCreateProgram();
+    }
+    void   delete_program(GLuint id)
+    {
+        glDeleteProgram(id);
+    }
+    GLuint create_shader(GLenum type)
+    {
+        return glCreateShader(type);
+    }
+    void   delete_shader(GLuint id)
+    {
+        glDeleteShader(id);
+    }
+    void   program_parameter(GLuint id, GLenum parameter, GLint value)
+    {
+        glProgramParameteri(id, parameter, value);
+    }
+    void   shader_binary(GLuint id, std::span<const byte> binary)
+    {
+        glShaderBinary(1, &id, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size_bytes()));
+    }
+    void   specialize_shader(GLuint id, std::string_view entry)
+    {
+        glSpecializeShader(id, entry.data(), 0, nullptr, nullptr);
+    }
+    void   attach_shader(GLuint programId, GLuint shaderId)
+    {
+        glAttachShader(programId, shaderId);
+    }
+    void   link_program(GLuint id)
+    {
+        glLinkProgram(id);
+    }
+    void   detach_shader(GLuint programId, GLuint shaderId)
+    {
+        glDetachShader(programId, shaderId);
+    }
+
+    GLuint create_program_pipeline()
+    {
+        GLuint id{};
+        glCreateProgramPipelines(1, &id);
+
+        return id;
+    }
+    void   delete_program_pipeline(GLuint id)
+    {
+        glDeleteProgramPipelines(1, &id);
+    }
+    void   bind_program_pipeline(GLuint id)
+    {
+        glBindProgramPipeline(id);
+    }
+    void   use_program_stages(GLuint pipelineId, GLuint programId, GLbitfield stages)
+    {
+        glUseProgramStages(pipelineId, stages, programId);
     }
 }
