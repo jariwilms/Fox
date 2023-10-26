@@ -159,7 +159,7 @@
     <ClInclude Include="src\Helix\Config.hpp">
       <Filter>Helix</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Core\Library\Data\CyclicBuffer.hpp">
+    <ClInclude Include="src\Helix\Core\Library\Container\CyclicBuffer.hpp">
       <Filter>Helix\Core\Library\Array</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp">
@@ -434,7 +434,6 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Base.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Layout\VertexLayout.hpp" />
@@ -446,6 +445,8 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\API.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

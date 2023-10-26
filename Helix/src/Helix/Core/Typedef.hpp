@@ -2,6 +2,7 @@
 
 #include <glm/glm.hpp>
 
+using bit        = bool;
 using byte       = unsigned char;
 using word       = unsigned short;
 using dword      = unsigned int;

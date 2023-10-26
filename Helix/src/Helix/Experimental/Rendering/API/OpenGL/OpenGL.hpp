@@ -6,10 +6,11 @@
 #include "glfw/glfw3.h"
 
 #include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Experimental/Rendering/Texture/Texture.hpp"
 #include "Helix/Experimental/Rendering/Buffer/FrameBuffer.hpp"
 #include "Helix/Experimental/Rendering/Shader/Pipeline.hpp"
 #include "Helix/Experimental/Rendering/Shader/Shader.hpp"
+#include "Helix/Experimental/Rendering/Texture/Texture.hpp"
+#include "Helix/Core/Library/Utility/Bitwise.hpp"
 
 namespace hlx::gfx::api::gl
 {
@@ -86,6 +87,23 @@ namespace hlx::gfx::api::gl
             case Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
 
             default: throw std::invalid_argument{ "Invalid format!" };
+        }
+    }
+    constexpr GLenum      texture_format_base(Texture::Format format)
+    {
+        const auto& flags = (static_cast<int>(format) & 0xFF00) >> 8;
+        switch (flags)
+        {
+            case 0x01: return GL_RED;
+            case 0x02: return GL_RG;
+            case 0x03: return GL_RGB;
+            case 0x04: return GL_RGBA;
+
+            case 0x10: return GL_DEPTH_COMPONENT;
+            case 0x20: return GL_STENCIL_INDEX;
+            case 0x30: throw std::invalid_argument{ "Invalid texture format!" };
+
+            default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
     constexpr GLenum      texture_min_filter(Texture::Filter filter)
@@ -240,68 +258,67 @@ namespace hlx::gfx::api::gl
     GLuint create_buffer()
     {
         GLuint id{};
-        //glCreateBuffers(1, &id);
+        glCreateBuffers(1, &id);
 
         return id;
     }
     void   delete_buffer(GLuint id)
     {
-        //glDeleteBuffers(1, &id);
+        glDeleteBuffers(1, &id);
     }
     void   bind_buffer(GLuint id, Buffer::Type type)
     {
         const auto& target = buffer_target(type);
-        //glBindBuffer(target, id);
+        glBindBuffer(target, id);
     }
     template<typename T>
     void   buffer_storage(GLuint id, Buffer::Usage usage, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
         const auto& flags = buffer_usage(usage);
 
-        //glNamedBufferStorage(id, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
+        glNamedBufferStorage(id, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
     }
     void   buffer_storage(GLuint id, Buffer::Usage usage, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
-        //const auto& flags = buffer_usage(usage);
-
-        //glNamedBufferStorage(id, static_cast<GLsizeiptr>(size), nullptr, flags);
+        const auto& flags = buffer_usage(usage);
+        glNamedBufferStorage(id, static_cast<GLsizeiptr>(size), nullptr, flags);
     }
     template<typename T>
     void   buffer_sub_data(GLuint id, size_t offset, std::span<const T> data)
     {
-        //glNamedBufferSubData(id, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
+        glNamedBufferSubData(id, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
     }
 
     GLuint create_vertex_array()
     {
         GLuint id{};
-        //glCreateVertexArrays(1, &id);
+        glCreateVertexArrays(1, &id);
 
         return id;
     }
     void   delete_vertex_array(GLuint id)
     {
-        //glDeleteVertexArrays(1, &id);
+        glDeleteVertexArrays(1, &id);
     }
     void   bind_vertex_array(GLuint id)
     {
-        //glBindVertexArray(id);
+        glBindVertexArray(id);
     }
     void   vertex_array_vertex_buffer(GLuint arrayId, GLuint bufferId, GLuint index, GLsizei stride)
     {
-        //glVertexArrayVertexBuffer(arrayId, index, bufferId, 0, stride);
+        glVertexArrayVertexBuffer(arrayId, index, bufferId, 0, stride);
     }
     void   enable_vertex_array_attribute(GLuint id, GLuint index)
     {
-        //glEnableVertexArrayAttrib(id, index);
+        glEnableVertexArrayAttrib(id, index);
     }
     void   vertex_array_attribute_format(GLuint id, GLuint index, GLuint offset, GLenum type, GLint size, GLboolean normalized)
     {
-        //glVertexArrayAttribFormat(id, index, size, type, normalized, offset);
+        glVertexArrayAttribFormat(id, index, size, type, normalized, offset);
     }
     void   vertex_array_attribute_binding(GLuint id, GLuint index, GLuint binding)
     {
-        //glVertexArrayAttribBinding(id, index, binding);
+        glVertexArrayAttribBinding(id, index, binding);
     }
 
 
@@ -351,45 +368,53 @@ namespace hlx::gfx::api::gl
     GLuint create_texture(GLenum target)
     {
         GLuint id{};
-        //glCreateTextures(target, 1, &id);
+        glCreateTextures(target, 1, &id);
 
         return id;
     }
     void   delete_texture(GLuint id)
     {
-        //glDeleteTextures(1, &id);
+        glDeleteTextures(1, &id);
     }
     void   bind_texture(GLuint id, u32 slot)
     {
-        //glBindTextureUnit(static_cast<GLuint>(slot), id);
+        glBindTextureUnit(static_cast<GLuint>(slot), id);
     }
     void   texture_parameter(GLuint id, GLenum parameter, GLuint value)
     {
-        //glTextureParameteri(id, parameter, value);
+        glTextureParameteri(id, parameter, value);
     }
     void   texture_storage_1d(GLuint id, GLenum format, const Vector1u& dimensions, GLsizei levels)
     {
-        //glTextureStorage1D(id, levels, format, static_cast<GLsizei>(dimensions.x));
+        glTextureStorage1D(id, levels, format, static_cast<GLsizei>(dimensions.x));
     }
     void   texture_storage_2d(GLuint id, GLenum format, const Vector2u& dimensions, GLsizei levels)
     {
-        //glTextureStorage2D(id, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
+        glTextureStorage2D(id, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
     }
     void   texture_storage_3d(GLuint id, GLenum format, const Vector3u& dimensions, GLsizei levels)
     {
-        //glTextureStorage3D(id, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z));
+        glTextureStorage3D(id, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z));
     }
     void   texture_storage_2d_multisample(GLuint id, GLenum format, const Vector2u& dimensions, GLsizei samples)
     {
-        //glTextureStorage2DMultisample(id, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), GL_TRUE);
+        glTextureStorage2DMultisample(id, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), GL_TRUE);
     }
     void   texture_storage_3d_multisample(GLuint id, GLenum format, const Vector3u& dimensions, GLsizei samples)
     {
-        //glTextureStorage3DMultisample(id, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), GL_TRUE);
+        glTextureStorage3DMultisample(id, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), GL_TRUE);
+    }
+    void   texture_sub_image_1d(GLuint id, GLenum format, const Vector1u& dimensions, const Vector1u& offset, GLint level, const void* data)
+    {
+        glTextureSubImage1D(id, level, static_cast<GLint>(offset.x), static_cast<GLsizei>(dimensions.x), format, GL_UNSIGNED_BYTE, data);
     }
     void   texture_sub_image_2d(GLuint id, GLenum format, const Vector2u& dimensions, const Vector2u& offset, GLuint level, const void* data)
     {
-        //glTextureSubImage2D(id, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage2D(id, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
+    }
+    void   texture_sub_image_3d(GLuint id, GLenum format, const Vector3u& dimensions, const Vector3u& offset, GLint level, const void* data) //80 column rule my ass
+    {
+        glTextureSubImage3D(id, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLint>(offset.z), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
     }
 
 

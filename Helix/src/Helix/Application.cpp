@@ -2,15 +2,15 @@
 
 #include "Application.hpp"
 
+#include "Helix/Core/Library/Container/CyclicBuffer.hpp"
+#include "Helix/Core/Library/Time/Time.hpp"
+#include "Helix/Core/Library/Transform/Transform.hpp"
+#include "Helix/ECS/Components/Components.hpp"
+#include "Helix/Input/Input.hpp"
+#include "Helix/IO/Import/Model/ModelImporter.hpp"
 #include "Helix/IO/IO.hpp"
 #include "Helix/Rendering/Renderer.hpp"
-#include "Helix/IO/Import/Model/ModelImporter.hpp"
 #include "Helix/Scene/Scene.hpp"
-#include "Helix/ECS/Components/Components.hpp"
-#include "Helix/Core/Library/Transform/Transform.hpp"
-#include "Helix/Core/Library/Time/Time.hpp"
-#include "Helix/Input/Input.hpp"
-#include "Helix/Core/Library/Data/CyclicBuffer.hpp"
 
 namespace hlx
 {

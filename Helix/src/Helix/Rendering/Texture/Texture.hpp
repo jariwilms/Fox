@@ -20,49 +20,52 @@ namespace hlx
 			//SRGB    => stored as unsigned integer, sampled as   floating point in range [      0,    UINT_MAX]
 			//Note: The Red, Green and Blue components of SRGB formats are nonlinear
 
-			R8_UNORM,          //0x08'00'00
-			RG8_UNORM, 		   //0x08'00'01
-			RGB8_UNORM,		   //0x08'00'02
-			RGBA8_UNORM,	   //0x08'00'03
-			
-			R16_UNORM,		   //0x10'00'04
-			RG16_UNORM,		   //0x10'00'05
-			RGB16_UNORM,	   //0x10'00'06
-			RGBA16_UNORM,      //0x10'00'07
-			
-			R8_SNORM,          //0x08'00'08
-			RG8_SNORM,		   //0x08'00'09
-			RGB8_SNORM,		   //0x08'00'0A
-			RGBA8_SNORM,	   //0x08'00'0B
-			
-			R16_SNORM,         //0x10'00'0C
-			RG16_SNORM,		   //0x10'00'0D
-			RGB16_SNORM,	   //0x10'00'0E
-			RGBA16_SNORM,	   //0x10'00'0F
-			
-			R8_SRGB,           //0x08'00'10
-			RG8_SRGB,		   //0x08'00'11
-			RGB8_SRGB,		   //0x08'00'12
-			RGBA8_SRGB,		   //0x08'00'13
-			
-			R16_SFLOAT,        //0x10'00'14
-			RG16_SFLOAT,	   //0x10'00'15
-			RGB16_SFLOAT,	   //0x10'00'16
-			RGBA16_SFLOAT,	   //0x10'00'17
-			
-			R32_SFLOAT,        //0x20'00'18
-			RG32_SFLOAT,	   //0x20'00'19
-			RGB32_SFLOAT,	   //0x20'00'1A
-			RGBA32_SFLOAT,	   //0x20'00'1B
-			
-			D16_UNORM,         //0x10'00'1C
-			D24_UNORM,		   //0x18'00'1D
-			D32_FLOAT,		   //0x20'00'1E
-			
-			D24_UNORM_S8_UINT, //0x18'08'1F
-			D32_FLOAT_S8_UINT, //0x20'08'20
-			
-			S8_UINT,           //0x08'00'21
+
+			//0x[Size 1]'[Size 2]'[Components]'[Key]
+
+			R8_UNORM, 		   //0x08'00'01'00
+			RG8_UNORM, 		   //0x08'00'02'01
+			RGB8_UNORM, 	   //0x08'00'03'02
+			RGBA8_UNORM, 	   //0x08'00'04'03
+
+			R16_UNORM, 		   //0x10'00'01'04
+			RG16_UNORM, 	   //0x10'00'02'05
+			RGB16_UNORM, 	   //0x10'00'03'06
+			RGBA16_UNORM, 	   //0x10'00'04'07
+
+			R8_SNORM, 		   //0x08'00'01'08
+			RG8_SNORM, 		   //0x08'00'02'09
+			RGB8_SNORM, 	   //0x08'00'03'0A
+			RGBA8_SNORM, 	   //0x08'00'04'0B
+
+			R16_SNORM, 		   //0x10'00'01'0C
+			RG16_SNORM, 	   //0x10'00'02'0D
+			RGB16_SNORM, 	   //0x10'00'03'0E
+			RGBA16_SNORM, 	   //0x10'00'04'0F
+
+			R8_SRGB, 		   //0x08'00'01'10
+			RG8_SRGB, 		   //0x08'00'02'11
+			RGB8_SRGB, 		   //0x08'00'03'12
+			RGBA8_SRGB, 	   //0x08'00'04'13
+
+			R16_SFLOAT, 	   //0x10'00'01'14
+			RG16_SFLOAT, 	   //0x10'00'02'15
+			RGB16_SFLOAT, 	   //0x10'00'03'16
+			RGBA16_SFLOAT, 	   //0x10'00'04'17
+
+			R32_SFLOAT, 	   //0x20'00'01'18
+			RG32_SFLOAT, 	   //0x20'00'02'19
+			RGB32_SFLOAT, 	   //0x20'00'03'1A
+			RGBA32_SFLOAT, 	   //0x20'00'04'1B
+
+			D16_UNORM, 		   //0x10'00'10'1C
+			D24_UNORM, 		   //0x18'00'10'1D
+			D32_FLOAT, 		   //0x20'00'10'1E
+
+			S8_UINT, 		   //0x08'00'20'1F
+
+			D24_UNORM_S8_UINT, //0x18'08'30'20 
+			D32_FLOAT_S8_UINT, //0x20'08'30'21 
 		};
         enum class Filter
 		{

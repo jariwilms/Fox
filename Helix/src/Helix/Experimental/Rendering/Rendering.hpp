@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Experimental/Rendering/Base.hpp"
+#include "Helix/Experimental/Rendering/API/API.hpp"
 
 #include "Helix/Experimental/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 #include "Helix/Experimental/Rendering/API/OpenGL/Buffer/OpenGLFrameBuffer.hpp"
@@ -37,4 +37,10 @@ namespace hlx::gfx
     using Texture2D              = api::GTexture<api::GRAPHICS_API, api::Dimensions::_2D, api::AntiAliasing::None>;
     using Texture2DMultisample   = api::GTexture<api::GRAPHICS_API, api::Dimensions::_2D, api::AntiAliasing::MSAA>;
     using Texture3D              = api::GTexture<api::GRAPHICS_API, api::Dimensions::_3D, api::AntiAliasing::None>;
+    using Texture3DMultisample   = api::GTexture<api::GRAPHICS_API, api::Dimensions::_3D, api::AntiAliasing::MSAA>;
+
+    void test()
+    {
+
+    }
 }

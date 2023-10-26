@@ -11,7 +11,9 @@ namespace hlx::gfx::api
     class GTexture<GraphicsAPI::OpenGL, D, A> : public DTexture<D>
     {
     public:
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions) requires (D == Dimensions::_1D && A == AntiAliasing::None)
+        using vector_t = DTexture<D>::Vector;
+
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions) requires (D == Dimensions::_1D && A == AntiAliasing::None)
             : DTexture<D>{ format, filter, wrapping, dimensions }
         {
             m_glId        = gl::create_texture(GL_TEXTURE_1D);
@@ -27,12 +29,12 @@ namespace hlx::gfx::api
             gl::texture_storage_1d(m_glId, m_glFormat, this->m_dimensions, 0);
         }
         template<typename T>
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions, std::span<const T> data) requires (D == Dimensions::_1D && A == AntiAliasing::None)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const T> data) requires (D == Dimensions::_1D && A == AntiAliasing::None)
             : GTexture{ format, filter, wrapping, dimensions }
         {
-
+            copy(format, data);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions) requires (D == Dimensions::_2D)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions) requires (D == Dimensions::_2D)
             : DTexture<D>{ format, filter, wrapping, dimensions }
         {
             m_glId        = gl::create_texture(GL_TEXTURE_2D);
@@ -50,12 +52,12 @@ namespace hlx::gfx::api
             if constexpr (A == AntiAliasing::MSAA) gl::texture_storage_2d_multisample(m_glId, m_glFormat, this->m_dimensions, 0);
         }
         template<typename T>
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions, std::span<const T> data) requires (D == Dimensions::_2D)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const T> data) requires (D == Dimensions::_2D)
             : GTexture{ format, filter, wrapping, dimensions }
         {
-
+            copy(format, data);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions) requires (D == Dimensions::_3D)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions) requires (D == Dimensions::_3D)
             : DTexture<D>{ format, filter, wrapping, dimensions }
         {
             m_glId        = gl::create_texture(GL_TEXTURE_3D);
@@ -74,12 +76,11 @@ namespace hlx::gfx::api
             if constexpr (A == AntiAliasing::MSAA) gl::texture_storage_3d_multisample(m_glId, m_glFormat, this->m_dimensions, 0);
         }
         template<typename T>
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const DTexture<D>::Vector& dimensions, std::span<const T> data) requires (D == Dimensions::_3D)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const T> data) requires (D == Dimensions::_3D)
             : GTexture{ format, filter, wrapping, dimensions }
         {
-
+            copy(format, data);
         }
-        GTexture(GTexture&&) = default;
         ~GTexture()
         {
             gl::delete_texture(m_glId);
@@ -88,6 +89,20 @@ namespace hlx::gfx::api
         void bind(u32 slot)
         {
             gl::bind_texture(m_glId, slot);
+        }
+
+        void copy(Texture::Format format, std::span<const byte> data)
+        {
+            copy_range(format, data);
+        }
+        void copy_range(Texture::Format format, const vector_t& dimensions, const vector_t& offset, std::span<const byte> data)
+        {
+            if (data.empty()) return;
+            if (glm::any(glm::greaterThan(this->m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
+            
+            if constexpr (D == Dimensions::_1D) gl::texture_sub_image_1d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (D == Dimensions::_2D) gl::texture_sub_image_2d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (D == Dimensions::_3D) gl::texture_sub_image_3d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
         }
 
         GLuint id() const
