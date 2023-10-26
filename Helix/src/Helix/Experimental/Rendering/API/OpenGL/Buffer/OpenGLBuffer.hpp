@@ -17,19 +17,21 @@ namespace hlx::gfx::api
         {
             m_glId = gl::create_buffer();
 
-            gl::buffer_storage(m_glId, Buffer::Usage::Dynamic, data);
+            const auto& flags = gl::buffer_usage(Buffer::Usage::Dynamic);
+            gl::buffer_storage(m_glId, flags, data);
         }
         GBuffer(u32 count)
             : Buffer{ count * sizeof(T) }
         {
             m_glId = gl::create_buffer();
 
-            gl::buffer_storage(m_glId, Buffer::Usage::Dynamic, m_size);
+            const auto& flags = gl::buffer_usage(Buffer::Usage::Dynamic);
+            gl::buffer_storage(m_glId, flags, m_size);
         }
 
         void bind()
         {
-            gl::bind_buffer(m_glId, S);
+            gl::bind_buffer(m_glId, gl::buffer_target(S));
         }
 
         void copy(std::span<const T> data)

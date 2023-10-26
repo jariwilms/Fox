@@ -213,7 +213,7 @@ namespace hlx::gfx::api::gl
     GLint       integer_v(GLenum parameter)
     {
         GLint result{};
-        //glGetIntegerv(parameter, &result);
+        glGetIntegerv(parameter, &result);
 
         return result;
     }
@@ -233,7 +233,7 @@ namespace hlx::gfx::api::gl
     }
     std::string shader_infolog(GLuint shader)
     {
-        const GLsizei length = shader_iv(shader, GL_INFO_LOG_LENGTH);
+        const auto& length = shader_iv(shader, GL_INFO_LOG_LENGTH);
 
         std::string infolog{};
         infolog.resize(length);
@@ -255,166 +255,165 @@ namespace hlx::gfx::api::gl
     }
 
 
+
     GLuint create_buffer()
     {
-        GLuint id{};
-        glCreateBuffers(1, &id);
+        GLuint buffer{};
+        glCreateBuffers(1, &buffer);
 
-        return id;
+        return buffer;
     }
-    void   delete_buffer(GLuint id)
+    void   delete_buffer(GLuint buffer)
     {
-        glDeleteBuffers(1, &id);
+        glDeleteBuffers(1, &buffer);
     }
-    void   bind_buffer(GLuint id, Buffer::Type type)
+    void   bind_buffer(GLuint buffer, GLenum target)
     {
-        const auto& target = buffer_target(type);
-        glBindBuffer(target, id);
+        glBindBuffer(target, buffer);
     }
     template<typename T>
-    void   buffer_storage(GLuint id, Buffer::Usage usage, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void   buffer_storage(GLuint buffer, GLbitfield flags, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
-        const auto& flags = buffer_usage(usage);
-
-        glNamedBufferStorage(id, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
+        glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
     }
-    void   buffer_storage(GLuint id, Buffer::Usage usage, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void   buffer_storage(GLuint buffer, GLbitfield flags, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
-        const auto& flags = buffer_usage(usage);
-        glNamedBufferStorage(id, static_cast<GLsizeiptr>(size), nullptr, flags);
+        glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(size), nullptr, flags);
     }
     template<typename T>
-    void   buffer_sub_data(GLuint id, size_t offset, std::span<const T> data)
+    void   buffer_sub_data(GLuint buffer, size_t offset, std::span<const T> data)
     {
-        glNamedBufferSubData(id, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
+        glNamedBufferSubData(buffer, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
     }
+
+
 
     GLuint create_vertex_array()
     {
-        GLuint id{};
-        glCreateVertexArrays(1, &id);
+        GLuint array{};
+        glCreateVertexArrays(1, &array);
 
-        return id;
+        return array;
     }
-    void   delete_vertex_array(GLuint id)
+    void   delete_vertex_array(GLuint array)
     {
-        glDeleteVertexArrays(1, &id);
+        glDeleteVertexArrays(1, &array);
     }
-    void   bind_vertex_array(GLuint id)
+    void   bind_vertex_array(GLuint array)
     {
-        glBindVertexArray(id);
+        glBindVertexArray(array);
     }
-    void   vertex_array_vertex_buffer(GLuint arrayId, GLuint bufferId, GLuint index, GLsizei stride)
+    void   vertex_array_vertex_buffer(GLuint array, GLuint buffer, GLuint index, GLsizei stride)
     {
-        glVertexArrayVertexBuffer(arrayId, index, bufferId, 0, stride);
+        glVertexArrayVertexBuffer(array, index, buffer, 0, stride);
     }
-    void   enable_vertex_array_attribute(GLuint id, GLuint index)
+    void   enable_vertex_array_attribute(GLuint array, GLuint index)
     {
-        glEnableVertexArrayAttrib(id, index);
+        glEnableVertexArrayAttrib(array, index);
     }
-    void   vertex_array_attribute_format(GLuint id, GLuint index, GLuint offset, GLenum type, GLint size, GLboolean normalized)
+    void   vertex_array_attribute_format(GLuint array, GLuint index, GLuint offset, GLenum type, GLint size, GLboolean normalized)
     {
-        glVertexArrayAttribFormat(id, index, size, type, normalized, offset);
+        glVertexArrayAttribFormat(array, index, size, type, normalized, offset);
     }
-    void   vertex_array_attribute_binding(GLuint id, GLuint index, GLuint binding)
+    void   vertex_array_attribute_binding(GLuint array, GLuint index, GLuint binding)
     {
-        glVertexArrayAttribBinding(id, index, binding);
+        glVertexArrayAttribBinding(array, index, binding);
     }
 
 
 
     GLuint create_frame_buffer()
     {
-        GLuint id{};
-        glCreateFramebuffers(1, &id);
+        GLuint frameBuffer{};
+        glCreateFramebuffers(1, &frameBuffer);
 
-        return id;
+        return frameBuffer;
     }
-    void   delete_frame_buffer(GLuint id)
+    void   delete_frame_buffer(GLuint frameBuffer)
     {
-        glDeleteFramebuffers(1, &id);
+        glDeleteFramebuffers(1, &frameBuffer);
     }
-    void   bind_frame_buffer(GLuint id, GLenum target)
+    void   bind_frame_buffer(GLuint frameBuffer, GLenum target)
     {
-        glBindFramebuffer(target, id);
+        glBindFramebuffer(target, frameBuffer);
     }
-    void   frame_buffer_read_buffer(GLuint id, GLenum buffer)
+    void   frame_buffer_read_buffer(GLuint frameBuffer, GLenum source)
     {
-        glNamedFramebufferReadBuffer(id, buffer);
+        glNamedFramebufferReadBuffer(frameBuffer, source);
     }
-    void   frame_buffer_draw_buffer(GLuint id, GLenum buffer)
+    void   frame_buffer_draw_buffer(GLuint frameBuffer, GLenum buffer)
     {
-        glNamedFramebufferDrawBuffer(id, buffer);
+        glNamedFramebufferDrawBuffer(frameBuffer, buffer);
     }
-    void   frame_buffer_draw_buffers(GLuint id, std::span<const GLenum> buffers)
+    void   frame_buffer_draw_buffers(GLuint frameBuffer, std::span<const GLenum> buffers)
     {
-        glNamedFramebufferDrawBuffers(id, static_cast<GLsizei>(buffers.size()), buffers.data());
+        glNamedFramebufferDrawBuffers(frameBuffer, static_cast<GLsizei>(buffers.size()), buffers.data());
     }
-    void   frame_buffer_texture(GLuint frameBufferId, GLuint textureId, GLenum attachment, GLint level)
+    void   frame_buffer_texture(GLuint frameBuffer, GLuint texture, GLenum attachment, GLint level)
     {
-        glNamedFramebufferTexture(frameBufferId, attachment, textureId, level);
+        glNamedFramebufferTexture(frameBuffer, attachment, texture, level);
     }
-    void   frame_buffer_render_buffer(GLuint frameBufferId, GLuint renderBufferId, GLenum attachment)
+    void   frame_buffer_render_buffer(GLuint frameBuffer, GLuint renderBuffer, GLenum attachment)
     {
-        glNamedFramebufferRenderbuffer(frameBufferId, attachment, GL_RENDERBUFFER, renderBufferId);
+        glNamedFramebufferRenderbuffer(frameBuffer, attachment, GL_RENDERBUFFER, renderBuffer);
     }
-    GLenum check_frame_buffer_status(GLuint id)
+    GLenum check_frame_buffer_status(GLuint frameBuffer)
     {
-        return glCheckNamedFramebufferStatus(id, GL_FRAMEBUFFER);
+        return glCheckNamedFramebufferStatus(frameBuffer, GL_FRAMEBUFFER);
     }
 
 
 
     GLuint create_texture(GLenum target)
     {
-        GLuint id{};
-        glCreateTextures(target, 1, &id);
+        GLuint texture{};
+        glCreateTextures(target, 1, &texture);
 
-        return id;
+        return texture;
     }
-    void   delete_texture(GLuint id)
+    void   delete_texture(GLuint texture)
     {
-        glDeleteTextures(1, &id);
+        glDeleteTextures(1, &texture);
     }
-    void   bind_texture(GLuint id, u32 slot)
+    void   bind_texture(GLuint texture, u32 slot)
     {
-        glBindTextureUnit(static_cast<GLuint>(slot), id);
+        glBindTextureUnit(static_cast<GLuint>(slot), texture);
     }
-    void   texture_parameter(GLuint id, GLenum parameter, GLuint value)
+    void   texture_parameter(GLuint texture, GLenum parameter, GLuint value)
     {
-        glTextureParameteri(id, parameter, value);
+        glTextureParameteri(texture, parameter, value);
     }
-    void   texture_storage_1d(GLuint id, GLenum format, const Vector1u& dimensions, GLsizei levels)
+    void   texture_storage_1d(GLuint texture, GLenum format, const Vector1u& dimensions, GLsizei levels)
     {
-        glTextureStorage1D(id, levels, format, static_cast<GLsizei>(dimensions.x));
+        glTextureStorage1D(texture, levels, format, static_cast<GLsizei>(dimensions.x));
     }
-    void   texture_storage_2d(GLuint id, GLenum format, const Vector2u& dimensions, GLsizei levels)
+    void   texture_storage_2d(GLuint texture, GLenum format, const Vector2u& dimensions, GLsizei levels)
     {
-        glTextureStorage2D(id, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
+        glTextureStorage2D(texture, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
     }
-    void   texture_storage_3d(GLuint id, GLenum format, const Vector3u& dimensions, GLsizei levels)
+    void   texture_storage_3d(GLuint texture, GLenum format, const Vector3u& dimensions, GLsizei levels)
     {
-        glTextureStorage3D(id, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z));
+        glTextureStorage3D(texture, levels, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z));
     }
-    void   texture_storage_2d_multisample(GLuint id, GLenum format, const Vector2u& dimensions, GLsizei samples)
+    void   texture_storage_2d_multisample(GLuint texture, GLenum format, const Vector2u& dimensions, GLsizei samples)
     {
-        glTextureStorage2DMultisample(id, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), GL_TRUE);
+        glTextureStorage2DMultisample(texture, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), GL_TRUE);
     }
-    void   texture_storage_3d_multisample(GLuint id, GLenum format, const Vector3u& dimensions, GLsizei samples)
+    void   texture_storage_3d_multisample(GLuint texture, GLenum format, const Vector3u& dimensions, GLsizei samples)
     {
-        glTextureStorage3DMultisample(id, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), GL_TRUE);
+        glTextureStorage3DMultisample(texture, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), GL_TRUE);
     }
-    void   texture_sub_image_1d(GLuint id, GLenum format, const Vector1u& dimensions, const Vector1u& offset, GLint level, const void* data)
+    void   texture_sub_image_1d(GLuint texture, GLenum format, const Vector1u& dimensions, const Vector1u& offset, GLint level, const void* data)
     {
-        glTextureSubImage1D(id, level, static_cast<GLint>(offset.x), static_cast<GLsizei>(dimensions.x), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage1D(texture, level, static_cast<GLint>(offset.x), static_cast<GLsizei>(dimensions.x), format, GL_UNSIGNED_BYTE, data);
     }
-    void   texture_sub_image_2d(GLuint id, GLenum format, const Vector2u& dimensions, const Vector2u& offset, GLuint level, const void* data)
+    void   texture_sub_image_2d(GLuint texture, GLenum format, const Vector2u& dimensions, const Vector2u& offset, GLuint level, const void* data)
     {
-        glTextureSubImage2D(id, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage2D(texture, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
     }
-    void   texture_sub_image_3d(GLuint id, GLenum format, const Vector3u& dimensions, const Vector3u& offset, GLint level, const void* data) //80 column rule my ass
+    void   texture_sub_image_3d(GLuint texture, GLenum format, const Vector3u& dimensions, const Vector3u& offset, GLint level, const void* data) //80 column rule my ass
     {
-        glTextureSubImage3D(id, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLint>(offset.z), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage3D(texture, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLint>(offset.z), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
     }
 
 
@@ -423,60 +422,62 @@ namespace hlx::gfx::api::gl
     {
         return glCreateProgram();
     }
-    void   delete_program(GLuint id)
+    void   delete_program(GLuint program)
     {
-        glDeleteProgram(id);
+        glDeleteProgram(program);
+    }
+    void   link_program(GLuint program)
+    {
+        glLinkProgram(program);
+    }
+    void   program_parameter(GLuint program, GLenum parameter, GLint value)
+    {
+        glProgramParameteri(program, parameter, value);
     }
     GLuint create_shader(GLenum type)
     {
         return glCreateShader(type);
     }
-    void   delete_shader(GLuint id)
+    void   delete_shader(GLuint shader)
     {
-        glDeleteShader(id);
+        glDeleteShader(shader);
     }
-    void   program_parameter(GLuint id, GLenum parameter, GLint value)
+    void   attach_shader(GLuint program, GLuint shader)
     {
-        glProgramParameteri(id, parameter, value);
+        glAttachShader(program, shader);
     }
-    void   shader_binary(GLuint id, std::span<const byte> binary)
+    void   detach_shader(GLuint program, GLuint shader)
     {
-        glShaderBinary(1, &id, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size_bytes()));
+        glDetachShader(program, shader);
     }
-    void   specialize_shader(GLuint id, std::string_view entry)
+    void   shader_binary(GLuint shader, std::span<const byte> binary)
     {
-        glSpecializeShader(id, entry.data(), 0, nullptr, nullptr);
+        glShaderBinary(1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<GLsizei>(binary.size_bytes()));
     }
-    void   attach_shader(GLuint programId, GLuint shaderId)
+    void   specialize_shader(GLuint shader, std::string_view entry)
     {
-        glAttachShader(programId, shaderId);
+        glSpecializeShader(shader, entry.data(), 0, nullptr, nullptr);
     }
-    void   link_program(GLuint id)
-    {
-        glLinkProgram(id);
-    }
-    void   detach_shader(GLuint programId, GLuint shaderId)
-    {
-        glDetachShader(programId, shaderId);
-    }
+
+
 
     GLuint create_program_pipeline()
     {
-        GLuint id{};
-        glCreateProgramPipelines(1, &id);
+        GLuint pipeline{};
+        glCreateProgramPipelines(1, &pipeline);
 
-        return id;
+        return pipeline;
     }
-    void   delete_program_pipeline(GLuint id)
+    void   delete_program_pipeline(GLuint pipeline)
     {
-        glDeleteProgramPipelines(1, &id);
+        glDeleteProgramPipelines(1, &pipeline);
     }
-    void   bind_program_pipeline(GLuint id)
+    void   bind_program_pipeline(GLuint pipeline)
     {
-        glBindProgramPipeline(id);
+        glBindProgramPipeline(pipeline);
     }
-    void   use_program_stages(GLuint pipelineId, GLuint programId, GLbitfield stages)
+    void   use_program_stages(GLuint pipeline, GLuint program, GLbitfield stages)
     {
-        glUseProgramStages(pipelineId, stages, programId);
+        glUseProgramStages(pipeline, stages, program);
     }
 }
