@@ -2,13 +2,6 @@
 
 #include "stdafx.hpp"
 
-#pragma warning(push)
-#pragma warning(disable: 6262 26827 26819 26451)
-#include <stb_image.h>
-#pragma warning(pop)
-
-#include "File.hpp"
-
 namespace hlx
 {
     class Image
@@ -16,46 +9,48 @@ namespace hlx
     public:
         enum class Format
         {
-            R8, 
+            BMP, 
+            JPEG, 
+            PNG, 
+        };
+        enum class Layout
+        {
+            R8 = 1, 
             RG8, 
             RGB8, 
             RGBA8, 
         };
 
-        Image(const Vector2u& dimensions, unsigned int channels, const std::vector<byte>& data)
-            : m_dimensions{ dimensions }, m_channels{ channels }, m_data{ data } {}
-        Image(const Vector2u& dimensions, unsigned int channels, std::vector<byte>&& data)
-            : m_dimensions{ dimensions }, m_channels{ channels }, m_data{ std::move(data) } {}
+        Image(Layout layout, const Vector2u& dimensions, std::span<const byte> data)
+            : m_layout{ layout }, m_dimensions{ dimensions }, m_data{ data.data(), data.data() + data.size_bytes() }
+        {
+            const auto& channels = static_cast<int>(layout);
+            if (static_cast<size_t>(m_dimensions.x) * m_dimensions.y * channels > m_data.size()) throw std::runtime_error{ "Invalid image dimensions or layout!" };
+        }
+        Image(Layout layout, const Vector2u& dimensions, std::vector<byte>&& data)
+            : m_layout{ layout }, m_dimensions{ dimensions }, m_data{ std::move(data) }
+        {
+            const auto& channels = static_cast<int>(layout);
+            if (static_cast<size_t>(m_dimensions.x) * m_dimensions.y * channels > m_data.size()) throw std::runtime_error{ "Invalid image dimensions or layout!" };
+        }
 
         virtual ~Image() = default;
 
-        static Image decode(std::span<const byte> data, unsigned int channels = 0u)
+        static std::vector<byte> encode(Format format, const Image& image);
+        static Image             decode(Layout layout, std::span<const byte> data);
+
+        Layout                layout()     const
         {
-            stbi_set_flip_vertically_on_load(Config::IO::flipImages);
-            channels = std::min(channels, 4u);
-
-            int x{}, y{}, c{};
-            auto* decodedData = reinterpret_cast<byte*>(stbi_load_from_memory(data.data(), static_cast<int>(data.size_bytes()), &x, &y, &c, channels));
-
-            const auto& size = x * y * channels;
-            std::vector<byte> a{ decodedData, decodedData + size };
-            stbi_image_free(decodedData);
-
-            return Image{ Vector2u{ x, y }, channels, std::move(a)};
+            return m_layout;
         }
-
-        size_t size() const
-        {
-            return data().size_bytes();
-        }
-
         const Vector2u&       dimensions() const
         {
             return m_dimensions;
         }
-        unsigned int          channels()   const
+
+        std::span<byte>       data()       
         {
-            return m_channels;
+            return m_data;
         }
         std::span<const byte> data()       const
         {
@@ -63,8 +58,8 @@ namespace hlx
         }
 
     private:
+        Layout            m_layout{};
         Vector2u          m_dimensions{};
-        unsigned int      m_channels{};
         std::vector<byte> m_data{};
     };
 }

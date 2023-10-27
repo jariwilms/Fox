@@ -10,7 +10,6 @@
 #include "Helix/Experimental/Rendering/Shader/Pipeline.hpp"
 #include "Helix/Experimental/Rendering/Shader/Shader.hpp"
 #include "Helix/Experimental/Rendering/Texture/Texture.hpp"
-#include "Helix/Core/Library/Utility/Bitwise.hpp"
 
 namespace hlx::gfx::api::gl
 {
@@ -141,6 +140,25 @@ namespace hlx::gfx::api::gl
             case Texture::Wrapping::MirroredClampToEdge: return GL_MIRROR_CLAMP_TO_EDGE;
 
             default: throw std::invalid_argument{ "Invalid wrapping!" };
+        }
+    }
+
+    constexpr GLenum      render_buffer_format(Texture::Format format)
+    {
+        switch (format)
+        {
+            case Texture::Format::R8_UNORM:          return GL_R8;
+            case Texture::Format::RG8_UNORM:         return GL_RG8;
+            case Texture::Format::RGB8_UNORM:        return GL_RGB8;
+            case Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
+            case Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
+            case Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
+            case Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32;
+            case Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
+            case Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
+            case Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
+
+            default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
 
@@ -326,7 +344,7 @@ namespace hlx::gfx::api::gl
     {
         GLuint frameBuffer{};
         glCreateFramebuffers(1, &frameBuffer);
-
+        
         return frameBuffer;
     }
     void   delete_frame_buffer(GLuint frameBuffer)
@@ -414,6 +432,32 @@ namespace hlx::gfx::api::gl
     void   texture_sub_image_3d(GLuint texture, GLenum format, const Vector3u& dimensions, const Vector3u& offset, GLint level, const void* data) //80 column rule my ass
     {
         glTextureSubImage3D(texture, level, static_cast<GLint>(offset.x), static_cast<GLint>(offset.y), static_cast<GLint>(offset.z), static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y), static_cast<GLsizei>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
+    }
+
+
+
+    GLuint create_render_buffer()
+    {
+        GLuint id{};
+        glCreateRenderbuffers(1, &id);
+
+        return id;
+    }
+    void   delete_render_buffer(GLuint renderBuffer)
+    {
+        glDeleteRenderbuffers(1, &renderBuffer);
+    }
+    void   bind_render_buffer(GLuint renderBuffer)
+    {
+        glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+    }
+    void   render_buffer_storage(GLuint renderBuffer, GLenum format, const Vector2u& dimensions)
+    {
+        glNamedRenderbufferStorage(renderBuffer, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
+    }
+    void   render_buffer_storage_multisample(GLuint renderBuffer, GLenum format, const Vector2u& dimensions, u8 samples)
+    {
+        glNamedRenderbufferStorageMultisample(renderBuffer, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
     }
 
 

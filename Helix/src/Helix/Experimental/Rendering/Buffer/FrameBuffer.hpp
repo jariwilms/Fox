@@ -30,13 +30,13 @@ namespace hlx::gfx::api
         };
         struct Manifest
         {
-            Manifest(const std::string& identifier, const TextureBlueprint& blueprint, FrameBuffer::Attachment attachment, FrameBuffer::Resample resample)
-                : identifier{ identifier }, blueprint{ blueprint }, attachment{ attachment }, resample{ resample } {}
+            Manifest(const std::string& identifier, FrameBuffer::Attachment attachment, FrameBuffer::Resample resample, const TextureBlueprint& blueprint)
+                : identifier{ identifier }, attachment{ attachment }, resample{ resample }, blueprint{ blueprint } {}
 
             const std::string&      identifier{};
-            const TextureBlueprint& blueprint{};
             FrameBuffer::Attachment attachment{};
             FrameBuffer::Resample   resample{};
+            const TextureBlueprint& blueprint{};
         };
 
         const Vector2u& dimensions() const

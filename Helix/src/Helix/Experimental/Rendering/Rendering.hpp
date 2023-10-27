@@ -12,6 +12,10 @@
 #include "Helix/Experimental/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
 #include "Helix/Experimental/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
 
+#include "Helix/Core/Library/Transform/Transform.hpp"
+#include "Helix/Rendering/Model/Model.hpp"
+#include "Helix/Rendering/Mesh/Mesh.hpp"
+
 namespace hlx::gfx
 {
     using VertexArray            = api::GVertexArray<api::GRAPHICS_API>;
@@ -38,9 +42,4 @@ namespace hlx::gfx
     using Texture2DMultisample   = api::GTexture<api::GRAPHICS_API, api::Dimensions::_2D, api::AntiAliasing::MSAA>;
     using Texture3D              = api::GTexture<api::GRAPHICS_API, api::Dimensions::_3D, api::AntiAliasing::None>;
     using Texture3DMultisample   = api::GTexture<api::GRAPHICS_API, api::Dimensions::_3D, api::AntiAliasing::MSAA>;
-
-    void test()
-    {
-
-    }
 }

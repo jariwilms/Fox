@@ -22,7 +22,7 @@ namespace hlx::gfx::api
             //SRGB    => stored as unsigned integer, sampled as   floating point in range [      0,    UINT_MAX]
             //Note: The Red, Green and Blue components of SRGB formats are nonlinear
 
-            //0x[Size 1]'[Size 2]'[Components]'[Key]
+            //0x[Size 1]'[Size 2]'[Components]'[Primary Key]
 
             R8_UNORM = 		    0x08'00'01'00, 
             RG8_UNORM =         0x08'00'02'01, 

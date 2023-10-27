@@ -447,6 +447,8 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\API.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Using.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">
@@ -513,5 +515,6 @@
     <ClCompile Include="src\stdafx.cpp" />
     <ClCompile Include="src\Helix\Scene\Actor.cpp" />
     <ClCompile Include="src\Helix\Rendering\Blueprint\FrameBufferBlueprint.cpp" />
+    <ClCompile Include="src\Helix\IO\Filesystem\Image.cpp" />
   </ItemGroup>
 </Project>

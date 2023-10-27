@@ -95,6 +95,11 @@ namespace hlx::gfx::api
             gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, m_size });
         }
 
+        GLuint id() const
+        {
+            return m_glId;
+        }
+
     private:
         GLuint m_glId{};
     };

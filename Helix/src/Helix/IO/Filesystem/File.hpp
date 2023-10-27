@@ -5,7 +5,6 @@
 #include "Entry.hpp"
 
 #include "Helix/Core/Library/Utility/Utility.hpp"
-#include "Helix/Core/Library/Utility/Define.hpp"
 
 namespace hlx
 {
@@ -32,11 +31,11 @@ namespace hlx
             m_stream.flush();
         }
 
-        std::shared_ptr<const std::vector<byte>> read(unsigned int count = 0u)
+        std::shared_ptr<const std::vector<byte>> read(u32 limit = 0u)
         {
-            //The vector allocator default-initializes all data when resizing. This is redundant and costly on larger files, so a custom allocator is used
-            auto buffer = std::make_unique<std::vector<byte>>();
-            reinterpret_cast<std::vector<byte, utl::default_init_allocator<byte>>*>(buffer.get())->resize(count ? count : size());
+            //The default vector allocator initializes all data when resizing. This is redundant because we wrap the vector around existing data
+            auto buffer = std::make_shared<std::vector<byte>>();
+            reinterpret_cast<std::vector<byte, utl::default_init_allocator<byte>>*>(buffer.get())->resize(limit ? limit : size());
 
             read_data(reinterpret_cast<char*>(buffer->data()), buffer->size());
             return buffer;

@@ -262,6 +262,7 @@ namespace hlx
         static Image _load_img(const aiScene* aiScene, const std::filesystem::path& baseDirectory, const aiString& aiTexturePath, unsigned int channels)
         {
             const std::string texturePath{ aiTexturePath.C_Str() };
+            const auto& format = static_cast<Image::Layout>(channels);
             if (texturePath.at(0) == '*')
             {
                 const auto& aiTextureIndex = std::stoi(texturePath.substr(1));
@@ -269,12 +270,12 @@ namespace hlx
                 const auto& aiSize = aiTexture->mWidth * std::max(aiTexture->mHeight, 1u);
                 const auto& aiPtr = reinterpret_cast<byte*>(aiTexture->pcData);
 
-                return Image::decode(std::vector<byte>{ aiPtr, aiPtr + aiSize }, channels);
+                return Image::decode(format, std::vector<byte>{ aiPtr, aiPtr + aiSize });
             }
             else
             {
                 auto file = IO::load<File>(baseDirectory / texturePath);
-                return Image::decode(*file->read(), channels);
+                return Image::decode(format, *file->read());
             }
         }
 

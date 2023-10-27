@@ -2,6 +2,7 @@
 
 #include "stdafx.hpp"
 
+#include "Helix/Core/Library/Camera/Camera.hpp"
 #include "Helix/Core/Library/Lighting/Light.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
 
