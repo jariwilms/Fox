@@ -2,11 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-
 namespace hlx
 {
     class Transform

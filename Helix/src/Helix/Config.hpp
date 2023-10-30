@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Helix/Core/RenderAPI.hpp"
-
 namespace hlx
 {
 	class Config
@@ -26,7 +24,7 @@ namespace hlx
 		class Rendering
 		{
 		public:
-			static inline RenderAPI renderAPI{ RenderAPI::OpenGL };
+
 		};
 	};
 }

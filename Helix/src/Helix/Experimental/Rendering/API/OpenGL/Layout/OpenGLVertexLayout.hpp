@@ -8,7 +8,7 @@
 namespace hlx::gfx::api
 {
     template<>
-    struct Attribute<GraphicsAPI::OpenGL>
+    struct GAttribute<GraphicsAPI::OpenGL>
     {
     public:
         size_t stride() const
@@ -23,13 +23,13 @@ namespace hlx::gfx::api
     };
 
     template<typename... T>
-    class VertexLayout<GraphicsAPI::OpenGL, T...>
+    class GVertexLayout<GraphicsAPI::OpenGL, T...>
     {
     public:
-        using Attribute = Attribute<GraphicsAPI::OpenGL>;
+        using Attribute = GAttribute<GraphicsAPI::OpenGL>;
         using span_t = std::span<const Attribute>;
 
-        VertexLayout()
+        GVertexLayout()
         {
             (m_attributes.emplace_back(Attribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
         }

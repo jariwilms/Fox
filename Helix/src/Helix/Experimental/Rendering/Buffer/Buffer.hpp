@@ -28,15 +28,6 @@ namespace hlx::gfx::api
             Write, 
             ReadWrite, 
         };
-        class Mapping2
-        {
-            enum
-            {
-                Read, 
-                Write, 
-                ReadWrite, 
-            };
-        };
 
         size_t size() const
         {

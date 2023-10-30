@@ -7,7 +7,14 @@
 
 namespace hlx::gfx::api
 {
-    template<typename T, u32 COUNT, bool NORM = false> requires std::is_fundamental_v<T> && NonZero<decltype(COUNT), COUNT>
+    template<typename T, u32 COUNT>
+    concept LayoutReq = requires
+    {
+        std::is_fundamental_v<T>;
+        NonZero<decltype(COUNT), COUNT>;
+    };
+
+    template<typename T, u32 COUNT, bool NORM = false> requires LayoutReq<T, COUNT>
     class Layout
     {
     public:
@@ -18,8 +25,8 @@ namespace hlx::gfx::api
     };
 
     template<GraphicsAPI G>
-    struct Attribute;
+    struct GAttribute;
 
     template<GraphicsAPI G, typename... T>
-    class VertexLayout;
+    class GVertexLayout;
 }

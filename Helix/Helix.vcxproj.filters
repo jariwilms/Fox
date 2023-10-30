@@ -168,10 +168,7 @@
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp">
       <Filter>Helix\Core\Library\Time</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Core\RenderAPI.hpp">
-      <Filter>Helix\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Helix\Core\Typedef.hpp">
+    <ClInclude Include="src\Helix\Core\Using\Using.hpp">
       <Filter>Helix\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp">
@@ -448,9 +445,13 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\API.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Using.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Uniform\Uniform.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\RenderState.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\GL.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Using.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\Vulkan\VK.hpp" />
+    <ClInclude Include="src\Helix\Core\Using\GLM.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\API\Vulkan\Vulkan.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

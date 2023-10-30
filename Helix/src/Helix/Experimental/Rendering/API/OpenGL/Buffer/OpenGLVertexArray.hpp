@@ -37,12 +37,12 @@ namespace hlx::gfx::api
         }
 
         template<Buffer::Access ACCESS, typename T, typename... U>
-        void tie(vertex_pointer<ACCESS, T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        void tie(vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
             tie(static_pointer_cast<const vertex_type<T>>(buffer), layout);
         }
         template<Buffer::Access ACCESS, typename T, typename... U>
-        void tie(const_vertex_pointer<ACCESS, T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        void tie(const_vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
             if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 

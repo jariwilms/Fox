@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "GLM.hpp"
 
 using bit        = bool;
 using byte       = unsigned char;
