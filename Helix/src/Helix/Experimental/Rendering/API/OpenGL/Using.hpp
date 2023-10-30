@@ -14,12 +14,17 @@
 
 namespace hlx::gfx::api::gl
 {
+    using Buffer                 = api::Buffer;
+
     using VertexArray            = api::GVertexArray<GraphicsAPI::OpenGL>;
+    template<Buffer::Access ACCESS, typename T>         
+    using VertexBuffer           = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::Vertex, ACCESS, T>;
+    template<Buffer::Access ACCESS>
+    using IndexBuffer            = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::Index, ACCESS, u32>;
     template<typename T>         
-    using VertexBuffer           = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::Vertex, T>;
-    using IndexBuffer            = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::Index, u32>;
-    template<typename T>         
-    using UniformBuffer          = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::Uniform, T>;
+    using UniformBuffer          = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::Uniform, api::Buffer::Access::Static, T>;
+    template<Buffer::Access ACCESS, typename T>
+    using UniformArrayBuffer     = api::GBuffer<GraphicsAPI::OpenGL, api::Buffer::Type::UniformArray, ACCESS, T>;
 
     using FrameBuffer            = api::GFrameBuffer<GraphicsAPI::OpenGL, api::AntiAliasing::None>;
     using FrameBufferMultisample = api::GFrameBuffer<GraphicsAPI::OpenGL, api::AntiAliasing::MSAA>;

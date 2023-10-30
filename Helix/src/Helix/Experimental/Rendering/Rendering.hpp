@@ -2,6 +2,7 @@
 
 #include "stdafx.hpp"
 
+#define HLX_GRAPHICS_API OpenGL
 #include "Helix/Experimental/Rendering/API/API.hpp"
 
 #include "Helix/Experimental/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
@@ -18,24 +19,41 @@
 
 namespace hlx::gfx
 {
+    using Buffer                 = api::Buffer;
+
     using VertexArray            = api::GVertexArray<api::GRAPHICS_API>;
+    template<Buffer::Access ACCESS, typename T>         
+    using VertexBuffer           = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Vertex, ACCESS, T>;
+    template<Buffer::Access ACCESS>
+    using IndexBuffer            = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Index, ACCESS, u32>;
     template<typename T>         
-    using VertexBuffer           = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Vertex, T>;
-    using IndexBuffer            = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Index, u32>;
-    template<typename T>         
-    using UniformBuffer          = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Uniform, T>;
+    using UniformBuffer          = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Uniform, api::Buffer::Access::Static, T>;
+    template<Buffer::Access ACCESS, typename T>
+    using UniformArrayBuffer     = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::UniformArray, ACCESS, T>;
 
     using FrameBuffer            = api::GFrameBuffer<api::GRAPHICS_API, api::AntiAliasing::None>;
     using FrameBufferMultisample = api::GFrameBuffer<api::GRAPHICS_API, api::AntiAliasing::MSAA>;
 
-    template<typename T, u32 C>
-    using Layout                 = api::Layout<T, C>;
+    template<typename T, u32 COUNT>
+    using Layout                 = api::Layout<T, COUNT>;
     template<typename... T>
     using VertexLayout           = api::VertexLayout<api::GRAPHICS_API, T...>;
+
+
+    //template<>
+    //class api::GShader<api::GraphicsAPI::OpenGL>;
 
     using Pipeline               = api::GPipeline<api::GRAPHICS_API>;
     using Shader                 = api::GShader<api::GRAPHICS_API>;
                                  
+
+
+
+
+
+
+
+
     using Texture                = api::Texture;
     using Texture1D              = api::GTexture<api::GRAPHICS_API, api::Dimensions::_1D, api::AntiAliasing::None>;
     using Texture2D              = api::GTexture<api::GRAPHICS_API, api::Dimensions::_2D, api::AntiAliasing::None>;

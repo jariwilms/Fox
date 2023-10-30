@@ -2,6 +2,10 @@
 
 #include "stdafx.hpp"
 
+#ifndef HLX_GRAPHICS_API
+#define HLX_GRAPHICS_API OpenGL
+#endif
+
 namespace hlx::gfx::api
 {
     enum class GraphicsAPI
@@ -29,5 +33,5 @@ namespace hlx::gfx::api
     template<> struct DimensionToVector<Dimensions::_2D> { using type = Vector2u; };
     template<> struct DimensionToVector<Dimensions::_3D> { using type = Vector3u; };
 
-    constexpr auto GRAPHICS_API = GraphicsAPI::OpenGL;
+    constexpr auto GRAPHICS_API = GraphicsAPI::HLX_GRAPHICS_API;
 }

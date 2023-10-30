@@ -101,7 +101,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Template\Concept.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Template\Concepts.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Utility.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp" />
@@ -127,10 +127,12 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Renderer.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\RenderState.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Uniform\Uniform.hpp" />
     <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />

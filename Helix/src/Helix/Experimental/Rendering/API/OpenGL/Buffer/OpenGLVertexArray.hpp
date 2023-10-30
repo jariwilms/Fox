@@ -11,14 +11,16 @@ namespace hlx::gfx::api
     class GVertexArray<GraphicsAPI::OpenGL> final : public VertexArray
     {
     public:
-        template<typename T>
-        using vertex_type          = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Vertex, T>;
-        using index_type           = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Index, u32>;
-        template<typename T>
-        using vertex_pointer       = std::shared_ptr<vertex_type<T>>;
-        template<typename T>
-        using const_vertex_pointer = std::shared_ptr<const vertex_type<T>>;
-        using const_index_pointer  = std::shared_ptr<const index_type>;
+        template<Buffer::Access ACCESS, typename T>
+        using vertex_type          = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Vertex, ACCESS, T>;
+        template<Buffer::Access ACCESS>
+        using index_type           = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, u32>;
+        template<Buffer::Access ACCESS, typename T>
+        using vertex_pointer       = std::shared_ptr<vertex_type<ACCESS, T>>;
+        template<Buffer::Access ACCESS, typename T>
+        using const_vertex_pointer = std::shared_ptr<const vertex_type<ACCESS, T>>;
+        template<Buffer::Access ACCESS>
+        using const_index_pointer  = std::shared_ptr<const index_type<ACCESS>>;
 
         GVertexArray()
         {
@@ -34,13 +36,13 @@ namespace hlx::gfx::api
             gl::bind_vertex_array(m_glId);
         }
 
-        template<typename T, typename... U>
-        void tie(vertex_pointer<T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        template<Buffer::Access ACCESS, typename T, typename... U>
+        void tie(vertex_pointer<ACCESS, T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
             tie(static_pointer_cast<const vertex_type<T>>(buffer), layout);
         }
-        template<typename T, typename... U>
-        void tie(const_vertex_pointer<T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        template<Buffer::Access ACCESS, typename T, typename... U>
+        void tie(const_vertex_pointer<ACCESS, T> buffer, VertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
             if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 
@@ -61,9 +63,10 @@ namespace hlx::gfx::api
 
             ++m_glArrayBindingIndex;
         }
-        void tie(const_index_pointer buffer)
+        template<Buffer::Access ACCESS>
+        void tie(const_index_pointer<ACCESS> buffer)
         {
-            m_indexBuffer = buffer;
+            //m_indexBuffer = buffer;
         }
 
         unsigned int primitive_count() const
@@ -81,7 +84,7 @@ namespace hlx::gfx::api
         GLuint m_glArrayAttributeIndex{};
         GLuint m_glArrayBindingIndex{};
 
-        const_index_pointer m_indexBuffer{};
+        //const_index_pointer m_indexBuffer{};
         u32 m_primitiveCount{};
     };
 }

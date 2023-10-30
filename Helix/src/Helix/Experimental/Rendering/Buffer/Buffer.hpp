@@ -9,11 +9,6 @@ namespace hlx::gfx::api
     class Buffer
     {
     public:
-        enum class Usage
-        {
-            Static,
-            Dynamic,
-        };
         enum class Type
         {
             Vertex,
@@ -22,9 +17,26 @@ namespace hlx::gfx::api
             Uniform,
             UniformArray, 
         };
-
-        Buffer(size_t size)
-            : m_size{ size } {}
+        enum class Access
+        {
+            Static,
+            Dynamic,
+        };
+        enum class Mapping
+        {
+            Read, 
+            Write, 
+            ReadWrite, 
+        };
+        class Mapping2
+        {
+            enum
+            {
+                Read, 
+                Write, 
+                ReadWrite, 
+            };
+        };
 
         size_t size() const
         {
@@ -32,9 +44,12 @@ namespace hlx::gfx::api
         }
 
     protected:
+        Buffer(size_t size)
+            : m_size{ size } {}
+
         size_t m_size{};
     };
 
-    template<GraphicsAPI, Buffer::Type, typename>
+    template<GraphicsAPI, Buffer::Type, Buffer::Access, typename>
     class GBuffer;
 }

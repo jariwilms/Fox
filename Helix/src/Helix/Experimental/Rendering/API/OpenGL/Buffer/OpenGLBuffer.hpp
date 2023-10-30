@@ -8,53 +8,73 @@
 
 namespace hlx::gfx::api
 {
-    template<Buffer::Type S, typename T>
-    class GBuffer<GraphicsAPI::OpenGL, S, T> final : public Buffer
+    template<Buffer::Type TYPE, Buffer::Access ACCESS, typename T>
+    class GBuffer<GraphicsAPI::OpenGL, TYPE, ACCESS, T> final : public Buffer
     {
     public:
-        GBuffer(std::span<const T> data)
-            : Buffer{ data.size_bytes() }
-        {
-            m_glId = gl::create_buffer();
-
-            const auto& flags = gl::buffer_usage(Buffer::Usage::Dynamic);
-            gl::buffer_storage(m_glId, flags, data);
-        }
-        GBuffer(u32 count)
+        GBuffer(u32 count) requires (ACCESS == Buffer::Access::Dynamic)
             : Buffer{ count * sizeof(T) }
         {
             m_glId = gl::create_buffer();
 
-            const auto& flags = gl::buffer_usage(Buffer::Usage::Dynamic);
-            gl::buffer_storage(m_glId, flags, m_size);
+            const auto& glAccess = gl::buffer_access(ACCESS);
+            gl::buffer_storage(m_glId, glAccess, m_size);
+        }
+        GBuffer(std::span<const T> data)
+        {
+            m_glId = gl::create_buffer();
+
+            const auto& glAccess = gl::buffer_access(ACCESS);
+            gl::buffer_storage(m_glId, glAccess, data);
+        }
+        ~GBuffer()
+        {
+            gl::delete_buffer(m_glId);
         }
 
         void bind()
         {
-            gl::bind_buffer(m_glId, gl::buffer_target(S));
+            if constexpr (TYPE == Buffer::Type::Vertex)       gl::bind_buffer(m_glId, GL_ARRAY_BUFFER);
+            if constexpr (TYPE == Buffer::Type::Index)        gl::bind_buffer(m_glId, GL_ELEMENT_ARRAY_BUFFER);
+            if constexpr (TYPE == Buffer::Type::UniformArray) gl::bind_buffer(m_glId, GL_UNIFORM_BUFFER);
+        }
+        void bind_range(u32 binding, u32 count, u32 offset) requires (TYPE == Buffer::Type::UniformArray)
+        {
+            gl::bind_buffer_range(m_glId, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
         }
 
-        void copy(std::span<const T> data)
+        void copy(std::span<const T> data)                   requires (ACCESS == Buffer::Access::Dynamic)
         {
-            if (data.size_bytes() != m_size) throw std::runtime_error{ "Data size does not equal buffer size!" };
-
-            copy_range(0, data);
+            gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
         }
-        void copy_range(u32 offset, std::span<const T> data)
+        void copy_range(u32 offset, std::span<const T> data) requires (ACCESS == Buffer::Access::Dynamic)
         {
-            if ((data.size_bytes() + (offset * sizeof(T))) > m_size) throw std::runtime_error{ "Data size exceeds buffer size!" };
-
             gl::buffer_sub_data(m_glId, offset * sizeof(T), data);
         }
 
-        std::span<T> map(u32 count)
+        template<Buffer::Mapping MAP>
+        auto map()
         {
-            //if (count * sizeof(T) > m_size) ...
-            //if (!mapped) ...
+            using data_t = std::conditional_t<MAP == Buffer::Mapping::Read, const T, T>;
+
+            const auto& glMap = gl::buffer_map(MAP);
+            auto* data = gl::map_buffer(m_glId, glMap);
+
+            return std::span<data_t>{ data, m_size / sizeof(T) };
         }
-        void unmap()
+        template<Buffer::Mapping MAP>
+        auto map_range(u32 count, u32 offset)
         {
-            //glunmap...
+            using data_t = std::conditional_t<MAP == Buffer::Mapping::Read, const T, T>;
+
+            const auto& glMap = gl::buffer_map(MAP);
+            auto* data = gl::map_buffer_range(m_glId, glMap, count * sizeof(T), offset * sizeof(T));
+
+            return std::span<data_t>{ data, m_size / sizeof(T) };
+        }
+        bool unmap()
+        {
+            if (!gl::unmap_buffer(m_glId)) throw std::runtime_error{ "Buffer data store may be undefined!" };
         }
 
         GLuint id() const
@@ -65,34 +85,30 @@ namespace hlx::gfx::api
     private:
         GLuint m_glId{};
     };
-
     template<typename T>
-    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, T> final : public Buffer
+    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Dynamic, T> final : public Buffer
     {
     public:
-        GBuffer()
-            : Buffer{ sizeof(T) }
-        {
-            m_glId = gl::create_buffer();
-
-            gl::buffer_storage(m_glId, Buffer::Usage::Dynamic, m_size);
-        }
         GBuffer(const T& data)
-            : Buffer{ sizeof(T) }
         {
             m_glId = gl::create_buffer();
 
-            gl::buffer_storage(m_glId, Buffer::Usage::Dynamic, std::span<const T>{ &data, m_size });
+            const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
+            gl::buffer_storage(m_glId, glAccess, std::span<const T>{ &data, 1u });
+        }
+        ~GBuffer()
+        {
+            gl::delete_buffer(m_glId);
         }
 
-        void bind()
+        void bind(u32 binding)
         {
-            gl::bind_buffer(m_glId, Buffer::Type::Uniform);
+            gl::bind_buffer_base(m_glId, GL_UNIFORM_BUFFER, binding);
         }
 
         void copy(const T& data)
         {
-            gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, m_size });
+            gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
         }
 
         GLuint id() const
@@ -103,4 +119,6 @@ namespace hlx::gfx::api
     private:
         GLuint m_glId{};
     };
+    template<typename T>
+    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Static, T>;
 }

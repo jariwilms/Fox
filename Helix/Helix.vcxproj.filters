@@ -438,7 +438,7 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Template\Concept.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Template\Concepts.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Shader.hpp" />
@@ -449,6 +449,8 @@
     <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Using.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\Uniform\Uniform.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Rendering\RenderState.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

@@ -162,16 +162,6 @@ namespace hlx::gfx::api::gl
         }
     }
 
-    constexpr GLbitfield  buffer_usage(Buffer::Usage usage)
-    {
-        switch (usage)
-        {
-            case Buffer::Usage::Static:  return {};
-            case Buffer::Usage::Dynamic: return GL_DYNAMIC_STORAGE_BIT;
-
-            default: throw std::invalid_argument{ "Invalid usage!" };
-        }
-    }
     constexpr GLenum      buffer_target(Buffer::Type type)
     {
         switch (type)
@@ -181,6 +171,27 @@ namespace hlx::gfx::api::gl
             case Buffer::Type::Uniform: return GL_UNIFORM_BUFFER;
 
             default: throw std::invalid_argument{ "Invalid type!" };
+        }
+    }
+    constexpr GLbitfield  buffer_access(Buffer::Access access)
+    {
+        switch (access)
+        {
+            case Buffer::Access::Static:  return {};
+            case Buffer::Access::Dynamic: return GL_DYNAMIC_STORAGE_BIT;
+
+            default: throw std::invalid_argument{ "Invalid access!" };
+        }
+    }
+    constexpr GLenum      buffer_map(Buffer::Mapping mapping)
+    {
+        switch (mapping)
+        {
+            case Buffer::Mapping::Read:      return GL_READ_ONLY;
+            case Buffer::Mapping::Write:     return GL_WRITE_ONLY;
+            case Buffer::Mapping::ReadWrite: return GL_READ_WRITE;
+
+            default: throw std::invalid_argument{ "Invalid Map!" };
         }
     }
 
@@ -274,34 +285,55 @@ namespace hlx::gfx::api::gl
 
 
 
-    GLuint create_buffer()
+    GLuint    create_buffer()
     {
         GLuint buffer{};
         glCreateBuffers(1, &buffer);
 
         return buffer;
     }
-    void   delete_buffer(GLuint buffer)
+    void      delete_buffer(GLuint buffer)
     {
         glDeleteBuffers(1, &buffer);
     }
-    void   bind_buffer(GLuint buffer, GLenum target)
+    void      bind_buffer(GLuint buffer, GLenum target)
     {
         glBindBuffer(target, buffer);
     }
-    template<typename T>
-    void   buffer_storage(GLuint buffer, GLbitfield flags, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void      bind_buffer_base(GLuint buffer, GLenum target, GLuint index)
     {
-        glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
+        glBindBufferBase(target, index, buffer);
     }
-    void   buffer_storage(GLuint buffer, GLbitfield flags, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void      bind_buffer_range(GLuint buffer, GLenum target, GLuint index, GLsizeiptr size, GLintptr offset)
+    {
+        glBindBufferRange(target, index, buffer, offset, size);
+    }
+    void      buffer_storage(GLuint buffer, GLbitfield flags, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
     {
         glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(size), nullptr, flags);
     }
     template<typename T>
-    void   buffer_sub_data(GLuint buffer, size_t offset, std::span<const T> data)
+    void      buffer_storage(GLuint buffer, GLbitfield flags, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    {
+        glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
+    }
+    template<typename T>
+    void      buffer_sub_data(GLuint buffer, size_t offset, std::span<const T> data)
     {
         glNamedBufferSubData(buffer, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
+    }
+    template<typename T>
+    void*     map_buffer(GLuint buffer, GLenum access)
+    {
+        return glMapNamedBuffer(buffer, access);
+    }
+    void*     map_buffer_range(GLuint buffer, GLenum access, GLsizeiptr size, GLintptr offset)
+    {
+        return glMapNamedBufferRange(buffer, offset, size, access);
+    }
+    GLboolean unmap_buffer(GLuint buffer)
+    {
+        return glUnmapNamedBuffer(buffer);
     }
 
 

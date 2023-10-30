@@ -15,7 +15,7 @@
               "state": {
                 "file": "Rendering/Texture.md",
                 "mode": "source",
-                "source": false
+                "source": true
               }
             }
           }
@@ -137,12 +137,12 @@
               }
             }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -154,10 +154,10 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "3da657eb0328daf5",
+  "active": "2da74a34e5c62d4a",
   "lastOpenFiles": [
     "IO/IO.md",
-    "Vulkan.md",
-    "Rendering/Texture.md"
+    "Rendering/Texture.md",
+    "Vulkan.md"
   ]
 }

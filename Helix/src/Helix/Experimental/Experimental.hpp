@@ -7,7 +7,7 @@
 
 void experimental()
 {
-    using namespace hlx::gfx;
+    using namespace hlx;
 
 
 }
