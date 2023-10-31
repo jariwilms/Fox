@@ -2,20 +2,16 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Experimental/Rendering/API/API.hpp"
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
 
-#include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Experimental/Rendering/Buffer/VertexArray.hpp"
-#include "Helix/Experimental/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Experimental/Rendering/Layout/VertexLayout.hpp"
-#include "Helix/Experimental/Rendering/Shader/Pipeline.hpp"
-#include "Helix/Experimental/Rendering/Shader/Shader.hpp"
-#include "Helix/Experimental/Rendering/Texture/Texture.hpp"
-#include "Helix/Experimental/Rendering/Uniform/Uniform.hpp"
-
-#include "Helix/Core/Library/Transform/Transform.hpp"
-#include "Helix/Rendering/Model/Model.hpp"
-#include "Helix/Rendering/Mesh/Mesh.hpp"
+#include "Helix/Rendering/Buffer/Buffer.hpp"
+#include "Helix/Rendering/Buffer/VertexArray.hpp"
+#include "Helix/Rendering/Buffer/FrameBuffer.hpp"
+#include "Helix/Rendering/Layout/VertexLayout.hpp"
+#include "Helix/Rendering/Shader/Pipeline.hpp"
+#include "Helix/Rendering/Shader/Shader.hpp"
+#include "Helix/Rendering/Texture/Texture.hpp"
+#include "Helix/Rendering/Uniform/Uniform.hpp"
 
 namespace hlx::gfx
 {

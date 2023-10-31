@@ -2,8 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Texture/Texture2D.hpp"
-#include "Helix/Rendering/Shader/Pipeline.hpp"
+#include "Helix/Rendering/Rendering.hpp"
 
 namespace hlx
 {
@@ -19,9 +18,9 @@ namespace hlx
         float roughness{};
         float metallic{};
 
-        std::shared_ptr<const Texture2D> albedoMap{};
-        std::shared_ptr<const Texture2D> normalMap{};
-        std::shared_ptr<const Texture2D> armMap{};
-        std::shared_ptr<const Texture2D> emissionMap{};
+        std::shared_ptr<const gfx::Texture2D> albedoMap{};
+        std::shared_ptr<const gfx::Texture2D> normalMap{};
+        std::shared_ptr<const gfx::Texture2D> armMap{};
+        std::shared_ptr<const gfx::Texture2D> emissionMap{};
     };
 }

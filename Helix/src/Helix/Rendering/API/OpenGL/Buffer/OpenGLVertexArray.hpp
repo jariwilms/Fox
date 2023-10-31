@@ -1,87 +1,90 @@
 #pragma once
 
-#include "stdafx.hpp"
-
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
+#include "Helix/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
 #include "Helix/Rendering/Buffer/VertexArray.hpp"
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLVertexBuffer.hpp"
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLIndexBuffer.hpp"
 
-namespace hlx
+namespace hlx::gfx::api
 {
-    class OpenGLVertexArray : public VertexArray
+    template<>
+    class GVertexArray<GraphicsAPI::OpenGL> final : public VertexArray
     {
     public:
-        OpenGLVertexArray()
+        template<Buffer::Access ACCESS, typename T>
+        using vertex_type          = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Vertex, ACCESS, T>;
+        template<Buffer::Access ACCESS>
+        using index_type           = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, u32>;
+        template<Buffer::Access ACCESS, typename T>
+        using vertex_pointer       = std::shared_ptr<vertex_type<ACCESS, T>>;
+        template<Buffer::Access ACCESS, typename T>
+        using const_vertex_pointer = std::shared_ptr<const vertex_type<ACCESS, T>>;
+        template<Buffer::Access ACCESS>
+        using const_index_pointer  = std::shared_ptr<const index_type<ACCESS>>;
+
+        GVertexArray()
         {
-            m_id = OpenGL::create_vertex_array();
+            //m_glId = gl::create_vertex_array();
         }
-        ~OpenGLVertexArray()
+        ~GVertexArray()
         {
-            OpenGL::delete_vertex_array(m_id);
+            gl::delete_vertex_array(m_glId);
         }
 
-        void bind()     const override
+        void bind()
         {
-            OpenGL::bind_vertex_array(m_id);
+            gl::bind_vertex_array(m_glId);
         }
 
-        void tie(const std::shared_ptr<VertexBuffer> vertexBuffer, const std::shared_ptr<VertexLayout> vertexLayout) override
+        template<Buffer::Access ACCESS, typename T, typename... U>
+        void tie(vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
-            if (m_bindingIndex == 16) throw std::runtime_error{ "BindingIndex may not exceed 16!" };
+            tie(static_pointer_cast<const vertex_type<T>>(buffer), layout);
+        }
+        template<Buffer::Access ACCESS, typename T, typename... U>
+        void tie(const_vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        {
+            if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 
-            const auto& glBuffer = std::static_pointer_cast<OpenGLVertexBuffer>(vertexBuffer);
-            OpenGL::vertex_array_vertex_buffer(m_id, glBuffer->id(), m_bindingIndex, static_cast<GLsizei>(vertexLayout->stride()));
-            
-            GLint offset{};
-            for (const auto& attribute : vertexLayout->attributes())
+            gl::vertex_array_vertex_buffer(m_glId, buffer->id(), m_glArrayBindingIndex, static_cast<GLsizei>(layout.stride()));
+
+            GLuint offset{};
+            for (const auto& attribute : layout.attributes())
             {
-                const auto internalType = OpenGL::type_enum(attribute.hash());
-                const auto typeSize = OpenGL::type_size(attribute.hash());
+                gl::enable_vertex_array_attribute(m_glId, m_glArrayAttributeIndex);
+                gl::vertex_array_attribute_format(m_glId, m_glArrayAttributeIndex, offset, attribute.glType, static_cast<GLint>(attribute.stride()), attribute.isNormalized);
+                gl::vertex_array_attribute_binding(m_glId, m_glArrayAttributeIndex, m_glArrayBindingIndex);
 
-                OpenGL::enable_vertex_array_attribute(m_id, m_attributeIndex);
-                OpenGL::vertex_array_attribute_format(m_id, m_attributeIndex, attribute.count(), internalType, offset, attribute.normalized());
-                OpenGL::vertex_array_attribute_binding(m_id, m_attributeIndex, m_bindingIndex);
+                offset += static_cast<GLuint>(attribute.stride());
+                m_primitiveCount += static_cast<u32>(buffer->size() / attribute.stride());
 
-                offset += static_cast<GLint>(attribute.count() * typeSize);
-
-                m_primitiveCount += static_cast<unsigned int>(vertexBuffer->size() / (static_cast<size_t>(attribute.count()) * typeSize));
-                ++m_attributeIndex;
+                ++m_glArrayAttributeIndex;
             }
 
-            ++m_bindingIndex;
+            ++m_glArrayBindingIndex;
         }
-        void tie(const std::shared_ptr<IndexBuffer>  indexBuffer)                                                    override
+        template<Buffer::Access ACCESS>
+        void tie(const_index_pointer<ACCESS> buffer)
         {
-            m_indexBuffer = std::static_pointer_cast<OpenGLIndexBuffer>(indexBuffer);
-            OpenGL::vertex_array_element_buffer(m_id, m_indexBuffer->id());
+            //m_indexBuffer = buffer;
         }
 
-        unsigned int primitive_count() const override
+        unsigned int primitive_count() const
         {
             return m_primitiveCount;
-        }
-        bool indexed() const override
-        {
-            return m_indexBuffer != nullptr;
-        }
-
-        const std::shared_ptr<const IndexBuffer> index_buffer() const override
-        {
-            return m_indexBuffer;
         }
 
         GLuint id() const
         {
-            return m_id;
+            return m_glId;
         }
 
     private:
-        GLuint       m_id{};
-        GLuint       m_attributeIndex{};
-        unsigned int m_bindingIndex{};
-        unsigned int m_primitiveCount{};
+        GLuint m_glId{};
+        GLuint m_glArrayAttributeIndex{};
+        GLuint m_glArrayBindingIndex{};
 
-        std::shared_ptr<const OpenGLIndexBuffer> m_indexBuffer{};
+        //const_index_pointer m_indexBuffer{};
+        u32 m_primitiveCount{};
     };
 }

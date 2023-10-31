@@ -2,14 +2,34 @@
 
 #include "stdafx.hpp"
 
-namespace hlx
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
+
+namespace hlx::gfx::api
 {
     class Buffer
     {
     public:
-        virtual ~Buffer() = default;
+        enum class Type
+        {
+            Vertex,
+            Index,
 
-        size_t size()  const
+            Uniform,
+            UniformArray, 
+        };
+        enum class Access
+        {
+            Static,
+            Dynamic,
+        };
+        enum class Mapping
+        {
+            Read, 
+            Write, 
+            ReadWrite, 
+        };
+
+        size_t size() const
         {
             return m_size;
         }
@@ -20,4 +40,7 @@ namespace hlx
 
         size_t m_size{};
     };
+
+    template<GraphicsAPI, Buffer::Type, Buffer::Access, typename>
+    class GBuffer;
 }

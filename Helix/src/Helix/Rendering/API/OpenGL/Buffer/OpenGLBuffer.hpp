@@ -2,9 +2,8 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Experimental/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Experimental/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Experimental/Rendering/Buffer/VertexArray.hpp"
+#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/Buffer/Buffer.hpp"
 
 namespace hlx::gfx::api
 {

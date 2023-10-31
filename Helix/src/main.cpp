@@ -1,7 +1,6 @@
 #include "stdafx.hpp"
 
 #include "Helix/Application.hpp"
-
 #include "Helix/Experimental/Experimental.hpp"
 
 using namespace hlx;

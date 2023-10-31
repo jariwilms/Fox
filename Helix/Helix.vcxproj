@@ -59,8 +59,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -78,9 +78,9 @@
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
-      <WarningLevel>EnableAllWarnings</WarningLevel>
-      <DisableSpecificWarnings>4250;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -90,7 +90,6 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,118 +99,72 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
+    <ClInclude Include="src\Helix\Application.hpp" />
+    <ClInclude Include="src\Helix\Config.hpp" />
+    <ClInclude Include="src\Helix\Core\Include\GLM.hpp" />
+    <ClInclude Include="src\Helix\Core\Include\STB.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Camera\Camera.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Container\CyclicBuffer.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Lighting\Light.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Template\Concepts.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Transform\Transform.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Utility.hpp" />
     <ClInclude Include="src\Helix\Core\Using\GLM.hpp" />
     <ClInclude Include="src\Helix\Core\Using\STB.hpp" />
+    <ClInclude Include="src\Helix\Core\Using.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp" />
-    <ClInclude Include="src\Helix\ECS\Components\LightComponent.hpp" />
-    <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
-    <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\API.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\Vulkan\VK.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\Vulkan\Vulkan.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Blueprint\TextureBlueprint.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Layout\VertexLayout.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Rendering.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Experimental.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\OpenGL.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Renderer.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\RenderState.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Pipeline.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Shader\Shader.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\API\OpenGL\GL.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Using.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Texture\Texture.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Helix\Experimental\Rendering\Uniform\Uniform.hpp" />
-    <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\RenderStateAPI.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
-    <ClInclude Include="src\Helix\Rendering\RenderSettings.hpp" />
-    <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
-    <ClInclude Include="src\Helix\Scene\Actor.hpp" />
-    <ClInclude Include="src\Helix\Application.hpp" />
-    <ClInclude Include="src\Helix\Config.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Camera\Camera.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Container\CyclicBuffer.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
-    <ClInclude Include="src\Helix\Core\Using\Using.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Components.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Lighting\Light.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\LightComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\MeshRendererComponent.hpp" />
-    <ClInclude Include="src\Helix\Core\Library\Transform\Transform.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\RelationshipComponent.hpp" />
+    <ClInclude Include="src\Helix\ECS\Components\TransformComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Entity\Entity.hpp" />
     <ClInclude Include="src\Helix\ECS\Registry.hpp" />
     <ClInclude Include="src\Helix\ECS\System\RenderSystem.hpp" />
     <ClInclude Include="src\Helix\ECS\System\System.hpp" />
+    <ClInclude Include="src\Helix\Experimental\Experimental.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
-    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
     <ClInclude Include="src\Helix\IO\IO.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp" />
+    <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
     <ClInclude Include="src\Helix\Input\Code\ButtonCode.hpp" />
     <ClInclude Include="src\Helix\Input\Code\KeyCode.hpp" />
     <ClInclude Include="src\Helix\Input\Code\ModifierCode.hpp" />
     <ClInclude Include="src\Helix\Input\Handler\InputHandlerAPI.hpp" />
     <ClInclude Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.hpp" />
     <ClInclude Include="src\Helix\Input\Input.hpp" />
+    <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLIndexBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBufferMultisample.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLUniformArrayBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLUniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLCubemapTexture.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2DMultisample.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\RenderContextAPI.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\RendererAPI.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Blueprint\FrameBufferBlueprint.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Blueprint\RenderBufferBlueprint.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Vulkan\VK.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Vulkan\Vulkan.hpp" />
     <ClInclude Include="src\Helix\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\FrameBufferMultisample.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\IndexBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\RenderBufferMultisample.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\UniformArrayBuffer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\UniformBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Buffer\VertexBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Context\RenderContext.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Layout\VertexAttribute.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
     <ClInclude Include="src\Helix\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp" />
@@ -220,14 +173,15 @@
     <ClInclude Include="src\Helix\Rendering\PostProcessing\PostProcessing.hpp" />
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Shader\Uniform\Uniform.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Texture\CubemapTexture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Texture\Texture2D.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Texture\Texture2DMultisample.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Uniform\Uniform.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Using.hpp" />
+    <ClInclude Include="src\Helix\Scene\Actor.hpp" />
     <ClInclude Include="src\Helix\Scene\Scene.hpp" />
     <ClInclude Include="src\Helix\Test\Test.hpp" />
     <ClInclude Include="src\Helix\Window\API\GLFW\GLFWWindow.hpp" />
@@ -236,26 +190,12 @@
     <ClInclude Include="src\stdafx.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Helix\IO\Filesystem\Image.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Blueprint\FrameBufferBlueprint.cpp" />
-    <ClCompile Include="src\Helix\Scene\Actor.cpp" />
     <ClCompile Include="src\Helix\Application.cpp" />
+    <ClCompile Include="src\Helix\IO\Filesystem\Image.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Helix\Input\Input.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBufferMultisample.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBuffer.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLRenderBufferMultisample.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Context\OpenGLRenderContext.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLCubemapTexture.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2D.cpp" />
-    <ClCompile Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture2DMultisample.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Blueprint\RenderBufferBlueprint.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Blueprint\TextureBlueprint.cpp" />
     <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
+    <ClCompile Include="src\Helix\Scene\Actor.cpp" />
     <ClCompile Include="src\Helix\Scene\Scene.cpp" />
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp" />
     <ClCompile Include="src\Helix\Window\WindowManager.cpp" />

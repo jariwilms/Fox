@@ -2,35 +2,31 @@
 
 #include "stdafx.hpp"
 
-#include "VertexAttribute.hpp"
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
+#include "Helix/Core/Library/Template/Concepts.hpp"
 
-namespace hlx
+namespace hlx::gfx::api
 {
-	class VertexLayout
-	{
-	public:
-		VertexLayout() = default;
+    template<typename T, u32 COUNT>
+    concept LayoutReq = requires
+    {
+        std::is_fundamental_v<T>;
+        NonZero<decltype(COUNT), COUNT>;
+    };
 
-		template<typename T>
-		void specify(unsigned int count)
-		{
-			const auto& tHash = typeid(T).hash_code();
+    template<typename T, u32 COUNT, bool NORM = false> requires LayoutReq<T, COUNT>
+    class Layout
+    {
+    public:
+        using type = T;
 
-			m_attributes.emplace_back(count, tHash);
-			m_stride += count * sizeof(T);
-		}
+        static inline const u32  count        = COUNT;
+        static inline const bool isNormalized = NORM;
+    };
 
-		std::span<const VertexAttribute> attributes() const
-		{
-			return m_attributes;
-		}
-		size_t stride() const
-		{
-			return m_stride;
-		}
+    template<GraphicsAPI G>
+    struct GAttribute;
 
-	private:
-		std::vector<VertexAttribute> m_attributes{};
-		size_t m_stride{};
-	};
+    template<GraphicsAPI G, typename... T>
+    class GVertexLayout;
 }

@@ -1,9 +1,11 @@
-#pragma once
+#include "Helix/Rendering/Using.hpp"
 
-#include "Helix/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/Buffer/IndexBuffer.hpp"
-#include "Helix/Rendering/Buffer/RenderBuffer.hpp"
-#include "Helix/Rendering/Buffer/UniformBuffer.hpp"
-#include "Helix/Rendering/Buffer/VertexArray.hpp"
-#include "Helix/Rendering/Buffer/VertexBuffer.hpp"
+#if HLX_GRAPHICS_API == OpenGL
+#include "Helix/Rendering/API/OpenGL/GL.hpp"
+#endif
+
+#if HLX_GRAPHICS_API == Vulkan
+#endif
+
+#include "Helix/Rendering/Model/Model.hpp"
+#include "Helix/Rendering/Mesh/Mesh.hpp"

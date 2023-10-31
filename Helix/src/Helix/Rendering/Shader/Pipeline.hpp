@@ -2,22 +2,16 @@
 
 #include "stdafx.hpp"
 
-#include "Shader.hpp"
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
 
-namespace hlx
+namespace hlx::gfx::api
 {
-	class Pipeline
-	{
-	public:
-		virtual ~Pipeline() = default;
-
-		virtual void bind() const = 0;
-
-		virtual void stage(const std::shared_ptr<Shader> shader) = 0;
-		
-		virtual const std::shared_ptr<Shader> shader(Shader::Stage stage) const = 0;
-
-	protected:
+    class Pipeline
+    {
+    protected:
         Pipeline() = default;
-	};
+    };
+
+    template<GraphicsAPI G>
+    class GPipeline;
 }

@@ -2,8 +2,8 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Experimental/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Experimental/Rendering/Texture/Texture.hpp"
+#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/Texture/Texture.hpp"
 
 namespace hlx::gfx::api
 {

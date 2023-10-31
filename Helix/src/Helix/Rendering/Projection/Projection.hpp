@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Using/GLM.hpp"
+#include "Helix/Core/Include/GLM.hpp"
 
 namespace hlx
 {

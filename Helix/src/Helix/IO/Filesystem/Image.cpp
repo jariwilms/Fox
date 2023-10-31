@@ -1,6 +1,6 @@
 #include "stdafx.hpp"
 
-#include "Helix/Core/Using/STB.hpp"
+#include "Helix/Core/Include/STB.hpp"
 
 #include "Image.hpp"
 

@@ -1,34 +1,53 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "OpenGLShader.hpp"
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
 #include "Helix/Rendering/Shader/Pipeline.hpp"
 
-namespace hlx
+namespace hlx::gfx::api
 {
-	class OpenGLPipeline : public Pipeline
-	{
-	public:
-		OpenGLPipeline();
-		OpenGLPipeline(std::initializer_list<const std::shared_ptr<Shader>> shaders);
-		~OpenGLPipeline();
+    template<>
+    class GPipeline<GraphicsAPI::OpenGL> : public Pipeline
+    {
+    public:
+        GPipeline(std::initializer_list<const std::shared_ptr<GShader<GraphicsAPI::OpenGL>>> shaders)
+        {
+            m_glId = gl::create_program_pipeline();
+            
+            std::ranges::for_each(shaders, [this](const std::shared_ptr<GShader<GraphicsAPI::OpenGL>>& shader)
+                {
+                    gl::use_program_stages(m_glId, shader->id(), gl::shader_stage(shader->stage()));
 
-		void bind() const override;
+                    switch (shader->stage())
+                    {
+                        case Shader::Stage::Vertex:                 m_shaders.at(0) = shader; break;
+                        case Shader::Stage::TessellationControl:    m_shaders.at(1) = shader; break;
+                        case Shader::Stage::TessellationEvaluation: m_shaders.at(2) = shader; break;
+                        case Shader::Stage::Geometry:               m_shaders.at(3) = shader; break;
+                        case Shader::Stage::Fragment:               m_shaders.at(4) = shader; break;
 
-		void stage(const std::shared_ptr<Shader> shader) override;
+                        default: throw std::invalid_argument{ "Invalid shader stage!" };
+                    }
+                });
+        }
+        ~GPipeline()
+        {
+            gl::delete_program_pipeline(m_glId);
+        }
 
-		GLuint id() const
-		{
-			return m_id;
-		}
+        void bind()
+        {
+            gl::bind_program_pipeline(m_glId);
+        }
 
-		const std::shared_ptr<Shader> shader(Shader::Stage stage) const override;
+        GLuint id() const
+        {
+            return m_glId;
+        }
 
-	private:
-        GLuint m_id{};
+    private:
+        GLuint m_glId{};
 
-        std::array<std::shared_ptr<OpenGLShader>, 5> m_shaders{};
-	};
+        std::array<std::shared_ptr<GShader<GraphicsAPI::OpenGL>>, 5> m_shaders{};
+    };
 }

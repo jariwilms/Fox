@@ -2,21 +2,14 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/IO/Filesystem/Image.hpp"
-#include "Helix/Rendering/Texture/Texture2D.hpp"
-#include "Helix/Rendering/Texture/Texture2DMultisample.hpp"
+#include "Helix/Rendering/Texture/Texture.hpp"
 
-namespace hlx
+namespace hlx::gfx
 {
-	struct TextureBlueprint
-	{
-	public:
-		std::shared_ptr<Texture2D>            build(const std::shared_ptr<Image> image) const;
-		std::shared_ptr<Texture2D>            build(const Vector2u& dimensions) const;
-		std::shared_ptr<Texture2DMultisample> build_multisample(const Vector2u& dimensions, unsigned int samples) const;
-
-		Texture::Format   format  { Texture::Format::RGBA8_UNORM };
-		Texture::Filter   filter  { Texture::Filter::Point };
-		Texture::Wrapping wrapping{ Texture::Wrapping::Repeat };
-	};
+    struct TextureBlueprint
+    {
+        Texture::Format   format{};
+        Texture::Filter   filter{};
+        Texture::Wrapping wrapping{};
+    };
 }

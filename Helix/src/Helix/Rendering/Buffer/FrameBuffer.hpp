@@ -2,62 +2,55 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Texture/Texture2D.hpp"
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
+#include "Helix/Rendering/Texture/Texture.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
-#include "Helix/Rendering/Blueprint/RenderBufferBlueprint.hpp"
 
-namespace hlx
+namespace hlx::gfx::api
 {
-	class FrameBuffer
-	{
-	public:
+    class FrameBuffer
+    {
+    public:
         enum class Target
         {
-            Default,
-            Read,
-            Write,
+            Read, 
+            Write, 
         };
         enum class Attachment
         {
-            Color,
-            Depth,
-            Stencil,
-            DepthStencil,
+            Color, 
+            Depth, 
+            Stencil, 
+            DepthStencil, 
         };
-
-        struct TextureManifest
+        enum class Resample
         {
-            TextureManifest(const std::string& name, Attachment attachment, TextureBlueprint blueprint)
-                : name{ name }, attachment{ attachment }, blueprint{ blueprint } {}
-
-            std::string      name{};
-            Attachment       attachment{};
-            TextureBlueprint blueprint{};
+            No, 
+            Yes, 
         };
-        struct RenderBufferManifest
+        struct Manifest
         {
-            RenderBufferManifest(const std::string& name, Attachment attachment, RenderBufferBlueprint blueprint)
-                : name{ name }, attachment{ attachment }, blueprint{ blueprint } {}
+            Manifest(const std::string& identifier, FrameBuffer::Attachment attachment, FrameBuffer::Resample resample, const TextureBlueprint& blueprint)
+                : identifier{ identifier }, attachment{ attachment }, resample{ resample }, blueprint{ blueprint } {}
 
-            std::string           name{};
-            Attachment            attachment{};
-            RenderBufferBlueprint blueprint{};
+            const std::string&      identifier{};
+            FrameBuffer::Attachment attachment{};
+            FrameBuffer::Resample   resample{};
+            const TextureBlueprint& blueprint{};
         };
-
-		virtual ~FrameBuffer() = default;
-
-		virtual void bind(Target target) const = 0;
-		virtual void bind_texture(const std::string& identifier, unsigned int slot) const = 0;
 
         const Vector2u& dimensions() const
         {
             return m_dimensions;
         }
 
-	protected:
-		FrameBuffer(const Vector2u& dimensions)
-			: m_dimensions{ dimensions } {}
+    protected:
+        FrameBuffer(const Vector2u& dimensions)
+            : m_dimensions{ dimensions } {}
 
-		Vector2u m_dimensions{};
-	};
-}
+        Vector2u m_dimensions{};
+    };
+
+    template<GraphicsAPI, AntiAliasing>
+    class GFrameBuffer;
+};

@@ -16,18 +16,13 @@ namespace hlx
 {
     Transform transform_product(TransformComponent& tc)
     {
-        auto& owner = tc.owner;
-        auto& rc = Registry::get_component<RelationshipComponent>(owner.id());
+        const auto& owner = tc.owner;
+        const auto& rc    = Registry::get_component<RelationshipComponent>(owner.id());
 
-        if (rc.parent.has_value())
-        {
-            auto& ptc = Registry::get_component<TransformComponent>(rc.parent.value());
-            return transform_product(ptc) * tc;
-        }
-        else
-        {
-            return tc;
-        }
+        if (!rc.parent.has_value()) return tc;
+
+        auto& ptc = Registry::get_component<TransformComponent>(rc.parent.value());
+        return transform_product(ptc) * tc;
     };
     std::shared_ptr<Actor> model_to_scene_graph(Scene* scene, std::shared_ptr<Model> model, std::shared_ptr<Actor> parent, Model::Node* node)
     {
@@ -64,7 +59,7 @@ namespace hlx
         m_window = WindowManager::create("Window", "Helix", Vector2u{ 1280, 720 });
 
         IO::init();
-        Renderer::init();
+        gfx::Renderer::init();
         ModelImporter::init();
     }
     Application::~Application()
@@ -181,13 +176,13 @@ namespace hlx
 
             //The render system starts running here and submits all models/meshes to the renderer
             //So, TODO: RenderSystem::update, which calls the code below
-            Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
-            auto group = Registry::view<TransformComponent, MeshRendererComponent>();
-            group.each([](auto entity, TransformComponent& transform, MeshRendererComponent& meshRenderer)
-                {
-                    Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
-                });
-            Renderer::finish();
+            //Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
+            //auto group = Registry::view<TransformComponent, MeshRendererComponent>();
+            //group.each([](auto entity, TransformComponent& transform, MeshRendererComponent& meshRenderer)
+            //    {
+            //        Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
+            //    });
+            //Renderer::finish();
 
 
 

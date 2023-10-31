@@ -2,33 +2,37 @@
 
 #include "stdafx.hpp"
 
-namespace hlx
+#include "Helix/Rendering/API/GraphicsAPI.hpp"
+
+namespace hlx::gfx::api
 {
-	class Shader
-	{
-	public:
-		enum class Stage
-		{
-			Vertex,
-			TessellationControl, 
-			TessellationEvaluation, 
-			Geometry,
-			Fragment,
+    class Shader
+    {
+    public:
+        enum class Stage
+        {
+            Vertex,
+            TessellationControl,
+            TessellationEvaluation,
+            Geometry,
+            Fragment,
 
-			Compute, 
-		};
+            Compute,
 
-		virtual ~Shader() = default;
+        };
 
-		Stage stage() const
-		{
-			return m_stage;
-		}
+        Stage stage() const
+        {
+            return m_stage;
+        }
 
-	protected:
-		Shader(Stage stage)
-			: m_stage{ stage } {}
+    protected:
+        Shader(Stage stage)
+            : m_stage{ stage } {}
 
-		Stage m_stage{};
-	};
+        Stage m_stage{};
+    };
+
+    template<GraphicsAPI G>
+    class GShader;
 }

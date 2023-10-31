@@ -2,8 +2,8 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Experimental/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Experimental/Rendering/Layout/VertexLayout.hpp"
+#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/Layout/VertexLayout.hpp"
 
 namespace hlx::gfx::api
 {
