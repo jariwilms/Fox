@@ -1,6 +1,8 @@
 #pragma once
 
-#include "GLM.hpp"
+#include <cstdint>
+
+#include <glm/glm.hpp>
 
 using bit        = bool;
 using byte       = unsigned char;
@@ -31,11 +33,11 @@ using Vector1f   = glm::vec1;
 using Vector2f   = glm::vec2;
 using Vector3f   = glm::vec3;
 using Vector4f   = glm::vec4;
-//using Matrix1f   = Vector4f; //cursed?
+//using Matrix1f   = Vector4f; //obv
 using Matrix2f   = glm::mat2;
 using Matrix3f   = glm::mat3;
 using Matrix4f   = glm::mat4;
 using Quaternion = glm::quat;
 
 using t_hash     = size_t;
-using Id         = unsigned int;
+using Id         = u32;

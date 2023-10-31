@@ -2,6 +2,8 @@
 
 #include "stdafx.hpp"
 
+#include "Helix/Core/Using/GLM.hpp"
+
 namespace hlx
 {
     class Projection

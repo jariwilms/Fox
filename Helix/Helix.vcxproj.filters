@@ -452,6 +452,7 @@
     <ClInclude Include="src\Helix\Experimental\Rendering\API\Vulkan\VK.hpp" />
     <ClInclude Include="src\Helix\Core\Using\GLM.hpp" />
     <ClInclude Include="src\Helix\Experimental\Rendering\API\Vulkan\Vulkan.hpp" />
+    <ClInclude Include="src\Helix\Core\Using\STB.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">
