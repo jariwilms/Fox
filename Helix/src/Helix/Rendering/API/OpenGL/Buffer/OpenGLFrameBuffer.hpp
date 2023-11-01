@@ -9,14 +9,14 @@
 
 namespace hlx::gfx::api
 {
-    template<AntiAliasing A>
-    class GFrameBuffer<GraphicsAPI::OpenGL, A> final : public FrameBuffer
+    template<AntiAliasing AA>
+    class GFrameBuffer<GraphicsAPI::OpenGL, AA> final : public FrameBuffer
     {
     public:
-        using texture_t       = GTexture<GraphicsAPI::OpenGL, Dimensions::_2D, A>;
-        using render_buffer_t = GRenderBuffer<A>;
+        using texture_t       = GTexture<GraphicsAPI::OpenGL, Dimensions::_2D, AA>;
+        using render_buffer_t = GRenderBuffer<AA>;
 
-        GFrameBuffer(const Vector2u& dimensions,             std::span<const FrameBuffer::Manifest> manifests) requires (A == AntiAliasing::None)
+        GFrameBuffer(const Vector2u& dimensions,             std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::None)
             : FrameBuffer{ dimensions }
         {
             m_glId = gl::create_frame_buffer();
@@ -74,7 +74,7 @@ namespace hlx::gfx::api
 
             if (gl::check_frame_buffer_status(m_glId) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        GFrameBuffer(const Vector2u& dimensions, u8 samples, std::span<const FrameBuffer::Manifest> manifests) requires (A == AntiAliasing::MSAA)
+        GFrameBuffer(const Vector2u& dimensions, u8 samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)
             : FrameBuffer{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_frame_buffer();

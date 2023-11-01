@@ -11,7 +11,7 @@ namespace hlx::gfx::api
         _3D,
     };
 
-    template<Dimensions D>
+    template<Dimensions>
     struct DimensionsToVector;
     template<> struct DimensionsToVector<Dimensions::_1D> { using type = Vector1u; };
     template<> struct DimensionsToVector<Dimensions::_2D> { using type = Vector2u; };

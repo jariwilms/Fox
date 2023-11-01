@@ -5,7 +5,7 @@
 
 namespace hlx::gfx::api
 {
-    template<Dimensions D>
+    template<Dimensions>
     struct DimensionsToTarget;
     template<> struct DimensionsToTarget<Dimensions::_1D> { static inline GLenum target = GL_TEXTURE_1D; };
     template<> struct DimensionsToTarget<Dimensions::_2D> { static inline GLenum target = GL_TEXTURE_2D; };

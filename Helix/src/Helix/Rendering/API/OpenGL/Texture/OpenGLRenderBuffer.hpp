@@ -5,11 +5,11 @@
 
 namespace hlx::gfx::api
 {
-    template<AntiAliasing A>
+    template<AntiAliasing AA>
     class GRenderBuffer : public Texture
     {
     public:
-        GRenderBuffer(Format format, const Vector2u& dimensions)             requires (A == AntiAliasing::None)
+        GRenderBuffer(Format format, const Vector2u& dimensions)             requires (AA == AntiAliasing::None)
             : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }
         {
             m_glId = gl::create_render_buffer();
@@ -17,7 +17,7 @@ namespace hlx::gfx::api
             const auto& glFormat = gl::render_buffer_format(format);
             gl::render_buffer_storage(m_glId, glFormat, this->m_dimensions);
         }
-        GRenderBuffer(Format format, const Vector2u& dimensions, u8 samples) requires (A == AntiAliasing::MSAA)
+        GRenderBuffer(Format format, const Vector2u& dimensions, u8 samples) requires (AA == AntiAliasing::MSAA)
             : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_render_buffer();

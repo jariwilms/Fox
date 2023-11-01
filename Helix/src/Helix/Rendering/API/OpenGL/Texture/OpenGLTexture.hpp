@@ -8,12 +8,12 @@
 
 namespace hlx::gfx::api
 {
-    template<Dimensions D, AntiAliasing A>
-    class GTexture<GraphicsAPI::OpenGL, D, A> : public Texture
+    template<Dimensions DIMS, AntiAliasing A>
+    class GTexture<GraphicsAPI::OpenGL, DIMS, A> : public Texture
     {
     public:
-        using vector_t = DimensionsToVector<D>::type;
-        struct Internal
+        using vector_t = DimensionsToVector<DIMS>::type;
+        struct InternalView
         {
             const GLuint& glId;
             const GLuint& glFormat;
@@ -25,27 +25,7 @@ namespace hlx::gfx::api
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (A == AntiAliasing::None)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
         {
-            m_glId = gl::create_texture(DimensionsToTarget<D>::target);
-            m_glFormat = gl::texture_format(this->m_format);
-            m_glMinFilter = gl::texture_min_filter(this->m_filter);
-            m_glMagFilter = gl::texture_mag_filter(this->m_filter);
-            m_glWrapping = gl::texture_wrapping(this->m_wrapping);
-
-            gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
-            gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
-
-            gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_S, m_glWrapping);
-            if constexpr (D >= Dimensions::_2D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
-            if constexpr (D >= Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
-
-            if constexpr (D == Dimensions::_1D) gl::texture_storage_1d(m_glId, m_glFormat, this->m_dimensions, 0);
-            if constexpr (D == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, this->m_dimensions, 0);
-            if constexpr (D == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, this->m_dimensions, 0);
-        }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, u8 samples)                 requires (D != Dimensions::_1D && A == AntiAliasing::MSAA)
-            : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
-        {
-            m_glId        = gl::create_texture(DimensionsToTarget<D>::target);
+            m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
             m_glFormat    = gl::texture_format(this->m_format);
             m_glMinFilter = gl::texture_min_filter(this->m_filter);
             m_glMagFilter = gl::texture_mag_filter(this->m_filter);
@@ -54,12 +34,32 @@ namespace hlx::gfx::api
             gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
             gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
 
-                                                gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_S, m_glWrapping);
-                                                gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
-            if constexpr (D == Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
+                                                   gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_S, m_glWrapping);
+            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
+            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
 
-            if constexpr (D == Dimensions::_2D) gl::texture_storage_2d_multisample(m_glId, m_glFormat, this->m_dimensions, m_samples);
-            if constexpr (D == Dimensions::_3D) gl::texture_storage_3d_multisample(m_glId, m_glFormat, this->m_dimensions, m_samples);
+            if constexpr (DIMS == Dimensions::_1D) gl::texture_storage_1d(m_glId, m_glFormat, m_dimensions, 0);
+            if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, m_dimensions, 0);
+            if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, m_dimensions, 0);
+        }
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, u8 samples)                 requires (DIMS != Dimensions::_1D && A == AntiAliasing::MSAA)
+            : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
+        {
+            m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
+            m_glFormat    = gl::texture_format(this->m_format);
+            m_glMinFilter = gl::texture_min_filter(this->m_filter);
+            m_glMagFilter = gl::texture_mag_filter(this->m_filter);
+            m_glWrapping  = gl::texture_wrapping(this->m_wrapping);
+
+            gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
+            gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
+
+                                                   gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_S, m_glWrapping);
+                                                   gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
+            if constexpr (DIMS == Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
+
+            if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
+            if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
         }
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const byte> data) requires (A == AntiAliasing::None)
             : GTexture{ format, filter, wrapping, dimensions }
@@ -83,11 +83,11 @@ namespace hlx::gfx::api
         void copy_range(Texture::Format format, const vector_t& dimensions, const vector_t& offset, std::span<const byte> data)                      requires (A == AntiAliasing::None)
         {
             if (data.empty()) return;
-            if (glm::any(glm::greaterThan(this->m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
+            if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
             
-            if constexpr (D == Dimensions::_1D) gl::texture_sub_image_1d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
-            if constexpr (D == Dimensions::_2D) gl::texture_sub_image_2d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
-            if constexpr (D == Dimensions::_3D) gl::texture_sub_image_3d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (DIMS == Dimensions::_1D) gl::texture_sub_image_1d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (DIMS == Dimensions::_2D) gl::texture_sub_image_2d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (DIMS == Dimensions::_3D) gl::texture_sub_image_3d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
         }
 
         const vector_t& dimensions() const
@@ -99,9 +99,9 @@ namespace hlx::gfx::api
             return m_samples;
         }
 
-        Internal expose_internal() const
+        InternalView expose_internal() const
         {
-            return Internal{ m_glId, m_glFormat, m_glMinFilter, m_glMagFilter, m_glWrapping };
+            return InternalView{ m_glId, m_glFormat, m_glMinFilter, m_glMagFilter, m_glWrapping };
         }
 
     private:
