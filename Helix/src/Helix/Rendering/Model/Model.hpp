@@ -2,11 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Library/Camera/Camera.hpp"
-#include "Helix/Core/Library/Lighting/Light.hpp"
+#include "Helix/Rendering/Material/Material.hpp"
 #include "Helix/Rendering/Mesh/Mesh.hpp"
+#include "Helix/Core/Library/Lighting/Light.hpp"
+#include "Helix/Core/Library/Camera/Camera.hpp"
 
-namespace hlx
+namespace hlx::gfx
 {
     class Model
     {

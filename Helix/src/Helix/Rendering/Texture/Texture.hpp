@@ -3,6 +3,8 @@
 #include "stdafx.hpp"
 
 #include "Helix/Rendering/API/GraphicsAPI.hpp"
+#include "Dimensions.hpp"
+#include "AntiAliasing.hpp"
 
 namespace hlx::gfx::api
 {
@@ -88,38 +90,11 @@ namespace hlx::gfx::api
     protected:
         Texture(Format format, Filter filter, Wrapping wrapping)
             : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping } {}
-        ~Texture() = default;
 
         Format   m_format{};
         Filter   m_filter{};
         Wrapping m_wrapping{};
     };
-
-
-
-
-
-
-    template<Dimensions D>
-    class DTexture : public Texture
-    {
-    public:
-        using Vector = DimensionToVector<D>::type;
-
-        const Vector& dimensions() const
-        {
-            return m_dimensions;
-        }
-
-    protected:
-        DTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const Vector& dimensions)
-            : Texture{ format, filter, wrapping }, m_dimensions{ dimensions } {}
-        ~DTexture<D>() = default;
-
-        Vector m_dimensions{};
-    };
-
-
 
     template<GraphicsAPI, Dimensions, AntiAliasing>
     class GTexture;

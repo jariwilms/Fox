@@ -7,11 +7,14 @@
 
 namespace hlx::gfx::api
 {
+    template<Buffer::Access ACCESS>
+    concept DynamicBuffer = (ACCESS == Buffer::Access::Dynamic);
+
     template<Buffer::Type TYPE, Buffer::Access ACCESS, typename T>
     class GBuffer<GraphicsAPI::OpenGL, TYPE, ACCESS, T> final : public Buffer
     {
     public:
-        GBuffer(u32 count) requires (ACCESS == Buffer::Access::Dynamic)
+        GBuffer(u32 count) requires DynamicBuffer<ACCESS>
             : Buffer{ count * sizeof(T) }
         {
             m_glId = gl::create_buffer();
@@ -20,6 +23,7 @@ namespace hlx::gfx::api
             gl::buffer_storage(m_glId, glAccess, m_size);
         }
         GBuffer(std::span<const T> data)
+            : Buffer{ data.size_bytes() }
         {
             m_glId = gl::create_buffer();
 
@@ -42,11 +46,11 @@ namespace hlx::gfx::api
             gl::bind_buffer_range(m_glId, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
         }
 
-        void copy(std::span<const T> data)                   requires (ACCESS == Buffer::Access::Dynamic)
+        void copy(std::span<const T> data)                   requires DynamicBuffer<ACCESS>
         {
             gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
         }
-        void copy_range(u32 offset, std::span<const T> data) requires (ACCESS == Buffer::Access::Dynamic)
+        void copy_range(u32 offset, std::span<const T> data) requires DynamicBuffer<ACCESS>
         {
             gl::buffer_sub_data(m_glId, offset * sizeof(T), data);
         }

@@ -33,6 +33,6 @@ namespace hlx::gfx::api
         Stage m_stage{};
     };
 
-    template<GraphicsAPI G>
+    template<GraphicsAPI>
     class GShader;
 }

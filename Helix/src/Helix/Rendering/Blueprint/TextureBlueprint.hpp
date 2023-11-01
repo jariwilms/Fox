@@ -4,7 +4,7 @@
 
 #include "Helix/Rendering/Texture/Texture.hpp"
 
-namespace hlx::gfx
+namespace hlx::gfx::api
 {
     struct TextureBlueprint
     {

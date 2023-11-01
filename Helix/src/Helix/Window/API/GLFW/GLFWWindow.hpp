@@ -3,7 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Helix/Window/Window.hpp"
-#include "Helix/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
+//#include "Helix/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
 #include "Helix/Input/Handler/Platform/GLFWInputHandler.hpp"
 #include "Helix/Input/Input.hpp"
 
@@ -16,7 +16,7 @@ namespace hlx
         {
 		public:
 			std::shared_ptr<GLFWWindow>          glfwWindow{};
-			std::shared_ptr<OpenGLRenderContext> renderContext{};              //TODO: abstract away from OpenGL
+			//std::shared_ptr<OpenGLRenderContext> renderContext{};              //TODO: abstract away from OpenGL + unique ptrs
 			std::shared_ptr<GLFWInputHandler>    inputHandler{};
         };
 

@@ -3,7 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Rendering/Layout/VertexLayout.hpp"
+#include "Helix/Rendering/Layout/Layout.hpp"
 
 namespace hlx::gfx::api
 {
@@ -34,16 +34,6 @@ namespace hlx::gfx::api
             (m_attributes.emplace_back(Attribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
         }
 
-        size_t stride()     const
-        {
-            size_t result{};
-            for (const auto& attribute : m_attributes)
-            {
-                result += attribute.stride();
-            }
-
-            return result;
-        }
         span_t attributes() const
         {
             return m_attributes;

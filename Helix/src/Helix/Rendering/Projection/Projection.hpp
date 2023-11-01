@@ -4,7 +4,7 @@
 
 #include "Helix/Core/Include/GLM.hpp"
 
-namespace hlx
+namespace hlx::gfx
 {
     class Projection
     {
@@ -15,18 +15,33 @@ namespace hlx
             Orthographic,
         };
 
+        Projection() = default;
+        Projection(const Matrix4f& matrix)
+            : m_matrix{ matrix } {}
+        
         template<Type T, typename... Args>
-        static Matrix4f create(Args... args) = delete;
+        static Projection create(Args... args) = delete;
+        template<> 
+        static Projection create<Type::Perspective>(f32 fov, f32 aspect, f32 zNear, f32 zFar)
+        {
+            const auto& matrix = glm::perspective(glm::radians(fov), aspect, zNear, zFar);
 
-        template<> 
-        static Matrix4f create<Type::Perspective>(float fov, float aspect, float zNear, float zFar)
-        {
-            return glm::perspective(glm::radians(fov), aspect, zNear, zFar);
+            return Projection{ matrix };
         }
         template<> 
-        static Matrix4f create<Type::Orthographic>(float top, float bottom, float left, float right, float zNear, float zFar)
+        static Projection create<Type::Orthographic>(f32 top, f32 bottom, f32 left, f32 right, f32 zNear, f32 zFar)
         {
-            return glm::ortho(left, right, bottom, top, zNear, zFar);
+            const auto& matrix = glm::ortho(left, right, bottom, top, zNear, zFar);
+
+            return Projection{ matrix };
         }
+
+        const Matrix4f& matrix() const
+        {
+            return m_matrix;
+        }
+
+    private:
+        Matrix4f m_matrix{};
     };
 }

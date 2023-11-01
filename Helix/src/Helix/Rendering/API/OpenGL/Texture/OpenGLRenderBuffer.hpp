@@ -6,11 +6,11 @@
 namespace hlx::gfx::api
 {
     template<AntiAliasing A>
-    class GRenderBuffer : public DTexture<Dimensions::_2D>
+    class GRenderBuffer : public Texture
     {
     public:
         GRenderBuffer(Format format, const Vector2u& dimensions)             requires (A == AntiAliasing::None)
-            : DTexture<Dimensions::_2D>{ format, Texture::Filter::None, Texture::Wrapping::Repeat, dimensions }
+            : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }
         {
             m_glId = gl::create_render_buffer();
 
@@ -18,7 +18,7 @@ namespace hlx::gfx::api
             gl::render_buffer_storage(m_glId, glFormat, this->m_dimensions);
         }
         GRenderBuffer(Format format, const Vector2u& dimensions, u8 samples) requires (A == AntiAliasing::MSAA)
-            : DTexture<Dimensions::_2D>{ format, Texture::Filter::None, Texture::Wrapping::Repeat, dimensions }, m_samples{ samples }
+            : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_render_buffer();
 
@@ -30,17 +30,19 @@ namespace hlx::gfx::api
             gl::delete_render_buffer(m_glId);
         }
 
-        GLuint id()      const
+        const Vector2u& dimensions() const
         {
-            return m_glId;
+            return m_dimensions;
         }
-        u8     samples() const
+        u8              samples()    const
         {
             return m_samples;
         }
 
     private:
         GLuint m_glId{};
-        u8     m_samples{};
+
+        Vector2u m_dimensions{};
+        u8       m_samples{};
     };
 }

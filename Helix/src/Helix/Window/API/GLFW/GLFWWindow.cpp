@@ -33,7 +33,7 @@ namespace hlx
         //TODO: move above context into these classes
         m_userPointer = std::make_shared<UserPointer>();
         m_userPointer->glfwWindow = std::shared_ptr<GLFWWindow>(this, [](const GLFWWindow* window) {});
-        m_userPointer->renderContext = std::make_shared<OpenGLRenderContext>();
+        //m_userPointer->renderContext = std::make_shared<OpenGLRenderContext>();
         m_userPointer->inputHandler  = std::make_shared<GLFWInputHandler>();
         glfwSetWindowUserPointer(m_glfwWindow, m_userPointer.get());
 
@@ -55,8 +55,8 @@ namespace hlx
         };
         const auto forward_gl_debug_callback          = [](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* param)
         {
-            const auto& context = user_pointer()->renderContext;
-            context->gl_debug_callback(source, type, id, severity, length, message, param);
+            //const auto& context = user_pointer()->renderContext;
+            //context->gl_debug_callback(source, type, id, severity, length, message, param);
         };
         const auto forward_glfw_input_key_callback    = [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {
@@ -87,7 +87,7 @@ namespace hlx
 
 
 
-		RenderContext::init(m_userPointer->renderContext);
+		//RenderContext::init(m_userPointer->renderContext);
 		Input::init(m_userPointer->inputHandler);
 	}
 	GLFWWindow::~GLFWWindow()

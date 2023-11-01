@@ -32,8 +32,8 @@ namespace hlx
             bool receiveShadows{ true };
         };
 
-        std::shared_ptr<Mesh> mesh{};
-        std::shared_ptr<Material> material{};
+        std::shared_ptr<gfx::Mesh> mesh{};
+        std::shared_ptr<gfx::Material> material{};
         //LightingOptions lightingOptions{};
     };
 }

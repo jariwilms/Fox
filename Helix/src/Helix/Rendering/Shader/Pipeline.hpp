@@ -12,6 +12,6 @@ namespace hlx::gfx::api
         Pipeline() = default;
     };
 
-    template<GraphicsAPI G>
+    template<GraphicsAPI>
     class GPipeline;
 }

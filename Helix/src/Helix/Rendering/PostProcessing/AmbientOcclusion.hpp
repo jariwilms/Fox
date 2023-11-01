@@ -4,7 +4,7 @@
 
 #include "PostProcessing.hpp"
 
-namespace hlx
+namespace hlx::gfx
 {
     //struct AmbientOcclusionOption : PostProcessingOption
     //{

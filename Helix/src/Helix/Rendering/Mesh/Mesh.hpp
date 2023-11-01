@@ -3,7 +3,7 @@
 #include "Helix/Rendering/Rendering.hpp"
 #include "Helix/Rendering/Material/Material.hpp"
 
-namespace hlx
+namespace hlx::gfx
 {
     class Mesh
     {

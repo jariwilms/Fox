@@ -60,7 +60,7 @@
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";HLX_PLATFORM_WINDOWS;NOMINMAX;HLX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -113,8 +113,6 @@
     <ClInclude Include="src\Helix\Core\Library\Utility\Bitwise.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Define.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Utility\Utility.hpp" />
-    <ClInclude Include="src\Helix\Core\Using\GLM.hpp" />
-    <ClInclude Include="src\Helix\Core\Using\STB.hpp" />
     <ClInclude Include="src\Helix\Core\Using.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\CameraComponent.hpp" />
     <ClInclude Include="src\Helix\ECS\Components\Component.hpp" />
@@ -155,29 +153,32 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTextureTarget.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Vulkan\VK.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Vulkan\Vulkan.hpp" />
     <ClInclude Include="src\Helix\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Context\RenderContext.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Create.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Layout\VertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Layout\Layout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp" />
     <ClInclude Include="src\Helix\Rendering\Model\Model.hpp" />
     <ClInclude Include="src\Helix\Rendering\PostProcessing\AmbientOcclusion.hpp" />
     <ClInclude Include="src\Helix\Rendering\PostProcessing\PostProcessing.hpp" />
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
-    <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\AntiAliasing.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Texture\Dimensions.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Uniform\Uniform.hpp" />
     <ClInclude Include="src\Helix\Rendering\Using.hpp" />
@@ -194,7 +195,6 @@
     <ClCompile Include="src\Helix\IO\Filesystem\Image.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Helix\Input\Input.cpp" />
-    <ClCompile Include="src\Helix\Rendering\Context\RenderContext.cpp" />
     <ClCompile Include="src\Helix\Scene\Actor.cpp" />
     <ClCompile Include="src\Helix\Scene\Scene.cpp" />
     <ClCompile Include="src\Helix\Window\API\GLFW\GLFWWindow.cpp" />

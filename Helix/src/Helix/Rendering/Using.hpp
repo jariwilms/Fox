@@ -7,7 +7,7 @@
 #include "Helix/Rendering/Buffer/Buffer.hpp"
 #include "Helix/Rendering/Buffer/VertexArray.hpp"
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/Layout/VertexLayout.hpp"
+#include "Helix/Rendering/Layout/Layout.hpp"
 #include "Helix/Rendering/Shader/Pipeline.hpp"
 #include "Helix/Rendering/Shader/Shader.hpp"
 #include "Helix/Rendering/Texture/Texture.hpp"
@@ -16,18 +16,17 @@
 namespace hlx::gfx
 {
     using Buffer                 = api::Buffer;
+
     template<Buffer::Access ACCESS, typename T>
-    using VertexBuffer           = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Vertex, ACCESS, T>;
+    using VertexBuffer           = api::GBuffer<api::GRAPHICS_API, Buffer::Type::Vertex, ACCESS, T>;
     template<Buffer::Access ACCESS>
-    using IndexBuffer            = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Index, ACCESS, u32>;
+    using IndexBuffer            = api::GBuffer<api::GRAPHICS_API, Buffer::Type::Index, ACCESS, u32>;
     template<typename T>
-    using UniformBuffer          = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::Uniform, api::Buffer::Access::Static, T>;
+    using UniformBuffer          = api::GBuffer<api::GRAPHICS_API, Buffer::Type::Uniform, Buffer::Access::Static, T>;
     template<Buffer::Access ACCESS, typename T>
-    using UniformArrayBuffer     = api::GBuffer<api::GRAPHICS_API, api::Buffer::Type::UniformArray, ACCESS, T>;
+    using UniformArrayBuffer     = api::GBuffer<api::GRAPHICS_API, Buffer::Type::UniformArray, ACCESS, T>;
     using VertexArray            = api::GVertexArray<api::GRAPHICS_API>;
 
-    template<typename T, u32 COUNT>
-    using Layout                 = api::Layout<T, COUNT>;
     template<typename... T>
     using VertexLayout           = api::GVertexLayout<api::GRAPHICS_API, T...>;
 

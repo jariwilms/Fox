@@ -63,6 +63,7 @@ project "Helix"
 		"GLFW_INCLUDE_NONE", 
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
+		"STB_IMAGE_WRITE_IMPLEMENTATION", 
 		"NOMINMAX", 		
 		'PROJECT_DIR=R"($(ProjectDir).)"', 
 		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 

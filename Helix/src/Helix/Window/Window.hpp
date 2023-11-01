@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Context/RenderContext.hpp"
 #include "Helix/Input/Handler/InputHandlerAPI.hpp"
 
 namespace hlx

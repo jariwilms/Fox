@@ -8,5 +8,6 @@ namespace hlx::gfx
     {
     public:
 
+    private:
     };
 }

@@ -6,6 +6,3 @@
 
 #if HLX_GRAPHICS_API == Vulkan
 #endif
-
-#include "Helix/Rendering/Model/Model.hpp"
-#include "Helix/Rendering/Mesh/Mesh.hpp"
