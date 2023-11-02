@@ -4,25 +4,18 @@
 
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/Texture/Texture.hpp"
+#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
 #include "OpenGLTextureTarget.hpp"
 
 namespace hlx::gfx::api
 {
-    template<Dimensions DIMS, AntiAliasing A>
-    class GTexture<GraphicsAPI::OpenGL, DIMS, A> : public Texture
+    template<Dimensions DIMS, AntiAliasing AA>
+    class GTexture<GraphicsAPI::OpenGL, DIMS, AA> : public Texture
     {
     public:
         using vector_t = DimensionsToVector<DIMS>::type;
-        struct InternalView
-        {
-            const GLuint& glId;
-            const GLuint& glFormat;
-            const GLuint& glMinFilter;
-            const GLuint& glMagFilter;
-            const GLuint& glWrapping;
-        };
 
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (A == AntiAliasing::None)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (AA == AntiAliasing::None)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
@@ -42,7 +35,7 @@ namespace hlx::gfx::api
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, m_dimensions, 0);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, m_dimensions, 0);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, u8 samples)                 requires (DIMS != Dimensions::_1D && A == AntiAliasing::MSAA)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, u8 samples)                 requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
@@ -61,7 +54,7 @@ namespace hlx::gfx::api
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const byte> data) requires (A == AntiAliasing::None)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const byte> data) requires (AA == AntiAliasing::None)
             : GTexture{ format, filter, wrapping, dimensions }
         {
             copy(format, data);
@@ -76,11 +69,11 @@ namespace hlx::gfx::api
             gl::bind_texture(m_glId, slot);
         }
 
-        void copy(Texture::Format format, std::span<const byte> data)                                                                                requires (A == AntiAliasing::None)
+        void copy(Texture::Format format, std::span<const byte> data)                                                                                requires (AA == AntiAliasing::None)
         {
             copy_range(format, this->m_dimensions, vector_t{}, data);
         }
-        void copy_range(Texture::Format format, const vector_t& dimensions, const vector_t& offset, std::span<const byte> data)                      requires (A == AntiAliasing::None)
+        void copy_range(Texture::Format format, const vector_t& dimensions, const vector_t& offset, std::span<const byte> data)                      requires (AA == AntiAliasing::None)
         {
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
@@ -99,9 +92,16 @@ namespace hlx::gfx::api
             return m_samples;
         }
 
-        InternalView expose_internal() const
+        auto expose_internals() const
         {
-            return InternalView{ m_glId, m_glFormat, m_glMinFilter, m_glMagFilter, m_glWrapping };
+            return InternalView<GTexture<GraphicsAPI::OpenGL, DIMS, AA>>
+            {
+                m_glId,
+                m_glFormat,
+                m_glMinFilter,
+                m_glMagFilter,
+                m_glWrapping,
+            };
         }
 
     private:

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdafx.hpp"
+
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
@@ -24,7 +26,7 @@ namespace hlx::gfx::api
 
         GVertexArray()
         {
-            //m_glId = gl::create_vertex_array();
+            m_glId = gl::create_vertex_array();
         }
         ~GVertexArray()
         {
@@ -39,14 +41,14 @@ namespace hlx::gfx::api
         template<Buffer::Access ACCESS, typename T, typename... U>
         void tie(vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
-            tie(static_pointer_cast<const vertex_type<T>>(buffer), layout);
+            tie(static_pointer_cast<const vertex_type<ACCESS, T>>(buffer), layout);
         }
         template<Buffer::Access ACCESS, typename T, typename... U>
         void tie(const_vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
         {
             if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 
-            gl::vertex_array_vertex_buffer(m_glId, buffer->id(), m_glArrayBindingIndex, static_cast<GLsizei>(layout.stride()));
+            gl::vertex_array_vertex_buffer(m_glId, buffer->expose_internals().glId, m_glArrayBindingIndex, static_cast<GLsizei>(layout.stride()));
 
             GLuint offset{};
             for (const auto& attribute : layout.attributes())
@@ -66,7 +68,7 @@ namespace hlx::gfx::api
         template<Buffer::Access ACCESS>
         void tie(const_index_pointer<ACCESS> buffer)
         {
-            //m_indexBuffer = buffer;
+            throw std::logic_error{ "The method or operation has not been implemented!" };
         }
 
         unsigned int primitive_count() const
@@ -74,17 +76,11 @@ namespace hlx::gfx::api
             return m_primitiveCount;
         }
 
-        GLuint id() const
-        {
-            return m_glId;
-        }
-
     private:
         GLuint m_glId{};
         GLuint m_glArrayAttributeIndex{};
         GLuint m_glArrayBindingIndex{};
 
-        //const_index_pointer m_indexBuffer{};
         u32 m_primitiveCount{};
     };
 }

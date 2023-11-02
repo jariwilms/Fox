@@ -424,6 +424,8 @@
     <ClInclude Include="src\Helix\Rendering\Texture\Dimensions.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\AntiAliasing.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTextureTarget.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Internal\InternalView.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Internal\InternalView.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

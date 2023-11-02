@@ -27,14 +27,25 @@ namespace hlx::gfx::api
     {
     public:
         using Attribute = GAttribute<GraphicsAPI::OpenGL>;
-        using span_t = std::span<const Attribute>;
 
         GVertexLayout()
         {
             (m_attributes.emplace_back(Attribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
         }
 
-        span_t attributes() const
+        size_t stride() const
+        {
+            size_t result{};
+
+            for (const auto& attribute : m_attributes)
+            {
+                result += attribute.stride();
+            }
+
+            return result;
+        }
+
+        std::span<const Attribute> attributes() const
         {
             return m_attributes;
         }

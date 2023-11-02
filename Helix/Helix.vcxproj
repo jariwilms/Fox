@@ -146,6 +146,7 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Internal\InternalView.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="src\Helix\Rendering\Geometry\Geometry.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Helix\Rendering\Geometry\Primitives\Plane.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Internal\InternalView.hpp" />
     <ClInclude Include="src\Helix\Rendering\Layout\Layout.hpp" />
     <ClInclude Include="src\Helix\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Helix\Rendering\Mesh\Mesh.hpp" />
