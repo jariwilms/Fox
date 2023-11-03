@@ -5,18 +5,19 @@
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
+#include "Helix/Rendering/API/Implementation/GVertexArray.hpp"
 #include "Helix/Rendering/Buffer/VertexArray.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<>
-    class GVertexArray<GraphicsAPI::OpenGL> final : public VertexArray
+    class GVertexArray<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::VertexArray
     {
     public:
         template<Buffer::Access ACCESS, typename T>
-        using vertex_type          = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Vertex, ACCESS, T>;
+        using vertex_type = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Vertex, ACCESS, T>;
         template<Buffer::Access ACCESS>
-        using index_type           = GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, u32>;
+        using index_type           = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, u32>;
         template<Buffer::Access ACCESS, typename T>
         using vertex_pointer       = std::shared_ptr<vertex_type<ACCESS, T>>;
         template<Buffer::Access ACCESS, typename T>
@@ -39,12 +40,12 @@ namespace hlx::gfx::api
         }
 
         template<Buffer::Access ACCESS, typename T, typename... U>
-        void tie(vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        void tie(vertex_pointer<ACCESS, T> buffer, GVertexLayout<gfx::api::GraphicsAPI::OpenGL, U...> layout)
         {
             tie(static_pointer_cast<const vertex_type<ACCESS, T>>(buffer), layout);
         }
         template<Buffer::Access ACCESS, typename T, typename... U>
-        void tie(const_vertex_pointer<ACCESS, T> buffer, GVertexLayout<GraphicsAPI::OpenGL, U...> layout)
+        void tie(const_vertex_pointer<ACCESS, T> buffer, GVertexLayout<gfx::api::GraphicsAPI::OpenGL, U...> layout)
         {
             if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 

@@ -3,7 +3,7 @@
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/Texture/Dimensions.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<Dimensions>
     struct DimensionsToTarget;

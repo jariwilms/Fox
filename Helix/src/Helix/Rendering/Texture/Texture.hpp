@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Dimensions.hpp"
 #include "AntiAliasing.hpp"
 
@@ -95,7 +94,4 @@ namespace hlx::gfx::api
         Filter   m_filter{};
         Wrapping m_wrapping{};
     };
-
-    template<GraphicsAPI, Dimensions, AntiAliasing>
-    class GTexture;
 }

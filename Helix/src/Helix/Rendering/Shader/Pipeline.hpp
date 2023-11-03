@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-
 namespace hlx::gfx::api
 {
     class Pipeline
@@ -11,7 +9,4 @@ namespace hlx::gfx::api
     protected:
         Pipeline() = default;
     };
-
-    template<GraphicsAPI>
-    class GPipeline;
 }

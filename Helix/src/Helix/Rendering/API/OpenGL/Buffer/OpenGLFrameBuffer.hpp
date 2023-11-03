@@ -5,15 +5,16 @@
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
+#include "Helix/Rendering/API/Implementation/GFrameBuffer.hpp"
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<AntiAliasing AA>
-    class GFrameBuffer<GraphicsAPI::OpenGL, AA> final : public FrameBuffer
+    class GFrameBuffer<gfx::api::GraphicsAPI::OpenGL, AA> final : public gfx::api::FrameBuffer
     {
     public:
-        using texture_t       = GTexture<GraphicsAPI::OpenGL, Dimensions::_2D, AA>;
+        using texture_t       = GTexture<gfx::api::GraphicsAPI::OpenGL, Dimensions::_2D, AA>;
         using render_buffer_t = GRenderBuffer<AA>;
 
         GFrameBuffer(const Vector2u& dimensions,             std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::None)
@@ -149,10 +150,6 @@ namespace hlx::gfx::api
             gl::bind_texture(it->second->id(), slot);
         }
 
-        GLuint id()      const
-        {
-            return m_glId;
-        }
         u8     samples() const
         {
             return m_samples;

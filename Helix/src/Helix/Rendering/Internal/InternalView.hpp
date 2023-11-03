@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<typename...>
     struct InternalView;

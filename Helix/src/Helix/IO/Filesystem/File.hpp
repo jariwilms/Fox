@@ -31,10 +31,10 @@ namespace hlx
             m_stream.flush();
         }
 
-        std::shared_ptr<const std::vector<byte>> read(u32 limit = 0u)
+        std::unique_ptr<const std::vector<byte>> read(u32 limit = 0u)
         {
             //The default vector allocator initializes all data when resizing. This is redundant because we wrap the vector around existing data
-            auto buffer = std::make_shared<std::vector<byte>>();
+            auto buffer = std::make_unique<std::vector<byte>>();
             reinterpret_cast<std::vector<byte, utl::default_init_allocator<byte>>*>(buffer.get())->resize(limit ? limit : size());
 
             read_data(reinterpret_cast<char*>(buffer->data()), buffer->size());

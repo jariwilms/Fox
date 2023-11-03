@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Rendering/Texture/Texture.hpp"
 #include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
 
@@ -50,7 +49,4 @@ namespace hlx::gfx::api
 
         Vector2u m_dimensions{};
     };
-
-    template<GraphicsAPI, AntiAliasing>
-    class GFrameBuffer;
 };

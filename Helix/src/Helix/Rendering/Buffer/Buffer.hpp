@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-
 namespace hlx::gfx::api
 {
     class Buffer
@@ -40,7 +38,4 @@ namespace hlx::gfx::api
 
         size_t m_size{};
     };
-
-    template<GraphicsAPI, Buffer::Type, Buffer::Access, typename>
-    class GBuffer;
 }

@@ -255,7 +255,7 @@
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp">
       <Filter>Helix\IO\Filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp">
+    <ClInclude Include="src\Helix\Core\Library\Image\Image.hpp">
       <Filter>Helix\IO\Filesystem</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\IO\IO.hpp">
@@ -426,12 +426,21 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTextureTarget.hpp" />
     <ClInclude Include="src\Helix\Rendering\Internal\InternalView.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Internal\InternalView.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GFrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GVertexArray.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GVertexLayout.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GPipeline.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GShader.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GTexture.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Utility\Utility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">
       <Filter>Helix</Filter>
     </ClCompile>
-    <ClCompile Include="src\Helix\IO\Filesystem\Image.cpp">
+    <ClCompile Include="src\Helix\Core\Library\Image\Image.cpp">
       <Filter>Helix\IO\Filesystem</Filter>
     </ClCompile>
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp">

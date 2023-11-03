@@ -3,12 +3,13 @@
 #include "stdafx.hpp"
 
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/Implementation/GVertexLayout.hpp"
 #include "Helix/Rendering/Layout/Layout.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<>
-    struct GAttribute<GraphicsAPI::OpenGL>
+    struct GAttribute<gfx::api::GraphicsAPI::OpenGL>
     {
     public:
         size_t stride() const
@@ -23,10 +24,10 @@ namespace hlx::gfx::api
     };
 
     template<typename... T>
-    class GVertexLayout<GraphicsAPI::OpenGL, T...>
+    class GVertexLayout<gfx::api::GraphicsAPI::OpenGL, T...>
     {
     public:
-        using Attribute = GAttribute<GraphicsAPI::OpenGL>;
+        using Attribute = GAttribute<gfx::api::GraphicsAPI::OpenGL>;
 
         GVertexLayout()
         {

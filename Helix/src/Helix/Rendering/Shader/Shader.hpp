@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-
 namespace hlx::gfx::api
 {
     class Shader
@@ -32,7 +30,4 @@ namespace hlx::gfx::api
 
         Stage m_stage{};
     };
-
-    template<GraphicsAPI>
-    class GShader;
 }

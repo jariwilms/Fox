@@ -7,13 +7,13 @@
 #include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
 #include "OpenGLTextureTarget.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<Dimensions DIMS, AntiAliasing AA>
-    class GTexture<GraphicsAPI::OpenGL, DIMS, AA> : public Texture
+    class GTexture<gfx::api::GraphicsAPI::OpenGL, DIMS, AA> : public Texture
     {
     public:
-        using vector_t = DimensionsToVector<DIMS>::type;
+        using vector_t = gfx::api::DimensionsToVector<DIMS>::type;
 
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (AA == AntiAliasing::None)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
@@ -94,7 +94,7 @@ namespace hlx::gfx::api
 
         auto expose_internals() const
         {
-            return InternalView<GTexture<GraphicsAPI::OpenGL, DIMS, AA>>
+            return InternalView<GTexture<gfx::api::GraphicsAPI::OpenGL, DIMS, AA>>
             {
                 m_glId,
                 m_glFormat,

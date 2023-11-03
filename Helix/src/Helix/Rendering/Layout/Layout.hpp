@@ -2,16 +2,15 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
 #include "Helix/Core/Library/Template/Concepts.hpp"
 
-namespace hlx::gfx
+namespace hlx::gfx::api
 {
     template<typename T, u32 COUNT>
     concept LayoutRequirements = requires
     {
         std::is_fundamental_v<T>;
-        NonZero<decltype(COUNT), COUNT>;
+        NonZero<decltype(COUNT), COUNT>; //TODO greater than zero concept instead of non zero
     };
 
     template<typename T, u32 COUNT, bool NORM = false> requires LayoutRequirements<T, COUNT>
@@ -23,13 +22,4 @@ namespace hlx::gfx
         static inline const u32  count        = COUNT;
         static inline const bool isNormalized = NORM;
     };
-
-    namespace api
-    {
-        template<GraphicsAPI G>
-        struct GAttribute;
-
-        template<GraphicsAPI G, typename... T>
-        class GVertexLayout;
-    }
 }

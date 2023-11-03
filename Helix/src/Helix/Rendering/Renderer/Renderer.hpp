@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-
 namespace hlx::gfx::api
 {
     class Renderer
@@ -11,7 +9,4 @@ namespace hlx::gfx::api
     protected:
         Renderer() = default;
     };
-
-    template<GraphicsAPI>
-    class GRenderer;
 }

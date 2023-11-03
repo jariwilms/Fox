@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-
 namespace hlx::gfx::api
 {
     class VertexArray
@@ -9,7 +7,4 @@ namespace hlx::gfx::api
     protected:
         VertexArray() = default;
     };
-
-    template<GraphicsAPI>
-    class GVertexArray;
 }

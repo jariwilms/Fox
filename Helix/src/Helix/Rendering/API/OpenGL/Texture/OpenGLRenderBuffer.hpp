@@ -3,7 +3,7 @@
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/Texture/Texture.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<AntiAliasing AA>
     class GRenderBuffer : public Texture

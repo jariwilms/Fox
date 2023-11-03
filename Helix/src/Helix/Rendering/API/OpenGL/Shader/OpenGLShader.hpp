@@ -4,12 +4,13 @@
 
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Helix/Rendering/Shader/Shader.hpp"
-#include "Helix/Rendering/Shader/Pipeline.hpp"
+#include "Helix/Rendering/API/Implementation/GShader.hpp"
+#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<>
-    class GShader<GraphicsAPI::OpenGL> final : public Shader
+    class GShader<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::Shader
     {
     public:
         GShader(Shader::Stage stage, std::span<const byte> binary)
@@ -40,9 +41,12 @@ namespace hlx::gfx::api
             gl::delete_program(m_glId);
         }
 
-        GLuint id() const
+        auto expose_internals() const
         {
-            return m_glId;
+            return InternalView<GShader<gfx::api::GraphicsAPI::OpenGL>>
+            {
+                m_glId
+            };
         }
 
     private:

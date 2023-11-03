@@ -4,19 +4,26 @@
 
 #include "Helix/Rendering/Internal/InternalView.hpp"
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Rendering/Texture/Texture.hpp"
-#include "Helix/Rendering/Buffer/Buffer.hpp"
+#include "Helix/Rendering/API/Implementation/GBuffer.hpp"
+#include "Helix/Rendering/API/Implementation/GShader.hpp"
+#include "Helix/Rendering/API/Implementation/GTexture.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<Buffer::Type TYPE, Buffer::Access ACCESS, typename T>
-    struct InternalView<GBuffer<GraphicsAPI::OpenGL, TYPE, ACCESS, T>>
+    struct InternalView<imp::GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, ACCESS, T>>
+    {
+        const GLuint& glId;
+    };
+
+    template<>
+    struct InternalView<imp::GShader<gfx::api::GraphicsAPI::OpenGL>>
     {
         const GLuint& glId;
     };
 
     template<Dimensions DIMS, AntiAliasing AA>
-    struct InternalView<GTexture<GraphicsAPI::OpenGL, DIMS, AA>>
+    struct InternalView<imp::GTexture<gfx::api::GraphicsAPI::OpenGL, DIMS, AA>>
     {
         const GLuint& glId;
         const GLuint& glFormat;

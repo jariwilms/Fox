@@ -130,7 +130,7 @@
     <ClInclude Include="src\Helix\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\File.hpp" />
     <ClInclude Include="src\Helix\IO\Filesystem\Handle.hpp" />
-    <ClInclude Include="src\Helix\IO\Filesystem\Image.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Image\Image.hpp" />
     <ClInclude Include="src\Helix\IO\IO.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\GLTFImporter.hpp" />
     <ClInclude Include="src\Helix\IO\Import\Model\ModelImporter.hpp" />
@@ -142,6 +142,14 @@
     <ClInclude Include="src\Helix\Input\Input.hpp" />
     <ClInclude Include="src\Helix\Rendering\AABB\AABB.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\GraphicsAPI.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GFrameBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GPipeline.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GShader.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GTexture.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GVertexArray.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GVertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
@@ -184,6 +192,7 @@
     <ClInclude Include="src\Helix\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Helix\Rendering\Uniform\Uniform.hpp" />
     <ClInclude Include="src\Helix\Rendering\Using.hpp" />
+    <ClInclude Include="src\Helix\Rendering\Utility\Utility.hpp" />
     <ClInclude Include="src\Helix\Scene\Actor.hpp" />
     <ClInclude Include="src\Helix\Scene\Scene.hpp" />
     <ClInclude Include="src\Helix\Test\Test.hpp" />
@@ -194,7 +203,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp" />
-    <ClCompile Include="src\Helix\IO\Filesystem\Image.cpp" />
+    <ClCompile Include="src\Helix\Core\Library\Image\Image.cpp" />
     <ClCompile Include="src\Helix\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Helix\Input\Input.cpp" />
     <ClCompile Include="src\Helix\Scene\Actor.cpp" />

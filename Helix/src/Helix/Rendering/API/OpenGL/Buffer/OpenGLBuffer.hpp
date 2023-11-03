@@ -3,13 +3,14 @@
 #include "stdafx.hpp"
 
 #include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Helix/Rendering/Buffer/Buffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
+#include "Helix/Rendering/API/Implementation/GBuffer.hpp"
+#include "Helix/Rendering/Buffer/Buffer.hpp"
 
-namespace hlx::gfx::api
+namespace hlx::gfx::imp::api
 {
     template<Buffer::Type TYPE, typename T>
-    class GBuffer<GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T> final : public Buffer
+    class GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T> final : public gfx::api::Buffer
     {
     public:
         GBuffer(std::span<const T> data)
@@ -38,9 +39,9 @@ namespace hlx::gfx::api
 
         auto expose_internals() const
         {
-            return InternalView<GBuffer<GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T>>
+            return InternalView<GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T>>
             {
-                m_glId,
+                m_glId
             };
         }
 
@@ -48,7 +49,7 @@ namespace hlx::gfx::api
         GLuint m_glId{};
     };
     template<Buffer::Type TYPE, typename T>
-    class GBuffer<GraphicsAPI::OpenGL, TYPE, Buffer::Access::Dynamic, T> final : public Buffer
+    class GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Dynamic, T> final : public Buffer
     {
     public:
         GBuffer(u32 count)
@@ -119,9 +120,9 @@ namespace hlx::gfx::api
 
         auto expose_internals() const
         {
-            return InternalView<GBuffer<GraphicsAPI::OpenGL, TYPE, Buffer::Access::Dynamic, T>>
+            return InternalView<GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Dynamic, T>>
             {
-                m_glId,
+                m_glId
             };
         }
 
@@ -129,7 +130,7 @@ namespace hlx::gfx::api
         GLuint m_glId{};
     };
     template<typename T>
-    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Dynamic, T> final : public Buffer
+    class GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Dynamic, T> final : public Buffer
     {
     public:
         GBuffer(const T& data)
@@ -156,9 +157,9 @@ namespace hlx::gfx::api
 
         auto expose_internals() const
         {
-            return InternalView<GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Dynamic, T>>
+            return InternalView<GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Dynamic, T>>
             {
-                m_glId,
+                m_glId
             };
         }
 
@@ -166,5 +167,5 @@ namespace hlx::gfx::api
         GLuint m_glId{};
     };
     template<typename T>
-    class GBuffer<GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Static, T>;
+    class imp::GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Static, T>;
 }
