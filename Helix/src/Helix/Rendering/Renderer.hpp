@@ -12,7 +12,7 @@ namespace hlx::gfx
     public:
         static void init()
         {
-            s_renderer = std::make_unique<api::GRenderer<api::GraphicsAPI::OpenGL>>();
+            s_renderer = std::make_unique<imp::GRenderer<api::GraphicsAPI::OpenGL>>();
         }
 
         static void start()
@@ -30,6 +30,6 @@ namespace hlx::gfx
         }
 
     private:
-        static inline std::unique_ptr<api::GRenderer<api::GraphicsAPI::OpenGL>> s_renderer{};
+        static inline std::unique_ptr<imp::GRenderer<api::GraphicsAPI::OpenGL>> s_renderer{};
     };
 }

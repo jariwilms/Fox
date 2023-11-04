@@ -7,6 +7,7 @@
 #include "Helix/Rendering/API/Implementation/GBuffer.hpp"
 #include "Helix/Rendering/API/Implementation/GShader.hpp"
 #include "Helix/Rendering/API/Implementation/GTexture.hpp"
+#include "Helix/Rendering/API/Implementation/GRenderBuffer.hpp"
 
 namespace hlx::gfx::imp::api
 {
@@ -30,5 +31,11 @@ namespace hlx::gfx::imp::api
         const GLuint& glMinFilter;
         const GLuint& glMagFilter;
         const GLuint& glWrapping;
+    };
+
+    template<AntiAliasing AA>
+    struct InternalView<imp::GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA>>
+    {
+        const GLuint& glId;
     };
 }

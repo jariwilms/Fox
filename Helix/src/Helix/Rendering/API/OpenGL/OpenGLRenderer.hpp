@@ -9,6 +9,7 @@
 #include "Helix/Rendering/Renderer/Renderer.hpp"
 #include "Helix/Rendering/Rendering.hpp"
 #include "Helix/Rendering/Utility/Utility.hpp"
+#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 
 namespace hlx::gfx::imp::api
 {
@@ -64,10 +65,10 @@ namespace hlx::gfx::imp::api
             const auto& skyboxShaders   = shaders_from_binaries("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
-            m_pipelines.emplace("Mesh",     std::make_unique<Pipeline>(meshShaders.at(0),     meshShaders.at(1)));
-            m_pipelines.emplace("Lighting", std::make_unique<Pipeline>(lightingShaders.at(0), lightingShaders.at(1)));
-            m_pipelines.emplace("Skybox",   std::make_unique<Pipeline>(skyboxShaders.at(0),   skyboxShaders.at(1)));
-            m_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(shadowShaders.at(0),   shadowShaders.at(1)));
+            m_pipelines.emplace("Mesh",     std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(0) }));
+            m_pipelines.emplace("Lighting", std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(0) }));
+            m_pipelines.emplace("Skybox",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(0) }));
+            m_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
 
 
 

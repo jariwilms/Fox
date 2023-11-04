@@ -16,10 +16,10 @@ namespace hlx::gfx
         auto vertexFile   = File{ vertex };
         auto fragmentFile = File{ fragment };
 
-        return std::array<Shader, 2>
+        return std::array<std::shared_ptr<Shader>, 2>
         {
-            Shader{ Shader::Stage::Vertex,   *vertexFile.read() },
-            Shader{ Shader::Stage::Fragment, *fragmentFile.read() },
+            std::make_shared<Shader>(Shader::Stage::Vertex,   *vertexFile.read()), 
+            std::make_shared<Shader>(Shader::Stage::Fragment, *fragmentFile.read()), 
         };
     }
 }

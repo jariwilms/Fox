@@ -30,7 +30,7 @@ namespace hlx::gfx
     template<Buffer::Access ACCESS>
     using IndexBuffer            = imp::GBuffer<api::GRAPHICS_API, Buffer::Type::Index, ACCESS, u32>;
     template<typename T>
-    using UniformBuffer          = imp::GBuffer<api::GRAPHICS_API, Buffer::Type::Uniform, Buffer::Access::Static, T>;
+    using UniformBuffer          = imp::GBuffer<api::GRAPHICS_API, Buffer::Type::Uniform, Buffer::Access::Dynamic, T>;
     template<Buffer::Access ACCESS, typename T>
     using UniformArrayBuffer     = imp::GBuffer<api::GRAPHICS_API, Buffer::Type::UniformArray, ACCESS, T>;
     using VertexArray            = imp::GVertexArray<api::GRAPHICS_API>;

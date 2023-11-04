@@ -106,7 +106,9 @@
     <ClInclude Include="src\Helix\Core\Library\Camera\Camera.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Container\CyclicBuffer.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Lighting\Light.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Memory\Memory.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonCopyable.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Semantics\NonMovable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Template\Concepts.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Time\Time.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Transform\Transform.hpp" />
@@ -145,6 +147,7 @@
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GPipeline.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GShader.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GTexture.hpp" />

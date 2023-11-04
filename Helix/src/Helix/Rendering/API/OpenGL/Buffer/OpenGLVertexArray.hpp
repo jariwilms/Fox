@@ -29,9 +29,13 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_vertex_array();
         }
+        GVertexArray(GVertexArray&& other) noexcept
+        {
+            *this = std::move(other);
+        }
         ~GVertexArray()
         {
-            gl::delete_vertex_array(m_glId);
+            if (m_glId) gl::delete_vertex_array(m_glId);
         }
 
         void bind()
@@ -75,6 +79,21 @@ namespace hlx::gfx::imp::api
         unsigned int primitive_count() const
         {
             return m_primitiveCount;
+        }
+
+        GVertexArray& operator=(GVertexArray&& other) noexcept
+        {
+            m_glId                  = other.m_glId;
+            m_glArrayAttributeIndex = other.m_glArrayAttributeIndex;
+            m_glArrayBindingIndex   = other.m_glArrayBindingIndex;
+            m_primitiveCount        = other.m_primitiveCount;
+
+            other.m_glId                  = 0u;
+            other.m_glArrayAttributeIndex = 0u;
+            other.m_glArrayBindingIndex   = 0u;
+            other.m_primitiveCount        = 0u;
+
+            return *this;
         }
 
     private:

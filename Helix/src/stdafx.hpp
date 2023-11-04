@@ -3,6 +3,10 @@
 #include "Helix/Config.hpp"
 #include "Helix/Core/Using.hpp"
 
+#include "Helix/Core/Library/Memory/Memory.hpp"
+
+
+
 #include <typeinfo>
 #include <typeindex>
 #include <type_traits>
@@ -10,12 +14,12 @@
 #include <string>
 #include <string_view>
 
-#include <sstream>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 #include <istream>
 #include <ostream>
-#include <iostream>
-#include <iomanip>
+#include <sstream>
 
 #include <set>
 #include <map>
@@ -41,6 +45,8 @@
 #include <functional>
 
 #include <filesystem>
+
+
 
 #ifdef HLX_PLATFORM_WINDOWS
 #include <Windows.h>

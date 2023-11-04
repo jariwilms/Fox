@@ -15,7 +15,7 @@ namespace hlx::gfx::imp::api
     {
     public:
         using texture_t       = GTexture<gfx::api::GraphicsAPI::OpenGL, Dimensions::_2D, AA>;
-        using render_buffer_t = GRenderBuffer<AA>;
+        using render_buffer_t = GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA>;
 
         GFrameBuffer(const Vector2u& dimensions,             std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::None)
             : FrameBuffer{ dimensions }
@@ -27,7 +27,7 @@ namespace hlx::gfx::imp::api
 
             std::ranges::for_each(manifests, [&, this](const FrameBuffer::Manifest& manifest)
                 {
-                    const auto& [identifier, blueprint, attachment, resample] = manifest;
+                    const auto& [identifier, attachment, resample, blueprint] = manifest;
 
                     auto glAttachment = gl::frame_buffer_attachment(attachment);
                     if (attachment == FrameBuffer::Attachment::Color)
@@ -43,7 +43,7 @@ namespace hlx::gfx::imp::api
                         case FrameBuffer::Resample::Yes: //Bind as texture
                         {
                             const auto& texture = std::make_shared<texture_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions);
-                            gl::frame_buffer_texture(m_glId, texture->id(), glAttachment, 0);
+                            gl::frame_buffer_texture(m_glId, texture->expose_internals().glId, glAttachment, 0);
 
                             m_identifierToTexture.emplace(identifier, texture);
 
@@ -51,8 +51,8 @@ namespace hlx::gfx::imp::api
                         };
                         case FrameBuffer::Resample::No: //Bind as renderbuffer
                         {
-                            const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions);
-                            gl::frame_buffer_render_buffer(m_glId, renderBuffer->id(), glAttachment);
+                            const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions);
+                            gl::frame_buffer_render_buffer(m_glId, renderBuffer->expose_internals().glId, glAttachment);
 
                             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
 
@@ -85,7 +85,7 @@ namespace hlx::gfx::imp::api
 
             std::ranges::for_each(manifests, [&, this](const FrameBuffer::Manifest& manifest)
                 {
-                    const auto& [identifier, blueprint, attachment, resample] = manifest;
+                    const auto& [identifier, attachment, resample, blueprint] = manifest;
 
                     auto glAttachment = gl::frame_buffer_attachment(attachment);
                     if (attachment == FrameBuffer::Attachment::Color)
@@ -101,7 +101,7 @@ namespace hlx::gfx::imp::api
                         case FrameBuffer::Resample::Yes: //Bind as texture
                         {
                             const auto& texture = std::make_shared<texture_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions, m_samples);
-                            gl::frame_buffer_texture(m_glId, texture->id(), glAttachment, 0);
+                            gl::frame_buffer_texture(m_glId, texture->expose_internals().glId, glAttachment, 0);
 
                             m_identifierToTexture.emplace(identifier, texture);
 
@@ -109,8 +109,8 @@ namespace hlx::gfx::imp::api
                         };
                         case FrameBuffer::Resample::No: //Bind as renderbuffer
                         {
-                            const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions, m_samples);
-                            gl::frame_buffer_render_buffer(m_glId, renderBuffer->id(), glAttachment);
+                            const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions, m_samples);
+                            gl::frame_buffer_render_buffer(m_glId, renderBuffer->expose_internals().glId, glAttachment);
 
                             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
 
@@ -133,9 +133,14 @@ namespace hlx::gfx::imp::api
 
             if (gl::check_frame_buffer_status(m_glId) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
+        GFrameBuffer(GFrameBuffer&& other) noexcept
+            : FrameBuffer{ std::move(other.m_dimensions) }
+        {
+            *this = std::move(other);
+        }
         ~GFrameBuffer()
         {
-            gl::delete_frame_buffer(m_glId);
+            if (m_glId) gl::delete_frame_buffer(m_glId);
         }
 
         void bind(FrameBuffer::Target target)
@@ -150,14 +155,28 @@ namespace hlx::gfx::imp::api
             gl::bind_texture(it->second->id(), slot);
         }
 
-        u8     samples() const
+        u8 samples() const
         {
             return m_samples;
         }
 
+        GFrameBuffer& operator=(GFrameBuffer&& other) noexcept
+        {
+            m_glId                     = other.m_glId;
+            m_samples                  = other.m_samples;
+            m_identifierToTexture      = std::move(other.m_identifierToTexture);
+            m_identifierToRenderBuffer = std::move(other.m_identifierToRenderBuffer);
+
+            other.m_glId    = 0u;
+            other.m_samples = 0u;
+
+            return *this;
+        }
+
     private:
         GLuint m_glId{};
-        u8     m_samples{};
+
+        u8 m_samples{};
 
         std::unordered_map<std::string, std::shared_ptr<texture_t>>       m_identifierToTexture{};
         std::unordered_map<std::string, std::shared_ptr<render_buffer_t>> m_identifierToRenderBuffer{};

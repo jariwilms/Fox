@@ -59,9 +59,13 @@ namespace hlx::gfx::imp::api
         {
             copy(format, data);
         }
+        GTexture(GTexture&& other) noexcept
+        {
+            *this = std::move(other);
+        }
         ~GTexture()
         {
-            gl::delete_texture(m_glId);
+            if (m_glId) gl::delete_texture(m_glId);
         }
 
         void bind(u32 slot)
@@ -102,6 +106,27 @@ namespace hlx::gfx::imp::api
                 m_glMagFilter,
                 m_glWrapping,
             };
+        }
+
+        GTexture& operator=(GTexture&& other) noexcept
+        {
+            m_glId        = other.m_glId;
+            m_glFormat    = other.m_glFormat;
+            m_glMinFilter = other.m_glMinFilter;
+            m_glMagFilter = other.m_glMagFilter;
+            m_glWrapping  = other.m_glWrapping;
+            m_dimensions  = other.m_dimensions;
+            m_samples     = other.m_samples;
+
+            other.m_glId        = 0u;
+            other.m_glFormat    = 0u;
+            other.m_glMinFilter = 0u;
+            other.m_glMagFilter = 0u;
+            other.m_glWrapping  = 0u;
+            other.m_dimensions  = {};
+            other.m_samples     = 0u;
+
+            return *this;
         }
 
     private:

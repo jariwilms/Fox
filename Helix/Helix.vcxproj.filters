@@ -435,6 +435,9 @@
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GTexture.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Utility\Utility.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Semantics\NonMovable.hpp" />
+    <ClInclude Include="src\Helix\Core\Library\Memory\Memory.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

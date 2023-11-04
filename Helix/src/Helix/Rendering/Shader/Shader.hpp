@@ -16,7 +16,6 @@ namespace hlx::gfx::api
             Fragment,
 
             Compute,
-
         };
 
         Stage stage() const
@@ -27,6 +26,17 @@ namespace hlx::gfx::api
     protected:
         Shader(Stage stage)
             : m_stage{ stage } {}
+        Shader(Shader&& other) noexcept
+        {
+            *this = std::move(other);
+        }
+
+        Shader& operator=(Shader&& other) noexcept
+        {
+            m_stage = other.m_stage;
+
+            other.m_stage = {};
+        }
 
         Stage m_stage{};
     };

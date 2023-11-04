@@ -11,29 +11,27 @@ namespace hlx::gfx::imp::api
     class GPipeline<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::Pipeline
     {
     public:
-        GPipeline(std::initializer_list<const std::shared_ptr<GShader<gfx::api::GraphicsAPI::OpenGL>>> shaders)
+        using shader_t = GShader<gfx::api::GraphicsAPI::OpenGL>;
+        using Manifest = Manifest<shader_t>;
+
+        GPipeline(Manifest shaders)
+            : m_shaders{ shaders }
         {
             m_glId = gl::create_program_pipeline();
-            
-            std::ranges::for_each(shaders, [this](const std::shared_ptr<GShader<gfx::api::GraphicsAPI::OpenGL>>& shader)
-                {
-                    gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
 
-                    switch (shader->stage())
-                    {
-                        case gfx::api::Shader::Stage::Vertex:                 m_shaders.at(0) = shader; break;
-                        case gfx::api::Shader::Stage::TessellationControl:    m_shaders.at(1) = shader; break;
-                        case gfx::api::Shader::Stage::TessellationEvaluation: m_shaders.at(2) = shader; break;
-                        case gfx::api::Shader::Stage::Geometry:               m_shaders.at(3) = shader; break;
-                        case gfx::api::Shader::Stage::Fragment:               m_shaders.at(4) = shader; break;
-
-                        default: throw std::invalid_argument{ "Invalid shader stage!" };
-                    }
-                });
+            if (const auto& shader = m_shaders.vertexShader; shader)                 gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.tessellationControlShader; shader)    gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.tessellationEvaluationShader; shader) gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.geometryShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.fragmentShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
+        }
+        GPipeline(GPipeline&& other) noexcept
+        {
+            *this = std::move(other);
         }
         ~GPipeline()
         {
-            gl::delete_program_pipeline(m_glId);
+            if (m_glId) gl::delete_program_pipeline(m_glId);
         }
 
         void bind()
@@ -41,14 +39,25 @@ namespace hlx::gfx::imp::api
             gl::bind_program_pipeline(m_glId);
         }
 
-        GLuint id() const
+        const Manifest& shaders() const
         {
-            return m_glId;
+            return m_shaders;
+        }
+
+        GPipeline& operator=(GPipeline&& other) noexcept
+        {
+            m_glId    = other.m_glId;
+            m_shaders = other.m_shaders;
+
+            other.m_glId    = 0u;
+            other.m_shaders = {};
+
+            return *this;
         }
 
     private:
         GLuint m_glId{};
 
-        std::array<std::shared_ptr<GShader<gfx::api::GraphicsAPI::OpenGL>>, 5> m_shaders{};
+        Manifest m_shaders{};
     };
 }

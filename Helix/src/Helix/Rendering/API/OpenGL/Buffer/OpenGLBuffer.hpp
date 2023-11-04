@@ -21,9 +21,13 @@ namespace hlx::gfx::imp::api
             const auto& glAccess = gl::buffer_access(Buffer::Access::Static);
             gl::buffer_storage(m_glId, glAccess, data);
         }
+        GBuffer(GBuffer&& other) noexcept
+        {
+            *this = std::move(other);
+        }
         ~GBuffer()
         {
-            gl::delete_buffer(m_glId);
+            if (m_glId) gl::delete_buffer(m_glId);
         }
 
         void bind()
@@ -43,6 +47,15 @@ namespace hlx::gfx::imp::api
             {
                 m_glId
             };
+        }
+
+        GBuffer& operator=(GBuffer&& other) noexcept
+        {
+            m_glId = other.m_glId;
+
+            other.m_glId = 0u;
+
+            return *this;
         }
 
     private:
@@ -68,9 +81,13 @@ namespace hlx::gfx::imp::api
             const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
             gl::buffer_storage(m_glId, glAccess, data);
         }
+        GBuffer(GBuffer&& other) noexcept
+        {
+            *this = std::move(other);
+        }
         ~GBuffer()
         {
-            gl::delete_buffer(m_glId);
+            if (m_glId) gl::delete_buffer(m_glId);
         }
 
         void bind()
@@ -126,6 +143,15 @@ namespace hlx::gfx::imp::api
             };
         }
 
+        GBuffer& operator=(GBuffer&& other) noexcept
+        {
+            m_glId = other.m_glId;
+
+            other.m_glId = 0;
+
+            return *this;
+        }
+
     private:
         GLuint m_glId{};
     };
@@ -133,16 +159,29 @@ namespace hlx::gfx::imp::api
     class GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Dynamic, T> final : public Buffer
     {
     public:
+        GBuffer()
+            : Buffer{ sizeof(T) }
+        {
+            m_glId = gl::create_buffer();
+
+            const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
+            gl::buffer_storage(m_glId, glAccess, sizeof(T) );
+        }
         GBuffer(const T& data)
+            : Buffer{ sizeof(T) }
         {
             m_glId = gl::create_buffer();
 
             const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
             gl::buffer_storage(m_glId, glAccess, std::span<const T>{ &data, 1u });
         }
+        GBuffer(GBuffer&& other) noexcept
+        {
+            *this = std::move(other);
+        }
         ~GBuffer()
         {
-            gl::delete_buffer(m_glId);
+            if (m_glId) gl::delete_buffer(m_glId);
         }
 
         void bind(u32 binding)
@@ -163,9 +202,18 @@ namespace hlx::gfx::imp::api
             };
         }
 
+        GBuffer& operator=(GBuffer&& other) noexcept
+        {
+            m_glId = other.m_glId;
+
+            other.m_glId = 0;
+
+            return *this;
+        }
+
     private:
         GLuint m_glId{};
     };
     template<typename T>
-    class imp::GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Static, T>;
+    class GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Uniform, Buffer::Access::Static, T>;
 }

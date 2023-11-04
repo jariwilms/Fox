@@ -36,9 +36,14 @@ namespace hlx::gfx::imp::api
             gl::detach_shader(m_glId, glShader);
             gl::delete_shader(glShader);
         }
+        GShader(GShader&& other) noexcept
+            : Shader{ std::move(other) }
+        {
+            *this = std::move(other);
+        }
         ~GShader()
         {
-            gl::delete_program(m_glId);
+            if (m_glId) gl::delete_program(m_glId);
         }
 
         auto expose_internals() const
@@ -47,6 +52,19 @@ namespace hlx::gfx::imp::api
             {
                 m_glId
             };
+        }
+
+        GShader& operator=(GShader&& other) noexcept
+        {
+            m_glId    = other.m_glId;
+            m_glType  = other.m_glType;
+            m_glStage = other.m_glStage;
+
+            other.m_glId    = 0u;
+            other.m_glType  = {};
+            other.m_glStage = {};
+
+            return *this;
         }
 
     private:
