@@ -300,13 +300,13 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp">
       <Filter>Helix\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp">
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp">
       <Filter>Helix\Rendering\API\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp">
       <Filter>Helix\Rendering\API\OpenGL\Layout</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp">
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp">
       <Filter>Helix\Rendering\API\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp">
@@ -375,9 +375,6 @@
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp">
       <Filter>Helix\Rendering\Projection</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\RenderState.hpp">
-      <Filter>Helix\Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp">
       <Filter>Helix\Rendering</Filter>
     </ClInclude>
@@ -441,6 +438,7 @@
     <ClInclude Include="src\Helix\Rendering\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GLMappings.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

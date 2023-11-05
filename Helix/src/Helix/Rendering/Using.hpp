@@ -56,4 +56,6 @@ namespace hlx::gfx
 
     using Dimensions             = api::Dimensions;
     using AntiAliasing           = api::AntiAliasing;
+
+    using RenderState            = imp::GRenderState<api::GRAPHICS_API>;
 }

@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/OpenGL/GL.hpp"
 #include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 #include "Helix/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
 #include "Helix/Rendering/API/Implementation/GVertexArray.hpp"

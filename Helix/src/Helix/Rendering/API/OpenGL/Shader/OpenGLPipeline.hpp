@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/OpenGL/GL.hpp"
 #include "Helix/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
 #include "Helix/Rendering/API/Implementation/GPipeline.hpp"
 #include "Helix/Rendering/Shader/Pipeline.hpp"

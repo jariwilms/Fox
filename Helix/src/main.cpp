@@ -9,8 +9,8 @@ using namespace hlx;
 
 int main(int argc, char* argv[])
 {
+    gfx::Renderer::init();
     gfx::Renderer::start();
-
 
     //Application application{ argc, argv };
     //return application.run();

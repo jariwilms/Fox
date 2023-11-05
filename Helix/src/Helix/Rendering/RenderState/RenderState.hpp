@@ -14,6 +14,17 @@ namespace hlx::gfx::api
             CullingFace, 
             FrontFace, 
         };
+        enum class DepthFunction
+        {
+            Never, 
+            Less, 
+            Equal, 
+            LessEqual, 
+            Greater, 
+            NotEqual, 
+            GreaterEqual, 
+            Always, 
+        };
 
     protected:
         RenderState() = default;

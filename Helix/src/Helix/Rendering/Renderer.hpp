@@ -1,35 +1,12 @@
-#pragma once
-
-#include "stdafx.hpp"
-
-#include "Helix/Rendering/Rendering.hpp"
+#if HLX_GRAPHICS_API == OpenGL
 #include "Helix/Rendering/API/OpenGL/OpenGLRenderer.hpp"
+#endif
+
+#if HLX_GRAPHICS_API == Vulkan
+//#include "Helix/Rendering/API/Vulkan/VulkanRenderer.hpp"
+#endif
 
 namespace hlx::gfx
 {
-    class Renderer
-    {
-    public:
-        static void init()
-        {
-            s_renderer = std::make_unique<imp::GRenderer<api::GRAPHICS_API>>();
-        }
-
-        static void start()
-        {
-            s_renderer->start();
-        }
-        static void finish()
-        {
-            s_renderer->finish();
-        }
-
-        static void render()
-        {
-            //s_renderer->render();
-        }
-
-    private:
-        static inline std::unique_ptr<imp::GRenderer<api::GRAPHICS_API>> s_renderer{};
-    };
+    using Renderer = imp::api::GRenderer<api::GRAPHICS_API>;
 }

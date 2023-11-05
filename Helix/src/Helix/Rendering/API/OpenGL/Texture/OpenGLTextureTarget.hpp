@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/OpenGL/GL.hpp"
 #include "Helix/Rendering/Texture/Dimensions.hpp"
 
 namespace hlx::gfx::imp::api

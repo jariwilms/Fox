@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Helix/Rendering/API/OpenGL/GL.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
 #include "Helix/Rendering/API/Implementation/GFrameBuffer.hpp"

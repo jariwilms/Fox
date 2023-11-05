@@ -14,24 +14,44 @@ namespace hlx::gfx::imp::api
     class GRenderState<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::RenderState
     {
     public:
-        template<RenderState::Parameter PARAM, typename... Args>
-        auto query(Args... args) = delete;
-        template<RenderState::Parameter PARAM, typename... Args>
-        auto apply(Args... args) = delete;
+        static void init()
+        {
 
-        template<> auto query<RenderState::Parameter::ClearColor>()
-        {
-            return m_clearColor;
-        }
-        template<> auto apply<RenderState::Parameter::ClearColor>(Vector4f clearColor)
-        {
-            m_clearColor = clearColor;
         }
 
+        template<RenderState::Parameter PARAM, typename... Args>
+        static auto query(Args... args) = delete;
+        template<RenderState::Parameter PARAM, typename... Args>
+        static auto apply(Args... args) = delete;
 
+        template<> static auto query<RenderState::Parameter::ClearColor>()
+        {
+            return s_clearColor;
+        }
+        template<> static auto apply<RenderState::Parameter::ClearColor>(Vector4f clearColor)
+        {
+            if (s_clearColor == clearColor) return;
 
+            s_clearColor = clearColor;
+            glClearColor(s_clearColor.r, s_clearColor.g, s_clearColor.b, s_clearColor.a);
+        }
+
+        template<> static auto query<RenderState::Parameter::DepthFunction>()
+        {
+            return s_depthFunction;
+        }
+        template<> static auto apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction depthFunction)
+        {
+            if (s_depthFunction == depthFunction) return;
+
+            const auto& glDepthFunction = GL_NEVER;
+            glDepthFunc(glDepthFunction);
+        }
 
     private:
-        Vector4f m_clearColor{};
+        GRenderState() = delete;
+
+        static inline Vector4f      s_clearColor{};
+        static inline DepthFunction s_depthFunction{};
     };
 }

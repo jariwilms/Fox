@@ -157,10 +157,11 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GLMappings.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Internal\InternalView.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
@@ -186,7 +187,6 @@
     <ClInclude Include="src\Helix\Rendering\PostProcessing\AmbientOcclusion.hpp" />
     <ClInclude Include="src\Helix\Rendering\PostProcessing\PostProcessing.hpp" />
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
-    <ClInclude Include="src\Helix\Rendering\RenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
