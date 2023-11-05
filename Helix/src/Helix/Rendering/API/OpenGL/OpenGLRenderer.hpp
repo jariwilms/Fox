@@ -2,19 +2,19 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Library/Transform/Transform.hpp"
-#include "Helix/Rendering/API/Implementation/GRenderer.hpp"
-#include "Helix/Rendering/Material/Material.hpp"
-#include "Helix/Rendering/Mesh/Mesh.hpp"
-#include "Helix/Rendering/Renderer/Renderer.hpp"
 #include "Helix/Rendering/Rendering.hpp"
+#include "Helix/Rendering/Renderer/Renderer.hpp"
+#include "Helix/Rendering/API/Implementation/GRenderer.hpp"
+#include "Helix/Rendering/RenderState.hpp"
+#include "Helix/Rendering/Mesh/Mesh.hpp"
+#include "Helix/Rendering/Material/Material.hpp"
+#include "Helix/Core/Library/Transform/Transform.hpp"
 #include "Helix/Rendering/Utility/Utility.hpp"
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 
 namespace hlx::gfx::imp::api
 {
     template<>
-    class GRenderer<gfx::api::GraphicsAPI::OpenGL>
+    class GRenderer<gfx::api::GraphicsAPI::OpenGL> : public gfx::api::Renderer
     {
     public:
         GRenderer()
@@ -69,6 +69,12 @@ namespace hlx::gfx::imp::api
             m_pipelines.emplace("Lighting", std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(0) }));
             m_pipelines.emplace("Skybox",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(0) }));
             m_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
+
+
+
+
+            RenderState::apply<RenderState::Parameter::ClearColor>(Vector4f{});
+
 
 
 

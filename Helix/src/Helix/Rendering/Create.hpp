@@ -44,7 +44,5 @@ namespace hlx::gfx::test
         VertexArray* vaptr{};
 
         vaptr->tie(vbufs, layout);
-
-
     }
 }

@@ -149,6 +149,7 @@
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GPipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GShader.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GTexture.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GVertexArray.hpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Helix\Rendering\Texture\AntiAliasing.hpp" />

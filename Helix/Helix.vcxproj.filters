@@ -438,6 +438,9 @@
     <ClInclude Include="src\Helix\Core\Library\Semantics\NonMovable.hpp" />
     <ClInclude Include="src\Helix\Core\Library\Memory\Memory.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderBuffer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderState\RenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

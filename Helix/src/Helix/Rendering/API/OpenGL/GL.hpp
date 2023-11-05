@@ -7,3 +7,4 @@
 #include "Helix/Rendering/API/OpenGL/Shader/OpenGLPipeline.hpp"
 #include "Helix/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
+#include "Helix/Rendering/API/OpenGL/OpenGLRenderState.hpp"
