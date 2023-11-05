@@ -18,7 +18,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::buffer_access(Buffer::Access::Static);
+            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Static);
             gl::buffer_storage(m_glId, glAccess, data);
         }
         GBuffer(GBuffer&& other) noexcept
@@ -70,7 +70,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
+            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Dynamic);
             gl::buffer_storage(m_glId, glAccess, m_size);
         }
         GBuffer(std::span<const T> data)
@@ -78,7 +78,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
+            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Dynamic);
             gl::buffer_storage(m_glId, glAccess, data);
         }
         GBuffer(GBuffer&& other) noexcept
@@ -115,7 +115,7 @@ namespace hlx::gfx::imp::api
         {
             using data_t = std::conditional_t<MAP == Buffer::Mapping::Read, const T, T>;
 
-            const auto& glMap = gl::buffer_map(MAP);
+            const auto& glMap = gl::map_buffer_map(MAP);
             auto* data = gl::map_buffer(m_glId, glMap);
 
             return std::span<data_t>{ data, m_size / sizeof(T) };
@@ -125,7 +125,7 @@ namespace hlx::gfx::imp::api
         {
             using data_t = std::conditional_t<MAP == Buffer::Mapping::Read, const T, T>;
 
-            const auto& glMap = gl::buffer_map(MAP);
+            const auto& glMap = gl::map_buffer_map(MAP);
             auto* data = gl::map_buffer_range(m_glId, glMap, count * sizeof(T), offset * sizeof(T));
 
             return std::span<data_t>{ data, m_size / sizeof(T) };
@@ -164,7 +164,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
+            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Dynamic);
             gl::buffer_storage(m_glId, glAccess, sizeof(T) );
         }
         GBuffer(const T& data)
@@ -172,7 +172,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::buffer_access(Buffer::Access::Dynamic);
+            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Dynamic);
             gl::buffer_storage(m_glId, glAccess, std::span<const T>{ &data, 1u });
         }
         GBuffer(GBuffer&& other) noexcept

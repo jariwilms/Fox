@@ -1,5 +1,5 @@
 #if HLX_GRAPHICS_API == OpenGL
-#include "Helix/Rendering/API/OpenGL/OpenGLRenderer.hpp"
+#include "Helix/Rendering/API/OpenGL/Renderer/OpenGLRenderer.hpp"
 #endif
 
 #if HLX_GRAPHICS_API == Vulkan

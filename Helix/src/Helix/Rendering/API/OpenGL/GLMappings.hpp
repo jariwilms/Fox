@@ -8,6 +8,7 @@
 #include "Helix/Rendering/Shader/Pipeline.hpp"
 #include "Helix/Rendering/Shader/Shader.hpp"
 #include "Helix/Rendering/Texture/Texture.hpp"
+#include "Helix/Rendering/RenderState/RenderState.hpp"
 
 namespace hlx::gfx::imp::api::gl
 {
@@ -195,6 +196,34 @@ namespace hlx::gfx::imp::api::gl
             case gfx::api::Shader::Stage::Compute:                return GL_COMPUTE_SHADER_BIT;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
+        }
+    }
+
+    constexpr GLenum      map_depth_function(gfx::api::RenderState::DepthFunction depthFunction)
+    {
+        switch (depthFunction)
+        {
+            case gfx::api::RenderState::DepthFunction::Never:        return GL_NEVER;
+            case gfx::api::RenderState::DepthFunction::Less:         return GL_LESS;
+            case gfx::api::RenderState::DepthFunction::Equal:        return GL_EQUAL;
+            case gfx::api::RenderState::DepthFunction::LessEqual:    return GL_LEQUAL;
+            case gfx::api::RenderState::DepthFunction::Greater:      return GL_GREATER;
+            case gfx::api::RenderState::DepthFunction::NotEqual:     return GL_NOTEQUAL;
+            case gfx::api::RenderState::DepthFunction::GreaterEqual: return GL_GEQUAL;
+            case gfx::api::RenderState::DepthFunction::Always:       return GL_ALWAYS;
+
+            default: throw std::invalid_argument{ "Invalid depth function!" };
+        }
+    }
+    constexpr GLenum      map_culling_face(gfx::api::RenderState::CullingFace cullingFace)
+    {
+        switch (cullingFace)
+        {
+            case gfx::api::RenderState::CullingFace::Front:     return GL_FRONT;
+            case gfx::api::RenderState::CullingFace::Back:      return GL_BACK;
+            case gfx::api::RenderState::CullingFace::FrontBack: return GL_FRONT_AND_BACK;
+
+            default: throw std::invalid_argument{ "Invalid culling face!" };
         }
     }
 }

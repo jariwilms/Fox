@@ -19,10 +19,10 @@ namespace hlx::gfx::imp::api
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
-            m_glFormat    = gl::texture_format(this->m_format);
-            m_glMinFilter = gl::texture_min_filter(this->m_filter);
-            m_glMagFilter = gl::texture_mag_filter(this->m_filter);
-            m_glWrapping  = gl::texture_wrapping(this->m_wrapping);
+            m_glFormat    = gl::map_texture_format(this->m_format);
+            m_glMinFilter = gl::map_texture_min_filter(this->m_filter);
+            m_glMagFilter = gl::map_texture_mag_filter(this->m_filter);
+            m_glWrapping  = gl::map_texture_wrapping(this->m_wrapping);
 
             gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
             gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
@@ -39,10 +39,10 @@ namespace hlx::gfx::imp::api
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
-            m_glFormat    = gl::texture_format(this->m_format);
-            m_glMinFilter = gl::texture_min_filter(this->m_filter);
-            m_glMagFilter = gl::texture_mag_filter(this->m_filter);
-            m_glWrapping  = gl::texture_wrapping(this->m_wrapping);
+            m_glFormat    = gl::map_texture_format(this->m_format);
+            m_glMinFilter = gl::map_texture_min_filter(this->m_filter);
+            m_glMagFilter = gl::map_texture_mag_filter(this->m_filter);
+            m_glWrapping  = gl::map_texture_wrapping(this->m_wrapping);
 
             gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
             gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
@@ -82,9 +82,9 @@ namespace hlx::gfx::imp::api
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
             
-            if constexpr (DIMS == Dimensions::_1D) gl::texture_sub_image_1d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
-            if constexpr (DIMS == Dimensions::_2D) gl::texture_sub_image_2d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
-            if constexpr (DIMS == Dimensions::_3D) gl::texture_sub_image_3d(m_glId, gl::texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (DIMS == Dimensions::_1D) gl::texture_sub_image_1d(m_glId, gl::map_texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (DIMS == Dimensions::_2D) gl::texture_sub_image_2d(m_glId, gl::map_texture_format_base(format), dimensions, offset, 0, data.data());
+            if constexpr (DIMS == Dimensions::_3D) gl::texture_sub_image_3d(m_glId, gl::map_texture_format_base(format), dimensions, offset, 0, data.data());
         }
 
         const vector_t& dimensions() const

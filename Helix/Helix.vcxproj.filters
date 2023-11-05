@@ -309,7 +309,7 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp">
       <Filter>Helix\Rendering\API\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp">
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Renderer\OpenGLRenderer.hpp">
       <Filter>Helix\Rendering\API\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp">
@@ -437,8 +437,9 @@
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Implementation\GRenderState.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\GLMappings.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Vulkan\VKMappings.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

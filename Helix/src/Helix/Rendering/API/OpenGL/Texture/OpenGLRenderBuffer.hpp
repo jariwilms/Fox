@@ -14,7 +14,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_render_buffer();
 
-            const auto& glFormat = gl::render_buffer_format(format);
+            const auto& glFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage(m_glId, glFormat, this->m_dimensions);
         }
         GRenderBuffer(Format format, const Vector2u& dimensions, u8 samples) requires (AA == AntiAliasing::MSAA)
@@ -22,7 +22,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_render_buffer();
 
-            const auto& glFormat = gl::render_buffer_format(format);
+            const auto& glFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage_multisample(m_glId, glFormat, this->m_dimensions, m_samples);
         }
         GRenderBuffer(GRenderBuffer&& other) noexcept

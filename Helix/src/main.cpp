@@ -10,7 +10,7 @@ using namespace hlx;
 int main(int argc, char* argv[])
 {
     gfx::Renderer::init();
-    gfx::Renderer::start();
+    gfx::Renderer::start_render_pass();
 
     //Application application{ argc, argv };
     //return application.run();

@@ -162,14 +162,15 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Internal\InternalView.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\GL.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderer.hpp" />
-    <ClInclude Include="src\Helix\Rendering\API\OpenGL\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\Renderer\OpenGLRenderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\Texture\OpenGLTextureTarget.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Vulkan\VK.hpp" />
+    <ClInclude Include="src\Helix\Rendering\API\Vulkan\VKMappings.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Vulkan\Vulkan.hpp" />
     <ClInclude Include="src\Helix\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Helix\Rendering\Buffer\Buffer.hpp" />

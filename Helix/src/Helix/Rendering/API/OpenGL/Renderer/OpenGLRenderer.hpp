@@ -71,24 +71,18 @@ namespace hlx::gfx::imp::api
 
 
 
-
-            RenderState::apply<RenderState::Parameter::ClearColor>(Vector4f{});
-            RenderState::apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction::Always);
-
-
-
-            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            glDepthFunc(GL_LEQUAL);
-            glEnable(GL_CULL_FACE);
-            glCullFace(GL_BACK);
-            glFrontFace(GL_CCW);
+            RenderState::apply<RenderState::Parameter::ClearColor>(Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
+            RenderState::apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction::LessEqual);
+            RenderState::apply<RenderState::Parameter::CullingFaceAlpha>(true);
+            RenderState::apply<RenderState::Parameter::CullingFace>(RenderState::CullingFace::Back);
+            RenderState::apply<RenderState::Parameter::FrontFace>(RenderState::FrontFace::CounterClockwise);
         }
 
-        static void start()
+        static void start_render_pass()
         {
 
         }
-        static void finish()
+        static void finish_render_pass()
         {
 
         }

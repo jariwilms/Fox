@@ -29,7 +29,7 @@ namespace hlx::gfx::imp::api
                 {
                     const auto& [identifier, attachment, resample, blueprint] = manifest;
 
-                    auto glAttachment = gl::frame_buffer_attachment(attachment);
+                    auto glAttachment = gl::map_frame_buffer_attachment(attachment);
                     if (attachment == FrameBuffer::Attachment::Color)
                     {
                         glAttachment += static_cast<GLenum>(colorBuffers.size());
@@ -87,7 +87,7 @@ namespace hlx::gfx::imp::api
                 {
                     const auto& [identifier, attachment, resample, blueprint] = manifest;
 
-                    auto glAttachment = gl::frame_buffer_attachment(attachment);
+                    auto glAttachment = gl::map_frame_buffer_attachment(attachment);
                     if (attachment == FrameBuffer::Attachment::Color)
                     {
                         glAttachment += static_cast<GLenum>(colorBuffers.size());

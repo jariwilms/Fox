@@ -17,8 +17,8 @@ namespace hlx::gfx::imp::api
             : Shader{ stage }
         {
             m_glId    = gl::create_program();
-            m_glType  = gl::shader_type(stage);
-            m_glStage = gl::shader_stage(stage);
+            m_glType  = gl::map_shader_type(stage);
+            m_glStage = gl::map_shader_stage(stage);
 
             const auto& glShader = gl::create_shader(m_glType);
 

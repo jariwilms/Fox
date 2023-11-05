@@ -19,11 +19,11 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_program_pipeline();
 
-            if (const auto& shader = m_shaders.vertexShader; shader)                 gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
-            if (const auto& shader = m_shaders.tessellationControlShader; shader)    gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
-            if (const auto& shader = m_shaders.tessellationEvaluationShader; shader) gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
-            if (const auto& shader = m_shaders.geometryShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
-            if (const auto& shader = m_shaders.fragmentShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.vertexShader; shader)                 gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.tessellationControlShader; shader)    gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.tessellationEvaluationShader; shader) gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.geometryShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            if (const auto& shader = m_shaders.fragmentShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
         }
         GPipeline(GPipeline&& other) noexcept
         {
