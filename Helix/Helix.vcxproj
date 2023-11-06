@@ -190,6 +190,7 @@
     <ClInclude Include="src\Helix\Rendering\Projection\Projection.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Helix\Rendering\Renderer\Renderer.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderInfo\RenderInfo.hpp" />
     <ClInclude Include="src\Helix\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Helix\Rendering\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\Shader\Pipeline.hpp" />

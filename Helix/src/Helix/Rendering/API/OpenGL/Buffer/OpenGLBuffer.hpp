@@ -6,6 +6,7 @@
 #include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
 #include "Helix/Rendering/API/Implementation/GBuffer.hpp"
 #include "Helix/Rendering/Buffer/Buffer.hpp"
+#include "Helix/Core/Library/Utility/Utility.hpp"
 
 namespace hlx::gfx::imp::api
 {
@@ -30,13 +31,13 @@ namespace hlx::gfx::imp::api
             if (m_glId) gl::delete_buffer(m_glId);
         }
 
-        void bind()
+        void bind() const
         {
             if constexpr (TYPE == Buffer::Type::Vertex)       gl::bind_buffer(m_glId, GL_ARRAY_BUFFER);
             if constexpr (TYPE == Buffer::Type::Index)        gl::bind_buffer(m_glId, GL_ELEMENT_ARRAY_BUFFER);
             if constexpr (TYPE == Buffer::Type::UniformArray) gl::bind_buffer(m_glId, GL_UNIFORM_BUFFER);
         }
-        void bind_range(u32 binding, u32 count, u32 offset)  requires (TYPE == Buffer::Type::UniformArray)
+        void bind_range(u32 binding, u32 count, u32 offset) const requires (TYPE == Buffer::Type::UniformArray)
         {
             gl::bind_buffer_range(m_glId, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
         }
@@ -90,42 +91,42 @@ namespace hlx::gfx::imp::api
             if (m_glId) gl::delete_buffer(m_glId);
         }
 
-        void bind()
+        void bind() const
         {
             if constexpr (TYPE == Buffer::Type::Vertex)       gl::bind_buffer(m_glId, GL_ARRAY_BUFFER);
             if constexpr (TYPE == Buffer::Type::Index)        gl::bind_buffer(m_glId, GL_ELEMENT_ARRAY_BUFFER);
             if constexpr (TYPE == Buffer::Type::UniformArray) gl::bind_buffer(m_glId, GL_UNIFORM_BUFFER);
         }
-        void bind_range(u32 binding, u32 count, u32 offset)  requires (TYPE == Buffer::Type::UniformArray)
+        void bind_range(u32 binding, u32 count, u32 offset) const requires (TYPE == Buffer::Type::UniformArray)
         {
             gl::bind_buffer_range(m_glId, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
         }
 
         void copy(std::span<const T> data)
         {
-            gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
+            gl::buffer_sub_data(m_glId, 0, data);
         }
         void copy_range(u32 offset, std::span<const T> data)
         {
             gl::buffer_sub_data(m_glId, offset * sizeof(T), data);
         }
 
-        template<Buffer::Mapping MAP>
+        template<Buffer::Mapping MAPPING>
         auto map()
         {
-            using data_t = std::conditional_t<MAP == Buffer::Mapping::Read, const T, T>;
+            using data_t = std::conditional_t<MAPPING == Buffer::Mapping::Read, const T, T>;
 
-            const auto& glMap = gl::map_buffer_map(MAP);
+            const auto& glMap = gl::map_buffer_mapping(MAPPING);
             auto* data = gl::map_buffer(m_glId, glMap);
 
             return std::span<data_t>{ data, m_size / sizeof(T) };
         }
-        template<Buffer::Mapping MAP>
+        template<Buffer::Mapping MAPPING>
         auto map_range(u32 count, u32 offset)
         {
-            using data_t = std::conditional_t<MAP == Buffer::Mapping::Read, const T, T>;
+            using data_t = std::conditional_t<MAPPING == Buffer::Mapping::Read, const T, T>;
 
-            const auto& glMap = gl::map_buffer_map(MAP);
+            const auto& glMap = gl::map_buffer_mapping(MAPPING);
             auto* data = gl::map_buffer_range(m_glId, glMap, count * sizeof(T), offset * sizeof(T));
 
             return std::span<data_t>{ data, m_size / sizeof(T) };
@@ -184,7 +185,7 @@ namespace hlx::gfx::imp::api
             if (m_glId) gl::delete_buffer(m_glId);
         }
 
-        void bind(u32 binding)
+        void bind(u32 binding) const
         {
             gl::bind_buffer_base(m_glId, GL_UNIFORM_BUFFER, binding);
         }
@@ -192,6 +193,24 @@ namespace hlx::gfx::imp::api
         void copy(const T& data)
         {
             gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
+        }
+        template<typename... T>
+        void copy_tuple(size_t offset, const std::tuple<T...>& data)
+        {
+            //This method lets you copy a tuple of any amount of types into an allocated buffer
+            //There is no guarantee that a parameter pack will be evaluated in order of declaration, so we cannot use T... as a regular parameter
+            //Arguments in a braced initializer list eg. tuple{ myval1, myval2 }, are required to be evaluated first to last
+            //This guarantees that the data will be copied into the uniform buffer in order
+
+            std::array<byte, (sizeof(T) + ... + 0u)> buffer{};
+
+            std::apply([&buffer](auto&&... args)
+                {
+                    size_t size{};
+                    ((std::memcpy(buffer.data() + size, &args, sizeof(args)), size += sizeof(args)), ...);
+                }, data);
+
+            gl::buffer_sub_data(m_glId, offset, std::span<const byte>{ buffer.data(), buffer.size() });
         }
 
         auto expose_internals() const

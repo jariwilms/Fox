@@ -440,6 +440,7 @@
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\OpenGL\GLMappings.hpp" />
     <ClInclude Include="src\Helix\Rendering\API\Vulkan\VKMappings.hpp" />
+    <ClInclude Include="src\Helix\Rendering\RenderInfo\RenderInfo.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Helix\Application.cpp">

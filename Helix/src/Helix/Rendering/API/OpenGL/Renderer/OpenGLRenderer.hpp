@@ -9,6 +9,7 @@
 #include "Helix/Rendering/Material/Material.hpp"
 #include "Helix/Core/Library/Transform/Transform.hpp"
 #include "Helix/Rendering/Utility/Utility.hpp"
+#include "Helix/Rendering/RenderInfo/RenderInfo.hpp"
 
 namespace hlx::gfx::imp::api
 {
@@ -19,7 +20,7 @@ namespace hlx::gfx::imp::api
         static void init()
         {
             const u8 samples{ 4 };
-            const u32 lightCount{ 8 };
+            const u32 lightCount{ 32 };
             const Vector2u dimensions{ 1280, 720 };
             const Vector2u shadowMapDimensions{ 1024, 1024 };
 
@@ -73,23 +74,76 @@ namespace hlx::gfx::imp::api
 
             RenderState::apply<RenderState::Parameter::ClearColor>(Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
             RenderState::apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction::LessEqual);
-            RenderState::apply<RenderState::Parameter::CullingFaceAlpha>(true);
-            RenderState::apply<RenderState::Parameter::CullingFace>(RenderState::CullingFace::Back);
+            RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
+            RenderState::apply<RenderState::Parameter::FaceCulling>(RenderState::FaceCulling::Back);
             RenderState::apply<RenderState::Parameter::FrontFace>(RenderState::FrontFace::CounterClockwise);
         }
 
-        static void start_render_pass()
+        static void start(const RenderInfo& renderInfo)
         {
+            const auto& [camera, transform] = renderInfo.camera;
+            const auto& viewMatrix          = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
+            const auto& projectionMatrix    = camera.projection().matrix();
 
+            std::array<ULight, 32> uLights{};
+            const auto lights = renderInfo.lights;
+            std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<Light, Vector3f>& _)
+                {
+                    const auto& [light, position] = _;
+
+                    return ULight
+                    {
+                        Vector4f{ position, 0.0f },
+                        Vector4f{ light.color, 0.0f },
+                    };
+                });
+
+            s_matricesBuffer->copy_tuple(offsetof(UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
+            s_cameraBuffer->copy(UCamera{ Vector4f{ transform.position, 0.0f } });
+            s_lightBuffer->copy(uLights);
+
+
+
+            s_mmt.clear();
+
+
+
+            s_gBufferMultisample->bind(FrameBuffer::Target::Write);
+
+            gl::clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //TODO: define buffers
+            RenderState::apply<RenderState::Parameter::DepthTestingAlpha>(true);
+            RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
         }
-        static void finish_render_pass()
+        static void finish()
         {
 
+
+
+            s_pipelines.at("Mesh")->bind();
+            //for (const auto& mmt : s_mmt)
+            //{
+            //    const auto& [mesh, material, transform] = mmt;
+
+            //    s_matricesBuffer->copy_tuple(offsetof(UMatrices, model), std::make_tuple(transform.matrix()));
+            //    s_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
+
+            //    const auto& vao = mesh->vertex_array();
+            //    vao->bind();
+            //    if (vao->indexed()) vao->index_buffer()->bind();
+
+            //    s_materialBuffer->copy(UMaterial{ material->color, material->roughness, material->metallic });
+            //    material->albedoMap->bind(0);
+            //    material->normalMap->bind(1);
+            //    material->armMap->bind(2);
+            //    material->emissionMap->bind(3);
+
+            //    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->index_buffer()->count()), GL_UNSIGNED_INT, nullptr);
+            //}
         }
 
-        static void render(const std::shared_ptr<const Mesh> mesh, const std::shared_ptr<const Material> material, const Transform& transform)
+        static void render(std::shared_ptr<const Mesh> mesh, std::shared_ptr<const Material> material, const Transform& transform)
         {
-
+            s_mmt.emplace_back(mesh, material, transform);
         }
 
     private:

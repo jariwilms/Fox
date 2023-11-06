@@ -23,7 +23,7 @@ namespace hlx::gfx::imp::api
         template<Buffer::Access ACCESS, typename T>
         using const_vertex_pointer = std::shared_ptr<const vertex_type<ACCESS, T>>;
         template<Buffer::Access ACCESS>
-        using const_index_pointer  = std::shared_ptr<const index_type<ACCESS>>;
+        using const_index_pointer  = std::shared_ptr<const index_type<Buffer::Access::Static>>;
 
         GVertexArray()
         {

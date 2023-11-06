@@ -4,6 +4,14 @@
 
 namespace hlx::utl
 {
+    template<typename T, size_t SIZE>
+    auto to_span(const std::array<T, SIZE>& v)
+    {
+        return std::span{ v };
+    }
+
+
+
     //https://stackoverflow.com/questions/70524923
     template<typename T>
     auto to_span(const std::vector<T>& v)
@@ -29,14 +37,18 @@ namespace hlx::utl
         return to_span(r);
     }
 
-    template<typename T, size_t extent>
-    auto as_bytes(std::span<T, extent> s)
+
+
+    template<typename T, size_t EXTENT>
+    auto as_bytes(std::span<T, EXTENT> s)
     {
-        constexpr auto dynamic_extent = static_cast<size_t>(-1); //no idea
-        using return_type = std::span<const byte, extent == dynamic_extent ? dynamic_extent : sizeof(T) * extent>;
+        constexpr auto dynamic_extent = static_cast<size_t>(-1);
+        using return_type = std::span<const byte, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
 
         return return_type{ reinterpret_cast<const byte*>(s.data()), s.size_bytes() };
     }
+
+
 
     //https://stackoverflow.com/a/21028912
     template <typename T, typename A = std::allocator<T>>
@@ -64,6 +76,8 @@ namespace hlx::utl
         }
     };
 
+
+
     //https://stackoverflow.com/a/57053750
     template<typename V>
     void resize(V& v, size_t newSize)
@@ -73,6 +87,8 @@ namespace hlx::utl
         typedef std::vector<vt, typename std::allocator_traits<typename V::allocator_type>::template rebind_alloc<vt>> V2;
         reinterpret_cast<V2&>(v).resize(newSize);
     }
+
+
 
     //auto mip_l(const Vector2u& dimensions)
     //{

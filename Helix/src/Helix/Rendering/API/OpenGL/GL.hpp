@@ -84,6 +84,13 @@ namespace hlx::gfx::imp::api::gl
 
 
 
+    void clear(GLbitfield mask)
+    {
+        glClear(mask);
+    }
+
+
+
     GLuint    create_buffer()
     {
         GLuint buffer{};

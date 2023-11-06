@@ -147,7 +147,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid access!" };
         }
     }
-    constexpr GLenum      map_buffer_map(gfx::api::Buffer::Mapping mapping)
+    constexpr GLenum      map_buffer_mapping(gfx::api::Buffer::Mapping mapping)
     {
         switch (mapping)
         {
@@ -168,6 +168,16 @@ namespace hlx::gfx::imp::api::gl
             case gfx::api::FrameBuffer::Attachment::DepthStencil: return GL_DEPTH_STENCIL_ATTACHMENT;
 
             default: throw std::invalid_argument{ "Invalid attachment!" };
+        }
+    }
+    constexpr GLenum      map_frame_buffer_target(gfx::api::FrameBuffer::Target target)
+    {
+        switch (target)
+        {
+            case gfx::api::FrameBuffer::Target::Read:  return GL_READ_FRAMEBUFFER;
+            case gfx::api::FrameBuffer::Target::Write: return GL_DRAW_FRAMEBUFFER;
+
+            default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
     constexpr GLenum      map_shader_type(gfx::api::Shader::Stage stage)
@@ -215,13 +225,13 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    constexpr GLenum      map_culling_face(gfx::api::RenderState::CullingFace cullingFace)
+    constexpr GLenum      map_culling_face(gfx::api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {
-            case gfx::api::RenderState::CullingFace::Front:     return GL_FRONT;
-            case gfx::api::RenderState::CullingFace::Back:      return GL_BACK;
-            case gfx::api::RenderState::CullingFace::FrontBack: return GL_FRONT_AND_BACK;
+            case gfx::api::RenderState::FaceCulling::Front:     return GL_FRONT;
+            case gfx::api::RenderState::FaceCulling::Back:      return GL_BACK;
+            case gfx::api::RenderState::FaceCulling::FrontBack: return GL_FRONT_AND_BACK;
 
             default: throw std::invalid_argument{ "Invalid culling face!" };
         }

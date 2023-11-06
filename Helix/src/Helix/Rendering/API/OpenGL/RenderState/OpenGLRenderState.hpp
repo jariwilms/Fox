@@ -17,11 +17,12 @@ namespace hlx::gfx::imp::api
     public:
         static void init()
         {
-            s_faceCullingAlpha = false;
-            s_cullingFace      = CullingFace::Back;
-            s_depthFunction    = DepthFunction::Less;
-            s_frontFace        = FrontFace::CounterClockwise;
-            s_clearColor       = Vector4f{ 0.0f };
+            s_cullingFaceAlpha  = false;
+            s_depthTestingAlpha = false;
+            s_faceCulling       = FaceCulling::Back;
+            s_depthFunction     = DepthFunction::Less;
+            s_frontFace         = FrontFace::CounterClockwise;
+            s_clearColor        = Vector4f{ 0.0f };
         }
 
         template<RenderState::Parameter PARAM, typename... Args>
@@ -54,34 +55,34 @@ namespace hlx::gfx::imp::api
             glDepthFunc(glDepthFunction);
         }
 
-        template<> static auto query<RenderState::Parameter::CullingFaceAlpha>()
+        template<> static auto query<RenderState::Parameter::FaceCullingAlpha>()
         {
-            return s_faceCullingAlpha;
+            return s_cullingFaceAlpha;
         }
-        template<> static auto apply<RenderState::Parameter::CullingFaceAlpha>(bool alpha)
+        template<> static auto apply<RenderState::Parameter::FaceCullingAlpha>(bool alpha)
         {
-            if (s_faceCullingAlpha == alpha) return;
+            if (s_cullingFaceAlpha == alpha) return;
 
-            s_faceCullingAlpha = alpha;
-            s_faceCullingAlpha ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
+            s_cullingFaceAlpha = alpha;
+            s_cullingFaceAlpha ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
         }
 
-        template<> static auto query<RenderState::Parameter::CullingFace>()
+        template<> static auto query<RenderState::Parameter::FaceCulling>()
         {
-            return s_cullingFace;
+            return s_faceCulling;
         }
-        template<> static auto apply<RenderState::Parameter::CullingFace>(CullingFace cullingFace)
+        template<> static auto apply<RenderState::Parameter::FaceCulling>(FaceCulling faceCulling)
         {
-            if (s_cullingFace == cullingFace) return;
+            if (s_faceCulling == faceCulling) return;
 
-            s_cullingFace = cullingFace;
-            const auto& glCullingFace = gl::map_culling_face(s_cullingFace);
-            glCullFace(glCullingFace);
+            s_faceCulling = faceCulling;
+            const auto& glFaceCulling = gl::map_culling_face(s_faceCulling);
+            glCullFace(glFaceCulling);
         }
 
         template<> static auto query<RenderState::Parameter::FrontFace>()
         {
-            return s_cullingFace;
+            return s_faceCulling;
         }
         template<> static auto apply<RenderState::Parameter::FrontFace>(FrontFace frontFace)
         {
@@ -89,6 +90,18 @@ namespace hlx::gfx::imp::api
 
             s_frontFace = frontFace;
             s_frontFace == RenderState::FrontFace::Clockwise ? glFrontFace(GL_CW) : glFrontFace(GL_CCW);
+        }
+
+        template<> static auto query<RenderState::Parameter::DepthTestingAlpha>()
+        {
+            return s_depthTestingAlpha;
+        }
+        template<> static auto apply<RenderState::Parameter::DepthTestingAlpha>(bool alpha)
+        {
+            if (s_depthTestingAlpha == alpha) return;
+
+            s_depthTestingAlpha = alpha;
+            s_depthTestingAlpha ? glEnable(GL_DEPTH_TEST) : glDisable(GL_DEPTH_TEST);
         }
 
     private:

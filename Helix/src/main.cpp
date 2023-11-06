@@ -5,12 +5,23 @@
 #include "Helix/Rendering/Create.hpp"
 #include "Helix/Rendering/Renderer.hpp"
 
+#include "Helix/Rendering/RenderInfo/RenderInfo.hpp"
+
 using namespace hlx;
 
 int main(int argc, char* argv[])
 {
+    Camera camera;
+    Transform t{};
+    std::array<std::tuple<Light, Vector3f>, 32> lights{};
+
+    gfx::RenderInfo ri{ std::make_tuple(camera, t), lights };
+
     gfx::Renderer::init();
-    gfx::Renderer::start_render_pass();
+    gfx::Renderer::start(ri);
+    gfx::Renderer::finish();
+
+
 
     //Application application{ argc, argv };
     //return application.run();

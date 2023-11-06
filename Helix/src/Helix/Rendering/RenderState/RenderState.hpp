@@ -11,8 +11,9 @@ namespace hlx::gfx::api
         {
             ClearColor, 
             DepthFunction, 
-            CullingFace, 
-            CullingFaceAlpha, 
+            DepthTestingAlpha, 
+            FaceCulling, 
+            FaceCullingAlpha, 
             FrontFace, 
         };
         enum class DepthFunction
@@ -26,7 +27,7 @@ namespace hlx::gfx::api
             GreaterEqual, 
             Always, 
         };
-        enum class CullingFace
+        enum class FaceCulling
         {
             Front, 
             Back, 
@@ -41,8 +42,9 @@ namespace hlx::gfx::api
     protected:
         RenderState() = default;
 
-        static inline bool          s_faceCullingAlpha{};
-        static inline CullingFace   s_cullingFace{};
+        static inline bool          s_depthTestingAlpha{};
+        static inline bool          s_cullingFaceAlpha{};
+        static inline FaceCulling   s_faceCulling{};
         static inline DepthFunction s_depthFunction{};
         static inline FrontFace     s_frontFace{};
         static inline Vector4f      s_clearColor{};

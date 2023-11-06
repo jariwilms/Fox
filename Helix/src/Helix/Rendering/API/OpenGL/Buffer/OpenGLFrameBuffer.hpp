@@ -145,7 +145,8 @@ namespace hlx::gfx::imp::api
 
         void bind(FrameBuffer::Target target)
         {
-            gl::bind_frame_buffer(m_glId);
+            const auto& glTarget = gl::map_frame_buffer_target(target);
+            gl::bind_frame_buffer(m_glId, glTarget);
         }
         void bind_texture(const std::string& identifier, u32 slot)
         {
