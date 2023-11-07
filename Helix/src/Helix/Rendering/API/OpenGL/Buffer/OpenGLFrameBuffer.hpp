@@ -7,6 +7,7 @@
 #include "Helix/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
 #include "Helix/Rendering/API/Implementation/GFrameBuffer.hpp"
 #include "Helix/Rendering/Buffer/FrameBuffer.hpp"
+#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
 
 namespace hlx::gfx::imp::api
 {
@@ -159,6 +160,14 @@ namespace hlx::gfx::imp::api
         u8 samples() const
         {
             return m_samples;
+        }
+
+        auto expose_internals() const
+        {
+            return InternalView<GFrameBuffer<gfx::api::GraphicsAPI::OpenGL, AA>>
+            {
+                m_glId
+            };
         }
 
         GFrameBuffer& operator=(GFrameBuffer&& other) noexcept

@@ -68,7 +68,7 @@ namespace hlx::gfx::imp::api
             if (m_glId) gl::delete_texture(m_glId);
         }
 
-        void bind(u32 slot)
+        void bind(u32 slot) const
         {
             gl::bind_texture(m_glId, slot);
         }

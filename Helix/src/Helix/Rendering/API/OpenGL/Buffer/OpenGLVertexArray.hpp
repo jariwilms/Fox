@@ -22,7 +22,6 @@ namespace hlx::gfx::imp::api
         using vertex_pointer       = std::shared_ptr<vertex_type<ACCESS, T>>;
         template<Buffer::Access ACCESS, typename T>
         using const_vertex_pointer = std::shared_ptr<const vertex_type<ACCESS, T>>;
-        template<Buffer::Access ACCESS>
         using const_index_pointer  = std::shared_ptr<const index_type<Buffer::Access::Static>>;
 
         GVertexArray()
@@ -70,13 +69,20 @@ namespace hlx::gfx::imp::api
 
             ++m_glArrayBindingIndex;
         }
-        template<Buffer::Access ACCESS>
-        void tie(const_index_pointer<ACCESS> buffer)
+        void tie(const_index_pointer buffer)
         {
-            throw std::logic_error{ "The method or operation has not been implemented!" };
+            m_indexBuffer = buffer;
         }
 
-        unsigned int primitive_count() const
+        bool                is_indexed()      const
+        {
+            return m_indexBuffer.get() != nullptr;
+        }
+        const_index_pointer index_buffer()    const
+        {
+            return m_indexBuffer;
+        }
+        unsigned int        primitive_count() const
         {
             return m_primitiveCount;
         }
@@ -101,6 +107,7 @@ namespace hlx::gfx::imp::api
         GLuint m_glArrayAttributeIndex{};
         GLuint m_glArrayBindingIndex{};
 
+        const_index_pointer m_indexBuffer{};
         u32 m_primitiveCount{};
     };
 }

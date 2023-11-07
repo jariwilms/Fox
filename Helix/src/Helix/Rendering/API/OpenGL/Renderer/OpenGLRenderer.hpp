@@ -110,35 +110,74 @@ namespace hlx::gfx::imp::api
 
             s_gBufferMultisample->bind(FrameBuffer::Target::Write);
 
-            gl::clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); //TODO: define buffers
+            gl::clear(gl::BufferMask::ColorBuffer | gl::BufferMask::DepthBuffer | gl::BufferMask::StencilBuffer);
             RenderState::apply<RenderState::Parameter::DepthTestingAlpha>(true);
             RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
         }
         static void finish()
         {
-
-
-
             s_pipelines.at("Mesh")->bind();
-            //for (const auto& mmt : s_mmt)
-            //{
-            //    const auto& [mesh, material, transform] = mmt;
+            for (auto& mmt : s_mmt)
+            {
+                const auto& [mesh, material, transform] = mmt;
+                const auto& vao                         = mesh->vertex_array();
+                const auto& ind                         = vao->index_buffer();
 
-            //    s_matricesBuffer->copy_tuple(offsetof(UMatrices, model), std::make_tuple(transform.matrix()));
-            //    s_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
+                s_matricesBuffer->copy_tuple(offsetof(UMatrices, model),  std::make_tuple(transform.matrix()));
+                s_matricesBuffer->copy_tuple(offsetof(UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
-            //    const auto& vao = mesh->vertex_array();
-            //    vao->bind();
-            //    if (vao->indexed()) vao->index_buffer()->bind();
+                vao->bind();
+                if (vao->is_indexed()) ind->bind();
 
-            //    s_materialBuffer->copy(UMaterial{ material->color, material->roughness, material->metallic });
-            //    material->albedoMap->bind(0);
-            //    material->normalMap->bind(1);
-            //    material->armMap->bind(2);
-            //    material->emissionMap->bind(3);
+                s_materialBuffer->copy(UMaterial{ material->color, material->roughness, material->metallic });
+                material->albedoMap->bind(0);
+                material->normalMap->bind(1);
+                material->armMap->bind(2);
+                material->emissionMap->bind(3);
 
-            //    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(vao->index_buffer()->count()), GL_UNSIGNED_INT, nullptr);
-            //}
+                glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(ind->count()), GL_UNSIGNED_INT, nullptr);
+            }
+
+
+
+            RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(false);
+
+            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, so we have to copy it into a regular framebuffer
+            const auto width{ 1280 };
+            const auto height{ 720 };
+            const auto& gBufferInternal   = s_gBuffer->expose_internals();
+            const auto& gBufferMsInternal = s_gBufferMultisample->expose_internals();
+
+            for (auto i{ 0u }; i < 4; ++i)
+            {
+                glNamedFramebufferReadBuffer(gBufferMsInternal.glId, GL_COLOR_ATTACHMENT0 + i);
+                glNamedFramebufferDrawBuffer(gBufferInternal.glId, GL_COLOR_ATTACHMENT0 + i);
+                glBlitNamedFramebuffer(gBufferMsInternal.glId, gBufferInternal.glId, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            }
+            glBlitNamedFramebuffer(gBufferMsInternal.glId, gBufferInternal.glId, 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+
+
+
+            ////Lighting pass render into ppBuffer
+            //glDisable(GL_BLEND);
+
+            //s_pipelines.at("Lighting")->bind();
+            //s_ppBuffers[0]->bind(FrameBuffer::Target::Write);
+            //s_gBuffer->bind_texture("Position", 0);
+            //s_gBuffer->bind_texture("Albedo", 1);
+            //s_gBuffer->bind_texture("Normal", 2);
+            //s_gBuffer->bind_texture("ARM", 3);
+
+            //glDisable(GL_DEPTH_TEST);
+            //Geometry::Plane::mesh()->vertex_array()->bind();
+            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            //glEnable(GL_BLEND);
+
+
+
+
+
         }
 
         static void render(std::shared_ptr<const Mesh> mesh, std::shared_ptr<const Material> material, const Transform& transform)

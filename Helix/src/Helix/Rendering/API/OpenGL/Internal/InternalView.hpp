@@ -38,4 +38,10 @@ namespace hlx::gfx::imp::api
     {
         const GLuint& glId;
     };
+
+    template<AntiAliasing AA>
+    struct InternalView<imp::GFrameBuffer<gfx::api::GraphicsAPI::OpenGL, AA>>
+    {
+        const GLuint& glId;
+    };
 }
