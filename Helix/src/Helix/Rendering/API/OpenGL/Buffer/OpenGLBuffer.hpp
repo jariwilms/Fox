@@ -37,14 +37,14 @@ namespace hlx::gfx::imp::api
             if constexpr (TYPE == Buffer::Type::Index)        gl::bind_buffer(m_glId, gl::Buffer::Target::ElementArrayBuffer);
             if constexpr (TYPE == Buffer::Type::UniformArray) gl::bind_buffer(m_glId, gl::Buffer::Target::UniformBuffer);
         }
-        void bind_range(u32 binding, u32 count, u32 offset) const requires (TYPE == Buffer::Type::UniformArray)
+        void bind_range(std::uint32_t binding, std::uint32_t count, std::uint32_t offset) const requires (TYPE == Buffer::Type::UniformArray)
         {
             gl::bind_buffer_range(m_glId, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
         }
 
-        u32 count() const
+        std::uint32_t count() const
         {
-            return static_cast<u32>(m_size / sizeof(T));
+            return static_cast<std::uint32_t>(m_size / sizeof(T));
         }
 
         auto expose_internals() const
@@ -74,7 +74,7 @@ namespace hlx::gfx::imp::api
     class GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Dynamic, T> final : public GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T>
     {
     public:
-        GBuffer(u32 count)
+        GBuffer(std::uint32_t count)
             : GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T>{ count * sizeof(T) }
         {
             this->m_glId = gl::create_buffer();
@@ -99,7 +99,7 @@ namespace hlx::gfx::imp::api
         {
             gl::buffer_sub_data(this->m_glId, 0, data);
         }
-        void copy_range(u32 offset, std::span<const T> data)
+        void copy_range(std::uint32_t offset, std::span<const T> data)
         {
             gl::buffer_sub_data(this->m_glId, offset * sizeof(T), data);
         }
@@ -115,7 +115,7 @@ namespace hlx::gfx::imp::api
             return std::span<data_t>{ data, this->m_size / sizeof(T) };
         }
         template<Buffer::Mapping MAPPING>
-        auto map_range(u32 count, u32 offset)
+        auto map_range(std::uint32_t count, std::uint32_t offset)
         {
             using data_t = std::conditional_t<MAPPING == Buffer::Mapping::Read, const T, T>;
 
@@ -162,7 +162,7 @@ namespace hlx::gfx::imp::api
             if (m_glId) gl::delete_buffer(m_glId);
         }
 
-        void bind(u32 binding) const
+        void bind(std::uint32_t binding) const
         {
             gl::bind_buffer_base(m_glId, gl::Buffer::TargetBase::UniformBuffer, binding);
         }

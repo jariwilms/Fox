@@ -65,34 +65,6 @@ namespace hlx::gfx::imp::api::gl
             ClientStorage  = GL_CLIENT_STORAGE_BIT, 
         };
     };
-    //template<typename T, Buffer::Access ACCESS>
-    //class BufferProxy
-    //{
-    //public:
-    //    BufferProxy(T* ptr, size_t size)
-    //        : m_data{ ptr, size } {}
-
-    //    T& read(u32 index) const requires (ACCESS != Buffer::Access::Write)
-    //    {
-    //        return m_data[index];
-    //    }
-    //    void write(const T& value) requires (ACCESS != Buffer::Access::Read)
-    //    {
-    //        m_data[index] = value;
-    //    }
-
-    //    size_t size() const
-    //    {
-    //        return m_data.size();
-    //    }
-    //    T* data()
-    //    {
-    //        return m_data.data();
-    //    }
-
-    //private:
-    //    std::span<T> m_data{};
-    //};
 
 
 
@@ -296,7 +268,7 @@ namespace hlx::gfx::imp::api::gl
     {
         glDeleteTextures(1, &texture);
     }
-    void        bind_texture(GLuint texture, u32 slot)
+    void        bind_texture(GLuint texture, std::uint32_t slot)
     {
         glBindTextureUnit(static_cast<GLuint>(slot), texture);
     }
@@ -356,7 +328,7 @@ namespace hlx::gfx::imp::api::gl
     {
         glNamedRenderbufferStorage(renderBuffer, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
     }
-    void        render_buffer_storage_multisample(GLuint renderBuffer, GLenum format, const Vector2u& dimensions, u8 samples)
+    void        render_buffer_storage_multisample(GLuint renderBuffer, GLenum format, const Vector2u& dimensions, std::uint8_t samples)
     {
         glNamedRenderbufferStorageMultisample(renderBuffer, samples, format, static_cast<GLsizei>(dimensions.x), static_cast<GLsizei>(dimensions.y));
     }

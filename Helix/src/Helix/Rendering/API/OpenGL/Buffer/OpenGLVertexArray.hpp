@@ -17,7 +17,7 @@ namespace hlx::gfx::imp::api
         template<Buffer::Access ACCESS, typename T>
         using vertex_type = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Vertex, ACCESS, T>;
         template<Buffer::Access ACCESS>
-        using index_type           = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, u32>;
+        using index_type           = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, std::uint32_t>;
         template<Buffer::Access ACCESS, typename T>
         using vertex_pointer       = std::shared_ptr<vertex_type<ACCESS, T>>;
         template<Buffer::Access ACCESS, typename T>
@@ -62,7 +62,7 @@ namespace hlx::gfx::imp::api
                 gl::vertex_array_attribute_binding(m_glId, m_glArrayAttributeIndex, m_glArrayBindingIndex);
 
                 offset += static_cast<GLuint>(attribute.stride());
-                m_primitiveCount += static_cast<u32>(buffer->size() / attribute.stride());
+                m_primitiveCount += static_cast<std::uint32_t>(buffer->size() / attribute.stride());
 
                 ++m_glArrayAttributeIndex;
             }
@@ -108,6 +108,6 @@ namespace hlx::gfx::imp::api
         GLuint m_glArrayBindingIndex{};
 
         const_index_pointer m_indexBuffer{};
-        u32 m_primitiveCount{};
+        std::uint32_t m_primitiveCount{};
     };
 }

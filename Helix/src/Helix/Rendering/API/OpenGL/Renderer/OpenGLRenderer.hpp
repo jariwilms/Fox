@@ -19,8 +19,8 @@ namespace hlx::gfx::imp::api
     public:
         static void init()
         {
-            const u8 samples{ 4 };
-            const u32 lightCount{ 32 };
+            const std::uint8_t samples{ 4 };
+            const std::uint32_t lightCount{ 32 };
             const Vector2u dimensions{ 1280, 720 };
             const Vector2u shadowMapDimensions{ 1024, 1024 };
 

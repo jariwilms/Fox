@@ -35,7 +35,7 @@ namespace hlx::gfx::imp::api
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, m_dimensions, 0);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, m_dimensions, 0);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, u8 samples)                 requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::uint8_t samples)                 requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
@@ -68,7 +68,7 @@ namespace hlx::gfx::imp::api
             if (m_glId) gl::delete_texture(m_glId);
         }
 
-        void bind(u32 slot) const
+        void bind(std::uint32_t slot) const
         {
             gl::bind_texture(m_glId, slot);
         }
@@ -91,7 +91,7 @@ namespace hlx::gfx::imp::api
         {
             return m_dimensions;
         }
-        u8              samples()    const
+        std::uint8_t              samples()    const
         {
             return m_samples;
         }
@@ -137,6 +137,6 @@ namespace hlx::gfx::imp::api
         GLuint m_glWrapping{};
 
         vector_t m_dimensions{};
-        u8       m_samples{};
+        std::uint8_t       m_samples{};
     };
 }

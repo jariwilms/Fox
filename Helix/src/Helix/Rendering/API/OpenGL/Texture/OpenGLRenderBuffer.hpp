@@ -17,7 +17,7 @@ namespace hlx::gfx::imp::api
             const auto& glFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage(m_glId, glFormat, this->m_dimensions);
         }
-        GRenderBuffer(Format format, const Vector2u& dimensions, u8 samples) requires (AA == AntiAliasing::MSAA)
+        GRenderBuffer(Format format, const Vector2u& dimensions, std::uint8_t samples) requires (AA == AntiAliasing::MSAA)
             : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_render_buffer();
@@ -38,7 +38,7 @@ namespace hlx::gfx::imp::api
         {
             return m_dimensions;
         }
-        u8              samples()    const
+        std::uint8_t              samples()    const
         {
             return m_samples;
         }
@@ -68,6 +68,6 @@ namespace hlx::gfx::imp::api
         GLuint m_glId{};
 
         Vector2u m_dimensions{};
-        u8       m_samples{};
+        std::uint8_t       m_samples{};
     };
 }

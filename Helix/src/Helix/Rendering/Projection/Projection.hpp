@@ -22,14 +22,14 @@ namespace hlx::gfx
         template<Type T, typename... Args>
         static Projection create(Args... args) = delete;
         template<> 
-        static Projection create<Type::Perspective>(f32 fov, f32 aspect, f32 zNear, f32 zFar)
+        static Projection create<Type::Perspective>(float fov, float aspect, float zNear, float zFar)
         {
             const auto& matrix = glm::perspective(glm::radians(fov), aspect, zNear, zFar);
 
             return Projection{ matrix };
         }
         template<> 
-        static Projection create<Type::Orthographic>(f32 top, f32 bottom, f32 left, f32 right, f32 zNear, f32 zFar)
+        static Projection create<Type::Orthographic>(float top, float bottom, float left, float right, float zNear, float zFar)
         {
             const auto& matrix = glm::ortho(left, right, bottom, top, zNear, zFar);
 

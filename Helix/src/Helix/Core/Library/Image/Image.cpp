@@ -52,6 +52,6 @@ namespace hlx
 
         stbi_image_free(decodedData);
 
-        return Image{ layout, Vector2u{ static_cast<u32>(x), static_cast<u32>(y) }, std::move(v) };
+        return Image{ layout, Vector2u{ static_cast<std::uint32_t>(x), static_cast<std::uint32_t>(y) }, std::move(v) };
     }
 }

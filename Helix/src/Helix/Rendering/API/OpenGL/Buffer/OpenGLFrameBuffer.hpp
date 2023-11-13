@@ -76,7 +76,7 @@ namespace hlx::gfx::imp::api
 
             if (gl::check_frame_buffer_status(m_glId) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        GFrameBuffer(const Vector2u& dimensions, u8 samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)
+        GFrameBuffer(const Vector2u& dimensions, std::uint8_t samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)
             : FrameBuffer{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_frame_buffer();
@@ -149,7 +149,7 @@ namespace hlx::gfx::imp::api
             const auto& glTarget = gl::map_frame_buffer_target(target);
             gl::bind_frame_buffer(m_glId, glTarget);
         }
-        void bind_texture(const std::string& identifier, u32 slot)
+        void bind_texture(const std::string& identifier, std::uint32_t slot)
         {
             const auto& it = m_identifierToTexture.find(identifier);
             if (it == m_identifierToTexture.end()) throw std::invalid_argument{ "Invalid texture identifier!" };
@@ -157,7 +157,7 @@ namespace hlx::gfx::imp::api
             gl::bind_texture(it->second->id(), slot);
         }
 
-        u8 samples() const
+        std::uint8_t samples() const
         {
             return m_samples;
         }
@@ -186,7 +186,7 @@ namespace hlx::gfx::imp::api
     private:
         GLuint m_glId{};
 
-        u8 m_samples{};
+        std::uint8_t m_samples{};
 
         std::unordered_map<std::string, std::shared_ptr<texture_t>>       m_identifierToTexture{};
         std::unordered_map<std::string, std::shared_ptr<render_buffer_t>> m_identifierToRenderBuffer{};

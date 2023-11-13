@@ -18,7 +18,7 @@ namespace hlx::gfx::imp::api
         }
 
         GLenum glType{};
-        u32    count{};
+        std::uint32_t    count{};
         size_t typeSize{};
         bool   isNormalized{};
     };
