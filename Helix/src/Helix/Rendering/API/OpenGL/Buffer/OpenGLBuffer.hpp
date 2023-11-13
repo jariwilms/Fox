@@ -33,9 +33,9 @@ namespace hlx::gfx::imp::api
 
         void bind() const
         {
-            if constexpr (TYPE == Buffer::Type::Vertex)       gl::bind_buffer(m_glId, GL_ARRAY_BUFFER);
-            if constexpr (TYPE == Buffer::Type::Index)        gl::bind_buffer(m_glId, GL_ELEMENT_ARRAY_BUFFER);
-            if constexpr (TYPE == Buffer::Type::UniformArray) gl::bind_buffer(m_glId, GL_UNIFORM_BUFFER);
+            if constexpr (TYPE == Buffer::Type::Vertex)       gl::bind_buffer(m_glId, gl::Buffer::Target::ArrayBuffer);
+            if constexpr (TYPE == Buffer::Type::Index)        gl::bind_buffer(m_glId, gl::Buffer::Target::ElementArrayBuffer);
+            if constexpr (TYPE == Buffer::Type::UniformArray) gl::bind_buffer(m_glId, gl::Buffer::Target::UniformBuffer);
         }
         void bind_range(u32 binding, u32 count, u32 offset) const requires (TYPE == Buffer::Type::UniformArray)
         {
@@ -79,8 +79,7 @@ namespace hlx::gfx::imp::api
         {
             this->m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Dynamic);
-            gl::buffer_storage(this->m_glId, glAccess, this->m_size);
+            gl::buffer_storage(this->m_glId, gl::Buffer::StorageFlags::DynamicStorage, this->m_size);
         }
         GBuffer(std::span<const T> data)
             : GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T>{ data.size_bytes() }
@@ -144,8 +143,7 @@ namespace hlx::gfx::imp::api
         {
             m_glId = gl::create_buffer();
 
-            const auto& glAccess = gl::map_buffer_access(Buffer::Access::Dynamic);
-            gl::buffer_storage(m_glId, glAccess, sizeof(T) );
+            gl::buffer_storage(m_glId, gl::Buffer::StorageFlags::DynamicStorage, sizeof(T) );
         }
         GBuffer(const T& data)
             : Buffer{ sizeof(T) }
@@ -166,7 +164,7 @@ namespace hlx::gfx::imp::api
 
         void bind(u32 binding) const
         {
-            gl::bind_buffer_base(m_glId, GL_UNIFORM_BUFFER, binding);
+            gl::bind_buffer_base(m_glId, gl::Buffer::TargetBase::UniformBuffer, binding);
         }
 
         void copy(const T& data)

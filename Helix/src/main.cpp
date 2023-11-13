@@ -21,8 +21,6 @@ int main(int argc, char* argv[])
     gfx::Renderer::start(ri);
     gfx::Renderer::finish();
 
-
-
     //Application application{ argc, argv };
     //return application.run();
 

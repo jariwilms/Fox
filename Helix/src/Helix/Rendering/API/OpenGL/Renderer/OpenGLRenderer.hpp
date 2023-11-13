@@ -110,7 +110,7 @@ namespace hlx::gfx::imp::api
 
             s_gBufferMultisample->bind(FrameBuffer::Target::Write);
 
-            gl::clear(gl::BufferMask::ColorBuffer | gl::BufferMask::DepthBuffer | gl::BufferMask::StencilBuffer);
+            gl::clear(gl::Buffer::Mask::All);
             RenderState::apply<RenderState::Parameter::DepthTestingAlpha>(true);
             RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
         }

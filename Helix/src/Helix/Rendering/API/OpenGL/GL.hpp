@@ -9,12 +9,91 @@
 
 namespace hlx::gfx::imp::api::gl
 {
-    enum BufferMask : GLbitfield
+    struct Buffer
     {
-        ColorBuffer   = GL_COLOR_BUFFER_BIT,
-        DepthBuffer   = GL_DEPTH_BUFFER_BIT,
-        StencilBuffer = GL_STENCIL_BUFFER_BIT,
+        enum Mask : GLbitfield
+        {
+            ColorBuffer   = GL_COLOR_BUFFER_BIT,
+            DepthBuffer   = GL_DEPTH_BUFFER_BIT,
+            StencilBuffer = GL_STENCIL_BUFFER_BIT, 
+
+            All           = ColorBuffer | DepthBuffer | StencilBuffer
+        };
+        enum class Access : GLenum
+        {
+            Read      = GL_READ_ONLY, 
+            Write     = GL_WRITE_ONLY, 
+            ReadWrite = GL_READ_WRITE, 
+        };
+        enum class Target : GLenum
+        {
+            ArrayBuffer              = GL_ARRAY_BUFFER, 
+            AtomicCounterBuffer      = GL_ATOMIC_COUNTER_BUFFER, 
+            CopyReadBuffer           = GL_COPY_READ_BUFFER, 
+            CopyWriteBuffer          = GL_COPY_WRITE_BUFFER, 
+            DispatchIndirectBuffer   = GL_DISPATCH_INDIRECT_BUFFER, 
+            DrawIndirectBuffer       = GL_DRAW_INDIRECT_BUFFER, 
+            ElementArrayBuffer       = GL_ELEMENT_ARRAY_BUFFER, 
+            PixelPackBuffer          = GL_PIXEL_PACK_BUFFER, 
+            PixelUnpackBuffer        = GL_PIXEL_UNPACK_BUFFER, 
+            QueryBuffer              = GL_QUERY_BUFFER, 
+            ShaderStorageBuffer      = GL_SHADER_STORAGE_BUFFER, 
+            TextureBuffer            = GL_TEXTURE_BUFFER, 
+            TransformFeedbackBuffer  = GL_TRANSFORM_FEEDBACK_BUFFER, 
+            UniformBuffer            = GL_UNIFORM_BUFFER, 
+        };
+        enum class TargetBase : GLenum
+        {
+            AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER, 
+            TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER, 
+            UniformBuffer           = GL_UNIFORM_BUFFER, 
+            ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER, 
+
+        };
+        enum class TargetRange : GLenum
+        {
+            TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
+            UniformBuffer           = GL_UNIFORM_BUFFER,
+        };
+        enum StorageFlags : GLbitfield
+        {
+            DynamicStorage = GL_DYNAMIC_STORAGE_BIT, 
+            MapRead        = GL_MAP_READ_BIT, 
+            MapWrite       = GL_MAP_WRITE_BIT, 
+            MapPersistent  = GL_MAP_PERSISTENT_BIT, 
+            MapCoherent    = GL_MAP_COHERENT_BIT, 
+            ClientStorage  = GL_CLIENT_STORAGE_BIT, 
+        };
     };
+    //template<typename T, Buffer::Access ACCESS>
+    //class BufferProxy
+    //{
+    //public:
+    //    BufferProxy(T* ptr, size_t size)
+    //        : m_data{ ptr, size } {}
+
+    //    T& read(u32 index) const requires (ACCESS != Buffer::Access::Write)
+    //    {
+    //        return m_data[index];
+    //    }
+    //    void write(const T& value) requires (ACCESS != Buffer::Access::Read)
+    //    {
+    //        m_data[index] = value;
+    //    }
+
+    //    size_t size() const
+    //    {
+    //        return m_data.size();
+    //    }
+    //    T* data()
+    //    {
+    //        return m_data.data();
+    //    }
+
+    //private:
+    //    std::span<T> m_data{};
+    //};
+
 
 
 
@@ -57,13 +136,13 @@ namespace hlx::gfx::imp::api::gl
 
 
 
-    void draw_elements(GLenum mode)
+    void draw_elements()
     {
 
     }
-    void clear(GLbitfield mask)
+    void clear(Buffer::Mask mask)
     {
-        glClear(mask);
+        glClear(static_cast<GLbitfield>(mask));
     }
 
 
@@ -79,36 +158,42 @@ namespace hlx::gfx::imp::api::gl
     {
         glDeleteBuffers(1, &buffer);
     }
-    void        bind_buffer(GLuint buffer, GLenum target)
+    void        bind_buffer(GLuint buffer, Buffer::Target target)
     {
-        glBindBuffer(target, buffer);
+        glBindBuffer(static_cast<GLenum>(target), buffer);
     }
-    void        bind_buffer_base(GLuint buffer, GLenum target, GLuint index)
+    void        bind_buffer_base(GLuint buffer, Buffer::TargetBase target, GLuint index)
     {
-        glBindBufferBase(target, index, buffer);
+        glBindBufferBase(static_cast<GLenum>(target), index, buffer);
     }
-    void        bind_buffer_range(GLuint buffer, GLenum target, GLuint index, GLsizeiptr size, GLintptr offset)
+    void        bind_buffer_range(GLuint buffer, Buffer::TargetRange target, GLuint index, GLsizeiptr size, GLintptr offset)
     {
-        glBindBufferRange(target, index, buffer, offset, size);
+        glBindBufferRange(static_cast<GLenum>(target), index, buffer, offset, size);
     }
-    void        buffer_storage(GLuint buffer, GLbitfield flags, size_t size) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void        buffer_storage(GLuint buffer, Buffer::StorageFlags flags, GLsizeiptr size)
     {
-        glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(size), nullptr, flags);
+        glNamedBufferStorage(buffer, size, nullptr, static_cast<GLbitfield>(flags));
     }
     template<typename T>
-    void        buffer_storage(GLuint buffer, GLbitfield flags, std::span<const T> data) //TODO: storage types (STATIC, DYNAMIC ETC.)
+    void        buffer_storage(GLuint buffer, Buffer::StorageFlags flags, std::span<const T> data)
     {
         glNamedBufferStorage(buffer, static_cast<GLsizeiptr>(data.size_bytes()), data.data(), flags);
     }
     template<typename T>
-    void        buffer_sub_data(GLuint buffer, size_t offset, std::span<const T> data)
+    void        buffer_sub_data(GLuint buffer, GLintptr offset, std::span<const T> data)
     {
-        glNamedBufferSubData(buffer, static_cast<GLintptr>(offset), static_cast<GLsizeiptr>(data.size_bytes()), data.data());
+        glNamedBufferSubData(buffer, offset, static_cast<GLsizeiptr>(data.size_bytes()), data.data());
     }
-    template<typename T>
-    void*       map_buffer(GLuint buffer, GLenum access)
+
+
+
+
+
+
+
+    void*       map_buffer(GLuint buffer, size_t size)
     {
-        return glMapNamedBuffer(buffer, access);
+        return glMapNamedBuffer(buffer, GL_READ_WRITE);
     }
     void*       map_buffer_range(GLuint buffer, GLenum access, GLsizeiptr size, GLintptr offset)
     {
@@ -118,6 +203,15 @@ namespace hlx::gfx::imp::api::gl
     {
         return glUnmapNamedBuffer(buffer);
     }
+
+
+
+
+
+
+
+
+
 
     GLuint      create_vertex_array()
     {
