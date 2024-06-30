@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{72EB870B-DEF4-877C-6770-9E7CD378937C}</ProjectGuid>
+    <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Fox</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\bin\Debug\windows\Fox\</OutDir>
+    <IntDir>..\bin_obj\Debug\windows\Fox\</IntDir>
+    <TargetName>Fox</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\bin\Release\windows\Fox\</OutDir>
+    <IntDir>..\bin_obj\Release\windows\Fox\</IntDir>
+    <TargetName>Fox</TargetName>
+    <TargetExt>.exe</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>GLFW_INCLUDE_NONE;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\entt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <Optimization>Full</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <ExternalWarningLevel>Level3</ExternalWarningLevel>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Fox\Application.hpp" />
+    <ClInclude Include="src\Fox\Config.hpp" />
+    <ClInclude Include="src\Fox\Core\Include\GLM.hpp" />
+    <ClInclude Include="src\Fox\Core\Include\STB.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Memory\Memory.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Semantics\NonMovable.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Template\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Time\Time.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Transform\Transform.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Utility\Bitwise.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Utility\Define.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Utility\Utility.hpp" />
+    <ClInclude Include="src\Fox\Core\Using.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\CameraComponent.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\Components.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\LightComponent.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\MeshRendererComponent.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\RelationshipComponent.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\TransformComponent.hpp" />
+    <ClInclude Include="src\Fox\ECS\Entity\Entity.hpp" />
+    <ClInclude Include="src\Fox\ECS\Registry.hpp" />
+    <ClInclude Include="src\Fox\ECS\System\RenderSystem.hpp" />
+    <ClInclude Include="src\Fox\ECS\System\System.hpp" />
+    <ClInclude Include="src\Fox\Experimental\Experimental.hpp" />
+    <ClInclude Include="src\Fox\IO\Filesystem\Directory.hpp" />
+    <ClInclude Include="src\Fox\IO\Filesystem\Entry.hpp" />
+    <ClInclude Include="src\Fox\IO\Filesystem\File.hpp" />
+    <ClInclude Include="src\Fox\IO\Filesystem\Handle.hpp" />
+    <ClInclude Include="src\Fox\IO\IO.hpp" />
+    <ClInclude Include="src\Fox\IO\Import\Model\GLTFImporter.hpp" />
+    <ClInclude Include="src\Fox\IO\Import\Model\ModelImporter.hpp" />
+    <ClInclude Include="src\Fox\Input\Code\ButtonCode.hpp" />
+    <ClInclude Include="src\Fox\Input\Code\KeyCode.hpp" />
+    <ClInclude Include="src\Fox\Input\Code\ModifierCode.hpp" />
+    <ClInclude Include="src\Fox\Input\Handler\InputHandlerAPI.hpp" />
+    <ClInclude Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.hpp" />
+    <ClInclude Include="src\Fox\Input\Input.hpp" />
+    <ClInclude Include="src\Fox\Rendering\AABB\AABB.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\GraphicsAPI.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GFrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GPipeline.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GRenderBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GRenderState.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GRenderer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GShader.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GTexture.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GVertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Implementation\GVertexLayout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\GL.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\GLMappings.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Internal\InternalView.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Renderer\OpenGLRenderer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\OpenGLPipeline.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\OpenGLShader.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\OpenGLRenderBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\OpenGLTexture.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\OpenGLTextureTarget.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Vulkan\VK.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Vulkan\VKMappings.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Vulkan\Vulkan.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Create.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Plane.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Internal\InternalView.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Layout\Layout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Material\Material.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Mesh\Mesh.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Model\Model.hpp" />
+    <ClInclude Include="src\Fox\Rendering\PostProcessing\AmbientOcclusion.hpp" />
+    <ClInclude Include="src\Fox\Rendering\PostProcessing\PostProcessing.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp" />
+    <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp" />
+    <ClInclude Include="src\Fox\Rendering\RenderState\RenderState.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Renderer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Renderer\Renderer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Rendering.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Shader\Pipeline.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Shader\Shader.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Texture\AntiAliasing.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Texture\Dimensions.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Texture\Texture.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Uniform\Uniform.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Using.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Utility\Utility.hpp" />
+    <ClInclude Include="src\Fox\Scene\Actor.hpp" />
+    <ClInclude Include="src\Fox\Scene\Scene.hpp" />
+    <ClInclude Include="src\Fox\Test\Test.hpp" />
+    <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp" />
+    <ClInclude Include="src\Fox\Window\Window.hpp" />
+    <ClInclude Include="src\Fox\Window\WindowManager.hpp" />
+    <ClInclude Include="src\stdafx.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Fox\Application.cpp" />
+    <ClCompile Include="src\Fox\Core\Library\Image\Image.cpp" />
+    <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp" />
+    <ClCompile Include="src\Fox\Input\Input.cpp" />
+    <ClCompile Include="src\Fox\Scene\Actor.cpp" />
+    <ClCompile Include="src\Fox\Scene\Scene.cpp" />
+    <ClCompile Include="src\Fox\Window\API\GLFW\GLFWWindow.cpp" />
+    <ClCompile Include="src\Fox\Window\WindowManager.cpp" />
+    <ClCompile Include="src\Fox\test.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="vendor\glad\GLAD.vcxproj">
+      <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
+      <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
