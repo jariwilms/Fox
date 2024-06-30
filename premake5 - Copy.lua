@@ -1,6 +1,6 @@
-workspace "Fox"
+workspace "Helix"
 	architecture "x64"
-	startproject "Fox"
+	startproject "Helix"
 	
 	configurations
 	{
@@ -11,17 +11,17 @@ workspace "Fox"
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
-	includedir["GLAD"] = "Fox/vendor/glad/include"
-	includedir["GLFW"] = "Fox/vendor/glfw/include"
-	includedir["GLM"]  = "Fox/vendor/glm/include"
-	includedir["STB"]  = "Fox/vendor/stb/include"
-	includedir["ENTT"] = "Fox/vendor/entt/include"
+	includedir["GLAD"] = "Helix/vendor/glad/include"
+	includedir["GLFW"] = "Helix/vendor/glfw/include"
+	includedir["GLM"]  = "Helix/vendor/glm/include"
+	includedir["STB"]  = "Helix/vendor/stb/include"
+	includedir["ENTT"] = "Helix/vendor/entt/include"
 	
-	include "Fox/vendor/glad"
-	include "Fox/vendor/glfw"
+	include "Helix/vendor/glad"
+	include "Helix/vendor/glfw"
 	
-project "Fox"
-	location "Fox"
+project "Helix"
+	location "Helix"
 	language "C++"
 	cppdialect "C++20"
 	kind "ConsoleApp"
@@ -31,7 +31,7 @@ project "Fox"
 	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
 	
 	pchheader "stdafx.hpp"
-	pchsource "Fox/src/stdafx.cpp"
+	pchsource "Helix/src/stdafx.cpp"
 	
 	files
 	{
@@ -65,7 +65,7 @@ project "Fox"
 	
 	defines
 	{
-		"FOX_PLATFORM_WINDOWS", 
+		"HLX_PLATFORM_WINDOWS", 
 		"GLFW_INCLUDE_NONE", 
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
@@ -87,16 +87,16 @@ project "Fox"
 
 		defines
 		{
-			"FOX_PLATFORM_WINDOWS", 
+			"HLX_PLATFORM_WINDOWS", 
 			"NOMINMAX", 
 		}
 		
 	filter "configurations:Debug"
-		defines "FOX_DEBUG"
+		defines "HLX_DEBUG"
 		runtime "Debug"
 		symbols "On"
 		
 	filter "configurations:Release"
-		defines "FOX_RELEASE"
+		defines "HLX_RELEASE"
 		runtime "Release"
 		optimize "On"

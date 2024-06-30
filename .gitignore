@@ -1,7 +1,7 @@
 .vs/
 bin/
 bin_obj/
-Helix/assets/
+Fox/assets/
 Test/
 
 ## Ignore Visual Studio temporary files, build results, and
