@@ -6,7 +6,7 @@
 #define HLX_GRAPHICS_API OpenGL
 #endif
 
-namespace hlx::gfx::api
+namespace fox::gfx::api
 {
     enum class GraphicsAPI
     {

@@ -2,7 +2,7 @@
 
 #include <memory>
 
-namespace hlx
+namespace fox
 {
     template<typename T>
     void memcpst(T* dst, T* src, int value)

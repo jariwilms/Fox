@@ -5,9 +5,9 @@
 #include "Code/KeyCode.hpp"
 #include "Code/ButtonCode.hpp"
 
-#include "Helix/Input/Handler/InputHandlerAPI.hpp"
+#include "Fox/Input/Handler/InputHandlerAPI.hpp"
 
-namespace hlx
+namespace fox
 {
     class Input
     {

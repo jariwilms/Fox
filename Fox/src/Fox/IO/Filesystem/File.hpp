@@ -4,9 +4,9 @@
 
 #include "Entry.hpp"
 
-#include "Helix/Core/Library/Utility/Utility.hpp"
+#include "Fox/Core/Library/Utility/Utility.hpp"
 
-namespace hlx
+namespace fox
 {
 	class File : public Entry
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace hlx
+namespace fox
 {
     class Entity;
     struct Component

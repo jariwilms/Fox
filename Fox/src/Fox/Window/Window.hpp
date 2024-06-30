@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Input/Handler/InputHandlerAPI.hpp"
+#include "Fox/Input/Handler/InputHandlerAPI.hpp"
 
-namespace hlx
+namespace fox
 {
 	using NativeWindow = void;
 

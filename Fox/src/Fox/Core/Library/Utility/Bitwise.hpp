@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx::utl
+namespace fox::utl
 {
     template<typename T>
     concept BitOperand = std::is_integral_v<T> && (sizeof(T) <= sizeof(i64));

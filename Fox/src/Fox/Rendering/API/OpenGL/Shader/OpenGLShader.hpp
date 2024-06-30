@@ -2,12 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/Shader/Shader.hpp"
-#include "Helix/Rendering/API/Implementation/GShader.hpp"
-#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/API/Implementation/GShader.hpp"
+#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<>
     class GShader<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::Shader

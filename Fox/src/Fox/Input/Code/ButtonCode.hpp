@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx
+namespace fox
 {
     using ButtonCode = int;
 

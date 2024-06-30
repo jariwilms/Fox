@@ -2,9 +2,9 @@
 
 #include "Scene.hpp"
 
-namespace hlx
+namespace fox
 {
-    std::shared_ptr<hlx::Actor> Scene::create_actor()
+    std::shared_ptr<fox::Actor> Scene::create_actor()
     {
         return m_actors.emplace_back(std::make_shared<Actor>());
     }

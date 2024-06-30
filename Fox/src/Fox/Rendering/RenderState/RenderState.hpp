@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx::gfx::api
+namespace fox::gfx::api
 {
     class RenderState
     {

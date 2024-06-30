@@ -3,7 +3,7 @@
 #include "WindowManager.hpp"
 #include "API/GLFW/GLFWWindow.hpp"
 
-namespace hlx
+namespace fox
 {
     std::shared_ptr<Window> WindowManager::create(const std::string& identifier, const std::string& title, const Vector2u& dimensions)
     {
@@ -13,7 +13,7 @@ namespace hlx
         return window;
     }
 
-    std::shared_ptr<hlx::Window> WindowManager::find(const Window* const instance)
+    std::shared_ptr<fox::Window> WindowManager::find(const Window* const instance)
     {
         const auto pred = [instance](const std::unordered_map<size_t, std::shared_ptr<Window>>::value_type value) -> bool
         {
@@ -22,7 +22,7 @@ namespace hlx
         if (const auto it = std::find_if(s_windows.begin(), s_windows.end(), pred); it != s_windows.end()) return it->second;
         throw std::runtime_error{ "Invalid window pointer!" };
     }
-    std::shared_ptr<hlx::Window> WindowManager::find(size_t identifier)
+    std::shared_ptr<fox::Window> WindowManager::find(size_t identifier)
     {
         if (const auto it = s_windows.find(identifier); it != s_windows.end()) return it->second;
         throw std::runtime_error{ "Invalid window identifier!" };

@@ -2,11 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/Implementation/GVertexLayout.hpp"
-#include "Helix/Rendering/Layout/Layout.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/Implementation/GVertexLayout.hpp"
+#include "Fox/Rendering/Layout/Layout.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<>
     struct GAttribute<gfx::api::GraphicsAPI::OpenGL>

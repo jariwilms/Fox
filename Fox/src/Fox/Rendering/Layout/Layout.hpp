@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Library/Template/Concepts.hpp"
+#include "Fox/Core/Library/Template/Concepts.hpp"
 
-namespace hlx::gfx::api
+namespace fox::gfx::api
 {
     template<typename T, std::uint32_t COUNT>
     concept LayoutRequirements = requires

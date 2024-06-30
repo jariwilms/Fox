@@ -2,11 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-#include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/API/GraphicsAPI.hpp"
+#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
 
-namespace hlx::gfx::imp
+namespace fox::gfx::imp
 {
     inline namespace api
     {

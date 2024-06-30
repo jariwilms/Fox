@@ -4,7 +4,7 @@
 
 #include "Window.hpp"
 
-namespace hlx
+namespace fox
 {
     class WindowManager
     {

@@ -5,11 +5,11 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
-#include "Helix/Rendering/API/OpenGL/GLMappings.hpp"
-#include "Helix/Rendering/RenderState/RenderState.hpp"
-#include "Helix/Rendering/API/Implementation/GRenderState.hpp"
+#include "Fox/Rendering/API/OpenGL/GLMappings.hpp"
+#include "Fox/Rendering/RenderState/RenderState.hpp"
+#include "Fox/Rendering/API/Implementation/GRenderState.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<>
     class GRenderState<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::RenderState

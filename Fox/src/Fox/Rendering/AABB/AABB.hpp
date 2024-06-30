@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     struct AABB
     {

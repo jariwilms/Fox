@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Helix/Config.hpp"
-#include "Helix/Core/Using.hpp"
+#include "Fox/Config.hpp"
+#include "Fox/Core/Using.hpp"
 
-#include "Helix/Core/Library/Memory/Memory.hpp"
+#include "Fox/Core/Library/Memory/Memory.hpp"
 
 
 

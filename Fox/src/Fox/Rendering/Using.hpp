@@ -2,27 +2,27 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
+#include "Fox/Rendering/API/GraphicsAPI.hpp"
 
-#include "Helix/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/Buffer/VertexArray.hpp"
-#include "Helix/Rendering/Layout/Layout.hpp"
-#include "Helix/Rendering/Shader/Pipeline.hpp"
-#include "Helix/Rendering/Shader/Shader.hpp"
-#include "Helix/Rendering/Texture/Texture.hpp"
-#include "Helix/Rendering/Uniform/Uniform.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Buffer/VertexArray.hpp"
+#include "Fox/Rendering/Layout/Layout.hpp"
+#include "Fox/Rendering/Shader/Pipeline.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Uniform/Uniform.hpp"
 
-#include "Helix/Rendering/API/Implementation/GBuffer.hpp"
-#include "Helix/Rendering/API/Implementation/GFrameBuffer.hpp"
-#include "Helix/Rendering/API/Implementation/GPipeline.hpp"
-#include "Helix/Rendering/API/Implementation/GRenderState.hpp"
-#include "Helix/Rendering/API/Implementation/GShader.hpp"
-#include "Helix/Rendering/API/Implementation/GTexture.hpp"
-#include "Helix/Rendering/API/Implementation/GVertexArray.hpp"
-#include "Helix/Rendering/API/Implementation/GVertexLayout.hpp"
+#include "Fox/Rendering/API/Implementation/GBuffer.hpp"
+#include "Fox/Rendering/API/Implementation/GFrameBuffer.hpp"
+#include "Fox/Rendering/API/Implementation/GPipeline.hpp"
+#include "Fox/Rendering/API/Implementation/GRenderState.hpp"
+#include "Fox/Rendering/API/Implementation/GShader.hpp"
+#include "Fox/Rendering/API/Implementation/GTexture.hpp"
+#include "Fox/Rendering/API/Implementation/GVertexArray.hpp"
+#include "Fox/Rendering/API/Implementation/GVertexLayout.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     using Buffer                 = api::Buffer;
 

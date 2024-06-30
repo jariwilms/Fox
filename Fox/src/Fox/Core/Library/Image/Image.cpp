@@ -1,10 +1,10 @@
 #include "stdafx.hpp"
 
-#include "Helix/Core/Include/STB.hpp"
+#include "Fox/Core/Include/STB.hpp"
 
 #include "Image.hpp"
 
-namespace hlx
+namespace fox
 {
     struct Context
     {

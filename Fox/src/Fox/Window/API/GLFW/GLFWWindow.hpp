@@ -2,13 +2,13 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Window/Window.hpp"
-//#include "Helix/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
-#include "Helix/Input/Handler/Platform/GLFWInputHandler.hpp"
-#include "Helix/Input/Input.hpp"
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Window/Window.hpp"
+//#include "Fox/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
+#include "Fox/Input/Handler/Platform/GLFWInputHandler.hpp"
+#include "Fox/Input/Input.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
 
-namespace hlx
+namespace fox
 {
 	class GLFWWindow : public Window
 	{

@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
-namespace hlx::gfx::api
+namespace fox::gfx::api
 {
     struct TextureBlueprint
     {

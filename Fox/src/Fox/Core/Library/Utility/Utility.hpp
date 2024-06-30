@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx::utl
+namespace fox::utl
 {
     template<typename T, size_t SIZE>
     auto to_span(const std::array<T, SIZE>& v)

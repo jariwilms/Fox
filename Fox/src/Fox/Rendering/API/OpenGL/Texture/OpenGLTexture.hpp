@@ -2,12 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/Texture/Texture.hpp"
-#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
 #include "OpenGLTextureTarget.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<Dimensions DIMS, AntiAliasing AA>
     class GTexture<gfx::api::GraphicsAPI::OpenGL, DIMS, AA> : public Texture

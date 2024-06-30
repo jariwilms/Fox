@@ -4,10 +4,10 @@
 
 #include "Component.hpp"
 
-#include "Helix/Rendering/Mesh/Mesh.hpp"
-#include "Helix/Rendering/Material/Material.hpp"
+#include "Fox/Rendering/Mesh/Mesh.hpp"
+#include "Fox/Rendering/Material/Material.hpp"
 
-namespace hlx
+namespace fox
 {
     struct MeshRendererComponent : public Component
     {

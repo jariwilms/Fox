@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/Texture/Dimensions.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<Dimensions, AntiAliasing>
     struct DimensionsToTarget;

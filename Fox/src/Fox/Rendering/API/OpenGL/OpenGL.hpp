@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLFrameBuffer.hpp"
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLVertexArray.hpp"
-#include "Helix/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
-#include "Helix/Rendering/API/OpenGL/RenderState/OpenGLRenderState.hpp"
-#include "Helix/Rendering/API/OpenGL/Shader/OpenGLPipeline.hpp"
-#include "Helix/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
-#include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
+#include "Fox/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Buffer/OpenGLFrameBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Buffer/OpenGLVertexArray.hpp"
+#include "Fox/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
+#include "Fox/Rendering/API/OpenGL/RenderState/OpenGLRenderState.hpp"
+#include "Fox/Rendering/API/OpenGL/Shader/OpenGLPipeline.hpp"
+#include "Fox/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
 
 namespace gl
 {

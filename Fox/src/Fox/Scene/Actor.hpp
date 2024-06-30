@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Helix/ECS/Entity/Entity.hpp"
-#include "Helix/ECS/Registry.hpp"
-#include "Helix/ECS/Components/RelationshipComponent.hpp"
-#include "Helix/ECS/Components/TransformComponent.hpp"
+#include "Fox/ECS/Entity/Entity.hpp"
+#include "Fox/ECS/Registry.hpp"
+#include "Fox/ECS/Components/RelationshipComponent.hpp"
+#include "Fox/ECS/Components/TransformComponent.hpp"
 
-namespace hlx
+namespace fox
 {
     class Actor : public Entity
     {

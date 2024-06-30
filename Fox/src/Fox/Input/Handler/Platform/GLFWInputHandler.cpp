@@ -1,9 +1,9 @@
 #include "stdafx.hpp"
 
 #include "GLFWInputHandler.hpp"
-#include "Helix/Window/API/GLFW/GLFWWindow.hpp"
+#include "Fox/Window/API/GLFW/GLFWWindow.hpp"
 
-namespace hlx
+namespace fox
 {
     void GLFWInputHandler::update()
     {

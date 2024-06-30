@@ -2,13 +2,13 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
-#include "Helix/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
-#include "Helix/Rendering/API/Implementation/GVertexArray.hpp"
-#include "Helix/Rendering/Buffer/VertexArray.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
+#include "Fox/Rendering/API/Implementation/GVertexArray.hpp"
+#include "Fox/Rendering/Buffer/VertexArray.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<>
     class GVertexArray<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::VertexArray

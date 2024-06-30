@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
-#include "Helix/Rendering/API/Implementation/GPipeline.hpp"
-#include "Helix/Rendering/Shader/Pipeline.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/OpenGL/Shader/OpenGLShader.hpp"
+#include "Fox/Rendering/API/Implementation/GPipeline.hpp"
+#include "Fox/Rendering/Shader/Pipeline.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<>
     class GPipeline<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::Pipeline

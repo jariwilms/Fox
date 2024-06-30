@@ -2,13 +2,13 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
-#include "Helix/Rendering/API/Implementation/GBuffer.hpp"
-#include "Helix/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Core/Library/Utility/Utility.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
+#include "Fox/Rendering/API/Implementation/GBuffer.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Core/Library/Utility/Utility.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<Buffer::Type TYPE, typename T>
     class GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, Buffer::Access::Static, T> : public gfx::api::Buffer

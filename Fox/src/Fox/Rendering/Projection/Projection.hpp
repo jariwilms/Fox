@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Include/GLM.hpp"
+#include "Fox/Core/Include/GLM.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     class Projection
     {

@@ -5,7 +5,7 @@
 #include "Dimensions.hpp"
 #include "AntiAliasing.hpp"
 
-namespace hlx::gfx::api
+namespace fox::gfx::api
 {
     class Texture
     {

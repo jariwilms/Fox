@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Helix/Rendering/Projection/Projection.hpp"
+#include "Fox/Rendering/Projection/Projection.hpp"
 
-namespace hlx
+namespace fox
 {
     class Camera
     {

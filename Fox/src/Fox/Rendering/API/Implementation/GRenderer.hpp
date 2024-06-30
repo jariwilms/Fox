@@ -2,10 +2,10 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-#include "Helix/Rendering/Renderer/Renderer.hpp"
+#include "Fox/Rendering/API/GraphicsAPI.hpp"
+#include "Fox/Rendering/Renderer/Renderer.hpp"
 
-namespace hlx::gfx::imp
+namespace fox::gfx::imp
 {
     inline namespace api
     {

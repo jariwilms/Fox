@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Rendering.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 
-namespace hlx::gfx::test
+namespace fox::gfx::test
 {
     //template<template<Buffer::Access, typename> typename T, Buffer::Access ACCESS, typename U>
     //std::unique_ptr<VertexBuffer<Buffer::Access::Dynamic, U>> create(std::uint32_t count)       requires (std::is_same_v<T<ACCESS, U>, VertexBuffer<ACCESS, U>> && ACCESS == Buffer::Access::Dynamic)

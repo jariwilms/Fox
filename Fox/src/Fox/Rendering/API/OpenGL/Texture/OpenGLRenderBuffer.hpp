@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/Implementation/GRenderBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/Implementation/GRenderBuffer.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<AntiAliasing AA>
     class GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA> : public Texture

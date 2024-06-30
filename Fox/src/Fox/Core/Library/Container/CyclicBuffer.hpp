@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace hlx
+namespace fox
 {
     template<class _Ty, size_t _Size>
     class CyclicBuffer

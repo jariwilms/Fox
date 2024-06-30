@@ -2,10 +2,10 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Texture/Texture.hpp"
-#include "Helix/Rendering/Blueprint/TextureBlueprint.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Blueprint/TextureBlueprint.hpp"
 
-namespace hlx::gfx::api
+namespace fox::gfx::api
 {
     class FrameBuffer
     {

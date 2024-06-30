@@ -2,7 +2,7 @@
 //
 //#include "Component.hpp"
 //
-//#include "Helix/Core/Library/Lighting/Light.hpp"
+//#include "Fox/Core/Library/Lighting/Light.hpp"
 //
 //namespace hlx
 //{

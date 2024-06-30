@@ -2,10 +2,10 @@
 //
 //#include "stdafx.hpp"
 //
-//#include "Helix/Rendering/API/GraphicsAPI.hpp"
-//#include "Helix/Rendering/Buffer/VertexArray.hpp"
-//#include "Helix/Rendering/Buffer/VertexBuffer.hpp"
-//#include "Helix/Rendering/Buffer/IndexBuffer.hpp"
+//#include "Fox/Rendering/API/GraphicsAPI.hpp"
+//#include "Fox/Rendering/Buffer/VertexArray.hpp"
+//#include "Fox/Rendering/Buffer/VertexBuffer.hpp"
+//#include "Fox/Rendering/Buffer/IndexBuffer.hpp"
 //
 //namespace hlx
 //{

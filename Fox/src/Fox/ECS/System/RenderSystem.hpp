@@ -4,7 +4,7 @@
 
 #include "System.hpp"
 
-namespace hlx
+namespace fox
 {
     class RenderSystem : public System
     {

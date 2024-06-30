@@ -1,9 +1,9 @@
 #include "stdafx.hpp"
 
 #include "Input.hpp"
-#include "Helix/Input/Handler/Platform/GLFWInputHandler.hpp"
+#include "Fox/Input/Handler/Platform/GLFWInputHandler.hpp"
 
-namespace hlx
+namespace fox
 {
     void Input::init(const std::shared_ptr<InputHandlerAPI> inputHandler)
     {

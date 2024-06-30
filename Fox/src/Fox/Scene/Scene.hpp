@@ -2,7 +2,7 @@
 
 #include "Actor.hpp"
 
-namespace hlx
+namespace fox
 {
     class Scene
     {

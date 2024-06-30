@@ -1,9 +1,9 @@
 #include "stdafx.hpp"
 
 #include "GLFWWindow.hpp"
-#include "Helix/Window/WindowManager.hpp"
+#include "Fox/Window/WindowManager.hpp"
 
-namespace hlx
+namespace fox
 {
 	GLFWWindow::GLFWWindow(const std::string& title, const Vector2u& dimensions)
         : Window{ title, dimensions }

@@ -2,11 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Input/Code/KeyCode.hpp"
-#include "Helix/Input/Code/ButtonCode.hpp"
-#include "Helix/Input/Code/ModifierCode.hpp"
+#include "Fox/Input/Code/KeyCode.hpp"
+#include "Fox/Input/Code/ButtonCode.hpp"
+#include "Fox/Input/Code/ModifierCode.hpp"
 
-namespace hlx
+namespace fox
 {
     class InputHandlerAPI
     {

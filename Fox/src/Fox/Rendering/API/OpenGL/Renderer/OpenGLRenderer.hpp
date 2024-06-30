@@ -2,16 +2,16 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Rendering.hpp"
-#include "Helix/Rendering/Renderer/Renderer.hpp"
-#include "Helix/Rendering/API/Implementation/GRenderer.hpp"
-#include "Helix/Rendering/Mesh/Mesh.hpp"
-#include "Helix/Rendering/Material/Material.hpp"
-#include "Helix/Core/Library/Transform/Transform.hpp"
-#include "Helix/Rendering/Utility/Utility.hpp"
-#include "Helix/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/Rendering/Renderer/Renderer.hpp"
+#include "Fox/Rendering/API/Implementation/GRenderer.hpp"
+#include "Fox/Rendering/Mesh/Mesh.hpp"
+#include "Fox/Rendering/Material/Material.hpp"
+#include "Fox/Core/Library/Transform/Transform.hpp"
+#include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<>
     class GRenderer<gfx::api::GraphicsAPI::OpenGL> : public gfx::api::Renderer

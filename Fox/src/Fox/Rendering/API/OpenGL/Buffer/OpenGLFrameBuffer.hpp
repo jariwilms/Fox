@@ -2,14 +2,14 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
-#include "Helix/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
-#include "Helix/Rendering/API/Implementation/GFrameBuffer.hpp"
-#include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/API/OpenGL/Internal/InternalView.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
+#include "Fox/Rendering/API/Implementation/GFrameBuffer.hpp"
+#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<AntiAliasing AA>
     class GFrameBuffer<gfx::api::GraphicsAPI::OpenGL, AA> final : public gfx::api::FrameBuffer

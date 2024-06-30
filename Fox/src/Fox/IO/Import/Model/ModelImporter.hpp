@@ -6,9 +6,9 @@
 ////#include <assimp/scene.h>
 ////#include <assimp/postprocess.h>
 //
-//#include "Helix/IO/IO.hpp"
-//#include "Helix/Rendering/API/GraphicsAPI.hpp"
-//#include "Helix/Rendering/Model/Model.hpp"
+//#include "Fox/IO/IO.hpp"
+//#include "Fox/Rendering/API/GraphicsAPI.hpp"
+//#include "Fox/Rendering/Model/Model.hpp"
 //
 //namespace hlx
 //{

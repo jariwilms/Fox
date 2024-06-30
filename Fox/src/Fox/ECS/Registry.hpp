@@ -4,7 +4,7 @@
 
 #include <entt/entt.hpp>
 
-namespace hlx
+namespace fox
 {
     class Registry
     {

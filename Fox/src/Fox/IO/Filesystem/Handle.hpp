@@ -6,7 +6,7 @@
 #include "Directory.hpp"
 #include "File.hpp"
 
-namespace hlx
+namespace fox
 {
 	class Handle
 	{

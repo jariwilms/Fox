@@ -2,9 +2,9 @@
 
 #include "Component.hpp"
 
-#include "Helix/Core/Library/Camera/Camera.hpp"
+#include "Fox/Core/Library/Camera/Camera.hpp"
 
-namespace hlx
+namespace fox
 {
     class CameraComponent : public Camera, public Component
     {

@@ -2,11 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/IO/Filesystem/File.hpp"
-#include "Helix/IO/IO.hpp"
-#include "Helix/Rendering/Rendering.hpp"
+#include "Fox/IO/Filesystem/File.hpp"
+#include "Fox/IO/IO.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     auto shaders_from_source()
     {

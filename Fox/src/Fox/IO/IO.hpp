@@ -5,7 +5,7 @@
 #include "Filesystem/File.hpp"
 #include "Filesystem/Directory.hpp"
 
-namespace hlx::io
+namespace fox::io
 {
         template<typename T>
         concept PathConstructible = requires (T t)

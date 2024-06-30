@@ -1,19 +1,19 @@
 #include "stdafx.hpp"
 
 #include "Application.hpp"
-#include "Helix/Window/WindowManager.hpp"
+#include "Fox/Window/WindowManager.hpp"
 
-//#include "Helix/Core/Library/Container/CyclicBuffer.hpp"
-//#include "Helix/Core/Library/Time/Time.hpp"
-//#include "Helix/Core/Library/Transform/Transform.hpp"
-//#include "Helix/ECS/Components/Components.hpp"
-//#include "Helix/Input/Input.hpp"
-//#include "Helix/IO/Import/Model/ModelImporter.hpp"
-//#include "Helix/IO/IO.hpp"
-//#include "Helix/Rendering/Renderer.hpp"
-//#include "Helix/Scene/Scene.hpp"
+//#include "Fox/Core/Library/Container/CyclicBuffer.hpp"
+//#include "Fox/Core/Library/Time/Time.hpp"
+//#include "Fox/Core/Library/Transform/Transform.hpp"
+//#include "Fox/ECS/Components/Components.hpp"
+//#include "Fox/Input/Input.hpp"
+//#include "Fox/IO/Import/Model/ModelImporter.hpp"
+//#include "Fox/IO/IO.hpp"
+//#include "Fox/Rendering/Renderer.hpp"
+//#include "Fox/Scene/Scene.hpp"
 
-namespace hlx
+namespace fox
 {
     //Transform transform_product(TransformComponent& tc)
     //{
@@ -57,7 +57,7 @@ namespace hlx
 
     Application::Application(int argc, char* argv[])
     {
-        m_window = WindowManager::create("Window", "Helix", Vector2u{ 1280, 720 });
+        m_window = WindowManager::create("Window", "Fox", Vector2u{ 1280, 720 });
 
         
         //IO::init();

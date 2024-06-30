@@ -4,7 +4,7 @@
 
 #include "GLMappings.hpp"
 
-namespace hlx::gfx::imp::api::gl
+namespace fox::gfx::imp::api::gl
 {
     struct Buffer
     {

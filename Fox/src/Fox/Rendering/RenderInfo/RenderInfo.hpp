@@ -2,11 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Core/Library/Transform/Transform.hpp"
-#include "Helix/Core/Library/Camera/Camera.hpp"
-#include "Helix/Core/Library/Lighting/Light.hpp"
+#include "Fox/Core/Library/Transform/Transform.hpp"
+#include "Fox/Core/Library/Camera/Camera.hpp"
+#include "Fox/Core/Library/Lighting/Light.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     struct RenderInfo
     {

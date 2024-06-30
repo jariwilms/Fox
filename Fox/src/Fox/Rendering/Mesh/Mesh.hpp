@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Helix/Rendering/Rendering.hpp"
-#include "Helix/Rendering/Material/Material.hpp"
+#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/Rendering/Material/Material.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     class Mesh
     {

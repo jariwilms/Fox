@@ -1,10 +1,10 @@
-#include "Helix/Core/Using.hpp"
-#include "Helix/Rendering/Rendering.hpp"
-#include "Helix/Rendering/Renderer.hpp"
+#include "Fox/Core/Using.hpp"
+#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/Rendering/Renderer.hpp"
 
 static int test()
 {
-    using namespace hlx::gfx;
+    using namespace fox::gfx;
 
     RenderInfo* ri;
 

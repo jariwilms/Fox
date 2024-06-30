@@ -4,10 +4,10 @@
 //
 ////#include "tinygltf/tiny_gltf.h"
 //
-//#include "Helix/Rendering/API/GraphicsAPI.hpp"
-//#include "Helix/Rendering/Rendering.hpp"
-//#include "Helix/Rendering/Mesh/Mesh.hpp"
-//#include "Helix/Rendering/Model/Model.hpp"
+//#include "Fox/Rendering/API/GraphicsAPI.hpp"
+//#include "Fox/Rendering/Rendering.hpp"
+//#include "Fox/Rendering/Mesh/Mesh.hpp"
+//#include "Fox/Rendering/Model/Model.hpp"
 //
 //namespace hlx
 //{

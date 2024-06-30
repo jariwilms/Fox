@@ -3,14 +3,14 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
-#include "Helix/Rendering/Buffer/Buffer.hpp"
-#include "Helix/Rendering/Buffer/FrameBuffer.hpp"
-#include "Helix/Rendering/Shader/Pipeline.hpp"
-#include "Helix/Rendering/Shader/Shader.hpp"
-#include "Helix/Rendering/Texture/Texture.hpp"
-#include "Helix/Rendering/RenderState/RenderState.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Shader/Pipeline.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/RenderState/RenderState.hpp"
 
-namespace hlx::gfx::imp::api::gl
+namespace fox::gfx::imp::api::gl
 {
     static constexpr GLenum      map_texture_format(gfx::api::Texture::Format format)
     {

@@ -2,9 +2,9 @@
 
 #include "Component.hpp"
 
-#include "Helix/Core/Library/Transform/Transform.hpp"
+#include "Fox/Core/Library/Transform/Transform.hpp"
 
-namespace hlx
+namespace fox
 {
     struct TransformComponent : public Transform, public Component
     {

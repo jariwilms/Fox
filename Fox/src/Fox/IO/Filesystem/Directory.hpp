@@ -5,7 +5,7 @@
 #include "Entry.hpp"
 #include "File.hpp"
 
-namespace hlx
+namespace fox
 {
 	class Directory : public Entry
 	{

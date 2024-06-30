@@ -2,14 +2,14 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Internal/InternalView.hpp"
-#include "Helix/Rendering/API/OpenGL/GL.hpp"
-#include "Helix/Rendering/API/Implementation/GBuffer.hpp"
-#include "Helix/Rendering/API/Implementation/GShader.hpp"
-#include "Helix/Rendering/API/Implementation/GTexture.hpp"
-#include "Helix/Rendering/API/Implementation/GRenderBuffer.hpp"
+#include "Fox/Rendering/Internal/InternalView.hpp"
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/Implementation/GBuffer.hpp"
+#include "Fox/Rendering/API/Implementation/GShader.hpp"
+#include "Fox/Rendering/API/Implementation/GTexture.hpp"
+#include "Fox/Rendering/API/Implementation/GRenderBuffer.hpp"
 
-namespace hlx::gfx::imp::api
+namespace fox::gfx::imp::api
 {
     template<Buffer::Type TYPE, Buffer::Access ACCESS, typename T>
     struct InternalView<imp::GBuffer<gfx::api::GraphicsAPI::OpenGL, TYPE, ACCESS, T>>

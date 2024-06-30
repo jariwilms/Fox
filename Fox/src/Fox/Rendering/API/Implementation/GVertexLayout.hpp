@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Helix/Rendering/API/GraphicsAPI.hpp"
-#include "Helix/Rendering/Layout/Layout.hpp"
+#include "Fox/Rendering/API/GraphicsAPI.hpp"
+#include "Fox/Rendering/Layout/Layout.hpp"
 
-namespace hlx::gfx::imp
+namespace fox::gfx::imp
 {
     inline namespace api
     {

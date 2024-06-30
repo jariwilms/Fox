@@ -5,9 +5,9 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-#include "Helix/Input/Handler/InputHandlerAPI.hpp"
+#include "Fox/Input/Handler/InputHandlerAPI.hpp"
 
-namespace hlx
+namespace fox
 {
     class GLFWInputHandler : public InputHandlerAPI
     {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Helix/Window/Window.hpp"
+#include "Fox/Window/Window.hpp"
 
-namespace hlx
+namespace fox
 {
     class Application
     {

@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Helix/Rendering/Rendering.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 
-namespace hlx::gfx
+namespace fox::gfx
 {
     class Material
     {

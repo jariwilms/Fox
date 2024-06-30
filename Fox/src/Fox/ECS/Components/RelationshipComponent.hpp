@@ -4,7 +4,7 @@
 
 #include "Component.hpp"
 
-namespace hlx
+namespace fox
 {
     struct RelationshipComponent : public Component
     {
