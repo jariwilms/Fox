@@ -1,6 +1,7 @@
 #include "stdafx.hpp"
 
 #include "Application.hpp"
+#include "Helix/Window/WindowManager.hpp"
 
 //#include "Helix/Core/Library/Container/CyclicBuffer.hpp"
 //#include "Helix/Core/Library/Time/Time.hpp"
@@ -56,8 +57,9 @@ namespace hlx
 
     Application::Application(int argc, char* argv[])
     {
-        //m_window = WindowManager::create("Window", "Helix", Vector2u{ 1280, 720 });
+        m_window = WindowManager::create("Window", "Helix", Vector2u{ 1280, 720 });
 
+        
         //IO::init();
         //gfx::Renderer::init();
         //ModelImporter::init();

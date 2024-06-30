@@ -18,7 +18,7 @@ namespace hlx::gfx::imp::api
         using texture_t       = GTexture<gfx::api::GraphicsAPI::OpenGL, Dimensions::_2D, AA>;
         using render_buffer_t = GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA>;
 
-        GFrameBuffer(const Vector2u& dimensions,             std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::None)
+        GFrameBuffer(const Vector2u& dimensions, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::None)
             : FrameBuffer{ dimensions }
         {
             m_glId = gl::create_frame_buffer();
@@ -74,6 +74,7 @@ namespace hlx::gfx::imp::api
                 gl::frame_buffer_draw_buffer(m_glId, GL_NONE);
             }
 
+            const auto& test = gl::check_frame_buffer_status(m_glId);
             if (gl::check_frame_buffer_status(m_glId) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         GFrameBuffer(const Vector2u& dimensions, std::uint8_t samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)

@@ -11,8 +11,11 @@ workspace "Helix"
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
-	includedir["GLAD"]    = "Helix/vendor/glad/include"
-	includedir["GLFW"]    = "Helix/vendor/glfw/include"
+	includedir["GLAD"] = "Helix/vendor/glad/include"
+	includedir["GLFW"] = "Helix/vendor/glfw/include"
+	includedir["GLM"]  = "Helix/vendor/glm/include"
+	includedir["STB"]  = "Helix/vendor/stb/include"
+	includedir["ENTT"] = "Helix/vendor/entt/include"
 	
 	include "Helix/vendor/glad"
 	include "Helix/vendor/glfw"
@@ -41,6 +44,9 @@ project "Helix"
 		"%{prj.name}/src", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
+		"%{includedir.GLM}", 
+		"%{includedir.STB}", 
+		"%{includedir.ENTT}", 
 	}
 	
 	libdirs

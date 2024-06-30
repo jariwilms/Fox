@@ -20,7 +20,7 @@ namespace hlx::gfx::imp::api
         static void init()
         {
             const std::uint8_t samples{ 4 };
-            const std::uint32_t lightCount{ 32 };
+            const std::uint32_t lightCount{ 32u };
             const Vector2u dimensions{ 1280, 720 };
             const Vector2u shadowMapDimensions{ 1024, 1024 };
 
@@ -56,7 +56,7 @@ namespace hlx::gfx::imp::api
             s_matricesBuffer = std::make_unique<UniformBuffer<UMatrices>>();
             s_materialBuffer = std::make_unique<UniformBuffer<UMaterial>>();
             s_cameraBuffer   = std::make_unique<UniformBuffer<UCamera>>();
-            s_lightBuffer    = std::make_unique<UniformArrayBuffer<Buffer::Access::Dynamic, ULight>>(2u);
+            s_lightBuffer    = std::make_unique<UniformArrayBuffer<Buffer::Access::Dynamic, ULight>>(32u);
 
 
 

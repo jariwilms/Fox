@@ -12,7 +12,7 @@
 
 namespace hlx::gfx::imp::api::gl
 {
-    constexpr GLenum      map_texture_format(gfx::api::Texture::Format format)
+    static constexpr GLenum      map_texture_format(gfx::api::Texture::Format format)
     {
         switch (format)
         {
@@ -54,7 +54,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    constexpr GLenum      map_texture_format_base(gfx::api::Texture::Format format)
+    static constexpr GLenum      map_texture_format_base(gfx::api::Texture::Format format)
     {
         const auto& flags = (static_cast<int>(format) & 0xFF00) >> 8;
         switch (flags)
@@ -71,7 +71,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    constexpr GLenum      map_texture_min_filter(gfx::api::Texture::Filter filter)
+    static constexpr GLenum      map_texture_min_filter(gfx::api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -83,7 +83,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    constexpr GLenum      map_texture_mag_filter(gfx::api::Texture::Filter filter)
+    static constexpr GLenum      map_texture_mag_filter(gfx::api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -95,7 +95,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    constexpr GLenum      map_texture_wrapping(gfx::api::Texture::Wrapping wrapping)
+    static constexpr GLenum      map_texture_wrapping(gfx::api::Texture::Wrapping wrapping)
     {
         switch (wrapping)
         {
@@ -108,7 +108,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    constexpr GLenum      map_render_buffer_format(gfx::api::Texture::Format format)
+    static constexpr GLenum      map_render_buffer_format(gfx::api::Texture::Format format)
     {
         switch (format)
         {
@@ -126,7 +126,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    constexpr GLenum      map_buffer_target(gfx::api::Buffer::Type type)
+    static constexpr GLenum      map_buffer_target(gfx::api::Buffer::Type type)
     {
         switch (type)
         {
@@ -137,7 +137,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid type!" };
         }
     }
-    constexpr GLbitfield  map_buffer_access(gfx::api::Buffer::Access access)
+    static constexpr GLbitfield  map_buffer_access(gfx::api::Buffer::Access access)
     {
         switch (access)
         {
@@ -147,7 +147,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid access!" };
         }
     }
-    constexpr GLenum      map_buffer_mapping(gfx::api::Buffer::Mapping mapping)
+    static constexpr GLenum      map_buffer_mapping(gfx::api::Buffer::Mapping mapping)
     {
         switch (mapping)
         {
@@ -158,7 +158,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid Map!" };
         }
     }
-    constexpr GLenum      map_frame_buffer_attachment(gfx::api::FrameBuffer::Attachment attachment)
+    static constexpr GLenum      map_frame_buffer_attachment(gfx::api::FrameBuffer::Attachment attachment)
     {
         switch (attachment)
         {
@@ -170,7 +170,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    constexpr GLenum      map_frame_buffer_target(gfx::api::FrameBuffer::Target target)
+    static constexpr GLenum      map_frame_buffer_target(gfx::api::FrameBuffer::Target target)
     {
         switch (target)
         {
@@ -180,7 +180,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    constexpr GLenum      map_shader_type(gfx::api::Shader::Stage stage)
+    static constexpr GLenum      map_shader_type(gfx::api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -194,7 +194,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    constexpr GLenum      map_shader_stage(gfx::api::Shader::Stage stage)
+    static constexpr GLenum      map_shader_stage(gfx::api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -209,7 +209,7 @@ namespace hlx::gfx::imp::api::gl
         }
     }
 
-    constexpr GLenum      map_depth_function(gfx::api::RenderState::DepthFunction depthFunction)
+    static constexpr GLenum      map_depth_function(gfx::api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
         {
@@ -225,7 +225,7 @@ namespace hlx::gfx::imp::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    constexpr GLenum      map_culling_face(gfx::api::RenderState::FaceCulling cullingFace)
+    static constexpr GLenum      map_culling_face(gfx::api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {

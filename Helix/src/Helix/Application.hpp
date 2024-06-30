@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Helix/Window/WindowManager.hpp"
+#include "Helix/Window/Window.hpp"
 
 namespace hlx
 {

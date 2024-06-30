@@ -18,7 +18,7 @@ namespace hlx::gfx::imp::api
         GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (AA == AntiAliasing::None)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
         {
-            m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
+            m_glId        = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
             m_glFormat    = gl::map_texture_format(this->m_format);
             m_glMinFilter = gl::map_texture_min_filter(this->m_filter);
             m_glMagFilter = gl::map_texture_mag_filter(this->m_filter);
@@ -31,25 +31,26 @@ namespace hlx::gfx::imp::api
             if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
             if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
 
-            if constexpr (DIMS == Dimensions::_1D) gl::texture_storage_1d(m_glId, m_glFormat, m_dimensions, 0);
-            if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, m_dimensions, 0);
-            if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, m_dimensions, 0);
+            if constexpr (DIMS == Dimensions::_1D) gl::texture_storage_1d(m_glId, m_glFormat, m_dimensions, 1);
+            if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, m_dimensions, 1);
+            if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, m_dimensions, 1);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::uint8_t samples)                 requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
+        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::uint8_t samples)       requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
         {
-            m_glId        = gl::create_texture(DimensionsToTarget<DIMS>::target);
+            m_glId        = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
             m_glFormat    = gl::map_texture_format(this->m_format);
             m_glMinFilter = gl::map_texture_min_filter(this->m_filter);
             m_glMagFilter = gl::map_texture_mag_filter(this->m_filter);
             m_glWrapping  = gl::map_texture_wrapping(this->m_wrapping);
 
-            gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
-            gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
+            //"Multisample textures target doesn't support sampler state"
+            //gl::texture_parameter(m_glId, GL_TEXTURE_MIN_FILTER, m_glMinFilter);
+            //gl::texture_parameter(m_glId, GL_TEXTURE_MAG_FILTER, m_glMagFilter);
 
-                                                   gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_S, m_glWrapping);
-                                                   gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
-            if constexpr (DIMS == Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
+            //                                       gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_S, m_glWrapping);
+            //                                       gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_T, m_glWrapping);
+            //if constexpr (DIMS == Dimensions::_3D) gl::texture_parameter(m_glId, GL_TEXTURE_WRAP_R, m_glWrapping);
 
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
@@ -91,7 +92,7 @@ namespace hlx::gfx::imp::api
         {
             return m_dimensions;
         }
-        std::uint8_t              samples()    const
+        std::uint8_t    samples()    const
         {
             return m_samples;
         }

@@ -6,6 +6,7 @@
 //#include "Helix/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
 #include "Helix/Input/Handler/Platform/GLFWInputHandler.hpp"
 #include "Helix/Input/Input.hpp"
+#include "Helix/Rendering/API/OpenGL/GL.hpp"
 
 namespace hlx
 {
