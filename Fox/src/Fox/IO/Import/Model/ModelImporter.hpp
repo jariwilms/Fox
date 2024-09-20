@@ -2,15 +2,15 @@
 //
 //#include "stdafx.hpp"
 //
-////#include <assimp/Importer.hpp>
-////#include <assimp/scene.h>
-////#include <assimp/postprocess.h>
+//#include <assimp/Importer.hpp>
+//#include <assimp/scene.h>
+//#include <assimp/postprocess.h>
 //
 //#include "Fox/IO/IO.hpp"
 //#include "Fox/Rendering/API/GraphicsAPI.hpp"
 //#include "Fox/Rendering/Model/Model.hpp"
 //
-//namespace hlx
+//namespace fox
 //{
 //    class ModelImporter
 //    {

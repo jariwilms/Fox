@@ -172,7 +172,7 @@ namespace fox::gfx::imp::api
             gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
         }
         template<typename... T>
-        void copy_tuple(size_t offset, const std::tuple<T...>& data)
+        void copy_tuple(size_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
         {
             //This method lets you copy a tuple of any amount of types into an allocated buffer
             //There is no guarantee that a parameter pack will be evaluated in order of declaration, so we cannot use T... as a regular parameter

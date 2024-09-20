@@ -48,6 +48,6 @@
 
 
 
-#ifdef HLX_PLATFORM_WINDOWS
+#ifdef FOX_PLATFORM_WINDOWS
 #include <Windows.h>
-#endif // HLX_PLATFORM_WINDOWS
+#endif // FOX_PLATFORM_WINDOWS

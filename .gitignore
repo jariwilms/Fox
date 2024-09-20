@@ -1,7 +1,6 @@
 .vs/
 bin/
 bin_obj/
-Fox/assets/
 Test/
 
 ## Ignore Visual Studio temporary files, build results, and

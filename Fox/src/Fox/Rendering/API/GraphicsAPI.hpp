@@ -2,8 +2,8 @@
 
 #include "stdafx.hpp"
 
-#ifndef HLX_GRAPHICS_API
-#define HLX_GRAPHICS_API OpenGL
+#ifndef FOX_GRAPHICS_API
+#define FOX_GRAPHICS_API OpenGL
 #endif
 
 namespace fox::gfx::api
@@ -16,5 +16,5 @@ namespace fox::gfx::api
         Vulkan,
     };
 
-    constexpr auto GRAPHICS_API = GraphicsAPI::HLX_GRAPHICS_API;
+    constexpr auto GRAPHICS_API = GraphicsAPI::OpenGL;
 }

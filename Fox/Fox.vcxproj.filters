@@ -178,9 +178,6 @@
     <Filter Include="Fox\Scene">
       <UniqueIdentifier>{0FA6B3C5-7B10-683C-C44E-19E230F84591}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fox\Test">
-      <UniqueIdentifier>{212FA191-0DFC-FB9C-3615-EA442241312B}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fox\Window">
       <UniqueIdentifier>{1964EE85-051C-30D3-6E23-092F5AFACAC3}</UniqueIdentifier>
     </Filter>
@@ -503,9 +500,6 @@
     </ClInclude>
     <ClInclude Include="src\Fox\Scene\Scene.hpp">
       <Filter>Fox\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\Test\Test.hpp">
-      <Filter>Fox\Test</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp">
       <Filter>Fox\Window\API\GLFW</Filter>

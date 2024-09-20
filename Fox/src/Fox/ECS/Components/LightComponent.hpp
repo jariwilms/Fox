@@ -4,7 +4,7 @@
 //
 //#include "Fox/Core/Library/Lighting/Light.hpp"
 //
-//namespace hlx
+//namespace fox
 //{
 //    class LightComponent : public Light, public Component
 //    {

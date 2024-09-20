@@ -16,6 +16,8 @@ namespace fox
         {
             m_stream.exceptions(std::fstream::badbit);
             m_stream.open(m_path, std::ios::in | std::ios::out | std::ios::app | std::ios::binary);
+
+            if (!m_stream) throw std::runtime_error{ "Failed to open file!" };
         }
         virtual ~File() = default;
 

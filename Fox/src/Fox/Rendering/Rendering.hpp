@@ -1,8 +1,9 @@
 #include "Fox/Rendering/Using.hpp"
 
-#if HLX_GRAPHICS_API == OpenGL
+#if FOX_GRAPHICS_API == OpenGL
 #include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
 #endif
 
-#if HLX_GRAPHICS_API == Vulkan
+#if FOX_GRAPHICS_API == Vulkan
+//#include "Fox/Rendering/API/Vulkan/Vulkan.hpp"
 #endif

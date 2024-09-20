@@ -7,7 +7,7 @@
 //#include "Fox/Rendering/Buffer/VertexBuffer.hpp"
 //#include "Fox/Rendering/Buffer/IndexBuffer.hpp"
 //
-//namespace hlx
+//namespace fox
 //{
 //    struct Cube
 //    {

@@ -11,11 +11,12 @@ workspace "Fox"
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
-	includedir["GLAD"] = "Fox/vendor/glad/include"
-	includedir["GLFW"] = "Fox/vendor/glfw/include"
-	includedir["GLM"]  = "Fox/vendor/glm/include"
-	includedir["STB"]  = "Fox/vendor/stb/include"
-	includedir["ENTT"] = "Fox/vendor/entt/include"
+	includedir["GLAD"]     = "Fox/vendor/glad/include"
+	includedir["GLFW"]     = "Fox/vendor/glfw/include"
+	includedir["GLM"]      = "Fox/vendor/glm/include"
+	includedir["STB"]      = "Fox/vendor/stb/include"
+	includedir["ENTT"]     = "Fox/vendor/entt/include"
+	includedir["TINYGLTF"] = "Fox/vendor/tinygltf/include"
 	
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
@@ -27,7 +28,7 @@ project "Fox"
 	kind "ConsoleApp"
 	staticruntime "On"
 	
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
 	
 	pchheader "stdafx.hpp"
@@ -47,32 +48,32 @@ project "Fox"
 		"%{includedir.GLM}", 
 		"%{includedir.STB}", 
 		"%{includedir.ENTT}", 
+		"%{includedir.TINYGLTF}", 
 	}
 	
 	libdirs
 	{
-	
+		
 	}
 	
 	links
 	{
 		"GLAD", 
 		"GLFW", 
-	
 		
 		"opengl32.lib", 
 	}
 	
 	defines
 	{
-		"FOX_PLATFORM_WINDOWS", 
+		'PROJECT_DIR=R"($(ProjectDir).)"', 
+		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
+	
 		"GLFW_INCLUDE_NONE", 
+		
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
 		"STB_IMAGE_WRITE_IMPLEMENTATION", 
-		"NOMINMAX", 		
-		'PROJECT_DIR=R"($(ProjectDir).)"', 
-		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 	}
 	
 	disablewarnings
