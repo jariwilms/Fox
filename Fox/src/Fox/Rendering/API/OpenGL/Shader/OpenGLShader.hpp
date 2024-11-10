@@ -4,16 +4,13 @@
 
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
-#include "Fox/Rendering/API/Implementation/GShader.hpp"
-#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
-    template<>
-    class GShader<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::Shader
+    class OpenGLShader : public api::Shader
     {
     public:
-        GShader(Shader::Stage stage, std::span<const byte> binary)
+        OpenGLShader(Shader::Stage stage, std::span<const byte> binary)
             : Shader{ stage }
         {
             m_glId    = gl::create_program();
@@ -36,25 +33,17 @@ namespace fox::gfx::imp::api
             gl::detach_shader(m_glId, glShader);
             gl::delete_shader(glShader);
         }
-        GShader(GShader&& other) noexcept
+        OpenGLShader(OpenGLShader&& other) noexcept
             : Shader{ std::move(other) }
         {
             *this = std::move(other);
         }
-        ~GShader()
+        ~OpenGLShader()
         {
             if (m_glId) gl::delete_program(m_glId);
         }
 
-        auto expose_internals() const
-        {
-            return InternalView<GShader<gfx::api::GraphicsAPI::OpenGL>>
-            {
-                m_glId
-            };
-        }
-
-        GShader& operator=(GShader&& other) noexcept
+        OpenGLShader& operator=(OpenGLShader&& other) noexcept
         {
             m_glId    = other.m_glId;
             m_glType  = other.m_glType;

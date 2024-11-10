@@ -5,20 +5,18 @@
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
-#include "Fox/Rendering/API/Implementation/GFrameBuffer.hpp"
 #include "Fox/Rendering/Buffer/FrameBuffer.hpp"
-#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
     template<AntiAliasing AA>
-    class GFrameBuffer<gfx::api::GraphicsAPI::OpenGL, AA> final : public gfx::api::FrameBuffer
+    class OpenGLFrameBuffer : public api::FrameBuffer
     {
     public:
-        using texture_t       = GTexture<gfx::api::GraphicsAPI::OpenGL, Dimensions::_2D, AA>;
-        using render_buffer_t = GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA>;
+        using texture_t       = OpenGLTexture<Dimensions::_2D, AA>;
+        using render_buffer_t = OpenGLRenderBuffer<AA>;
 
-        GFrameBuffer(const Vector2u& dimensions, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::None)
+        OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const FrameBuffer::Manifest> manifests)                       requires (AA == AntiAliasing::None)
             : FrameBuffer{ dimensions }
         {
             m_glId = gl::create_frame_buffer();
@@ -77,7 +75,7 @@ namespace fox::gfx::imp::api
             const auto& test = gl::check_frame_buffer_status(m_glId);
             if (gl::check_frame_buffer_status(m_glId) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        GFrameBuffer(const Vector2u& dimensions, std::uint8_t samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)
+        OpenGLFrameBuffer(const Vector2u& dimensions, std::uint8_t samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)
             : FrameBuffer{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_frame_buffer();
@@ -135,12 +133,12 @@ namespace fox::gfx::imp::api
 
             if (gl::check_frame_buffer_status(m_glId) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        GFrameBuffer(GFrameBuffer&& other) noexcept
+        OpenGLFrameBuffer(OpenGLFrameBuffer&& other) noexcept
             : FrameBuffer{ std::move(other.m_dimensions) }
         {
             *this = std::move(other);
         }
-        ~GFrameBuffer()
+        ~OpenGLFrameBuffer()
         {
             if (m_glId) gl::delete_frame_buffer(m_glId);
         }
@@ -163,15 +161,7 @@ namespace fox::gfx::imp::api
             return m_samples;
         }
 
-        auto expose_internals() const
-        {
-            return InternalView<GFrameBuffer<gfx::api::GraphicsAPI::OpenGL, AA>>
-            {
-                m_glId
-            };
-        }
-
-        GFrameBuffer& operator=(GFrameBuffer&& other) noexcept
+        OpenGLFrameBuffer& operator=(OpenGLFrameBuffer&& other) noexcept
         {
             m_glId                     = other.m_glId;
             m_samples                  = other.m_samples;
@@ -185,7 +175,7 @@ namespace fox::gfx::imp::api
         }
 
     private:
-        GLuint m_glId{};
+        gl::uint32_t m_glId{};
 
         std::uint8_t m_samples{};
 

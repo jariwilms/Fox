@@ -12,18 +12,18 @@ namespace fox::gfx::api
     public:
         enum class Format
         {
-            //UNORM   => stored as unsigned integer, sampled as   floating point in range [      0,           1]
-            //SNORM   => stored as   signed integer, sampled as   floating point in range [     -1,           1]
-            //USCALED => stored as   floating point, sampled as   floating point in range [      0,    UINT_MAX]
-            //SSCALED => stored as   floating point, sampled as   floating point in range [INT_MIN,     INT_MAX]
-            //UINT    => stored as unsigned integer, sampled as unsigned integer in range [      0,    UINT_MAX]
-            //SINT    => stored as   signed integer, sampled as   signed integer in range [INT_MIN,     INT_MAX]
-            //UFLOAT  => stored as   floating point, sampled as   floating point in range [      0,  UFLOAT_MAX]
-            //SFLOAT  => stored as   floating point, sampled as   floating point in range [FLOAT_MIN, FLOAT-MAX]
-            //SRGB    => stored as unsigned integer, sampled as   floating point in range [      0,    UINT_MAX]
+            //UNORM   => stored as unsigned integer, sampled as   floating point in range [        0,          1]
+            //SNORM   => stored as   signed integer, sampled as   floating point in range [       -1,          1]
+            //USCALED => stored as   floating point, sampled as   floating point in range [        0,   UINT_MAX]
+            //SSCALED => stored as   floating point, sampled as   floating point in range [  INT_MIN,    INT_MAX]
+            //UINT    => stored as unsigned integer, sampled as unsigned integer in range [        0,   UINT_MAX]
+            //SINT    => stored as   signed integer, sampled as   signed integer in range [  INT_MIN,    INT_MAX]
+            //UFLOAT  => stored as   floating point, sampled as   floating point in range [        0, UFLOAT_MAX]
+            //SFLOAT  => stored as   floating point, sampled as   floating point in range [FLOAT_MIN,  FLOAT-MAX]
+            //SRGB    => stored as unsigned integer, sampled as   floating point in range [        0,   UINT_MAX]
             //Note: The Red, Green and Blue components of SRGB formats are nonlinear
 
-            //0x[Size 1]'[Size 2]'[Components]'[Primary Key]
+            //Format: 0x|Size 1|'|Size 2|'|No. Components|'|Primary Key|
 
             R8_UNORM = 		    0x08'00'01'00, 
             RG8_UNORM =         0x08'00'02'01, 

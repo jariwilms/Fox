@@ -51,6 +51,8 @@ namespace fox::utl
 
 
     //https://stackoverflow.com/a/21028912
+    //There is an instance where we want a vector to take ownership of a large amount of preallocated data without allocating and initializing its data beforehand
+    //This allocator does just that, nothing
     template <typename T, typename A = std::allocator<T>>
     class default_init_allocator : public A
     {
@@ -84,12 +86,13 @@ namespace fox::utl
     {
         struct vt { typename V::value_type v; vt() {} };
         static_assert(sizeof(vt[10]) == sizeof(typename V::value_type[10]), "alignment error");
-        typedef std::vector<vt, typename std::allocator_traits<typename V::allocator_type>::template rebind_alloc<vt>> V2;
+        using V2 = std::vector<vt, typename std::allocator_traits<typename V::allocator_type>::template rebind_alloc<vt>>;
         reinterpret_cast<V2&>(v).resize(newSize);
     }
 
 
 
+    //Calculates the amount of MIP levels for a given dimension
     //auto mip_l(const Vector2u& dimensions)
     //{
     //    return static_cast<unsigned int>(std::floor(std::log2(std::max(dimensions.x, dimensions.y)))) + 1u;

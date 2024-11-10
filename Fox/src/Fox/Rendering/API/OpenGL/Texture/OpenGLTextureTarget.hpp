@@ -3,7 +3,7 @@
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
 #include "Fox/Rendering/Texture/Dimensions.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
     template<Dimensions, AntiAliasing>
     struct DimensionsToTarget;

@@ -5,14 +5,13 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
+#include "Fox/Rendering/API/OpenGL/GL.hpp"
 #include "Fox/Rendering/API/OpenGL/GLMappings.hpp"
 #include "Fox/Rendering/RenderState/RenderState.hpp"
-#include "Fox/Rendering/API/Implementation/GRenderState.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
-    template<>
-    class GRenderState<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::RenderState
+    class OpenGLRenderState : public api::RenderState
     {
     public:
         static void init()
@@ -25,16 +24,16 @@ namespace fox::gfx::imp::api
             s_clearColor        = Vector4f{ 0.0f };
         }
 
-        template<RenderState::Parameter PARAM, typename... Args>
+        template<api::RenderState::Parameter PARAM, typename... Args>
         static auto query(Args... args) = delete;
-        template<RenderState::Parameter PARAM, typename... Args>
+        template<api::RenderState::Parameter PARAM, typename... Args>
         static auto apply(Args... args) = delete;
 
-        template<> static auto query<RenderState::Parameter::ClearColor>()
+        template<> static auto query<api::RenderState::Parameter::ClearColor>()
         {
             return s_clearColor;
         }
-        template<> static auto apply<RenderState::Parameter::ClearColor>(Vector4f clearColor)
+        template<> static auto apply<api::RenderState::Parameter::ClearColor>(Vector4f clearColor)
         {
             if (s_clearColor == clearColor) return;
 
@@ -42,11 +41,11 @@ namespace fox::gfx::imp::api
             glClearColor(s_clearColor.r, s_clearColor.g, s_clearColor.b, s_clearColor.a);
         }
 
-        template<> static auto query<RenderState::Parameter::DepthFunction>()
+        template<> static auto query<api::RenderState::Parameter::DepthFunction>()
         {
             return s_depthFunction;
         }
-        template<> static auto apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction depthFunction)
+        template<> static auto apply<api::RenderState::Parameter::DepthFunction>(api::RenderState::DepthFunction depthFunction)
         {
             if (s_depthFunction == depthFunction) return;
 
@@ -55,11 +54,11 @@ namespace fox::gfx::imp::api
             glDepthFunc(glDepthFunction);
         }
 
-        template<> static auto query<RenderState::Parameter::FaceCullingAlpha>()
+        template<> static auto query<api::RenderState::Parameter::FaceCullingAlpha>()
         {
             return s_cullingFaceAlpha;
         }
-        template<> static auto apply<RenderState::Parameter::FaceCullingAlpha>(bool alpha)
+        template<> static auto apply<api::RenderState::Parameter::FaceCullingAlpha>(bool alpha)
         {
             if (s_cullingFaceAlpha == alpha) return;
 
@@ -67,11 +66,11 @@ namespace fox::gfx::imp::api
             s_cullingFaceAlpha ? glEnable(GL_CULL_FACE) : glDisable(GL_CULL_FACE);
         }
 
-        template<> static auto query<RenderState::Parameter::FaceCulling>()
+        template<> static auto query<api::RenderState::Parameter::FaceCulling>()
         {
             return s_faceCulling;
         }
-        template<> static auto apply<RenderState::Parameter::FaceCulling>(FaceCulling faceCulling)
+        template<> static auto apply<api::RenderState::Parameter::FaceCulling>(api::RenderState::FaceCulling faceCulling)
         {
             if (s_faceCulling == faceCulling) return;
 
@@ -80,23 +79,23 @@ namespace fox::gfx::imp::api
             glCullFace(glFaceCulling);
         }
 
-        template<> static auto query<RenderState::Parameter::FrontFace>()
+        template<> static auto query<api::RenderState::Parameter::FrontFace>()
         {
             return s_faceCulling;
         }
-        template<> static auto apply<RenderState::Parameter::FrontFace>(FrontFace frontFace)
+        template<> static auto apply<api::RenderState::Parameter::FrontFace>(api::RenderState::FrontFace frontFace)
         {
             if (s_frontFace == frontFace) return;
 
             s_frontFace = frontFace;
-            s_frontFace == RenderState::FrontFace::Clockwise ? glFrontFace(GL_CW) : glFrontFace(GL_CCW);
+            s_frontFace == api::RenderState::FrontFace::Clockwise ? glFrontFace(GL_CW) : glFrontFace(GL_CCW);
         }
 
-        template<> static auto query<RenderState::Parameter::DepthTestingAlpha>()
+        template<> static auto query<api::RenderState::Parameter::DepthTestingAlpha>()
         {
             return s_depthTestingAlpha;
         }
-        template<> static auto apply<RenderState::Parameter::DepthTestingAlpha>(bool alpha)
+        template<> static auto apply<api::RenderState::Parameter::DepthTestingAlpha>(bool alpha)
         {
             if (s_depthTestingAlpha == alpha) return;
 
@@ -105,6 +104,6 @@ namespace fox::gfx::imp::api
         }
 
     private:
-        GRenderState() = delete;
+        OpenGLRenderState() = delete;
     };
 }

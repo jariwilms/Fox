@@ -19,7 +19,7 @@ namespace fox::gfx::api
     public:
         using type = T;
 
-        static inline const std::uint32_t  count        = COUNT;
-        static inline const bool isNormalized = NORM;
+        static inline const std::uint32_t count        = COUNT;
+        static inline const bool          isNormalized = NORM;
     };
 }

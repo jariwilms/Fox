@@ -5,12 +5,12 @@
 
 #include "Fox/Rendering/Buffer/Buffer.hpp"
 #include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/RenderState/RenderState.hpp"
 #include "Fox/Rendering/Shader/Pipeline.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/RenderState/RenderState.hpp"
 
-namespace fox::gfx::imp::api::gl
+namespace fox::gfx::api::gl
 {
     static constexpr GLenum      map_texture_format(gfx::api::Texture::Format format)
     {

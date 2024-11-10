@@ -1,15 +1,15 @@
 #pragma once
 
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
-#include "Fox/Rendering/API/Implementation/GRenderBuffer.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
     template<AntiAliasing AA>
-    class GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA> : public Texture
+    class OpenGLRenderBuffer : public Texture
     {
     public:
-        GRenderBuffer(Format format, const Vector2u& dimensions)             requires (AA == AntiAliasing::None)
+        OpenGLRenderBuffer(Format format, const Vector2u& dimensions)                       requires (AA == AntiAliasing::None)
             : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }
         {
             m_glId = gl::create_render_buffer();
@@ -17,7 +17,7 @@ namespace fox::gfx::imp::api
             const auto& glFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage(m_glId, glFormat, this->m_dimensions);
         }
-        GRenderBuffer(Format format, const Vector2u& dimensions, std::uint8_t samples) requires (AA == AntiAliasing::MSAA)
+        OpenGLRenderBuffer(Format format, const Vector2u& dimensions, std::uint8_t samples) requires (AA == AntiAliasing::MSAA)
             : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId = gl::create_render_buffer();
@@ -25,11 +25,11 @@ namespace fox::gfx::imp::api
             const auto& glFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage_multisample(m_glId, glFormat, this->m_dimensions, m_samples);
         }
-        GRenderBuffer(GRenderBuffer&& other) noexcept
+        OpenGLRenderBuffer(OpenGLRenderBuffer&& other) noexcept
         {
             *this = std::move(other);
         }
-        ~GRenderBuffer()
+        ~OpenGLRenderBuffer()
         {
             if (m_glId) gl::delete_render_buffer(m_glId);
         }
@@ -38,20 +38,12 @@ namespace fox::gfx::imp::api
         {
             return m_dimensions;
         }
-        std::uint8_t              samples()    const
+        std::uint8_t    samples()    const
         {
             return m_samples;
         }
 
-        auto expose_internals() const
-        {
-            return InternalView<GRenderBuffer<gfx::api::GraphicsAPI::OpenGL, AA>>
-            {
-                m_glId
-            };
-        }
-
-        GRenderBuffer& operator=(GRenderBuffer&& other) noexcept
+        OpenGLRenderBuffer& operator=(OpenGLRenderBuffer&& other) noexcept
         {
             m_glId       = other.m_glId;
             m_dimensions = other.m_dimensions;
@@ -65,9 +57,9 @@ namespace fox::gfx::imp::api
         }
 
     private:
-        GLuint m_glId{};
+        gl::uint32_t m_glId{};
 
-        Vector2u m_dimensions{};
-        std::uint8_t       m_samples{};
+        Vector2u     m_dimensions{};
+        std::uint8_t m_samples{};
     };
 }

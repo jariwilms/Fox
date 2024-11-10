@@ -5,34 +5,31 @@
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/OpenGLBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Layout/OpenGLVertexLayout.hpp"
-#include "Fox/Rendering/API/Implementation/GVertexArray.hpp"
-#include "Fox/Rendering/Buffer/VertexArray.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
-    template<>
-    class GVertexArray<gfx::api::GraphicsAPI::OpenGL> final : public gfx::api::VertexArray
+    class OpenGLVertexArray
     {
     public:
-        template<Buffer::Access ACCESS, typename T>
-        using vertex_type = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Vertex, ACCESS, T>;
-        template<Buffer::Access ACCESS>
-        using index_type           = GBuffer<gfx::api::GraphicsAPI::OpenGL, Buffer::Type::Index, ACCESS, std::uint32_t>;
-        template<Buffer::Access ACCESS, typename T>
-        using vertex_pointer       = std::shared_ptr<vertex_type<ACCESS, T>>;
-        template<Buffer::Access ACCESS, typename T>
-        using const_vertex_pointer = std::shared_ptr<const vertex_type<ACCESS, T>>;
-        using const_index_pointer  = std::shared_ptr<const index_type<Buffer::Access::Static>>;
+        template<api::Buffer::Access ACCESS, typename T>
+        using vertex_t             = OpenGLBuffer<api::Buffer::Type::Vertex, ACCESS, T>;
+        template<api::Buffer::Access ACCESS>
+        using index_t              = OpenGLBuffer<api::Buffer::Type::Index, ACCESS, std::uint32_t>;
+        template<api::Buffer::Access ACCESS, typename T>
+        using vertex_pointer       = std::shared_ptr<vertex_t<ACCESS, T>>;
+        template<api::Buffer::Access ACCESS, typename T>
+        using const_vertex_pointer = std::shared_ptr<const vertex_t<ACCESS, T>>;
+        using const_index_pointer  = std::shared_ptr<const index_t<api::Buffer::Access::Static>>;
 
-        GVertexArray()
+        OpenGLVertexArray()
         {
             m_glId = gl::create_vertex_array();
         }
-        GVertexArray(GVertexArray&& other) noexcept
+        OpenGLVertexArray(OpenGLVertexArray&& other) noexcept
         {
             *this = std::move(other);
         }
-        ~GVertexArray()
+        ~OpenGLVertexArray()
         {
             if (m_glId) gl::delete_vertex_array(m_glId);
         }
@@ -42,13 +39,13 @@ namespace fox::gfx::imp::api
             gl::bind_vertex_array(m_glId);
         }
 
-        template<Buffer::Access ACCESS, typename T, typename... U>
-        void tie(vertex_pointer<ACCESS, T> buffer, GVertexLayout<gfx::api::GraphicsAPI::OpenGL, U...> layout)
+        template<api::Buffer::Access ACCESS, typename T, typename... U>
+        void tie(vertex_pointer<ACCESS, T> buffer, OpenGLVertexLayout<U...> layout)
         {
-            tie(static_pointer_cast<const vertex_type<ACCESS, T>>(buffer), layout);
+            tie(static_pointer_cast<const vertex_t<ACCESS, T>>(buffer), layout);
         }
-        template<Buffer::Access ACCESS, typename T, typename... U>
-        void tie(const_vertex_pointer<ACCESS, T> buffer, GVertexLayout<gfx::api::GraphicsAPI::OpenGL, U...> layout)
+        template<api::Buffer::Access ACCESS, typename T, typename... U>
+        void tie(const_vertex_pointer<ACCESS, T> buffer, OpenGLVertexLayout<U...> layout)
         {
             if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 
@@ -87,7 +84,7 @@ namespace fox::gfx::imp::api
             return m_primitiveCount;
         }
 
-        GVertexArray& operator=(GVertexArray&& other) noexcept
+        OpenGLVertexArray& operator=(OpenGLVertexArray&& other) noexcept
         {
             m_glId                  = other.m_glId;
             m_glArrayAttributeIndex = other.m_glArrayAttributeIndex;

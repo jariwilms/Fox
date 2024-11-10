@@ -4,18 +4,17 @@
 
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/API/OpenGL/Internal/InternalView.hpp"
 #include "OpenGLTextureTarget.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
     template<Dimensions DIMS, AntiAliasing AA>
-    class GTexture<gfx::api::GraphicsAPI::OpenGL, DIMS, AA> : public Texture
+    class OpenGLTexture : public Texture
     {
     public:
         using vector_t = gfx::api::DimensionsToVector<DIMS>::type;
 
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (AA == AntiAliasing::None)
+        OpenGLTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions)                             requires (AA == AntiAliasing::None)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
@@ -35,7 +34,7 @@ namespace fox::gfx::imp::api
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_glId, m_glFormat, m_dimensions, 1);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_glId, m_glFormat, m_dimensions, 1);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::uint8_t samples)       requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
+        OpenGLTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::uint8_t samples)       requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
             : Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_glId        = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
@@ -55,16 +54,16 @@ namespace fox::gfx::imp::api
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_glId, m_glFormat, m_dimensions, m_samples);
         }
-        GTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const byte> data) requires (AA == AntiAliasing::None)
-            : GTexture{ format, filter, wrapping, dimensions }
+        OpenGLTexture(Texture::Format format, Texture::Filter filter, Texture::Wrapping wrapping, const vector_t& dimensions, std::span<const byte> data) requires (AA == AntiAliasing::None)
+            : OpenGLTexture{ format, filter, wrapping, dimensions }
         {
             copy(format, data);
         }
-        GTexture(GTexture&& other) noexcept
+        OpenGLTexture(OpenGLTexture&& other) noexcept
         {
             *this = std::move(other);
         }
-        ~GTexture()
+        ~OpenGLTexture()
         {
             if (m_glId) gl::delete_texture(m_glId);
         }
@@ -99,7 +98,7 @@ namespace fox::gfx::imp::api
 
         auto expose_internals() const
         {
-            return InternalView<GTexture<gfx::api::GraphicsAPI::OpenGL, DIMS, AA>>
+            return InternalView<OpenGLTexture<DIMS, AA>>
             {
                 m_glId,
                 m_glFormat,
@@ -109,7 +108,7 @@ namespace fox::gfx::imp::api
             };
         }
 
-        GTexture& operator=(GTexture&& other) noexcept
+        OpenGLTexture& operator=(OpenGLTexture&& other) noexcept
         {
             m_glId        = other.m_glId;
             m_glFormat    = other.m_glFormat;
@@ -131,11 +130,11 @@ namespace fox::gfx::imp::api
         }
 
     private:
-        GLuint m_glId{};
-        GLuint m_glFormat{};
-        GLuint m_glMinFilter{};
-        GLuint m_glMagFilter{};
-        GLuint m_glWrapping{};
+        gl::uint32_t m_glId{};
+        gl::uint32_t m_glFormat{};
+        gl::uint32_t m_glMinFilter{};
+        gl::uint32_t m_glMagFilter{};
+        gl::uint32_t m_glWrapping{};
 
         vector_t m_dimensions{};
         std::uint8_t       m_samples{};

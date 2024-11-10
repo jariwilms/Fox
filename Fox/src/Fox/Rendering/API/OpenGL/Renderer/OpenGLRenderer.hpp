@@ -2,19 +2,18 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/Renderer/Renderer.hpp"
-#include "Fox/Rendering/API/Implementation/GRenderer.hpp"
 #include "Fox/Rendering/Mesh/Mesh.hpp"
 #include "Fox/Rendering/Material/Material.hpp"
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/Uniform/Uniform.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
-    template<>
-    class GRenderer<gfx::api::GraphicsAPI::OpenGL> : public gfx::api::Renderer
+    class OpenGLRenderer : public Renderer
     {
     public:
         static void init()
@@ -43,12 +42,12 @@ namespace fox::gfx::imp::api
                 FrameBuffer::Manifest{ "Depth", FrameBuffer::Attachment::DepthStencil, FrameBuffer::Resample::No,  TextureBlueprint{ Texture::Format::D24_UNORM_S8_UINT} },
             };
 
-            s_gBuffer            = std::make_unique<FrameBuffer>(dimensions, gBufferManifest);
-            s_gBufferMultisample = std::make_unique<FrameBufferMultisample>(dimensions, samples, gBufferManifest);
-            s_sBuffer            = std::make_unique<FrameBuffer>(shadowMapDimensions, sBufferManifest);
+            s_gBuffer            = std::make_unique<OpenGLFrameBuffer<AntiAliasing::None>>(dimensions, gBufferManifest);
+            s_gBufferMultisample = std::make_unique<OpenGLFrameBuffer<AntiAliasing::MSAA>>(dimensions, samples, gBufferManifest);
+            s_sBuffer            = std::make_unique<OpenGLFrameBuffer<AntiAliasing::None>>(shadowMapDimensions, sBufferManifest);
             for (auto& ppBuffer : s_ppBuffers)
             {
-                ppBuffer = std::make_unique<FrameBuffer>(dimensions, ppBufferManifest);
+                ppBuffer = std::make_unique<OpenGLFrameBuffer<AntiAliasing::None>>(dimensions, ppBufferManifest);
             }
 
             
@@ -56,7 +55,7 @@ namespace fox::gfx::imp::api
             s_matricesBuffer = std::make_unique<UniformBuffer<UMatrices>>();
             s_materialBuffer = std::make_unique<UniformBuffer<UMaterial>>();
             s_cameraBuffer   = std::make_unique<UniformBuffer<UCamera>>();
-            s_lightBuffer    = std::make_unique<UniformArrayBuffer<Buffer::Access::Dynamic, ULight>>(32u);
+            s_lightBuffer    = std::make_unique<UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>>(32u);
 
 
 
@@ -71,12 +70,11 @@ namespace fox::gfx::imp::api
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
 
 
-
-            RenderState::apply<RenderState::Parameter::ClearColor>(Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
-            RenderState::apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction::LessEqual);
-            RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
-            RenderState::apply<RenderState::Parameter::FaceCulling>(RenderState::FaceCulling::Back);
-            RenderState::apply<RenderState::Parameter::FrontFace>(RenderState::FrontFace::CounterClockwise);
+            OpenGLRenderState::apply<RenderState::Parameter::ClearColor>(Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
+            OpenGLRenderState::apply<RenderState::Parameter::DepthFunction>(RenderState::DepthFunction::LessEqual);
+            OpenGLRenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
+            OpenGLRenderState::apply<RenderState::Parameter::FaceCulling>(RenderState::FaceCulling::Back);
+            OpenGLRenderState::apply<RenderState::Parameter::FrontFace>(RenderState::FrontFace::CounterClockwise);
         }
 
         static void start(const RenderInfo& renderInfo)
@@ -111,8 +109,8 @@ namespace fox::gfx::imp::api
             s_gBufferMultisample->bind(FrameBuffer::Target::Write);
 
             gl::clear(gl::Buffer::Mask::All);
-            RenderState::apply<RenderState::Parameter::DepthTestingAlpha>(true);
-            RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
+            OpenGLRenderState::apply<RenderState::Parameter::DepthTestingAlpha>(true);
+            OpenGLRenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
         }
         static void finish()
         {
@@ -140,13 +138,13 @@ namespace fox::gfx::imp::api
 
 
 
-            RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(false);
+            OpenGLRenderState::apply<RenderState::Parameter::FaceCullingAlpha>(false);
 
-            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, so we have to copy it into a regular framebuffer
+            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, they need to be blit into a regular framebuffer first
             const auto width{ 1280 };
             const auto height{ 720 };
-            const auto& gBufferInternal   = s_gBuffer->expose_internals();
-            const auto& gBufferMsInternal = s_gBufferMultisample->expose_internals();
+            const auto& gBufferInternal = s_gBuffer->id();// s_gBuffer->expose_internals();
+            const auto& gBufferMsInternal = s_gBufferMultisample->id();// s_gBufferMultisample->expose_internals();
 
             for (auto i{ 0u }; i < 4; ++i)
             {
@@ -186,19 +184,19 @@ namespace fox::gfx::imp::api
         }
 
     private:
-        GRenderer() = delete;
+        OpenGLRenderer() = delete;
 
-        static inline std::unique_ptr<FrameBuffer> s_gBuffer{};
-        static inline std::unique_ptr<FrameBuffer> s_sBuffer{};
-        static inline std::array<std::unique_ptr<FrameBuffer>, 2> s_ppBuffers{};
-        static inline std::unique_ptr<FrameBufferMultisample> s_gBufferMultisample{};
-
+        static inline std::unique_ptr<OpenGLFrameBuffer<AntiAliasing::None>> s_gBuffer{};
+        static inline std::unique_ptr<OpenGLFrameBuffer<AntiAliasing::None>> s_sBuffer{};
+        static inline std::array<std::unique_ptr<OpenGLFrameBuffer<AntiAliasing::None>>, 2> s_ppBuffers{};
+        static inline std::unique_ptr<OpenGLFrameBuffer<AntiAliasing::MSAA>> s_gBufferMultisample{};
+        
         static inline std::unique_ptr<UniformBuffer<UMatrices>> s_matricesBuffer{};
         static inline std::unique_ptr<UniformBuffer<UMaterial>> s_materialBuffer{};
         static inline std::unique_ptr<UniformBuffer<UCamera>> s_cameraBuffer{};
-        static inline std::unique_ptr<UniformArrayBuffer<Buffer::Access::Dynamic, ULight>> s_lightBuffer{};
+        static inline std::unique_ptr<UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>> s_lightBuffer{};
 
-        static inline std::unordered_map<std::string, std::unique_ptr<Pipeline>> s_pipelines{};
+        static inline std::unordered_map<std::string, std::unique_ptr<OpenGLPipeline>> s_pipelines{};
 
         static inline std::vector<std::tuple<const std::shared_ptr<const Mesh>, const std::shared_ptr<const Material>, const Transform&>> s_mmt{};
     };

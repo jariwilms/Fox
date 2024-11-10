@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::gfx
+namespace fox::gfx::api
 {
     struct UMatrices //std140, binding 0
     {

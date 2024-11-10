@@ -6,7 +6,7 @@
 #include "Fox/IO/IO.hpp"
 #include "Fox/Rendering/Rendering.hpp"
 
-namespace fox::gfx
+namespace fox::gfx::api
 {
     auto shaders_from_source()
     {

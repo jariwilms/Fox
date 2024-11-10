@@ -3,13 +3,11 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/API/OpenGL/GL.hpp"
-#include "Fox/Rendering/API/Implementation/GVertexLayout.hpp"
 #include "Fox/Rendering/Layout/Layout.hpp"
 
-namespace fox::gfx::imp::api
+namespace fox::gfx::api::gl
 {
-    template<>
-    struct GAttribute<gfx::api::GraphicsAPI::OpenGL>
+    struct OpenGLAttribute
     {
     public:
         size_t stride() const
@@ -18,20 +16,19 @@ namespace fox::gfx::imp::api
         }
 
         GLenum glType{};
-        std::uint32_t    count{};
-        size_t typeSize{};
-        bool   isNormalized{};
+
+        std::uint32_t count{};
+        size_t        typeSize{};
+        bool          isNormalized{};
     };
 
     template<typename... T>
-    class GVertexLayout<gfx::api::GraphicsAPI::OpenGL, T...>
+    class OpenGLVertexLayout
     {
     public:
-        using Attribute = GAttribute<gfx::api::GraphicsAPI::OpenGL>;
-
-        GVertexLayout()
+        OpenGLVertexLayout()
         {
-            (m_attributes.emplace_back(Attribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
+            (m_attributes.emplace_back(OpenGLAttribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
         }
 
         size_t stride() const
@@ -46,12 +43,12 @@ namespace fox::gfx::imp::api
             return result;
         }
 
-        std::span<const Attribute> attributes() const
+        std::span<const OpenGLAttribute> attributes() const
         {
             return m_attributes;
         }
 
     private:
-        std::vector<Attribute> m_attributes{};
+        std::vector<OpenGLAttribute> m_attributes{};
     };
 }

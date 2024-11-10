@@ -4,8 +4,38 @@
 
 #include "GLMappings.hpp"
 
-namespace fox::gfx::imp::api::gl
+namespace fox::gfx::api::gl
 {
+    enum
+    {
+        False = GL_FALSE, 
+        True  = GL_TRUE, 
+    };
+
+    using int8_t     = GLbyte;
+    using uint8_t    = GLubyte;
+    using int16_t    = GLshort;
+    using uint16_t   = GLushort;
+    using int32_t    = GLint;
+    using uint32_t   = GLuint;
+    using int64_t    = GLint64;
+    using uint64_t   = GLuint64;
+    using size_t     = GLsizei;
+    using f16_t      = GLhalf;
+    using f32_t      = GLfloat;
+    using f64_t      = GLdouble;
+
+    using intptr_t   = GLintptr;
+    using sizeptr_t  = GLsizeiptr;
+    using sync_t     = GLsync;
+
+    using bitfield_t = GLbitfield;
+
+    enum handle_t : uint32_t {};
+    enum query_t  : uint32_t {};
+
+
+
     struct Buffer
     {
         enum Mask : GLbitfield
@@ -474,38 +504,6 @@ namespace fox::gfx::imp::api::gl
 
         std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}\n", sourceMessage, typeMessage, severityMessage, id, message);
     }
-}
-
-
-namespace gl
-{
-    enum
-    {
-        False = GL_FALSE, 
-        True  = GL_TRUE, 
-    };
-
-    using int8_t     = GLbyte;
-    using uint8_t    = GLubyte;
-    using int16_t    = GLshort;
-    using uint16_t   = GLushort;
-    using int32_t    = GLint;
-    using uint32_t   = GLuint;
-    using int64_t    = GLint64;
-    using uint64_t   = GLuint64;
-    using size_t     = GLsizei;
-    using f16_t      = GLhalf;
-    using f32_t      = GLfloat;
-    using f64_t      = GLdouble;
-
-    using intptr_t   = GLintptr;
-    using sizeptr_t  = GLsizeiptr;
-    using sync_t     = GLsync;
-
-    using bitfield_t = GLbitfield;
-
-    enum handle_t : uint32_t {};
-    enum query_t  : uint32_t {};
 
 
 
