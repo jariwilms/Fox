@@ -47,7 +47,7 @@ namespace fox
         {
             glEnable(GL_DEBUG_OUTPUT);
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-            glDebugMessageCallback(gfx::imp::api::gl::debug_callback, nullptr);
+            glDebugMessageCallback(gfx::api::gl::debug_callback, nullptr);
             glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
         }
 
@@ -74,7 +74,7 @@ namespace fox
             //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)
             //context->gl_debug_callback(source, type, id, severity, length, message, param);
 
-            gfx::imp::api::gl::debug_callback(source, type, id, severity, length, message, param);
+            gfx::api::gl::debug_callback(source, type, id, severity, length, message, param);
         };
         const auto& forward_glfw_input_key_callback    = [](GLFWwindow* window, int key, int scancode, int action, int mods)
         {

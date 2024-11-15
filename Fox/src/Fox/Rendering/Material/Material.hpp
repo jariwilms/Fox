@@ -4,7 +4,7 @@
 
 #include "Fox/Rendering/Rendering.hpp"
 
-namespace fox::gfx::api
+namespace fox::gfx
 {
     class Material
     {

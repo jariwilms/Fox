@@ -27,15 +27,15 @@ namespace fox::gfx::api
             ReadWrite, 
         };
 
-        size_t size() const
+        std::size_t size() const
         {
             return m_size;
         }
 
     protected:
-        Buffer(size_t size)
+        Buffer(std::size_t size)
             : m_size{ size } {}
 
-        size_t m_size{};
+        std::size_t m_size{};
     };
 }

@@ -6,7 +6,7 @@
 
 #include "Fox/Core/Library/Utility/Utility.hpp"
 
-namespace fox
+namespace fox::io
 {
 	class File : public Entry
 	{

@@ -387,7 +387,6 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLFrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Internal\InternalView.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Renderer\OpenGLRenderer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\OpenGLRenderState.hpp" />
@@ -406,11 +405,9 @@
     <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Plane.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Internal\InternalView.hpp" />
     <ClInclude Include="src\Fox\Rendering\Layout\Layout.hpp" />
     <ClInclude Include="src\Fox\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Fox\Rendering\Mesh\Mesh.hpp" />
@@ -431,6 +428,7 @@
     <ClInclude Include="src\Fox\Rendering\Renderer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Rendering.hpp" />
     <ClInclude Include="src\Fox\Rendering\Using.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\GLTypes.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

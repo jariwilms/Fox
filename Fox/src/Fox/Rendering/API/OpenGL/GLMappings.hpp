@@ -3,6 +3,7 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
+#include "Fox/Rendering/API/OpenGL/GLTypes.hpp"
 #include "Fox/Rendering/Buffer/Buffer.hpp"
 #include "Fox/Rendering/Buffer/FrameBuffer.hpp"
 #include "Fox/Rendering/RenderState/RenderState.hpp"
@@ -12,7 +13,11 @@
 
 namespace fox::gfx::api::gl
 {
-    static constexpr GLenum      map_texture_format(gfx::api::Texture::Format format)
+    //This file converts universal mappings to their equivalent OpenGL names
+    //ie. Texture::Format::RGBA32_SFLOAT => GL_RGBA32F
+    //TODO: create enum of every possible OpenGL value?
+
+    static constexpr enum_t               map_texture_format(gfx::api::Texture::Format format)
     {
         switch (format)
         {
@@ -54,9 +59,9 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr GLenum      map_texture_format_base(gfx::api::Texture::Format format)
+    static constexpr enum_t               map_texture_format_base(gfx::api::Texture::Format format)
     {
-        const auto& flags = (static_cast<int>(format) & 0xFF00) >> 8;
+        const auto& flags = (static_cast<std::int32_t>(format) & 0xFF00) >> 8;
         switch (flags)
         {
             case 0x01: return GL_RED;
@@ -71,7 +76,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    static constexpr GLenum      map_texture_min_filter(gfx::api::Texture::Filter filter)
+    static constexpr enum_t               map_texture_min_filter(gfx::api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -83,7 +88,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static constexpr GLenum      map_texture_mag_filter(gfx::api::Texture::Filter filter)
+    static constexpr enum_t               map_texture_mag_filter(gfx::api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -95,7 +100,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static constexpr GLenum      map_texture_wrapping(gfx::api::Texture::Wrapping wrapping)
+    static constexpr enum_t               map_texture_wrapping(gfx::api::Texture::Wrapping wrapping)
     {
         switch (wrapping)
         {
@@ -108,7 +113,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    static constexpr GLenum      map_render_buffer_format(gfx::api::Texture::Format format)
+    static constexpr enum_t               map_render_buffer_format(gfx::api::Texture::Format format)
     {
         switch (format)
         {
@@ -126,7 +131,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr GLenum      map_buffer_target(gfx::api::Buffer::Type type)
+    static constexpr enum_t               map_buffer_target(gfx::api::Buffer::Type type)
     {
         switch (type)
         {
@@ -137,17 +142,17 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid type!" };
         }
     }
-    static constexpr GLbitfield  map_buffer_access(gfx::api::Buffer::Access access)
+    static constexpr Buffer::StorageFlags map_buffer_access(gfx::api::Buffer::Access access)
     {
         switch (access)
         {
             case gfx::api::Buffer::Access::Static:  return {};
-            case gfx::api::Buffer::Access::Dynamic: return GL_DYNAMIC_STORAGE_BIT;
+            case gfx::api::Buffer::Access::Dynamic: return Buffer::StorageFlags::DynamicStorage;
 
             default: throw std::invalid_argument{ "Invalid access!" };
         }
     }
-    static constexpr GLenum      map_buffer_mapping(gfx::api::Buffer::Mapping mapping)
+    static constexpr enum_t               map_buffer_mapping(gfx::api::Buffer::Mapping mapping)
     {
         switch (mapping)
         {
@@ -158,7 +163,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid Map!" };
         }
     }
-    static constexpr GLenum      map_frame_buffer_attachment(gfx::api::FrameBuffer::Attachment attachment)
+    static constexpr enum_t               map_frame_buffer_attachment(gfx::api::FrameBuffer::Attachment attachment)
     {
         switch (attachment)
         {
@@ -170,7 +175,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    static constexpr GLenum      map_frame_buffer_target(gfx::api::FrameBuffer::Target target)
+    static constexpr enum_t               map_frame_buffer_target(gfx::api::FrameBuffer::Target target)
     {
         switch (target)
         {
@@ -180,7 +185,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    static constexpr GLenum      map_shader_type(gfx::api::Shader::Stage stage)
+    static constexpr enum_t               map_shader_type(gfx::api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -194,7 +199,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    static constexpr GLenum      map_shader_stage(gfx::api::Shader::Stage stage)
+    static constexpr enum_t               map_shader_stage(gfx::api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -209,7 +214,7 @@ namespace fox::gfx::api::gl
         }
     }
 
-    static constexpr GLenum      map_depth_function(gfx::api::RenderState::DepthFunction depthFunction)
+    static constexpr enum_t               map_depth_function(gfx::api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
         {
@@ -225,7 +230,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    static constexpr GLenum      map_culling_face(gfx::api::RenderState::FaceCulling cullingFace)
+    static constexpr enum_t               map_culling_face(gfx::api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {

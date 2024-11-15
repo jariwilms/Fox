@@ -8,5 +8,6 @@
 
 namespace fox::gfx
 {
-    using Renderer = imp::api::GRenderer<api::GRAPHICS_API>;
+    //using Renderer = imp::api::GRenderer<api::GRAPHICS_API>;
+    using Renderer = api::gl::OpenGLRenderer;
 }

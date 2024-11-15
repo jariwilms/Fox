@@ -198,6 +198,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\OpenGLVertexArray.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\GL.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\GLMappings.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\GLTypes.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Layout\OpenGLVertexLayout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Renderer\OpenGLRenderer.hpp" />

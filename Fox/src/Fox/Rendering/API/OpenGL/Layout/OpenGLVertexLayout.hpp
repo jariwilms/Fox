@@ -15,7 +15,7 @@ namespace fox::gfx::api::gl
             return count * typeSize;
         }
 
-        GLenum glType{};
+        enum_t glType{};
 
         std::uint32_t count{};
         size_t        typeSize{};
@@ -26,9 +26,13 @@ namespace fox::gfx::api::gl
     class OpenGLVertexLayout
     {
     public:
-        OpenGLVertexLayout()
+        OpenGLVertexLayout(std::initializer_list<const std::uint32_t> count)
         {
-            (m_attributes.emplace_back(OpenGLAttribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
+            auto* first = count.begin();
+
+            std::int32_t index{};
+            ((m_attributes.emplace_back(OpenGLAttribute{ gl::type_enum<T>(), *(first + index), static_cast<size_t>(*(first + index) * sizeof(T)), false }), ++index), ...);
+            //(m_attributes.emplace_back(OpenGLAttribute{ gl::type_enum<typename T::type>(), T::count, T::count * sizeof(typename T::type), T::isNormalized }), ...);
         }
 
         size_t stride() const
@@ -51,4 +55,11 @@ namespace fox::gfx::api::gl
     private:
         std::vector<OpenGLAttribute> m_attributes{};
     };
+
+
+
+    void test()
+    {
+
+    }
 }

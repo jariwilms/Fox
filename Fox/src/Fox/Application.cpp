@@ -1,4 +1,4 @@
-//#include "stdafx.hpp"
+#include "stdafx.hpp"
 //
 //#include "Application.hpp"
 //#include "Fox/Window/WindowManager.hpp"
@@ -8,8 +8,8 @@
 //#include "Fox/Core/Library/Transform/Transform.hpp"
 //#include "Fox/ECS/Components/Components.hpp"
 //#include "Fox/Input/Input.hpp"
-//#include "Fox/IO/Import/Model/ModelImporter.hpp"
 //#include "Fox/IO/IO.hpp"
+//#include "Fox/IO/Import/Model/GLTFImporter.hpp"
 //#include "Fox/Rendering/Renderer.hpp"
 //#include "Fox/Scene/Scene.hpp"
 //#include "Fox/Rendering/Model/Model.hpp"
@@ -17,6 +17,12 @@
 //
 //namespace fox
 //{
+//    //////////////////REMOVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+//    using ModelImporter = io::GLTFImporter;
+//    using Renderer      = gfx::api::gl::OpenGLRenderer;
+//    //////////////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+//
+//
 //    Transform transform_product(TransformComponent& tc)
 //    {
 //        const auto& owner = tc.owner;
@@ -62,9 +68,7 @@
 //        m_window = WindowManager::create("Window", "Fox", Vector2u{ 1280, 720 });
 //
 //        
-//        //IO::init();
-//        //gfx::Renderer::init();
-//        //ModelImporter::init();
+//        gfx::Renderer::init();
 //    }
 //    Application::~Application()
 //    {
@@ -102,12 +106,12 @@
 //        std::array<std::string, 6> skyboxFileNames{ "right.png", "left.png", "bottom.png", "top.png", "front.png", "back.png", };
 //        std::array<std::shared_ptr<const std::vector<byte>>, 6> skyboxImages
 //        {
-//            Image{ io::load<File>(skyboxDirectory + skyboxFileNames.at(0)) }.read(4u), 
-//            Image{ io::load<File>(skyboxDirectory + skyboxFileNames.at(1)) }.read(4u), 
-//            Image{ io::load<File>(skyboxDirectory + skyboxFileNames.at(2)) }.read(4u), 
-//            Image{ io::load<File>(skyboxDirectory + skyboxFileNames.at(3)) }.read(4u), 
-//            Image{ io::load<File>(skyboxDirectory + skyboxFileNames.at(4)) }.read(4u), 
-//            Image{ io::load<File>(skyboxDirectory + skyboxFileNames.at(5)) }.read(4u),
+//            //Image{ io::load(skyboxDirectory + skyboxFileNames.at(0))->read(4u) },
+//            //Image{ io::load(skyboxDirectory + skyboxFileNames.at(1))->read(4u) },
+//            //Image{ io::load(skyboxDirectory + skyboxFileNames.at(2))->read(4u) },
+//            //Image{ io::load(skyboxDirectory + skyboxFileNames.at(3))->read(4u) },
+//            //Image{ io::load(skyboxDirectory + skyboxFileNames.at(4))->read(4u) },
+//            //Image{ io::load(skyboxDirectory + skyboxFileNames.at(5))->read(4u) },
 //        };
 //        std::array<std::span<const byte>, 6> skyboxImageData
 //        {
@@ -118,11 +122,11 @@
 //            *skyboxImages[4], 
 //            *skyboxImages[5], 
 //        };
-//        RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, skyboxImageData);
+//        //RenderSettings::lighting.skybox = std::make_shared<OpenGLCubemapTexture>(Texture::Format::RGBA8_SRGB, Texture::Filter::Trilinear, Texture::Wrapping::ClampToEdge, skyboxDimensions, Texture::Components::RGBA, skyboxImageData);
 //
 //
 //
-//        std::array<std::tuple<Light, Vector3f>, 8> lights
+//        std::array<std::tuple<Light, Vector3f>, 32> lights
 //        {
 //            std::make_tuple(Light{.color = { 1.0f, 0.0f, 1.0f }, .radius = 100.0f }, Vector3f{ 0.0f, 0.0f, 1.0f }),
 //        };
@@ -169,20 +173,13 @@
 //
 //            //The render system starts running here and submits all models/meshes to the renderer
 //            //So, TODO: RenderSystem::update, which calls the code below
-//            Renderer::start(RendererAPI::RenderInfo{ camera, cameraTransform, lights });
+//            Renderer::start(gfx::RenderInfo{ {camera, cameraTransform}, lights });
 //            auto group = Registry::view<TransformComponent, MeshRendererComponent>();
 //            group.each([](auto entity, TransformComponent& transform, MeshRendererComponent& meshRenderer)
 //                {
 //                    Renderer::render(meshRenderer.mesh, meshRenderer.material, transform_product(transform));
 //                });
 //            Renderer::finish();
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //

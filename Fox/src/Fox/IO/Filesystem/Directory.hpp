@@ -10,7 +10,7 @@ namespace fox
 	class Directory : public Entry
 	{
 	public:
-		using Children = std::tuple<std::vector<std::shared_ptr<Directory>>, std::vector<std::shared_ptr<File>>>;
+		using Children = std::tuple<std::vector<std::shared_ptr<Directory>>, std::vector<std::shared_ptr<io::File>>>;
 
 		explicit Directory(const std::filesystem::path& path, bool explore = false)
 			: Entry{ path }
@@ -34,7 +34,7 @@ namespace fox
             for (const auto& entry : it)
             {
                 if (entry.is_directory())    directories.emplace_back(std::make_shared<Directory>(entry.path()));
-                if (entry.is_regular_file()) files.emplace_back(std::make_shared<File>(entry.path()));
+                if (entry.is_regular_file()) files.emplace_back(std::make_shared<io::File>(entry.path()));
             }
 
             m_count = directories.size() + files.size();
@@ -49,12 +49,12 @@ namespace fox
 
             return std::make_shared<Directory>(aggregatePath);
         }
-		template<> std::shared_ptr<File> create(const std::string& identifier, const std::string& extension)
+		template<> std::shared_ptr<io::File> create(const std::string& identifier, const std::string& extension)
 		{
             const auto aggregatePath = m_path / identifier;
 			if (!std::filesystem::exists(aggregatePath)) std::ofstream{ aggregatePath };
 
-            return std::make_shared<File>(aggregatePath);
+            return std::make_shared<io::File>(aggregatePath);
 		}
 
 		template<typename T, typename... Args>
@@ -66,7 +66,7 @@ namespace fox
 			if (recursive) return std::filesystem::remove_all(path);
 			else           return std::filesystem::remove(path);
 		}
-        template<> bool remove<File>(const std::filesystem::path& path)
+        template<> bool remove<io::File>(const std::filesystem::path& path)
         {
 			if (!std::filesystem::is_regular_file(path)) throw std::invalid_argument{ "The given path is not a file!" };
 

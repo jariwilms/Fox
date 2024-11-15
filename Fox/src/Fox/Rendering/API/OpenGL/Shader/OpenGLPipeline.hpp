@@ -6,7 +6,7 @@
 
 namespace fox::gfx::api::gl
 {
-    class OpenGLPipeline : public api::Pipeline
+    class OpenGLPipeline : public api::Pipeline, public gl::Object
     {
     public:
         using shader_t = OpenGLShader;
@@ -15,14 +15,14 @@ namespace fox::gfx::api::gl
         OpenGLPipeline(Manifest shaders)
             : m_shaders{ shaders }
         {
-            m_glId = gl::create_program_pipeline();
+            m_handle = gl::create_program_pipeline();
 
-            throw std::runtime_error{ "Id method for shaders has not been implemented! Required below" };
-            //if (const auto& shader = m_shaders.vertexShader; shader)                 gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
-            //if (const auto& shader = m_shaders.tessellationControlShader; shader)    gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
-            //if (const auto& shader = m_shaders.tessellationEvaluationShader; shader) gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
-            //if (const auto& shader = m_shaders.geometryShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
-            //if (const auto& shader = m_shaders.fragmentShader; shader)               gl::use_program_stages(m_glId, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            throw std::runtime_error{ "Id method for shaders has not been implemented!" };
+            //if (const auto& shader = m_shaders.vertexShader; shader)                 gl::use_program_stages(m_handle, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            //if (const auto& shader = m_shaders.tessellationControlShader; shader)    gl::use_program_stages(m_handle, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            //if (const auto& shader = m_shaders.tessellationEvaluationShader; shader) gl::use_program_stages(m_handle, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            //if (const auto& shader = m_shaders.geometryShader; shader)               gl::use_program_stages(m_handle, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
+            //if (const auto& shader = m_shaders.fragmentShader; shader)               gl::use_program_stages(m_handle, shader->expose_internals().glId, gl::map_shader_stage(shader->stage()));
         }
         OpenGLPipeline(OpenGLPipeline&& other) noexcept
         {
@@ -30,12 +30,12 @@ namespace fox::gfx::api::gl
         }
         ~OpenGLPipeline()
         {
-            if (m_glId) gl::delete_program_pipeline(m_glId);
+            gl::delete_program_pipeline(m_handle);
         }
 
         void bind()
         {
-            gl::bind_program_pipeline(m_glId);
+            gl::bind_program_pipeline(m_handle);
         }
 
         const Manifest& shaders() const
@@ -45,18 +45,16 @@ namespace fox::gfx::api::gl
 
         OpenGLPipeline& operator=(OpenGLPipeline&& other) noexcept
         {
-            m_glId    = other.m_glId;
+            m_handle  = other.m_handle;
             m_shaders = other.m_shaders;
 
-            other.m_glId    = 0u;
+            other.m_handle  = {};
             other.m_shaders = {};
 
             return *this;
         }
 
     private:
-        GLuint m_glId{};
-
         Manifest m_shaders{};
     };
 }

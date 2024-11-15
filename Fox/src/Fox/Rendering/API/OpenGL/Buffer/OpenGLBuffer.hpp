@@ -7,32 +7,20 @@
 
 namespace fox::gfx::api::gl
 {
-    class OpenGLBufferBase : public api::Buffer
-    {
-    public:
-        gl::uint32_t id() const
-        {
-            return m_glId;
-        }
-
-    protected:
-        gl::uint32_t m_glId{};
-    };
-
     template<api::Buffer::Type TYPE, api::Buffer::Access ACCESS, typename T>
     class OpenGLBuffer;
 
     template<api::Buffer::Type TYPE, typename T>
-    class OpenGLBuffer<TYPE, api::Buffer::Access::Static, T> : public OpenGLBufferBase
+    class OpenGLBuffer<TYPE, api::Buffer::Access::Static, T> : public api::Buffer, public gl::Object
     {
     public:
-        OpenGLBuffer(std::span<const T> data)
-            : OpenGLBufferBase{ data.size_bytes() }
+        explicit OpenGLBuffer(std::span<const T> data)
+            : api::Buffer{ data.size_bytes() }
         {
-            m_glId = gl::create_buffer();
+            m_handle = gl::create_buffer();
 
-            const auto& glAccess = gl::map_buffer_access(api::Buffer::Access::Static);
-            gl::buffer_storage(m_glId, glAccess, data);
+            const auto& accessFlags = gl::map_buffer_access(api::Buffer::Access::Static);
+            gl::buffer_storage(m_handle, accessFlags, data);
         }
         OpenGLBuffer(OpenGLBuffer&& other) noexcept
         {
@@ -40,18 +28,18 @@ namespace fox::gfx::api::gl
         }
         virtual ~OpenGLBuffer()
         {
-            if (m_glId) gl::delete_buffer(m_glId);
+            gl::delete_buffer(m_handle);
         }
 
         void bind() const
         {
-            if constexpr (TYPE == api::Buffer::Type::Vertex)       gl::bind_buffer(m_glId, gl::Buffer::Target::ArrayBuffer);
-            if constexpr (TYPE == api::Buffer::Type::Index)        gl::bind_buffer(m_glId, gl::Buffer::Target::ElementArrayBuffer);
-            if constexpr (TYPE == api::Buffer::Type::UniformArray) gl::bind_buffer(m_glId, gl::Buffer::Target::UniformBuffer);
+            if constexpr (TYPE == api::Buffer::Type::Vertex)       gl::bind_buffer(m_handle, gl::Buffer::Target::ArrayBuffer);
+            if constexpr (TYPE == api::Buffer::Type::Index)        gl::bind_buffer(m_handle, gl::Buffer::Target::ElementArrayBuffer);
+            if constexpr (TYPE == api::Buffer::Type::UniformArray) gl::bind_buffer(m_handle, gl::Buffer::Target::UniformBuffer);
         }
         void bind_range(std::uint32_t binding, std::uint32_t count, std::uint32_t offset) const requires (TYPE == api::Buffer::Type::UniformArray)
         {
-            gl::bind_buffer_range(m_glId, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
+            gl::bind_buffer_range(m_handle, GL_UNIFORM_BUFFER, binding, count * sizeof(T), offset * sizeof(T));
         }
 
         std::uint32_t count() const
@@ -61,16 +49,16 @@ namespace fox::gfx::api::gl
 
         OpenGLBuffer& operator=(OpenGLBuffer&& other) noexcept
         {
-            m_glId = other.m_glId;
+            m_handle = other.m_handle;
 
-            other.m_glId = 0u;
+            other.m_handle = {};
 
             return *this;
         }
 
     protected:
         OpenGLBuffer(size_t size)
-            : OpenGLBufferBase{ size } {}
+            : api::Buffer{ size } {}
     };
     template<api::Buffer::Type TYPE, typename T >
     class OpenGLBuffer<TYPE, api::Buffer::Access::Dynamic, T> : public OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>
@@ -79,17 +67,17 @@ namespace fox::gfx::api::gl
         OpenGLBuffer(std::uint32_t count)
             : OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>{ count * sizeof(T) }
         {
-            this->m_glId = gl::create_buffer();
+            m_handle = gl::create_buffer();
 
-            gl::buffer_storage(this->m_glId, gl::Buffer::StorageFlags::DynamicStorage, this->m_size);
+            gl::buffer_storage(m_handle, gl::Buffer::StorageFlags::DynamicStorage, m_size);
         }
         OpenGLBuffer(std::span<const T> data)
-            : OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>{ data.size_bytes() }
+            : OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>{ data }
         {
-            this->m_glId = gl::create_buffer();
+            m_handle = gl::create_buffer();
 
-            const auto& glAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(this->m_glId, glAccess, data);
+            const auto& accessFlags = gl::map_buffer_access(api::Buffer::Access::Dynamic);
+            gl::buffer_storage(m_handle, accessFlags, data);
         }
         OpenGLBuffer(OpenGLBuffer&& other) noexcept
         {
@@ -99,61 +87,64 @@ namespace fox::gfx::api::gl
 
         void copy(std::span<const T> data)
         {
-            gl::buffer_sub_data(this->m_glId, 0, data);
+            gl::buffer_sub_data(m_handle, 0, data);
         }
         void copy_range(std::uint32_t offset, std::span<const T> data)
         {
-            gl::buffer_sub_data(this->m_glId, offset * sizeof(T), data);
+            gl::buffer_sub_data(m_handle, offset * sizeof(T), data);
         }
 
-        template<api::Buffer::Mapping MAPPING>
+        template<api::Buffer::Mapping MAPPING = api::Buffer::Mapping::ReadWrite>
         auto map()
-        {
+        { 
+            const auto& bufferMapping = gl::map_buffer_mapping(MAPPING);
+            auto* data = gl::map_buffer(m_handle, bufferMapping);
+
             using data_t = std::conditional_t<MAPPING == api::Buffer::Mapping::Read, const T, T>;
-
-            const auto& glMap = gl::map_buffer_mapping(MAPPING);
-            auto* data = gl::map_buffer(this->m_glId, glMap);
-
-            return std::span<data_t>{ data, this->m_size / sizeof(T) };
+            return std::span<data_t>{ data, m_size / sizeof(T) };
         }
-        template<api::Buffer::Mapping MAPPING>
+        template<api::Buffer::Mapping MAPPING = api::Buffer::Mapping::ReadWrite>
         auto map_range(std::uint32_t count, std::uint32_t offset)
         {
             using data_t = std::conditional_t<MAPPING == api::Buffer::Mapping::Read, const T, T>;
 
-            const auto& glMap = gl::map_buffer_mapping(MAPPING);
-            auto* data = gl::map_buffer_range(this->m_glId, glMap, count * sizeof(T), offset * sizeof(T));
+            const auto& bufferMapping = gl::map_buffer_mapping(MAPPING);
+            auto* data = gl::map_buffer_range(m_handle, bufferMapping, count * sizeof(T), offset * sizeof(T));
 
-            return std::span<data_t>{ data, this->m_size / sizeof(T) };
+            return std::span<data_t>{ data, m_size / sizeof(T) };
         }
-        bool unmap()
+        void unmap()
         {
-            if (!gl::unmap_buffer(this->m_glId)) throw std::runtime_error{ "Buffer data store may be undefined!" };
+            if (!gl::unmap_buffer(m_handle)) throw std::runtime_error{ "Buffer data store may be undefined!" };
         }
 
         OpenGLBuffer& operator=(OpenGLBuffer&& other) noexcept
         {
             return OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>::operator=(std::move(other));
         }
+
+    protected:
+        using OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>::m_handle;
+        using OpenGLBuffer<TYPE, api::Buffer::Access::Static, T>::m_size;
     };
     template<typename T>
-    class OpenGLBuffer<api::Buffer::Type::Uniform, api::Buffer::Access::Dynamic, T> : public OpenGLBufferBase
+    class OpenGLBuffer<api::Buffer::Type::Uniform, api::Buffer::Access::Dynamic, T> : public api::Buffer, public gl::Object
     {
     public:
         OpenGLBuffer()
-            : OpenGLBufferBase{ sizeof(T) }
+            : api::Buffer{ sizeof(T) }
         {
-            m_glId = gl::create_buffer();
+            m_handle = gl::create_buffer();
 
-            gl::buffer_storage(m_glId, gl::Buffer::StorageFlags::DynamicStorage, sizeof(T));
+            gl::buffer_storage(m_handle, gl::Buffer::StorageFlags::DynamicStorage, sizeof(T));
         }
         OpenGLBuffer(const T& data)
-            : OpenGLBufferBase{ sizeof(T) }
+            : api::Buffer{ sizeof(T) }
         {
-            m_glId = gl::create_buffer();
+            m_handle = gl::create_buffer();
 
-            const auto& glAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(m_glId, glAccess, std::span<const T>{ &data, 1u });
+            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
+            gl::buffer_storage(m_handle, bufferAccess, std::span<const T>{ &data, 1u });
         }
         OpenGLBuffer(OpenGLBuffer&& other) noexcept
         {
@@ -161,17 +152,17 @@ namespace fox::gfx::api::gl
         }
         ~OpenGLBuffer()
         {
-            if (m_glId) gl::delete_buffer(m_glId);
+            gl::delete_buffer(m_handle);
         }
 
         void bind(std::uint32_t binding) const
         {
-            gl::bind_buffer_base(m_glId, gl::Buffer::TargetBase::UniformBuffer, binding);
+            gl::bind_buffer_base(m_handle, gl::Buffer::TargetBase::UniformBuffer, binding);
         }
 
         void copy(const T& data)
         {
-            gl::buffer_sub_data(m_glId, 0, std::span<const T>{ &data, 1u });
+            gl::buffer_sub_data(m_handle, 0, std::span<const T>{ &data, 1u });
         }
         template<typename... T>
         void copy_tuple(size_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
@@ -189,18 +180,16 @@ namespace fox::gfx::api::gl
                     ((std::memcpy(buffer.data() + size, &args, sizeof(args)), size += sizeof(args)), ...);
                 }, data);
 
-            gl::buffer_sub_data(m_glId, offset, std::span<const byte>{ buffer.data(), buffer.size() });
+            gl::buffer_sub_data(m_handle, offset, std::span<const byte>{ buffer.data(), buffer.size() });
         }
 
         OpenGLBuffer& operator=(OpenGLBuffer&& other) noexcept
         {
-            m_glId = other.m_glId;
+            m_handle = other.m_handle;
 
-            other.m_glId = 0;
+            other.m_handle = {};
 
             return *this;
         }
     };
-    template<typename T>
-    class OpenGLBuffer<api::Buffer::Type::Uniform, api::Buffer::Access::Static, T>;
 }

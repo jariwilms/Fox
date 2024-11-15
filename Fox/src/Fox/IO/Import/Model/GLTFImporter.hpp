@@ -4,12 +4,11 @@
 
 #include "tinygltf/tiny_gltf.h"
 
-#include "Fox/Rendering/API/GraphicsAPI.hpp"
 #include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/Mesh/Mesh.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
 
-namespace fox
+namespace fox::io
 {
     class GLTFImporter
     {
@@ -64,7 +63,7 @@ namespace fox
                         for (const auto& v : vec)
                         {
                             const auto& asd = Vector3f{ v.x, v.y, 0.0f };
-                            result.push_back(asd);
+                            result.emplace_back(asd);
                         }
 
                         break;
@@ -132,6 +131,7 @@ namespace fox
             auto model = std::make_shared<gfx::Model>();
 
 
+
             tinygltf::Model gltfModel;
             tinygltf::TinyGLTF gltfLoader;
             std::string err;
@@ -141,36 +141,32 @@ namespace fox
             if (!success) throw std::runtime_error{ "Failed to load model!" };
 
             auto positions = load_vertices<Vector3f>(gltfModel, 0, "POSITION");
-            auto normals = load_vertices<Vector3f>(gltfModel, 0, "NORMAL");
+            auto normals   = load_vertices<Vector3f>(gltfModel, 0, "NORMAL");
             auto texCoords = load_vertices<Vector2f>(gltfModel, 0, "TEXCOORD_0");
-            auto indices = load_indices(gltfModel);
-
-            std::span<const Vector3f> test = positions;
-            gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector3f>(test);
+            auto indices   = load_indices(gltfModel);
 
 
 
 
 
+            auto positionBuffer = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector3f>>(positions);
+            auto normalBuffer   = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector3f>>(normals);
+            auto texCoordBuffer = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector2f>>(texCoords);
+            auto indexBuffer    = std::make_shared<const gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indices);
 
+            auto layout2f = gfx::VertexLayout<float, float>{};
+            auto layout3f = gfx::VertexLayout<float, float, float>{};
 
-
-            const auto& positionBuffer = GraphicsAPI::create_vbo<Vector3f>(positions);
-            const auto& normalBuffer   = GraphicsAPI::create_vbo<Vector3f>(normals);
-            const auto& texCoordBuffer = GraphicsAPI::create_vbo<Vector2f>(texCoords);
-            const auto& indexBufer     = GraphicsAPI::create_ibo(indices);
-
-            auto layout2f = std::make_shared<gfx::VertexLayout>();
-            layout2f->specify<float>(2);
-
-            auto layout3f = std::make_shared<VertexLayout>();
-            layout3f->specify<float>(3);
-
-            auto vao = GraphicsAPI::create_vao();
+            auto vao = std::make_shared<gfx::VertexArray>();
             vao->tie(positionBuffer, layout3f);
-            vao->tie(normalBuffer, layout3f);
+            vao->tie(normalBuffer,   layout3f);
             vao->tie(texCoordBuffer, layout2f);
-            vao->tie(indexBufer);
+            vao->tie(indexBuffer);
+
+            gfx::Mesh m{ vao };
+            model->meshes.emplace_back(m);
+
+            return model;
         }
     };
 }

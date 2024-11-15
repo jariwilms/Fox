@@ -6,98 +6,26 @@
 
 namespace fox::gfx::api::gl
 {
-    enum
+    class State
     {
-        False = GL_FALSE, 
-        True  = GL_TRUE, 
-    };
-
-    using bool_t     = GLboolean;
-    using char_t     = GLchar;
-    using int8_t     = GLbyte;
-    using uint8_t    = GLubyte;
-    using int16_t    = GLshort;
-    using uint16_t   = GLushort;
-    using int32_t    = GLint;
-    using uint32_t   = GLuint;
-    using int64_t    = GLint64;
-    using uint64_t   = GLuint64;
-    using size_t     = GLsizei;
-    using f16_t      = GLhalf;
-    using f32_t      = GLfloat;
-    using f64_t      = GLdouble;
-
-    using enum_t     = GLenum;
-    using intptr_t   = GLintptr;
-    using sizeptr_t  = GLsizeiptr;
-    using sync_t     = GLsync;
-
-    using bitfield_t = GLbitfield;
-
-    enum handle_t : uint32_t {};
-    enum query_t  : uint32_t {};
-
-
-
-    struct Buffer
-    {
-        enum       Mask : bitfield_t
+    public:
+        static void init()
         {
-            ColorBuffer   = GL_COLOR_BUFFER_BIT,
-            DepthBuffer   = GL_DEPTH_BUFFER_BIT,
-            StencilBuffer = GL_STENCIL_BUFFER_BIT, 
+            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &s_maxCombinedTextureImageUnits);
+        }
 
-            All           = ColorBuffer | DepthBuffer | StencilBuffer
-        };
-        enum class Access : enum_t
+        static int32_t max_combined_texture_image_units()
         {
-            Read      = GL_READ_ONLY, 
-            Write     = GL_WRITE_ONLY, 
-            ReadWrite = GL_READ_WRITE, 
-        };
-        enum class Target : enum_t
-        {
-            ArrayBuffer              = GL_ARRAY_BUFFER, 
-            AtomicCounterBuffer      = GL_ATOMIC_COUNTER_BUFFER, 
-            CopyReadBuffer           = GL_COPY_READ_BUFFER, 
-            CopyWriteBuffer          = GL_COPY_WRITE_BUFFER, 
-            DispatchIndirectBuffer   = GL_DISPATCH_INDIRECT_BUFFER, 
-            DrawIndirectBuffer       = GL_DRAW_INDIRECT_BUFFER, 
-            ElementArrayBuffer       = GL_ELEMENT_ARRAY_BUFFER, 
-            PixelPackBuffer          = GL_PIXEL_PACK_BUFFER, 
-            PixelUnpackBuffer        = GL_PIXEL_UNPACK_BUFFER, 
-            QueryBuffer              = GL_QUERY_BUFFER, 
-            ShaderStorageBuffer      = GL_SHADER_STORAGE_BUFFER, 
-            TextureBuffer            = GL_TEXTURE_BUFFER, 
-            TransformFeedbackBuffer  = GL_TRANSFORM_FEEDBACK_BUFFER, 
-            UniformBuffer            = GL_UNIFORM_BUFFER, 
-        };
-        enum class TargetBase : enum_t
-        {
-            AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER, 
-            TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER, 
-            UniformBuffer           = GL_UNIFORM_BUFFER, 
-            ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER, 
-        };
-        enum class TargetRange : enum_t
-        {
-            TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
-            UniformBuffer           = GL_UNIFORM_BUFFER,
-        };
-        enum       StorageFlags : bitfield_t
-        {
-            DynamicStorage = GL_DYNAMIC_STORAGE_BIT, 
-            MapRead        = GL_MAP_READ_BIT, 
-            MapWrite       = GL_MAP_WRITE_BIT, 
-            MapPersistent  = GL_MAP_PERSISTENT_BIT, 
-            MapCoherent    = GL_MAP_COHERENT_BIT, 
-            ClientStorage  = GL_CLIENT_STORAGE_BIT, 
-        };
+            return s_maxCombinedTextureImageUnits;
+        }
+
+    private:
+        static inline int32_t s_maxCombinedTextureImageUnits;
     };
 
 
 
-    template<typename T>
+    template<typename T> //TODO: outdated types, change to int32_t etc.
     constexpr enum_t  type_enum() requires (std::is_fundamental_v<T>)
     {
         if constexpr (std::is_same_v<T, char>)           return GL_BYTE;
@@ -109,7 +37,7 @@ namespace fox::gfx::api::gl
         if constexpr (std::is_same_v<T, float>)          return GL_FLOAT;
         if constexpr (std::is_same_v<T, double>)         return GL_DOUBLE;
     }
-    template<typename T>
+    template<typename T> //TODO: idem as above
     constexpr size_t  type_size() requires (std::is_fundamental_v<T>)
     {
         if constexpr (std::is_same_v<T, char>)               return sizeof(int8_t);
@@ -143,305 +71,336 @@ namespace fox::gfx::api::gl
 
 
 
-    static uint32_t    create_buffer()
+    static handle_t    create_buffer()
     {
-        uint32_t buffer{};
-        glCreateBuffers(1, &buffer);
+        uint32_t handle{};
+        glCreateBuffers(1, &handle);
 
-        return buffer;
+        return static_cast<handle_t>(handle);
     }
-    static void        delete_buffer(uint32_t buffer)
+    static void        delete_buffer(handle_t buffer)
     {
-        glDeleteBuffers(1, &buffer);
+        glDeleteBuffers(1, reinterpret_cast<uint32_t*>(&buffer));
     }
-    static void        bind_buffer(uint32_t buffer, Buffer::Target target)
+    static void        bind_buffer(handle_t buffer, Buffer::Target target)
     {
-        glBindBuffer(static_cast<enum_t>(target), buffer);
+        glBindBuffer(static_cast<enum_t>(target), static_cast<uint32_t>(buffer));
     }
-    static void        bind_buffer_base(uint32_t buffer, Buffer::TargetBase target, uint32_t index)
+    static void        bind_buffer_base(handle_t buffer, Buffer::TargetBase target, uint32_t index)
     {
-        glBindBufferBase(static_cast<enum_t>(target), index, buffer);
+        glBindBufferBase(static_cast<enum_t>(target), index, static_cast<uint32_t>(buffer));
     }
-    static void        bind_buffer_range(uint32_t buffer, Buffer::TargetRange target, uint32_t index, sizeptr_t size, intptr_t offset)
+    static void        bind_buffer_range(handle_t buffer, Buffer::TargetRange target, uint32_t index, sizeptr_t size, intptr_t offset)
     {
-        glBindBufferRange(static_cast<enum_t>(target), index, buffer, offset, size);
+        glBindBufferRange(static_cast<enum_t>(target), index, static_cast<uint32_t>(buffer), offset, size);
     }
-    static void        buffer_storage(uint32_t buffer, Buffer::StorageFlags flags, sizeptr_t size)
+    static void        buffer_storage(handle_t buffer, Buffer::StorageFlags flags, sizeptr_t size)
     {
-        glNamedBufferStorage(buffer, size, nullptr, static_cast<bitfield_t>(flags));
+        glNamedBufferStorage(static_cast<uint32_t>(buffer), size, nullptr, static_cast<bitfield_t>(flags));
     }
     template<typename T>
-    static void        buffer_storage(uint32_t buffer, Buffer::StorageFlags flags, std::span<const T> data)
+    static void        buffer_storage(handle_t buffer, Buffer::StorageFlags flags, std::span<const T> data)
     {
-        glNamedBufferStorage(buffer, static_cast<sizeptr_t>(data.size_bytes()), data.data(), flags);
+        glNamedBufferStorage(static_cast<uint32_t>(buffer), static_cast<sizeptr_t>(data.size_bytes()), data.data(), flags);
     }
     template<typename T>
-    static void        buffer_sub_data(uint32_t buffer, intptr_t offset, std::span<const T> data)
+    static void        buffer_sub_data(handle_t buffer, intptr_t offset, std::span<const T> data)
     {
-        glNamedBufferSubData(buffer, offset, static_cast<sizeptr_t>(data.size_bytes()), data.data());
+        glNamedBufferSubData(static_cast<uint32_t>(buffer), offset, static_cast<sizeptr_t>(data.size_bytes()), data.data());
+    }
+
+    static void*       map_buffer(handle_t buffer, size_t size)
+    {
+        return glMapNamedBuffer(static_cast<uint32_t>(buffer), GL_READ_WRITE);
+    }
+    static void*       map_buffer_range(handle_t buffer, enum_t access, sizeptr_t size, intptr_t offset)
+    {
+        return glMapNamedBufferRange(static_cast<uint32_t>(buffer), offset, size, access);
+    }
+    static bool_t      unmap_buffer(handle_t buffer)
+    {
+        return glUnmapNamedBuffer(static_cast<uint32_t>(buffer));
     }
 
 
 
-    static void*       map_buffer(uint32_t buffer, size_t size)
+    static handle_t    create_vertex_array()
     {
-        return glMapNamedBuffer(buffer, GL_READ_WRITE);
+        uint32_t vertexArray{};
+        glCreateVertexArrays(1, &vertexArray);
+
+        return static_cast<handle_t>(vertexArray);
     }
-    static void*       map_buffer_range(uint32_t buffer, enum_t access, sizeptr_t size, intptr_t offset)
+    static void        delete_vertex_array(handle_t vertexArray)
     {
-        return glMapNamedBufferRange(buffer, offset, size, access);
+        glDeleteVertexArrays(1, reinterpret_cast<uint32_t*>(&vertexArray));
     }
-    static bool_t      unmap_buffer(uint32_t buffer)
+    static void        bind_vertex_array(handle_t vertexArray)
     {
-        return glUnmapNamedBuffer(buffer);
+        glBindVertexArray(static_cast<uint32_t>(vertexArray));
+    }
+    static void        vertex_array_vertex_buffer(handle_t vertexArray, handle_t buffer, uint32_t index, size_t stride)
+    {
+        glVertexArrayVertexBuffer(static_cast<uint32_t>(vertexArray), index, static_cast<uint32_t>(buffer), 0, stride);
+    }
+    static void        enable_vertex_array_attribute(handle_t vertexArray, uint32_t index)
+    {
+        glEnableVertexArrayAttrib(static_cast<uint32_t>(vertexArray), index);
+    }
+    static void        vertex_array_attribute_format(handle_t vertexArray, uint32_t index, uint32_t offset, enum_t type, int32_t size, bool_t normalized)
+    {
+        glVertexArrayAttribFormat(static_cast<uint32_t>(vertexArray), index, size, type, normalized, offset);
+    }
+    static void        vertex_array_attribute_binding(handle_t vertexArray, uint32_t index, uint32_t binding)
+    {
+        glVertexArrayAttribBinding(static_cast<uint32_t>(vertexArray), index, binding);
     }
 
 
 
-    static uint32_t    create_vertex_array()
-    {
-        uint32_t array{};
-        glCreateVertexArrays(1, &array);
-
-        return array;
-    }
-    static void        delete_vertex_array(uint32_t array)
-    {
-        glDeleteVertexArrays(1, &array);
-    }
-    static void        bind_vertex_array(uint32_t array)
-    {
-        glBindVertexArray(array);
-    }
-    static void        vertex_array_vertex_buffer(uint32_t array, uint32_t buffer, uint32_t index, size_t stride)
-    {
-        glVertexArrayVertexBuffer(array, index, buffer, 0, stride);
-    }
-    static void        enable_vertex_array_attribute(uint32_t array, uint32_t index)
-    {
-        glEnableVertexArrayAttrib(array, index);
-    }
-    static void        vertex_array_attribute_format(uint32_t array, uint32_t index, uint32_t offset, enum_t type, int32_t size, bool_t normalized)
-    {
-        glVertexArrayAttribFormat(array, index, size, type, normalized, offset);
-    }
-    static void        vertex_array_attribute_binding(uint32_t array, uint32_t index, uint32_t binding)
-    {
-        glVertexArrayAttribBinding(array, index, binding);
-    }
-
-    static uint32_t    create_frame_buffer()
+    static handle_t    create_frame_buffer()
     {
         uint32_t frameBuffer{};
         glCreateFramebuffers(1, &frameBuffer);
         
-        return frameBuffer;
+        return static_cast<handle_t>(frameBuffer);
     }
-    static void        delete_frame_buffer(uint32_t frameBuffer)
+    static void        delete_frame_buffer(handle_t frameBuffer)
     {
-        glDeleteFramebuffers(1, &frameBuffer);
+        glDeleteFramebuffers(1, reinterpret_cast<uint32_t*>(&frameBuffer));
     }
-    static void        bind_frame_buffer(uint32_t frameBuffer, enum_t target)
+    static void        bind_frame_buffer(handle_t frameBuffer, enum_t target)
     {
-        glBindFramebuffer(target, frameBuffer);
+        glBindFramebuffer(target, static_cast<uint32_t>(frameBuffer));
     }
-    static void        frame_buffer_read_buffer(uint32_t frameBuffer, enum_t source)
+    static void        frame_buffer_read_buffer(handle_t frameBuffer, enum_t source)
     {
-        glNamedFramebufferReadBuffer(frameBuffer, source);
+        glNamedFramebufferReadBuffer(static_cast<uint32_t>(frameBuffer), source);
     }
-    static void        frame_buffer_draw_buffer(uint32_t frameBuffer, enum_t buffer)
+    static void        frame_buffer_draw_buffer(handle_t frameBuffer, enum_t buffer)
     {
-        glNamedFramebufferDrawBuffer(frameBuffer, buffer);
+        glNamedFramebufferDrawBuffer(static_cast<uint32_t>(frameBuffer), buffer);
     }
-    static void        frame_buffer_draw_buffers(uint32_t frameBuffer, std::span<const enum_t> buffers)
+    static void        frame_buffer_draw_buffers(handle_t frameBuffer, std::span<const enum_t> buffers)
     {
-        glNamedFramebufferDrawBuffers(frameBuffer, static_cast<size_t>(buffers.size()), buffers.data());
+        glNamedFramebufferDrawBuffers(static_cast<uint32_t>(frameBuffer), static_cast<size_t>(buffers.size()), buffers.data());
     }
-    static void        frame_buffer_texture(uint32_t frameBuffer, uint32_t texture, enum_t attachment, int32_t level)
+    static void        frame_buffer_texture(handle_t frameBuffer, handle_t texture, enum_t attachment, int32_t level)
     {
-        glNamedFramebufferTexture(frameBuffer, attachment, texture, level);
+        glNamedFramebufferTexture(static_cast<uint32_t>(frameBuffer), attachment, static_cast<uint32_t>(texture), level);
     }
-    static void        frame_buffer_render_buffer(uint32_t frameBuffer, uint32_t renderBuffer, enum_t attachment)
+    static void        frame_buffer_render_buffer(handle_t frameBuffer, uint32_t renderBuffer, enum_t attachment)
     {
-        glNamedFramebufferRenderbuffer(frameBuffer, attachment, GL_RENDERBUFFER, renderBuffer);
+        glNamedFramebufferRenderbuffer(static_cast<uint32_t>(frameBuffer), attachment, GL_RENDERBUFFER, renderBuffer);
     }
-    static enum_t      check_frame_buffer_status(uint32_t frameBuffer)
+    static enum_t      check_frame_buffer_status(handle_t frameBuffer)
     {
-        return glCheckNamedFramebufferStatus(frameBuffer, GL_FRAMEBUFFER);
+        return glCheckNamedFramebufferStatus(static_cast<uint32_t>(frameBuffer), GL_FRAMEBUFFER);
     }
 
-    static uint32_t    create_texture(enum_t target)
+
+
+    static handle_t    create_texture(enum_t target)
     {
         uint32_t texture{};
         glCreateTextures(target, 1, &texture);
 
-        return texture;
+        return static_cast<handle_t>(texture);
     }
-    static void        delete_texture(uint32_t texture)
+    static void        delete_texture(handle_t texture)
     {
-        glDeleteTextures(1, &texture);
+        glDeleteTextures(1, reinterpret_cast<uint32_t*>(&texture));
     }
-    static void        bind_texture(uint32_t texture, std::uint32_t slot)
+    static void        bind_texture(handle_t texture, std::uint32_t slot)
     {
-        glBindTextureUnit(static_cast<uint32_t>(slot), texture);
+        glBindTextureUnit(static_cast<uint32_t>(slot), static_cast<uint32_t>(texture));
     }
-    static void        texture_parameter(uint32_t texture, enum_t parameter, uint32_t value)
+    static void        texture_parameter(handle_t texture, enum_t parameter, uint32_t value)
     {
-        glTextureParameteri(texture, parameter, value);
+        glTextureParameteri(static_cast<uint32_t>(texture), parameter, value);
     }
-    static void        texture_storage_1d(uint32_t texture, enum_t format, const Vector1u& dimensions, size_t levels)
+    static void        texture_storage_1d(handle_t texture, enum_t format, const Vector1u& dimensions, size_t levels)
     {
-        glTextureStorage1D(texture, levels, format, static_cast<size_t>(dimensions.x));
+        glTextureStorage1D(static_cast<uint32_t>(texture), levels, format, static_cast<size_t>(dimensions.x));
     }
-    static void        texture_storage_2d(uint32_t texture, enum_t format, const Vector2u& dimensions, size_t levels)
+    static void        texture_storage_2d(handle_t texture, enum_t format, const Vector2u& dimensions, size_t levels)
     {
-        glTextureStorage2D(texture, levels, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y));
+        glTextureStorage2D(static_cast<uint32_t>(texture), levels, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y));
     }
-    static void        texture_storage_3d(uint32_t texture, enum_t format, const Vector3u& dimensions, size_t levels)
+    static void        texture_storage_3d(handle_t texture, enum_t format, const Vector3u& dimensions, size_t levels)
     {
-        glTextureStorage3D(texture, levels, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), static_cast<size_t>(dimensions.z));
+        glTextureStorage3D(static_cast<uint32_t>(texture), levels, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), static_cast<size_t>(dimensions.z));
     }
-    static void        texture_storage_2d_multisample(uint32_t texture, enum_t format, const Vector2u& dimensions, size_t samples)
+    static void        texture_storage_2d_multisample(handle_t texture, enum_t format, const Vector2u& dimensions, size_t samples)
     {
-        glTextureStorage2DMultisample(texture, samples, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), GL_TRUE);
+        glTextureStorage2DMultisample(static_cast<uint32_t>(texture), samples, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), GL_TRUE);
     }
-    static void        texture_storage_3d_multisample(uint32_t texture, enum_t format, const Vector3u& dimensions, size_t samples)
+    static void        texture_storage_3d_multisample(handle_t texture, enum_t format, const Vector3u& dimensions, size_t samples)
     {
-        glTextureStorage3DMultisample(texture, samples, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), static_cast<size_t>(dimensions.z), GL_TRUE);
+        glTextureStorage3DMultisample(static_cast<uint32_t>(texture), samples, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), static_cast<size_t>(dimensions.z), GL_TRUE);
     }
-    static void        texture_sub_image_1d(uint32_t texture, enum_t format, const Vector1u& dimensions, const Vector1u& offset, int32_t level, const void* data)
+    static void        texture_sub_image_1d(handle_t texture, enum_t format, const Vector1u& dimensions, const Vector1u& offset, int32_t level, const void* data)
     {
-        glTextureSubImage1D(texture, level, static_cast<int32_t>(offset.x), static_cast<size_t>(dimensions.x), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage1D(static_cast<uint32_t>(texture), level, static_cast<int32_t>(offset.x), static_cast<size_t>(dimensions.x), format, GL_UNSIGNED_BYTE, data);
     }
-    static void        texture_sub_image_2d(uint32_t texture, enum_t format, const Vector2u& dimensions, const Vector2u& offset, uint32_t level, const void* data)
+    static void        texture_sub_image_2d(handle_t texture, enum_t format, const Vector2u& dimensions, const Vector2u& offset, uint32_t level, const void* data)
     {
-        glTextureSubImage2D(texture, level, static_cast<int32_t>(offset.x), static_cast<int32_t>(offset.y), static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage2D(static_cast<uint32_t>(texture), level, static_cast<int32_t>(offset.x), static_cast<int32_t>(offset.y), static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), format, GL_UNSIGNED_BYTE, data);
     }
-    static void        texture_sub_image_3d(uint32_t texture, enum_t format, const Vector3u& dimensions, const Vector3u& offset, int32_t level, const void* data) //80 column rule my ass
+    static void        texture_sub_image_3d(handle_t texture, enum_t format, const Vector3u& dimensions, const Vector3u& offset, int32_t level, const void* data) //80 column rule my ass
     {
-        glTextureSubImage3D(texture, level, static_cast<int32_t>(offset.x), static_cast<int32_t>(offset.y), static_cast<int32_t>(offset.z), static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), static_cast<size_t>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
+        glTextureSubImage3D(static_cast<uint32_t>(texture), level, static_cast<int32_t>(offset.x), static_cast<int32_t>(offset.y), static_cast<int32_t>(offset.z), static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y), static_cast<size_t>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
     }
 
-    static uint32_t    create_render_buffer()
-    {
-        uint32_t id{};
-        glCreateRenderbuffers(1, &id);
 
-        return id;
-    }
-    static void        delete_render_buffer(uint32_t renderBuffer)
+
+    static handle_t    create_render_buffer()
     {
-        glDeleteRenderbuffers(1, &renderBuffer);
+        uint32_t renderBuffer{};
+        glCreateRenderbuffers(1, &renderBuffer);
+
+        return static_cast<handle_t>(renderBuffer);
     }
-    static void        bind_render_buffer(uint32_t renderBuffer)
+    static void        delete_render_buffer(handle_t renderBuffer)
     {
-        glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+        glDeleteRenderbuffers(1, reinterpret_cast<uint32_t*>(&renderBuffer));
     }
-    static void        render_buffer_storage(uint32_t renderBuffer, enum_t format, const Vector2u& dimensions)
+    static void        bind_render_buffer(handle_t renderBuffer)
     {
-        glNamedRenderbufferStorage(renderBuffer, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y));
+        glBindRenderbuffer(GL_RENDERBUFFER, static_cast<uint32_t>(renderBuffer));
     }
-    static void        render_buffer_storage_multisample(uint32_t renderBuffer, enum_t format, const Vector2u& dimensions, std::uint8_t samples)
+    static void        render_buffer_storage(handle_t renderBuffer, enum_t format, const Vector2u& dimensions)
     {
-        glNamedRenderbufferStorageMultisample(renderBuffer, samples, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y));
+        glNamedRenderbufferStorage(static_cast<uint32_t>(renderBuffer), format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y));
+    }
+    static void        render_buffer_storage_multisample(handle_t renderBuffer, enum_t format, const Vector2u& dimensions, std::uint8_t samples)
+    {
+        glNamedRenderbufferStorageMultisample(static_cast<uint32_t>(renderBuffer), samples, format, static_cast<size_t>(dimensions.x), static_cast<size_t>(dimensions.y));
     }
 
-    static uint32_t    create_program()
+
+
+    static handle_t    create_program()
     {
-        return glCreateProgram();
+        return static_cast<handle_t>(glCreateProgram());
     }
-    static void        delete_program(uint32_t program)
+    static void        delete_program(handle_t program)
     {
-        glDeleteProgram(program);
+        glDeleteProgram(static_cast<uint32_t>(program));
     }
-    static void        link_program(uint32_t program)
+    static void        link_program(handle_t program)
     {
-        glLinkProgram(program);
+        glLinkProgram(static_cast<uint32_t>(program));
     }
-    static void        program_parameter(uint32_t program, enum_t parameter, int32_t value)
+    static void        program_parameter(handle_t program, enum_t parameter, int32_t value)
     {
-        glProgramParameteri(program, parameter, value);
+        glProgramParameteri(static_cast<uint32_t>(program), parameter, value);
     }
-    static int32_t     program_iv(uint32_t program, enum_t parameter)
+    static int32_t     program_iv(handle_t program, enum_t parameter)
     {
         int32_t result{};
-        glGetProgramiv(program, parameter, &result);
+        glGetProgramiv(static_cast<uint32_t>(program), parameter, &result);
 
         return result;
     }
-    static std::string program_infolog(uint32_t program)
+    static std::string program_infolog(handle_t program)
     {
         std::string infolog{};
-        size_t length = program_iv(program, GL_INFO_LOG_LENGTH);
-        size_t bufSize{ length };
+        const size_t bufferSize = program_iv(program, GL_INFO_LOG_LENGTH);
 
-        infolog.resize(length);
-        glGetProgramInfoLog(program, bufSize, nullptr, infolog.data());
+        infolog.resize(bufferSize);
+        glGetProgramInfoLog(static_cast<uint32_t>(program), bufferSize, nullptr, infolog.data());
 
         return infolog;
     }
 
-    static uint32_t    create_shader(enum_t type)
+
+
+    static handle_t    create_shader(enum_t type)
     {
-        return glCreateShader(type);
+        return static_cast<handle_t>(glCreateShader(type));
     }
-    static void        delete_shader(uint32_t shader)
+    static void        delete_shader(handle_t shader)
     {
-        glDeleteShader(shader);
+        glDeleteShader(static_cast<uint32_t>(shader));
     }
-    static void        attach_shader(uint32_t program, uint32_t shader)
+    static void        attach_shader(handle_t program, handle_t shader)
     {
-        glAttachShader(program, shader);
+        glAttachShader(static_cast<uint32_t>(program), static_cast<uint32_t>(shader));
     }
-    static void        detach_shader(uint32_t program, uint32_t shader)
+    static void        detach_shader(handle_t program, handle_t shader)
     {
-        glDetachShader(program, shader);
+        glDetachShader(static_cast<uint32_t>(program), static_cast<uint32_t>(shader));
     }
-    static void        shader_binary(uint32_t shader, std::span<const byte> binary)
+    static void        shader_binary(handle_t shader, std::span<const byte> binary)
     {
-        glShaderBinary(1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<size_t>(binary.size_bytes()));
+        glShaderBinary(1, reinterpret_cast<uint32_t*>(&shader), GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<size_t>(binary.size_bytes()));
     }
-    static void        specialize_shader(uint32_t shader, std::string_view entry)
+    static void        specialize_shader(handle_t shader, std::string_view entry)
     {
-        glSpecializeShader(shader, entry.data(), 0, nullptr, nullptr);
+        glSpecializeShader(static_cast<uint32_t>(shader), entry.data(), 0, nullptr, nullptr);
     }
-    static int32_t     shader_iv(uint32_t shader, enum_t parameter)
+    static int32_t     shader_iv(handle_t shader, enum_t parameter)
     {
         int32_t result{};
-        glGetShaderiv(shader, parameter, &result);
+        glGetShaderiv(static_cast<uint32_t>(shader), parameter, &result);
 
         return result;
     }
-    static std::string shader_infolog(uint32_t shader)
+    static std::string shader_infolog(handle_t shader)
     {
         const auto& length = shader_iv(shader, GL_INFO_LOG_LENGTH);
 
         std::string infolog{};
         infolog.resize(length);
 
-        glGetShaderInfoLog(shader, length, nullptr, infolog.data());
+        glGetShaderInfoLog(static_cast<uint32_t>(shader), length, nullptr, infolog.data());
 
         return infolog;
     }
 
-    static uint32_t    create_program_pipeline()
+
+
+    static handle_t    create_program_pipeline()
     {
         uint32_t pipeline{};
         glCreateProgramPipelines(1, &pipeline);
 
-        return pipeline;
+        return static_cast<handle_t>(pipeline);
     }
-    static void        delete_program_pipeline(uint32_t pipeline)
+    static void        delete_program_pipeline(handle_t pipeline)
     {
-        glDeleteProgramPipelines(1, &pipeline);
+        glDeleteProgramPipelines(1, reinterpret_cast<uint32_t*>(&pipeline));
     }
-    static void        bind_program_pipeline(uint32_t pipeline)
+    static void        bind_program_pipeline(handle_t pipeline)
     {
-        glBindProgramPipeline(pipeline);
+        glBindProgramPipeline(static_cast<uint32_t>(pipeline));
     }
-    static void        use_program_stages(uint32_t pipeline, uint32_t program, bitfield_t stages)
+    static void        use_program_stages(handle_t pipeline, handle_t program, bitfield_t stages)
     {
-        glUseProgramStages(pipeline, stages, program);
+        glUseProgramStages(static_cast<uint32_t>(pipeline), stages, static_cast<uint32_t>(program));
+    }
+
+
+
+    static void        active_shader_program(handle_t pipeline, handle_t program)
+    {
+        glActiveShaderProgram(static_cast<uint32_t>(pipeline), static_cast<uint32_t>(program));
+    }
+    static void        active_texture(uint32_t unit)
+    {
+        const auto& maxTextureUnits = State::max_combined_texture_image_units();
+        if (std::cmp_greater_equal(unit, maxTextureUnits)) throw std::invalid_argument{ "The given texture unit exceeds capacity!" };
+
+        glActiveTexture(GL_TEXTURE0 + unit);
+    }
+    static void        begin_conditional_render()
+    {
+
+    }
+    static void        begin_query()
+    {
+
     }
 
 
@@ -493,65 +452,5 @@ namespace fox::gfx::api::gl
         }();
 
         std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}\n", sourceMessage, typeMessage, severityMessage, id, message);
-    }
-
-
-
-
-
-    struct Query
-    {
-        enum class Mode : enum_t
-        {
-            QueryWait, 
-            QueryNoWait, 
-            QueryRegionWait, 
-            QueryRegionNoWait, 
-        };
-    };
-
-
-
-    class State
-    {
-    public:
-        static void init()
-        {
-            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &s_maxCombinedTextureImageUnits);
-        }
-
-        static int32_t max_combined_texture_image_units()
-        {
-            return s_maxCombinedTextureImageUnits;
-        }
-
-    private:
-        static inline int32_t s_maxCombinedTextureImageUnits;
-    };
-
-
-
-    static void active_shader_program(handle_t pipeline, handle_t program)
-    {
-        glActiveShaderProgram(pipeline, program);
-    }
-    static void active_texture(uint32_t unit)
-    {
-        const auto& maxTextureUnits = State::max_combined_texture_image_units();
-        if (std::cmp_greater_equal(unit, maxTextureUnits)) throw std::invalid_argument{ "The given texture unit exceeds capacity!" };
-
-        glActiveTexture(GL_TEXTURE0 + unit);
-    }
-    static void attach_shader(handle_t program, handle_t shader)
-    {
-        glAttachShader(program, shader);
-    }
-    static void begin_conditional_render()
-    {
-
-    }
-    static void begin_query()
-    {
-
     }
 }

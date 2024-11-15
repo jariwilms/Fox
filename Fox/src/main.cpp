@@ -1,19 +1,11 @@
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/Rendering.hpp"
-
-using namespace fox;
+#include "Fox/Application.hpp"
 
 int main(int argc, char* argv[])
 {
-    using namespace gfx;
-
-    std::vector<float> vec{};
-    VertexBuffer<Buffer::Access::Dynamic, float> asd{ vec };
-
-
-
-
+    //auto application = std::make_unique<fox::Application>(argc, argv);
+    //application->run();
 
     return EXIT_SUCCESS;
 }

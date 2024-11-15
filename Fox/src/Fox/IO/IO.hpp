@@ -22,7 +22,7 @@ namespace fox::io
 
         std::shared_ptr<File> load(const std::filesystem::path& path)
         {
-            const auto filePath = (root().path() / path).lexically_normal();
+            const auto& filePath = (root().path() / path).lexically_normal();
 
             return std::make_shared<File>(filePath);
         }

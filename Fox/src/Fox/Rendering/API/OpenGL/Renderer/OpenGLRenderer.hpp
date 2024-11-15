@@ -2,14 +2,15 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/Renderer/Renderer.hpp"
-#include "Fox/Rendering/Mesh/Mesh.hpp"
-#include "Fox/Rendering/Material/Material.hpp"
 #include "Fox/Core/Library/Transform/Transform.hpp"
-#include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/Material/Material.hpp"
+#include "Fox/Rendering/Mesh/Mesh.hpp"
+#include "Fox/Rendering/Renderer/Renderer.hpp"
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Uniform/Uniform.hpp"
+#include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Rendering/Geometry/Geometry.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -64,9 +65,9 @@ namespace fox::gfx::api::gl
             const auto& skyboxShaders   = shaders_from_binaries("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             //const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
-            s_pipelines.emplace("Mesh",     std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(0) }));
-            s_pipelines.emplace("Lighting", std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(0) }));
-            s_pipelines.emplace("Skybox",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(0) }));
+            s_pipelines.emplace("Mesh",     std::make_unique<OpenGLPipeline>(Pipeline::Manifest{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(0) }));
+            s_pipelines.emplace("Lighting", std::make_unique<OpenGLPipeline>(Pipeline::Manifest{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(0) }));
+            s_pipelines.emplace("Skybox",   std::make_unique<OpenGLPipeline>(Pipeline::Manifest{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(0) }));
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
 
 
@@ -140,37 +141,37 @@ namespace fox::gfx::api::gl
 
             OpenGLRenderState::apply<RenderState::Parameter::FaceCullingAlpha>(false);
 
-            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, they need to be blit into a regular framebuffer first
+            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, they need to be drawn to a regular framebuffer first
             const auto width{ 1280 };
             const auto height{ 720 };
-            const auto& gBufferInternal = s_gBuffer->id();// s_gBuffer->expose_internals();
-            const auto& gBufferMsInternal = s_gBufferMultisample->id();// s_gBufferMultisample->expose_internals();
+            const auto& gBufferInternal   = static_cast<gl::uint32_t>(s_gBuffer->handle());
+            const auto& gBufferMsInternal = static_cast<gl::uint32_t>(s_gBufferMultisample->handle());
 
             for (auto i{ 0u }; i < 4; ++i)
             {
-                glNamedFramebufferReadBuffer(gBufferMsInternal.glId, GL_COLOR_ATTACHMENT0 + i);
-                glNamedFramebufferDrawBuffer(gBufferInternal.glId, GL_COLOR_ATTACHMENT0 + i);
-                glBlitNamedFramebuffer(gBufferMsInternal.glId, gBufferInternal.glId, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+                glNamedFramebufferReadBuffer(gBufferMsInternal, GL_COLOR_ATTACHMENT0 + i);
+                glNamedFramebufferDrawBuffer(gBufferInternal, GL_COLOR_ATTACHMENT0 + i);
+                glBlitNamedFramebuffer(gBufferMsInternal, gBufferInternal, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
             }
-            glBlitNamedFramebuffer(gBufferMsInternal.glId, gBufferInternal.glId, 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBlitNamedFramebuffer(gBufferMsInternal, gBufferInternal, 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 
 
 
-            ////Lighting pass render into ppBuffer
-            //glDisable(GL_BLEND);
+            //Lighting pass render into ppBuffer
+            glDisable(GL_BLEND);
 
-            //s_pipelines.at("Lighting")->bind();
-            //s_ppBuffers[0]->bind(FrameBuffer::Target::Write);
-            //s_gBuffer->bind_texture("Position", 0);
-            //s_gBuffer->bind_texture("Albedo", 1);
-            //s_gBuffer->bind_texture("Normal", 2);
-            //s_gBuffer->bind_texture("ARM", 3);
+            s_pipelines.at("Lighting")->bind();
+            s_ppBuffers[0]->bind(FrameBuffer::Target::Write);
+            s_gBuffer->bind_texture("Position", 0);
+            s_gBuffer->bind_texture("Albedo", 1);
+            s_gBuffer->bind_texture("Normal", 2);
+            s_gBuffer->bind_texture("ARM", 3);
 
-            //glDisable(GL_DEPTH_TEST);
-            //Geometry::Plane::mesh()->vertex_array()->bind();
-            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-            //glEnable(GL_BLEND);
+            glDisable(GL_DEPTH_TEST);
+            Geometry::Plane::mesh()->vertex_array()->bind();
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            glEnable(GL_BLEND);
 
 
 

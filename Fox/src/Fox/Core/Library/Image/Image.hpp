@@ -52,7 +52,7 @@ namespace fox
         {
             return m_data;
         }
-        std::span<const byte> data()       const
+        std::span<const byte> data() const
         {
             return m_data;
         }

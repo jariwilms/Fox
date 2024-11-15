@@ -8,7 +8,7 @@
 
 namespace fox::gfx::api::gl
 {
-    class OpenGLVertexArray
+    class OpenGLVertexArray : public gl::Object
     {
     public:
         template<api::Buffer::Access ACCESS, typename T>
@@ -23,7 +23,7 @@ namespace fox::gfx::api::gl
 
         OpenGLVertexArray()
         {
-            m_glId = gl::create_vertex_array();
+            m_handle = gl::create_vertex_array();
         }
         OpenGLVertexArray(OpenGLVertexArray&& other) noexcept
         {
@@ -31,12 +31,12 @@ namespace fox::gfx::api::gl
         }
         ~OpenGLVertexArray()
         {
-            if (m_glId) gl::delete_vertex_array(m_glId);
+            gl::delete_vertex_array(m_handle);
         }
 
         void bind()
         {
-            gl::bind_vertex_array(m_glId);
+            gl::bind_vertex_array(m_handle);
         }
 
         template<api::Buffer::Access ACCESS, typename T, typename... U>
@@ -49,14 +49,14 @@ namespace fox::gfx::api::gl
         {
             if (m_glArrayBindingIndex > static_cast<GLuint>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
 
-            gl::vertex_array_vertex_buffer(m_glId, buffer->expose_internals().glId, m_glArrayBindingIndex, static_cast<GLsizei>(layout.stride()));
+            gl::vertex_array_vertex_buffer(m_handle, buffer->handle(), m_glArrayBindingIndex, static_cast<GLsizei>(layout.stride()));
 
             GLuint offset{};
             for (const auto& attribute : layout.attributes())
             {
-                gl::enable_vertex_array_attribute(m_glId, m_glArrayAttributeIndex);
-                gl::vertex_array_attribute_format(m_glId, m_glArrayAttributeIndex, offset, attribute.glType, static_cast<GLint>(attribute.stride()), attribute.isNormalized);
-                gl::vertex_array_attribute_binding(m_glId, m_glArrayAttributeIndex, m_glArrayBindingIndex);
+                gl::enable_vertex_array_attribute(m_handle, m_glArrayAttributeIndex);
+                gl::vertex_array_attribute_format(m_handle, m_glArrayAttributeIndex, offset, attribute.glType, static_cast<GLint>(attribute.stride()), attribute.isNormalized);
+                gl::vertex_array_attribute_binding(m_handle, m_glArrayAttributeIndex, m_glArrayBindingIndex);
 
                 offset += static_cast<GLuint>(attribute.stride());
                 m_primitiveCount += static_cast<std::uint32_t>(buffer->size() / attribute.stride());
@@ -86,12 +86,12 @@ namespace fox::gfx::api::gl
 
         OpenGLVertexArray& operator=(OpenGLVertexArray&& other) noexcept
         {
-            m_glId                  = other.m_glId;
+            m_handle                  = other.m_handle;
             m_glArrayAttributeIndex = other.m_glArrayAttributeIndex;
             m_glArrayBindingIndex   = other.m_glArrayBindingIndex;
             m_primitiveCount        = other.m_primitiveCount;
 
-            other.m_glId                  = 0u;
+            other.m_handle                = {};
             other.m_glArrayAttributeIndex = 0u;
             other.m_glArrayBindingIndex   = 0u;
             other.m_primitiveCount        = 0u;
@@ -100,7 +100,6 @@ namespace fox::gfx::api::gl
         }
 
     private:
-        GLuint m_glId{};
         GLuint m_glArrayAttributeIndex{};
         GLuint m_glArrayBindingIndex{};
 
