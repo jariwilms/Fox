@@ -1,6 +1,7 @@
 #include "stdafx.hpp"
 
-#include "Fox/Core/Include/STB.hpp"
+#include "stb/stb_image.h"
+#include "stb/stb_image_write.h"
 
 #include "Image.hpp"
 

@@ -59,8 +59,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;TINYGLTF_IMPLEMENTATION;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;TINYGLTF_IMPLEMENTATION;FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -79,8 +78,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings> 4250; 6262;26451;%(DisableSpecificWarnings)</DisableSpecificWarnings>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;TINYGLTF_IMPLEMENTATION;STB_IMAGE_STATIC;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;TINYGLTF_IMPLEMENTATION;FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -101,8 +99,6 @@
   <ItemGroup>
     <ClInclude Include="src\Fox\Application.hpp" />
     <ClInclude Include="src\Fox\Config.hpp" />
-    <ClInclude Include="src\Fox\Core\Include\GLM.hpp" />
-    <ClInclude Include="src\Fox\Core\Include\STB.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
@@ -213,6 +209,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\stb\STB_IMAGE.vcxproj">
+      <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

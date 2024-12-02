@@ -127,7 +127,6 @@ namespace fox
 
 
 
-
         auto model = ModelImporter::import("assets/models/cube2/cube.gltf");
 
 

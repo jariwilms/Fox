@@ -25,9 +25,6 @@
     <Filter Include="Fox\Core\Library\Lighting">
       <UniqueIdentifier>{538DC35A-BF4F-F7E4-0800-86717401D0C2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fox\Core\Library\Memory">
-      <UniqueIdentifier>{B6E5C80B-221D-11A3-2B27-75C697DD379C}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fox\Core\Library\Semantics">
       <UniqueIdentifier>{24ABB7EE-10BB-63BF-7974-C8DD65A35258}</UniqueIdentifier>
     </Filter>
@@ -182,12 +179,6 @@
     </ClInclude>
     <ClInclude Include="src\Fox\Config.hpp">
       <Filter>Fox</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\Core\Include\GLM.hpp">
-      <Filter>Fox\Core\Include</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\Core\Include\STB.hpp">
-      <Filter>Fox\Core\Include</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp">
       <Filter>Fox\Core\Library\Camera</Filter>
