@@ -29,24 +29,24 @@ namespace fox::gfx::api
         };
         struct Manifest
         {
-            Manifest(const std::string& identifier, FrameBuffer::Attachment attachment, FrameBuffer::Resample resample, const TextureBlueprint& blueprint)
+            Manifest(const std::string& identifier, Attachment attachment, Resample resample, const api::TextureBlueprint& blueprint)
                 : identifier{ identifier }, attachment{ attachment }, resample{ resample }, blueprint{ blueprint } {}
 
-            const std::string&      identifier{};
-            FrameBuffer::Attachment attachment{};
-            FrameBuffer::Resample   resample{};
-            const TextureBlueprint& blueprint{};
+            std::string             identifier{};
+            Attachment              attachment{};
+            Resample                resample{};
+            TextureBlueprint        blueprint{};
         };
 
-        const Vector2u& dimensions() const
+        const fox::Vector2u& dimensions() const
         {
             return m_dimensions;
         }
 
     protected:
-        FrameBuffer(const Vector2u& dimensions)
+        FrameBuffer(const fox::Vector2u& dimensions)
             : m_dimensions{ dimensions } {}
 
-        Vector2u m_dimensions{};
+        fox::Vector2u m_dimensions{};
     };
 };

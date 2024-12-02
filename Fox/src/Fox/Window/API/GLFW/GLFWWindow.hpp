@@ -6,7 +6,7 @@
 //#include "Fox/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
 #include "Fox/Input/Handler/Platform/GLFWInputHandler.hpp"
 #include "Fox/Input/Input.hpp"
-#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
 
 namespace fox
 {

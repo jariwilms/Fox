@@ -28,7 +28,7 @@ namespace fox::gfx::api
             R8_UNORM = 		    0x08'00'01'00, 
             RG8_UNORM =         0x08'00'02'01, 
             RGB8_UNORM = 	    0x08'00'03'02, 
-            RGBA8_UNORM = 	    0x08'00'04'03, 
+            RGBA8_UNORM = 	    0x08'00'04'03, //Recommended for regular images
                                 
             R16_UNORM =         0x10'00'01'04, 
             RG16_UNORM = 	    0x10'00'02'05, 
@@ -38,7 +38,7 @@ namespace fox::gfx::api
             R8_SNORM = 		    0x08'00'01'08, 
             RG8_SNORM = 	    0x08'00'02'09, 
             RGB8_SNORM = 	    0x08'00'03'0A, 
-            RGBA8_SNORM = 	    0x08'00'04'0B, 
+            RGBA8_SNORM = 	    0x08'00'04'0B, //Recommended for normal maps
                                 
             R16_SNORM = 	    0x10'00'01'0C, 
             RG16_SNORM = 	    0x10'00'02'0D, 
@@ -48,7 +48,7 @@ namespace fox::gfx::api
             R8_SRGB = 		    0x08'00'01'10, 
             RG8_SRGB = 		    0x08'00'02'11, 
             RGB8_SRGB =         0x08'00'03'12, 
-            RGBA8_SRGB = 	    0x08'00'04'13, 
+            RGBA8_SRGB = 	    0x08'00'04'13, //Recommended for sRGB images
                                 
             R16_SFLOAT = 	    0x10'00'01'14, 
             RG16_SFLOAT = 	    0x10'00'02'15, 

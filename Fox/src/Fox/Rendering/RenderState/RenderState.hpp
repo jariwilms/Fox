@@ -18,14 +18,17 @@ namespace fox::gfx::api
         };
         enum class DepthFunction
         {
-            Never, 
-            Less, 
-            Equal, 
-            LessEqual, 
-            Greater, 
-            NotEqual, 
-            GreaterEqual, 
             Always, 
+            Never, 
+
+            Equal, 
+            NotEqual, 
+
+            Less, 
+            LessEqual, 
+
+            Greater, 
+            GreaterEqual, 
         };
         enum class FaceCulling
         {

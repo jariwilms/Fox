@@ -1,5 +1,11 @@
 #pragma once
 
+
+#define TINYGLTF_NO_STB_IMAGE
+#define TINYGLTF_NO_INCLUDE_STB_IMAGE
+#define TINYGLTF_NO_STB_IMAGE_WRITE
+#define TINYGLTF_NO_INCLUDE_STB_IMAGE_WRITE
+
 #include "stdafx.hpp"
 
 #include "tinygltf/tiny_gltf.h"
@@ -16,7 +22,7 @@ namespace fox::io
         template<typename T>
         static std::vector<T> load_vertices(const tinygltf::Model& model, unsigned int meshIndex, const std::string& identifier)
         {
-            if (model.meshes.size() > meshIndex) throw std::out_of_range{ "Mesh index out of range!" };
+            //if (model.meshes.size() > meshIndex) throw std::out_of_range{ "Mesh index out of range!" };
             const auto find_attribute = [](const tinygltf::Primitive& primitive, const std::string& identifier) -> int
             {
                 for (const auto& attribute : primitive.attributes)
@@ -130,15 +136,19 @@ namespace fox::io
         {
             auto model = std::make_shared<gfx::Model>();
 
-
+            auto fname = path.string();
 
             tinygltf::Model gltfModel;
             tinygltf::TinyGLTF gltfLoader;
             std::string err;
             std::string warn;
 
-            bool success = gltfLoader.LoadASCIIFromFile(&gltfModel, &err, &warn, "assets/models/cube/cube.gltf");
-            if (!success) throw std::runtime_error{ "Failed to load model!" };
+            bool success = gltfLoader.LoadASCIIFromFile(&gltfModel, &err, &warn, fname);
+            if (!success)
+            {
+                std::cout << err;
+                throw std::runtime_error{ "Failed to load model!" };
+            }
 
             auto positions = load_vertices<Vector3f>(gltfModel, 0, "POSITION");
             auto normals   = load_vertices<Vector3f>(gltfModel, 0, "NORMAL");
@@ -154,8 +164,8 @@ namespace fox::io
             auto texCoordBuffer = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector2f>>(texCoords);
             auto indexBuffer    = std::make_shared<const gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indices);
 
-            auto layout2f = gfx::VertexLayout<float, float>{};
-            auto layout3f = gfx::VertexLayout<float, float, float>{};
+            auto layout2f = gfx::VertexLayout<float>{ 2 };
+            auto layout3f = gfx::VertexLayout<float>{ 3 };
 
             auto vao = std::make_shared<gfx::VertexArray>();
             vao->tie(positionBuffer, layout3f);
@@ -163,7 +173,7 @@ namespace fox::io
             vao->tie(texCoordBuffer, layout2f);
             vao->tie(indexBuffer);
 
-            gfx::Mesh m{ vao };
+            const auto& m = std::make_shared<gfx::Mesh>(vao);
             model->meshes.emplace_back(m);
 
             return model;

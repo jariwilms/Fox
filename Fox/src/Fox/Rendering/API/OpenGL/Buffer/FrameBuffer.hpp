@@ -2,37 +2,37 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/API/OpenGL/GL.hpp"
-#include "Fox/Rendering/API/OpenGL/Texture/OpenGLTexture.hpp"
-#include "Fox/Rendering/API/OpenGL/Texture/OpenGLRenderBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/RenderBuffer.hpp"
 #include "Fox/Rendering/Buffer/FrameBuffer.hpp"
 
 namespace fox::gfx::api::gl
 {
     template<AntiAliasing AA>
-    class OpenGLFrameBuffer : public api::FrameBuffer, public gl::Object
+    class FrameBuffer : public api::FrameBuffer, public gl::Object
     {
     public:
-        using texture_t       = OpenGLTexture<Dimensions::_2D, AA>;
-        using render_buffer_t = OpenGLRenderBuffer<AA>;
+        using texture_t       = gl::Texture<Dimensions::_2D, AA>;
+        using render_buffer_t = gl::RenderBuffer<AA>;
 
-        OpenGLFrameBuffer(const Vector2u& dimensions, std::span<const FrameBuffer::Manifest> manifests)                       requires (AA == AntiAliasing::None)
-            : FrameBuffer{ dimensions }
+        FrameBuffer(const fox::Vector2u& dimensions, std::span<const Manifest> manifests)                       requires (AA == AntiAliasing::None)
+            : api::FrameBuffer{ dimensions }
         {
             m_handle = gl::create_frame_buffer();
 
             bool hasColorBuffer{};
-            std::vector<GLenum> colorBuffers{};
+            std::vector<gl::enum_t> colorBuffers{};
 
-            std::ranges::for_each(manifests, [&, this](const FrameBuffer::Manifest& manifest)
+            std::ranges::for_each(manifests, [&, this](const Manifest& manifest)
                 {
                     const auto& [identifier, attachment, resample, blueprint] = manifest;
 
-                    auto glAttachment = gl::map_frame_buffer_attachment(attachment);
-                    if (attachment == FrameBuffer::Attachment::Color)
+                    auto bufferAttachment = static_cast<gl::enum_t>(gl::map_frame_buffer_attachment(attachment));
+                    if (attachment == Attachment::Color)
                     {
-                        glAttachment += static_cast<GLenum>(colorBuffers.size());
-                        colorBuffers.emplace_back(glAttachment);
+                        bufferAttachment += static_cast<gl::enum_t>(colorBuffers.size());
+                        colorBuffers.emplace_back(bufferAttachment);
 
                         hasColorBuffer = true;
                     }
@@ -42,7 +42,7 @@ namespace fox::gfx::api::gl
                         case FrameBuffer::Resample::Yes: //Bind as texture
                         {
                             const auto& texture = std::make_shared<texture_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions);
-                            gl::frame_buffer_texture(m_handle, texture->expose_internals().glId, glAttachment, 0);
+                            gl::frame_buffer_texture(m_handle, texture->handle(), bufferAttachment, 0);
 
                             m_identifierToTexture.emplace(identifier, texture);
 
@@ -51,7 +51,7 @@ namespace fox::gfx::api::gl
                         case FrameBuffer::Resample::No: //Bind as renderbuffer
                         {
                             const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions);
-                            gl::frame_buffer_render_buffer(m_handle, renderBuffer->expose_internals().glId, glAttachment);
+                            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), bufferAttachment);
 
                             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
 
@@ -68,30 +68,30 @@ namespace fox::gfx::api::gl
             }
             else
             {
-                gl::frame_buffer_read_buffer(m_handle, GL_NONE);
-                gl::frame_buffer_draw_buffer(m_handle, GL_NONE);
+                gl::frame_buffer_read_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
+                gl::frame_buffer_draw_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
             }
 
-            const auto& test = gl::check_frame_buffer_status(m_handle);
-            if (gl::check_frame_buffer_status(m_handle) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
+            const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
+            if (gl::check_frame_buffer_status(m_handle) != gl::Flags::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        OpenGLFrameBuffer(const Vector2u& dimensions, std::uint8_t samples, std::span<const FrameBuffer::Manifest> manifests) requires (AA == AntiAliasing::MSAA)
-            : FrameBuffer{ dimensions }, m_samples{ samples }
+        FrameBuffer(const fox::Vector2u& dimensions, fox::uint8_t samples, std::span<const Manifest> manifests) requires (AA == AntiAliasing::MSAA)
+            : api::FrameBuffer{ dimensions }, m_samples{ samples }
         {
             m_handle = gl::create_frame_buffer();
 
             bool hasColorBuffer{};
-            std::vector<GLenum> colorBuffers{};
+            std::vector<gl::enum_t> colorBuffers{};
 
-            std::ranges::for_each(manifests, [&, this](const FrameBuffer::Manifest& manifest)
+            std::ranges::for_each(manifests, [&, this](const Manifest& manifest)
                 {
                     const auto& [identifier, attachment, resample, blueprint] = manifest;
-
-                    auto glAttachment = gl::map_frame_buffer_attachment(attachment);
+                    
+                    auto frameBufferAttachment = static_cast<gl::enum_t>(gl::map_frame_buffer_attachment(attachment));
                     if (attachment == FrameBuffer::Attachment::Color)
                     {
-                        glAttachment += static_cast<GLenum>(colorBuffers.size());
-                        colorBuffers.emplace_back(glAttachment);
+                        frameBufferAttachment += static_cast<gl::enum_t>(colorBuffers.size());
+                        colorBuffers.emplace_back(frameBufferAttachment);
 
                         hasColorBuffer = true;
                     }
@@ -101,7 +101,7 @@ namespace fox::gfx::api::gl
                         case FrameBuffer::Resample::Yes: //Bind as texture
                         {
                             const auto& texture = std::make_shared<texture_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions, m_samples);
-                            gl::frame_buffer_texture(m_handle, texture->expose_internals().glId, glAttachment, 0);
+                            gl::frame_buffer_texture(m_handle, texture->handle(), frameBufferAttachment, 0);
 
                             m_identifierToTexture.emplace(identifier, texture);
 
@@ -110,7 +110,7 @@ namespace fox::gfx::api::gl
                         case FrameBuffer::Resample::No: //Bind as renderbuffer
                         {
                             const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions, m_samples);
-                            gl::frame_buffer_render_buffer(m_handle, renderBuffer->expose_internals().glId, glAttachment);
+                            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), frameBufferAttachment);
 
                             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
 
@@ -127,28 +127,28 @@ namespace fox::gfx::api::gl
             }
             else
             {
-                gl::frame_buffer_read_buffer(m_handle, GL_NONE);
-                gl::frame_buffer_draw_buffer(m_handle, GL_NONE);
+                gl::frame_buffer_read_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
+                gl::frame_buffer_draw_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
             }
 
-            if (gl::check_frame_buffer_status(m_handle) != GL_FRAMEBUFFER_COMPLETE) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(m_handle) != gl::Flags::FrameBuffer::Status::Complete) throw std::runtime_error{"Framebuffer is not complete!"};
         }
-        OpenGLFrameBuffer(OpenGLFrameBuffer&& other) noexcept
+        FrameBuffer(FrameBuffer&& other) noexcept
             : FrameBuffer{ std::move(other.m_dimensions) }
         {
             *this = std::move(other);
         }
-        ~OpenGLFrameBuffer()
+        ~FrameBuffer()
         {
             gl::delete_frame_buffer(m_handle);
         }
 
         void bind(FrameBuffer::Target target)
         {
-            const auto& glTarget = gl::map_frame_buffer_target(target);
-            gl::bind_frame_buffer(m_handle, glTarget);
+            const auto& frameBufferTarget = gl::map_frame_buffer_target(target);
+            gl::bind_frame_buffer(m_handle, frameBufferTarget);
         }
-        void bind_texture(const std::string& identifier, std::uint32_t slot)
+        void bind_texture(const std::string& identifier, fox::uint32_t slot)
         {
             const auto& it = m_identifierToTexture.find(identifier);
             if (it == m_identifierToTexture.end()) throw std::invalid_argument{ "Invalid texture identifier!" };
@@ -156,12 +156,12 @@ namespace fox::gfx::api::gl
             gl::bind_texture(it->second->handle(), slot);
         }
 
-        std::uint8_t samples() const
+        fox::uint8_t samples() const
         {
             return m_samples;
         }
 
-        OpenGLFrameBuffer& operator=(OpenGLFrameBuffer&& other) noexcept
+        FrameBuffer& operator=(FrameBuffer&& other) noexcept
         {
             m_handle                   = other.m_handle;
             m_samples                  = other.m_samples;
@@ -170,12 +170,12 @@ namespace fox::gfx::api::gl
 
             other.m_handle  = {};
             other.m_samples = 0u;
-
+            
             return *this;
         }
 
     private:
-        std::uint8_t m_samples{};
+        fox::uint8_t m_samples{};
 
         std::unordered_map<std::string, std::shared_ptr<texture_t>>       m_identifierToTexture{};
         std::unordered_map<std::string, std::shared_ptr<render_buffer_t>> m_identifierToRenderBuffer{};

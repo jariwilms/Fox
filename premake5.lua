@@ -20,6 +20,7 @@ workspace "Fox"
 	
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
+	include "Fox/vendor/tinygltf"
 	
 project "Fox"
 	location "Fox"
@@ -37,7 +38,10 @@ project "Fox"
 	files
 	{
 		"%{prj.name}/src/**.hpp", 
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp", 
+		
+		"%{prj.name}/src/**.h", 
+		"%{prj.name}/src/**.c", 
 	}
 	
 	includedirs
@@ -71,6 +75,7 @@ project "Fox"
 	
 		"GLFW_INCLUDE_NONE", 
 		
+		"TINYGLTF_IMPLEMENTATION", 
 		"STB_IMAGE_STATIC", 
 		"STB_IMAGE_IMPLEMENTATION", 
 		"STB_IMAGE_WRITE_IMPLEMENTATION", 

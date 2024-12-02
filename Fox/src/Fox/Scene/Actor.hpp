@@ -42,6 +42,6 @@ namespace fox
             Registry::remove_component<T>(m_id);
         }
         template<> void remove_component<RelationshipComponent>() = delete;
-        template<> void remove_component<TransformComponent>() = delete;
+        template<> void remove_component<TransformComponent>()    = delete;
     };
 }

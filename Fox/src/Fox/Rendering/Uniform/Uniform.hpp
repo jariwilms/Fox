@@ -2,28 +2,28 @@
 
 #include "stdafx.hpp"
 
-namespace fox::gfx::api
+namespace fox::gfx
 {
     struct UMatrices //std140, binding 0
     {
-        Matrix4f model{ 1.0f };
-        Matrix4f view{ 1.0f };
-        Matrix4f projection{ 1.0f };
-        Matrix4f normal{ 1.0f };
+        fox::Matrix4f model{ 1.0f };
+        fox::Matrix4f view{ 1.0f };
+        fox::Matrix4f projection{ 1.0f };
+        fox::Matrix4f normal{ 1.0f };
     };
     struct UMaterial //std140, binding 1
     {
-        Vector4f color{};
-        float    roughness{};
-        float    metallic{};
+        fox::Vector4f color{};
+        fox::f32_t    roughness{};
+        fox::f32_t    metallic{};
     };
     struct ULight //std140, binding 2
     {
-        Vector4f position{};
-        Vector4f color{};
+        fox::Vector4f position{};
+        fox::Vector4f color{};
     };
     struct UCamera //std140, binding 3
     {
-        Vector4f position{};
+        fox::Vector4f position{};
     };
 }

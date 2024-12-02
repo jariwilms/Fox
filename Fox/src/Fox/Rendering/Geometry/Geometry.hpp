@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/Mesh/Mesh.hpp"
 
 namespace fox::gfx
@@ -21,33 +20,33 @@ namespace fox::gfx
         public:
             friend Geometry;
 
-            static const std::shared_ptr<Mesh> mesh()
+            static const std::shared_ptr<gfx::Mesh> mesh()
             {
                 return s_mesh;
             }
 
-            static inline const std::array<float, 12> positions
+            static inline const std::array<fox::f32_t, 12> positions
             {
                  1.0f,  1.0f,  0.0f,
                 -1.0f,  1.0f,  0.0f,
                 -1.0f, -1.0f,  0.0f,
                  1.0f, -1.0f,  0.0f,
             };
-            static inline const std::array<float, 12> normals
+            static inline const std::array<fox::f32_t, 12> normals
             {
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
             };
-            static inline const std::array<float, 12> coordinates
+            static inline const std::array<fox::f32_t, 8> coordinates
             {
                 1.0f, 1.0f,
                 0.0f, 1.0f,
                 0.0f, 0.0f,
                 1.0f, 0.0f,
             };
-            static inline const std::array<unsigned int, 6> indices
+            static inline const std::array<fox::uint32_t, 6> indices
             {
                 0, 1, 2,
                 0, 2, 3,
@@ -56,25 +55,28 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto& layout3f = VertexLayout<float, float, float>{};
-                const auto& layout2f = VertexLayout<float, float>{};
+                const auto& layout3f = VertexLayout<float>{ 3 };
+                const auto& layout2f = VertexLayout<float>{ 2 };
 
-
-                const auto& positionsVBO   = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                const auto& normalsVBO     = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                const auto& coordinatesVBO = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                const auto& indicesIBO     = std::make_shared<IndexBuffer<Buffer::Access::Static>>(indices);
+                s_positions   = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
+                s_normals     = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(normals);
+                s_coordinates = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(coordinates);
+                s_indices     = std::make_shared<IndexBuffer<Buffer::Access::Static>>(indices);
 
                 auto vertexArray = std::make_shared<VertexArray>();
-                vertexArray->tie(positionsVBO,   layout3f);
-                vertexArray->tie(normalsVBO,     layout3f);
-                vertexArray->tie(coordinatesVBO, layout2f);
-                vertexArray->tie(indicesIBO);
+                vertexArray->tie(s_positions,   layout3f);
+                vertexArray->tie(s_normals,     layout3f);
+                vertexArray->tie(s_coordinates, layout2f);
+                vertexArray->tie(s_indices);
 
                 s_mesh = std::make_shared<Mesh>(vertexArray);
             }
 
             static inline std::shared_ptr<Mesh> s_mesh{};
+            static inline std::shared_ptr<VertexBuffer<Buffer::Access::Static, float>> s_positions{};
+            static inline std::shared_ptr<VertexBuffer<Buffer::Access::Static, float>> s_normals{};
+            static inline std::shared_ptr<VertexBuffer<Buffer::Access::Static, float>> s_coordinates{};
+            static inline std::shared_ptr<IndexBuffer<Buffer::Access::Static>> s_indices{};
         };
         struct Cube
         {
@@ -206,8 +208,8 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto layout3f = VertexLayout<float, float, float>{};
-                const auto layout2f = VertexLayout<float, float>{};
+                const auto layout3f = VertexLayout<float>{ 3 };
+                const auto layout2f = VertexLayout<float>{ 2 };
 
                 const auto& positionsVBO   = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
                 const auto& normalsVBO     = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);

@@ -10,7 +10,7 @@ namespace fox::gfx
 {
     struct RenderInfo
     {
-        std::tuple<const Camera&, const Transform&> camera;
-        std::span<const std::tuple<Light, Vector3f>> lights;
+        std::tuple<const fox::Camera&, const fox::Transform&> camera;
+        std::span<const std::tuple<fox::Light, fox::Vector3f>> lights;
     };
 }

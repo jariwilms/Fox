@@ -8,7 +8,7 @@ namespace fox::gfx::api
     {
     public:
         template<typename T>
-        struct Manifest
+        struct Layout
         {
             std::shared_ptr<T> vertexShader{};
             std::shared_ptr<T> tessellationControlShader{};

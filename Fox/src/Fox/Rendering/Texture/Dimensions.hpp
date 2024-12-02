@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::gfx::api
+namespace fox::gfx
 {
     enum class Dimensions
     {

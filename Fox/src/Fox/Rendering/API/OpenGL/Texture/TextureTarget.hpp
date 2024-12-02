@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Rendering/API/OpenGL/GL.hpp"
+#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/Texture/Dimensions.hpp"
 
 namespace fox::gfx::api::gl

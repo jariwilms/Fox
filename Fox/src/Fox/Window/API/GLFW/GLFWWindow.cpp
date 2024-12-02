@@ -26,8 +26,8 @@ namespace fox
 		glfwMakeContextCurrent(m_glfwWindow);
         glfwSwapInterval(0);
 
-        const auto& load = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-        if (!load) throw std::runtime_error{ "Failed to initialize GLAD!" };
+        const auto& isInitialized = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+        if (!isInitialized) throw std::runtime_error{ "Failed to initialize GLAD!" };
 
         //TODO: move above context into these classes
         m_userPointer = std::make_shared<UserPointer>();

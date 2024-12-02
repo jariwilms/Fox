@@ -23,8 +23,8 @@ namespace fox
         stbi_flip_vertically_on_write(Config::IO::flipImages); //Use as parameter?
 
         const auto& dimensions = image.dimensions();
-        const auto& channels = static_cast<int>(image.layout());
-        const auto* data = image.data().data();
+        const auto& channels   = static_cast<int>(image.layout());
+        const auto* data       = image.data().data();
 
         std::vector<byte> v{};
         Context ctx{ v };
