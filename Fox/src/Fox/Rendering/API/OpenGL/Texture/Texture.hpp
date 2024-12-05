@@ -14,6 +14,8 @@ namespace fox::gfx::api::gl
     public:
         using vector_t = gfx::DimensionsToVector<DIMS>::type;
 
+        Texture(const vector_t& dimensions, std::span<const fox::byte> data)
+            : Texture{ Texture::Format::RGBA8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, dimensions, data } {}
         Texture(Format format, Filter filter, Wrapping wrapping, const vector_t& dimensions)                                  requires (AA == AntiAliasing::None)
             : api::Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
         {

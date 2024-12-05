@@ -64,14 +64,14 @@ namespace fox::gfx::api::gl
     class Buffer<TYPE, api::Buffer::Access::Dynamic, T> : public Buffer<TYPE, api::Buffer::Access::Static, T>
     {
     public:
-        Buffer(fox::count_t count)
+        explicit Buffer(fox::count_t count)
             : Buffer<TYPE, api::Buffer::Access::Static, T>{ count * sizeof(T) }
         {
             m_handle = gl::create_buffer();
 
             gl::buffer_storage(m_handle, gl::Flags::Buffer::StorageFlags::DynamicStorage, m_size);
         }
-        Buffer(std::span<const T> data)
+        explicit Buffer(std::span<const T> data)
             : Buffer<TYPE, api::Buffer::Access::Static, T>{ data }
         {
             m_handle = gl::create_buffer();
@@ -134,7 +134,7 @@ namespace fox::gfx::api::gl
     class Buffer<api::Buffer::Type::Uniform, api::Buffer::Access::Dynamic, T> : public api::Buffer, public gl::Object
     {
     public:
-        Buffer(const T& data = {})
+        explicit Buffer(const T& data = {})
             : api::Buffer{ sizeof(T) }
         {
             m_handle = gl::create_buffer();

@@ -7,15 +7,15 @@ namespace fox::gfx
     class Mesh
     {
     public:
-        Mesh(const std::shared_ptr<gfx::VertexArray> vertexArray)
-            : m_vertexArray{ vertexArray } {}
+        Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
+            : vertexArray{ vertexArray } {}
 
-        const std::shared_ptr<gfx::VertexArray> vertex_array() const
-        {
-            return m_vertexArray;
-        }
+        std::shared_ptr<gfx::VertexArray> vertexArray{};
 
-    private:
-        std::shared_ptr<gfx::VertexArray> m_vertexArray{};
+        //std::shared_ptr<gfx::VertexBuffer<api::Buffer::Access::Static, float>> positions{};
+        //std::shared_ptr<gfx::VertexBuffer<api::Buffer::Access::Static, float>> normals{};
+        //std::shared_ptr<gfx::VertexBuffer<api::Buffer::Access::Static, float>> tangents{};
+        //std::shared_ptr<gfx::VertexBuffer<api::Buffer::Access::Static, float>> textureCoordinates{};
+        //std::shared_ptr<gfx::IndexBuffer<api::Buffer::Access::Static>>         indices{};
     };
 }

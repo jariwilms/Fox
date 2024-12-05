@@ -92,6 +92,11 @@
   <ItemGroup>
     <ClCompile Include="include\tinygltf\tiny_gltf.cc" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\stb\STB_IMAGE.vcxproj">
+      <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

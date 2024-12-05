@@ -25,21 +25,21 @@ namespace fox::gfx
                 return s_mesh;
             }
 
-            static inline const std::array<fox::f32_t, 12> positions
+            static inline const std::array<fox::float32_t, 12> positions
             {
                  1.0f,  1.0f,  0.0f,
                 -1.0f,  1.0f,  0.0f,
                 -1.0f, -1.0f,  0.0f,
                  1.0f, -1.0f,  0.0f,
             };
-            static inline const std::array<fox::f32_t, 12> normals
+            static inline const std::array<fox::float32_t, 12> normals
             {
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
             };
-            static inline const std::array<fox::f32_t, 8> coordinates
+            static inline const std::array<fox::float32_t, 8> coordinates
             {
                 1.0f, 1.0f,
                 0.0f, 1.0f,

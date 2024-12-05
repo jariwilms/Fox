@@ -251,7 +251,7 @@ namespace fox::gfx::api::gl
         if constexpr (std::is_same_v<T, fox::uint16_t>) return GL_UNSIGNED_SHORT;
         if constexpr (std::is_same_v<T, fox::int32_t>)  return GL_INT;
         if constexpr (std::is_same_v<T, fox::uint32_t>) return GL_UNSIGNED_INT;
-        if constexpr (std::is_same_v<T, fox::f32_t>)    return GL_FLOAT;
-        if constexpr (std::is_same_v<T, fox::f64_t>)    return GL_DOUBLE;
+        if constexpr (std::is_same_v<T, fox::float32_t>)    return GL_FLOAT;
+        if constexpr (std::is_same_v<T, fox::float64_t>)    return GL_DOUBLE;
     }
 }

@@ -92,7 +92,7 @@ namespace fox::gfx::api::gl
             m_arrayAttributeIndex = other.m_arrayAttributeIndex;
             m_arrayBindingIndex   = other.m_arrayBindingIndex;
             m_primitiveCount      = other.m_primitiveCount;
-            m_indexBuffer         = other.m_indexBuffer;
+            m_indexBuffer         = std::move(other.m_indexBuffer);
 
             other.m_handle              = {};
             other.m_arrayAttributeIndex = 0u;

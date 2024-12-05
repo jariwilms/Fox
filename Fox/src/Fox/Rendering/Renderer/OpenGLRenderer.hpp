@@ -170,8 +170,7 @@ namespace fox::gfx::api
             glCullFace(GL_BACK);
 
             glDisable(GL_DEPTH_TEST);
-            gfx::Geometry::Plane::mesh()->vertex_array()->bind();
-            gfx::Geometry::Plane::mesh()->vertex_array()->index_buffer()->bind();
+            gfx::Geometry::Plane::mesh()->vertexArray->bind();
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
             glEnable(GL_BLEND);
 

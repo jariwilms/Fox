@@ -56,16 +56,12 @@ project "Fox"
 		"%{includedir.TINYGLTF}", 
 	}
 	
-	libdirs
-	{
-		
-	}
-	
 	links
 	{
 		"GLAD", 
 		"GLFW", 
 		"STB_IMAGE", 
+		"TINYGLTF", 
 		
 		"opengl32.lib", 
 	}

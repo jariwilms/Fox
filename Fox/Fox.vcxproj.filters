@@ -7,9 +7,6 @@
     <Filter Include="Fox\Core">
       <UniqueIdentifier>{0A079891-F6D3-F29C-1FED-E0440B19282B}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fox\Core\Include">
-      <UniqueIdentifier>{5D00D1F8-49F9-EF4A-722B-D5CF5E83CF56}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fox\Core\Library">
       <UniqueIdentifier>{0ECA06D4-FAC2-2526-23F5-0AAB0F4D0532}</UniqueIdentifier>
     </Filter>

@@ -26,13 +26,6 @@ project "STB_IMAGE"
 		"STB_IMAGE_WRITE_IMPLEMENTATION", 
 	}
 
-	--disablewarnings
-	--{
-	--	" 4250", --Buffer Dominance
-	--	" 6262", --STB stack 
-	--	"26451", --STB overflow
-	--}
-
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"

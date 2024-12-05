@@ -13,9 +13,9 @@ namespace fox::gfx
     };
     struct UMaterial //std140, binding 1
     {
-        fox::Vector4f color{};
-        fox::f32_t    roughness{};
-        fox::f32_t    metallic{};
+        fox::Vector4f  color{};
+        fox::float32_t roughness{};
+        fox::float32_t metallic{};
     };
     struct ULight //std140, binding 2
     {

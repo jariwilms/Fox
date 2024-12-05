@@ -213,6 +213,9 @@
     <ProjectReference Include="vendor\stb\STB_IMAGE.vcxproj">
       <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
     </ProjectReference>
+    <ProjectReference Include="vendor\tinygltf\TINYGLTF.vcxproj">
+      <Project>{169A0DB1-0267-68BC-2B80-566417AC9D4A}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

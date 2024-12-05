@@ -12,37 +12,32 @@ namespace fox::gfx
     class Model
     {
     public:
-        Model()
-            : rootNode{ std::make_unique<Node>() }
-        {}
-
         struct Node
         {
-        public:
-            struct Primitive
-            {
-                unsigned int meshIndex{};
-                unsigned int materialIndex{};
-            };
+            Node() = default;
 
-            bool empty() const
-            { 
-                return !(localTransform.has_value() ||
-                         meshPrimitive.has_value()  || 
-                         cameraIndex.has_value());
-            }
-
-            std::optional<Matrix4f> localTransform{};
-            std::optional<unsigned int> cameraIndex{};
-            std::optional<Primitive> meshPrimitive{};
-
-            std::vector<Node> children{};
+            std::optional<fox::uint32_t> meshIndex{};
+            std::optional<fox::uint32_t> materialIndex{};
+            fox::Transform               localTransform{};
+            std::vector<Node>            children{};
         };
 
-        std::unique_ptr<Node> rootNode{};
-        std::vector<std::shared_ptr<Mesh>> meshes{};
-        std::vector<std::shared_ptr<Light>> lights{};
-        std::vector<std::shared_ptr<Camera>> cameras{};
+        Model()
+            : root{ std::make_unique<Node>() } 
+        {}
+
+        void traverse(const Node& node, std::function<void(const Node&)> function) const
+        {
+            function(node);
+
+            for (const auto& child : node.children)
+            {
+                traverse(child, function);
+            }
+        }
+
+        std::unique_ptr<Node>                  root{};
+        std::vector<std::shared_ptr<Mesh>>     meshes{};
         std::vector<std::shared_ptr<Material>> materials{};
     };
 }

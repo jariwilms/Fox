@@ -7,14 +7,13 @@ namespace fox
     class Time
     {
     public:
-        using DeltaTime = float;
-        using Clock     = std::chrono::system_clock;
-        using Duration  = std::chrono::duration<DeltaTime>;
-        using TimePoint = std::chrono::time_point<Clock>;
+        using DeltaTime  = fox::float32_t;
+        using Clock      = std::chrono::system_clock;
+        using TimePoint  = std::chrono::time_point<Clock>;
+        using Duration   = std::chrono::duration<DeltaTime>;
 
         static void reset()
         {
-            s_tr = Clock::now();
             s_t0 = Clock::now();
             s_t1 = Clock::now();
         }
@@ -32,7 +31,7 @@ namespace fox
         }
         static const std::chrono::seconds epoch()
         {
-            const auto time = std::chrono::system_clock::now().time_since_epoch();
+            const auto& time = now().time_since_epoch();
             return std::chrono::duration_cast<std::chrono::seconds>(time);
         }
         static const DeltaTime& delta()
@@ -43,8 +42,6 @@ namespace fox
     private:
         static inline TimePoint s_t0{};                                        //Previous TimePoint
         static inline TimePoint s_t1{};                                        //Current  TimePoint
-        static inline TimePoint s_tr{};                                        //Reset    TimePoint
         static inline DeltaTime s_delta{};                                     //DeltaTime as difference of (t1, t0)
-        static inline DeltaTime s_deltaC{};                                    //DeltaTime starting from reset
     };
 }
