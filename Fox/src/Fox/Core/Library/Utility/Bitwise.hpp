@@ -8,7 +8,7 @@ namespace fox::utl
     concept BitOperand = std::is_integral_v<T> && (sizeof(T) <= sizeof(fox::int64_t));
     
     template<typename T>
-    constexpr bool bit_query(T value, fox::byte index)                        requires BitOperand<T>
+    constexpr bool bit_query(T value, fox::byte index)                            requires BitOperand<T>
     {
         return (value >> index) & 0x1;
     }
@@ -18,7 +18,7 @@ namespace fox::utl
         return (value >> index) & (((T{} + 1) << count) - 1);
     }
     template<typename T>
-    constexpr T   bit_mask(T value, fox::byte index, bool state)              requires BitOperand<T>
+    constexpr T   bit_mask(T value, fox::byte index, bool state)                  requires BitOperand<T>
     {
         return value ^ (-static_cast<T>(state) ^ value) & ((T{} + 1) << index);
     }
@@ -28,7 +28,7 @@ namespace fox::utl
         return (value & ~((((T{} + 1) << count) - 1) << index)) | (static_cast<T>(source) << index);
     }
     template<typename T>
-    constexpr T   bit_toggle(T value, fox::byte index)                       requires BitOperand<T>
+    constexpr T   bit_toggle(T value, fox::byte index)                            requires BitOperand<T>
     {
         return value ^ ((T{} + 1) << index);
     }

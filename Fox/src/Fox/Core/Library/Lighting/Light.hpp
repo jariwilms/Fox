@@ -12,21 +12,17 @@ namespace fox
             Point, 
             Directional, 
             Spot, 
-            //Area, 
+            Area, 
         };
         enum class Mode
         {
             Realtime, 
-            //Mixed, 
-            //Baked, 
+            Mixed, 
+            Baked, 
         };
 
-        Type type{};
-        Vector3f color{};
-        float radius{};
+        Type           type{};
+        fox::Vector3f  color{};
+        fox::float32_t radius{};
     };
-    //struct DirectionalLight : Light
-    //{
-    //    float angle{};
-    //};
 }

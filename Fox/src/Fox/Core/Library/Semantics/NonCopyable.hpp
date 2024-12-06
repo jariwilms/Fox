@@ -9,6 +9,7 @@ namespace fox
         NonCopyable& operator=(const NonCopyable&) = delete;
 
     protected:
-        NonCopyable() = default;
+        NonCopyable()  = default;
+        virtual ~NonCopyable() = default;
     };
 }

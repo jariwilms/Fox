@@ -9,6 +9,7 @@ namespace fox
         NonMovable& operator=(NonMovable&&) = delete;
 
     protected:
-        NonMovable() = default;
+        NonMovable()  = default;
+        virtual ~NonMovable() = default;
     };
 }

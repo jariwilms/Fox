@@ -4,7 +4,7 @@
 
 namespace fox::utl
 {
-    template<typename T, size_t SIZE>
+    template<typename T, fox::size_t SIZE>
     auto to_span(const std::array<T, SIZE>& v)
     {
         return std::span{ v };
@@ -39,19 +39,19 @@ namespace fox::utl
 
 
 
-    template<typename T, size_t EXTENT>
+    template<typename T, fox::size_t EXTENT>
     auto as_bytes(std::span<T, EXTENT> s)
     {
-        constexpr auto dynamic_extent = static_cast<size_t>(-1);
-        using return_type = std::span<const byte, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
+        constexpr auto dynamic_extent = static_cast<fox::size_t>(-1);
+        using return_type = std::span<const fox::byte, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
 
-        return return_type{ reinterpret_cast<const byte*>(s.data()), s.size_bytes() };
+        return return_type{ reinterpret_cast<const fox::byte*>(s.data()), s.size_bytes() };
     }
 
 
 
     //https://stackoverflow.com/a/21028912
-    //There is an instance where we want a vector to take ownership of a large amount of preallocated data without allocating and initializing its data beforehand
+    //There is an instance where we want a vector to take ownership of a large amount of preallocated data without allocation or initialization
     //This allocator does just that, nothing
     template <typename T, typename A = std::allocator<T>>
     class default_init_allocator : public A
@@ -89,12 +89,4 @@ namespace fox::utl
         using V2 = std::vector<vt, typename std::allocator_traits<typename V::allocator_type>::template rebind_alloc<vt>>;
         reinterpret_cast<V2&>(v).resize(newSize);
     }
-
-
-
-    //Calculates the amount of MIP levels for a given dimension
-    //auto mip_l(const Vector2u& dimensions)
-    //{
-    //    return static_cast<unsigned int>(std::floor(std::log2(std::max(dimensions.x, dimensions.y)))) + 1u;
-    //}
 }

@@ -9,25 +9,25 @@ namespace fox
 {
     struct Context
     {
-        std::vector<byte>& data;
+        std::vector<fox::byte>& data;
     };
-    void write_func(void* context, void* data, int size)
+    static void write_func(void* context, void* data, int size)
     {
-        const auto* ctx = reinterpret_cast<Context*>(context);
-        const auto* imageData = reinterpret_cast<const byte*>(data);
+        const auto* ctx       = reinterpret_cast<Context*>(context);
+        const auto* imageData = reinterpret_cast<const fox::byte*>(data);
 
-        ctx->data = std::vector<byte>{ imageData, imageData + size };
+        ctx->data = std::vector<fox::byte>{ imageData, imageData + size };
     }
 
-    std::vector<byte> Image::encode(Format format, const Image& image)
+    std::vector<fox::byte> Image::encode(Format format, const Image& image)
     {
-        stbi_flip_vertically_on_write(Config::IO::flipImages); //Use as parameter?
+        stbi_flip_vertically_on_write(Config::IO::flipImages);
 
         const auto& dimensions = image.dimensions();
-        const auto& channels   = static_cast<int>(image.layout());
+        const auto& channels   = static_cast<fox::int32_t>(image.layout());
         const auto* data       = image.data().data();
 
-        std::vector<byte> v{};
+        std::vector<fox::byte> v{};
         Context ctx{ v };
 
         switch (format)
@@ -41,18 +41,18 @@ namespace fox
 
         return v;
     }
-    Image             Image::decode(Layout layout, std::span<const byte> data)
+    Image                  Image::decode(Layout layout, std::span<const fox::byte> data)
     {
         stbi_set_flip_vertically_on_load(Config::IO::flipImages);
 
-        int x{}, y{}, c{}, channels{ static_cast<int>(layout) };
-        auto* decodedData = reinterpret_cast<byte*>(stbi_load_from_memory(data.data(), static_cast<int>(data.size_bytes()), &x, &y, &c, channels));
+        fox::int32_t x{}, y{}, c{}, channels{ static_cast<fox::int32_t>(layout) };
+        auto* decodedData = reinterpret_cast<fox::byte*>(stbi_load_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &x, &y, &c, channels));
 
         const auto& size = x * y * channels;
-        std::vector<byte> v{ decodedData, decodedData + size };
+        std::vector<fox::byte> v{ decodedData, decodedData + size };
 
         stbi_image_free(decodedData);
 
-        return Image{ layout, Vector2u{ static_cast<std::uint32_t>(x), static_cast<std::uint32_t>(y) }, std::move(v) };
+        return Image{ layout, fox::Vector2u{ static_cast<fox::uint32_t>(x), static_cast<fox::uint32_t>(y) }, std::move(v) };
     }
 }

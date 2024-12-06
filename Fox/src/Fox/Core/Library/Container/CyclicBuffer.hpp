@@ -80,7 +80,7 @@ namespace fox
             return rend();
         }
 
-        constexpr size_t size() const noexcept
+        constexpr fox::size_t size() const noexcept
         {
             return m_array.size();
         }
@@ -130,6 +130,6 @@ namespace fox
         }
 
         std::array<_Ty, _Size> m_array{};
-        size_t m_index{};
+        fox::size_t m_index{};
     };
 }
