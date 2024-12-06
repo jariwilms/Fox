@@ -142,16 +142,6 @@ namespace fox::gfx::api::gl
             const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
             gl::buffer_storage(m_handle, bufferAccess, std::span<const T>{ &data, 1u });
         }
-        Buffer(gl::index_t index, const T& data = {})
-            : api::Buffer{ sizeof(T) }
-        {
-            m_handle = gl::create_buffer();
-
-            bind_index(index);
-
-            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(m_handle, bufferAccess, std::span<const T>{ &data, 1u });
-        }
         Buffer(Buffer&& other) noexcept
         {
             *this = std::move(other);
