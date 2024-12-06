@@ -1,19 +1,19 @@
 #include "stdafx.hpp"
 
 #include "Application.hpp"
-#include "Fox/Window/WindowManager.hpp"
 
 #include "Fox/Core/Library/Container/CyclicBuffer.hpp"
+#include "Fox/Core/Library/Image/Image.hpp"
 #include "Fox/Core/Library/Time/Time.hpp"
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/ECS/Components/Components.hpp"
 #include "Fox/Input/Input.hpp"
-#include "Fox/IO/IO.hpp"
 #include "Fox/IO/Import/Model/GLTFImporter.hpp"
-#include "Fox/Scene/Scene.hpp"
+#include "Fox/IO/IO.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
-#include "Fox/Core/Library/Image/Image.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Scene/Scene.hpp"
+#include "Fox/Window/WindowManager.hpp"
 
 namespace fox
 {
@@ -121,7 +121,7 @@ namespace fox
         const auto& viewMatrix       = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
         const auto& projectionMatrix = camera.projection().matrix();
 
-              auto  matricesBuffer   = std::make_shared<gfx::UniformBuffer<gfx::UMatrices>>(gl::index_t{ 0 });
+              auto  matricesBuffer   = std::make_shared<gfx::UniformBuffer<gfx::UMatrices>>();
               auto  cameraBuffer     = std::make_shared<gfx::UniformBuffer<gfx::UCamera>>();
 
 
@@ -196,5 +196,11 @@ namespace fox
 
 
         return 0;
+    }
+
+    void fibonacci()
+    {
+        //generate fibonacci numbers
+
     }
 }
