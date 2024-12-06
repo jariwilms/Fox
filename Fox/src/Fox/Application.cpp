@@ -138,7 +138,7 @@ namespace fox
 
         while (!m_window->should_close())
         {
-            Time::advance();
+            Time::update();
 
             auto speed{ 10.0f * Time::delta() };
             if (Input::key_pressed(Key::LeftShift))   speed *= 10.0f;
@@ -196,11 +196,5 @@ namespace fox
 
 
         return 0;
-    }
-
-    void fibonacci()
-    {
-        //generate fibonacci numbers
-
     }
 }

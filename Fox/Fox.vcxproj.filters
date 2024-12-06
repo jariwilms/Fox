@@ -207,13 +207,10 @@
     <ClInclude Include="src\Fox\Core\Library\Utility\Bitwise.hpp">
       <Filter>Fox\Core\Library\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Core\Library\Utility\Define.hpp">
-      <Filter>Fox\Core\Library\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="src\Fox\Core\Library\Utility\Utility.hpp">
       <Filter>Fox\Core\Library\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Core\Using.hpp">
+    <ClInclude Include="src\Fox\Core\Types.hpp">
       <Filter>Fox\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\ECS\Components\CameraComponent.hpp">

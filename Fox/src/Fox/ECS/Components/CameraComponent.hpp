@@ -6,10 +6,10 @@
 
 namespace fox
 {
-    class CameraComponent : public Camera, public Component
+    class CameraComponent : public Component, public Camera
     {
     public:
-        CameraComponent(Entity& parent)
-            : Component{ parent } {}
+        explicit CameraComponent(Entity& parent)
+            : Component{ parent }, Camera{ 16.0f / 9.0f } {}
     };
 }

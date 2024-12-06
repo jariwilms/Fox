@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Fox/Config.hpp"
-#include "Fox/Core/Using.hpp"
+#include "Fox/Core/Types.hpp"
 
 
 
@@ -47,5 +47,5 @@
 
 
 #ifdef FOX_PLATFORM_WINDOWS
-#include <Windows.h>
+//#include <Windows.h>
 #endif // FOX_PLATFORM_WINDOWS
