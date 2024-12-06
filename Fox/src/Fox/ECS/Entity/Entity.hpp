@@ -2,16 +2,16 @@
 
 #include "stdafx.hpp"
 
-namespace fox
+namespace fox::ecs
 {
     class Entity
     {
     public:
-        Entity(Id id)
+        Entity(fox::id_t id)
             : m_id{ id } {}
         virtual ~Entity() = default;
 
-        Id id() const
+        fox::id_t id() const
         {
             return m_id;
         }
@@ -19,6 +19,6 @@ namespace fox
         bool operator==(const Entity& other) const = default;
 
     protected:
-        Id m_id{};
+        fox::id_t m_id{};
     };
 }

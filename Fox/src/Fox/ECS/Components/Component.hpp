@@ -1,6 +1,6 @@
 #pragma once
 
-namespace fox
+namespace fox::ecs
 {
     class Entity;
     struct Component

@@ -114,7 +114,6 @@
     <ClInclude Include="src\Fox\ECS\Components\CameraComponent.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\Components.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\LightComponent.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\MeshRendererComponent.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\RelationshipComponent.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\TransformComponent.hpp" />
@@ -193,7 +192,6 @@
     <ClCompile Include="src\Fox\Core\Library\Image\Image.cpp" />
     <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Fox\Input\Input.cpp" />
-    <ClCompile Include="src\Fox\Scene\Actor.cpp" />
     <ClCompile Include="src\Fox\Scene\Scene.cpp" />
     <ClCompile Include="src\Fox\Window\API\GLFW\GLFWWindow.cpp" />
     <ClCompile Include="src\Fox\Window\WindowManager.cpp" />

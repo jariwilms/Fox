@@ -4,59 +4,57 @@
 
 #include <entt/entt.hpp>
 
+#include "Fox/ECS/Components/Component.hpp"
+
 namespace fox
 {
-    class Registry
+    namespace reg::api
     {
-    public:
-        static void init()
+        inline entt::basic_registry<fox::id_t> s_registry{};
+    }
+    namespace reg
+    {
+        static fox::id_t create()
         {
-
+            return api::s_registry.create();
         }
-
-        static Id create()
+        static void      destroy(fox::id_t id)
         {
-            return s_registry.create();
-        }
-        static void destroy(Id id)
-        {
-            s_registry.destroy(id);
+            api::s_registry.destroy(id);
         }
 
         template<typename... T>
-        static bool has_component(Id id)
+        static bool has_component(fox::id_t id)
         {
-            //static_assert(std::is_base_of_v<Component, T>);
-            return s_registry.all_of<T...>(id);
+            static_assert(std::is_base_of_v<ecs::Component, T>);
+
+            return api::s_registry.all_of<T...>(id);
         }
         template<typename T, typename... Args>
-        static T& add_component(Id id, Args&&... args)
+        static T&   add_component(fox::id_t id, Args&&... args)
         {
-            return s_registry.emplace<T>(id, std::forward<Args>(args)...);
+            return api::s_registry.emplace<T>(id, std::forward<Args>(args)...);
         }
         template<typename T>
-        static T& get_component(Id id)
+        static T&   get_component(fox::id_t id)
         {
-            return s_registry.get<T>(id);
+            return api::s_registry.get<T>(id);
         }
         template<typename T>
-        static void remove_component(Id id)
+        static void remove_component(fox::id_t id)
         {
-            s_registry.remove<T>(id);
+            api::s_registry.remove<T>(id);
         }
 
         template<typename... T>
         static auto view() //TODO: wrapper for entity group (using my_view = entt::basic_view ofzoiets)
         {
-            return s_registry.view<T...>();
+            return api::s_registry.view<T...>();
         }
         template<typename... T>
         static auto group()
         {
-            return s_registry.group<T...>();
+            return api::s_registry.group<T...>();
         }
-
-    private:
-        static inline entt::basic_registry<Id> s_registry{};
     };
 }

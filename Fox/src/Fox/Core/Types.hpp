@@ -46,5 +46,5 @@ namespace fox
 	using Matrix4f   = glm::mat4;
 	using Quaternion = glm::quat;
 
-	enum Id : fox::uint32_t {};
+	enum class id_t : fox::uint32_t {};
 }

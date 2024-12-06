@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Component.hpp"
+#include "Fox/ECS/Components/Component.hpp"
 
-namespace fox
+namespace fox::ecs
 {
     struct RelationshipComponent : public Component
     {
@@ -12,7 +12,7 @@ namespace fox
         RelationshipComponent(Entity& parent)
             : Component{ parent } {}
 
-        std::optional<Id> parent{};
-        std::vector<Id> children{};
+        std::optional<fox::id_t> parent{};
+        std::vector<fox::id_t>   children{};
     };
 }

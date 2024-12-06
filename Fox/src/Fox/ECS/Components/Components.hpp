@@ -1,6 +1,7 @@
 #pragma once
 
-#include "CameraComponent.hpp"
-#include "LightComponent.hpp"
-#include "MeshRendererComponent.hpp"
-#include "TransformComponent.hpp"
+#include "Fox/ECS/Components/CameraComponent.hpp"
+#include "Fox/ECS/Components/MeshRendererComponent.hpp"
+#include "Fox/ECS/Components/RelationshipComponent.hpp"
+#include "Fox/ECS/Components/TransformComponent.hpp"
+

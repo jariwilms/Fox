@@ -64,10 +64,10 @@ namespace fox
         //RelationshipComponent rc = parent.get_component<RelationshipComponent>();
         //rc.children.emplace_back(actor->id());
 
-        Transform& t = actor->get_component<TransformComponent>();
+        auto& t = actor->get_component<ecs::TransformComponent>().transform();
         t = node.localTransform;
 
-        auto& mrc = actor->add_component<MeshRendererComponent>();
+        auto& mrc = actor->add_component<ecs::MeshRendererComponent>();
         if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
         if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
         
@@ -76,7 +76,6 @@ namespace fox
             model_to_scene_graph(scene, *actor, model, child);
         }
     }
-
 
 
 
@@ -97,8 +96,8 @@ namespace fox
         auto  scene           = std::make_shared<Scene>();
         auto  model           = io::GLTFImporter::import2("models/cube/Cube.gltf");
         auto  observer        = scene->create_actor();
-        auto& camera          = observer->add_component<CameraComponent>();
-        auto& cameraTransform = observer->get_component<TransformComponent>();
+        auto& camera          = observer->add_component<ecs::CameraComponent>().camera();
+        auto& cameraTransform = observer->get_component<ecs::TransformComponent>().transform();
 
         cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
 

@@ -2,12 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Component.hpp"
-
+#include "Fox/ECS/Components/Component.hpp"
 #include "Fox/Rendering/Mesh/Mesh.hpp"
 #include "Fox/Rendering/Material/Material.hpp"
 
-namespace fox
+namespace fox::ecs
 {
     struct MeshRendererComponent : public Component
     {
@@ -28,12 +27,12 @@ namespace fox
             LightingOptions() = default;
 
             ShadowCasting shadowCasting{ ShadowCasting::On };
-            unsigned int maxShadowCastingLights{ 8 }; //TODO: global config setting
-            bool receiveShadows{ true };
+            fox::uint32_t maxShadowCastingLights{ 8 }; //TODO: global config setting
+            fox::bool_t   receiveShadows{ true };
         };
 
-        std::shared_ptr<gfx::Mesh> mesh{};
+        std::shared_ptr<gfx::Mesh>     mesh{};
         std::shared_ptr<gfx::Material> material{};
-        //LightingOptions lightingOptions{};
+        LightingOptions                lightingOptions{};
     };
 }
