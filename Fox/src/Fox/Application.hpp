@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Window/Window.hpp"
+#include "Fox/Window/Using.hpp"
 
 namespace fox
 {
@@ -13,6 +13,6 @@ namespace fox
         int run();
 
     private:
-        std::shared_ptr<Window> m_window{};
+        std::shared_ptr<wnd::Window> m_window{};
     };
 }

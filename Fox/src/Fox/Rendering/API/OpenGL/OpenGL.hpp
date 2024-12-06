@@ -375,10 +375,10 @@ namespace fox::gfx::api::gl
 
 
 
-    static gl::int32_t                    integer_v(gl::enum_t parameter)
+    static gl::int32_t                    integer_v(gl::Flags::Data flag)
     {
         gl::int32_t result{};
-        glGetIntegerv(parameter, &result);
+        glGetIntegerv(static_cast<gl::enum_t>(flag), &result);
 
         return result;
     }
@@ -412,7 +412,7 @@ namespace fox::gfx::api::gl
     }
 
 
-                                      
+    
     static void                           debug_callback(gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* user_param)
     {
         const auto& sourceMessage   = [source]() -> std::string
@@ -458,5 +458,13 @@ namespace fox::gfx::api::gl
         }();
 
         std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}", sourceMessage, typeMessage, severityMessage, id, message) << std::endl;
+    }
+    static void                           debug_message_callback(decltype(debug_callback) callback)
+    {
+        glDebugMessageCallback(callback, nullptr);
+    }
+    static void                           debug_message_control(gl::bool_t state, gl::Flags::Debug::Source source, gl::Flags::Debug::Type type, gl::Flags::Debug::Severity severity)
+    {
+        glDebugMessageControl(static_cast<gl::enum_t>(source), static_cast<gl::enum_t>(type), static_cast<gl::enum_t>(severity), 0, nullptr, state);
     }
 }

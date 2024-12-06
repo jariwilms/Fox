@@ -47,6 +47,10 @@ namespace fox::gfx::api::gl
     {
         NullObject = gl::uint32_t{}, 
     };
+    enum : gl::enum_t
+    {
+        DontCare = GL_DONT_CARE, 
+    };
 
 
 
@@ -134,7 +138,14 @@ namespace fox::gfx::api::gl
             FrameBufferSRGB          = GL_FRAMEBUFFER_SRGB, 
 
             DebugOutput              = GL_DEBUG_OUTPUT, 
-            SynchronousDebugOutput   = GL_DEBUG_OUTPUT_SYNCHRONOUS, 
+            DebugOutputSynchronous   = GL_DEBUG_OUTPUT_SYNCHRONOUS,
+        };
+        enum       Context : gl::enum_t
+        {
+            ForwardCompatibleBit = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
+            DebugBit             = GL_CONTEXT_FLAG_DEBUG_BIT, 
+            RobustAccessBit      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
+            NoErrorBit           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
         };
         enum class Data : gl::enum_t
         {
@@ -167,7 +178,44 @@ namespace fox::gfx::api::gl
             LineWidth            = GL_LINE_WIDTH, 
             PointSize            = GL_POINT_SIZE, 
         };
-        struct Draw
+        struct     Debug
+        {
+            enum class Source : gl::enum_t 
+            {
+                DebugSourceAPI            = GL_DEBUG_SOURCE_API,
+                DebugSourceWindowSystem   = GL_DEBUG_SOURCE_WINDOW_SYSTEM,
+                DebugSourceShaderCompiler = GL_DEBUG_SOURCE_SHADER_COMPILER,
+                DebugSourceThirdParty     = GL_DEBUG_SOURCE_THIRD_PARTY,
+                DebugSourceApplication    = GL_DEBUG_SOURCE_APPLICATION,
+                DebugSourceOther          = GL_DEBUG_SOURCE_OTHER, 
+
+                DontCare                  = GL_DONT_CARE, 
+            };
+            enum class Type : gl::enum_t 
+            {
+                DebugTypeError              = GL_DEBUG_TYPE_ERROR,
+                DebugTypeDeprecatedBehavior = GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR,
+                DebugTypeUndefinedBehavior  = GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR,
+                DebugTypePortability        = GL_DEBUG_TYPE_PORTABILITY,
+                DebugTypePerformance        = GL_DEBUG_TYPE_PERFORMANCE,
+                DebugTypeMarker             = GL_DEBUG_TYPE_MARKER,
+                DebugTypePushGroup          = GL_DEBUG_TYPE_PUSH_GROUP,
+                DebugTypePopGroup           = GL_DEBUG_TYPE_POP_GROUP,
+                DebugTypeOther              = GL_DEBUG_TYPE_OTHER, 
+
+                DontCare                    = GL_DONT_CARE, 
+            };
+            enum class Severity : gl::enum_t 
+            {
+                DebugSeverityHigh         = GL_DEBUG_SEVERITY_HIGH,
+                DebugSeverityMedium       = GL_DEBUG_SEVERITY_MEDIUM,
+                DebugSeverityLow          = GL_DEBUG_SEVERITY_LOW,
+                DebugSeverityNotification = GL_DEBUG_SEVERITY_NOTIFICATION, 
+
+                DontCare                  = GL_DONT_CARE, 
+            };
+        };
+        struct     Draw
         {
             enum class Mode : gl::enum_t
             {

@@ -7,6 +7,7 @@
 namespace fox
 {
 	using bool_t    = bool;
+	using char_t    = char;          //Not equal to signed char apparently
 	using int8_t    = std::int8_t;
 	using uint8_t   = std::uint8_t;
 	using int16_t   = std::int16_t;

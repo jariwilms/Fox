@@ -2,9 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Window.hpp"
+#include "Fox/Window/Using.hpp"
 
-namespace fox
+namespace fox::wnd
 {
     class WindowManager
     {

@@ -82,7 +82,7 @@ namespace fox
 
     Application::Application(int argc, char* argv[])
     {
-        m_window = WindowManager::create("Window", "Fox", Vector2u{ 1280u, 720u });
+        m_window = wnd::WindowManager::create("Window", "Fox", Vector2u{ 1280u, 720u });
         
         //gfx::Geometry::init();
         //gfx::Renderer::init();
@@ -136,7 +136,7 @@ namespace fox
         gl::front_face(gl::Flags::Orientation::CounterClockwise);
         gl::face_culling(gl::Flags::FaceCulling::Back);
 
-        while (!glfwWindowShouldClose(reinterpret_cast<GLFWwindow*>(m_window->native_handle())))
+        while (!m_window->should_close())
         {
             Time::advance();
 
@@ -158,8 +158,6 @@ namespace fox
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
-
-
             
 
 

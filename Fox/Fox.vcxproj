@@ -184,6 +184,7 @@
     <ClInclude Include="src\Fox\Scene\Actor.hpp" />
     <ClInclude Include="src\Fox\Scene\Scene.hpp" />
     <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp" />
+    <ClInclude Include="src\Fox\Window\Using.hpp" />
     <ClInclude Include="src\Fox\Window\Window.hpp" />
     <ClInclude Include="src\Fox\Window\WindowManager.hpp" />
     <ClInclude Include="src\stdafx.hpp" />

@@ -2,13 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Window/Window.hpp"
-//#include "Fox/Rendering/API/OpenGL/Context/OpenGLRenderContext.hpp"
 #include "Fox/Input/Handler/Platform/GLFWInputHandler.hpp"
 #include "Fox/Input/Input.hpp"
-#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Window/Window.hpp"
 
-namespace fox
+namespace fox::wnd::api
 {
 	class GLFWWindow : public Window
 	{
@@ -16,23 +14,25 @@ namespace fox
         struct UserPointer
         {
 		public:
-			std::shared_ptr<GLFWWindow>          glfwWindow{};
-			//std::shared_ptr<OpenGLRenderContext> renderContext{};              //TODO: abstract away from OpenGL + unique ptrs
-			std::shared_ptr<GLFWInputHandler>    inputHandler{};
+			std::shared_ptr<GLFWWindow>       glfwWindow{};
+			std::shared_ptr<GLFWInputHandler> inputHandler{};
         };
 
-		GLFWWindow(const std::string& title, const Vector2u& dimensions);
-		~GLFWWindow() override;
+		GLFWWindow(const std::string& name, const fox::Vector2u& dimensions);
+		~GLFWWindow();
 
-		void refresh() override;
+		void refresh();
 
-		void rename(const std::string& title) override;
-		void resize(const Vector2f& dimensions) override;
+		void rename(const std::string& title);
+		void resize(const fox::Vector2f& dimensions);
 
-        void glfw_error_callback(int error, const char* description);
+		void        close()        const;
+		fox::bool_t should_close() const;
 
 	private:
-		GLFWwindow* m_glfwWindow{};
+        void glfw_error_callback(fox::int32_t error, const fox::char_t* description);
+
+		GLFWwindow*                  m_glfwWindow{};
 		std::shared_ptr<UserPointer> m_userPointer{};
 	};
 }

@@ -439,6 +439,7 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Fox\Window\Using.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">
