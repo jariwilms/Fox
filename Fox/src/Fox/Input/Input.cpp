@@ -1,73 +1,74 @@
 #include "stdafx.hpp"
 
 #include "Input.hpp"
-#include "Fox/Input/Handler/Platform/GLFWInputHandler.hpp"
 
-namespace fox
+namespace fox::ipt::api
 {
-    void Input::init(const std::shared_ptr<InputHandlerAPI> inputHandler)
+    void init(const std::shared_ptr<InputHandlerAPI> handler)
     {
-        s_inputHandler = inputHandler;
+        inputHandler = handler;
     }
- 
-    bool Input::any_pressed()
+}
+namespace fox::ipt
+{
+    fox::bool_t   any_pressed()
     {
-        return s_inputHandler->any_pressed();
+        return api::inputHandler->any_pressed();
     }
-    bool Input::any_down()
+    fox::bool_t   any_down()
     {
-        return s_inputHandler->any_down();
+        return api::inputHandler->any_down();
     }
-    bool Input::any_up()
+    fox::bool_t   any_up()
     {
-        return s_inputHandler->any_up();
+        return api::inputHandler->any_up();
+    }
+                  
+    fox::bool_t   key_pressed(key::key_t code)
+    {
+        return api::inputHandler->key_pressed(code);
+    }
+    fox::bool_t   key_down(key::key_t code)
+    {
+        return api::inputHandler->key_down(code);
+    }
+    fox::bool_t   key_up(key::key_t code)
+    {
+        return api::inputHandler->key_up(code);
+    }
+                  
+    fox::bool_t   button_pressed(btn::btn_t code)
+    {
+        return api::inputHandler->button_pressed(code);
+    }
+    fox::bool_t   button_down(btn::btn_t code)
+    {
+        return api::inputHandler->button_down(code);
+    }
+    fox::bool_t   button_up(btn::btn_t code)
+    {
+        return api::inputHandler->button_up(code);
+    }
+                  
+    fox::bool_t   scrolling()
+    {
+        return api::inputHandler->scrolling();
+    }
+    fox::bool_t   scrolling_vertical()
+    {
+        return api::inputHandler->scrolling_vertical();
+    }
+    fox::bool_t   scrolling_horizontal()
+    {
+        return api::inputHandler->scrolling_horizontal();
     }
 
-    bool Input::key_pressed(KeyCode code)
+    fox::Vector2f cursor_position()
     {
-        return s_inputHandler->key_pressed(code);
+        return api::inputHandler->cursor_position();
     }
-    bool Input::key_down(KeyCode code)
+    fox::Vector2f cursor_position_relative()
     {
-        return s_inputHandler->key_down(code);
-    }
-    bool Input::key_up(KeyCode code)
-    {
-        return s_inputHandler->key_up(code);
-    }
-
-    bool Input::button_pressed(ButtonCode code)
-    {
-        return s_inputHandler->button_pressed(code);
-    }
-    bool Input::button_down(ButtonCode code)
-    {
-        return s_inputHandler->button_down(code);
-    }
-    bool Input::button_up(ButtonCode code)
-    {
-        return s_inputHandler->button_up(code);
-    }
-
-    bool Input::scrolling()
-    {
-        return s_inputHandler->scrolling();
-    }
-    bool Input::scrolling_vertical()
-    {
-        return s_inputHandler->scrolling_vertical();
-    }
-    bool Input::scrolling_horizontal()
-    {
-        return s_inputHandler->scrolling_horizontal();
-    }
-
-    Vector2f Input::cursor_position()
-    {
-        return s_inputHandler->cursor_position();
-    }
-    Vector2f Input::cursor_position_relative()
-    {
-        return s_inputHandler->cursor_position_relative();
+        return api::inputHandler->cursor_position_relative();
     }
 }

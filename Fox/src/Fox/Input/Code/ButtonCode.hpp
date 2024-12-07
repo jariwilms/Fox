@@ -2,31 +2,28 @@
 
 #include "stdafx.hpp"
 
-namespace fox
+namespace fox::ipt::btn
 {
-    using ButtonCode = int;
+    using btn_t = fox::int32_t;
 
-    class Button
+    enum : btn_t
     {
-    public:
-        enum : ButtonCode
-        {
-            Button0      =       0, 
-            Button1      =       1, 
-            Button2      =       2, 
-            Button3      =       3, 
-            Button4      =       4, 
-            Button5      =       5, 
-            Button6      =       6, 
-            Button7      =       7, 
+        Button1 = 0, 
+        Button2 = 1, 
+        Button3 = 2, 
+        Button4 = 3, 
+        Button5 = 4, 
+        Button6 = 5,
+        Button7 = 6,
+        Button8 = 7,
 
-            ButtonLast   = Button7, 
-            ButtonLeft   = Button0, 
-            ButtonRight  = Button1, 
-            ButtonMiddle = Button2, 
-        };
-
-        static constexpr int min = Button0;
-        static constexpr int max = Button7;
+        LeftMouse   = Button1, 
+        RightMouse  = Button2, 
+        MiddleMouse = Button3, 
+        Back        = Button4, 
+        Forward     = Button5, 
     };
+
+    static constexpr btn_t min{ Button1 };
+    static constexpr btn_t max{ Button8 };
 }

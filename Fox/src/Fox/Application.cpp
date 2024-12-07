@@ -140,20 +140,21 @@ namespace fox
             Time::update();
 
             auto speed{ 10.0f * Time::delta() };
-            if (Input::key_pressed(Key::LeftShift))   speed *= 10.0f;
-            if (Input::key_pressed(Key::LeftControl)) speed /=  5.0f;
-            if (Input::key_pressed(Key::W)) cameraTransform.position += cameraTransform.forward() * speed;
-            if (Input::key_pressed(Key::A)) cameraTransform.position -= cameraTransform.right()   * speed;
-            if (Input::key_pressed(Key::S)) cameraTransform.position -= cameraTransform.forward() * speed;
-            if (Input::key_pressed(Key::D)) cameraTransform.position += cameraTransform.right()   * speed;
-            if (Input::key_pressed(Key::E)) cameraTransform.position += cameraTransform.up()      * speed;
-            if (Input::key_pressed(Key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
+            if (ipt::key_pressed(ipt::key::LeftShift))   speed *= 10.0f;
+            if (ipt::key_pressed(ipt::key::LeftControl)) speed /=  5.0f;
+            if (ipt::key_pressed(ipt::key::W)) cameraTransform.position += cameraTransform.forward() * speed;
+            if (ipt::key_pressed(ipt::key::A)) cameraTransform.position -= cameraTransform.right()   * speed;
+            if (ipt::key_pressed(ipt::key::S)) cameraTransform.position -= cameraTransform.forward() * speed;
+            if (ipt::key_pressed(ipt::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
+            if (ipt::key_pressed(ipt::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
+            if (ipt::key_pressed(ipt::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
 
-            if (Input::button_pressed(Button::Button1)) //RMB
+            if (ipt::button_pressed(ipt::btn::RightMouse)) //RMB
             {
                 static fox::Vector3f rotation{};
-                const auto rel = Input::cursor_position_relative() / 10.0f;
-                rotation += fox::Vector3f{ rel.y, rel.x, 0.0f };
+                const auto& cpr = ipt::cursor_position_relative() / 10.0f;
+
+                rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }

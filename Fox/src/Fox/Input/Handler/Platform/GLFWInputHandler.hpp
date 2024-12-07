@@ -7,7 +7,7 @@
 
 #include "Fox/Input/Handler/InputHandlerAPI.hpp"
 
-namespace fox
+namespace fox::ipt
 {
     class GLFWInputHandler : public InputHandlerAPI
     {
@@ -15,29 +15,29 @@ namespace fox
         GLFWInputHandler() = default;
         ~GLFWInputHandler() override = default;
 
-        void update() override;
-        void reset() override;
+        void        update()                              override;
+        void        reset()                               override;
 
-        bool any_pressed() const override;
-        bool any_down() const override;
-        bool any_up() const override;
+        fox::bool_t any_pressed()                   const override;
+        fox::bool_t any_down()                      const override;
+        fox::bool_t any_up()                        const override;
 
-        bool key_pressed(KeyCode code) const override;
-        bool key_down(KeyCode code) const override;
-        bool key_up(KeyCode code) const override;
+        fox::bool_t key_pressed(key::key_t code)    const override;
+        fox::bool_t key_down(key::key_t code)       const override;
+        fox::bool_t key_up(key::key_t code)         const override;
 
-        bool button_pressed(ButtonCode code) const override;
-        bool button_down(ButtonCode code) const override;
-        bool button_up(ButtonCode code) const override;
+        fox::bool_t button_pressed(btn::btn_t code) const override;
+        fox::bool_t button_down(btn::btn_t code)    const override;
+        fox::bool_t button_up(btn::btn_t code)      const override;
 
-        bool scrolling() const override;
-        bool scrolling_vertical() const override;
-        bool scrolling_horizontal() const override;
+        fox::bool_t scrolling()                     const override;
+        fox::bool_t scrolling_vertical()            const override;
+        fox::bool_t scrolling_horizontal()          const override;
 
-        bool modifier(ModifierCode code) const override;
+        fox::bool_t modifier(mod::mod_t code)       const override;
 
-        Vector2f cursor_position() const override;
-        Vector2f cursor_position_relative() const override;
+        fox::Vector2f cursor_position()             const override;
+        fox::Vector2f cursor_position_relative()    const override;
 
         void glfw_input_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         void glfw_input_button_callback(GLFWwindow* window, int button, int action, int mods);

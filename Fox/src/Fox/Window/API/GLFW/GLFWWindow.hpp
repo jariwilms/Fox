@@ -14,8 +14,8 @@ namespace fox::wnd::api
         struct UserPointer
         {
 		public:
-			std::shared_ptr<GLFWWindow>       glfwWindow{};
-			std::shared_ptr<GLFWInputHandler> inputHandler{};
+			std::shared_ptr<GLFWWindow>            glfwWindow{};
+			std::shared_ptr<ipt::GLFWInputHandler> inputHandler{};
         };
 
 		GLFWWindow(const std::string& name, const fox::Vector2u& dimensions);

@@ -2,24 +2,20 @@
 
 #include "stdafx.hpp"
 
-namespace fox
+namespace fox::ipt::mod
 {
-    using ModifierCode = int;
+    using mod_t = fox::int32_t;
 
-    class Modifier
+    enum : mod_t
     {
-    public:
-        enum : ModifierCode
-        {
-            Shift    =  1,
-            Ctrl     =  2, 
-            Alt      =  4, 
-            Super    =  8, 
-            CapsLock = 16, 
-            NumLock  = 32, 
-        };
-
-        static constexpr int min = Shift;
-        static constexpr int max = NumLock;
+        Shift    =  1,
+        Ctrl     =  2, 
+        Alt      =  4, 
+        Super    =  8, 
+        CapsLock = 16, 
+        NumLock  = 32, 
     };
+
+    static constexpr mod_t min{ Shift };
+    static constexpr mod_t max{ NumLock };
 }

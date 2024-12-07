@@ -6,49 +6,47 @@
 #include "Fox/Input/Code/ButtonCode.hpp"
 #include "Fox/Input/Code/ModifierCode.hpp"
 
-namespace fox
+namespace fox::ipt
 {
     class InputHandlerAPI
     {
     public:
         virtual ~InputHandlerAPI() = default;
 
-        virtual void update() = 0;
-        virtual void reset() = 0;
+        virtual void          update()                              = 0;
+        virtual void          reset()                               = 0;
 
-        virtual bool any_pressed() const = 0;
-        virtual bool any_down() const = 0;
-        virtual bool any_up() const = 0;
+        virtual fox::bool_t   any_pressed()                   const = 0;
+        virtual fox::bool_t   any_down()                      const = 0;
+        virtual fox::bool_t   any_up()                        const = 0;
+                              
+        virtual fox::bool_t   key_pressed(key::key_t code)    const = 0;
+        virtual fox::bool_t   key_down(key::key_t code)       const = 0;
+        virtual fox::bool_t   key_up(key::key_t code)         const = 0;
+                              
+        virtual fox::bool_t   button_pressed(btn::btn_t code) const = 0;
+        virtual fox::bool_t   button_down(btn::btn_t code)    const = 0;
+        virtual fox::bool_t   button_up(btn::btn_t code)      const = 0;
+                              
+        virtual fox::bool_t   scrolling()                     const = 0;
+        virtual fox::bool_t   scrolling_vertical()            const = 0;
+        virtual fox::bool_t   scrolling_horizontal()          const = 0;
+                              
+        virtual fox::bool_t   modifier(mod::mod_t code)       const = 0;
 
-        virtual bool key_pressed(KeyCode code) const = 0;
-        virtual bool key_down(KeyCode code) const = 0;
-        virtual bool key_up(KeyCode code) const = 0;
-
-        virtual bool button_pressed(ButtonCode code) const = 0;
-        virtual bool button_down(ButtonCode code) const = 0;
-        virtual bool button_up(ButtonCode code) const = 0;
-
-        virtual bool scrolling() const = 0;
-        virtual bool scrolling_vertical() const = 0;
-        virtual bool scrolling_horizontal() const = 0;
-
-        virtual bool modifier(ModifierCode code) const = 0;
-
-        virtual Vector2f cursor_position() const = 0;
-        virtual Vector2f cursor_position_relative() const = 0;
+        virtual fox::Vector2f cursor_position()               const = 0;
+        virtual fox::Vector2f cursor_position_relative()      const = 0;
 
     protected:
         InputHandlerAPI() = default;
 
-        std::bitset<Key::max> m_activeKeys{};
-        std::bitset<Key::max> m_lastActiveKeys{};
+        std::bitset<key::max> m_activeKeys{};
+        std::bitset<key::max> m_lastActiveKeys{};
+        std::bitset<btn::max> m_activeButtons{};
+        std::bitset<btn::max> m_lastActiveButtons{};
+        std::bitset<mod::max> m_modifiers{};
 
-        std::bitset<Button::max> m_activeButtons{};
-        std::bitset<Button::max> m_lastActiveButtons{};
-
-        std::bitset<Modifier::max> m_modifiers{};
-
-        Vector2f m_cursorPosition{};
-        Vector2f m_lastCursorPosition{};
+        fox::Vector2f         m_cursorPosition{};
+        fox::Vector2f         m_lastCursorPosition{};
     };
 }
