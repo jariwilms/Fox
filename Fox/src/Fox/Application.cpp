@@ -113,7 +113,7 @@ namespace fox
         const auto& file             = io::load("images/anna.png");
         const auto& data             = file->read();
         const auto& image            = fox::Image::decode(fox::Image::Layout::RGBA8, *data);
-              auto  texture          = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, gfx::Texture2D::Filter::Trilinear, gfx::Texture2D::Wrapping::Repeat, image.dimensions(), image.data());
+              auto  texture          = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
 
         const auto& renderInfo       = gfx::RenderInfo{ { camera, cameraTransform }, {} };
         const auto& modelMatrix      = fox::Matrix4f{ 1.0f };

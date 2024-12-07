@@ -397,7 +397,7 @@ namespace fox::io
                         const auto& gltfTextureFileName = gltfModel.images.at(gltfTexture.source).uri;
                         const auto& gltfTextureFile     = io::load(cwd / gltfTextureFileName);
                         const auto& gltfImage           = Image::decode(Image::Layout::RGBA8, *gltfTextureFile->read());
-                        auto        texture             = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, gfx::Texture2D::Filter::Trilinear, gfx::Texture2D::Wrapping::Repeat, gltfImage.dimensions(), gltfImage.data());
+                        auto        texture             = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, gltfImage.dimensions(), gltfImage.data());
 
                         textures.emplace_back(std::move(texture));
                     }

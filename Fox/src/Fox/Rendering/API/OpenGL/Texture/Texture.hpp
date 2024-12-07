@@ -14,10 +14,15 @@ namespace fox::gfx::api::gl
     public:
         using vector_t = gfx::DimensionsToVector<DIMS>::type;
 
-        Texture(const vector_t& dimensions, std::span<const fox::byte> data)
-            : Texture{ Texture::Format::RGBA8_UNORM, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, dimensions, data } {}
+        Texture(Texture::Format format, const vector_t& dimensions, std::span<const fox::byte> data)                          requires (AA == AntiAliasing::None)
+            : Texture{ format, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, dimensions, data } {}
+        Texture(Format format, Filter filter, Wrapping wrapping, const vector_t& dimensions, std::span<const fox::byte> data) requires (AA == AntiAliasing::None)
+            : Texture{ format, filter, wrapping, dimensions }
+        {
+            copy(format, data);
+        }
         Texture(Format format, Filter filter, Wrapping wrapping, const vector_t& dimensions)                                  requires (AA == AntiAliasing::None)
-            : api::Texture{ format, filter, wrapping }, m_dimensions{ dimensions }
+            : api::Texture{ format, filter, wrapping }, m_dimensions{ dimensions } 
         {
             m_handle      = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
             m_glFormat    = gl::map_texture_format(m_format);
@@ -39,26 +44,11 @@ namespace fox::gfx::api::gl
         Texture(Texture::Format format, Filter filter, Wrapping wrapping, const vector_t& dimensions, fox::uint8_t samples)   requires (DIMS != Dimensions::_1D && AA == AntiAliasing::MSAA)
             : api::Texture{ format, filter, wrapping }, m_dimensions{ dimensions }, m_samples{ samples }
         {
-            m_handle      = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
-            m_glFormat    = gl::map_texture_format(m_format);
-            m_glMinFilter = gl::map_texture_min_filter(m_filter);
-            m_glMagFilter = gl::map_texture_mag_filter(m_filter);
-            m_glWrapping  = gl::map_texture_wrapping(m_wrapping);
-
-            gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MinificationFilter,  m_glMinFilter);
-            gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MagnificationFilter, m_glMagFilter);
-
-                                                   gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingS, m_glWrapping);
-            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingT, m_glWrapping);
-            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingR, m_glWrapping);
+            m_handle   = gl::create_texture(DimensionsToTarget<DIMS, AA>::target);
+            m_glFormat = gl::map_texture_format(m_format);
 
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, m_glFormat, m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_handle, m_glFormat, m_dimensions, m_samples);
-        }
-        Texture(Format format, Filter filter, Wrapping wrapping, const vector_t& dimensions, std::span<const fox::byte> data) requires (AA == AntiAliasing::None)
-            : Texture{ format, filter, wrapping, dimensions }
-        {
-            copy(format, data);
         }
         Texture(Texture&& other) noexcept
         {
@@ -74,11 +64,11 @@ namespace fox::gfx::api::gl
             gl::bind_texture(m_handle, slot);
         }
 
-        void copy(Format format, std::span<const fox::byte> data)                                                                                requires (AA == AntiAliasing::None)
+        void copy(Format format, std::span<const fox::byte> data)                                                           requires (AA == AntiAliasing::None)
         {
             copy_range(format, m_dimensions, vector_t{}, data);
         }
-        void copy_range(Format format, const vector_t& dimensions, const vector_t& offset, std::span<const fox::byte> data)                      requires (AA == AntiAliasing::None)
+        void copy_range(Format format, const vector_t& dimensions, const vector_t& offset, std::span<const fox::byte> data) requires (AA == AntiAliasing::None)
         {
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
