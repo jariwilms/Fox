@@ -114,12 +114,14 @@ namespace fox::wnd::api
 		glfwTerminate();
 	}
 
-	void GLFWWindow::refresh()
-	{
+    void GLFWWindow::poll_events()
+    {
         m_userPointer->inputHandler->update();
-
+        glfwPollEvents();
+    }
+    void GLFWWindow::swap_buffers()
+	{
 		glfwSwapBuffers(m_glfwWindow);
-		glfwPollEvents();
 	}
 
 	void GLFWWindow::rename(const std::string& title)

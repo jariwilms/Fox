@@ -21,7 +21,8 @@ namespace fox::wnd::api
 		GLFWWindow(const std::string& name, const fox::Vector2u& dimensions);
 		~GLFWWindow();
 
-		void refresh();
+		void poll_events();
+		void swap_buffers();
 
 		void rename(const std::string& title);
 		void resize(const fox::Vector2f& dimensions);

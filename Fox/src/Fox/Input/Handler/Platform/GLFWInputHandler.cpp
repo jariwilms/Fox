@@ -7,8 +7,8 @@ namespace fox::inp
 {
     void          GLFWInputHandler::update()
     {
-        m_lastActiveKeys = m_activeKeys;
-        m_lastActiveButtons = m_activeButtons;
+        m_lastActiveKeys     = m_activeKeys;
+        m_lastActiveButtons  = m_activeButtons;
         m_lastCursorPosition = m_cursorPosition;
     }
     void          GLFWInputHandler::reset()
@@ -19,8 +19,8 @@ namespace fox::inp
         m_activeButtons.reset();
         m_lastActiveButtons.reset();
 
-        m_cursorPosition = Vector2f{};
-        m_lastCursorPosition = Vector2f{};
+        m_cursorPosition     = fox::Vector2f{};
+        m_lastCursorPosition = fox::Vector2f{};
     }
                   
     fox::bool_t   GLFWInputHandler::any_pressed()                   const
@@ -117,7 +117,7 @@ namespace fox::inp
     }
     void          GLFWInputHandler::glfw_input_cursor_callback(GLFWwindow* window, double x, double y)
     {
-        m_cursorPosition = Vector2f{ x, y };
+        m_cursorPosition = fox::Vector2f{ x, y };
     }
     void          GLFWInputHandler::glfw_input_scroll_callback(GLFWwindow* window, double x, double y)
     {

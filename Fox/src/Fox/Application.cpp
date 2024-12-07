@@ -113,7 +113,7 @@ namespace fox
         const auto& file             = io::load("images/anna.png");
         const auto& data             = file->read();
         const auto& image            = fox::Image::decode(fox::Image::Layout::RGBA8, *data);
-              auto  texture          = std::make_shared<gfx::Texture2D>(image.dimensions(), image.data());
+              auto  texture          = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, gfx::Texture2D::Filter::Trilinear, gfx::Texture2D::Wrapping::Repeat, image.dimensions(), image.data());
 
         const auto& renderInfo       = gfx::RenderInfo{ { camera, cameraTransform }, {} };
         const auto& modelMatrix      = fox::Matrix4f{ 1.0f };
@@ -135,9 +135,14 @@ namespace fox
         gl::front_face(gl::Flags::Orientation::CounterClockwise);
         gl::face_culling(gl::Flags::FaceCulling::Back);
 
+
+
         while (!m_window->should_close())
         {
             Time::update();
+            m_window->poll_events();
+
+
 
             auto speed{ 10.0f * Time::delta() };
             if (inp::key_pressed(inp::key::LeftShift))   speed *= 10.0f;
@@ -158,7 +163,7 @@ namespace fox
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
-            
+
 
 
             gl::clear(gfx::api::gl::Flags::Buffer::ColorBuffer);
@@ -175,8 +180,6 @@ namespace fox
             //model->materials.at(0)->normal->bind(1);
             model->materials.at(0)->arm->bind(2);
 
-
-
             model->meshes.at(0)->vertexArray->bind();
             gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, model->meshes.at(0)->vertexArray->index_buffer()->count());
 
@@ -184,7 +187,7 @@ namespace fox
 
 
 
-            m_window->refresh();
+            m_window->swap_buffers();
             frametimes.push_back(Time::delta());
         }
 
