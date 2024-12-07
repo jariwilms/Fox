@@ -3,7 +3,7 @@
 #include "GLFWInputHandler.hpp"
 #include "Fox/Window/API/GLFW/GLFWWindow.hpp"
 
-namespace fox::ipt
+namespace fox::inp
 {
     void          GLFWInputHandler::update()
     {

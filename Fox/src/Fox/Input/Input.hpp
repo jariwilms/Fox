@@ -8,13 +8,13 @@
 
 #include "Fox/Input/Handler/InputHandlerAPI.hpp"
 
-namespace fox::ipt::api
+namespace fox::inp::api
 {
     void init(const std::shared_ptr<InputHandlerAPI> inputHandler);
 
     inline std::shared_ptr<InputHandlerAPI> inputHandler{};
 }
-namespace fox::ipt
+namespace fox::inp
 {
     fox::bool_t   any_pressed();
     fox::bool_t   any_down();

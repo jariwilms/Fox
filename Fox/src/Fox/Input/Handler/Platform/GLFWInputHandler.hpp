@@ -7,7 +7,7 @@
 
 #include "Fox/Input/Handler/InputHandlerAPI.hpp"
 
-namespace fox::ipt
+namespace fox::inp
 {
     class GLFWInputHandler : public InputHandlerAPI
     {

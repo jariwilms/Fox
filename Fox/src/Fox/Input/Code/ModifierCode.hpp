@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::ipt::mod
+namespace fox::inp::mod
 {
     using mod_t = fox::int32_t;
 

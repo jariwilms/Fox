@@ -2,14 +2,14 @@
 
 #include "Input.hpp"
 
-namespace fox::ipt::api
+namespace fox::inp::api
 {
     void init(const std::shared_ptr<InputHandlerAPI> handler)
     {
         inputHandler = handler;
     }
 }
-namespace fox::ipt
+namespace fox::inp
 {
     fox::bool_t   any_pressed()
     {
