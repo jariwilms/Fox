@@ -72,7 +72,7 @@ namespace fox::gfx::api
         enum class Filter
         {
             None,
-            Point,
+            Nearest,
             Bilinear,
             Trilinear,
         };

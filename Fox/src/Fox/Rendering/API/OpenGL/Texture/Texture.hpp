@@ -45,6 +45,13 @@ namespace fox::gfx::api::gl
             m_glMagFilter = gl::map_texture_mag_filter(m_filter);
             m_glWrapping  = gl::map_texture_wrapping(m_wrapping);
 
+            gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MinificationFilter,  m_glMinFilter);
+            gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MagnificationFilter, m_glMagFilter);
+
+                                                   gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingS, m_glWrapping);
+            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingT, m_glWrapping);
+            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingR, m_glWrapping);
+
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, m_glFormat, m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_handle, m_glFormat, m_dimensions, m_samples);
         }

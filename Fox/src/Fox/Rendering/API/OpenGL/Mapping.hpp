@@ -81,7 +81,7 @@ namespace fox::gfx::api::gl
         switch (filter)
         {
             case api::Texture::Filter::None:      return GL_NEAREST;
-            case api::Texture::Filter::Point:     return GL_NEAREST_MIPMAP_NEAREST;
+            case api::Texture::Filter::Nearest:   return GL_NEAREST_MIPMAP_NEAREST;
             case api::Texture::Filter::Bilinear:  return GL_LINEAR_MIPMAP_NEAREST;
             case api::Texture::Filter::Trilinear: return GL_LINEAR_MIPMAP_LINEAR;
 
@@ -93,7 +93,7 @@ namespace fox::gfx::api::gl
         switch (filter)
         {
             case api::Texture::Filter::None:      return GL_NEAREST;
-            case api::Texture::Filter::Point:     return GL_NEAREST;
+            case api::Texture::Filter::Nearest:   return GL_NEAREST;
             case api::Texture::Filter::Bilinear:  return GL_LINEAR;
             case api::Texture::Filter::Trilinear: return GL_LINEAR;
 
