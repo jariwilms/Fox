@@ -5,7 +5,7 @@
 #include "Fox/ECS/Components/RelationshipComponent.hpp"
 #include "Fox/ECS/Components/TransformComponent.hpp"
 
-namespace fox
+namespace fox::scn
 {
     class Actor : public ecs::Entity
     {

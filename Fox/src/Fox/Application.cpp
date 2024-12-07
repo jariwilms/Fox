@@ -55,33 +55,33 @@ namespace fox
     //    return actor;
     //};
 
-    static void model_to_scene_graph(fox::Scene& scene, fox::Actor& parent, const gfx::Model& model, const gfx::Model::Node& node)
-    {
-        throw std::logic_error{ "Not implemented." };
+    //static void model_to_scene_graph(fox::scene::Scene& scene, fox::scn::Actor& parent, const gfx::Model& model, const gfx::Model::Node& node)
+    //{
+    //    throw std::logic_error{ "Not implemented." };
 
-        auto actor = scene.create_actor();
-        
-        //RelationshipComponent rc = parent.get_component<RelationshipComponent>();
-        //rc.children.emplace_back(actor->id());
+    //    auto actor = scene.create_actor();
+    //    
+    //    //RelationshipComponent rc = parent.get_component<RelationshipComponent>();
+    //    //rc.children.emplace_back(actor->id());
 
-        auto& t = actor->get_component<ecs::TransformComponent>().transform();
-        t = node.localTransform;
+    //    auto& t = actor->get_component<ecs::TransformComponent>().transform();
+    //    t = node.localTransform;
 
-        auto& mrc = actor->add_component<ecs::MeshRendererComponent>();
-        if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
-        if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
-        
-        for (const auto& child : node.children)
-        {
-            model_to_scene_graph(scene, *actor, model, child);
-        }
-    }
+    //    auto& mrc = actor->add_component<ecs::MeshRendererComponent>();
+    //    if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
+    //    if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
+    //    
+    //    for (const auto& child : node.children)
+    //    {
+    //        model_to_scene_graph(scene, *actor, model, child);
+    //    }
+    //}
 
 
 
     Application::Application(int argc, char* argv[])
     {
-        m_window = wnd::WindowManager::create("Window", "Fox", Vector2u{ 1280u, 720u });
+        m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
         //gfx::Geometry::init();
         //gfx::Renderer::init();
@@ -93,7 +93,7 @@ namespace fox
 
     int Application::run()
     {
-        auto  scene           = std::make_shared<Scene>();
+        auto  scene           = std::make_shared<scn::Scene>();
         auto  model           = io::GLTFImporter::import2("models/cube/Cube.gltf");
         auto  observer        = scene->create_actor();
         auto& camera          = observer->add_component<ecs::CameraComponent>().camera();

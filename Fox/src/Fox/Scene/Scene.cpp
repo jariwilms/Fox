@@ -2,13 +2,13 @@
 
 #include "Scene.hpp"
 
-namespace fox
+namespace fox::scn
 {
-    std::shared_ptr<fox::Actor> Scene::create_actor()
+    std::shared_ptr<fox::scn::Actor> Scene::create_actor()
     {
         return m_actors.emplace_back(std::make_shared<Actor>());
     }
-    void                        Scene::destroy_actor(std::shared_ptr<Actor> actor)
+    void                             Scene::destroy_actor(std::shared_ptr<Actor> actor)
     {
         const auto& it = std::find(m_actors.begin(), m_actors.end(), actor);
         if (it != m_actors.end())
