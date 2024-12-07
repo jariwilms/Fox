@@ -17,67 +17,45 @@
 
 namespace fox
 {
-    //Transform transform_product(TransformComponent& tc)
-    //{
-    //    const auto& owner = tc.owner;
-    //    const auto& rc = Registry::get_component<RelationshipComponent>(owner.id());
+    static void model_to_scene_graph(std::shared_ptr<scn::Scene> scene, std::shared_ptr<scn::Actor> actor, const gfx::Model& model, const gfx::Model::Node& node)
+    {
+        auto& mrc = actor->add_component<ecs::MeshRendererComponent>();
+        if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
+        if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
 
-    //    if (!rc.parent.has_value()) return tc;
+        for (auto& child : node.children)
+        {
+            auto childActor = scene->create_actor();
+            scene->set_parent(actor, childActor);
 
-    //    auto& ptc = Registry::get_component<TransformComponent>(rc.parent.value());
-    //    return transform_product(ptc) * tc;
-    //};
-    //std::shared_ptr<Actor> model_to_scene_graph(Scene* scene, std::shared_ptr<gfx::Model> model, std::shared_ptr<Actor> parent, gfx::Model::Node* node)
-    //{
-    //    auto actor = scene->create_actor();
-    //    scene->set_parent(parent, actor);
+            model_to_scene_graph(scene, childActor, model, child);
+        }
+    }
+    static fox::Transform transform_product(std::shared_ptr<scn::Scene> scene, std::shared_ptr<scn::Actor> actor)
+    {
+        const auto& rc = actor->get_component<ecs::RelationshipComponent>();
+        const auto& tc = actor->get_component<ecs::TransformComponent>();
 
-    //    auto& transformComponent = actor->get_component<TransformComponent>();
-    //    if (node->localTransform.has_value())
-    //    {
-    //        Transform& t = transformComponent;
-    //        t = node->localTransform.value();
-    //    }
+        if (rc.parent)
+        {
+            const auto& find_actor = [](std::shared_ptr<scn::Scene> scene, fox::id_t id)
+                {
+                    const auto& actors  = scene->actors();
 
-    //    if (node->meshPrimitive.has_value())
-    //    {
-    //        const auto& mp = node->meshPrimitive.value();
-    //        auto& meshR = actor->add_component<MeshRendererComponent>();
-    //        meshR.mesh = model->meshes[mp.meshIndex];
-    //        meshR.material = model->materials[mp.materialIndex];
-    //    }
+                    return std::find_if(actors.begin(), actors.end(), [id](std::shared_ptr<scn::Actor> _) { return _->id() == id; });
+                };
+            auto it = find_actor(scene, rc.parent.value());
 
-    //    for (auto& child : node->children)
-    //    {
-    //        model_to_scene_graph(scene, model, actor, &child);
-    //    }
+            if (it == scene->actors().end()) throw std::runtime_error{ "Parent actor not found!" };
 
-    //    return actor;
-    //};
+            return transform_product(scene, *it) * tc.transform();
+        }
+        else
+        {
+            return tc.transform();
+        }
 
-    //static void model_to_scene_graph(fox::scene::Scene& scene, fox::scn::Actor& parent, const gfx::Model& model, const gfx::Model::Node& node)
-    //{
-    //    throw std::logic_error{ "Not implemented." };
-
-    //    auto actor = scene.create_actor();
-    //    
-    //    //RelationshipComponent rc = parent.get_component<RelationshipComponent>();
-    //    //rc.children.emplace_back(actor->id());
-
-    //    auto& t = actor->get_component<ecs::TransformComponent>().transform();
-    //    t = node.localTransform;
-
-    //    auto& mrc = actor->add_component<ecs::MeshRendererComponent>();
-    //    if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
-    //    if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
-    //    
-    //    for (const auto& child : node.children)
-    //    {
-    //        model_to_scene_graph(scene, *actor, model, child);
-    //    }
-    //}
-
-
+    }
 
     Application::Application(int argc, char* argv[])
     {
@@ -101,7 +79,10 @@ namespace fox
 
         cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
 
+        auto actor = scene->create_actor();
+        model_to_scene_graph(scene, actor, *model, *model->root);
 
+        auto test = transform_product(scene, actor);
 
 
 
@@ -128,7 +109,7 @@ namespace fox
 
 
         Time::reset();
-        CyclicBuffer<fox::float32_t, 128> frametimes{};
+        fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
 
         gl::clear_color(fox::Vector4f{ 0.1f, 0.1f, 0.1f, 1.0f });
         gl::enable(gl::Flags::Capability::FaceCulling);
@@ -176,12 +157,21 @@ namespace fox
             cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
 
             testPipeline->bind();
-            model->materials.at(0)->albedo->bind(0);
-            //model->materials.at(0)->normal->bind(1);
-            model->materials.at(0)->arm->bind(2);
 
-            model->meshes.at(0)->vertexArray->bind();
-            gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, model->meshes.at(0)->vertexArray->index_buffer()->count());
+            const auto& mrc = actor->get_component<ecs::MeshRendererComponent>();
+
+            mrc.material->albedo->bind(0);
+            //mrc.material->normal->bind(1);
+            mrc.material->arm->bind(2);
+            mrc.mesh->vertexArray->bind();
+
+            //model->materials.at(0)->albedo->bind(0);
+            //model->materials.at(0)->normal->bind(1);
+            //model->materials.at(0)->arm->bind(2);
+            //model->meshes.at(0)->vertexArray->bind();
+
+            //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, model->meshes.at(0)->vertexArray->index_buffer()->count());
+            gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mrc.mesh->vertexArray->index_buffer()->count());
 
 
 

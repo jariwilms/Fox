@@ -1,11 +1,5 @@
 #pragma once
 
-
-//#define TINYGLTF_NO_STB_IMAGE
-//#define TINYGLTF_NO_INCLUDE_STB_IMAGE
-//#define TINYGLTF_NO_STB_IMAGE_WRITE
-//#define TINYGLTF_NO_INCLUDE_STB_IMAGE_WRITE
-
 #include "stdafx.hpp"
 
 #include "tinygltf/tiny_gltf.h"
@@ -20,233 +14,6 @@ namespace fox::io
     class GLTFImporter
     {
     public:
-        template<typename T>
-        static std::vector<T> load_vertices(const tinygltf::Model& model, unsigned int meshIndex, const std::string& identifier)
-        {
-            const auto find_attribute = [](const tinygltf::Primitive& primitive, const std::string& identifier) -> int
-            {
-                for (const auto& attribute : primitive.attributes)
-                {
-                    if (attribute.first == identifier) return attribute.second;
-                }
-
-                throw std::runtime_error{ "Requested identifier does not exist!" };
-            };
-
-            std::vector<T> result{};
-
-            const auto& mesh = model.meshes[meshIndex];
-            for (const auto& primitive : mesh.primitives)
-            {
-                const auto& accessorIndex    = find_attribute(primitive, identifier);
-                const auto& accessor         = model.accessors[accessorIndex];
-
-                const auto& bufferViewIndex  = accessor.bufferView;
-                const auto& bufferViewOffset = accessor.byteOffset;
-                const auto& bufferView       = model.bufferViews[bufferViewIndex];
-
-                const auto& bufferIndex      = bufferView.buffer;
-                const auto& bufferOffset     = bufferView.byteOffset;
-                const auto& buffer           = model.buffers[bufferIndex];
-
-                const auto& count            = accessor.count;
-                const auto& dataType         = accessor.type;
-                const auto& componentType    = accessor.componentType;
-                                             
-                const auto& startOffset      = bufferViewOffset + bufferOffset;
-
-                switch (dataType)
-                {
-                    case (TINYGLTF_TYPE_VEC2): 
-                    {
-                        const auto& ptr = reinterpret_cast<const Vector2f*>(buffer.data.data() + startOffset);
-                        const auto& vec = std::vector<Vector2f>{ ptr, ptr + count };
-
-                        for (const auto& v : vec)
-                        {
-                            const auto& asd = Vector3f{ v.x, v.y, 0.0f };
-                            result.emplace_back(asd);
-                        }
-
-                        break;
-                    }
-                    case (TINYGLTF_TYPE_VEC3): 
-                    {
-                        const auto& ptr = reinterpret_cast<const Vector3f*>(buffer.data.data() + startOffset);
-                        const auto& vec = std::vector<Vector3f>{ ptr, ptr + count };
-                        result = std::vector<T>{ vec.begin(), vec.end() };
-
-                        break;
-                    }
-                    case (TINYGLTF_TYPE_VEC4): 
-                    {
-                        const auto& ptr = reinterpret_cast<const Vector4f*>(buffer.data.data() + startOffset);
-                        const auto& vec = std::vector<Vector4f>{ ptr, ptr + count };
-                        result = std::vector<T>{ vec.begin(), vec.end() };
-
-                        break;
-                    }
-
-                    default: throw std::invalid_argument{ "Invalid argument!" };
-                }
-            }
-
-            return result;
-        }
-        static std::vector<unsigned int> load_indices(const tinygltf::Model& model)
-        {
-            std::vector<unsigned int> result{};
-
-
-
-            const auto& accessor         = model.accessors[0];
-
-            const auto& bufferViewIndex  = accessor.bufferView;
-            const auto& bufferViewOffset = accessor.byteOffset;
-            const auto& bufferView       = model.bufferViews[bufferViewIndex];
-
-            const auto& bufferIndex      = bufferView.buffer;
-            const auto& bufferOffset     = bufferView.byteOffset;
-            const auto& buffer           = model.buffers[bufferIndex];
-            
-            const auto& count            = accessor.count;
-            const auto& dataType         = accessor.type;
-            const auto& componentType    = accessor.componentType;
-
-            const auto& startOffset      = bufferViewOffset + bufferOffset;
-
-
-
-            const auto& ptr = reinterpret_cast<const unsigned short*>(buffer.data.data() + startOffset);
-            const auto& vec = std::vector<unsigned short>{ ptr, ptr + count };
-            result = std::vector<unsigned int>{ vec.begin(), vec.end() };
-
-
-
-            return result;
-        }
-
-        static std::shared_ptr<gfx::Model> import(const std::filesystem::path& path)
-        {
-            auto model = std::make_shared<gfx::Model>();
-
-            tinygltf::Model gltfModel;
-            tinygltf::TinyGLTF gltfLoader;
-            std::string err;
-            std::string warn;
-
-            bool isLoaded = gltfLoader.LoadASCIIFromFile(&gltfModel, &err, &warn, path.string());
-            if (!isLoaded)
-            {
-                std::cout << err;
-                throw std::runtime_error{ "Failed to load model!" };
-            }
-            if (!warn.empty())
-            {
-                std::cout << warn;
-            }
-
-
-            auto positions = load_vertices<Vector3f>(gltfModel, 0, "POSITION");
-            auto normals   = load_vertices<Vector3f>(gltfModel, 0, "NORMAL");
-            auto texCoords = load_vertices<Vector2f>(gltfModel, 0, "TEXCOORD_0");
-            auto indices   = load_indices(gltfModel);
-
-
-
-
-
-            auto positionBuffer = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector3f>>(positions);
-            auto normalBuffer   = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector3f>>(normals);
-            auto texCoordBuffer = std::make_shared<const gfx::VertexBuffer<gfx::api::Buffer::Access::Static, Vector2f>>(texCoords);
-            auto indexBuffer    = std::make_shared<const gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indices);
-
-            auto layout2f = gfx::VertexLayout<float>{ 2 };
-            auto layout3f = gfx::VertexLayout<float>{ 3 };
-
-            auto vao = std::make_shared<gfx::VertexArray>();
-            vao->tie(positionBuffer, layout3f);
-            vao->tie(normalBuffer,   layout3f);
-            vao->tie(texCoordBuffer, layout2f);
-            vao->tie(indexBuffer);
-
-            const auto& m = std::make_shared<gfx::Mesh>(vao);
-            model->meshes.emplace_back(m);
-
-            return model;
-        }
-
-
-        static void traverse_nodes(tinygltf::Node node, std::function<void(const tinygltf::Node&)> function)
-        {
-            function(node);
-
-            for (const auto& child : node.children)
-            {
-                function(node);
-            }
-        }
-
-        static fox::Matrix4f vector_to_matrix(const std::vector<fox::float64_t>& values)
-        {
-            std::vector<fox::float32_t> v{};
-            std::transform(values.begin(), values.end(), std::back_inserter(v), [](fox::float64_t _) { return static_cast<fox::float32_t>(_); });
-
-            fox::Matrix4f matrix{ v.at( 0), v.at( 1), v.at( 2), v.at( 3),
-                                  v.at( 4), v.at( 5), v.at( 6), v.at( 7),
-                                  v.at( 8), v.at( 9), v.at(10), v.at(11),
-                                  v.at(12), v.at(13), v.at(14), v.at(15) }; //It be like that
-
-            return matrix;
-        };
-        static void create_nodes(gfx::Model::Node& mNode, const tinygltf::Model& gModel, const tinygltf::Node& gNode)
-        {
-            const auto& gMeshIndex        = gNode.mesh;
-            const auto& gMesh             = gModel.meshes.at(gMeshIndex);
-            const auto& gMaterialIndex    = gMesh.primitives.at(0).material;
-            const auto& isMatrixTransform = gNode.matrix.size() == 16;
-
-            if (gMeshIndex >     -1) mNode.meshIndex     = gMeshIndex;
-            if (gMaterialIndex > -1) mNode.materialIndex = gMaterialIndex;
-            if (isMatrixTransform)
-            {
-                mNode.localTransform = vector_to_matrix(gNode.matrix);
-            }
-            else
-            {
-                fox::Vector4f translation{};
-                fox::Vector4f rotation{};
-                fox::Vector4f scale{ 1.0f };
-
-                if (!gNode.translation.empty())
-                {
-                    std::vector<fox::float32_t> tv{ gNode.translation.begin(), gNode.translation.end() };
-                    translation = { tv.at(0), tv.at(1), tv.at(2), tv.at(3) };
-                }
-                if (!gNode.rotation.empty())
-                {
-                    std::vector<fox::float32_t> rv{ gNode.rotation.begin(), gNode.rotation.end() };
-                    rotation = { rv.at(0), rv.at(1), rv.at(2), rv.at(3) };
-                }
-                if (!gNode.scale.empty())
-                {
-                    std::vector<fox::float32_t> sv{ gNode.scale.begin(), gNode.scale.end() };
-                    scale = { sv.at(0), sv.at(1), sv.at(2), sv.at(3) };
-                }
-
-                fox::Transform transform{ translation, rotation, scale };
-                mNode.localTransform = transform.matrix();
-            }
-
-            for (const auto& gChildIndex : gNode.children)
-            {
-                      auto& mChild = mNode.children.emplace_back(gfx::Model::Node{});
-                const auto& gChild = gModel.nodes.at(gChildIndex);
-
-                create_nodes(mChild, gModel, gChild);
-            }
-        };
-
         static std::shared_ptr<gfx::Model> import2(const std::filesystem::path& path)
         {
             auto model = std::make_shared<fox::gfx::Model>();
@@ -430,6 +197,179 @@ namespace fox::io
         }
 
     protected:
+        template<typename T>
+        static std::vector<T> load_vertices(const tinygltf::Model& model, unsigned int meshIndex, const std::string& identifier)
+        {
+            const auto find_attribute = [](const tinygltf::Primitive& primitive, const std::string& identifier) -> int
+            {
+                for (const auto& attribute : primitive.attributes)
+                {
+                    if (attribute.first == identifier) return attribute.second;
+                }
+
+                throw std::runtime_error{ "Requested identifier does not exist!" };
+            };
+
+            std::vector<T> result{};
+
+            const auto& mesh = model.meshes[meshIndex];
+            for (const auto& primitive : mesh.primitives)
+            {
+                const auto& accessorIndex    = find_attribute(primitive, identifier);
+                const auto& accessor         = model.accessors[accessorIndex];
+
+                const auto& bufferViewIndex  = accessor.bufferView;
+                const auto& bufferViewOffset = accessor.byteOffset;
+                const auto& bufferView       = model.bufferViews[bufferViewIndex];
+
+                const auto& bufferIndex      = bufferView.buffer;
+                const auto& bufferOffset     = bufferView.byteOffset;
+                const auto& buffer           = model.buffers[bufferIndex];
+
+                const auto& count            = accessor.count;
+                const auto& dataType         = accessor.type;
+                const auto& componentType    = accessor.componentType;
+                                             
+                const auto& startOffset      = bufferViewOffset + bufferOffset;
+
+                switch (dataType)
+                {
+                    case (TINYGLTF_TYPE_VEC2): 
+                    {
+                        const auto& ptr = reinterpret_cast<const Vector2f*>(buffer.data.data() + startOffset);
+                        const auto& vec = std::vector<Vector2f>{ ptr, ptr + count };
+
+                        for (const auto& v : vec)
+                        {
+                            const auto& asd = Vector3f{ v.x, v.y, 0.0f };
+                            result.emplace_back(asd);
+                        }
+
+                        break;
+                    }
+                    case (TINYGLTF_TYPE_VEC3): 
+                    {
+                        const auto& ptr = reinterpret_cast<const Vector3f*>(buffer.data.data() + startOffset);
+                        const auto& vec = std::vector<Vector3f>{ ptr, ptr + count };
+                        result = std::vector<T>{ vec.begin(), vec.end() };
+
+                        break;
+                    }
+                    case (TINYGLTF_TYPE_VEC4): 
+                    {
+                        const auto& ptr = reinterpret_cast<const Vector4f*>(buffer.data.data() + startOffset);
+                        const auto& vec = std::vector<Vector4f>{ ptr, ptr + count };
+                        result = std::vector<T>{ vec.begin(), vec.end() };
+
+                        break;
+                    }
+
+                    default: throw std::invalid_argument{ "Invalid argument!" };
+                }
+            }
+
+            return result;
+        }
+        static std::vector<unsigned int> load_indices(const tinygltf::Model& model)
+        {
+            std::vector<unsigned int> result{};
+
+
+
+            const auto& accessor         = model.accessors[0];
+
+            const auto& bufferViewIndex  = accessor.bufferView;
+            const auto& bufferViewOffset = accessor.byteOffset;
+            const auto& bufferView       = model.bufferViews[bufferViewIndex];
+
+            const auto& bufferIndex      = bufferView.buffer;
+            const auto& bufferOffset     = bufferView.byteOffset;
+            const auto& buffer           = model.buffers[bufferIndex];
+            
+            const auto& count            = accessor.count;
+            const auto& dataType         = accessor.type;
+            const auto& componentType    = accessor.componentType;
+
+            const auto& startOffset      = bufferViewOffset + bufferOffset;
+
+
+
+            const auto& ptr = reinterpret_cast<const unsigned short*>(buffer.data.data() + startOffset);
+            const auto& vec = std::vector<unsigned short>{ ptr, ptr + count };
+            result = std::vector<unsigned int>{ vec.begin(), vec.end() };
+
+
+
+            return result;
+        }
+        static void create_nodes(gfx::Model::Node& mNode, const tinygltf::Model& gModel, const tinygltf::Node& gNode)
+        {
+            const auto& gMeshIndex        = gNode.mesh;
+            const auto& gMesh             = gModel.meshes.at(gMeshIndex);
+            const auto& gMaterialIndex    = gMesh.primitives.at(0).material;
+            const auto& isMatrixTransform = gNode.matrix.size() == 16;
+
+            if (gMeshIndex >     -1) mNode.meshIndex     = gMeshIndex;
+            if (gMaterialIndex > -1) mNode.materialIndex = gMaterialIndex;
+            if (isMatrixTransform)
+            {
+                mNode.localTransform = vector_to_matrix(gNode.matrix);
+            }
+            else
+            {
+                fox::Vector4f translation{};
+                fox::Vector4f rotation{};
+                fox::Vector4f scale{ 1.0f };
+
+                if (!gNode.translation.empty())
+                {
+                    std::vector<fox::float32_t> tv{ gNode.translation.begin(), gNode.translation.end() };
+                    translation = { tv.at(0), tv.at(1), tv.at(2), tv.at(3) };
+                }
+                if (!gNode.rotation.empty())
+                {
+                    std::vector<fox::float32_t> rv{ gNode.rotation.begin(), gNode.rotation.end() };
+                    rotation = { rv.at(0), rv.at(1), rv.at(2), rv.at(3) };
+                }
+                if (!gNode.scale.empty())
+                {
+                    std::vector<fox::float32_t> sv{ gNode.scale.begin(), gNode.scale.end() };
+                    scale = { sv.at(0), sv.at(1), sv.at(2), sv.at(3) };
+                }
+
+                fox::Transform transform{ translation, rotation, scale };
+                mNode.localTransform = transform.matrix();
+            }
+
+            for (const auto& gChildIndex : gNode.children)
+            {
+                      auto& mChild = mNode.children.emplace_back(gfx::Model::Node{});
+                const auto& gChild = gModel.nodes.at(gChildIndex);
+
+                create_nodes(mChild, gModel, gChild);
+            }
+        };
+        static fox::Matrix4f vector_to_matrix(const std::vector<fox::float64_t>& values)
+        {
+            std::vector<fox::float32_t> v{};
+            std::transform(values.begin(), values.end(), std::back_inserter(v), [](fox::float64_t _) { return static_cast<fox::float32_t>(_); });
+
+            fox::Matrix4f matrix{ v.at( 0), v.at( 1), v.at( 2), v.at( 3),
+                                  v.at( 4), v.at( 5), v.at( 6), v.at( 7),
+                                  v.at( 8), v.at( 9), v.at(10), v.at(11),
+                                  v.at(12), v.at(13), v.at(14), v.at(15) }; //It be like that
+
+            return matrix;
+        };
+        static void traverse_nodes(tinygltf::Node node, std::function<void(const tinygltf::Node&)> function)
+        {
+            function(node);
+
+            for (const auto& child : node.children)
+            {
+                function(node);
+            }
+        }
         static int find_attribute_index(const tinygltf::Primitive& primitive, const std::string& identifier)
         {
             for (const auto& attribute : primitive.attributes)
