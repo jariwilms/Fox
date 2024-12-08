@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Fox">
@@ -240,6 +240,9 @@
     <ClInclude Include="src\Fox\ECS\System\RenderSystem.hpp">
       <Filter>Fox\ECS\System</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\ECS\System\System.hpp">
+      <Filter>Fox\ECS\System</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\Experimental\Experimental.hpp">
       <Filter>Fox\Experimental</Filter>
     </ClInclude>
@@ -423,6 +426,9 @@
     <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp">
       <Filter>Fox\Window\API\GLFW</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\Window\Using.hpp">
+      <Filter>Fox\Window</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\Window\Window.hpp">
       <Filter>Fox\Window</Filter>
     </ClInclude>
@@ -430,8 +436,6 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Fox\Window\Using.hpp" />
-    <ClInclude Include="src\Fox\ECS\System\System.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

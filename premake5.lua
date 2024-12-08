@@ -5,12 +5,13 @@ workspace "Fox"
 	configurations
 	{
 		"Debug", 
-		"Release"
+		"Release", 
 	}
 	
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 	includedir = {}
+	includedir["ASSIMP"]   = "Fox/vendor/assimp/include"
 	includedir["GLAD"]     = "Fox/vendor/glad/include"
 	includedir["GLFW"]     = "Fox/vendor/glfw/include"
 	includedir["GLM"]      = "Fox/vendor/glm/include"
@@ -18,6 +19,7 @@ workspace "Fox"
 	includedir["ENTT"]     = "Fox/vendor/entt/include"
 	includedir["TINYGLTF"] = "Fox/vendor/tinygltf/include"
 	
+	include "Fox/vendor/assimp"
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
 	include "Fox/vendor/stb"
@@ -48,6 +50,7 @@ project "Fox"
 	includedirs
 	{
 		"%{prj.name}/src", 
+		"%{includedir.ASSIMP}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
@@ -58,6 +61,7 @@ project "Fox"
 	
 	links
 	{
+		"ASSIMP", 
 		"GLAD", 
 		"GLFW", 
 		"STB_IMAGE", 
@@ -70,10 +74,8 @@ project "Fox"
 	{
 		'PROJECT_DIR=R"($(ProjectDir).)"', 
 		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
-	
-		"GLFW_INCLUDE_NONE", 
 		
-		"TINYGLTF_IMPLEMENTATION", 
+		"GLFW_INCLUDE_NONE", 
 	}
 	
 	filter "system:windows"

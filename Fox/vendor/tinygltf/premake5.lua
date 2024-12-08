@@ -21,6 +21,11 @@ project "TINYGLTF"
 		"STB_IMAGE", 
 	}
 	
+	defines
+	{
+		"TINYGLTF_IMPLEMENTATION", 
+	}
+	
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"

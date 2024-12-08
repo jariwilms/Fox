@@ -16,6 +16,8 @@ namespace fox
         Transform(const Transform& transform) = default;
         Transform(const fox::Vector3f& position, const fox::Vector3f& rotation, const fox::Vector3f& scale)
             : position{ position }, rotation{ fox::Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
+        Transform(const fox::Vector3f& position, const fox::Quaternion& rotation, const fox::Vector3f& scale)
+            : position{ position }, rotation{ fox::Quaternion{ rotation } }, scale{ scale } {}
         Transform(const fox::Matrix4f& matrix)
         {
             fox::Vector3f skew{};

@@ -42,7 +42,7 @@ namespace fox::io
 
 
             if (gltfModel.scenes.empty()) throw std::invalid_argument{ "Model requires at least one scene!" };
-            if (gltfModel.defaultScene == -1)
+            if (gltfModel.defaultScene < 0)
             {
                 gltfScene = gltfModel.scenes.at(0);
 
@@ -74,7 +74,7 @@ namespace fox::io
             
             const auto& load_meshes = [](const tinygltf::Model& gModel) -> auto
                 {
-                    std::bitset<4> attributesFound{};
+                    std::bitset<3> attributesFound{};
 
                     using access_t = fox::gfx::api::Buffer::Access;
                     using varr_t   = fox::gfx::VertexArray;
@@ -89,7 +89,7 @@ namespace fox::io
                     std::shared_ptr<vbuf3f_t> positionsBuffer{};
                     std::shared_ptr<vbuf3f_t> normalsBuffer{};
                     std::shared_ptr<vbuf2f_t> texCoordsBuffer{};
-                    std::shared_ptr<vbuf3f_t> tangentsBuffer{};
+                    //std::shared_ptr<vbuf3f_t> tangentsBuffer{};
                     std::shared_ptr<ibuf_t>   indicesBuffer{};
 
 
@@ -118,19 +118,19 @@ namespace fox::io
 
                                     attributesFound.set(1, true);
                                 }
-                                if (gltfAttribute.first == "TANGENT")
-                                {
-                                    auto tangents = load_vertices<Vector3f>(gModel, 0, "TANGENT");
-                                    tangentsBuffer = std::make_shared<vbuf3f_t>(tangents);
+                                //if (gltfAttribute.first == "TANGENT")
+                                //{
+                                //    auto tangents = load_vertices<Vector3f>(gModel, 0, "TANGENT");
+                                //    tangentsBuffer = std::make_shared<vbuf3f_t>(tangents);
 
-                                    attributesFound.set(2, true);
-                                }
+                                //    attributesFound.set(2, true);
+                                //}
                                 if (gltfAttribute.first == "TEXCOORD_0")
                                 {
                                     auto texCoords = load_vertices<Vector2f>(gModel, 0, "TEXCOORD_0");
                                     texCoordsBuffer = std::make_shared<vbuf2f_t>(texCoords);
 
-                                    attributesFound.set(3, true);
+                                    attributesFound.set(2, true);
                                 }
                             }
 
@@ -141,7 +141,7 @@ namespace fox::io
 
                             vertexArray->tie(positionsBuffer, layout3f);
                             vertexArray->tie(normalsBuffer, layout3f);
-                            vertexArray->tie(tangentsBuffer, layout3f);
+                            //vertexArray->tie(tangentsBuffer, layout3f);
                             vertexArray->tie(texCoordsBuffer, layout2f);
                             vertexArray->tie(indicesBuffer);
                         }
@@ -317,14 +317,14 @@ namespace fox::io
             }
             else
             {
-                fox::Vector4f translation{};
+                fox::Vector3f translation{};
                 fox::Vector4f rotation{};
-                fox::Vector4f scale{ 1.0f };
+                fox::Vector3f scale{ 1.0f };
 
                 if (!gNode.translation.empty())
                 {
                     std::vector<fox::float32_t> tv{ gNode.translation.begin(), gNode.translation.end() };
-                    translation = { tv.at(0), tv.at(1), tv.at(2), tv.at(3) };
+                    translation = { tv.at(0), tv.at(1), tv.at(2),  };
                 }
                 if (!gNode.rotation.empty())
                 {
@@ -334,7 +334,7 @@ namespace fox::io
                 if (!gNode.scale.empty())
                 {
                     std::vector<fox::float32_t> sv{ gNode.scale.begin(), gNode.scale.end() };
-                    scale = { sv.at(0), sv.at(1), sv.at(2), sv.at(3) };
+                    scale = { sv.at(0), sv.at(1), sv.at(2) };
                 }
 
                 fox::Transform transform{ translation, rotation, scale };

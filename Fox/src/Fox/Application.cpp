@@ -72,7 +72,8 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
-        auto  model           = io::GLTFImporter::import2("models/cube/Cube.gltf");
+        //auto  model           = io::GLTFImporter::import2("models/sponza/Sponza.gltf");
+        auto  model           = io::GLTFImporter::import2("models/sponza/Sponza.gltf");
         auto  observer        = scene->create_actor();
         auto& camera          = observer->add_component<ecs::CameraComponent>().camera();
         auto& cameraTransform = observer->get_component<ecs::TransformComponent>().transform();
@@ -81,8 +82,6 @@ namespace fox
 
         auto actor = scene->create_actor();
         model_to_scene_graph(scene, actor, *model, *model->root);
-
-        auto test = transform_product(scene, actor);
 
 
 
@@ -151,8 +150,11 @@ namespace fox
 
             const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
+            auto& tc = actor->get_component<ecs::TransformComponent>();
+            tc.transform().scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
+
             matricesBuffer->bind_index(gfx::api::gl::index_t{ 0 });
-            matricesBuffer->copy(gfx::UMatrices{ modelMatrix, viewMatrix, projectionMatrix, {} });
+            matricesBuffer->copy(gfx::UMatrices{ tc.transform().matrix(), viewMatrix, projectionMatrix, {}});
             cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
             cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
 
