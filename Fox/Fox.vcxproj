@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{72EB870B-DEF4-877C-6770-9E7CD378937C}</ProjectGuid>
+    <ProjectGuid>{32E7870B-9EF0-877C-276C-9E7C9374937C}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Fox</RootNamespace>
+    <RootNamespace>FOX</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -42,16 +42,16 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\Debug\windows\Fox\</OutDir>
-    <IntDir>..\bin_obj\Debug\windows\Fox\</IntDir>
-    <TargetName>Fox</TargetName>
+    <OutDir>..\bin\Debug\windows\FOX\</OutDir>
+    <IntDir>..\bin_obj\Debug\windows\FOX\</IntDir>
+    <TargetName>FOX</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\Release\windows\Fox\</OutDir>
-    <IntDir>..\bin_obj\Release\windows\Fox\</IntDir>
-    <TargetName>Fox</TargetName>
+    <OutDir>..\bin\Release\windows\FOX\</OutDir>
+    <IntDir>..\bin_obj\Release\windows\FOX\</IntDir>
+    <TargetName>FOX</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -1,6 +1,6 @@
 workspace "Fox"
 	architecture "x64"
-	startproject "Fox"
+	startproject "FOX"
 	
 	configurations
 	{
@@ -25,7 +25,7 @@ workspace "Fox"
 	include "Fox/vendor/stb"
 	include "Fox/vendor/tinygltf"
 	
-project "Fox"
+project "FOX"
 	location "Fox"
 	language "C++"
 	cppdialect "C++20"
@@ -40,11 +40,11 @@ project "Fox"
 	
 	files
 	{
-		"%{prj.name}/src/**.hpp", 
-		"%{prj.name}/src/**.cpp", 
+		"Fox/src/**.hpp", 
+		"Fox/src/**.cpp", 
 		
-		"%{prj.name}/src/**.h", 
-		"%{prj.name}/src/**.c", 
+		"Fox/src/**.h", 
+		"Fox/src/**.c", 
 	}
 	
 	includedirs

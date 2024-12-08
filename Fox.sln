@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fox", "Fox\Fox.vcxproj", "{72EB870B-DEF4-877C-6770-9E7CD378937C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FOX", "Fox\FOX.vcxproj", "{32E7870B-9EF0-877C-276C-9E7C9374937C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASSIMP", "Fox\vendor\assimp\ASSIMP.vcxproj", "{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}"
 EndProject
@@ -19,10 +19,10 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{72EB870B-DEF4-877C-6770-9E7CD378937C}.Debug|x64.ActiveCfg = Debug|x64
-		{72EB870B-DEF4-877C-6770-9E7CD378937C}.Debug|x64.Build.0 = Debug|x64
-		{72EB870B-DEF4-877C-6770-9E7CD378937C}.Release|x64.ActiveCfg = Release|x64
-		{72EB870B-DEF4-877C-6770-9E7CD378937C}.Release|x64.Build.0 = Release|x64
+		{32E7870B-9EF0-877C-276C-9E7C9374937C}.Debug|x64.ActiveCfg = Debug|x64
+		{32E7870B-9EF0-877C-276C-9E7C9374937C}.Debug|x64.Build.0 = Debug|x64
+		{32E7870B-9EF0-877C-276C-9E7C9374937C}.Release|x64.ActiveCfg = Release|x64
+		{32E7870B-9EF0-877C-276C-9E7C9374937C}.Release|x64.Build.0 = Release|x64
 		{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}.Debug|x64.ActiveCfg = Debug|x64
 		{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}.Debug|x64.Build.0 = Debug|x64
 		{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}.Release|x64.ActiveCfg = Release|x64
