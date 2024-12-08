@@ -13,14 +13,14 @@ namespace fox::io
         T{ std::filesystem::path{} };
     };
 
-    const Directory& root()
+    static const Directory& root()
     {
         static Directory rootDirectory{ ASSET_DIR };
 
         return rootDirectory;
     }
 
-    std::shared_ptr<File> load(const std::filesystem::path& path)
+    static std::shared_ptr<File> load(const std::filesystem::path& path)
     {
         const auto& filePath = (root().path() / path).lexically_normal();
 

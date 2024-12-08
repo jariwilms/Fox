@@ -4,9 +4,9 @@
 
 #include "Fox/Rendering/Renderer/Renderer.hpp"
 #include "Fox/Rendering/Using.hpp"
-#include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Geometry/Geometry.hpp"
+#include "Fox/Rendering/Utility/Utility.hpp"
 
 namespace fox::gfx::api
 {

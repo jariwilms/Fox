@@ -2,18 +2,17 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/IO/Filesystem/File.hpp"
 #include "Fox/IO/IO.hpp"
-#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
 
 namespace fox::gfx::api
 {
-    auto shaders_from_source()
+    static auto shaders_from_source()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
     template<typename SHADER_T>
-    auto shaders_from_binaries(std::string_view vertex, std::string_view fragment)
+    static auto shaders_from_binaries(std::string_view vertex, std::string_view fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& fragmentFile = io::load(fragment);

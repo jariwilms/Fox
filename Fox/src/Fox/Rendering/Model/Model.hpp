@@ -2,10 +2,11 @@
 
 #include "stdafx.hpp"
 
+#include "Fox/Core/Library/Camera/Camera.hpp"
+#include "Fox/Core/Library/Lighting/Light.hpp"
+#include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/Rendering/Material/Material.hpp"
 #include "Fox/Rendering/Mesh/Mesh.hpp"
-#include "Fox/Core/Library/Lighting/Light.hpp"
-#include "Fox/Core/Library/Camera/Camera.hpp"
 
 namespace fox::gfx
 {

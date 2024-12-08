@@ -8,12 +8,14 @@
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/ECS/Components/Components.hpp"
 #include "Fox/Input/Input.hpp"
-#include "Fox/IO/Import/Model/GLTFImporter.hpp"
+//#include "Fox/IO/Import/Model/GLTFImporter.hpp"
+//#include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Scene/Scene.hpp"
 #include "Fox/Window/WindowManager.hpp"
+#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 
 namespace fox
 {
@@ -72,8 +74,10 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
+        auto model = std::make_shared<gfx::Model>();
+        //auto model            = io::ModelImporter::import2("models/cube/Cube.gltf");
+        //auto  model           = io::GLTFImporter::import2("models/cube/Cube.gltf");
         //auto  model           = io::GLTFImporter::import2("models/sponza/Sponza.gltf");
-        auto  model           = io::GLTFImporter::import2("models/sponza/Sponza.gltf");
         auto  observer        = scene->create_actor();
         auto& camera          = observer->add_component<ecs::CameraComponent>().camera();
         auto& cameraTransform = observer->get_component<ecs::TransformComponent>().transform();
