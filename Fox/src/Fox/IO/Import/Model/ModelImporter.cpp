@@ -170,7 +170,7 @@ namespace fox::io
         std::span<fox::uint32_t> asiNodeMeshIndices{ asiNode.mMeshes, asiNode.mNumMeshes };
         for (const auto& asiNodeMeshIndex : asiNodeMeshIndices)
         {
-            const auto& childNodeIndex = model.nodes.size();
+            const auto& childNodeIndex = static_cast<fox::uint32_t>(model.nodes.size());
                   auto& childNode      = model.nodes.emplace_back(gfx::Model::Node{});
 
             childNode.meshIndex     = asiNodeMeshIndex;
@@ -182,7 +182,7 @@ namespace fox::io
         std::span<aiNode* const> asiChildren{ asiNode.mChildren, asiNode.mNumChildren };
         for (const auto& asiChild : asiChildren)
         {
-            const auto& childNodeIndex = model.nodes.size();
+            const auto& childNodeIndex = static_cast<fox::uint32_t>(model.nodes.size());
                   auto& child          = model.nodes.emplace_back(gfx::Model::Node{});
 
             model.nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
