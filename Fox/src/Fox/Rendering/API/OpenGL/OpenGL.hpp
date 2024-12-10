@@ -382,7 +382,7 @@ namespace fox::gfx::api::gl
 
         return result;
     }
-    static void                           clear(gl::Flags::Buffer::Mask mask)
+    static void                           clear(gl::bitfield_t mask)
     {
         glClear(mask);
     }

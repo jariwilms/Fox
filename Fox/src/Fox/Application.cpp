@@ -8,8 +8,7 @@
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/ECS/Components/Components.hpp"
 #include "Fox/Input/Input.hpp"
-//#include "Fox/IO/Import/Model/GLTFImporter.hpp"
-//#include "Fox/IO/Import/Model/ModelImporter.hpp"
+#include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
@@ -25,32 +24,33 @@ namespace fox
         if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
         if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
 
-        for (auto& child : node.children)
+        for (auto& childIndex : node.children)
         {
             auto childActor = scene->create_actor();
             scene->set_parent(actor, childActor);
 
-            model_to_scene_graph(scene, childActor, model, child);
+            model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    static fox::Transform transform_product(std::shared_ptr<scn::Scene> scene, std::shared_ptr<scn::Actor> actor)
+    //very inefficient
+    static fox::Transform transform_product(scn::Scene& scene, scn::Actor& actor)
     {
-        const auto& rc = actor->get_component<ecs::RelationshipComponent>();
-        const auto& tc = actor->get_component<ecs::TransformComponent>();
+        const auto& rc = actor.get_component<ecs::RelationshipComponent>();
+        const auto& tc = actor.get_component<ecs::TransformComponent>();
 
         if (rc.parent)
         {
-            const auto& find_actor = [](std::shared_ptr<scn::Scene> scene, fox::id_t id)
+            const auto& find_actor = [](scn::Scene& scene, fox::id_t id)
                 {
-                    const auto& actors  = scene->actors();
+                    const auto& actors  = scene.actors();
 
                     return std::find_if(actors.begin(), actors.end(), [id](std::shared_ptr<scn::Actor> _) { return _->id() == id; });
                 };
             auto it = find_actor(scene, rc.parent.value());
 
-            if (it == scene->actors().end()) throw std::runtime_error{ "Parent actor not found!" };
+            if (it == scene.actors().end()) throw std::runtime_error{ "Parent actor not found!" };
 
-            return transform_product(scene, *it) * tc.transform();
+            return transform_product(scene, *it->get()) * tc.transform();
         }
         else
         {
@@ -58,11 +58,36 @@ namespace fox
         }
 
     }
+    static void render_actor(scn::Scene& scene, scn::Actor& actor, gfx::UniformBuffer<gfx::UMatrices>& matrices)
+    {
+        const auto& view = reg::view<ecs::TransformComponent, ecs::MeshRendererComponent>();
+
+        view.each([&](auto entity, const ecs::TransformComponent& tc, const ecs::MeshRendererComponent& mrc)
+            {
+                namespace gl = fox::gfx::api::gl;
+
+                const auto& mesh     = mrc.mesh;
+                const auto& material = mrc.material;
+
+                if (!mesh || !material) return;
+
+                const auto& matrix = transform_product(scene, actor).matrix();
+                matrices.copy_tuple(offsetof(gfx::UMatrices, model), std::make_tuple(matrix));
+
+                material->albedo->bind(0);
+                material->normal->bind(1);
+                material->arm->bind(2);
+
+                mesh->vertexArray->bind();
+                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mesh->vertexArray->index_buffer()->count());
+            });
+    }
 
     Application::Application(int argc, char* argv[])
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
+        io::ModelImporter::init();
         //gfx::Geometry::init();
         //gfx::Renderer::init();
     }
@@ -74,10 +99,7 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
-        auto model = std::make_shared<gfx::Model>();
-        //auto model            = io::ModelImporter::import2("models/cube/Cube.gltf");
-        //auto  model           = io::GLTFImporter::import2("models/cube/Cube.gltf");
-        //auto  model           = io::GLTFImporter::import2("models/sponza/Sponza.gltf");
+        auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
         auto  observer        = scene->create_actor();
         auto& camera          = observer->add_component<ecs::CameraComponent>().camera();
         auto& cameraTransform = observer->get_component<ecs::TransformComponent>().transform();
@@ -85,7 +107,7 @@ namespace fox
         cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
 
         auto actor = scene->create_actor();
-        model_to_scene_graph(scene, actor, *model, *model->root);
+        model_to_scene_graph(scene, actor, *model, model->nodes.at(model->rootNode));
 
 
 
@@ -115,9 +137,11 @@ namespace fox
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
 
         gl::clear_color(fox::Vector4f{ 0.1f, 0.1f, 0.1f, 1.0f });
-        gl::enable(gl::Flags::Capability::FaceCulling);
-        gl::front_face(gl::Flags::Orientation::CounterClockwise);
-        gl::face_culling(gl::Flags::FaceCulling::Back);
+        //gl::enable(gl::Flags::Capability::FaceCulling);
+        //gl::front_face(gl::Flags::Orientation::CounterClockwise);
+        //gl::face_culling(gl::Flags::FaceCulling::Back);
+        gl::enable(gl::Flags::Capability::DepthTest);
+        gl::depth_function(gl::Flags::DepthFunction::Less);
 
 
 
@@ -150,7 +174,7 @@ namespace fox
 
 
 
-            gl::clear(gfx::api::gl::Flags::Buffer::ColorBuffer);
+            gl::clear(gl::Flags::Buffer::Mask::ColorBuffer | gl::Flags::Buffer::Mask::DepthBuffer);
 
             const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
@@ -158,18 +182,18 @@ namespace fox
             tc.transform().scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
 
             matricesBuffer->bind_index(gfx::api::gl::index_t{ 0 });
-            matricesBuffer->copy(gfx::UMatrices{ tc.transform().matrix(), viewMatrix, projectionMatrix, {}});
+            matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
             cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
             cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
 
             testPipeline->bind();
 
-            const auto& mrc = actor->get_component<ecs::MeshRendererComponent>();
 
-            mrc.material->albedo->bind(0);
+            //const auto& mrc = actor->get_component<ecs::MeshRendererComponent>();
+            //mrc.material->albedo->bind(0);
             //mrc.material->normal->bind(1);
-            mrc.material->arm->bind(2);
-            mrc.mesh->vertexArray->bind();
+            //mrc.material->arm->bind(2);
+            //mrc.mesh->vertexArray->bind();
 
             //model->materials.at(0)->albedo->bind(0);
             //model->materials.at(0)->normal->bind(1);
@@ -177,7 +201,8 @@ namespace fox
             //model->meshes.at(0)->vertexArray->bind();
 
             //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, model->meshes.at(0)->vertexArray->index_buffer()->count());
-            gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mrc.mesh->vertexArray->index_buffer()->count());
+            //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mrc.mesh->vertexArray->index_buffer()->count());
+            render_actor(*scene, *actor, *matricesBuffer);
 
 
 

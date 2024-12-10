@@ -444,6 +444,9 @@
     <ClCompile Include="src\Fox\Core\Library\Image\Image.cpp">
       <Filter>Fox\Core\Library\Image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Fox\IO\Import\Model\ModelImporter.cpp">
+      <Filter>Fox\IO\Import\Model</Filter>
+    </ClCompile>
     <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp">
       <Filter>Fox\Input\Handler\Platform</Filter>
     </ClCompile>

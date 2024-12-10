@@ -7,35 +7,26 @@
     <Filter Include="code\AssetLib">
       <UniqueIdentifier>{E67D4210-523E-BE46-1B79-07C487F80223}</UniqueIdentifier>
     </Filter>
-    <Filter Include="code\AssetLib\3DS">
-      <UniqueIdentifier>{BFA89547-2BBF-93DD-7436-1FFFE08B6465}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="code\AssetLib\3MF">
-      <UniqueIdentifier>{DBA99547-47C0-93DD-9037-1FFFFC8C6465}</UniqueIdentifier>
-    </Filter>
     <Filter Include="code\AssetLib\FBX">
       <UniqueIdentifier>{55F99547-C10F-94DD-0A87-1FFF76DC6465}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="code\AssetLib\IQM">
-      <UniqueIdentifier>{FC079647-681E-94DD-B195-1FFF1DEB6465}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="code\AssetLib\M3D">
-      <UniqueIdentifier>{19159647-852B-94DD-CEA2-1FFF3AF86465}</UniqueIdentifier>
     </Filter>
     <Filter Include="code\AssetLib\Obj">
       <UniqueIdentifier>{D0239647-3C3A-94DD-85B1-1FFFF1066565}</UniqueIdentifier>
     </Filter>
-    <Filter Include="code\AssetLib\STL">
-      <UniqueIdentifier>{E8329647-5449-94DD-9DC0-1FFF09166565}</UniqueIdentifier>
+    <Filter Include="code\AssetLib\glTF">
+      <UniqueIdentifier>{E2EE673A-CED2-2890-3733-23E323361312}</UniqueIdentifier>
     </Filter>
-    <Filter Include="code\AssetLib\X3D">
-      <UniqueIdentifier>{E4439647-505A-94DD-99D1-1FFF05276565}</UniqueIdentifier>
+    <Filter Include="code\AssetLib\glTF2">
+      <UniqueIdentifier>{54CB6587-C02C-4395-499A-8947B5FA7954}</UniqueIdentifier>
     </Filter>
     <Filter Include="code\CApi">
       <UniqueIdentifier>{ECAE986F-5819-4DE6-A157-FE8B0D012B3B}</UniqueIdentifier>
     </Filter>
     <Filter Include="code\Common">
       <UniqueIdentifier>{B8FBBEBB-24B1-37B1-ADA5-3188195A2EB5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="code\Geometry">
+      <UniqueIdentifier>{DBBB525B-477C-CE91-10B7-170F7C36136E}</UniqueIdentifier>
     </Filter>
     <Filter Include="code\Material">
       <UniqueIdentifier>{1EBD14BC-8A7D-90F2-53B8-D96FBF37D5CE}</UniqueIdentifier>
@@ -45,6 +36,9 @@
     </Filter>
     <Filter Include="contrib">
       <UniqueIdentifier>{16D079D3-82AF-F86E-8BC7-8345F7255FD0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="contrib\Open3DGC">
+      <UniqueIdentifier>{D8FE8CA6-C4F7-ABF8-ED29-917DD9818B04}</UniqueIdentifier>
     </Filter>
     <Filter Include="contrib\pugixml">
       <UniqueIdentifier>{0B3EFB80-77C9-6845-80DA-EB39ECE4C445}</UniqueIdentifier>
@@ -81,33 +75,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="code\AssetLib\3DS\3DSExporter.h">
-      <Filter>code\AssetLib\3DS</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3DS\3DSHelper.h">
-      <Filter>code\AssetLib\3DS</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3DS\3DSLoader.h">
-      <Filter>code\AssetLib\3DS</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3MF\3MFTypes.h">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3MF\3MFXmlTags.h">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3MF\D3MFExporter.h">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3MF\D3MFImporter.h">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3MF\D3MFOpcPackage.h">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\3MF\XmlSerializer.h">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClInclude>
     <ClInclude Include="code\AssetLib\FBX\FBXCommon.h">
       <Filter>code\AssetLib\FBX</Filter>
     </ClInclude>
@@ -153,27 +120,6 @@
     <ClInclude Include="code\AssetLib\FBX\FBXUtil.h">
       <Filter>code\AssetLib\FBX</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\IQM\IQMImporter.h">
-      <Filter>code\AssetLib\IQM</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\IQM\iqm.h">
-      <Filter>code\AssetLib\IQM</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\M3D\M3DExporter.h">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\M3D\M3DImporter.h">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\M3D\M3DMaterials.h">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\M3D\M3DWrapper.h">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClInclude>
-    <ClInclude Include="code\AssetLib\M3D\m3d.h">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClInclude>
     <ClInclude Include="code\AssetLib\Obj\ObjExporter.h">
       <Filter>code\AssetLib\Obj</Filter>
     </ClInclude>
@@ -192,29 +138,44 @@
     <ClInclude Include="code\AssetLib\Obj\ObjTools.h">
       <Filter>code\AssetLib\Obj</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\STL\STLExporter.h">
-      <Filter>code\AssetLib\STL</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFAsset.h">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\STL\STLLoader.h">
-      <Filter>code\AssetLib\STL</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFAsset.inl">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\X3D\X3DExporter.hpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFAssetWriter.h">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\X3D\X3DGeoHelper.h">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFAssetWriter.inl">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\X3D\X3DImporter.hpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFCommon.h">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\X3D\X3DImporter_Macro.hpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFExporter.h">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\X3D\X3DImporter_Node.hpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClInclude Include="code\AssetLib\glTF\glTFImporter.h">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClInclude>
-    <ClInclude Include="code\AssetLib\X3D\X3DXmlHelper.h">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClInclude Include="code\AssetLib\glTF2\glTF2Asset.h">
+      <Filter>code\AssetLib\glTF2</Filter>
+    </ClInclude>
+    <ClInclude Include="code\AssetLib\glTF2\glTF2Asset.inl">
+      <Filter>code\AssetLib\glTF2</Filter>
+    </ClInclude>
+    <ClInclude Include="code\AssetLib\glTF2\glTF2AssetWriter.h">
+      <Filter>code\AssetLib\glTF2</Filter>
+    </ClInclude>
+    <ClInclude Include="code\AssetLib\glTF2\glTF2AssetWriter.inl">
+      <Filter>code\AssetLib\glTF2</Filter>
+    </ClInclude>
+    <ClInclude Include="code\AssetLib\glTF2\glTF2Exporter.h">
+      <Filter>code\AssetLib\glTF2</Filter>
+    </ClInclude>
+    <ClInclude Include="code\AssetLib\glTF2\glTF2Importer.h">
+      <Filter>code\AssetLib\glTF2</Filter>
     </ClInclude>
     <ClInclude Include="code\CApi\CInterfaceIOWrapper.h">
       <Filter>code\CApi</Filter>
@@ -278,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="code\Common\simd.h">
       <Filter>code\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="code\Geometry\GeometryUtils.h">
+      <Filter>code\Geometry</Filter>
     </ClInclude>
     <ClInclude Include="code\Material\MaterialSystem.h">
       <Filter>code\Material</Filter>
@@ -374,6 +338,78 @@
     </ClInclude>
     <ClInclude Include="code\PostProcessing\ValidateDataStructure.h">
       <Filter>code\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcAdjacencyInfo.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcArithmeticCodec.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcBinaryStream.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcCommon.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcDVEncodeParams.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcDynamicVector.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcDynamicVectorDecoder.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcDynamicVectorEncoder.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcFIFO.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcIndexedFaceSet.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcIndexedFaceSet.inl">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcSC3DMCDecoder.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcSC3DMCDecoder.inl">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcSC3DMCEncodeParams.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcSC3DMCEncoder.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcSC3DMCEncoder.inl">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcTimer.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcTriangleFans.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcTriangleListDecoder.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcTriangleListDecoder.inl">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcTriangleListEncoder.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcTriangleListEncoder.inl">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcVector.h">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClInclude>
+    <ClInclude Include="contrib\Open3DGC\o3dgcVector.inl">
+      <Filter>contrib\Open3DGC</Filter>
     </ClInclude>
     <ClInclude Include="contrib\pugixml\src\pugiconfig.hpp">
       <Filter>contrib\pugixml\src</Filter>
@@ -707,27 +743,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="code\AssetLib\3DS\3DSConverter.cpp">
-      <Filter>code\AssetLib\3DS</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\3DS\3DSExporter.cpp">
-      <Filter>code\AssetLib\3DS</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\3DS\3DSLoader.cpp">
-      <Filter>code\AssetLib\3DS</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\3MF\D3MFExporter.cpp">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\3MF\D3MFImporter.cpp">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\3MF\D3MFOpcPackage.cpp">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\3MF\XmlSerializer.cpp">
-      <Filter>code\AssetLib\3MF</Filter>
-    </ClCompile>
     <ClCompile Include="code\AssetLib\FBX\FBXAnimation.cpp">
       <Filter>code\AssetLib\FBX</Filter>
     </ClCompile>
@@ -782,18 +797,6 @@
     <ClCompile Include="code\AssetLib\FBX\FBXUtil.cpp">
       <Filter>code\AssetLib\FBX</Filter>
     </ClCompile>
-    <ClCompile Include="code\AssetLib\IQM\IQMImporter.cpp">
-      <Filter>code\AssetLib\IQM</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\M3D\M3DExporter.cpp">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\M3D\M3DImporter.cpp">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\M3D\M3DWrapper.cpp">
-      <Filter>code\AssetLib\M3D</Filter>
-    </ClCompile>
     <ClCompile Include="code\AssetLib\Obj\ObjExporter.cpp">
       <Filter>code\AssetLib\Obj</Filter>
     </ClCompile>
@@ -806,53 +809,20 @@
     <ClCompile Include="code\AssetLib\Obj\ObjFileParser.cpp">
       <Filter>code\AssetLib\Obj</Filter>
     </ClCompile>
-    <ClCompile Include="code\AssetLib\STL\STLExporter.cpp">
-      <Filter>code\AssetLib\STL</Filter>
+    <ClCompile Include="code\AssetLib\glTF\glTFCommon.cpp">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClCompile>
-    <ClCompile Include="code\AssetLib\STL\STLLoader.cpp">
-      <Filter>code\AssetLib\STL</Filter>
+    <ClCompile Include="code\AssetLib\glTF\glTFExporter.cpp">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DExporter.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClCompile Include="code\AssetLib\glTF\glTFImporter.cpp">
+      <Filter>code\AssetLib\glTF</Filter>
     </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DGeoHelper.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClCompile Include="code\AssetLib\glTF2\glTF2Exporter.cpp">
+      <Filter>code\AssetLib\glTF2</Filter>
     </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Geometry2D.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Geometry3D.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Group.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Light.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Metadata.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Networking.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Postprocess.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Rendering.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Shape.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DImporter_Texturing.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
-    </ClCompile>
-    <ClCompile Include="code\AssetLib\X3D\X3DXmlHelper.cpp">
-      <Filter>code\AssetLib\X3D</Filter>
+    <ClCompile Include="code\AssetLib\glTF2\glTF2Importer.cpp">
+      <Filter>code\AssetLib\glTF2</Filter>
     </ClCompile>
     <ClCompile Include="code\CApi\AssimpCExport.cpp">
       <Filter>code\CApi</Filter>
@@ -956,6 +926,9 @@
     <ClCompile Include="code\Common\simd.cpp">
       <Filter>code\Common</Filter>
     </ClCompile>
+    <ClCompile Include="code\Geometry\GeometryUtils.cpp">
+      <Filter>code\Geometry</Filter>
+    </ClCompile>
     <ClCompile Include="code\Material\MaterialSystem.cpp">
       <Filter>code\Material</Filter>
     </ClCompile>
@@ -1051,6 +1024,21 @@
     </ClCompile>
     <ClCompile Include="code\PostProcessing\ValidateDataStructure.cpp">
       <Filter>code\PostProcessing</Filter>
+    </ClCompile>
+    <ClCompile Include="contrib\Open3DGC\o3dgcArithmeticCodec.cpp">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClCompile>
+    <ClCompile Include="contrib\Open3DGC\o3dgcDynamicVectorDecoder.cpp">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClCompile>
+    <ClCompile Include="contrib\Open3DGC\o3dgcDynamicVectorEncoder.cpp">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClCompile>
+    <ClCompile Include="contrib\Open3DGC\o3dgcTools.cpp">
+      <Filter>contrib\Open3DGC</Filter>
+    </ClCompile>
+    <ClCompile Include="contrib\Open3DGC\o3dgcTriangleFans.cpp">
+      <Filter>contrib\Open3DGC</Filter>
     </ClCompile>
     <ClCompile Include="contrib\pugixml\src\pugixml.cpp">
       <Filter>contrib\pugixml\src</Filter>

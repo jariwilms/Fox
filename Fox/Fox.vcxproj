@@ -190,6 +190,7 @@
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp" />
     <ClCompile Include="src\Fox\Core\Library\Image\Image.cpp" />
+    <ClCompile Include="src\Fox\IO\Import\Model\ModelImporter.cpp" />
     <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Fox\Input\Input.cpp" />
     <ClCompile Include="src\Fox\Scene\Scene.cpp" />

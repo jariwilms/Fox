@@ -3,14 +3,22 @@
 #include "ModelImporter.hpp"
 
 #include "Fox/Rendering/Rendering.hpp"
+#include "Fox/Core/Library/Image/Image.hpp"
 
 namespace fox::io
 {
-	std::shared_ptr<gfx::Model> ModelImporter::import2(const std::filesystem::path& path)
-	{
-		Assimp::Importer importer{};
+    void ModelImporter::init()
+    {
+        s_defaultAlbedoTexture = load_texture("textures/albedo.png");
+        s_defaultNormalTexture = load_texture("textures/normal.png");
+        s_defaultARMTexture    = load_texture("textures/arm.png");
+    }
 
-		const auto& fullPath      = "assets" / path;
+    std::shared_ptr<gfx::Model> ModelImporter::import2(const std::filesystem::path& path)
+	{
+		Assimp::Importer asiImporter{};
+
+        const auto& fullPath      = path.lexically_normal();
 		const auto& baseDirectory = fullPath.parent_path();
 
 		const auto& importerFlags =
@@ -29,51 +37,70 @@ namespace fox::io
             aiProcess_TransformUVCoords     | //Applies per-texture UV transformations
             aiProcess_Triangulate           ; //Split up faces with >3 indices into triangles
 
-        const auto* aiScene = importer.ReadFile(fullPath.string(), importerFlags);
-        if (!aiScene)                                     throw std::runtime_error{ "Failed to read file!" };
-        if ( aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) throw std::invalid_argument{ "Scene data structure is not complete!" };
-        if (!aiScene->HasMeshes())                        throw std::invalid_argument{ "Model requires at least one mesh!" };
+        const auto* asiScene = asiImporter.ReadFile("assets/" + fullPath.string(), importerFlags);
+        if (!asiScene)                                     throw std::runtime_error{ "Failed to read file!" };
+        if ( asiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) throw std::invalid_argument{ "Scene data structure is not complete!" };
+        if (!asiScene->mRootNode)                          throw std::invalid_argument{ "Scene requires at least one node!" };
+        if (!asiScene->HasMeshes())                        throw std::invalid_argument{ "Model requires at least one mesh!" };
 
 
 
         auto model = std::make_shared<gfx::Model>();
 
-        std::span<aiMesh* const> aiMeshes{ aiScene->mMeshes, aiScene->mNumMeshes };
-        for (const auto* aiMesh : aiMeshes)
+        
+
+        std::span<aiMesh* const> asiMeshes{ asiScene->mMeshes, asiScene->mNumMeshes };
+        for (const auto* asiMesh : asiMeshes)
         {
-            const auto& aiNumVertices = aiMesh->mNumVertices;
-            const auto& aiNumFaces    = aiMesh->mNumFaces;
+            const auto& asiNumVertices = asiMesh->mNumVertices;
+            const auto& asiNumFaces    = asiMesh->mNumFaces;
 
             std::vector<fox::Vector3f> positionsVector{};
-            positionsVector.reserve(aiNumVertices);
-            std::span<const aiVector3D> aiPositions{ aiMesh->mVertices, aiNumVertices };
-            for (const auto& aiPosition : aiPositions)
+            positionsVector.reserve(asiNumVertices);
+            std::span<const aiVector3D> asiPositions{ asiMesh->mVertices, asiNumVertices };
+            for (const auto& asiPosition : asiPositions)
             {
-                positionsVector.emplace_back(aiPosition.x, aiPosition.y, aiPosition.z);
+                positionsVector.emplace_back(asiPosition.x, asiPosition.y, asiPosition.z);
             }
 
             std::vector<fox::Vector3f> normalsVector{};
-            normalsVector.reserve(aiNumVertices);
-            std::span<const aiVector3D> aiNormals{ aiMesh->mNormals, aiNumVertices };
-            for (const auto& aiNormal : aiNormals)
+            normalsVector.reserve(asiNumVertices);
+            std::span<const aiVector3D> asiNormals{ asiMesh->mNormals, asiNumVertices };
+            for (const auto& asiNormal : asiNormals)
             {
-                positionsVector.emplace_back(aiNormal.x, aiNormal.y, aiNormal.z);
+                normalsVector.emplace_back(asiNormal.x, asiNormal.y, asiNormal.z);
+            }
+
+            std::vector<fox::Vector3f> tangentsVector{};
+            tangentsVector.reserve(asiNumVertices);
+            std::span<const aiVector3D> asiTangents{ asiMesh->mTangents, asiMesh->mNumVertices };
+            for (const auto& asiTangent : asiTangents)
+            {
+                tangentsVector.emplace_back(asiTangent.x, asiTangent.y, asiTangent.z);
+            }
+
+            std::vector<fox::Vector3f> bitangentsVector{};
+            bitangentsVector.reserve(asiNumVertices);
+            std::span<const aiVector3D> asiBitangents{ asiMesh->mBitangents, asiMesh->mNumVertices };
+            for (const auto& asiBitangent : asiBitangents)
+            {
+                bitangentsVector.emplace_back(asiBitangent.x, asiBitangent.y, asiBitangent.z);
             }
 
             std::vector<fox::Vector2f> texCoordsVector{};
-            texCoordsVector.reserve(aiNumVertices);
-            std::span<const aiVector3D> aiTexCoords{ aiMesh->mTextureCoords[0], aiNumVertices };
-            for (const auto& aiTexCoord : aiTexCoords)
+            texCoordsVector.reserve(asiNumVertices);
+            std::span<const aiVector3D> asiTexCoords{ asiMesh->mTextureCoords[0], asiNumVertices };
+            for (const auto& asiTexCoord : asiTexCoords)
             {
-                texCoordsVector.emplace_back(aiTexCoord.x, aiTexCoord.y);
+                texCoordsVector.emplace_back(asiTexCoord.x, asiTexCoord.y);
             }
 
             std::vector<fox::uint32_t> indicesVector{};
-            indicesVector.reserve(static_cast<fox::size_t>(aiNumFaces) * 3u);
-            std::span<aiFace> aiFaces{ aiMesh->mFaces, aiNumFaces };
-            for (const auto& aiFace : aiFaces)
+            indicesVector.reserve(static_cast<fox::size_t>(asiNumFaces) * 3u);
+            std::span<aiFace> asiFaces{ asiMesh->mFaces, asiNumFaces };
+            for (const auto& asiFace : asiFaces)
             {
-                std::span<fox::uint32_t> aiIndices{ aiFace.mIndices, aiFace.mNumIndices };
+                std::span<fox::uint32_t> aiIndices{ asiFace.mIndices, asiFace.mNumIndices };
 
                 for (const auto& aiIndex : aiIndices)
                 {
@@ -86,15 +113,19 @@ namespace fox::io
             const auto& layout2f = gfx::VertexLayout<float>({ 2u });
             const auto& layout3f = gfx::VertexLayout<float>({ 3u });
 
-            auto vertexArray     = std::make_shared<gfx::VertexArray>();
-            auto positionsBuffer = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(positionsVector);
-            auto normalsBuffer   = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(normalsVector);
-            auto texCoordsBuffer = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector2f>>(texCoordsVector);
-            auto indicesBuffer   = std::make_shared<gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indicesVector);
+            auto vertexArray      = std::make_shared<gfx::VertexArray>();
+            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(positionsVector);
+            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(normalsVector);
+            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(tangentsVector);
+            auto bitangentsBuffer = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(bitangentsVector);
+            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector2f>>(texCoordsVector);
+            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indicesVector);
 
-            vertexArray->tie(positionsBuffer, layout3f);
-            vertexArray->tie(normalsBuffer,   layout3f);
-            vertexArray->tie(texCoordsBuffer, layout2f);
+            vertexArray->tie(positionsBuffer,  layout3f);
+            vertexArray->tie(normalsBuffer,    layout3f);
+            vertexArray->tie(tangentsBuffer,   layout3f);
+            vertexArray->tie(bitangentsBuffer, layout3f);
+            vertexArray->tie(texCoordsBuffer,  layout2f);
             vertexArray->tie(indicesBuffer);
 
 
@@ -103,12 +134,92 @@ namespace fox::io
             model->meshes.emplace_back(std::move(mesh));
         }
 
-        std::span<aiMaterial*> aiMaterials{ aiScene->mMaterials, aiScene->mNumMaterials };
-        for (const auto* aiMaterial : aiMaterials)
+        std::span<aiMaterial* const> aiMaterials{ asiScene->mMaterials, asiScene->mNumMaterials };
+        for (const auto* asiMaterial : aiMaterials)
         {
-            //aiMaterial->
+            auto material = std::make_shared<gfx::Material>();
+
+            auto albedoTextureOpt = get_assimp_texture(asiMaterial, TextureType::Albedo, baseDirectory);
+            material->albedo = albedoTextureOpt.value_or(s_defaultAlbedoTexture);
+
+            auto normalTextureOpt = get_assimp_texture(asiMaterial, TextureType::Normal, baseDirectory);
+            material->normal = normalTextureOpt.value_or(s_defaultNormalTexture);
+
+            auto ARMTextureOpt = get_assimp_texture(asiMaterial, TextureType::MetallicRoughness, baseDirectory);
+            material->arm = ARMTextureOpt.value_or(s_defaultARMTexture);
+
+            model->materials.emplace_back(std::move(material));
         }
 
-        return {};
+
+
+        const auto& asiRootNode = *asiScene->mRootNode;
+        model->nodes.emplace_back(gfx::Model::Node{});
+        create_nodes(*model, 0, *asiScene, asiRootNode);
+
+
+
+        return model;
 	}
+    void ModelImporter::create_nodes(gfx::Model& model, fox::uint32_t nodeIndex , const aiScene& asiScene, const aiNode& asiNode)
+    {
+        const auto& matrix = *reinterpret_cast<const fox::Matrix4f*>(&asiNode.mTransformation);
+
+        model.nodes.at(nodeIndex).localTransform = matrix;
+
+        std::span<fox::uint32_t> asiNodeMeshIndices{ asiNode.mMeshes, asiNode.mNumMeshes };
+        for (const auto& asiNodeMeshIndex : asiNodeMeshIndices)
+        {
+            const auto& childNodeIndex = model.nodes.size();
+                  auto& childNode      = model.nodes.emplace_back(gfx::Model::Node{});
+
+            childNode.meshIndex     = asiNodeMeshIndex;
+            childNode.materialIndex = asiScene.mMeshes[asiNodeMeshIndex]->mMaterialIndex;
+
+            model.nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
+        }
+
+        std::span<aiNode* const> asiChildren{ asiNode.mChildren, asiNode.mNumChildren };
+        for (const auto& asiChild : asiChildren)
+        {
+            const auto& childNodeIndex = model.nodes.size();
+                  auto& child          = model.nodes.emplace_back(gfx::Model::Node{});
+
+            model.nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
+
+            create_nodes(model, childNodeIndex, asiScene, *asiChild);
+        }
+    }
+    ModelImporter::texptr_t ModelImporter::load_texture(const std::filesystem::path& path)
+    {
+        const auto& textureFile  = io::load(path);
+        const auto& textureImage = fox::Image::decode(fox::Image::Layout::RGBA8, *textureFile->read());
+
+        return std::make_shared<gfx::Texture2D>(gfx::Texture::Format::RGBA8_UNORM, textureImage.dimensions(), textureImage.data());
+    }
+    auto ModelImporter::to_assimp_type(TextureType type)
+    {
+        switch (type)
+        {
+            case TextureType::Albedo:            return aiTextureType_DIFFUSE;
+            case TextureType::Normal:            return aiTextureType_NORMALS;
+            case TextureType::MetallicRoughness: return aiTextureType_METALNESS;
+
+            default: throw std::invalid_argument{ "Invalid texture type!" };
+        }
+    }
+    std::optional<ModelImporter::texptr_t> ModelImporter::get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path)
+    {
+        std::optional<std::shared_ptr<gfx::Texture2D>> textureOpt{};
+
+        if (aiMaterial->GetTextureCount(aiTextureType_DIFFUSE))
+        {
+            aiString aiTextureName{};
+            const auto& aiReturn = aiMaterial->GetTexture(to_assimp_type(type), 0, &aiTextureName);
+
+            if (aiReturn == AI_SUCCESS) textureOpt.emplace(load_texture(path / aiTextureName.C_Str()));
+        }
+
+        return textureOpt;
+    }
 }

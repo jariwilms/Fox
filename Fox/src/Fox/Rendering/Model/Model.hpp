@@ -17,27 +17,16 @@ namespace fox::gfx
         {
             Node() = default;
 
+            fox::Transform               localTransform{};
             std::optional<fox::uint32_t> meshIndex{};
             std::optional<fox::uint32_t> materialIndex{};
-            fox::Transform               localTransform{};
-            std::vector<Node>            children{};
+            std::vector<fox::uint32_t>   children{};
         };
 
-        Model()
-            : root{ std::make_unique<Node>() } 
-        {}
+        Model() = default;
 
-        void traverse(const Node& node, std::function<void(const Node&)> function) const
-        {
-            function(node);
-
-            for (const auto& child : node.children)
-            {
-                traverse(child, function);
-            }
-        }
-
-        std::unique_ptr<Node>                  root{};
+        std::uint32_t                          rootNode{};
+        std::vector<Node>                      nodes{};
         std::vector<std::shared_ptr<Mesh>>     meshes{};
         std::vector<std::shared_ptr<Material>> materials{};
     };

@@ -22,20 +22,26 @@ namespace fox::scn
         }
 
         template<typename... T>
-        bool has_component()
+        bool     has_component() const
         {
             return reg::has_component<T...>(m_id);
         }
         template<typename T, typename... Args>
-        T&   add_component(Args&&... args)
+        T&       add_component(Args&&... args)
         {
             return reg::add_component<T>(m_id, *this, std::forward<Args>(args)...);
         }
         template<typename T>
-        T&   get_component()
+        T&       get_component()
         {
             return reg::get_component<T>(m_id);
         }
+        template<typename T>
+        const T& get_component() const
+        {
+            return reg::get_component<T>(m_id);
+        }
+
         template<typename T>
         void remove_component()
         {
