@@ -49,6 +49,7 @@ project "FOX"
 		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 		
 		"GLFW_INCLUDE_NONE", 
+		"GLM_ENABLE_EXPERIMENTAL", 
 	}
 	
 	files

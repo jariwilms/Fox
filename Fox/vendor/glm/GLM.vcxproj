@@ -60,6 +60,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -78,6 +79,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -95,6 +97,7 @@
     <ClInclude Include="include\glm\detail\_swizzle_func.hpp" />
     <ClInclude Include="include\glm\detail\_vectorize.hpp" />
     <ClInclude Include="include\glm\detail\compute_common.hpp" />
+    <ClInclude Include="include\glm\detail\compute_vector_decl.hpp" />
     <ClInclude Include="include\glm\detail\compute_vector_relational.hpp" />
     <ClInclude Include="include\glm\detail\qualifier.hpp" />
     <ClInclude Include="include\glm\detail\setup.hpp" />
@@ -116,6 +119,7 @@
     <ClInclude Include="include\glm\detail\type_vec4.hpp" />
     <ClInclude Include="include\glm\exponential.hpp" />
     <ClInclude Include="include\glm\ext.hpp" />
+    <ClInclude Include="include\glm\ext\_matrix_vectorize.hpp" />
     <ClInclude Include="include\glm\ext\matrix_clip_space.hpp" />
     <ClInclude Include="include\glm\ext\matrix_common.hpp" />
     <ClInclude Include="include\glm\ext\matrix_double2x2.hpp" />
@@ -172,6 +176,7 @@
     <ClInclude Include="include\glm\ext\matrix_int4x3_sized.hpp" />
     <ClInclude Include="include\glm\ext\matrix_int4x4.hpp" />
     <ClInclude Include="include\glm\ext\matrix_int4x4_sized.hpp" />
+    <ClInclude Include="include\glm\ext\matrix_integer.hpp" />
     <ClInclude Include="include\glm\ext\matrix_projection.hpp" />
     <ClInclude Include="include\glm\ext\matrix_relational.hpp" />
     <ClInclude Include="include\glm\ext\matrix_transform.hpp" />
@@ -208,6 +213,7 @@
     <ClInclude Include="include\glm\ext\scalar_int_sized.hpp" />
     <ClInclude Include="include\glm\ext\scalar_integer.hpp" />
     <ClInclude Include="include\glm\ext\scalar_packing.hpp" />
+    <ClInclude Include="include\glm\ext\scalar_reciprocal.hpp" />
     <ClInclude Include="include\glm\ext\scalar_relational.hpp" />
     <ClInclude Include="include\glm\ext\scalar_uint_sized.hpp" />
     <ClInclude Include="include\glm\ext\scalar_ulp.hpp" />
@@ -246,6 +252,7 @@
     <ClInclude Include="include\glm\ext\vector_int4_sized.hpp" />
     <ClInclude Include="include\glm\ext\vector_integer.hpp" />
     <ClInclude Include="include\glm\ext\vector_packing.hpp" />
+    <ClInclude Include="include\glm\ext\vector_reciprocal.hpp" />
     <ClInclude Include="include\glm\ext\vector_relational.hpp" />
     <ClInclude Include="include\glm\ext\vector_uint1.hpp" />
     <ClInclude Include="include\glm\ext\vector_uint1_sized.hpp" />
@@ -320,6 +327,7 @@
     <ClInclude Include="include\glm\gtx\number_precision.hpp" />
     <ClInclude Include="include\glm\gtx\optimum_pow.hpp" />
     <ClInclude Include="include\glm\gtx\orthonormalize.hpp" />
+    <ClInclude Include="include\glm\gtx\pca.hpp" />
     <ClInclude Include="include\glm\gtx\perpendicular.hpp" />
     <ClInclude Include="include\glm\gtx\polar_coordinates.hpp" />
     <ClInclude Include="include\glm\gtx\projection.hpp" />

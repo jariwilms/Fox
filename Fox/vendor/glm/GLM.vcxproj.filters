@@ -40,6 +40,9 @@
     <ClInclude Include="include\glm\detail\compute_common.hpp">
       <Filter>detail</Filter>
     </ClInclude>
+    <ClInclude Include="include\glm\detail\compute_vector_decl.hpp">
+      <Filter>detail</Filter>
+    </ClInclude>
     <ClInclude Include="include\glm\detail\compute_vector_relational.hpp">
       <Filter>detail</Filter>
     </ClInclude>
@@ -99,6 +102,9 @@
     </ClInclude>
     <ClInclude Include="include\glm\exponential.hpp" />
     <ClInclude Include="include\glm\ext.hpp" />
+    <ClInclude Include="include\glm\ext\_matrix_vectorize.hpp">
+      <Filter>ext</Filter>
+    </ClInclude>
     <ClInclude Include="include\glm\ext\matrix_clip_space.hpp">
       <Filter>ext</Filter>
     </ClInclude>
@@ -267,6 +273,9 @@
     <ClInclude Include="include\glm\ext\matrix_int4x4_sized.hpp">
       <Filter>ext</Filter>
     </ClInclude>
+    <ClInclude Include="include\glm\ext\matrix_integer.hpp">
+      <Filter>ext</Filter>
+    </ClInclude>
     <ClInclude Include="include\glm\ext\matrix_projection.hpp">
       <Filter>ext</Filter>
     </ClInclude>
@@ -373,6 +382,9 @@
       <Filter>ext</Filter>
     </ClInclude>
     <ClInclude Include="include\glm\ext\scalar_packing.hpp">
+      <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glm\ext\scalar_reciprocal.hpp">
       <Filter>ext</Filter>
     </ClInclude>
     <ClInclude Include="include\glm\ext\scalar_relational.hpp">
@@ -487,6 +499,9 @@
       <Filter>ext</Filter>
     </ClInclude>
     <ClInclude Include="include\glm\ext\vector_packing.hpp">
+      <Filter>ext</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glm\ext\vector_reciprocal.hpp">
       <Filter>ext</Filter>
     </ClInclude>
     <ClInclude Include="include\glm\ext\vector_relational.hpp">
@@ -703,6 +718,9 @@
       <Filter>gtx</Filter>
     </ClInclude>
     <ClInclude Include="include\glm\gtx\orthonormalize.hpp">
+      <Filter>gtx</Filter>
+    </ClInclude>
+    <ClInclude Include="include\glm\gtx\pca.hpp">
       <Filter>gtx</Filter>
     </ClInclude>
     <ClInclude Include="include\glm\gtx\perpendicular.hpp">

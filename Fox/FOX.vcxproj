@@ -59,7 +59,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -78,7 +78,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
