@@ -18,7 +18,7 @@
 
 namespace fox
 {
-    static void model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
+    static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
         auto& mrc = actor.add_component<ecs::MeshRendererComponent>();
         if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
@@ -32,7 +32,6 @@ namespace fox
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    //very inefficient
     static fox::Transform transform_product(const scn::Scene& scene, const scn::Actor& actor)
     {
         const auto& rc = actor.get_component<ecs::RelationshipComponent>();
@@ -48,9 +47,8 @@ namespace fox
         {
             return tc.transform();
         }
-
     }
-    static void render_actor(scn::Scene& scene, scn::Actor& actor, gfx::UniformBuffer<gfx::UMatrices>& matrices)
+    static void           render_actor(scn::Scene& scene, scn::Actor& actor, gfx::UniformBuffer<gfx::UMatrices>& matrices)
     {
         const auto& view = reg::view<ecs::TransformComponent, ecs::MeshRendererComponent>();
 
@@ -128,10 +126,7 @@ namespace fox
         Time::reset();
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
 
-        gl::clear_color(fox::Vector4f{ 0.1f, 0.1f, 0.1f, 1.0f });
-        //gl::enable(gl::Flags::Capability::FaceCulling);
-        //gl::front_face(gl::Flags::Orientation::CounterClockwise);
-        //gl::face_culling(gl::Flags::FaceCulling::Back);
+        gl::clear_color(fox::Vector4f{ 0.16f, 0.38f, 0.58f, 1.0f });
         gl::enable(gl::Flags::Capability::DepthTest);
         gl::depth_function(gl::Flags::DepthFunction::Less);
 
@@ -164,14 +159,12 @@ namespace fox
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
 
-
-
-            gl::clear(gl::Flags::Buffer::Mask::ColorBuffer | gl::Flags::Buffer::Mask::DepthBuffer);
-
-            const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
+            gl::clear(gl::Flags::Buffer::Mask::All);
 
             auto& tc = actor.get_component<ecs::TransformComponent>();
             tc.transform().scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
+
+            const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
             matricesBuffer->bind_index(gfx::api::gl::index_t{ 0 });
             matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
@@ -180,23 +173,7 @@ namespace fox
 
             testPipeline->bind();
 
-
-            //const auto& mrc = actor->get_component<ecs::MeshRendererComponent>();
-            //mrc.material->albedo->bind(0);
-            //mrc.material->normal->bind(1);
-            //mrc.material->arm->bind(2);
-            //mrc.mesh->vertexArray->bind();
-
-            //model->materials.at(0)->albedo->bind(0);
-            //model->materials.at(0)->normal->bind(1);
-            //model->materials.at(0)->arm->bind(2);
-            //model->meshes.at(0)->vertexArray->bind();
-
-            //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, model->meshes.at(0)->vertexArray->index_buffer()->count());
-            //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mrc.mesh->vertexArray->index_buffer()->count());
             render_actor(*scene, actor, *matricesBuffer);
-
-
 
 
 
@@ -204,9 +181,12 @@ namespace fox
             frametimes.push_back(Time::delta());
         }
 
+
+
         const auto& avgFrameTime = std::accumulate(frametimes.begin(), frametimes.end(), 0.0f) / static_cast<fox::float32_t>(frametimes.size());
+
         std::system("CLS");
-        std::cout << "Average frame time: " << avgFrameTime << '\n';
+        std::cout << "Average frame time: " <<        avgFrameTime << '\n';
         std::cout << "Average frame rate: " << 1.0f / avgFrameTime << '\n';
 
 
