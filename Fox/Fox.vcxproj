@@ -59,7 +59,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -78,7 +78,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;FOX_PLATFORM_WINDOWS;NOMINMAX;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\entt\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -205,6 +205,9 @@
   <ItemGroup>
     <ProjectReference Include="vendor\assimp\ASSIMP.vcxproj">
       <Project>{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\entt\ENTT.vcxproj">
+      <Project>{A03C847C-8C73-850D-3560-6B102176010F}</Project>
     </ProjectReference>
     <ProjectReference Include="vendor\glad\GLAD.vcxproj">
       <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>

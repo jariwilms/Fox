@@ -12,14 +12,15 @@ workspace "Fox"
 	
 	includedir = {}
 	includedir["ASSIMP"]   = "Fox/vendor/assimp/include"
+	includedir["ENTT"]     = "Fox/vendor/entt/include"
 	includedir["GLAD"]     = "Fox/vendor/glad/include"
 	includedir["GLFW"]     = "Fox/vendor/glfw/include"
 	includedir["GLM"]      = "Fox/vendor/glm/include"
 	includedir["STB"]      = "Fox/vendor/stb/include"
-	includedir["ENTT"]     = "Fox/vendor/entt/include"
 	includedir["TINYGLTF"] = "Fox/vendor/tinygltf/include"
 	
 	include "Fox/vendor/assimp"
+	include "Fox/vendor/entt"
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
 	include "Fox/vendor/stb"
@@ -41,15 +42,16 @@ project "FOX"
 	files
 	{
 		"Fox/src/**.hpp", 
-		"Fox/src/**.cpp", 
-		
 		"Fox/src/**.h", 
+		
+		"Fox/src/**.cpp", 
 		"Fox/src/**.c", 
 	}
 	
 	includedirs
 	{
 		"%{prj.name}/src", 
+		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
@@ -62,6 +64,7 @@ project "FOX"
 	links
 	{
 		"ASSIMP", 
+		"ENTT", 
 		"GLAD", 
 		"GLFW", 
 		"STB_IMAGE", 
@@ -83,8 +86,9 @@ project "FOX"
 
 		defines
 		{
-			"FOX_PLATFORM_WINDOWS", 
 			"NOMINMAX", 
+			
+			"FOX_PLATFORM_WINDOWS", 
 		}
 		
 	filter "configurations:Debug"
