@@ -18,39 +18,31 @@
 
 namespace fox
 {
-    static void model_to_scene_graph(std::shared_ptr<scn::Scene> scene, std::shared_ptr<scn::Actor> actor, const gfx::Model& model, const gfx::Model::Node& node)
+    static void model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
-        auto& mrc = actor->add_component<ecs::MeshRendererComponent>();
+        auto& mrc = actor.add_component<ecs::MeshRendererComponent>();
         if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
         if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
 
         for (auto& childIndex : node.children)
         {
-            auto childActor = scene->create_actor();
-            scene->set_parent(actor, childActor);
+            auto& childActor = scene.create_actor();
+            scene.set_parent(actor, childActor);
 
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
     //very inefficient
-    static fox::Transform transform_product(scn::Scene& scene, scn::Actor& actor)
+    static fox::Transform transform_product(const scn::Scene& scene, const scn::Actor& actor)
     {
         const auto& rc = actor.get_component<ecs::RelationshipComponent>();
         const auto& tc = actor.get_component<ecs::TransformComponent>();
 
         if (rc.parent)
         {
-            const auto& find_actor = [](scn::Scene& scene, fox::id_t id)
-                {
-                    const auto& actors  = scene.actors();
+            const auto& actor = scene.find_actor(rc.parent.value());
 
-                    return std::find_if(actors.begin(), actors.end(), [id](std::shared_ptr<scn::Actor> _) { return _->id() == id; });
-                };
-            auto it = find_actor(scene, rc.parent.value());
-
-            if (it == scene.actors().end()) throw std::runtime_error{ "Parent actor not found!" };
-
-            return transform_product(scene, *it->get()) * tc.transform();
+            return transform_product(scene, actor) * tc.transform();
         }
         else
         {
@@ -100,14 +92,14 @@ namespace fox
     {
         auto  scene           = std::make_shared<scn::Scene>();
         auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
-        auto  observer        = scene->create_actor();
-        auto& camera          = observer->add_component<ecs::CameraComponent>().camera();
-        auto& cameraTransform = observer->get_component<ecs::TransformComponent>().transform();
+        auto& observer        = scene->create_actor();
+        auto& camera          = observer.add_component<ecs::CameraComponent>().camera();
+        auto& cameraTransform = observer.get_component<ecs::TransformComponent>().transform();
 
         cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
 
-        auto actor = scene->create_actor();
-        model_to_scene_graph(scene, actor, *model, model->nodes.at(model->rootNode));
+        auto& actor = scene->create_actor();
+        model_to_scene_graph(*scene, actor, *model, model->nodes.at(model->rootNode));
 
 
 
@@ -178,7 +170,7 @@ namespace fox
 
             const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
-            auto& tc = actor->get_component<ecs::TransformComponent>();
+            auto& tc = actor.get_component<ecs::TransformComponent>();
             tc.transform().scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
 
             matricesBuffer->bind_index(gfx::api::gl::index_t{ 0 });
@@ -202,7 +194,7 @@ namespace fox
 
             //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, model->meshes.at(0)->vertexArray->index_buffer()->count());
             //gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mrc.mesh->vertexArray->index_buffer()->count());
-            render_actor(*scene, *actor, *matricesBuffer);
+            render_actor(*scene, actor, *matricesBuffer);
 
 
 

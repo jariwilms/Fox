@@ -16,8 +16,6 @@ namespace fox::ecs
             return m_id;
         }
 
-        bool operator==(const Entity& other) const = default;
-
     protected:
         fox::id_t m_id{};
     };

@@ -9,18 +9,22 @@ namespace fox::scn
     public:
         Scene() = default;
 
-        std::shared_ptr<Actor> create_actor();
-        void                   destroy_actor(std::shared_ptr<Actor> actor);
+        Actor& create_actor();
+        void   destroy_actor(Actor& actor);
 
-        void set_parent(std::shared_ptr<Actor> parent, std::shared_ptr<Actor> child);
-        void unset_parent(std::shared_ptr<Actor> child);
+        void set_parent(Actor& parent, Actor& child);
+        void unset_parent(Actor& child);
 
-        const std::vector<std::shared_ptr<Actor>>& actors() const
+              Actor& find_actor(fox::id_t id)
         {
-            return m_actors;
+            return *m_actors.at(static_cast<fox::uint32_t>(id));
+        }
+        const Actor& find_actor(fox::id_t id) const
+        {
+            return *m_actors.at(static_cast<fox::uint32_t>(id));
         }
 
     private:
-        std::vector<std::shared_ptr<Actor>> m_actors{};
+        std::unordered_map<fox::uint32_t, std::shared_ptr<scn::Actor>> m_actors{};
     };
 }
