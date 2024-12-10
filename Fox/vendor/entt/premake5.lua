@@ -19,6 +19,9 @@ project "ENTT"
 		"src", 
 	}
 
+	filter "system:windows"
+		systemversion "latest"
+		
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"

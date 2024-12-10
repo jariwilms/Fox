@@ -1,7 +1,6 @@
 project "GLAD"
 	kind "StaticLib"
 	language "C"
-	cppdialect "C++20"
 	staticruntime "On"
 	
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
@@ -11,17 +10,18 @@ project "GLAD"
 	{
 		"include/glad/glad.h", 
 		"include/KHR/khrplatform.h", 
-		"src/glad.c"
+		
+		"src/glad.c", 
 	}
 	
 	includedirs
 	{
-		"include"
+		"include", 
 	}	
 
 	filter "system:windows"
 		systemversion "latest"
-		
+
 	filter "configurations:Debug"
 		runtime "Debug"
 		symbols "On"

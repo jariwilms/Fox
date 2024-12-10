@@ -42,6 +42,14 @@ project "FOX"
 	pchheader "stdafx.hpp"
 	pchsource "Fox/src/stdafx.cpp"
 	
+	defines
+	{
+		'PROJECT_DIR=R"($(ProjectDir).)"', 
+		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
+		
+		"GLFW_INCLUDE_NONE", 
+	}
+	
 	files
 	{
 		"Fox/src/**.hpp", 
@@ -74,14 +82,6 @@ project "FOX"
 		"TINYGLTF", 
 		
 		"opengl32.lib", 
-	}
-	
-	defines
-	{
-		'PROJECT_DIR=R"($(ProjectDir).)"', 
-		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
-		
-		"GLFW_INCLUDE_NONE", 
 	}
 	
 	filter "system:windows"

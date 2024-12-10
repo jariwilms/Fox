@@ -6,10 +6,19 @@ project "STB_IMAGE"
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
 
+	defines 
+	{
+		"_CRT_SECURE_NO_WARNINGS", 
+		
+		"STB_IMAGE_IMPLEMENTATION", 
+		"STB_IMAGE_WRITE_IMPLEMENTATION", 
+	}
+
 	files
 	{
 		"include/stb/stb_image.h", 
 		"include/stb/stb_image_write.h", 
+		
 		"src/stb_image.c", 
 	}
 	
@@ -18,13 +27,8 @@ project "STB_IMAGE"
 		"include/stb", 
 	}
 
-	defines 
-	{
-		"_CRT_SECURE_NO_WARNINGS", 
-		
-		"STB_IMAGE_IMPLEMENTATION", 
-		"STB_IMAGE_WRITE_IMPLEMENTATION", 
-	}
+	filter "system:windows"
+		systemversion "latest"
 
 	filter "configurations:Debug"
 		runtime "Debug"

@@ -9,11 +9,17 @@ project "TINYGLTF"
 	
 	include "Fox/vendor/stb"
 	
+	defines
+	{
+		"TINYGLTF_IMPLEMENTATION", 
+	}
+	
 	files
 	{
-		"**.h", 
-		"**.hpp", 
-		"**.cc", 
+		"include/tinygltf/*.h", 
+		"include/tinygltf/*.hpp", 
+		
+		"include/tinygltf/*.cc", 
 	}
 	
 	links
@@ -21,10 +27,8 @@ project "TINYGLTF"
 		"STB_IMAGE", 
 	}
 	
-	defines
-	{
-		"TINYGLTF_IMPLEMENTATION", 
-	}
+	filter "system:windows"
+		systemversion "latest"
 	
 	filter "configurations:Debug"
 		runtime "Debug"

@@ -135,7 +135,7 @@ project "ASSIMP"
 		"contrib/utf8cpp/source", 
 		"contrib/zlib", 
 	}
-	
+
 	filter "system:windows"
 		systemversion "latest"
 

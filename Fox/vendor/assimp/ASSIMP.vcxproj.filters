@@ -1102,9 +1102,6 @@
     <None Include="contrib\unzip\MiniZip64_info.txt">
       <Filter>contrib\unzip</Filter>
     </None>
-    <None Include="contrib\zlib\CMakeLists.txt">
-      <Filter>contrib\zlib</Filter>
-    </None>
     <None Include="contrib\zlib\ChangeLog">
       <Filter>contrib\zlib</Filter>
     </None>
@@ -1114,20 +1111,8 @@
     <None Include="contrib\zlib\README">
       <Filter>contrib\zlib</Filter>
     </None>
-    <None Include="contrib\zlib\zconf.h.cmakein">
-      <Filter>contrib\zlib</Filter>
-    </None>
     <None Include="contrib\zlib\zconf.h.included">
       <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="contrib\zlib\zlib.pc.cmakein">
-      <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="include\assimp\.editorconfig">
-      <Filter>include\assimp</Filter>
-    </None>
-    <None Include="include\assimp\module.modulemap">
-      <Filter>include\assimp</Filter>
     </None>
   </ItemGroup>
 </Project>
