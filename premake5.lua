@@ -27,7 +27,7 @@ workspace "Fox"
 	include "Fox/vendor/tinygltf"
 	
 project "FOX"
-	location "Fox"
+	location "FOX"
 	language "C++"
 	cppdialect "C++20"
 	kind "ConsoleApp"
