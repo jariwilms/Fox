@@ -1,8 +1,5 @@
 # Frequently Asked Questions
 
-<!--
-@cond TURN_OFF_DOXYGEN
--->
 # Table of Contents
 
 * [Introduction](#introduction)
@@ -10,13 +7,10 @@
   * [Why is my debug build on Windows so slow?](#why-is-my-debug-build-on-windows-so-slow)
   * [How can I represent hierarchies with my components?](#how-can-i-represent-hierarchies-with-my-components)
   * [Custom entity identifiers: yay or nay?](#custom-entity-identifiers-yay-or-nay)
-  * [Warning C4307: integral constant overflow](#warning-C4307-integral-constant-overflow)
-  * [Warning C4003: the min, the max and the macro](#warning-C4003-the-min-the-max-and-the-macro)
+  * [Warning C4003: the min, the max and the macro](#warning-c4003-the-min-the-max-and-the-macro)
   * [The standard and the non-copyable types](#the-standard-and-the-non-copyable-types)
   * [Which functions trigger which signals](#which-functions-trigger-which-signals)
-<!--
-@endcond TURN_OFF_DOXYGEN
--->
+  * [Duplicate storage for the same component](#duplicate-storage-for-the-same-component)
 
 # Introduction
 
@@ -104,32 +98,6 @@ enum class entity: std::uint32_t {};
 
 There is no limit to the number of identifiers that can be defined.
 
-## Warning C4307: integral constant overflow
-
-According to [this](https://github.com/skypjack/entt/issues/121) issue, using a
-hashed string under VS (toolset v141) could generate a warning.<br/>
-First of all, I want to reassure you: it's expected and harmless. However, it
-can be annoying.
-
-To suppress it and if you don't want to suppress all the other warnings as well,
-here is a workaround in the form of a macro:
-
-```cpp
-#if defined(_MSC_VER)
-#define HS(str) __pragma(warning(suppress:4307)) entt::hashed_string{str}
-#else
-#define HS(str) entt::hashed_string{str}
-#endif
-```
-
-With an example of use included:
-
-```cpp
-constexpr auto identifier = HS("my/resource/identifier");
-```
-
-Thanks to [huwpascoe](https://github.com/huwpascoe) for the courtesy.
-
 ## Warning C4003: the min, the max and the macro
 
 On Windows, a header file defines two macros `min` and `max` which may result in
@@ -193,7 +161,7 @@ to mitigate the problem makes it manageable.
 
 ## Which functions trigger which signals
 
-The `registry` class offers three signals that are emitted following specific
+Storage classes offer three _signals_ that are emitted following specific
 operations. Maybe not everyone knows what these operations are, though.<br/>
 If this isn't clear, below you can find a _vademecum_ for this purpose:
 
@@ -213,3 +181,28 @@ otherwise the latter is replaced and therefore `on_update` is triggered. As for
 the second case, components are removed from their entities and thus freed when
 they are recycled. It means that `on_destroyed` is triggered for every component 
 owned by the entity that is destroyed.
+
+## Duplicate storage for the same component
+
+It's rare but you can see double sometimes, especially when it comes to storage.
+This can be caused by a conflict in the hash assigned to the various component
+types (one of a kind) or by bugs in your compiler
+([more common](https://github.com/skypjack/entt/issues/1063) apparently).<br/>
+Regardless of the cause, `EnTT` offers a customization point that also serves as
+a solution in this case:
+
+```cpp
+template<>
+struct entt::type_hash<Type> final {
+    [[nodiscard]] static constexpr id_type value() noexcept {
+        return hashed_string::value("Type");
+    }
+
+    [[nodiscard]] constexpr operator id_type() const noexcept {
+        return value();
+    }
+};
+```
+
+Specializing `type_hash` directly bypasses the default implementation offered by
+`EnTT`, thus avoiding any possible conflicts or compiler bugs.
