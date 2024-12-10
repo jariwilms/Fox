@@ -24,6 +24,7 @@ group "Dependencies"
 	include "Fox/vendor/entt"
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
+	include "Fox/vendor/glm"
 	include "Fox/vendor/stb"
 	include "Fox/vendor/tinygltf"
 group ""
@@ -64,11 +65,11 @@ project "FOX"
 		"%{prj.name}/src", 
 		
 		"%{includedir.ASSIMP}", 
+		"%{includedir.ENTT}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
 		"%{includedir.STB}", 
-		"%{includedir.ENTT}", 
 		"%{includedir.TINYGLTF}", 
 	}
 	
@@ -78,6 +79,7 @@ project "FOX"
 		"ENTT", 
 		"GLAD", 
 		"GLFW", 
+		"GLM", 
 		"STB_IMAGE", 
 		"TINYGLTF", 
 		
