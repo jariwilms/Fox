@@ -1,7 +1,7 @@
 project "TINYGLTF"
 	kind "StaticLib"
 	language "C++"
-	cppdialect "C++11"
+	cppdialect "C++14"
 	staticruntime "On"
 	
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
@@ -12,6 +12,7 @@ project "TINYGLTF"
 	defines
 	{
 		"TINYGLTF_IMPLEMENTATION", 
+		"TINYGLTF_USE_CPP14", 
 	}
 	
 	files
