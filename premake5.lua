@@ -19,18 +19,21 @@ workspace "Fox"
 	includedir["STB"]      = "Fox/vendor/stb/include"
 	includedir["TINYGLTF"] = "Fox/vendor/tinygltf/include"
 	
+group "Dependencies"
 	include "Fox/vendor/assimp"
 	include "Fox/vendor/entt"
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
 	include "Fox/vendor/stb"
 	include "Fox/vendor/tinygltf"
-	
+group ""
+
+group "Application"
 project "FOX"
 	location "FOX"
+	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
-	kind "ConsoleApp"
 	staticruntime "On"
 	
 	targetdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")
@@ -100,3 +103,4 @@ project "FOX"
 		defines "FOX_RELEASE"
 		runtime "Release"
 		optimize "On"
+group ""

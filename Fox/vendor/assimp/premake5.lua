@@ -111,18 +111,20 @@ project "ASSIMP"
 		"code/Material/*", 
 		"code/PostProcessing/*", 
 
+		"contrib/Open3DGC/*", 
 		"contrib/pugixml/src/*", 
 		"contrib/unzip/*", 
 		"contrib/zip/src/*", 
 		"contrib/zlib/*", 
-		"contrib/Open3DGC/*", 
 	}
 
 	includedirs 
 	{
 		"./", 
-		"include", 
+		
 		"code", 
+		"include", 
+		
 		"contrib", 
 		"contrib/irrXML",
 		"contrib/openddlparser/include", 
