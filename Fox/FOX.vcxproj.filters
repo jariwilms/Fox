@@ -1,0 +1,471 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fox">
+      <UniqueIdentifier>{72EB870B-DEF4-877C-6770-9E7CD378937C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core">
+      <UniqueIdentifier>{0A079891-F6D3-F29C-1FED-E0440B19282B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library">
+      <UniqueIdentifier>{0ECA06D4-FAC2-2526-23F5-0AAB0F4D0532}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Camera">
+      <UniqueIdentifier>{C6C22CF4-32FA-748B-3B04-D9AEA7BA9B84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Container">
+      <UniqueIdentifier>{60FBDD59-4C0B-8A2A-B5C4-EE48A1F378C3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Image">
+      <UniqueIdentifier>{807E2E5D-6C78-57AF-55E5-EDBF417EBD1B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Lighting">
+      <UniqueIdentifier>{538DC35A-BF4F-F7E4-0800-86717401D0C2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Semantics">
+      <UniqueIdentifier>{24ABB7EE-10BB-63BF-7974-C8DD65A35258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Template">
+      <UniqueIdentifier>{D9747497-4537-A821-8EE7-36AEFAE880FF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Time">
+      <UniqueIdentifier>{6C9FFF9D-D80B-BB98-A1FF-52F60D2BDD00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Transform">
+      <UniqueIdentifier>{590B77E5-451B-23B6-AED4-87D49A03124F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Core\Library\Utility">
+      <UniqueIdentifier>{51B66A0F-3DDB-B98F-6626-9F1F52AAB8AD}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\ECS">
+      <UniqueIdentifier>{BC48AF1B-2828-2EB7-3140-B98D9D9E9418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\ECS\Components">
+      <UniqueIdentifier>{51C077D2-3DA4-3828-A604-337B920723AA}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\ECS\Entity">
+      <UniqueIdentifier>{88A9F30F-7477-E715-5D0B-583C4978C37A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\ECS\System">
+      <UniqueIdentifier>{50906231-3C5E-5637-25F2-C65D115F329C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Experimental">
+      <UniqueIdentifier>{AF633775-9B5C-56C7-C48E-3B4CB0E635D3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\IO">
+      <UniqueIdentifier>{D95F43B3-C501-6E89-AEBC-81DD9AFDF4D9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\IO\Filesystem">
+      <UniqueIdentifier>{6D1CD78E-D932-D524-22AA-60468EFFA5AC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\IO\Import">
+      <UniqueIdentifier>{C36FDD8F-2F30-59C6-F86A-A24364EA9DA2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\IO\Import\Model">
+      <UniqueIdentifier>{435FE3D7-AFC0-C0E5-382E-0798A48EF7A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Input">
+      <UniqueIdentifier>{F1E804C5-5D53-B93B-A691-6AE1123B9790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Input\Code">
+      <UniqueIdentifier>{1B4AFAE9-0718-EEEF-F0AB-5E16DC18CA54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Input\Handler">
+      <UniqueIdentifier>{BE104EE9-2A27-4C7F-739E-D7A0DFF31C07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Input\Handler\Platform">
+      <UniqueIdentifier>{D202A685-BE12-5256-27CC-B67413FB40EF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering">
+      <UniqueIdentifier>{3F2BE625-ABEB-615C-7426-ABD9E0A5A638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\AABB">
+      <UniqueIdentifier>{344CE5A9-2030-A6FF-8990-A05275939081}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API">
+      <UniqueIdentifier>{A89792B7-14AE-904D-5D25-1C6FC97A61D5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL">
+      <UniqueIdentifier>{DC137301-C838-C281-F183-A711DD07C19F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\Buffer">
+      <UniqueIdentifier>{4526D731-B109-E671-BA0C-14AE266FACC2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\Layout">
+      <UniqueIdentifier>{0966CB47-7549-DA87-7E4C-08C4EAAEA0D8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\RenderState">
+      <UniqueIdentifier>{6C33D41B-581A-9613-016B-FC30ED300F7A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\Shader">
+      <UniqueIdentifier>{02D49058-6EB7-9F98-77BA-CDD4E31C66E9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\Texture">
+      <UniqueIdentifier>{3C554FB2-28A6-3AF4-510A-29B63DBACD5D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\Vulkan">
+      <UniqueIdentifier>{28782512-149D-7492-3DE8-5922296C73B0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Blueprint">
+      <UniqueIdentifier>{E3F09535-4F28-DECC-5832-42F0C4E804C6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Buffer">
+      <UniqueIdentifier>{48B07FBE-343F-0988-DD5D-1D83C9CB192E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Geometry">
+      <UniqueIdentifier>{7A6F4F40-6669-7892-4FD6-0EA33B6FDEFE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Geometry\Primitives">
+      <UniqueIdentifier>{150D0C34-817B-61B3-CA64-1CB33612574F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Layout">
+      <UniqueIdentifier>{0CF073D4-F87E-FD9D-A19D-11998D0B0E44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Material">
+      <UniqueIdentifier>{BD7011A1-A96A-3AF3-92D7-D0037E70A05F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Mesh">
+      <UniqueIdentifier>{5B80ECA9-4764-ADFF-B0C4-A7529CC79781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Model">
+      <UniqueIdentifier>{BFC781E7-2B29-5FF5-B496-A5A720F795B4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\PostProcessing">
+      <UniqueIdentifier>{51D8531B-3D93-43C7-E64A-BC11D2E48D57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Projection">
+      <UniqueIdentifier>{CB9978B8-B7BE-C738-E009-ADC8CC8DC656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\RenderInfo">
+      <UniqueIdentifier>{FAAC141D-E6D1-639D-0F1D-492DFBA062BB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\RenderState">
+      <UniqueIdentifier>{4F7762C0-BB39-964A-04EA-24D770EB6E28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Renderer">
+      <UniqueIdentifier>{C5852B64-B17F-54B6-9AEC-EAC68685BA22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Shader">
+      <UniqueIdentifier>{055E39E5-F1EC-C2AE-9A0B-D7A98679D354}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Texture">
+      <UniqueIdentifier>{9F1F09D4-0B8C-C4CE-D47F-5C2C40ABE636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Uniform">
+      <UniqueIdentifier>{AE93EA34-1A00-A62F-E3F3-3D8D4F1FC897}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Utility">
+      <UniqueIdentifier>{82B8EC42-EE24-A83D-B718-409B2344CAA5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Scene">
+      <UniqueIdentifier>{0FA6B3C5-7B10-683C-C44E-19E230F84591}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Window">
+      <UniqueIdentifier>{1964EE85-051C-30D3-6E23-092F5AFACAC3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Window\API">
+      <UniqueIdentifier>{82AD5FE0-6E7B-53E6-570F-C40C437C2F4B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Window\API\GLFW">
+      <UniqueIdentifier>{012AEDB2-6D8B-CAC0-F6F8-107362590180}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Fox\Application.hpp">
+      <Filter>Fox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Config.hpp">
+      <Filter>Fox</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp">
+      <Filter>Fox\Core\Library\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp">
+      <Filter>Fox\Core\Library\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp">
+      <Filter>Fox\Core\Library\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp">
+      <Filter>Fox\Core\Library\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp">
+      <Filter>Fox\Core\Library\Semantics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Semantics\NonMovable.hpp">
+      <Filter>Fox\Core\Library\Semantics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Template\Concepts.hpp">
+      <Filter>Fox\Core\Library\Template</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Time\Time.hpp">
+      <Filter>Fox\Core\Library\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Transform\Transform.hpp">
+      <Filter>Fox\Core\Library\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Utility\Bitwise.hpp">
+      <Filter>Fox\Core\Library\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Utility\Utility.hpp">
+      <Filter>Fox\Core\Library\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Types.hpp">
+      <Filter>Fox\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\CameraComponent.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\Component.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\Components.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\MeshRendererComponent.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\RelationshipComponent.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\TransformComponent.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Entity\Entity.hpp">
+      <Filter>Fox\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Registry.hpp">
+      <Filter>Fox\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\System\RenderSystem.hpp">
+      <Filter>Fox\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\System\System.hpp">
+      <Filter>Fox\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Experimental\Experimental.hpp">
+      <Filter>Fox\Experimental</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\Filesystem\Directory.hpp">
+      <Filter>Fox\IO\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\Filesystem\Entry.hpp">
+      <Filter>Fox\IO\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\Filesystem\File.hpp">
+      <Filter>Fox\IO\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\Filesystem\Handle.hpp">
+      <Filter>Fox\IO\Filesystem</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\IO.hpp">
+      <Filter>Fox\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\Import\Model\GLTFImporter.hpp">
+      <Filter>Fox\IO\Import\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\IO\Import\Model\ModelImporter.hpp">
+      <Filter>Fox\IO\Import\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Input\Code\ButtonCode.hpp">
+      <Filter>Fox\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Input\Code\KeyCode.hpp">
+      <Filter>Fox\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Input\Code\ModifierCode.hpp">
+      <Filter>Fox\Input\Code</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Input\Handler\InputHandlerAPI.hpp">
+      <Filter>Fox\Input\Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.hpp">
+      <Filter>Fox\Input\Handler\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Input\Input.hpp">
+      <Filter>Fox\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\AABB\AABB.hpp">
+      <Filter>Fox\Rendering\AABB</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\GraphicsAPI.hpp">
+      <Filter>Fox\Rendering\API</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\FrameBuffer.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Layout\VertexLayout.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp">
+      <Filter>Fox\Rendering\API\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp">
+      <Filter>Fox\Rendering\API\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\RenderState.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Pipeline.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\RenderBuffer.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\TextureTarget.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Types.hpp">
+      <Filter>Fox\Rendering\API\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\Vulkan\VK.hpp">
+      <Filter>Fox\Rendering\API\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\Vulkan\VKMappings.hpp">
+      <Filter>Fox\Rendering\API\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\Vulkan\Vulkan.hpp">
+      <Filter>Fox\Rendering\API\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp">
+      <Filter>Fox\Rendering\Blueprint</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp">
+      <Filter>Fox\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Buffer\FrameBuffer.hpp">
+      <Filter>Fox\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp">
+      <Filter>Fox\Rendering\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp">
+      <Filter>Fox\Rendering\Geometry\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Plane.hpp">
+      <Filter>Fox\Rendering\Geometry\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Layout\Layout.hpp">
+      <Filter>Fox\Rendering\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Material\Material.hpp">
+      <Filter>Fox\Rendering\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Mesh\Mesh.hpp">
+      <Filter>Fox\Rendering\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Model\Model.hpp">
+      <Filter>Fox\Rendering\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\PostProcessing\AmbientOcclusion.hpp">
+      <Filter>Fox\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\PostProcessing\PostProcessing.hpp">
+      <Filter>Fox\Rendering\PostProcessing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp">
+      <Filter>Fox\Rendering\Projection</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp">
+      <Filter>Fox\Rendering\RenderInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\RenderState\RenderState.hpp">
+      <Filter>Fox\Rendering\RenderState</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Renderer\OpenGLRenderer.hpp">
+      <Filter>Fox\Rendering\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Renderer\Renderer.hpp">
+      <Filter>Fox\Rendering\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Rendering.hpp">
+      <Filter>Fox\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Shader\Pipeline.hpp">
+      <Filter>Fox\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Shader\Shader.hpp">
+      <Filter>Fox\Rendering\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Texture\AntiAliasing.hpp">
+      <Filter>Fox\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Texture\Dimensions.hpp">
+      <Filter>Fox\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Texture\Texture.hpp">
+      <Filter>Fox\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Uniform\Uniform.hpp">
+      <Filter>Fox\Rendering\Uniform</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Using.hpp">
+      <Filter>Fox\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Utility\Utility.hpp">
+      <Filter>Fox\Rendering\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Scene\Actor.hpp">
+      <Filter>Fox\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Scene\Scene.hpp">
+      <Filter>Fox\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp">
+      <Filter>Fox\Window\API\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Window\Using.hpp">
+      <Filter>Fox\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Window\Window.hpp">
+      <Filter>Fox\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Window\WindowManager.hpp">
+      <Filter>Fox\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Fox\Application.cpp">
+      <Filter>Fox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\Core\Library\Image\Image.cpp">
+      <Filter>Fox\Core\Library\Image</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\IO\Import\Model\ModelImporter.cpp">
+      <Filter>Fox\IO\Import\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp">
+      <Filter>Fox\Input\Handler\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\Input\Input.cpp">
+      <Filter>Fox\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\Scene\Scene.cpp">
+      <Filter>Fox\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\Window\API\GLFW\GLFWWindow.cpp">
+      <Filter>Fox\Window\API\GLFW</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\Window\WindowManager.cpp">
+      <Filter>Fox\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fox\test.cpp">
+      <Filter>Fox</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\stdafx.cpp" />
+  </ItemGroup>
+</Project>
