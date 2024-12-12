@@ -11,18 +11,18 @@
 #include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
+#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Scene/Scene.hpp"
 #include "Fox/Window/WindowManager.hpp"
-#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 
 namespace fox
 {
     static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
-        auto& mrc = actor.add_component<ecs::MeshRendererComponent>();
-        if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
-        if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
+        auto& mf = actor.add_component<ecs::MeshFilterComponent>().get();
+        if (node.meshIndex)     mf.mesh     = model.meshes.at(node.meshIndex.value());
+        if (node.materialIndex) mf.material = model.materials.at(node.materialIndex.value());
 
         for (auto& childIndex : node.children)
         {
@@ -34,30 +34,32 @@ namespace fox
     }
     static fox::Transform transform_product(const scn::Scene& scene, const scn::Actor& actor)
     {
-        const auto& rc = actor.get_component<ecs::RelationshipComponent>();
-        const auto& tc = actor.get_component<ecs::TransformComponent>();
+        const auto& rel = actor.get_component<ecs::RelationshipComponent>().get();
+        const auto& trs = actor.get_component<ecs::TransformComponent>().get();
 
-        if (rc.parent)
+        if (rel.parent)
         {
-            const auto& actor = scene.find_actor(rc.parent.value());
+            const auto& actor = scene.find_actor(rel.parent.value());
 
-            return transform_product(scene, actor) * tc.transform();
+            return transform_product(scene, actor) * trs;
         }
         else
         {
-            return tc.transform();
+            return trs;
         }
     }
     static void           render_actor(scn::Scene& scene, scn::Actor& actor, gfx::UniformBuffer<gfx::UMatrices>& matrices)
     {
-        const auto& view = reg::view<ecs::TransformComponent, ecs::MeshRendererComponent>();
+        const auto& view = reg::view<ecs::TransformComponent, ecs::MeshFilterComponent>();
 
-        view.each([&](auto entity, const ecs::TransformComponent& tc, const ecs::MeshRendererComponent& mrc)
+        view.each([&](auto entity, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mrc)
             {
                 namespace gl = fox::gfx::api::gl;
 
-                const auto& mesh     = mrc.mesh;
-                const auto& material = mrc.material;
+                const auto& mf = mrc.get();
+
+                const auto& mesh     = mf.mesh;
+                const auto& material = mf.material;
 
                 if (!mesh || !material) return;
 
@@ -91,8 +93,8 @@ namespace fox
         auto  scene           = std::make_shared<scn::Scene>();
         auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
         auto& observer        = scene->create_actor();
-        auto& camera          = observer.add_component<ecs::CameraComponent>().camera();
-        auto& cameraTransform = observer.get_component<ecs::TransformComponent>().transform();
+        auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
+        auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
 
         cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
 
@@ -161,8 +163,8 @@ namespace fox
 
             gl::clear(gl::Flags::Buffer::Mask::All);
 
-            auto& tc = actor.get_component<ecs::TransformComponent>();
-            tc.transform().scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
+            auto& t = actor.get_component<ecs::TransformComponent>().get();
+            t.scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
 
             const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 

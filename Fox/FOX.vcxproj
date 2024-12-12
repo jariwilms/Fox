@@ -100,6 +100,8 @@
     <ClInclude Include="src\Fox\Application.hpp" />
     <ClInclude Include="src\Fox\Config.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Component\MeshFilter.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
@@ -111,16 +113,13 @@
     <ClInclude Include="src\Fox\Core\Library\Utility\Bitwise.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Utility\Utility.hpp" />
     <ClInclude Include="src\Fox\Core\Types.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\CameraComponent.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\Components.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\MeshRendererComponent.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\RelationshipComponent.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\TransformComponent.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
     <ClInclude Include="src\Fox\ECS\Entity\Entity.hpp" />
     <ClInclude Include="src\Fox\ECS\Registry.hpp" />
     <ClInclude Include="src\Fox\ECS\System\RenderSystem.hpp" />
     <ClInclude Include="src\Fox\ECS\System\System.hpp" />
+    <ClInclude Include="src\Fox\ECS\Types.hpp" />
     <ClInclude Include="src\Fox\Experimental\Experimental.hpp" />
     <ClInclude Include="src\Fox\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="src\Fox\IO\Filesystem\Entry.hpp" />

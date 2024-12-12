@@ -2,8 +2,7 @@
 
 #include "Fox/ECS/Entity/Entity.hpp"
 #include "Fox/ECS/Registry.hpp"
-#include "Fox/ECS/Components/RelationshipComponent.hpp"
-#include "Fox/ECS/Components/TransformComponent.hpp"
+#include "Fox/ECS/Components/Components.hpp"
 
 namespace fox::scn
 {

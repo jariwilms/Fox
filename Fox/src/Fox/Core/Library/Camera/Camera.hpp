@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Fox/Core/Types.hpp"
+
 #include "Fox/Rendering/Projection/Projection.hpp"
 
 namespace fox

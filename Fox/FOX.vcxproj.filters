@@ -213,22 +213,7 @@
     <ClInclude Include="src\Fox\Core\Types.hpp">
       <Filter>Fox\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\ECS\Components\CameraComponent.hpp">
-      <Filter>Fox\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\ECS\Components\Component.hpp">
-      <Filter>Fox\ECS\Components</Filter>
-    </ClInclude>
     <ClInclude Include="src\Fox\ECS\Components\Components.hpp">
-      <Filter>Fox\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\ECS\Components\MeshRendererComponent.hpp">
-      <Filter>Fox\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\ECS\Components\RelationshipComponent.hpp">
-      <Filter>Fox\ECS\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\ECS\Components\TransformComponent.hpp">
       <Filter>Fox\ECS\Components</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\ECS\Entity\Entity.hpp">
@@ -436,6 +421,10 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Component\MeshFilter.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp" />
+    <ClInclude Include="src\Fox\ECS\Types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

@@ -1,10 +1,12 @@
 #pragma once
 
+//FOX
 #include "Fox/Config.hpp"
 #include "Fox/Core/Types.hpp"
 
 
 
+//STL
 #include <typeinfo>
 #include <typeindex>
 #include <type_traits>
@@ -39,13 +41,7 @@
 #include <random>
 #include <utility>
 #include <numeric>
+#include <variant>
 #include <algorithm>
 #include <functional>
-
 #include <filesystem>
-
-
-
-#ifdef FOX_PLATFORM_WINDOWS
-//#include <Windows.h>
-#endif // FOX_PLATFORM_WINDOWS
