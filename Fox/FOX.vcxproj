@@ -113,8 +113,8 @@
     <ClInclude Include="src\Fox\Core\Library\Utility\Bitwise.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Utility\Utility.hpp" />
     <ClInclude Include="src\Fox\Core\Types.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\Components.hpp" />
     <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
+    <ClInclude Include="src\Fox\ECS\Components\Components.hpp" />
     <ClInclude Include="src\Fox\ECS\Entity\Entity.hpp" />
     <ClInclude Include="src\Fox\ECS\Registry.hpp" />
     <ClInclude Include="src\Fox\ECS\System\RenderSystem.hpp" />

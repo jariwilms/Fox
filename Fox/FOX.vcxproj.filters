@@ -13,6 +13,9 @@
     <Filter Include="Fox\Core\Library\Camera">
       <UniqueIdentifier>{C6C22CF4-32FA-748B-3B04-D9AEA7BA9B84}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fox\Core\Library\Component">
+      <UniqueIdentifier>{F00B8F04-DC1B-3BD5-45D5-9FF331042A6E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Fox\Core\Library\Container">
       <UniqueIdentifier>{60FBDD59-4C0B-8A2A-B5C4-EE48A1F378C3}</UniqueIdentifier>
     </Filter>
@@ -180,6 +183,12 @@
     <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp">
       <Filter>Fox\Core\Library\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Component\MeshFilter.hpp">
+      <Filter>Fox\Core\Library\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp">
+      <Filter>Fox\Core\Library\Component</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp">
       <Filter>Fox\Core\Library\Container</Filter>
     </ClInclude>
@@ -213,6 +222,9 @@
     <ClInclude Include="src\Fox\Core\Types.hpp">
       <Filter>Fox\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Components\Component.hpp">
+      <Filter>Fox\ECS\Components</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\ECS\Components\Components.hpp">
       <Filter>Fox\ECS\Components</Filter>
     </ClInclude>
@@ -227,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="src\Fox\ECS\System\System.hpp">
       <Filter>Fox\ECS\System</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\ECS\Types.hpp">
+      <Filter>Fox\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Experimental\Experimental.hpp">
       <Filter>Fox\Experimental</Filter>
@@ -421,10 +436,6 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Component\MeshFilter.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp" />
-    <ClInclude Include="src\Fox\ECS\Types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

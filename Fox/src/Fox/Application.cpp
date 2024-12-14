@@ -20,6 +20,9 @@ namespace fox
 {
     static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
+        auto& tc = actor.get_component<ecs::TransformComponent>().get();
+        tc = node.localTransform;
+
         auto& mf = actor.add_component<ecs::MeshFilterComponent>().get();
         if (node.meshIndex)     mf.mesh     = model.meshes.at(node.meshIndex.value());
         if (node.materialIndex) mf.material = model.materials.at(node.materialIndex.value());
@@ -32,38 +35,35 @@ namespace fox
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    static fox::Transform transform_product(const scn::Scene& scene, const scn::Actor& actor)
+    static fox::Matrix4f  transform_product(const scn::Scene& scene, const Relationship& relation, const fox::Matrix4f& transform)
     {
-        const auto& rel = actor.get_component<ecs::RelationshipComponent>().get();
-        const auto& trs = actor.get_component<ecs::TransformComponent>().get();
+        if (!relation.parent) return transform;
 
-        if (rel.parent)
-        {
-            const auto& actor = scene.find_actor(rel.parent.value());
+        const auto& parent = scene.find_actor(relation.parent.value());
 
-            return transform_product(scene, actor) * trs;
-        }
-        else
-        {
-            return trs;
-        }
+        const auto& rel = parent.get_component<ecs::RelationshipComponent>().get();
+        const auto& trs = parent.get_component<ecs::TransformComponent>().get();
+
+        return transform_product(scene, rel, trs.matrix()) * transform;
     }
-    static void           render_actor(scn::Scene& scene, scn::Actor& actor, gfx::UniformBuffer<gfx::UMatrices>& matrices)
+    static void           render_scene(scn::Scene& scene, gfx::UniformBuffer<gfx::UMatrices>& matrices)
     {
-        const auto& view = reg::view<ecs::TransformComponent, ecs::MeshFilterComponent>();
+        const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
 
-        view.each([&](auto entity, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mrc)
+        view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mrc)
             {
                 namespace gl = fox::gfx::api::gl;
 
-                const auto& mf = mrc.get();
-
+                const auto& mf       = mrc.get();
                 const auto& mesh     = mf.mesh;
                 const auto& material = mf.material;
 
                 if (!mesh || !material) return;
 
-                const auto& matrix = transform_product(scene, actor).matrix();
+                const auto& rel = rlc.get();
+                const auto& trs = tc.get();
+
+                const auto& matrix = transform_product(scene, rel, trs.matrix());
                 matrices.copy_tuple(offsetof(gfx::UMatrices, model), std::make_tuple(matrix));
 
                 material->albedo->bind(0);
@@ -163,19 +163,19 @@ namespace fox
 
             gl::clear(gl::Flags::Buffer::Mask::All);
 
-            auto& t = actor.get_component<ecs::TransformComponent>().get();
-            t.scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
+            //auto& trs = actor.get_component<ecs::TransformComponent>().get();
+            //trs.scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
 
             const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
-            matricesBuffer->bind_index(gfx::api::gl::index_t{ 0 });
+            matricesBuffer->bind_index(gl::index_t{ 0 });
             matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
             cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
             cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
 
             testPipeline->bind();
 
-            render_actor(*scene, actor, *matricesBuffer);
+            render_scene(*scene, *matricesBuffer);
 
 
 

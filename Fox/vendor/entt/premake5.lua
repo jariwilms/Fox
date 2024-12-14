@@ -19,6 +19,11 @@ project "ENTT"
 		"src", 
 	}
 
+	disablewarnings
+	{
+		26827, 
+	}
+
 	filter "system:windows"
 		systemversion "latest"
 		
