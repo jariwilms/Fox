@@ -9,6 +9,8 @@
 
 namespace fox
 {
+    //Represents a position, rotation, and scale
+    //Arguments pertaining to rotation are to be passed in degrees
     class Transform
     {
     public:
@@ -79,7 +81,7 @@ namespace fox
         {
             return Transform{ lhs.matrix() * rhs.matrix() };
         }
-
+        
         fox::Vector3f   position{ 0.0f };
         fox::Quaternion rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
         fox::Vector3f   scale{ 1.0f };
