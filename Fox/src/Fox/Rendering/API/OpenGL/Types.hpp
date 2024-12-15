@@ -31,8 +31,8 @@ namespace fox::gfx::api::gl
 
 
     enum class handle_t   : gl::uint32_t {}; //Strong alias for OpenGL Object id's
-    enum class query_t    : gl::uint32_t {}; //Strong alias for OpenGL Query  id's
-    enum class index_t    : gl::uint32_t {}; //Strong alias for OpenGL Index  bindings
+    enum class query_t    : gl::uint32_t {}; //Strong alias for OpenGL Query id's
+    enum class index_t    : gl::uint32_t {}; //Strong alias for OpenGL Index bindings
     enum class location_t : gl::uint32_t {}; //Strong alias for OpenGL Shader locations
     enum class align_t    : gl::uint32_t {}; //Strong alias for OpenGL memory alignment
 

@@ -165,6 +165,7 @@
     <ClInclude Include="src\Fox\Rendering\PostProcessing\AmbientOcclusion.hpp" />
     <ClInclude Include="src\Fox\Rendering\PostProcessing\PostProcessing.hpp" />
     <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\OpenGLRenderer.hpp" />

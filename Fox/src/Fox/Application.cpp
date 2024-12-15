@@ -10,7 +10,9 @@
 #include "Fox/Input/Input.hpp"
 #include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
+#include "Fox/Rendering/Geometry/Geometry.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Scene/Scene.hpp"
@@ -80,8 +82,8 @@ namespace fox
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
         io::ModelImporter::init();
-        //gfx::Geometry::init();
-        //gfx::Renderer::init();
+        gfx::Geometry::init();
+        gfx::Renderer::init();
     }
     Application::~Application()
     {
@@ -163,8 +165,7 @@ namespace fox
 
             gl::clear(gl::Flags::Buffer::Mask::All);
 
-            //auto& trs = actor.get_component<ecs::TransformComponent>().get();
-            //trs.scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
+
 
             const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 

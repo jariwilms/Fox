@@ -2,10 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/Renderer/Renderer.hpp"
-#include "Fox/Rendering/Using.hpp"
-#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Geometry/Geometry.hpp"
+#include "Fox/Rendering/Renderer/Renderer.hpp"
+#include "Fox/Rendering/Renderer/RenderMode.hpp"
+#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/Using.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
 
 namespace fox::gfx::api
@@ -22,55 +23,61 @@ namespace fox::gfx::api
 
             std::array<api::FrameBuffer::Manifest, 5> gBufferManifest
             {
-                gfx::FrameBuffer::Manifest{ "Position", gfx::FrameBuffer::Attachment::Color, gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT, gfx::Texture::Filter::Trilinear, gfx::Texture::Wrapping::Repeat } },
-                gfx::FrameBuffer::Manifest{ "Albedo",   gfx::FrameBuffer::Attachment::Color, gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGBA8_SRGB,   gfx::Texture::Filter::Trilinear, gfx::Texture::Wrapping::Repeat } },
-                gfx::FrameBuffer::Manifest{ "Normal",   gfx::FrameBuffer::Attachment::Color, gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT, gfx::Texture::Filter::Trilinear, gfx::Texture::Wrapping::Repeat } },
-                gfx::FrameBuffer::Manifest{ "ARM",      gfx::FrameBuffer::Attachment::Color, gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_UNORM,  gfx::Texture::Filter::Trilinear, gfx::Texture::Wrapping::Repeat } },
+                gfx::FrameBuffer::Manifest{ "Position",     gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT } },
+                gfx::FrameBuffer::Manifest{ "Albedo",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGBA8_SRGB   } },
+                gfx::FrameBuffer::Manifest{ "Normal",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT } },
+                gfx::FrameBuffer::Manifest{ "ARM",          gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_UNORM  } },
 
-                gfx::FrameBuffer::Manifest{ "DepthStencil", gfx::FrameBuffer::Attachment::DepthStencil, gfx::FrameBuffer::Resample::No, gfx::TextureBlueprint{ Texture::Format::D24_UNORM_S8_UINT } },
+                gfx::FrameBuffer::Manifest{ "DepthStencil", gfx::FrameBuffer::Attachment::DepthStencil, gfx::FrameBuffer::Resample::No,  gfx::TextureBlueprint{ gfx::Texture::Format::D24_UNORM_S8_UINT } },
             };
             std::array<gfx::FrameBuffer::Manifest, 1> sBufferManifest
             {
-                gfx::FrameBuffer::Manifest{ "Depth", gfx::FrameBuffer::Attachment::Depth, gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ Texture::Format::D24_UNORM } },
+                gfx::FrameBuffer::Manifest{ "Depth",        gfx::FrameBuffer::Attachment::Depth,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::D24_UNORM } },
             };
             std::array<gfx::FrameBuffer::Manifest, 2> ppBufferManifest
             {
-                gfx::FrameBuffer::Manifest{ "Color", gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ Texture::Format::RGB16_UNORM } },
-                gfx::FrameBuffer::Manifest{ "Depth", gfx::FrameBuffer::Attachment::DepthStencil, gfx::FrameBuffer::Resample::No,  gfx::TextureBlueprint{ Texture::Format::D24_UNORM_S8_UINT } },
+                gfx::FrameBuffer::Manifest{ "Color",        gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_UNORM } },
+                gfx::FrameBuffer::Manifest{ "Depth",        gfx::FrameBuffer::Attachment::DepthStencil, gfx::FrameBuffer::Resample::No,  gfx::TextureBlueprint{ gfx::Texture::Format::D24_UNORM_S8_UINT } },
             };
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
             s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
             s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
-            for (auto& ppBuffer : s_ppBuffers)
-            {
-                ppBuffer = std::make_unique<gl::FrameBuffer<AntiAliasing::None>>(dimensions, ppBufferManifest);
-            }
+            s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
+            s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
 
-            
-
-            s_matricesBuffer = std::make_unique<gfx::UniformBuffer<UMatrices>>();
-            s_materialBuffer = std::make_unique<gfx::UniformBuffer<UMaterial>>();
-            s_cameraBuffer   = std::make_unique<gfx::UniformBuffer<UCamera>>();
-            s_lightBuffer    = std::make_unique<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>>(32u);
+            s_matricesBuffer     = std::make_unique<gfx::UniformBuffer<UMatrices>>();
+            s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
+            s_cameraBuffer       = std::make_unique<gfx::UniformBuffer<UCamera>>();
+            s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>>(32u);
 
 
 
-            const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh.vert.spv",                 "shaders/compiled/mesh.frag.spv");
-            const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
-            const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
+
+
+            //const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh.vert.spv",                 "shaders/compiled/mesh.frag.spv");
+            //const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
+            //const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             //const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
-            s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
-            s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
-            s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(1) }));
+            //s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
+            //s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
+            //s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(1) }));
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
 
-            gl::RenderState::apply<api::RenderState::Parameter::ClearColor>(Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
-            //gl::RenderState::apply<api::RenderState::Parameter::DepthFunction>(RenderState::DepthFunction::LessEqual);
-            //gl::RenderState::apply<api::RenderState::Parameter::FaceCullingAlpha>(true);
-            //gl::RenderState::apply<api::RenderState::Parameter::FaceCulling>(RenderState::FaceCulling::Back);
-            gl::RenderState::apply<api::RenderState::Parameter::FrontFace>(RenderState::FrontFace::CounterClockwise);
+
+
+
+
+
+
+
+
+
+
+
+
+            __debugbreak();
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
@@ -157,34 +164,31 @@ namespace fox::gfx::api
 
 
             //Lighting pass render into ppBuffer
-            glDisable(GL_BLEND);
+            //glDisable(GL_BLEND);
 
-            s_pipelines.at("Lighting")->bind();
-            s_ppBuffers[0]->bind(gfx::FrameBuffer::Target::Write);
-            s_gBuffer->bind_texture("Position", 0);
-            s_gBuffer->bind_texture("Albedo", 1);
-            s_gBuffer->bind_texture("Normal", 2);
-            s_gBuffer->bind_texture("ARM", 3);
+            //s_pipelines.at("Lighting")->bind();
+            //s_ppBuffers[0]->bind(gfx::FrameBuffer::Target::Write);
+            //s_gBuffer->bind_texture("Position", 0);
+            //s_gBuffer->bind_texture("Albedo", 1);
+            //s_gBuffer->bind_texture("Normal", 2);
+            //s_gBuffer->bind_texture("ARM", 3);
 
-            glFrontFace(GL_CCW);
-            glCullFace(GL_BACK);
+            //glFrontFace(GL_CCW);
+            //glCullFace(GL_BACK);
 
-            glDisable(GL_DEPTH_TEST);
-            gfx::Geometry::Plane::mesh()->vertexArray->bind();
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-            glEnable(GL_BLEND);
-
-
+            //glDisable(GL_DEPTH_TEST);
+            //gfx::Geometry::Plane::mesh()->vertexArray->bind();
+            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            //glEnable(GL_BLEND);
 
 
 
-            // blit to default framebuffer. Note that this may or may not work as the internal formats of both the FBO and default framebuffer have to match.
-            // the internal formats are implementation defined. This works on all of my systems, but if it doesn't on yours you'll likely have to write to the 		
-            // depth buffer in another shader stage (or somehow see to match the default framebuffer's internal format with the FBO's internal format).
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
-            glBlitFramebuffer(0, 0, 1280, 720, 0, 0, 1280, 720, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
 
+
+
+            //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
+            //glBlitFramebuffer(0, 0, 1280, 720, 0, 0, 1280, 720, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         }
 
         static void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
