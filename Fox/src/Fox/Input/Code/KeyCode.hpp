@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::inp::key
+namespace fox::input::key
 {
     using key_t = fox::int32_t;
 

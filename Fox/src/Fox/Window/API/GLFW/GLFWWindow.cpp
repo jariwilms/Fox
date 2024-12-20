@@ -36,7 +36,7 @@ namespace fox::wnd::api
 
         m_userPointer                = std::make_shared<UserPointer>();
         m_userPointer->glfwWindow    = std::shared_ptr<GLFWWindow>(this, [](const GLFWWindow* window) {}); //?
-        m_userPointer->inputHandler  = std::make_shared<inp::GLFWInputHandler>();
+        m_userPointer->inputHandler  = std::make_shared<input::GLFWInputHandler>();
         glfwSetWindowUserPointer(m_glfwWindow, m_userPointer.get());
 
         m_nativeWindow = m_glfwWindow;
@@ -106,7 +106,7 @@ namespace fox::wnd::api
 
 
 
-		inp::api::init(m_userPointer->inputHandler);
+		input::api::init(m_userPointer->inputHandler);
 	}
 	GLFWWindow::~GLFWWindow()
 	{

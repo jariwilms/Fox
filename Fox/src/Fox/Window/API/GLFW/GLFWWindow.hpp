@@ -15,7 +15,7 @@ namespace fox::wnd::api
         {
 		public:
 			std::shared_ptr<GLFWWindow>            glfwWindow{};
-			std::shared_ptr<inp::GLFWInputHandler> inputHandler{};
+			std::shared_ptr<input::GLFWInputHandler> inputHandler{};
         };
 
 		GLFWWindow(const std::string& name, const fox::Vector2u& dimensions);

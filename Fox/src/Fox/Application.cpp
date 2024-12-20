@@ -93,7 +93,7 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
-        auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
+        auto  model           = io::ModelImporter::import2("models/cube/Cube.gltf");
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
         auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
@@ -130,9 +130,10 @@ namespace fox
         Time::reset();
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
 
-        gl::clear_color(fox::Vector4f{ 0.16f, 0.38f, 0.58f, 1.0f });
-        gl::enable(gl::Flags::Capability::DepthTest);
-        gl::depth_function(gl::Flags::DepthFunction::Less);
+        gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
+
+        std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights{};
+
 
 
 
@@ -144,39 +145,58 @@ namespace fox
 
 
             auto speed{ 10.0f * Time::delta() };
-            if (inp::key_pressed(inp::key::LeftShift))   speed *= 10.0f;
-            if (inp::key_pressed(inp::key::LeftControl)) speed /=  5.0f;
-            if (inp::key_pressed(inp::key::W)) cameraTransform.position += cameraTransform.forward() * speed;
-            if (inp::key_pressed(inp::key::A)) cameraTransform.position -= cameraTransform.right()   * speed;
-            if (inp::key_pressed(inp::key::S)) cameraTransform.position -= cameraTransform.forward() * speed;
-            if (inp::key_pressed(inp::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
-            if (inp::key_pressed(inp::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
-            if (inp::key_pressed(inp::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
+            if (input::key_pressed(input::key::LeftShift))   speed *= 10.0f;
+            if (input::key_pressed(input::key::LeftControl)) speed /=  5.0f;
+            if (input::key_pressed(input::key::W)) cameraTransform.position += cameraTransform.forward() * speed;
+            if (input::key_pressed(input::key::A)) cameraTransform.position -= cameraTransform.right()   * speed;
+            if (input::key_pressed(input::key::S)) cameraTransform.position -= cameraTransform.forward() * speed;
+            if (input::key_pressed(input::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
+            if (input::key_pressed(input::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
+            if (input::key_pressed(input::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
 
-            if (inp::button_pressed(inp::btn::RightMouse)) //RMB
+            if (input::button_pressed(input::btn::RightMouse)) //RMB
             {
                 static fox::Vector3f rotation{};
-                const auto& cpr = inp::cursor_position_relative() / 10.0f;
+                const auto& cpr = input::cursor_position_relative() / 10.0f;
 
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
 
-            gl::clear(gl::Flags::Buffer::Mask::All);
+            //gl::clear(gl::Flags::Buffer::Mask::All);
+            //const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
+            //matricesBuffer->bind_index(gl::index_t{ 0 });
+            //matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
+            //cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
+            //cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
+            //testPipeline->bind();
+            //render_scene(*scene, *matricesBuffer);
 
 
 
-            const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
-            matricesBuffer->bind_index(gl::index_t{ 0 });
-            matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
-            cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
-            cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
 
-            testPipeline->bind();
+            gfx::RenderInfo ri{ {camera, cameraTransform}, lights };
 
-            render_scene(*scene, *matricesBuffer);
+            gfx::Renderer::start(ri);
+            const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
+            view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mfc)
+                {
+                    const auto& relation   = rlc.get();
+                    const auto& transform  = tc.get();
+                    const auto& meshFilter = mfc.get();
+                    const auto& mesh       = meshFilter.mesh;
+                    const auto& material   = meshFilter.material;
+
+                    if (!mesh || !material) return;
+
+                    const auto& transformProduct = transform_product(*scene, relation, transform.matrix());
+                    gfx::Renderer::render(mesh, material, transformProduct);
+                });
+            gfx::Renderer::finish();
+
+
 
 
 

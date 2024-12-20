@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::inp::mod
+namespace fox::input::mod
 {
     using mod_t = fox::int32_t;
 
