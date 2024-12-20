@@ -35,7 +35,7 @@ namespace fox::gfx::api
             std::string             identifier{};
             Attachment              attachment{};
             Resample                resample{};
-            TextureBlueprint        blueprint{};
+            TextureBlueprint        blueprint{ Texture::Format::RGBA8_UNORM };
         };
 
         const fox::Vector2u& dimensions() const

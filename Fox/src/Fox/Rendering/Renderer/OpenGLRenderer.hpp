@@ -19,7 +19,7 @@ namespace fox::gfx::api
             const fox::uint8_t  samples{ 4u };
             const fox::uint32_t lightCount{ 32u };
             const fox::Vector2u dimensions{ 1280u, 720u };
-            const fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
+            //const fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
 
             std::array<api::FrameBuffer::Manifest, 5> gBufferManifest
             {
@@ -42,105 +42,91 @@ namespace fox::gfx::api
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
             s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
-            s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
-            s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
-            s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
+            //s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
+            //s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
+            //s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
 
             s_matricesBuffer     = std::make_unique<gfx::UniformBuffer<UMatrices>>();
-            s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
+            //s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
             s_cameraBuffer       = std::make_unique<gfx::UniformBuffer<UCamera>>();
-            s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>>(32u);
+            //s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>>(32u);
 
 
 
 
 
-            //const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh.vert.spv",                 "shaders/compiled/mesh.frag.spv");
+            const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv",                 "shaders/compiled/test.frag.spv");
             //const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
             //const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             //const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
-            //s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
+            s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
             //s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
             //s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(1) }));
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
-
-
-
-
-
-
-
-
-
-
-
-
-
-            __debugbreak();
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
         {
-            gl::clear(gl::Flags::Buffer::Mask::All);
-            return;
-
+            const auto& lights              = renderInfo.lights;
             const auto& [camera, transform] = renderInfo.camera;
             const auto& viewMatrix          = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
             const auto& projectionMatrix    = camera.projection().matrix();
 
-            std::array<gfx::ULight, 32> uLights{};
-            const auto lights = renderInfo.lights;
-            std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
-                {
-                    const auto& [light, position] = _;
-
-                    return gfx::ULight
-                    {
-                        fox::Vector4f{ position, 0.0f },
-                        fox::Vector4f{ light.color, 0.0f },
-                    };
-                });
+            //std::array<gfx::ULight, 32> uLights{};
+            //std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
+            //    {
+            //        const auto& [light, position] = _;
+            //        return gfx::ULight
+            //        {
+            //            fox::Vector4f{ position,    0.0f },
+            //            fox::Vector4f{ light.color, 0.0f },
+            //        };
+            //    });
 
             s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
             s_cameraBuffer->copy(gfx::UCamera{ Vector4f{ transform.position, 0.0f } });
-            s_lightBuffer->copy(uLights);
-
-
+            //s_lightBuffer->copy(uLights);
 
             s_mmt.clear();
-
-
-
-            s_gBufferMultisample->bind(FrameBuffer::Target::Write);
-
-            gl::clear(gl::Flags::Buffer::Mask::All);
-            gfx::RenderState::apply<RenderState::Parameter::DepthTestingAlpha>(true);
-            gfx::RenderState::apply<RenderState::Parameter::FaceCullingAlpha>(true);
         }
         static void finish()
         {
-            //s_pipelines.at("Mesh")->bind();
-            //for (auto& mmt : s_mmt)
-            //{
-            //    const auto& [mesh, material, transform] = mmt;
-            //    const auto& vao                         = mesh->vertex_array();
-            //    const auto& ind                         = vao->index_buffer();
+            gl::clear(gl::Flags::Buffer::Mask::All);
+            gl::enable(gl::Flags::Capability::DepthTest);
+            gl::enable(gl::Flags::Capability::FaceCulling);
+            gl::depth_function(gl::Flags::DepthFunction::Less);
+            gl::front_face(gl::Flags::Orientation::CounterClockwise);
+            gl::face_culling(gl::Flags::FaceCulling::Back);
 
-            //    s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
-            //    s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
-            //    vao->bind();
-            //    if (vao->is_indexed()) ind->bind();
 
-            //    s_materialBuffer->copy(gfx::UMaterial{ material->color, material->roughness, material->metallic });
-            //    material->albedoMap->bind(0);
-            //    material->normalMap->bind(1);
-            //    material->armMap->bind(2);
-            //    material->emissionMap->bind(3);
+            s_matricesBuffer->bind_index(gl::index_t{ 0 });
+            //s_materialBuffer->bind_index(gl::index_t{ 1 });
+            s_cameraBuffer->bind_index(gl::index_t{ 2 });
 
-            //    glDrawElements(GL_TRIANGLES, static_cast<gl::sizeptr_t>(ind->count()), GL_UNSIGNED_INT, nullptr);
-            //}
+
+
+            s_pipelines.at("Mesh")->bind();
+            for (auto& mmt : s_mmt)
+            {
+                const auto& [mesh, material, transform] = mmt;
+                const auto& vao                         = mesh->vertexArray;
+                const auto& ind                         = vao->index_buffer();
+
+                s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
+                //s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
+
+                vao->bind();
+
+                //s_materialBuffer->copy(gfx::UMaterial{ material->color, material->roughnessFactor, material->metallicFactor });
+                material->albedo->bind(0);
+                material->normal->bind(1);
+                material->arm->bind(2);
+                //material->emissionMap->bind(3);
+
+                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, ind->count());
+            }
 
 
 
@@ -199,18 +185,18 @@ namespace fox::gfx::api
     private:
         OpenGLRenderer() = delete;
 
-        static inline std::unique_ptr<gfx::FrameBuffer> s_gBuffer{};
-        static inline std::unique_ptr<gfx::FrameBuffer> s_sBuffer{};
+        static inline std::unique_ptr<gfx::FrameBuffer>                s_gBuffer{};
+        static inline std::unique_ptr<gfx::FrameBuffer>                s_sBuffer{};
         static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2> s_ppBuffers{};
-        static inline std::unique_ptr<gfx::FrameBufferMultisample> s_gBufferMultisample{};
+        static inline std::unique_ptr<gfx::FrameBufferMultisample>     s_gBufferMultisample{};
         
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMatrices>> s_matricesBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMaterial>> s_materialBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>> s_cameraBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>>   s_cameraBuffer{};
         static inline std::unique_ptr<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, gfx::ULight>> s_lightBuffer{};
 
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
 
-        static inline std::vector<std::tuple<const std::shared_ptr<const gfx::Mesh>, const std::shared_ptr<const gfx::Material>, const fox::Transform&>> s_mmt{};
+        static inline std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> s_mmt{};
     };
 }
