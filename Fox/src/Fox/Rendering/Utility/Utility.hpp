@@ -2,7 +2,9 @@
 
 #include "stdafx.hpp"
 
+#include "Fox/Core/Library/Image/Image.hpp"
 #include "Fox/IO/IO.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
 
 namespace fox::gfx::api
@@ -22,5 +24,13 @@ namespace fox::gfx::api
             std::make_shared<SHADER_T>(Shader::Stage::Vertex,   *vertexFile->read()), 
             std::make_shared<SHADER_T>(Shader::Stage::Fragment, *fragmentFile->read()), 
         };
+    }
+    static auto texture_from_file(const std::filesystem::path& path)
+    {
+        const auto& file  = io::load(path);
+        const auto& data  = file->read();
+        const auto& image = fox::Image::decode(fox::Image::Layout::RGBA8, *data);
+        
+        return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
 }

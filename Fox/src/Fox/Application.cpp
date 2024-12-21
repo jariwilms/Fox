@@ -12,9 +12,10 @@
 #include "Fox/IO/IO.hpp"
 #include "Fox/Rendering/Geometry/Geometry.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
-#include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Scene/Actor.hpp"
 #include "Fox/Scene/Scene.hpp"
 #include "Fox/Window/WindowManager.hpp"
 
@@ -37,44 +38,15 @@ namespace fox
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    static fox::Matrix4f  transform_product(const scn::Scene& scene, const Relationship& relation, const fox::Matrix4f& transform)
+    static fox::Transform transform_product(const scn::Scene& scene, const Relationship& relation, const fox::Transform& transform)
     {
         if (!relation.parent) return transform;
 
         const auto& parent = scene.find_actor(relation.parent.value());
+        const auto& rel    = parent.get_component<ecs::RelationshipComponent>().get();
+        const auto& trs    = parent.get_component<ecs::TransformComponent>().get();
 
-        const auto& rel = parent.get_component<ecs::RelationshipComponent>().get();
-        const auto& trs = parent.get_component<ecs::TransformComponent>().get();
-
-        return transform_product(scene, rel, trs.matrix()) * transform;
-    }
-    static void           render_scene(scn::Scene& scene, gfx::UniformBuffer<gfx::UMatrices>& matrices)
-    {
-        const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
-
-        view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mrc)
-            {
-                namespace gl = fox::gfx::api::gl;
-
-                const auto& mf       = mrc.get();
-                const auto& mesh     = mf.mesh;
-                const auto& material = mf.material;
-
-                if (!mesh || !material) return;
-
-                const auto& rel = rlc.get();
-                const auto& trs = tc.get();
-
-                const auto& matrix = transform_product(scene, rel, trs.matrix());
-                matrices.copy_tuple(offsetof(gfx::UMatrices, model), std::make_tuple(matrix));
-
-                material->albedo->bind(0);
-                material->normal->bind(1);
-                material->arm->bind(2);
-
-                mesh->vertexArray->bind();
-                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mesh->vertexArray->index_buffer()->count());
-            });
+        return transform_product(scene, rel, trs) * transform;
     }
 
     Application::Application(int argc, char* argv[])
@@ -110,10 +82,7 @@ namespace fox
         const auto& shaders          = gfx::api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv", "shaders/compiled/test.frag.spv");
               auto  testPipeline     = std::make_shared<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = shaders.at(0), .fragmentShader = shaders.at(1) });
 
-        const auto& file             = io::load("images/anna.png");
-        const auto& data             = file->read();
-        const auto& image            = fox::Image::decode(fox::Image::Layout::RGBA8, *data);
-              auto  texture          = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
+              auto  texture          = gfx::api::texture_from_file("images/anna.png");
 
         const auto& renderInfo       = gfx::RenderInfo{ { camera, cameraTransform }, {} };
         const auto& modelMatrix      = fox::Matrix4f{ 1.0f };
@@ -129,13 +98,8 @@ namespace fox
 
         Time::reset();
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
-
-        gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
-
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights{};
-
-
-
+        gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
 
         while (!m_window->should_close())
         {
@@ -164,22 +128,11 @@ namespace fox
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
 
-            //gl::clear(gl::Flags::Buffer::Mask::All);
-            //const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
-            //matricesBuffer->bind_index(gl::index_t{ 0 });
-            //matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
-            //cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
-            //cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
-            //testPipeline->bind();
-            //render_scene(*scene, *matricesBuffer);
 
 
+            gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights };
 
-
-
-            gfx::RenderInfo ri{ {camera, cameraTransform}, lights };
-
-            gfx::Renderer::start(ri);
+            gfx::Renderer::start(renderInfo);
             const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
             view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mfc)
                 {
@@ -188,10 +141,10 @@ namespace fox
                     const auto& meshFilter = mfc.get();
                     const auto& mesh       = meshFilter.mesh;
                     const auto& material   = meshFilter.material;
-
+                    
                     if (!mesh || !material) return;
 
-                    const auto& transformProduct = transform_product(*scene, relation, transform.matrix());
+                    const auto& transformProduct = transform_product(*scene, relation, transform);
                     gfx::Renderer::render(mesh, material, transformProduct);
                 });
             gfx::Renderer::finish();

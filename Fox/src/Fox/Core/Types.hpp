@@ -29,6 +29,9 @@ namespace fox
 	using count_t    = fox::uint32_t; //Number of elements
 	using offset_t   = fox::uint32_t; //Number of elements offset
 
+	using degrees_t  = fox::float32_t;
+	using radians_t  = fox::float32_t;
+
 	using Vector1i   = glm::ivec1;
 	using Vector2i   = glm::ivec2;
 	using Vector3i   = glm::ivec3;
