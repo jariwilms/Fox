@@ -5,7 +5,7 @@ layout(binding = 1) uniform sampler2D t_Normal;
 layout(binding = 2) uniform sampler2D t_ARM;
 
 layout(location = 0) in vec3 v_Normal;
-layout(location = 1) in vec3 v_Tangent;
+//layout(location = 1) in vec3 v_Tangent;
 layout(location = 2) in vec2 v_TexCoord;
 
 layout(location = 0) out vec4 g_Albedo;
