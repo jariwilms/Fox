@@ -14,7 +14,7 @@ namespace fox::gfx::api::gl
     public:
         using vector_t = gfx::DimensionsToVector<DIMS>::type;
 
-        Texture(Texture::Format format, const vector_t& dimensions, std::span<const fox::byte> data)                          requires (AA == AntiAliasing::None)
+        Texture(Format format, const vector_t& dimensions, std::span<const fox::byte> data)                          requires (AA == AntiAliasing::None)
             : Texture{ format, Texture::Filter::Trilinear, Texture::Wrapping::Repeat, dimensions, data } {}
         Texture(Format format, Filter filter, Wrapping wrapping, const vector_t& dimensions, std::span<const fox::byte> data) requires (AA == AntiAliasing::None)
             : Texture{ format, filter, wrapping, dimensions }
@@ -32,7 +32,8 @@ namespace fox::gfx::api::gl
 
             gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MinificationFilter,  m_glMinFilter);
             gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MagnificationFilter, m_glMagFilter);
-
+                                                    
+                                                   gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::BaseLevel, 0);
                                                    gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingS, m_glWrapping);
             if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingT, m_glWrapping);
             if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingR, m_glWrapping);

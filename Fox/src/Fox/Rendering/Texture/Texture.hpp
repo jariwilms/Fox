@@ -19,11 +19,11 @@ namespace fox::gfx::api
             //UINT    => stored as unsigned integer, sampled as unsigned integer in range [        0,   UINT_MAX]
             //SINT    => stored as   signed integer, sampled as   signed integer in range [  INT_MIN,    INT_MAX]
             //UFLOAT  => stored as   floating point, sampled as   floating point in range [        0, UFLOAT_MAX]
-            //SFLOAT  => stored as   floating point, sampled as   floating point in range [FLOAT_MIN,  FLOAT-MAX]
+            //SFLOAT  => stored as   floating point, sampled as   floating point in range [FLOAT_MIN,  FLOAT_MAX]
             //SRGB    => stored as unsigned integer, sampled as   floating point in range [        0,   UINT_MAX]
             //Note: The Red, Green and Blue components of SRGB formats are nonlinear
 
-            //Format: 0x|Size 1|'|Size 2|'|No. Components|'|Primary Key|
+            //Format: 0x|Size Component 1|'|Size Component 2|'|No. Components|'|Primary Key|
 
             R8_UNORM = 		    0x08'00'01'00, 
             RG8_UNORM =         0x08'00'02'01, 

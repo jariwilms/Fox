@@ -99,7 +99,7 @@ namespace fox
         Time::reset();
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights{};
-        gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
+        gl::clear_color(fox::Vector4f{ 0.08f, 0.08f, 0.08f, 1.0f });
 
         while (!m_window->should_close())
         {
@@ -109,6 +109,7 @@ namespace fox
 
 
             auto speed{ 10.0f * Time::delta() };
+            if (input::key_pressed(input::key::Escape))      m_window->close();
             if (input::key_pressed(input::key::LeftShift))   speed *= 10.0f;
             if (input::key_pressed(input::key::LeftControl)) speed /=  5.0f;
             if (input::key_pressed(input::key::W)) cameraTransform.position += cameraTransform.forward() * speed;
@@ -117,16 +118,17 @@ namespace fox
             if (input::key_pressed(input::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
             if (input::key_pressed(input::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
             if (input::key_pressed(input::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
-
-            if (input::button_pressed(input::btn::RightMouse)) //RMB
+            
+            if (input::button_pressed(input::btn::RightMouse))
             {
-                static fox::Vector3f rotation{};
+                      auto& ct  = observer.get_component<ecs::TransformComponent>().get();
                 const auto& cpr = input::cursor_position_relative() / 10.0f;
 
-                rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
-
-                cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
+                ct.rotate({cpr.y, cpr.x, 0.0f});
+                ct.rotation.z = 0.0f;
             }
+
+
 
 
 

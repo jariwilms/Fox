@@ -24,7 +24,7 @@ namespace fox::gfx::api
             std::array<api::FrameBuffer::Manifest, 5> gBufferManifest
             {
                 gfx::FrameBuffer::Manifest{ "Position",     gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT } },
-                gfx::FrameBuffer::Manifest{ "Albedo",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGBA8_SRGB   } },
+                gfx::FrameBuffer::Manifest{ "Albedo",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGBA8_UNORM  } },
                 gfx::FrameBuffer::Manifest{ "Normal",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT } },
                 gfx::FrameBuffer::Manifest{ "ARM",          gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_UNORM  } },
 
@@ -41,7 +41,7 @@ namespace fox::gfx::api
             };
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
-            s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
+            //s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
             //s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
             //s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
             //s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
@@ -53,14 +53,15 @@ namespace fox::gfx::api
 
 
 
-
-
-            const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv",                 "shaders/compiled/test.frag.spv");
+            //const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv",                 "shaders/compiled/test.frag.spv");
+            const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv",        "shaders/compiled/mesh_deferred.frag.spv");
+            const auto& blitShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/blit_to_default.vert.spv",      "shaders/compiled/blit_to_default.frag.spv");
             //const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
             //const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             //const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
             s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
+            s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = blitShaders.at(0),     .fragmentShader = blitShaders.at(1) }));
             //s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
             //s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(1) }));
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
@@ -92,22 +93,24 @@ namespace fox::gfx::api
         }
         static void finish()
         {
-            gl::clear(gl::Flags::Buffer::Mask::All);
             gl::enable(gl::Flags::Capability::DepthTest);
-            gl::enable(gl::Flags::Capability::FaceCulling);
             gl::depth_function(gl::Flags::DepthFunction::Less);
-            gl::front_face(gl::Flags::Orientation::CounterClockwise);
+
+            gl::enable(gl::Flags::Capability::FaceCulling);
             gl::face_culling(gl::Flags::FaceCulling::Back);
+            gl::front_face(gl::Flags::Orientation::CounterClockwise);
 
 
 
             s_matricesBuffer->bind_index(gl::index_t{ 0 });
             //s_materialBuffer->bind_index(gl::index_t{ 1 });
-            s_cameraBuffer->bind_index(gl::index_t{ 2 });
 
 
 
             s_pipelines.at("Mesh")->bind();
+            s_gBuffer->bind(gfx::FrameBuffer::Target::Write);
+            gl::clear(gl::Flags::Buffer::Mask::All);
+
             for (auto& mmt : s_mmt)
             {
                 const auto& [mesh, material, transform] = mmt;
@@ -127,6 +130,34 @@ namespace fox::gfx::api
 
                 gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, ind->count());
             }
+
+
+
+
+
+            gl::disable(gl::Flags::Capability::DepthTest);
+            gl::disable(gl::Flags::Capability::FaceCulling);
+
+            s_pipelines.at("Blit")->bind();
+            s_gBuffer->bind(gfx::FrameBuffer::Target::Read);
+            s_gBuffer->bind_texture("Position", 0);
+            s_gBuffer->bind_texture("Albedo",   1);
+            s_gBuffer->bind_texture("Normal",   2);
+            s_gBuffer->bind_texture("ARM",      3);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+            gl::clear(gl::Flags::Buffer::Mask::All);
+
+            const auto& planeVA = gfx::Geometry::Plane::mesh()->vertexArray;
+            planeVA->bind();
+            gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, planeVA->index_buffer()->count());
+
+
+
+
+
+
+
+
 
 
 
