@@ -35,6 +35,7 @@ namespace fox::gfx::api
     protected:
         Buffer(fox::size_t size)
             : m_size{ size } {}
+        ~Buffer() = default;
 
         fox::size_t m_size{};
     };

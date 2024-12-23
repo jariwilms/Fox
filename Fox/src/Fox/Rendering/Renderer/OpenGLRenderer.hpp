@@ -49,20 +49,20 @@ namespace fox::gfx::api
             s_matricesBuffer     = std::make_unique<gfx::UniformBuffer<UMatrices>>();
             //s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
             s_cameraBuffer       = std::make_unique<gfx::UniformBuffer<UCamera>>();
-            //s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, ULight>>(32u);
+            s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<ULight>>(32u);
 
 
 
             //const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv",                 "shaders/compiled/test.frag.spv");
             const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv",        "shaders/compiled/mesh_deferred.frag.spv");
             const auto& blitShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/blit_to_default.vert.spv",      "shaders/compiled/blit_to_default.frag.spv");
-            //const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
+            const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
             //const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             //const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
             s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
             s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = blitShaders.at(0),     .fragmentShader = blitShaders.at(1) }));
-            //s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
+            s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
             //s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(1) }));
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
         }
@@ -74,20 +74,23 @@ namespace fox::gfx::api
             const auto& viewMatrix          = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
             const auto& projectionMatrix    = camera.projection().matrix();
 
-            //std::array<gfx::ULight, 32> uLights{};
-            //std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
-            //    {
-            //        const auto& [light, position] = _;
-            //        return gfx::ULight
-            //        {
-            //            fox::Vector4f{ position,    0.0f },
-            //            fox::Vector4f{ light.color, 0.0f },
-            //        };
-            //    });
+            std::array<gfx::ULight, 32u> uLights{};
+            std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
+                {
+                    const auto& [light, position] = _;
+                    return gfx::ULight
+                    {
+                        fox::Vector4f{ position,    0.0f },
+                        fox::Vector4f{ light.color, 0.0f },
+                        light.radius, 
+                        0.1f, 
+                        0.1f, 
+                    };
+                });
 
-            s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
+            s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
             s_cameraBuffer->copy(gfx::UCamera{ Vector4f{ transform.position, 0.0f } });
-            //s_lightBuffer->copy(uLights);
+            s_lightBuffer->copy(uLights);
 
             s_mmt.clear();
         }
@@ -117,7 +120,7 @@ namespace fox::gfx::api
                 const auto& vao                         = mesh->vertexArray;
                 const auto& ind                         = vao->index_buffer();
 
-                s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
+                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
                 //s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
                 vao->bind();
@@ -138,12 +141,17 @@ namespace fox::gfx::api
             gl::disable(gl::Flags::Capability::DepthTest);
             gl::disable(gl::Flags::Capability::FaceCulling);
 
-            s_pipelines.at("Blit")->bind();
+            s_pipelines.at("Lighting")->bind();
+
             s_gBuffer->bind(gfx::FrameBuffer::Target::Read);
             s_gBuffer->bind_texture("Position", 0);
             s_gBuffer->bind_texture("Albedo",   1);
             s_gBuffer->bind_texture("Normal",   2);
             s_gBuffer->bind_texture("ARM",      3);
+
+            s_lightBuffer->bind_index(gl::index_t{ 2 });
+            s_cameraBuffer->bind_index(gl::index_t{ 3 });
+
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             gl::clear(gl::Flags::Buffer::Mask::All);
 
@@ -221,10 +229,10 @@ namespace fox::gfx::api
         static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2> s_ppBuffers{};
         static inline std::unique_ptr<gfx::FrameBufferMultisample>     s_gBufferMultisample{};
         
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMatrices>> s_matricesBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMaterial>> s_materialBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>>   s_cameraBuffer{};
-        static inline std::unique_ptr<gfx::UniformArrayBuffer<api::Buffer::Access::Dynamic, gfx::ULight>> s_lightBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMatrices>>   s_matricesBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMaterial>>   s_materialBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>>     s_cameraBuffer{};
+        static inline std::unique_ptr<gfx::UniformArrayBuffer<gfx::ULight>> s_lightBuffer{};
 
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
 

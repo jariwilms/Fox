@@ -98,8 +98,12 @@ namespace fox
 
         Time::reset();
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
-        std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights{};
-        gl::clear_color(fox::Vector4f{ 0.08f, 0.08f, 0.08f, 1.0f });
+        std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
+        {
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.0f, 1.0f }, 100.0f }, fox::Vector3f{ 0.0f, 0.0f, 4.0f })
+        };
+
+        gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
 
         while (!m_window->should_close())
         {
@@ -121,11 +125,14 @@ namespace fox
             
             if (input::button_pressed(input::btn::RightMouse))
             {
+                static fox::Vector3f rotation{};
+
                       auto& ct  = observer.get_component<ecs::TransformComponent>().get();
                 const auto& cpr = input::cursor_position_relative() / 10.0f;
 
-                ct.rotate({cpr.y, cpr.x, 0.0f});
-                ct.rotation.z = 0.0f;
+                rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
+
+                cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
 
 

@@ -26,7 +26,7 @@ namespace fox::gfx::api::gl
         {
             *this = std::move(other);
         }
-        virtual ~Buffer()
+        ~Buffer()
         {
             gl::delete_buffer(m_handle);
         }
@@ -96,9 +96,9 @@ namespace fox::gfx::api::gl
 
         template<api::Buffer::Mapping MAPPING = api::Buffer::Mapping::ReadWrite>
         auto map()
-        { 
+        {
             const auto& bufferMapping = gl::map_buffer_mapping(MAPPING);
-            auto* data = gl::map_buffer(m_handle, bufferMapping);
+                  auto* data          = gl::map_buffer(m_handle, bufferMapping);
 
             using data_t = std::conditional_t<MAPPING == api::Buffer::Mapping::Read, const T, T>;
             return std::span<data_t>{ data, m_size / sizeof(T) };
@@ -107,7 +107,7 @@ namespace fox::gfx::api::gl
         auto map_range(fox::count_t count, fox::offset_t offset)
         {
             const auto& bufferMapping = gl::map_buffer_mapping(MAPPING);
-            auto* data = gl::map_buffer_range(m_handle, bufferMapping, count * sizeof(T), offset * sizeof(T));
+                  auto* data          = gl::map_buffer_range(m_handle, bufferMapping, count * sizeof(T), offset * sizeof(T));
 
             using data_t = std::conditional_t<MAPPING == api::Buffer::Mapping::Read, const T, T>;
             return std::span<data_t>{ data, m_size / sizeof(T) };
@@ -161,7 +161,7 @@ namespace fox::gfx::api::gl
             gl::buffer_sub_data(m_handle, 0, std::span<const T>{ &data, 1u });
         }
         template<typename... T>
-        void copy_tuple(fox::size_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
+        void copy_sub(fox::size_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
         {
             //This method lets you copy a tuple of any amount of types into an allocated buffer
             //There is no guarantee that a parameter pack will be evaluated in order of declaration, so we cannot use T... as a regular parameter
@@ -177,6 +177,64 @@ namespace fox::gfx::api::gl
                 }, data);
 
             gl::buffer_sub_data(m_handle, offset, std::span<const fox::byte>{ buffer.data(), buffer.size() });
+        }
+
+        Buffer& operator=(Buffer&& other) noexcept
+        {
+            m_handle = other.m_handle;
+
+            other.m_handle = {};
+
+            return *this;
+        }
+    };
+    template<typename T>
+    class Buffer<api::Buffer::Type::UniformArray, api::Buffer::Access::Dynamic, T> : public api::Buffer, public gl::Object
+    {
+    public:
+        explicit Buffer(fox::count_t count)
+            : api::Buffer{ count * sizeof(T) }
+        {
+            m_handle = gl::create_buffer();
+
+            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
+            gl::buffer_storage(m_handle, bufferAccess, gl::sizeptr_t{ count * sizeof(T) });
+        }
+        explicit Buffer(std::span<const T> data)
+            : api::Buffer{ data.size_bytes() }
+        {
+            m_handle = gl::create_buffer();
+
+            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
+            gl::buffer_storage(m_handle, bufferAccess, data);
+        }
+        Buffer(Buffer&& other) noexcept
+        {
+            *this = std::move(other);
+        }
+        ~Buffer()
+        {
+            gl::delete_buffer(m_handle);
+        }
+
+        void bind_index(gl::index_t index) const
+        {
+            gl::bind_buffer_base(m_handle, gl::Flags::Buffer::TargetBase::UniformBuffer, index);
+        }
+
+        void copy(std::span<const T> data)
+        {
+            if (data.size_bytes() > m_size) throw std::invalid_argument{ "The data size is greater than the size of the allocated buffer!" };
+
+            gl::buffer_sub_data(m_handle, 0, data);
+        }
+        void copy_index(fox::uint32_t index, const T& data)
+        {
+            const auto& offset = index * sizeof(T);
+
+            if (offset > m_size) throw std::invalid_argument{ "The given index is out of range!" };
+
+            gl::buffer_sub_data(m_handle, index * sizeof(T), std::span<const T>{ &data, 1u });
         }
 
         Buffer& operator=(Buffer&& other) noexcept

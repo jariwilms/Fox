@@ -63,6 +63,9 @@ namespace fox::gfx::api::gl
         }
 
     protected:
+        Object()  = default;
+        ~Object() = default;
+
         gl::handle_t m_handle{};
     };
 

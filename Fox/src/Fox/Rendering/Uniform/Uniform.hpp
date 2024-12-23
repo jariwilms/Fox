@@ -19,8 +19,11 @@ namespace fox::gfx
     };
     struct ULight //std140, binding 2
     {
-        fox::Vector4f position{};
-        fox::Vector4f color{};
+        fox::Vector4f  position{};
+        fox::Vector4f  color{};
+        fox::float32_t radius{};
+        fox::float32_t linearFalloff{};
+        fox::float32_t quadraticFalloff{};
     };
     struct UCamera //std140, binding 3
     {
