@@ -17,10 +17,6 @@ layout(set = 0, binding = 0) uniform MatricesBuffer
 	mat4 projection;
 	mat4 normal;
 } u_MVP;
-layout(set = 0, binding = 2) uniform CameraBuffer
-{
-	vec4 position;
-} u_Camera;
 
 void main()
 {
