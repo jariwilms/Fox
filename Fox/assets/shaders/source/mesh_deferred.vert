@@ -16,14 +16,14 @@ layout(set = 0, binding = 0) uniform MatricesBuffer
 	mat4 view;
 	mat4 projection;
 	mat4 normal;
-} u_MVP;
+} u_MatricesBuffer;
 
 void main()
 {
-	vec4 worldPosition = u_MVP.model * vec4(a_Position, 1.0);
+	vec4 worldPosition = u_MatricesBuffer.model * vec4(a_Position, 1.0);
 
 	v_Position = worldPosition.xyz;
 	v_TexCoord = a_TexCoord;
 
-	gl_Position = u_MVP.projection * u_MVP.view * worldPosition;
+	gl_Position = u_MatricesBuffer.projection * u_MatricesBuffer.view * worldPosition;
 }
