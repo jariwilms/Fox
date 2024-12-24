@@ -65,42 +65,30 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
-        auto  model           = io::ModelImporter::import2("models/cube/Cube.gltf");
+        auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+        //auto  model           = io::ModelImporter::import2("models/backpack/scene.gltf");
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
         auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
 
-        cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
+        cameraTransform.translate(fox::Vector3f{ 0.0f, 0.0f, 5.0f });
 
         auto& actor = scene->create_actor();
         model_to_scene_graph(*scene, actor, *model, model->nodes.at(model->rootNode));
 
 
 
+
+
         namespace gl = gfx::api::gl;
-
-        const auto& shaders          = gfx::api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv", "shaders/compiled/test.frag.spv");
-              auto  testPipeline     = std::make_shared<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = shaders.at(0), .fragmentShader = shaders.at(1) });
-
-              auto  texture          = gfx::api::texture_from_file("images/anna.png");
-
-        const auto& renderInfo       = gfx::RenderInfo{ { camera, cameraTransform }, {} };
-        const auto& modelMatrix      = fox::Matrix4f{ 1.0f };
-        const auto& viewMatrix       = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
-        const auto& projectionMatrix = camera.projection().matrix();
-
-              auto  matricesBuffer   = std::make_shared<gfx::UniformBuffer<gfx::UMatrices>>();
-              auto  cameraBuffer     = std::make_shared<gfx::UniformBuffer<gfx::UCamera>>();
-
-
-
-
 
         Time::reset();
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.0f, 1.0f }, 100.0f }, fox::Vector3f{ 0.0f, 0.0f, 4.0f })
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 1.0f, 1.0f }, 100.0f }, fox::Vector3f{ 0.0f, 0.0f, 5.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.0f, 1.0f, 0.0f }, 100.0f }, fox::Vector3f{ 2.0f, 2.0f, 4.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.0f, 0.0f, 1.0f }, 100.0f }, fox::Vector3f{ 4.0f, 4.0f, 4.0f }), 
         };
 
         gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
