@@ -78,6 +78,7 @@ namespace fox::gfx::api
             std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
                 {
                     const auto& [light, position] = _;
+
                     return gfx::ULight
                     {
                         fox::Vector4f{ position,    0.0f },
@@ -89,9 +90,9 @@ namespace fox::gfx::api
                 });
 
             s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
-            s_cameraBuffer->copy(gfx::UCamera{ Vector4f{ transform.position, 0.0f } });
+            s_cameraBuffer->copy(gfx::UCamera{ fox::Vector4f{ transform.position, 0.0f } });
             s_lightBuffer->copy(uLights);
-
+            
             s_mmt.clear();
         }
         static void finish()
@@ -121,7 +122,7 @@ namespace fox::gfx::api
                 const auto& ind                         = vao->index_buffer();
 
                 s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
-                //s_matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
+                //s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
 
                 vao->bind();
 
@@ -139,7 +140,6 @@ namespace fox::gfx::api
 
 
             gl::disable(gl::Flags::Capability::DepthTest);
-            gl::disable(gl::Flags::Capability::FaceCulling);
 
             s_pipelines.at("Lighting")->bind();
 

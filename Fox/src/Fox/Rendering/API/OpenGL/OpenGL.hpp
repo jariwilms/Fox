@@ -410,7 +410,10 @@ namespace fox::gfx::api::gl
     {
         glFrontFace(static_cast<gl::enum_t>(orientation));
     }
-
+    static void                           blend_func(gl::Flags::Blending::Factor source, gl::Flags::Blending::Factor destination)
+    {
+        glBlendFunc(static_cast<gl::enum_t>(source), static_cast<gl::enum_t>(destination));
+    }
 
     
     static void                           debug_callback(gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* user_param)
