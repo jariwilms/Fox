@@ -13,17 +13,17 @@ namespace fox::gfx
     };
     struct UMaterial //std140, binding 1
     {
-        fox::Vector4f  color{};
+        fox::Vector4f  color{ 1.0f, 1.0f, 1.0f, 1.0f };
         fox::float32_t roughness{};
         fox::float32_t metallic{};
     };
     struct ULight //std140, binding 2
     {
         fox::Vector4f  position{};
-        fox::Vector4f  color{};
-        fox::float32_t radius{};
-        fox::float32_t linearFalloff{};
-        fox::float32_t quadraticFalloff{};
+        fox::Vector4f  color{ 1.0f, 1.0f, 1.0f, 1.0f };
+        fox::float32_t radius{ 1.0f };
+        fox::float32_t linearFalloff{ 1.0f };
+        fox::float32_t quadraticFalloff{ 1.0f };
     };
     struct UCamera //std140, binding 3
     {
