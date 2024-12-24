@@ -15,8 +15,8 @@ struct Light
 	vec4 color;
 	
 	float radius;
-	float linearFalloff;
-	float quadraticFalloff;
+	float linear;
+	float quadratic;
 };
 
 const int NR_LIGHTS = 32;
@@ -39,19 +39,19 @@ void main()
     
 	
 	
-    vec3 lighting      = gAlbedo * 0.1; // TODO: get ambient component value from uniform
-    vec3 viewDirection = normalize(u_Camera.position.xyz - gPosition);
-	
-	
-	
-	const float linearFalloff    = 1.0;
-	const float quadraticFalloff = 1.0;
+	const vec3 viewDirection   = normalize(u_Camera.position.xyz - gPosition);
+	const vec3 ambientLighting = gAlbedo * 0.1;
+          vec3 lighting        = ambientLighting;
+		  
+		  
 	
     for(int i = 0; i < NR_LIGHTS; ++i)
     {
-		const  vec3 lightPosition = u_LightBuffer.lights[i].position.xyz;
-		const  vec3 lightColor    = u_LightBuffer.lights[i].color.rgb;
-		const float lightRadius   = u_LightBuffer.lights[i].radius;
+		const  vec3 lightPosition  = u_LightBuffer.lights[i].position.xyz;
+		const  vec3 lightColor     = u_LightBuffer.lights[i].color.rgb;
+		const float lightRadius    = u_LightBuffer.lights[i].radius;
+		const float lightLinear    = u_LightBuffer.lights[i].linear;
+		const float lightQuadratic = u_LightBuffer.lights[i].quadratic;
 		
         float distance = length(lightPosition - gPosition);
         if(distance < lightRadius)
@@ -66,7 +66,8 @@ void main()
             vec3 specular = lightColor * spec * gARM;
 			
             // attenuation
-            float attenuation = 1.0 / (1.0 + (linearFalloff * distance) + (quadraticFalloff * pow(distance, 2.0)));
+            float attenuation = 1.0 / (1.0 + (lightLinear * distance) + (lightQuadratic * pow(distance, 2.0)));
+			
             diffuse  *= attenuation;
             specular *= attenuation;
             lighting += diffuse + specular;

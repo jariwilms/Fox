@@ -15,8 +15,10 @@ layout(location = 3) out vec3 g_ARM;
 
 void main()
 {
-	g_Position = v_Position;
-	g_Albedo   = texture(t_Albedo, v_TexCoord);
-	g_Normal   = texture(t_Normal, v_TexCoord).rgb;
-	g_ARM      = texture(t_ARM,    v_TexCoord).rgb;
+	vec3 normal = texture(t_Normal, v_TexCoord).rgb;
+	
+	g_Position  = v_Position;
+	g_Albedo    = texture(t_Albedo, v_TexCoord);
+	g_Normal    = normalize(normal * 2.0 - 1.0);
+	g_ARM       = texture(t_ARM,    v_TexCoord).rgb;
 }
