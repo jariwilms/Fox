@@ -86,12 +86,13 @@ namespace fox
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 1.0f, 1.0f }, 100.0f }, fox::Vector3f{ 0.0f, 0.0f, 5.0f }), 
-            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.0f, 1.0f, 0.0f }, 100.0f }, fox::Vector3f{ 2.0f, 2.0f, 4.0f }), 
-            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.0f, 0.0f, 1.0f }, 100.0f }, fox::Vector3f{ 4.0f, 4.0f, 4.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 10000.0f }, fox::Vector3f{ -1.0f, 0.0f, 1.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 10000.0f }, fox::Vector3f{ 1.0f, 0.0f, 1.0f }), 
         };
 
-        gl::clear_color(fox::Vector4f{ 0.12f, 0.12f, 0.12f, 1.0f });
+
+
+        gl::clear_color(fox::Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
 
         while (!m_window->should_close())
         {
@@ -100,7 +101,7 @@ namespace fox
 
 
 
-            auto speed{ 10.0f * Time::delta() };
+            auto speed{ 5.0f * Time::delta() };
             if (input::key_pressed(input::key::Escape))      m_window->close();
             if (input::key_pressed(input::key::LeftShift))   speed *= 10.0f;
             if (input::key_pressed(input::key::LeftControl)) speed /=  5.0f;
@@ -144,6 +145,26 @@ namespace fox
                     const auto& transformProduct = transform_product(*scene, relation, transform);
                     gfx::Renderer::render(mesh, material, transformProduct);
                 });
+
+
+
+            const auto& lightAmount{ 2 };
+            int i{};
+            for (const auto& light : lights)
+            {
+                if (i >= lightAmount) break;
+
+                const auto& [l, p] = light;
+                fox::Transform t{};
+                t.position = p;
+                t.dilate({ 0.2f, 0.2f, 0.2f });
+                gfx::Renderer::render_debug(t);
+
+                ++i;
+            }
+
+
+
             gfx::Renderer::finish();
 
 

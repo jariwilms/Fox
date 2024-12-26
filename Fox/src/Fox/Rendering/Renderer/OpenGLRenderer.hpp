@@ -57,12 +57,14 @@ namespace fox::gfx::api
             const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv",        "shaders/compiled/mesh_deferred.frag.spv");
             const auto& blitShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/blit_to_default.vert.spv",      "shaders/compiled/blit_to_default.frag.spv");
             const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong.vert.spv", "shaders/compiled/lighting_blinn-phong.frag.spv");
+            const auto& debugShaders    = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/debug.vert.spv",                "shaders/compiled/debug.frag.spv");
             //const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",               "shaders/compiled/skybox.frag.spv");
             //const auto& shadowShaders   = shaders_from_binaries("shaders/compiled/shadow.vert.spv",               "shaders/compiled/shadow.frag.spv");
 
             s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
             s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = blitShaders.at(0),     .fragmentShader = blitShaders.at(1) }));
             s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
+            s_pipelines.emplace("Debug",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = debugShaders.at(0),    .fragmentShader = debugShaders.at(1) }));
             //s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = skyboxShaders.at(0),   .fragmentShader = skyboxShaders.at(1) }));
             //s_pipelines.emplace("Shadow",   std::make_unique<Pipeline>(Pipeline::Manifest{ .vertexShader = shadowShaders.at(0),   .fragmentShader = shadowShaders.at(0) }));
         }
@@ -94,6 +96,7 @@ namespace fox::gfx::api
             s_lightBuffer->copy(uLights);
             
             s_mmt.clear();
+            s_debugTransforms.clear();
         }
         static void finish()
         {
@@ -121,16 +124,17 @@ namespace fox::gfx::api
                 const auto& vao                         = mesh->vertexArray;
                 const auto& ind                         = vao->index_buffer();
 
-                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
-                //s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, normal), std::make_tuple(glm::transpose(glm::inverse(transform.matrix()))));
+                const auto& modelMatrix  = transform.matrix();
+                const auto& normalMatrix = glm::transpose(glm::inverse(fox::Matrix3f{ modelMatrix }));
+
+                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(modelMatrix));
+                //s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, normal), std::make_tuple(normalMatrix));
 
                 vao->bind();
 
-                //s_materialBuffer->copy(gfx::UMaterial{ material->color, material->roughnessFactor, material->metallicFactor });
                 material->albedo->bind(0);
                 material->normal->bind(1);
                 material->arm->bind(2);
-                //material->emissionMap->bind(3);
 
                 gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, ind->count());
             }
@@ -161,6 +165,19 @@ namespace fox::gfx::api
 
 
 
+
+#ifdef FOX_DEBUG
+            s_pipelines.at("Debug")->bind();
+
+            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+            cva->bind();
+
+            for (const auto& transform : s_debugTransforms)
+            {
+                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
+                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, cva->index_buffer()->count());
+            }
+#endif
 
 
 
@@ -220,6 +237,10 @@ namespace fox::gfx::api
         {
             s_mmt.emplace_back(mesh, material, transform);
         }
+        static void render_debug(const fox::Transform& transform)
+        {
+            s_debugTransforms.emplace_back(transform);
+        }
 
     private:
         OpenGLRenderer() = delete;
@@ -237,5 +258,8 @@ namespace fox::gfx::api
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
 
         static inline std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> s_mmt{};
+
+
+        static inline std::vector<fox::Transform> s_debugTransforms{};
     };
 }

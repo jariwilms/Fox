@@ -24,6 +24,7 @@ namespace fox::gfx
         fox::float32_t radius{ 1.0f };
         fox::float32_t linearFalloff{ 1.0f };
         fox::float32_t quadraticFalloff{ 1.0f };
+        fox::float32_t _padding;
     };
     struct UCamera //std140, binding 3
     {
