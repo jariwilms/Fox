@@ -79,14 +79,6 @@ namespace fox::io
                 tangentsVector.emplace_back(asiTangent.x, asiTangent.y, asiTangent.z);
             }
 
-            std::vector<fox::Vector3f> bitangentsVector{};
-            bitangentsVector.reserve(asiNumVertices);
-            std::span<const aiVector3D> asiBitangents{ asiMesh->mBitangents, asiMesh->mNumVertices };
-            for (const auto& asiBitangent : asiBitangents)
-            {
-                bitangentsVector.emplace_back(asiBitangent.x, asiBitangent.y, asiBitangent.z);
-            }
-
             std::vector<fox::Vector2f> texCoordsVector{};
             texCoordsVector.reserve(asiNumVertices);
             std::span<const aiVector3D> asiTexCoords{ asiMesh->mTextureCoords[0], asiNumVertices };
@@ -117,14 +109,12 @@ namespace fox::io
             auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(positionsVector);
             auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(normalsVector);
             auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(tangentsVector);
-            auto bitangentsBuffer = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(bitangentsVector);
             auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector2f>>(texCoordsVector);
             auto indicesBuffer    = std::make_shared<gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indicesVector);
 
             vertexArray->tie(positionsBuffer,  layout3f);
             vertexArray->tie(normalsBuffer,    layout3f);
             vertexArray->tie(tangentsBuffer,   layout3f);
-            vertexArray->tie(bitangentsBuffer, layout3f);
             vertexArray->tie(texCoordsBuffer,  layout2f);
             vertexArray->tie(indicesBuffer);
 
