@@ -17,10 +17,11 @@ struct Light
 	float radius;
 	float linear;
 	float quadratic;
+	float _padding;
 };
 
 const int NR_LIGHTS = 32;
-layout(std140, set = 0, binding = 2) uniform LightBuffer
+layout(set = 0, binding = 2) uniform LightBuffer
 {
 	Light lights[NR_LIGHTS];
 } u_LightBuffer;
@@ -44,14 +45,14 @@ void main()
           vec3 lighting        = ambientLighting;
 		  
 		  
-	
+		  
     for(int i = 0; i < NR_LIGHTS; ++i)
     {
-		const  vec3 lightPosition  = u_LightBuffer.lights[i].position.xyz;
-		const  vec3 lightColor     = u_LightBuffer.lights[i].color.rgb;
-		const float lightRadius    = u_LightBuffer.lights[i].radius;
-		const float lightLinear    = u_LightBuffer.lights[i].linear;
-		const float lightQuadratic = u_LightBuffer.lights[i].quadratic;
+		 vec3 lightPosition  = u_LightBuffer.lights[i].position.xyz;
+		 vec3 lightColor     = u_LightBuffer.lights[i].color.rgb;
+		float lightRadius    = u_LightBuffer.lights[i].radius;
+		float lightLinear    = u_LightBuffer.lights[i].linear;
+		float lightQuadratic = u_LightBuffer.lights[i].quadratic;
 		
         float distance = length(lightPosition - gPosition);
         if(distance < lightRadius)
