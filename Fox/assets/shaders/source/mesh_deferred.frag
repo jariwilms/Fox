@@ -4,10 +4,9 @@ layout(binding = 0) uniform sampler2D t_Albedo;
 layout(binding = 1) uniform sampler2D t_Normal;
 layout(binding = 2) uniform sampler2D t_ARM;
 
-layout(location = 0) in  vec3 v_Position;
-layout(location = 1) in  vec3 v_Normal;
-layout(location = 2) in  vec2 v_TexCoord;
-layout(location = 8) in  mat3 v_TBN;
+layout(location = 0) in vec3 v_Position;
+layout(location = 1) in vec2 v_TexCoord;
+layout(location = 2) in mat3 v_TBN;
 
 layout(location = 0) out vec3 g_Position;
 layout(location = 1) out vec4 g_Albedo;
@@ -20,9 +19,6 @@ void main()
 	
 	normal = normal * 2.0 - 1.0;
 	normal = normalize(v_TBN * normal);
-	
-	
-	
 	
 	
 	

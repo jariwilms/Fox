@@ -21,7 +21,7 @@ struct Light
 };
 
 const int NR_LIGHTS = 32;
-layout(set = 0, binding = 2) uniform LightBuffer
+layout(std140, set = 0, binding = 2) uniform LightBuffer
 {
 	Light lights[NR_LIGHTS];
 } u_LightBuffer;
