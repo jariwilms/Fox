@@ -47,7 +47,7 @@ namespace fox::gfx::api
             //s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
 
             s_matricesBuffer     = std::make_unique<gfx::UniformBuffer<UMatrices>>();
-            //s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
+            s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
             s_cameraBuffer       = std::make_unique<gfx::UniformBuffer<UCamera>>();
             s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<ULight>>(32u);
 
@@ -110,7 +110,7 @@ namespace fox::gfx::api
 
 
             s_matricesBuffer->bind_index(gl::index_t{ 0 });
-            //s_materialBuffer->bind_index(gl::index_t{ 1 });
+            s_materialBuffer->bind_index(gl::index_t{ 1 });
 
 
 
@@ -128,7 +128,7 @@ namespace fox::gfx::api
                 const auto& normalMatrix = glm::transpose(glm::inverse(fox::Matrix3f{ modelMatrix }));
 
                 s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(modelMatrix));
-                //s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, normal), std::make_tuple(normalMatrix));
+                s_materialBuffer->copy(gfx::UMaterial{ material->color, material->roughnessFactor, material->metallicFactor });
 
                 vao->bind();
 
