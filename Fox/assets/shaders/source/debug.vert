@@ -12,8 +12,5 @@ layout(set = 0, binding = 0) uniform MatricesBuffer
 
 void main()
 {
-	//vec4 worldPosition = u_MVP.model * vec4(a_Position, 1.0);
-	//v_Position = worldPosition.xyz;
-	
 	gl_Position = u_MVP.projection * u_MVP.view * u_MVP.model * vec4(a_Position, 1.0);
 }
