@@ -66,7 +66,7 @@ namespace fox
     {
         auto  scene           = std::make_shared<scn::Scene>();
         auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
-        //auto  model           = io::ModelImporter::import2("models/backpack/scene.gltf");
+
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
         auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
@@ -92,16 +92,12 @@ namespace fox
 
 
 
-        gl::clear_color(fox::Vector4f{ 0.0f, 0.0f, 0.0f, 1.0f });
 
-        while (!m_window->should_close())
+
+        const auto& move_camera = [&]
         {
-            Time::update();
-            m_window->poll_events();
-
-
-
             auto speed{ 5.0f * Time::delta() };
+
             if (input::key_pressed(input::key::Escape))      m_window->close();
             if (input::key_pressed(input::key::LeftShift))   speed *= 10.0f;
             if (input::key_pressed(input::key::LeftControl)) speed /=  5.0f;
@@ -111,18 +107,43 @@ namespace fox
             if (input::key_pressed(input::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
             if (input::key_pressed(input::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
             if (input::key_pressed(input::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
-            
+
             if (input::button_pressed(input::btn::RightMouse))
             {
                 static fox::Vector3f rotation{};
 
-                      auto& ct  = observer.get_component<ecs::TransformComponent>().get();
+                auto& ct  = observer.get_component<ecs::TransformComponent>().get();
                 const auto& cpr = input::cursor_position_relative() / 10.0f;
 
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
+        };
+        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, fox::uint32_t amount)
+            {
+                for (const auto& i : std::ranges::iota_view(0u, amount))
+                {
+                    const auto& [l, p] = lights[i];
+
+                    fox::Transform t{};
+                    t.position = p;
+                    t.dilate({ 0.1f, 0.1f, 0.1f });
+
+                    gfx::Renderer::render_debug(t);
+                }
+            };
+
+        while (!m_window->should_close())
+        {
+            Time::update();
+            m_window->poll_events();
+
+
+
+
+
+            move_camera();
 
 
 
@@ -146,24 +167,7 @@ namespace fox
                     gfx::Renderer::render(mesh, material, transformProduct);
                 });
 
-
-
-            const auto& lightAmount{ 2 };
-            int i{};
-            for (const auto& light : lights)
-            {
-                if (i >= lightAmount) break;
-
-                const auto& [l, p] = light;
-                fox::Transform t{};
-                t.position = p;
-                t.dilate({ 0.2f, 0.2f, 0.2f });
-                gfx::Renderer::render_debug(t);
-
-                ++i;
-            }
-
-
+            render_lights_debug(lights, 2);
 
             gfx::Renderer::finish();
 
