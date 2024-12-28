@@ -3,6 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/Mesh/Mesh.hpp"
+#include "Fox/IO/Import/Model/ModelImporter.hpp"
 
 namespace fox::gfx
 {
@@ -13,6 +14,7 @@ namespace fox::gfx
         {
             Plane::init();
             Cube::init();
+            Sphere::init();
         }
 
         struct Plane
@@ -226,6 +228,24 @@ namespace fox::gfx
             }
 
             static inline std::shared_ptr<Mesh> s_mesh{};
+        };
+        struct Sphere
+        {
+            friend Geometry;
+
+            static const std::shared_ptr<gfx::Mesh> mesh()
+            {
+                return s_mesh;
+            }
+
+        private:
+            static void init()
+            {
+                const auto& model = io::ModelImporter::import2("models/sphere/Sphere.gltf");
+                s_mesh = model->meshes.at(0);
+            }
+
+            static inline std::shared_ptr<gfx::Mesh> s_mesh{};
         };
     };
 }
