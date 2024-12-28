@@ -65,7 +65,8 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
-        auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+        //auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+        auto  model           = io::ModelImporter::import2("models/sphere/Sphere.gltf");
 
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
@@ -136,7 +137,7 @@ namespace fox
 
         while (!m_window->should_close())
         {
-            Time::update();
+            fox::Time::update();
             m_window->poll_events();
 
 
@@ -144,6 +145,15 @@ namespace fox
 
 
             move_camera();
+
+
+
+
+
+            auto& modelTransform = actor.get_component<ecs::TransformComponent>().get();
+            modelTransform.rotate(fox::Vector3f{ 0.0f, 2.0f * fox::Time::delta(), 0.0f});
+
+
 
 
 
