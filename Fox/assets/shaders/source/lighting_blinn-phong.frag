@@ -21,12 +21,12 @@ struct Light
 };
 
 const int NR_LIGHTS = 32;
-layout(std140, set = 0, binding = 2) uniform LightBuffer
+layout(std140, set = 0, binding = 3) uniform LightBuffer
 {
 	Light lights[NR_LIGHTS];
 } u_LightBuffer;
 
-layout(std140, set = 0, binding = 3) uniform Camera
+layout(std140, set = 0, binding = 4) uniform Camera
 {
 	vec4 position;
 } u_Camera;
