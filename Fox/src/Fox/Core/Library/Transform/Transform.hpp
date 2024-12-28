@@ -102,6 +102,6 @@ namespace fox
 
         fox::Vector3f   position{ 0.0f };
         fox::Quaternion rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
-        fox::Vector3f   scale{ 1.0f };
+        fox::Vector3f   scale   { 1.0f };
     };
 }
