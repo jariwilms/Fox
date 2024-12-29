@@ -1,6 +1,6 @@
 #version 460 core
 
-layout (binding = 99) uniform SamplerIndex
+layout (binding = 14) uniform SamplerIndex
 {
 	int index;
 } u_SamplerIndex;

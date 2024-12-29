@@ -345,12 +345,23 @@ namespace fox::gfx::api::gl
                                           
     
 
-    static void                           draw_elements(gl::Flags::Draw::Mode mode, gl::Flags::Draw::Type type, gl::size_t amount)
+    static void                           draw_arrays(gl::Flags::Draw::Mode mode, gl::size_t first, gl::size_t vertices)
     {
-        //Check if any element buffer is bound?
-        glDrawElements(static_cast<gl::enum_t>(mode), amount, static_cast<gl::enum_t>(type), nullptr);
+        glDrawArrays(static_cast<gl::enum_t>(mode), first, vertices);
     }
-
+    static void                           draw_arrays_instanced(gl::Flags::Draw::Mode mode, gl::size_t first, gl::size_t elements, gl::size_t vertices)
+    {
+        glDrawArraysInstanced(static_cast<gl::enum_t>(mode), first, vertices, elements);
+    }
+    static void                           draw_elements(gl::Flags::Draw::Mode mode, gl::Flags::Draw::Type type, gl::size_t indices)
+    {
+        glDrawElements(static_cast<gl::enum_t>(mode), indices, static_cast<gl::enum_t>(type), nullptr);
+    }
+    static void                           draw_elements_instanced(gl::Flags::Draw::Mode mode, gl::Flags::Draw::Type type, gl::size_t elements, gl::size_t indices)
+    {
+        glDrawElementsInstanced(static_cast<gl::enum_t>(mode), indices, static_cast<gl::enum_t>(type), nullptr, elements);
+    }
+    
 
 
     static void                           active_shader_program(gl::handle_t pipeline, gl::handle_t program)
@@ -460,6 +471,7 @@ namespace fox::gfx::api::gl
             }
         }();
 
+        //if (severityMessage != "NOTIFICATION") __debugbreak();
         std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}", sourceMessage, typeMessage, severityMessage, id, message) << std::endl;
     }
     static void                           debug_message_callback(decltype(debug_callback) callback)

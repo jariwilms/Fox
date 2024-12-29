@@ -15,19 +15,21 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_program();
 
-            const auto& type   = gl::map_shader_type(stage);
+            const auto& type = gl::map_shader_type(stage);
             const auto& shader = gl::create_shader(type);
 
             gl::program_parameter(m_handle, gl::Flags::Program::Parameter::Separable, gl::True);
             gl::shader_binary(shader, binary);
             gl::specialize_shader(shader, "main");
 
-            if (gl::shader_iv(shader, gl::Flags::Shader::Parameter::CompileStatus) != gl::True) throw std::runtime_error{ gl::shader_infolog(shader) };
+            const auto& compileStatus = gl::shader_iv(shader, gl::Flags::Shader::Parameter::CompileStatus);
+            if (compileStatus != gl::True) throw std::runtime_error{ gl::shader_infolog(shader) };
 
             gl::attach_shader(m_handle, shader);
             gl::link_program(m_handle);
 
-            if (gl::program_iv(m_handle, gl::Flags::Program::Parameter::LinkStatus) != gl::True) throw std::runtime_error{ gl::program_infolog(m_handle) };
+            const auto& linkStatus = gl::program_iv(m_handle, gl::Flags::Program::Parameter::LinkStatus);
+            if (linkStatus != gl::True) throw std::runtime_error{ gl::program_infolog(m_handle) };
 
             gl::detach_shader(m_handle, shader);
             gl::delete_shader(shader);
@@ -50,7 +52,5 @@ namespace fox::gfx::api::gl
 
             return *this;
         }
-
-    private:
     };
 }

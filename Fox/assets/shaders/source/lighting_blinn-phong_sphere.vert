@@ -1,5 +1,9 @@
 #version 460 core
 
+layout(location = 0) in  vec3 a_Position;
+
+layout(location = 0) out vec3 v_Position;
+
 layout(set = 0, binding = 1) uniform UMatrices
 {
 	mat4 model;
@@ -7,10 +11,6 @@ layout(set = 0, binding = 1) uniform UMatrices
 	mat4 projection;
 	mat4 normal;
 } u_Matrices;
-
-layout(location = 0) in  vec3 a_Position;
-
-layout(location = 0) out vec3 v_Position;
 
 void main()
 {

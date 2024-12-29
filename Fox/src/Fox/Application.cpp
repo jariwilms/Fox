@@ -65,8 +65,9 @@ namespace fox
     int Application::run()
     {
         auto  scene           = std::make_shared<scn::Scene>();
-        //auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
-        auto  model           = io::ModelImporter::import2("models/sphere/Sphere.gltf");
+        auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+        //auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
+        //auto  model           = io::ModelImporter::import2("models/sphere/Sphere.gltf");
 
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
@@ -87,8 +88,8 @@ namespace fox
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 10000.0f }, fox::Vector3f{ -1.0f, 0.0f, 1.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 10000.0f }, fox::Vector3f{ 1.0f, 0.0f, 1.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 2.0f }, fox::Vector3f{ -1.0f, 0.0f, 1.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 2.0f }, fox::Vector3f{  1.0f, 0.0f, 1.0f }), 
         };
 
 
@@ -145,15 +146,6 @@ namespace fox
 
 
             move_camera();
-
-
-
-
-
-            auto& modelTransform = actor.get_component<ecs::TransformComponent>().get();
-            modelTransform.rotate(fox::Vector3f{ 0.0f, 2.0f * fox::Time::delta(), 0.0f});
-
-
 
 
 
