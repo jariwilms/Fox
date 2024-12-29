@@ -6,25 +6,6 @@
 
 namespace fox::gfx::api::gl
 {
-    class State
-    {
-    public:
-        static void init()
-        {
-            glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &s_maxCombinedTextureImageUnits);
-        }
-
-        static gl::int32_t max_combined_texture_image_units()
-        {
-            return s_maxCombinedTextureImageUnits;
-        }
-
-    private:
-        static inline gl::int32_t s_maxCombinedTextureImageUnits;
-    };
-
-
-
     static gl::handle_t                   create_buffer()
     {
         gl::uint32_t handle{};
@@ -370,9 +351,6 @@ namespace fox::gfx::api::gl
     }
     static void                           active_texture(gl::uint32_t unit)
     {
-        const auto& maxTextureUnits = gl::State::max_combined_texture_image_units();
-        if (std::cmp_greater_equal(unit, maxTextureUnits)) throw std::invalid_argument{ "The given texture unit exceeds capacity!" };
-
         glActiveTexture(GL_TEXTURE0 + unit);
     }
     static void                           begin_conditional_render()
@@ -427,6 +405,7 @@ namespace fox::gfx::api::gl
     }
 
     
+
     static void                           debug_callback(gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* user_param)
     {
         const auto& sourceMessage   = [source]() -> std::string
