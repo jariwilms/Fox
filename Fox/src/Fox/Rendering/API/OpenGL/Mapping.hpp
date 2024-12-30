@@ -13,10 +13,6 @@
 
 namespace fox::gfx::api::gl
 {
-    //This file converts universal mappings to their equivalent OpenGL names
-    //ie. Texture::Format::RGBA32_SFLOAT => GL_RGBA32F
-    //TODO: create enum of all OpenGL values used in code
-
     static constexpr gl::enum_t                         map_texture_format(api::Texture::Format format)
     {
         switch (format)
@@ -245,13 +241,13 @@ namespace fox::gfx::api::gl
     template<typename T>                                
     constexpr gl::enum_t                                map_type() requires (std::is_fundamental_v<T>)
     {
-        if constexpr (std::is_same_v<T, fox::int8_t>)   return GL_BYTE;
-        if constexpr (std::is_same_v<T, fox::uint8_t>)  return GL_UNSIGNED_BYTE;
-        if constexpr (std::is_same_v<T, fox::int16_t>)  return GL_SHORT;
-        if constexpr (std::is_same_v<T, fox::uint16_t>) return GL_UNSIGNED_SHORT;
-        if constexpr (std::is_same_v<T, fox::int32_t>)  return GL_INT;
-        if constexpr (std::is_same_v<T, fox::uint32_t>) return GL_UNSIGNED_INT;
-        if constexpr (std::is_same_v<T, fox::float32_t>)    return GL_FLOAT;
-        if constexpr (std::is_same_v<T, fox::float64_t>)    return GL_DOUBLE;
+        if constexpr (std::is_same_v<T, fox::int8_t>)    return GL_BYTE;
+        if constexpr (std::is_same_v<T, fox::uint8_t>)   return GL_UNSIGNED_BYTE;
+        if constexpr (std::is_same_v<T, fox::int16_t>)   return GL_SHORT;
+        if constexpr (std::is_same_v<T, fox::uint16_t>)  return GL_UNSIGNED_SHORT;
+        if constexpr (std::is_same_v<T, fox::int32_t>)   return GL_INT;
+        if constexpr (std::is_same_v<T, fox::uint32_t>)  return GL_UNSIGNED_INT;
+        if constexpr (std::is_same_v<T, fox::float32_t>) return GL_FLOAT;
+        if constexpr (std::is_same_v<T, fox::float64_t>) return GL_DOUBLE;
     }
 }
