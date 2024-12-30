@@ -83,6 +83,10 @@ namespace fox::gfx::api::gl
     {
         glEnableVertexArrayAttrib(static_cast<gl::uint32_t>(vertexArray), index);
     }
+    static void                           disable_vertex_array_attribute(gl::handle_t vertexArray, gl::uint32_t index)
+    {
+        glDisableVertexArrayAttrib(static_cast<gl::uint32_t>(vertexArray), index);
+    }
     static void                           vertex_array_attribute_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, gl::enum_t type, gl::int32_t count, gl::bool_t normalized)
     {
         glVertexArrayAttribFormat(static_cast<gl::uint32_t>(vertexArray), index, count, type, normalized, offset);
