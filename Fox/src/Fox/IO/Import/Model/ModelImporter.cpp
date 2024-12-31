@@ -102,8 +102,11 @@ namespace fox::io
 
 
 
-            const auto& layout2f = gfx::VertexLayout<float>({ 2u });
-            const auto& layout3f = gfx::VertexLayout<float>({ 3u });
+            gfx::VertexLayout layout2f{};
+            gfx::VertexLayout layout3f{};
+
+            layout2f.specify<fox::float32_t>(2);
+            layout3f.specify<fox::float32_t>(3);
 
             auto vertexArray      = std::make_shared<gfx::VertexArray>();
             auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(positionsVector);
@@ -179,7 +182,7 @@ namespace fox::io
             create_nodes(model, childNodeIndex, asiScene, *asiChild);
         }
     }
-    ModelImporter::texptr_t ModelImporter::load_texture(const std::filesystem::path& path)
+    std::shared_ptr<gfx::Texture2D> ModelImporter::load_texture(const std::filesystem::path & path)
     {
         const auto& textureFile  = io::load(path);
         const auto& textureImage = fox::Image::decode(fox::Image::Layout::RGBA8, *textureFile->read());
@@ -197,7 +200,7 @@ namespace fox::io
             default: throw std::invalid_argument{ "Invalid texture type!" };
         }
     }
-    std::optional<ModelImporter::texptr_t> ModelImporter::get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path)
+    std::optional<std::shared_ptr<gfx::Texture2D>> ModelImporter::get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path)
     {
         std::optional<std::shared_ptr<gfx::Texture2D>> textureOpt{};
 

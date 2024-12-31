@@ -5,6 +5,7 @@
 #include "Fox/Rendering/Mesh/Mesh.hpp"
 #include "Fox/IO/Import/Model/ModelImporter.hpp"
 
+
 namespace fox::gfx
 {
     struct Geometry
@@ -57,8 +58,11 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto& layout3f = gfx::VertexLayout<fox::float32_t>{ 3 };
-                const auto& layout2f = gfx::VertexLayout<fox::float32_t>{ 2 };
+                gfx::VertexLayout layout2f{};
+                gfx::VertexLayout layout3f{};
+
+                layout2f.specify<fox::float32_t>(2);
+                layout3f.specify<fox::float32_t>(3);
 
                 s_positions   = std::make_shared<gfx::VertexBuffer<Buffer::Access::Static, fox::float32_t>>(positions);
                 s_normals     = std::make_shared<gfx::VertexBuffer<Buffer::Access::Static, fox::float32_t>>(normals);
@@ -210,8 +214,11 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto layout3f = VertexLayout<fox::float32_t>{ 3 };
-                const auto layout2f = VertexLayout<fox::float32_t>{ 2 };
+                gfx::VertexLayout layout2f{};
+                gfx::VertexLayout layout3f{};
+
+                layout2f.specify<fox::float32_t>(2);
+                layout3f.specify<fox::float32_t>(3);
 
                 const auto& positionsVBO   = std::make_shared<VertexBuffer<Buffer::Access::Static, fox::float32_t>>(positions);
                 const auto& normalsVBO     = std::make_shared<VertexBuffer<Buffer::Access::Static, fox::float32_t>>(positions);
