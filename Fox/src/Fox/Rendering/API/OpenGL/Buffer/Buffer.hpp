@@ -7,15 +7,23 @@
 
 namespace fox::gfx::api::gl
 {
+    class BufferObject : public api::Buffer, public gl::Object
+    {
+    protected:
+        BufferObject(fox::size_t size)
+            : api::Buffer{ size } {}
+        ~BufferObject() = default;
+    };
+
     template<api::Buffer::Type TYPE, api::Buffer::Access ACCESS, typename T>
     class Buffer;
 
     template<api::Buffer::Type TYPE, typename T>
-    class Buffer<TYPE, api::Buffer::Access::Static, T> : public api::Buffer, public gl::Object
+    class Buffer<TYPE, api::Buffer::Access::Static, T> : public BufferObject
     {
     public:
         explicit Buffer(std::span<const T> data)
-            : api::Buffer{ data.size_bytes() }
+            : BufferObject{ data.size_bytes() }
         {
             m_handle = gl::create_buffer();
 
@@ -36,10 +44,6 @@ namespace fox::gfx::api::gl
             if constexpr (TYPE == api::Buffer::Type::Vertex)       gl::bind_buffer(m_handle, gl::Flags::Buffer::Target::ArrayBuffer);
             if constexpr (TYPE == api::Buffer::Type::Index)        gl::bind_buffer(m_handle, gl::Flags::Buffer::Target::ElementArrayBuffer);
             if constexpr (TYPE == api::Buffer::Type::UniformArray) gl::bind_buffer(m_handle, gl::Flags::Buffer::Target::UniformBuffer);
-        }
-        void bind_range(gl::index_t binding, fox::count_t count, fox::offset_t offset) const requires (TYPE == api::Buffer::Type::UniformArray)
-        {
-            gl::bind_buffer_range(m_handle, Flags::Buffer::TargetRange::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
         }
 
         fox::count_t count() const
@@ -131,11 +135,11 @@ namespace fox::gfx::api::gl
         using Buffer<TYPE, api::Buffer::Access::Static, T>::m_size;
     };
     template<typename T>
-    class Buffer<api::Buffer::Type::Uniform, api::Buffer::Access::Dynamic, T> : public api::Buffer, public gl::Object
+    class Buffer<api::Buffer::Type::Uniform, api::Buffer::Access::Dynamic, T> : public BufferObject
     {
     public:
         explicit Buffer(const T& data = {})
-            : api::Buffer{ sizeof(T) }
+            : BufferObject{ sizeof(T) }
         {
             m_handle = gl::create_buffer();
 
@@ -189,11 +193,11 @@ namespace fox::gfx::api::gl
         }
     };
     template<typename T>
-    class Buffer<api::Buffer::Type::UniformArray, api::Buffer::Access::Dynamic, T> : public api::Buffer, public gl::Object
+    class Buffer<api::Buffer::Type::UniformArray, api::Buffer::Access::Dynamic, T> : public BufferObject
     {
     public:
         explicit Buffer(fox::count_t count)
-            : api::Buffer{ count * sizeof(T) }
+            : BufferObject{ count * sizeof(T) }
         {
             m_handle = gl::create_buffer();
 
@@ -201,7 +205,7 @@ namespace fox::gfx::api::gl
             gl::buffer_storage(m_handle, bufferAccess, gl::sizeptr_t{ count * sizeof(T) });
         }
         explicit Buffer(std::span<const T> data)
-            : api::Buffer{ data.size_bytes() }
+            : BufferObject{ data.size_bytes() }
         {
             m_handle = gl::create_buffer();
 
@@ -220,6 +224,10 @@ namespace fox::gfx::api::gl
         void bind_index(gl::index_t index) const
         {
             gl::bind_buffer_base(m_handle, gl::Flags::Buffer::TargetBase::UniformBuffer, index);
+        }
+        void bind_range(gl::index_t binding, fox::count_t count, fox::count_t offset) const
+        {
+            gl::bind_buffer_range(m_handle, Flags::Buffer::TargetRange::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
         }
 
         void copy(std::span<const T> data)
