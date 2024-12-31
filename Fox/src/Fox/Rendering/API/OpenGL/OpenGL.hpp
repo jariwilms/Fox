@@ -99,6 +99,10 @@ namespace fox::gfx::api::gl
     {
         glVertexArrayElementBuffer(static_cast<gl::uint32_t>(vertexArray), static_cast<gl::uint32_t>(buffer));
     }
+    static void                           vertex_array_binding_divisor(gl::handle_t vertexArray, gl::uint32_t binding, gl::uint32_t divisor)
+    {
+        glVertexArrayBindingDivisor(static_cast<gl::uint32_t>(vertexArray), binding, divisor);
+    }
                                           
                                           
                                           
@@ -194,6 +198,10 @@ namespace fox::gfx::api::gl
     static void                           texture_sub_image_3d(gl::handle_t texture, gl::enum_t format, const fox::Vector3u& dimensions, const fox::Vector3u& offset, gl::int32_t level, const void* data) //80 column rule my ass
     {
         glTextureSubImage3D(static_cast<gl::uint32_t>(texture), level, static_cast<gl::int32_t>(offset.x), static_cast<gl::int32_t>(offset.y), static_cast<gl::int32_t>(offset.z), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
+    }
+    static void                           generate_texture_mip_map(gl::handle_t texture)
+    {
+        glGenerateTextureMipmap(static_cast<gl::uint32_t>(texture));
     }
                                           
                                           

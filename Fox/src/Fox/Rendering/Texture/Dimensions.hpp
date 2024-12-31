@@ -6,15 +6,15 @@ namespace fox::gfx
 {
     enum class Dimensions
     {
-        _1D = 1,
-        _2D,
-        _3D,
+        _1D = 1, 
+        _2D, 
+        _3D, 
     };
 
     template<Dimensions>
-    struct MapVectorType;
+    struct MapDimensionsToVector;
 
-    template<> struct MapVectorType<Dimensions::_1D> { using type = Vector1u; };
-    template<> struct MapVectorType<Dimensions::_2D> { using type = Vector2u; };
-    template<> struct MapVectorType<Dimensions::_3D> { using type = Vector3u; };
+    template<> struct MapDimensionsToVector<Dimensions::_1D> { using type = fox::Vector1u; };
+    template<> struct MapDimensionsToVector<Dimensions::_2D> { using type = fox::Vector2u; };
+    template<> struct MapDimensionsToVector<Dimensions::_3D> { using type = fox::Vector3u; };
 }

@@ -2,8 +2,9 @@
 
 #include "stdafx.hpp"
 
-#include "Dimensions.hpp"
-#include "AntiAliasing.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Texture/MipMap.hpp"
 
 namespace fox::gfx::api
 {

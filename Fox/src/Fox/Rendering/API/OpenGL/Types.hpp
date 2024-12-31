@@ -37,7 +37,7 @@ namespace fox::gfx::api::gl
     enum class align_t    : gl::uint32_t {}; //Strong alias for OpenGL memory alignment
 
 
-    
+
     enum : gl::bool_t
     {
         False = GL_FALSE,
@@ -50,6 +50,19 @@ namespace fox::gfx::api::gl
     enum : gl::enum_t
     {
         DontCare = GL_DONT_CARE, 
+    };
+
+    enum class DataType : gl::enum_t
+    {
+        Boolean       = GL_BOOL, 
+        Byte          = GL_BYTE, 
+        UnsignedByte  = GL_UNSIGNED_BYTE, 
+        Int           = GL_INT, 
+        UnsignedInt   = GL_UNSIGNED_INT, 
+        Short         = GL_SHORT, 
+        UnsignedShort = GL_UNSIGNED_SHORT, 
+        Float         = GL_FLOAT, 
+        Double        = GL_DOUBLE, 
     };
 
 
@@ -375,23 +388,23 @@ namespace fox::gfx::api::gl
         {
             enum class Parameter : gl::enum_t
             {
-                DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
                 BaseLevel           = GL_TEXTURE_BASE_LEVEL, 
                 CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
                 CompareMode         = GL_TEXTURE_COMPARE_MODE, 
+                DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
                 LODBias             = GL_TEXTURE_LOD_BIAS, 
-                MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
                 MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
-                MinimumLOD          = GL_TEXTURE_MIN_LOD, 
-                MaximumLOD          = GL_TEXTURE_MAX_LOD, 
                 MaximumLevel        = GL_TEXTURE_MAX_LEVEL, 
-                SwizzleRed          = GL_TEXTURE_SWIZZLE_R, 
-                SwizzleGreen        = GL_TEXTURE_SWIZZLE_G,
-                SwizzleBlue         = GL_TEXTURE_SWIZZLE_B,
+                MaximumLOD          = GL_TEXTURE_MAX_LOD, 
+                MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
+                MinimumLOD          = GL_TEXTURE_MIN_LOD, 
                 SwizzleAlpha        = GL_TEXTURE_SWIZZLE_A,
+                SwizzleBlue         = GL_TEXTURE_SWIZZLE_B,
+                SwizzleGreen        = GL_TEXTURE_SWIZZLE_G,
+                SwizzleRed          = GL_TEXTURE_SWIZZLE_R, 
+                WrappingR           = GL_TEXTURE_WRAP_R, 
                 WrappingS           = GL_TEXTURE_WRAP_S, 
                 WrappingT           = GL_TEXTURE_WRAP_T, 
-                WrappingR           = GL_TEXTURE_WRAP_R, 
             };
         };
         struct     Query

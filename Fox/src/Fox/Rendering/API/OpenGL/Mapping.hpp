@@ -15,7 +15,7 @@
 namespace fox::gfx::api::gl
 {
     template<Dimensions DIMS, AntiAliasing AA>
-    static constexpr gl::enum_t map_texture_target()
+    static constexpr gl::enum_t                         map_texture_target()
     {
         if constexpr (AA == AntiAliasing::None)
         {
@@ -26,6 +26,7 @@ namespace fox::gfx::api::gl
         if constexpr (AA == AntiAliasing::MSAA)
         {
             if constexpr (DIMS == Dimensions::_2D) return GL_TEXTURE_2D_MULTISAMPLE;
+            if constexpr (DIMS == Dimensions::_3D) return GL_TEXTURE_2D_MULTISAMPLE_ARRAY; 
         }
 
         throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
