@@ -5,6 +5,7 @@
 
 #include "Fox/Rendering/API/OpenGL/Types.hpp"
 #include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/Buffer/DataTypes.hpp"
 #include "Fox/Rendering/Buffer/FrameBuffer.hpp"
 #include "Fox/Rendering/RenderState/RenderState.hpp"
 #include "Fox/Rendering/Shader/Pipeline.hpp"
@@ -13,6 +14,22 @@
 
 namespace fox::gfx::api::gl
 {
+    template<Dimensions DIMS, AntiAliasing AA>
+    static constexpr gl::enum_t map_texture_target()
+    {
+        if constexpr (AA == AntiAliasing::None)
+        {
+            if constexpr (DIMS == Dimensions::_1D) return GL_TEXTURE_1D;
+            if constexpr (DIMS == Dimensions::_2D) return GL_TEXTURE_2D;
+            if constexpr (DIMS == Dimensions::_3D) return GL_TEXTURE_3D;
+        }
+        if constexpr (AA == AntiAliasing::MSAA)
+        {
+            if constexpr (DIMS == Dimensions::_2D) return GL_TEXTURE_2D_MULTISAMPLE;
+        }
+
+        throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
+    }
     static constexpr gl::enum_t                         map_texture_format(api::Texture::Format format)
     {
         switch (format)
@@ -239,7 +256,7 @@ namespace fox::gfx::api::gl
     }
                                                         
     template<typename T>                                
-    constexpr gl::enum_t                                map_type() requires (std::is_fundamental_v<T>)
+    static constexpr gl::enum_t                         map_type() requires (std::is_fundamental_v<T>)
     {
         if constexpr (std::is_same_v<T, fox::int8_t>)    return GL_BYTE;
         if constexpr (std::is_same_v<T, fox::uint8_t>)   return GL_UNSIGNED_BYTE;
@@ -249,5 +266,18 @@ namespace fox::gfx::api::gl
         if constexpr (std::is_same_v<T, fox::uint32_t>)  return GL_UNSIGNED_INT;
         if constexpr (std::is_same_v<T, fox::float32_t>) return GL_FLOAT;
         if constexpr (std::is_same_v<T, fox::float64_t>) return GL_DOUBLE;
+    }
+    static constexpr gl::enum_t                         map_data_type(gfx::DataType dataType)
+    {
+        if (dataType == gfx::DataType::Byte)            return GL_BYTE;
+        if (dataType == gfx::DataType::UnsignedByte)    return GL_UNSIGNED_BYTE;
+        if (dataType == gfx::DataType::Short)           return GL_SHORT;
+        if (dataType == gfx::DataType::UnsignedShort)   return GL_UNSIGNED_SHORT;
+        if (dataType == gfx::DataType::Integer)         return GL_INT;
+        if (dataType == gfx::DataType::UnsignedInteger) return GL_UNSIGNED_INT;
+        if (dataType == gfx::DataType::Float)           return GL_FLOAT;
+        if (dataType == gfx::DataType::Double)          return GL_DOUBLE;
+
+        throw std::invalid_argument{ "Invalid Data Type!" };
     }
 }
