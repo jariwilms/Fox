@@ -15,7 +15,7 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_program();
 
-            const auto& type = gl::map_shader_type(stage);
+            const auto& type   = gl::map_shader_type(stage);
             const auto& shader = gl::create_shader(type);
 
             gl::program_parameter(m_handle, gl::Flags::Program::Parameter::Separable, gl::True);
@@ -24,7 +24,7 @@ namespace fox::gfx::api::gl
 
             const auto& compileStatus = gl::shader_iv(shader, gl::Flags::Shader::Parameter::CompileStatus);
             if (compileStatus != gl::True) throw std::runtime_error{ gl::shader_infolog(shader) };
-
+            
             gl::attach_shader(m_handle, shader);
             gl::link_program(m_handle);
 
