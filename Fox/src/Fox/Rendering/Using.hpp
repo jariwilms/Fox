@@ -9,12 +9,12 @@
 #include "Fox/Rendering/API/OpenGL/Buffer/Buffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/FrameBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/VertexArray.hpp"
-#include "Fox/Rendering/API/OpenGL/Layout/VertexLayout.hpp"
 #include "Fox/Rendering/API/OpenGL/RenderState/RenderState.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Pipeline.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Shader.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
 #include "Fox/Rendering/Uniform/Uniform.hpp"
+#include "Fox/Rendering/Layout/Layout.hpp"
 
 namespace fox::gfx
 {
@@ -29,9 +29,6 @@ namespace fox::gfx
     using UniformArrayBuffer     = api::gl::Buffer<api::Buffer::Type::UniformArray, Buffer::Access::Dynamic, T>;
 
     using VertexArray            = api::gl::VertexArray;
-
-    template<typename... T>
-    using VertexLayout           = api::gl::VertexLayout<T...>;
 
     using FrameBuffer            = api::gl::FrameBuffer<AntiAliasing::None>;
     using FrameBufferMultisample = api::gl::FrameBuffer<AntiAliasing::MSAA>;
