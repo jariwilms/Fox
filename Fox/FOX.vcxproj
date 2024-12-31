@@ -139,7 +139,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Layout\VertexLayout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\RenderState.hpp" />
@@ -154,7 +154,9 @@
     <ClInclude Include="src\Fox\Rendering\API\Vulkan\Vulkan.hpp" />
     <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Plane.hpp" />
@@ -175,6 +177,7 @@
     <ClInclude Include="src\Fox\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\AntiAliasing.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\Dimensions.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Fox\Rendering\Uniform\Uniform.hpp" />
     <ClInclude Include="src\Fox\Rendering\Using.hpp" />

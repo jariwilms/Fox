@@ -300,7 +300,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Layout\VertexLayout.hpp">
+    <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Layout</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp">
@@ -437,6 +437,9 @@
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">
