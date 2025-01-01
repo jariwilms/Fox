@@ -180,13 +180,4 @@ namespace fox::gfx::api::gl
         fox::uint8_t m_samples{};
         vector_t     m_dimensions{};
     };
-
-    static void texture_test()
-    {
-        using Texture2D = Texture<Dimensions::_2D, AntiAliasing::None>;
-
-        Texture2D* tex2d{};
-
-        tex2d->
-    }
 }
