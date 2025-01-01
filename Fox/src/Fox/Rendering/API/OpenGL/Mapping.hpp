@@ -10,6 +10,8 @@
 #include "Fox/Rendering/RenderState/RenderState.hpp"
 #include "Fox/Rendering/Shader/Pipeline.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::gfx::api::gl

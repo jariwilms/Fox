@@ -10,7 +10,7 @@ namespace fox::gfx::api::gl
     {
     public:
         RenderBuffer(Format format, const fox::Vector2u& dimensions) requires (AA == AntiAliasing::None)
-            : api::Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }
+            : api::Texture{ format }, m_dimensions{ dimensions }
         {
             m_handle = gl::create_render_buffer();
 
@@ -18,7 +18,7 @@ namespace fox::gfx::api::gl
             gl::render_buffer_storage(m_handle, renderBufferFormat, m_dimensions);
         }
         RenderBuffer(Format format, const fox::Vector2u& dimensions, fox::count_t samples) requires (AA == AntiAliasing::MSAA)
-            : Texture{ format, Texture::Filter::None, Texture::Wrapping::Repeat }, m_dimensions{ dimensions }, m_samples{ samples }
+            : Texture{ format }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_handle = gl::create_render_buffer();
 

@@ -2,10 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/Texture/Dimensions.hpp"
-#include "Fox/Rendering/Texture/AntiAliasing.hpp"
-#include "Fox/Rendering/Texture/MipMap.hpp"
-
 namespace fox::gfx::api
 {
     class Texture
@@ -73,26 +69,64 @@ namespace fox::gfx::api
         enum class Filter
         {
             None,
+
             Nearest,
             Bilinear,
             Trilinear,
         };
         enum class Wrapping
         {
+            Repeat,
+
             ClampToEdge,
             ClampToBorder,
 
-            Repeat,
             MirroredRepeat,
             MirroredClampToEdge,
         };
+        enum class Coordinate
+        {
+            U, 
+            V, 
+            W, 
+
+            S = U, 
+            T = V, 
+            R = W, 
+        };
+
+        Format format() const
+        {
+            return m_format;
+        }
+        Filter filter() const
+        {
+            return m_filter;
+        }
 
     protected:
-        Texture(Format format, Filter filter, Wrapping wrapping)
-            : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping } {}
+        Texture(Format format)
+            : Texture{ format, Filter::None } {}
+        Texture(Format format, Filter filter)
+            : m_format{ format }, m_filter{ filter } {}
+        Texture(Texture&& other) noexcept
+        {
+            *this = std::move(other);
+        }
+        ~Texture() = default;
 
-        Format   m_format{};
-        Filter   m_filter{};
-        Wrapping m_wrapping{};
+        Texture& operator=(Texture&& other) noexcept
+        {
+            if (this != &other)
+            {
+                m_format = std::exchange(other.m_format, m_format);
+                m_filter = std::exchange(other.m_filter, m_filter);
+            }
+
+            return *this;
+        }
+
+        Format m_format{};
+        Filter m_filter{};
     };
 }

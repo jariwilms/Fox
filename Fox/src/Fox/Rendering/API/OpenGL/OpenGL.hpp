@@ -199,7 +199,7 @@ namespace fox::gfx::api::gl
     {
         glTextureSubImage3D(static_cast<gl::uint32_t>(texture), level, static_cast<gl::int32_t>(offset.x), static_cast<gl::int32_t>(offset.y), static_cast<gl::int32_t>(offset.z), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), format, GL_UNSIGNED_BYTE, data);
     }
-    static void                           generate_texture_mip_map(gl::handle_t texture)
+    static void                           generate_texture_mipmap(gl::handle_t texture)
     {
         glGenerateTextureMipmap(static_cast<gl::uint32_t>(texture));
     }
