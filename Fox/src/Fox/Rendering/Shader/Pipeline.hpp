@@ -10,14 +10,15 @@ namespace fox::gfx::api
         template<typename T>
         struct Layout
         {
-            std::shared_ptr<T> vertexShader{};
-            std::shared_ptr<T> tessellationControlShader{};
-            std::shared_ptr<T> tessellationEvaluationShader{};
-            std::shared_ptr<T> geometryShader{};
-            std::shared_ptr<T> fragmentShader{};
+            std::shared_ptr<T> vertex{};
+            std::shared_ptr<T> tessellationControl{};
+            std::shared_ptr<T> tessellationEvaluation{};
+            std::shared_ptr<T> geometry{};
+            std::shared_ptr<T> fragment{};
         };
 
     protected:
         Pipeline() = default;
+        ~Pipeline() = default;
     };
 }
