@@ -16,28 +16,38 @@ namespace fox::gfx::api
     public:
         static void init()
         {
+            using FM = gfx::FrameBuffer::Manifest;
+            using FA = gfx::FrameBuffer::Attachment;
+            using FR = gfx::FrameBuffer::Resample;
+            using TB = gfx::TextureBlueprint;
+            using TF = gfx::Texture::Format;
+
+
+
             const fox::uint8_t  samples{ 4u };
             const fox::uint32_t lightCount{ 32u };
             const fox::Vector2u dimensions{ 1280u, 720u };
             const fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
 
-            std::array<api::FrameBuffer::Manifest, 5> gBufferManifest
-            {
-                gfx::FrameBuffer::Manifest{ "Position",     gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT } },
-                gfx::FrameBuffer::Manifest{ "Albedo",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGBA8_UNORM  } },
-                gfx::FrameBuffer::Manifest{ "Normal",       gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_SFLOAT } },
-                gfx::FrameBuffer::Manifest{ "ARM",          gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_UNORM  } },
 
-                gfx::FrameBuffer::Manifest{ "DepthStencil", gfx::FrameBuffer::Attachment::DepthStencil, gfx::FrameBuffer::Resample::No,  gfx::TextureBlueprint{ gfx::Texture::Format::D24_UNORM_S8_UINT } },
-            };
-            std::array<gfx::FrameBuffer::Manifest, 1> sBufferManifest
+
+            std::array<FM, 5> gBufferManifest
             {
-                gfx::FrameBuffer::Manifest{ "Depth",        gfx::FrameBuffer::Attachment::Depth,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::D24_UNORM } },
+                FM{ "Position",     FA::Color,        FR::Yes, TB{ TF::RGB16_SFLOAT } },
+                FM{ "Albedo",       FA::Color,        FR::Yes, TB{ TF::RGBA8_UNORM  } },
+                FM{ "Normal",       FA::Color,        FR::Yes, TB{ TF::RGB16_SFLOAT } },
+                FM{ "ARM",          FA::Color,        FR::Yes, TB{ TF::RGB16_UNORM  } },
+
+                FM{ "DepthStencil", FA::DepthStencil, FR::No,  TB{ TF::D24_UNORM_S8_UINT } },
             };
-            std::array<gfx::FrameBuffer::Manifest, 2> ppBufferManifest
+            std::array<FM, 1> sBufferManifest
             {
-                gfx::FrameBuffer::Manifest{ "Color",        gfx::FrameBuffer::Attachment::Color,        gfx::FrameBuffer::Resample::Yes, gfx::TextureBlueprint{ gfx::Texture::Format::RGB16_UNORM } },
-                gfx::FrameBuffer::Manifest{ "Depth",        gfx::FrameBuffer::Attachment::DepthStencil, gfx::FrameBuffer::Resample::No,  gfx::TextureBlueprint{ gfx::Texture::Format::D24_UNORM_S8_UINT } },
+                FM{ "Depth",        FA::Depth,        FR::Yes, TB{ TF::D24_UNORM } },
+            };
+            std::array<FM, 2> ppBufferManifest
+            {
+                FM{ "Color",        FA::Color,        FR::Yes, TB{ TF::RGB16_UNORM } },
+                FM{ "Depth",        FA::DepthStencil, FR::No,  TB{ TF::D24_UNORM_S8_UINT } },
             };
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
@@ -62,10 +72,10 @@ namespace fox::gfx::api
             const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere.frag.spv");
             const auto& debugShaders    = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/debug.vert.spv",                                 "shaders/compiled/debug.frag.spv");
 
-            s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = meshShaders.at(0),     .fragmentShader = meshShaders.at(1) }));
-            s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = blitShaders.at(0),     .fragmentShader = blitShaders.at(1) }));
-            s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = lightingShaders.at(0), .fragmentShader = lightingShaders.at(1) }));
-            s_pipelines.emplace("Debug",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = debugShaders.at(0),    .fragmentShader = debugShaders.at(1) }));
+            s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = meshShaders.at(0),     .fragment = meshShaders.at(1) }));
+            s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = blitShaders.at(0),     .fragment = blitShaders.at(1) }));
+            s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0), .fragment = lightingShaders.at(1) }));
+            s_pipelines.emplace("Debug",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),    .fragment = debugShaders.at(1) }));
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
