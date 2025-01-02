@@ -27,9 +27,10 @@ namespace fox::gfx::api
             No, 
             Yes, 
         };
+
         struct Manifest
         {
-            Manifest(const std::string& identifier, Attachment attachment, Resample resample, const api::TextureBlueprint& blueprint)
+            Manifest(const std::string& identifier, Attachment attachment, Resample resample, const TextureBlueprint& blueprint)
                 : identifier{ identifier }, attachment{ attachment }, resample{ resample }, blueprint{ blueprint } {}
 
             std::string             identifier{};

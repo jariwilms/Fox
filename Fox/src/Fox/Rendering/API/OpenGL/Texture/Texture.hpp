@@ -126,7 +126,7 @@ namespace fox::gfx::api::gl
         vector_t      m_dimensions{};
     };
     template<Dimensions DIMS> requires (DIMS != Dimensions::_1D)
-    class Texture<DIMS, AntiAliasing::MSAA> : public api::Texture, public gl::Object 
+    class Texture<DIMS, AntiAliasing::MSAA> : public api::Texture, public gl::Object
     {
     public:
         using vector_t = gfx::DimensionsToVectorMap<DIMS>::type;
@@ -139,10 +139,7 @@ namespace fox::gfx::api::gl
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);
         }
-        Texture(Texture&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Texture(Texture&& other) noexcept = default;
         ~Texture()
         {
             gl::delete_texture(m_handle);
@@ -162,22 +159,10 @@ namespace fox::gfx::api::gl
             return m_dimensions;
         }
 
-        Texture& operator=(Texture&& other) noexcept
-        {
-            if (this != &other)
-            {
-                api::Texture::operator=(std::move(other));
-
-                m_handle     = std::exchange(other.m_handle,     m_handle);
-                m_samples    = std::exchange(other.m_samples,    m_samples);
-                m_dimensions = std::exchange(other.m_dimensions, m_dimensions);
-            }
-
-            return *this;
-        }
+        Texture& operator=(Texture&& other) noexcept = default;
 
     private:
-        fox::uint8_t m_samples{};
         vector_t     m_dimensions{};
+        fox::uint8_t m_samples{};
     };
 }

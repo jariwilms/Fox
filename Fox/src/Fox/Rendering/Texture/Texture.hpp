@@ -105,26 +105,12 @@ namespace fox::gfx::api
         }
 
     protected:
-        Texture(Format format)
-            : Texture{ format, Filter::None } {}
-        Texture(Format format, Filter filter)
+        Texture(Format format, Filter filter = Filter::None)
             : m_format{ format }, m_filter{ filter } {}
-        Texture(Texture&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Texture(Texture&& other) noexcept = default;
         ~Texture() = default;
 
-        Texture& operator=(Texture&& other) noexcept
-        {
-            if (this != &other)
-            {
-                m_format = std::exchange(other.m_format, m_format);
-                m_filter = std::exchange(other.m_filter, m_filter);
-            }
-
-            return *this;
-        }
+        Texture& operator=(Texture&& other) noexcept = default;
 
         Format m_format{};
         Filter m_filter{};
