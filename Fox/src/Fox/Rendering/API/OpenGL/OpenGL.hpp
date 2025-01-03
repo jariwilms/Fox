@@ -11,7 +11,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t handle{};
         glCreateBuffers(1, &handle);
 
-        return static_cast<gl::handle_t>(handle);
+        return gl::handle_t{ handle };
     }
     static void                           delete_buffer(gl::handle_t buffer)
     {
@@ -43,12 +43,15 @@ namespace fox::gfx::api::gl
     {
         glNamedBufferSubData(static_cast<gl::uint32_t>(buffer), offset, static_cast<gl::sizeptr_t>(data.size_bytes()), data.data());
     }
-                                          
+    static void                           copy_buffer_sub_data(gl::handle_t source, gl::handle_t destination, gl::sizeptr_t size, gl::sizeptr_t sourceOffset, gl::sizeptr_t destinationOffset)
+    {
+        glCopyNamedBufferSubData(static_cast<gl::uint32_t>(source), static_cast<gl::uint32_t>(destination), sourceOffset, destinationOffset, size);
+    }
     static void*                          map_buffer(gl::handle_t buffer, gl::size_t size)
     {
         return glMapNamedBuffer(static_cast<gl::uint32_t>(buffer), GL_READ_WRITE);
     }
-    static void*                          map_buffer_range(gl::handle_t buffer, gl::enum_t access, gl::sizeptr_t size, gl::intptr_t offset)
+    static void*                          map_buffer_range(gl::handle_t buffer, gl::enum_t access, gl::sizeptr_t size, gl::intptr_t offset) //TODO: inptr_t correct for offset?
     {
         return glMapNamedBufferRange(static_cast<gl::uint32_t>(buffer), offset, size, access);
     }
@@ -57,7 +60,7 @@ namespace fox::gfx::api::gl
         const auto& isValidState = glUnmapNamedBuffer(static_cast<gl::uint32_t>(buffer));
         if (isValidState != gl::True) throw std::runtime_error{ "Buffer data store may be undefined!" };
     }
-                                          
+
                                           
                                           
     static gl::handle_t                   create_vertex_array()
@@ -65,7 +68,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t vertexArray{};
         glCreateVertexArrays(1, &vertexArray);
 
-        return static_cast<gl::handle_t>(vertexArray);
+        return gl::handle_t{ vertexArray };
     }
     static void                           delete_vertex_array(gl::handle_t vertexArray)
     {
@@ -111,7 +114,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t frameBuffer{};
         glCreateFramebuffers(1, &frameBuffer);
         
-        return static_cast<gl::handle_t>(frameBuffer);
+        return gl::handle_t{ frameBuffer };
     }
     static void                           delete_frame_buffer(gl::handle_t frameBuffer)
     {
@@ -153,7 +156,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t texture{};
         glCreateTextures(target, 1, &texture);
 
-        return static_cast<gl::handle_t>(texture);
+        return gl::handle_t{ texture };
     }
     static void                           delete_texture(gl::handle_t texture)
     {
@@ -211,7 +214,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t renderBuffer{};
         glCreateRenderbuffers(1, &renderBuffer);
 
-        return static_cast<gl::handle_t>(renderBuffer);
+        return gl::handle_t{ renderBuffer };
     }
     static void                           delete_render_buffer(gl::handle_t renderBuffer)
     {
@@ -234,7 +237,7 @@ namespace fox::gfx::api::gl
                                           
     static gl::handle_t                   create_program()
     {
-        return static_cast<gl::handle_t>(glCreateProgram());
+        return gl::handle_t{ glCreateProgram() };
     }
     static void                           delete_program(gl::handle_t program)
     {
@@ -273,7 +276,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t shader{};
         shader = glCreateShader(static_cast<gl::enum_t>(type));
 
-        return static_cast<gl::handle_t>(shader);
+        return gl::handle_t{ shader };
     }
     static void                           delete_shader(gl::handle_t shader)
     {
@@ -321,7 +324,7 @@ namespace fox::gfx::api::gl
         gl::uint32_t pipeline{};
         glCreateProgramPipelines(1, &pipeline);
 
-        return static_cast<gl::handle_t>(pipeline);
+        return gl::handle_t{ pipeline };
     }
     static void                           delete_program_pipeline(gl::handle_t pipeline)
     {
@@ -336,7 +339,60 @@ namespace fox::gfx::api::gl
         glUseProgramStages(static_cast<gl::uint32_t>(pipeline), stages, static_cast<gl::uint32_t>(program));
     }
                                           
+
+
+    static gl::handle_t                   create_query(gl::Flags::Query::Target target)
+    {
+        gl::uint32_t query{};
+        glCreateQueries(static_cast<gl::enum_t>(target), 1, &query);
+
+        return gl::handle_t{ query };
+    }
+    static void                           delete_query(gl::handle_t query)
+    {
+        glDeleteQueries(1, reinterpret_cast<gl::uint32_t*>(&query));
+    }
+    static void                           begin_query(gl::handle_t query, gl::Flags::Query::Target target)
+    {
+        //TODO: make template function? => automatic target deduction
+        glBeginQuery(static_cast<gl::enum_t>(target), static_cast<gl::uint32_t>(query));
+    }
+    static void                           begin_query_indexed(gl::handle_t query, gl::Flags::Query::Target target, gl::uint32_t index)
+    {
+        glBeginQueryIndexed(static_cast<gl::enum_t>(target), index, static_cast<gl::uint32_t>(query));
+    }
+    static void                           end_query(gl::Flags::Query::Target target)
+    {
+        glEndQuery(static_cast<gl::enum_t>(target));
+    }
+    static void                           end_query_indexed(gl::Flags::Query::Target target, gl::uint32_t index)
+    {
+        glEndQueryIndexed(static_cast<gl::enum_t>(target), index);
+    }
+    static gl::int32_t                    get_query_iv(gl::Flags::Query::Target target)
+    {
+        gl::int32_t params{};
+        glGetQueryiv(static_cast<gl::enum_t>(target), GL_CURRENT_QUERY, &params);
+
+        return params;
+    }
+    static gl::int32_t                    get_query_object(gl::handle_t query, gl::Flags::Query::Parameter parameter)
+    {
+        gl::int32_t result{};
+        glGetQueryObjectiv(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(parameter), &result);
+
+        return result;
+    }
+    static void                           begin_conditional_render(gl::handle_t query, gl::Flags::Query::Mode mode)
+    {
+        glBeginConditionalRender(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(mode));
+    }
+    static void                           end_conditional_render()
+    {
+        glEndConditionalRender();
+    }
     
+
 
     static void                           draw_arrays(gl::Flags::Draw::Mode mode, gl::size_t first, gl::size_t vertices)
     {

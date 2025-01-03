@@ -414,10 +414,28 @@ namespace fox::gfx::api::gl
         {
             enum class Mode : gl::enum_t
             {
-                QueryNoWait,
-                QueryRegionNoWait,
-                QueryRegionWait,
-                QueryWait,
+                QueryNoWait         = GL_QUERY_NO_WAIT, 
+                QueryNoWaitInverted = GL_QUERY_NO_WAIT_INVERTED, 
+                QueryRegionNoWait   = GL_QUERY_BY_REGION_NO_WAIT, 
+                QueryRegionWait     = GL_QUERY_BY_REGION_WAIT, 
+                QueryWait           = GL_QUERY_WAIT, 
+                QueryWaitInverted   = GL_QUERY_WAIT_INVERTED, 
+            };
+            enum class Target : gl::enum_t
+            {
+                AnySamplesPassed                   = GL_ANY_SAMPLES_PASSED, 
+                AnySamplesPassedConservative       = GL_ANY_SAMPLES_PASSED_CONSERVATIVE, 
+                PrimitivesGenerated                = GL_PRIMITIVES_GENERATED, 
+                SamplesPassed                      = GL_SAMPLES_PASSED, 
+                TimeElapsed                        = GL_TIME_ELAPSED, 
+                Timestamp                          = GL_TIMESTAMP, 
+                TransformFeedbackPrimitivesWritten = GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, 
+            };
+            enum class Parameter : gl::enum_t
+            {
+                Result          = GL_QUERY_RESULT, 
+                ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
+                ResultAvailable = GL_QUERY_RESULT_AVAILABLE, 
             };
         };
     };

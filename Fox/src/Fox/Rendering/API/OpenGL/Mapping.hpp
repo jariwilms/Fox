@@ -229,7 +229,17 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-                                                        
+                                                 
+    static constexpr gl::enum_t                         map_query_target(api::Query::Target target)
+    {
+        //switch (target)
+        //{
+        //    return 0;
+        //}
+
+        throw std::invalid_argument{ "Invalid target!" };
+    }
+
     static constexpr gl::Flags::DepthFunction           map_depth_function(api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
