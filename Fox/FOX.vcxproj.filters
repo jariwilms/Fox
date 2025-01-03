@@ -440,6 +440,7 @@
     <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
+    <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">
