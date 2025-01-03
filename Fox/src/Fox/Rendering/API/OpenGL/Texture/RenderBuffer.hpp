@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -9,11 +9,11 @@ namespace fox::gfx::api::gl
     class RenderBuffer;
 
     template<>
-    class RenderBuffer<AntiAliasing::None> : public api::Texture, public gl::Object
+    class RenderBuffer<AntiAliasing::None> : public api::RenderBuffer, public gl::Object
     {
     public:
         RenderBuffer(Format format, const fox::Vector2u& dimensions)
-            : api::Texture{ format }, m_dimensions{ dimensions }
+            : api::RenderBuffer{ format }, m_dimensions{ dimensions }
         {
             m_handle = gl::create_render_buffer();
 
@@ -37,11 +37,11 @@ namespace fox::gfx::api::gl
         fox::Vector2u m_dimensions{};
     };
     template<>
-    class RenderBuffer<AntiAliasing::MSAA> : public api::Texture, public gl::Object
+    class RenderBuffer<AntiAliasing::MSAA> : public api::RenderBuffer, public gl::Object
     {
     public:
         RenderBuffer(Format format, const fox::Vector2u& dimensions, fox::uint8_t samples)
-            : api::Texture{ format }, m_dimensions{ dimensions }, m_samples{ samples }
+            : api::RenderBuffer{ format }, m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_handle = gl::create_render_buffer();
 

@@ -7,6 +7,7 @@
 #include "Fox/Rendering/Buffer/Buffer.hpp"
 #include "Fox/Rendering/Buffer/DataTypes.hpp"
 #include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/RenderState/RenderState.hpp"
 #include "Fox/Rendering/Shader/Pipeline.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
@@ -37,40 +38,38 @@ namespace fox::gfx::api::gl
     {
         switch (format)
         {
-            case api::Texture::Format::R8_UNORM:          return GL_R8;
-            case api::Texture::Format::RG8_UNORM:         return GL_RG8;
-            case api::Texture::Format::RGB8_UNORM:        return GL_RGB8;
-            case api::Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
-            case api::Texture::Format::R16_UNORM:         return GL_R16;
-            case api::Texture::Format::RG16_UNORM:        return GL_RG16;
-            case api::Texture::Format::RGB16_UNORM:       return GL_RGB16;
-            case api::Texture::Format::RGBA16_UNORM:      return GL_RGBA16;
-            case api::Texture::Format::R8_SNORM:          return GL_R8_SNORM;
-            case api::Texture::Format::RG8_SNORM:         return GL_RG8_SNORM;
-            case api::Texture::Format::RGB8_SNORM:        return GL_RGB8_SNORM;
-            case api::Texture::Format::RGBA8_SNORM:       return GL_RGBA8_SNORM;
-            case api::Texture::Format::R16_SNORM:         return GL_R16_SNORM;
-            case api::Texture::Format::RG16_SNORM:        return GL_RG16_SNORM;
-            case api::Texture::Format::RGB16_SNORM:       return GL_RGB16_SNORM;
-            case api::Texture::Format::RGBA16_SNORM:      return GL_RGBA16_SNORM;
-            case api::Texture::Format::R8_SRGB:           throw std::invalid_argument{ "This format is not supported in OpenGL!" };
-            case api::Texture::Format::RG8_SRGB:          throw std::invalid_argument{ "This format is not supported in OpenGL!" };
-            case api::Texture::Format::RGB8_SRGB:         return GL_SRGB8;
-            case api::Texture::Format::RGBA8_SRGB:        return GL_SRGB8_ALPHA8;
-            case api::Texture::Format::R16_SFLOAT:        return GL_R16F;
-            case api::Texture::Format::RG16_SFLOAT:       return GL_RG16F;
-            case api::Texture::Format::RGB16_SFLOAT:      return GL_RGB16F;
-            case api::Texture::Format::RGBA16_SFLOAT:     return GL_RGBA16F;
-            case api::Texture::Format::R32_SFLOAT:        return GL_R32F;
-            case api::Texture::Format::RG32_SFLOAT:       return GL_RG32F;
-            case api::Texture::Format::RGB32_SFLOAT:      return GL_RGB32F;
-            case api::Texture::Format::RGBA32_SFLOAT:     return GL_RGBA32F;
-            case api::Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
-            case api::Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
-            case api::Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32F;
-            case api::Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
-            case api::Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
-            case api::Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
+            case api::Texture::Format::R8_UNORM:           return GL_R8;
+            case api::Texture::Format::RG8_UNORM:          return GL_RG8;
+            case api::Texture::Format::RGB8_UNORM:         return GL_RGB8;
+            case api::Texture::Format::RGBA8_UNORM:        return GL_RGBA8;
+            case api::Texture::Format::R16_UNORM:          return GL_R16;
+            case api::Texture::Format::RG16_UNORM:         return GL_RG16;
+            case api::Texture::Format::RGB16_UNORM:        return GL_RGB16;
+            case api::Texture::Format::RGBA16_UNORM:       return GL_RGBA16;
+            case api::Texture::Format::R8_SNORM:           return GL_R8_SNORM;
+            case api::Texture::Format::RG8_SNORM:          return GL_RG8_SNORM;
+            case api::Texture::Format::RGB8_SNORM:         return GL_RGB8_SNORM;
+            case api::Texture::Format::RGBA8_SNORM:        return GL_RGBA8_SNORM;
+            case api::Texture::Format::R16_SNORM:          return GL_R16_SNORM;
+            case api::Texture::Format::RG16_SNORM:         return GL_RG16_SNORM;
+            case api::Texture::Format::RGB16_SNORM:        return GL_RGB16_SNORM;
+            case api::Texture::Format::RGBA16_SNORM:       return GL_RGBA16_SNORM;
+            case api::Texture::Format::RGB8_SRGB:          return GL_SRGB8;
+            case api::Texture::Format::RGBA8_SRGB:         return GL_SRGB8_ALPHA8;
+            case api::Texture::Format::R16_SFLOAT:         return GL_R16F;
+            case api::Texture::Format::RG16_SFLOAT:        return GL_RG16F;
+            case api::Texture::Format::RGB16_SFLOAT:       return GL_RGB16F;
+            case api::Texture::Format::RGBA16_SFLOAT:      return GL_RGBA16F;
+            case api::Texture::Format::R32_SFLOAT:         return GL_R32F;
+            case api::Texture::Format::RG32_SFLOAT:        return GL_RG32F;
+            case api::Texture::Format::RGB32_SFLOAT:       return GL_RGB32F;
+            case api::Texture::Format::RGBA32_SFLOAT:      return GL_RGBA32F;
+            case api::Texture::Format::D16_UNORM:          return GL_DEPTH_COMPONENT16;
+            case api::Texture::Format::D24_UNORM:          return GL_DEPTH_COMPONENT24;
+            case api::Texture::Format::D32_FLOAT:          return GL_DEPTH_COMPONENT32F;
+            case api::Texture::Format::D24_UNORM_S8_UINT:  return GL_DEPTH24_STENCIL8;
+            case api::Texture::Format::D32_SFLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
+            case api::Texture::Format::S8_UINT:            return GL_STENCIL_INDEX8;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
@@ -129,20 +128,21 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    static constexpr gl::enum_t                         map_render_buffer_format(api::Texture::Format format)
+    static constexpr gl::enum_t                         map_render_buffer_format(api::RenderBuffer::Format format)
     {
         switch (format)
         {
-            case api::Texture::Format::R8_UNORM:          return GL_R8;
-            case api::Texture::Format::RG8_UNORM:         return GL_RG8;
-            case api::Texture::Format::RGB8_UNORM:        return GL_RGB8;
-            case api::Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
-            case api::Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
-            case api::Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
-            case api::Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32;
-            case api::Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
-            case api::Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
-            case api::Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
+            case api::RenderBuffer::Format::R8_UNORM:           return GL_R8;
+            case api::RenderBuffer::Format::RG8_UNORM:          return GL_RG8;
+            case api::RenderBuffer::Format::RGB8_UNORM:         return GL_RGB8;
+            case api::RenderBuffer::Format::RGBA8_UNORM:        return GL_RGBA8;
+            case api::RenderBuffer::Format::RGBA8_SRGB:         return GL_SRGB8_ALPHA8;
+            case api::RenderBuffer::Format::D16_UNORM:          return GL_DEPTH_COMPONENT16;
+            case api::RenderBuffer::Format::D24_UNORM:          return GL_DEPTH_COMPONENT24;
+            case api::RenderBuffer::Format::D32_SFLOAT:         return GL_DEPTH_COMPONENT32;
+            case api::RenderBuffer::Format::D24_UNORM_S8_UINT:  return GL_DEPTH24_STENCIL8;
+            case api::RenderBuffer::Format::D32_SFLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
+            case api::RenderBuffer::Format::S8_UINT:            return GL_STENCIL_INDEX8;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }

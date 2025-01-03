@@ -50,7 +50,8 @@ namespace fox::gfx::api::gl
                         };
                         case FrameBuffer::Resample::No: //Bind as renderbuffer
                         {
-                            const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions);
+                            const auto& renderBuffer = std::make_shared<render_buffer_t>(api::RenderBuffer::Format::D24_UNORM_S8_UINT, m_dimensions);
+                            //const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions);
                             gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
 
                             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
@@ -138,7 +139,8 @@ namespace fox::gfx::api::gl
                     };
                     case FrameBuffer::Resample::No:
                     {
-                        const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions, m_samples);
+                        const auto& renderBuffer = std::make_shared<render_buffer_t>(api::RenderBuffer::Format::D24_UNORM_S8_UINT, m_dimensions, m_samples);
+                        //const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions, m_samples);
                         gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
 
                         m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
