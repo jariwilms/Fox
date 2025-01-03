@@ -318,7 +318,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\RenderBuffer.hpp">
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderBuffer\RenderBuffer.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp">
@@ -442,6 +442,8 @@
     <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Query\Query.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Query\Query.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

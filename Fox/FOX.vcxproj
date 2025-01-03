@@ -139,6 +139,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Query\Query.hpp" />
     <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp" />
@@ -146,7 +147,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\RenderBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderBuffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\TextureTarget.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Types.hpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="src\Fox\Rendering\PostProcessing\AmbientOcclusion.hpp" />
     <ClInclude Include="src\Fox\Rendering\PostProcessing\PostProcessing.hpp" />
     <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Query\Query.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp" />
