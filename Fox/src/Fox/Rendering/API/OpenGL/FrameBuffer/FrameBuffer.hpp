@@ -2,11 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/FrameBuffer/Mapping.hpp"
-#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
-#include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
-#include "Fox/Rendering/API/OpenGL/Texture/RenderBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/API/OpenGL/RenderBuffer/RenderBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
+#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/FrameBuffer/Mapping.hpp"
 
 namespace fox::gfx::api::gl
 {
