@@ -41,6 +41,7 @@
 #include <bitset>
 #include <ranges>
 #include <random>
+#include <variant>
 #include <utility>
 #include <numeric>
 #include <variant>
