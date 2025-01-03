@@ -21,6 +21,7 @@ namespace fox::gfx::api
             using FR = gfx::FrameBuffer::Resample;
             using TB = gfx::TextureBlueprint;
             using TF = gfx::Texture::Format;
+            using RF = gfx::RenderBuffer::Format;
 
 
 
@@ -33,21 +34,21 @@ namespace fox::gfx::api
 
             std::array<FM, 5> gBufferManifest
             {
-                FM{ "Position",     FA::Color,        FR::Yes, TB{ TF::RGB16_SFLOAT } },
-                FM{ "Albedo",       FA::Color,        FR::Yes, TB{ TF::RGBA8_UNORM  } },
-                FM{ "Normal",       FA::Color,        FR::Yes, TB{ TF::RGB16_SFLOAT } },
-                FM{ "ARM",          FA::Color,        FR::Yes, TB{ TF::RGB16_UNORM  } },
+                FM{ "Position",     TF::RGB16_SFLOAT },
+                FM{ "Albedo",       TF::RGBA8_UNORM  },
+                FM{ "Normal",       TF::RGB16_SFLOAT },
+                FM{ "ARM",          TF::RGB16_UNORM  },
 
-                FM{ "DepthStencil", FA::DepthStencil, FR::No,  TB{ TF::D24_UNORM_S8_UINT } },
+                FM{ "DepthStencil", RF::D24_UNORM_S8_UINT },
             };
             std::array<FM, 1> sBufferManifest
             {
-                FM{ "Depth",        FA::Depth,        FR::Yes, TB{ TF::D24_UNORM } },
+                FM{ "Depth",        TF::D24_UNORM },
             };
             std::array<FM, 2> ppBufferManifest
             {
-                FM{ "Color",        FA::Color,        FR::Yes, TB{ TF::RGB16_UNORM } },
-                FM{ "Depth",        FA::DepthStencil, FR::No,  TB{ TF::D24_UNORM_S8_UINT } },
+                FM{ "Color",        TF::RGB16_UNORM },
+                FM{ "Depth",        RF::D24_UNORM_S8_UINT },
             };
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);

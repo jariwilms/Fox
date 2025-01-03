@@ -2,8 +2,8 @@
 
 #include "stdafx.hpp"
 
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/Blueprint/TextureBlueprint.hpp"
 
 namespace fox::gfx::api
 {
@@ -30,13 +30,13 @@ namespace fox::gfx::api
 
         struct Manifest
         {
-            Manifest(const std::string& identifier, Attachment attachment, Resample resample, const TextureBlueprint& blueprint)
-                : identifier{ identifier }, attachment{ attachment }, resample{ resample }, blueprint{ blueprint } {}
+            using var_t = std::variant<Texture::Format, RenderBuffer::Format>;
 
-            std::string             identifier{};
-            Attachment              attachment{};
-            Resample                resample{};
-            TextureBlueprint        blueprint{ Texture::Format::RGBA8_UNORM };
+            Manifest(const std::string& identifier, var_t format)
+                : identifier{ identifier }, format{ format } {}
+
+            std::string identifier{};
+            var_t       format;
         };
 
         const fox::Vector2u& dimensions() const

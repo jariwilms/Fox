@@ -6,15 +6,18 @@
 
 #if FOX_GRAPHICS_API == OpenGL
 
+//TODO: check includes
 #include "Fox/Rendering/API/OpenGL/Buffer/Buffer.hpp"
-#include "Fox/Rendering/API/OpenGL/Buffer/FrameBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/VertexArray.hpp"
+#include "Fox/Rendering/API/OpenGL/FrameBuffer/FrameBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/RenderState/RenderState.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Pipeline.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Shader.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
-#include "Fox/Rendering/Uniform/Uniform.hpp"
+#include "Fox/Rendering/Blueprint/TextureBlueprint.hpp" //TODO: Remove?
 #include "Fox/Rendering/Layout/Layout.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
+#include "Fox/Rendering/Uniform/Uniform.hpp"
 
 namespace fox::gfx
 {
@@ -42,6 +45,8 @@ namespace fox::gfx
     using Texture3D              = api::gl::Texture<Dimensions::_3D, AntiAliasing::None>;
     using Texture2DMultisample   = api::gl::Texture<Dimensions::_2D, AntiAliasing::MSAA>;
     using Texture3DMultisample   = api::gl::Texture<Dimensions::_3D, AntiAliasing::MSAA>;
+
+    using RenderBuffer           = api::RenderBuffer;
 
     using TextureBlueprint       = api::TextureBlueprint;
 

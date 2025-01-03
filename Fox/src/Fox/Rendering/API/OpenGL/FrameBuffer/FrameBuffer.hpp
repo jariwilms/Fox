@@ -2,10 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/FrameBuffer/Mapping.hpp"
+#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/RenderBuffer.hpp"
-#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -27,40 +28,9 @@ namespace fox::gfx::api::gl
             std::vector<gl::enum_t> colorBufferIndices{};
             std::ranges::for_each(manifests, [&, this](const Manifest& manifest)
                 {
-                    const auto& [identifier, attachment, resample, blueprint] = manifest;
-                    const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                          auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                    const auto& [identifier, format] = manifest;
 
-                    if (attachment == Attachment::Color)
-                    {
-                        attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
-                        colorBufferIndices.emplace_back(attachmentIndex);
-                    }
-
-                    switch (resample)
-                    {
-                        case FrameBuffer::Resample::Yes: //Bind as texture
-                        {
-                            const auto& texture = std::make_shared<texture_t>(blueprint.format, blueprint.filter, blueprint.wrapping, m_dimensions);
-                            gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, 0);
-
-                            m_identifierToTexture.emplace(identifier, texture);
-
-                            break;
-                        };
-                        case FrameBuffer::Resample::No: //Bind as renderbuffer
-                        {
-                            const auto& renderBuffer = std::make_shared<render_buffer_t>(api::RenderBuffer::Format::D24_UNORM_S8_UINT, m_dimensions);
-                            //const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions);
-                            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
-
-                            m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
-
-                            break;
-                        };
-
-                        default: throw std::invalid_argument{ "Invalid resample!" };
-                    }
+                    std::visit([&, this](auto&& f) { attach(identifier, f, colorBufferIndices); }, format);
                 });
 
             if (!colorBufferIndices.empty())
@@ -98,6 +68,41 @@ namespace fox::gfx::api::gl
         FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
 
     private:
+        void attach(std::string_view identifier, api::Texture::Format format,      std::vector<gl::enum_t>& colorBufferIndices)
+        {
+            const auto& attachment            = api::map_frame_buffer_texture_attachment(format);
+            const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
+                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+
+            if (attachment == Attachment::Color)
+            {
+                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(attachmentIndex);
+            }
+
+            const auto& texture = std::make_shared<texture_t>(format, api::Texture::Filter::None, api::Texture::Wrapping::ClampToBorder, m_dimensions);
+            gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, 0);
+
+            m_identifierToTexture.emplace(identifier, texture);
+        }
+        void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<gl::enum_t>& colorBufferIndices)
+        {
+            const auto& attachment            = api::map_frame_buffer_render_buffer_attachment(format);
+            const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
+                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+
+            if (attachment == Attachment::Color)
+            {
+                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(attachmentIndex);
+            }
+
+            const auto& renderBuffer = std::make_shared<render_buffer_t>(format, m_dimensions);
+            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
+
+            m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
+        }
+
         std::unordered_map<std::string, std::shared_ptr<texture_t>>       m_identifierToTexture{};
         std::unordered_map<std::string, std::shared_ptr<render_buffer_t>> m_identifierToRenderBuffer{};
     };
@@ -113,48 +118,17 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_frame_buffer();
 
-            std::vector<gl::enum_t> colorBuffers{};
+            std::vector<gl::enum_t> colorBufferIndices{};
             std::ranges::for_each(manifests, [&, this](const Manifest& manifest)
                 {
-                    const auto& [identifier, attachment, resample, blueprint] = manifest;
-                    const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                          auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                    const auto& [identifier, format] = manifest;
 
-                    if (attachment == FrameBuffer::Attachment::Color)
-                    {
-                        attachmentIndex += static_cast<gl::enum_t>(colorBuffers.size());
-                        colorBuffers.emplace_back(attachmentIndex);
-                    }
-
-                    switch (resample)
-                    {
-                    case FrameBuffer::Resample::Yes:
-                    {
-                        const auto& texture = std::make_shared<texture_t>(blueprint.format, m_dimensions, m_samples);
-                        gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, 0);
-
-                        m_identifierToTexture.emplace(identifier, texture);
-
-                        break;
-                    };
-                    case FrameBuffer::Resample::No:
-                    {
-                        const auto& renderBuffer = std::make_shared<render_buffer_t>(api::RenderBuffer::Format::D24_UNORM_S8_UINT, m_dimensions, m_samples);
-                        //const auto& renderBuffer = std::make_shared<render_buffer_t>(blueprint.format, m_dimensions, m_samples);
-                        gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
-
-                        m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
-
-                        break;
-                    };
-
-                    default: throw std::invalid_argument{ "Invalid resample!" };
-                    }
+                    std::visit([&, this](auto&& f) { attach(identifier, f, colorBufferIndices); }, format);
                 });
 
-            if (!colorBuffers.empty())
+            if (!colorBufferIndices.empty())
             {
-                gl::frame_buffer_draw_buffers(m_handle, colorBuffers);
+                gl::frame_buffer_draw_buffers(m_handle, colorBufferIndices);
             }
             else
             {
@@ -192,6 +166,41 @@ namespace fox::gfx::api::gl
         FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
 
     private:
+        void attach(std::string_view identifier, api::Texture::Format format,      std::vector<gl::enum_t>& colorBufferIndices)
+        {
+            const auto& attachment            = api::map_frame_buffer_texture_attachment(format);
+            const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
+                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+
+            if (attachment == Attachment::Color)
+            {
+                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(attachmentIndex);
+            }
+
+            const auto& texture = std::make_shared<texture_t>(format, m_dimensions, m_samples);
+            gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, 0);
+
+            m_identifierToTexture.emplace(identifier, texture);
+        }
+        void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<gl::enum_t>& colorBufferIndices)
+        {
+            const auto& attachment            = api::map_frame_buffer_render_buffer_attachment(format);
+            const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
+                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+
+            if (attachment == Attachment::Color)
+            {
+                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(attachmentIndex);
+            }
+
+            const auto& renderBuffer = std::make_shared<render_buffer_t>(format, m_dimensions, m_samples);
+            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
+
+            m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
+        }
+
         fox::uint8_t m_samples{};
 
         std::unordered_map<std::string, std::shared_ptr<texture_t>>       m_identifierToTexture{};

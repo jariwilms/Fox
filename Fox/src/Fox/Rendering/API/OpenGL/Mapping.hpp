@@ -3,17 +3,17 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
-#include "Fox/Rendering/API/OpenGL/Types.hpp"
-#include "Fox/Rendering/Buffer/Buffer.hpp"
-#include "Fox/Rendering/Buffer/DataTypes.hpp"
-#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
-#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
-#include "Fox/Rendering/RenderState/RenderState.hpp"
-#include "Fox/Rendering/Shader/Pipeline.hpp"
-#include "Fox/Rendering/Shader/Shader.hpp"
-#include "Fox/Rendering/Texture/AntiAliasing.hpp"
-#include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Shader/Pipeline.hpp"
+#include "Fox/Rendering/RenderState/RenderState.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
+#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Buffer/DataTypes.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Types.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -66,7 +66,7 @@ namespace fox::gfx::api::gl
             case api::Texture::Format::RGBA32_SFLOAT:      return GL_RGBA32F;
             case api::Texture::Format::D16_UNORM:          return GL_DEPTH_COMPONENT16;
             case api::Texture::Format::D24_UNORM:          return GL_DEPTH_COMPONENT24;
-            case api::Texture::Format::D32_FLOAT:          return GL_DEPTH_COMPONENT32F;
+            case api::Texture::Format::D32_SFLOAT:         return GL_DEPTH_COMPONENT32F;
             case api::Texture::Format::D24_UNORM_S8_UINT:  return GL_DEPTH24_STENCIL8;
             case api::Texture::Format::D32_SFLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
             case api::Texture::Format::S8_UINT:            return GL_STENCIL_INDEX8;

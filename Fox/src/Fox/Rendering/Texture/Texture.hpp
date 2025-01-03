@@ -21,6 +21,7 @@ namespace fox::gfx::api
             //Note: The Red, Green and Blue components of SRGB formats are nonlinear
 
             //Format: 0x|Size Component 1|'|Size Component 2|'|No. Components|'|Primary Key|
+            //TODO: XX_SFLOAT => XX_FLOAT, float is always signed, probably?
 
             R8_UNORM = 		     0x08'00'01'00, 
             RG8_UNORM =          0x08'00'02'01, 
@@ -57,7 +58,7 @@ namespace fox::gfx::api
                                  
             D16_UNORM =          0x10'00'10'1C, 
             D24_UNORM =          0x18'00'10'1D, 
-            D32_FLOAT =          0x20'00'10'1E, 
+            D32_SFLOAT =          0x20'00'10'1E, 
                                 
             D24_UNORM_S8_UINT  = 0x18'08'30'1F, 
             D32_SFLOAT_S8_UINT = 0x20'08'30'20, 
