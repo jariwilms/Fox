@@ -137,8 +137,9 @@
     <ClInclude Include="src\Fox\Rendering\AABB\AABB.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp" />
@@ -155,7 +156,7 @@
     <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp" />

@@ -294,7 +294,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\FrameBuffer.hpp">
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp">
@@ -345,7 +345,7 @@
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp">
       <Filter>Fox\Rendering\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\Buffer\FrameBuffer.hpp">
+    <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp">
       <Filter>Fox\Rendering\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp">
@@ -441,6 +441,7 @@
     <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">
