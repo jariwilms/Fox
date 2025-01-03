@@ -14,6 +14,13 @@ namespace fox::gfx::api
 
             Uniform,
             UniformArray, 
+
+            //DrawIndirect, 
+            //PixelPack, 
+            //PixelUnpack, 
+            //ShaderStorage, 
+            //Texture, 
+            //TransformFeedback, 
         };
         enum class Access
         {
