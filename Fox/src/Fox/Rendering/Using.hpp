@@ -6,7 +6,7 @@
 
 #if FOX_GRAPHICS_API == OpenGL
 
-//TODO: check includes
+//TODO: check if all includes present/correct
 #include "Fox/Rendering/API/OpenGL/Buffer/Buffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/VertexArray.hpp"
 #include "Fox/Rendering/API/OpenGL/FrameBuffer/FrameBuffer.hpp"
