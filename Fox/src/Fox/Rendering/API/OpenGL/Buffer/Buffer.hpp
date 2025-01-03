@@ -30,10 +30,7 @@ namespace fox::gfx::api::gl
             const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Static);
             gl::buffer_storage(m_handle, bufferAccess, data);
         }
-        Buffer(Buffer&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
         {
             gl::delete_buffer(m_handle);
@@ -51,18 +48,11 @@ namespace fox::gfx::api::gl
             return static_cast<fox::count_t>(m_size / sizeof(T));
         }
 
-        Buffer& operator=(Buffer&& other) noexcept
-        {
-            m_handle = other.m_handle;
-
-            other.m_handle = {};
-
-            return *this;
-        }
+        Buffer& operator=(Buffer&& other) noexcept = default;
 
     protected:
         Buffer(fox::size_t size)
-            : api::Buffer{ size } {}
+            : BufferObject{ size } {}
     };
     template<api::Buffer::Type TYPE, typename T >
     class Buffer<TYPE, api::Buffer::Access::Dynamic, T> : public Buffer<TYPE, api::Buffer::Access::Static, T>
@@ -83,10 +73,7 @@ namespace fox::gfx::api::gl
             const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
             gl::buffer_storage(m_handle, bufferAccess, data);
         }
-        Buffer(Buffer&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Buffer(Buffer&& other) noexcept = default;
         ~Buffer() = default;
 
         void copy(std::span<const T> data)
@@ -121,14 +108,7 @@ namespace fox::gfx::api::gl
             gl::unmap_buffer(m_handle);
         }
 
-        Buffer& operator=(Buffer&& other) noexcept
-        {
-            m_handle = other.m_handle;
-
-            other.m_handle = {};
-
-            return *this;
-        }
+        Buffer& operator=(Buffer&& other) noexcept = default;
 
     protected:
         using Buffer<TYPE, api::Buffer::Access::Static, T>::m_handle;
@@ -146,10 +126,7 @@ namespace fox::gfx::api::gl
             const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
             gl::buffer_storage(m_handle, bufferAccess, std::span<const T>{ &data, 1u });
         }
-        Buffer(Buffer&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
         {
             gl::delete_buffer(m_handle);
@@ -183,14 +160,7 @@ namespace fox::gfx::api::gl
             gl::buffer_sub_data(m_handle, offset, std::span<const fox::byte>{ buffer.data(), buffer.size() });
         }
 
-        Buffer& operator=(Buffer&& other) noexcept
-        {
-            m_handle = other.m_handle;
-
-            other.m_handle = {};
-
-            return *this;
-        }
+        Buffer& operator=(Buffer&& other) noexcept = default;
     };
     template<typename T>
     class Buffer<api::Buffer::Type::UniformArray, api::Buffer::Access::Dynamic, T> : public BufferObject
@@ -212,10 +182,7 @@ namespace fox::gfx::api::gl
             const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
             gl::buffer_storage(m_handle, bufferAccess, data);
         }
-        Buffer(Buffer&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
         {
             gl::delete_buffer(m_handle);
@@ -232,7 +199,7 @@ namespace fox::gfx::api::gl
 
         void copy(std::span<const T> data)
         {
-            if (data.size_bytes() > m_size) throw std::invalid_argument{ "The data size is greater than the size of the allocated buffer!" };
+            if (data.size_bytes() > m_size) throw std::invalid_argument{ "Data size exceeds buffer size!" };
 
             gl::buffer_sub_data(m_handle, 0, data);
         }
@@ -240,18 +207,13 @@ namespace fox::gfx::api::gl
         {
             const auto& offset = index * sizeof(T);
 
-            if (offset > m_size) throw std::invalid_argument{ "The given index is out of range!" };
+            if (offset > m_size) throw std::invalid_argument{ "Index out of range!" };
 
             gl::buffer_sub_data(m_handle, index * sizeof(T), std::span<const T>{ &data, 1u });
         }
 
-        Buffer& operator=(Buffer&& other) noexcept
-        {
-            m_handle = other.m_handle;
-
-            other.m_handle = {};
-
-            return *this;
-        }
+        Buffer& operator=(Buffer&& other) noexcept = default;
     };
+    
+    //TODO: StorageBuffer (SSBO)
 }
