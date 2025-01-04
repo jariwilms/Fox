@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 #include "glfw/glfw3.h"
 
 #include "Fox/Rendering/API/OpenGL/Query/Query.hpp"

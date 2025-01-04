@@ -31,8 +31,8 @@ namespace fox::wnd::api
 
 
         //Initialize GLAD
-        const auto& isLoaded = gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-        if (!isLoaded) throw std::runtime_error{ "Failed to initialize GLAD!" };
+        const auto& version = gladLoadGL(glfwGetProcAddress);
+        if (version == 0) throw std::runtime_error{ "Failed to initialize GLAD!" };
 
         m_userPointer                = std::make_shared<UserPointer>();
         m_userPointer->glfwWindow    = std::shared_ptr<GLFWWindow>(this, [](const GLFWWindow* window) {}); //?
