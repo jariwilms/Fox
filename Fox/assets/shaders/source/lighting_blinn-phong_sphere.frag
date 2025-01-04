@@ -20,14 +20,14 @@ layout(std140, set = 0, binding =  0) uniform Input
 	float deltaTime;
 	vec2  mousePosition;
 } u_Input;
-layout(std140, set = 0, binding =  4) uniform LightBuffer
-{
-	Light lights[NR_LIGHTS];
-} u_LightBuffer;
 layout(std140, set = 0, binding =  2) uniform Camera
 {
 	vec4 position;
 } u_Camera;
+layout(std140, set = 0, binding =  4) uniform LightBuffer
+{
+	Light lights[NR_LIGHTS];
+} u_LightBuffer;
 layout(std140, set = 0, binding = 12) uniform LightIndex
 {
 	int index;

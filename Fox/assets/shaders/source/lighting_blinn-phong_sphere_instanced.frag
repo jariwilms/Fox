@@ -85,5 +85,8 @@ void main()
 
 
 
-	f_Color = vec4(fragmentColor * smoothingFactor, 1.0);
+	//f_Color = vec4(fragmentColor * smoothingFactor, 1.0);
+	if      (v_InstanceIndex == 0) discard;//f_Color = vec4(1.0, 0.0, 0.0, 1.0);
+	else if (v_InstanceIndex == 1) f_Color = vec4(0.0, 1.0, 0.0, 1.0);
+	else                           f_Color = vec4(0.0, 0.0, 1.0, 1.0);
 }

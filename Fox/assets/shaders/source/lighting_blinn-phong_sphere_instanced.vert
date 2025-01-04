@@ -1,7 +1,5 @@
 #version 460 core
 
-const int NR_TRANSFORMS = 32;
-
 layout(std140, set = 0, binding = 1) uniform UMatrices
 {
 	mat4 model;
@@ -9,21 +7,16 @@ layout(std140, set = 0, binding = 1) uniform UMatrices
 	mat4 projection;
 	mat4 normal;
 } u_Matrices;
-layout(std140, set = 0, binding = 13) uniform ModelTransforms
-{
-	mat4 transform[NR_TRANSFORMS];
-} u_ModelTransforms;
 
 layout(location = 0)      in  vec3 a_Position;
 
 layout(location = 0)      out vec3 v_Position;
-layout(location = 1) flat out int  v_instanceIndex;
+layout(location = 1) flat out int  v_InstanceIndex;
 
 void main()
 {
 	v_Position      = a_Position;
-	v_instanceIndex = gl_InstanceIndex;
+	v_InstanceIndex = gl_InstanceIndex;
 	
-	mat4 modelTransform = u_ModelTransforms.transform[gl_InstanceIndex];
-	gl_Position = u_Matrices.projection * u_Matrices.view * modelTransform * vec4(a_Position, 1.0);
+	gl_Position = u_Matrices.projection * u_Matrices.view * u_Matrices.model * vec4(a_Position, 1.0);
 }
