@@ -94,8 +94,14 @@
     <Filter Include="Fox\Rendering\API\OpenGL\Buffer">
       <UniqueIdentifier>{4526D731-B109-E671-BA0C-14AE266FACC2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fox\Rendering\API\OpenGL\Layout">
-      <UniqueIdentifier>{0966CB47-7549-DA87-7E4C-08C4EAAEA0D8}</UniqueIdentifier>
+    <Filter Include="Fox\Rendering\API\OpenGL\FrameBuffer">
+      <UniqueIdentifier>{F0DA6B06-DCC1-2DFE-8512-941B71D8A664}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\Query">
+      <UniqueIdentifier>{61A4DF38-4DCA-A99F-3610-2F6B22D5CE6B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\API\OpenGL\RenderBuffer">
+      <UniqueIdentifier>{8589C76E-F14D-C65E-BAB3-F62826376294}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fox\Rendering\API\OpenGL\RenderState">
       <UniqueIdentifier>{6C33D41B-581A-9613-016B-FC30ED300F7A}</UniqueIdentifier>
@@ -114,6 +120,12 @@
     </Filter>
     <Filter Include="Fox\Rendering\Buffer">
       <UniqueIdentifier>{48B07FBE-343F-0988-DD5D-1D83C9CB192E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Concepts">
+      <UniqueIdentifier>{0D4D048E-F946-2DE0-E2B3-C3F0CE4C934C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\FrameBuffer">
+      <UniqueIdentifier>{D31EFAAA-3FE1-2D35-8891-BCC1F4920613}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fox\Rendering\Geometry">
       <UniqueIdentifier>{7A6F4F40-6669-7892-4FD6-0EA33B6FDEFE}</UniqueIdentifier>
@@ -138,6 +150,12 @@
     </Filter>
     <Filter Include="Fox\Rendering\Projection">
       <UniqueIdentifier>{CB9978B8-B7BE-C738-E009-ADC8CC8DC656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\Query">
+      <UniqueIdentifier>{047ACDE7-70DB-AAF5-F948-F1A765A9E1B4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fox\Rendering\RenderBuffer">
+      <UniqueIdentifier>{C8491EA5-B459-CA75-1D13-2F940942B90E}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fox\Rendering\RenderInfo">
       <UniqueIdentifier>{FAAC141D-E6D1-639D-0F1D-492DFBA062BB}</UniqueIdentifier>
@@ -294,20 +312,23 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp">
-      <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
-    </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp">
-      <Filter>Fox\Rendering\API\OpenGL\Layout</Filter>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\FrameBuffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp">
       <Filter>Fox\Rendering\API\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp">
       <Filter>Fox\Rendering\API\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Query\Query.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderBuffer\RenderBuffer.hpp">
+      <Filter>Fox\Rendering\API\OpenGL\RenderBuffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\RenderState.hpp">
       <Filter>Fox\Rendering\API\OpenGL\RenderState</Filter>
@@ -317,9 +338,6 @@
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Shader</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderBuffer\RenderBuffer.hpp">
-      <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
@@ -345,8 +363,17 @@
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp">
       <Filter>Fox\Rendering\Buffer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp">
+    <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp">
       <Filter>Fox\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp">
+      <Filter>Fox\Rendering\Concepts</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp">
+      <Filter>Fox\Rendering\FrameBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp">
+      <Filter>Fox\Rendering\FrameBuffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp">
       <Filter>Fox\Rendering\Geometry</Filter>
@@ -358,6 +385,9 @@
       <Filter>Fox\Rendering\Geometry\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Layout\Layout.hpp">
+      <Filter>Fox\Rendering\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp">
       <Filter>Fox\Rendering\Layout</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Material\Material.hpp">
@@ -378,6 +408,12 @@
     <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp">
       <Filter>Fox\Rendering\Projection</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Query\Query.hpp">
+      <Filter>Fox\Rendering\Query</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp">
+      <Filter>Fox\Rendering\RenderBuffer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp">
       <Filter>Fox\Rendering\RenderInfo</Filter>
     </ClInclude>
@@ -385,6 +421,9 @@
       <Filter>Fox\Rendering\RenderState</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Renderer\OpenGLRenderer.hpp">
+      <Filter>Fox\Rendering\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp">
       <Filter>Fox\Rendering\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Renderer\Renderer.hpp">
@@ -403,6 +442,9 @@
       <Filter>Fox\Rendering\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Texture\Dimensions.hpp">
+      <Filter>Fox\Rendering\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp">
       <Filter>Fox\Rendering\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Texture\Texture.hpp">
@@ -436,14 +478,6 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Query\Query.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Query\Query.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

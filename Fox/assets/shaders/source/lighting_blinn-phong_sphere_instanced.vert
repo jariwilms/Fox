@@ -18,5 +18,5 @@ void main()
 	v_Position      = a_Position;
 	v_InstanceIndex = gl_InstanceIndex;
 	
-	gl_Position = u_Matrices.projection * u_Matrices.view * u_Matrices.model * vec4(a_Position, 1.0);
+	gl_Position = u_Matrices.projection * u_Matrices.view * u_Matrices.model * (vec4(a_Position, 1.0) + ((v_InstanceIndex + 1) * vec4(0.5, 0.2, 0.2, 0.0)));
 }
