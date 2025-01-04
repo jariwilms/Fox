@@ -3,6 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/API/OpenGL/Types.hpp"
 #include "Fox/Rendering/Query/Query.hpp"
 
 namespace fox::gfx::api::gl

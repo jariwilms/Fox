@@ -3,17 +3,18 @@
 #include "glad/glad.h"
 #include "glfw/glfw3.h"
 
-#include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/Texture/Dimensions.hpp"
-#include "Fox/Rendering/Texture/AntiAliasing.hpp"
-#include "Fox/Rendering/Shader/Shader.hpp"
-#include "Fox/Rendering/Shader/Pipeline.hpp"
-#include "Fox/Rendering/RenderState/RenderState.hpp"
-#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
-#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
-#include "Fox/Rendering/Buffer/DataTypes.hpp"
-#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Query/Query.hpp"
 #include "Fox/Rendering/API/OpenGL/Types.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/Buffer/DataTypes.hpp"
+#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
+#include "Fox/Rendering/RenderState/RenderState.hpp"
+#include "Fox/Rendering/Shader/Pipeline.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -230,15 +231,14 @@ namespace fox::gfx::api::gl
         }
     }
                                                  
-    static constexpr gl::enum_t                         map_query_target(api::Query::Target target)
-    {
-        //switch (target)
-        //{
-        //    return 0;
-        //}
-
-        throw std::invalid_argument{ "Invalid target!" };
-    }
+    //static constexpr gl::enum_t                         map_query_target(api::Query::Target target)
+    //{
+    //    switch (target)
+    //    {
+    //        return 0;
+    //    }
+    //    throw std::invalid_argument{ "Invalid target!" };
+    //}
 
     static constexpr gl::Flags::DepthFunction           map_depth_function(api::RenderState::DepthFunction depthFunction)
     {
