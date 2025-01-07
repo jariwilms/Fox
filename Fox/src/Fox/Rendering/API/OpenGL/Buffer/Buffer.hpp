@@ -36,13 +36,6 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind() const
-        {
-            if constexpr (TYPE == api::Buffer::Type::Vertex)       gl::bind_buffer(m_handle, gl::Flags::Buffer::Target::ArrayBuffer);
-            if constexpr (TYPE == api::Buffer::Type::Index)        gl::bind_buffer(m_handle, gl::Flags::Buffer::Target::ElementArrayBuffer);
-            if constexpr (TYPE == api::Buffer::Type::UniformArray) gl::bind_buffer(m_handle, gl::Flags::Buffer::Target::UniformBuffer);
-        }
-
         fox::count_t count() const
         {
             return static_cast<fox::count_t>(m_size / sizeof(T));
@@ -192,7 +185,7 @@ namespace fox::gfx::api::gl
         {
             gl::bind_buffer_base(m_handle, gl::Flags::Buffer::TargetBase::UniformBuffer, index);
         }
-        void bind_range(gl::index_t binding, fox::count_t count, fox::count_t offset) const
+        void bind_index_range(gl::index_t binding, fox::count_t count, fox::count_t offset) const
         {
             gl::bind_buffer_range(m_handle, Flags::Buffer::TargetRange::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
         }
