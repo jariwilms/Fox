@@ -4,13 +4,13 @@
 
 #include "Fox/Window/WindowManager.hpp"
 #include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/API/OpenGL/Context/Context.hpp"
 
 namespace fox::wnd::api
 {
 	GLFWWindow::GLFWWindow(const std::string& name, const fox::Vector2u& dimensions)
         : Window{ name, dimensions }
 	{
-        //Initialize GLFW
 		const auto& isInitialized = glfwInit();
 		if (isInitialized != GLFW_TRUE) throw std::runtime_error{ "Failed to initialize GLFW!" };
 
@@ -30,7 +30,6 @@ namespace fox::wnd::api
 
 
 
-        //Initialize GLAD
         const auto& version = gladLoadGL(glfwGetProcAddress);
         if (version == 0) throw std::runtime_error{ "Failed to initialize GLAD!" };
 
@@ -43,33 +42,26 @@ namespace fox::wnd::api
 
 
 
-        //Set up debug message output
         namespace gl = gfx::api::gl;
-        if (auto flags = gl::integer_v(gl::Flags::Data::ContextFlags); flags & gl::Flags::Context::DebugBit)
-        {
-            gl::enable(gl::Flags::Capability::DebugOutput);
-            gl::enable(gl::Flags::Capability::DebugOutputSynchronous);
-
-            gl::debug_message_callback(gl::debug_callback);
-            gl::debug_message_control(gl::True, gl::Flags::Debug::Source::DontCare, gl::Flags::Debug::Type::DontCare, gl::Flags::Debug::Severity::DontCare);
-        }
+        gl::Context::init();
 
 
 
         //Set up event callbacks
-        static const auto& user_pointer                       = [this]() -> GLFWWindow::UserPointer*
+        static const auto& user_pointer = [this]() -> GLFWWindow::UserPointer*
         {
             const auto& glfwWindow  = reinterpret_cast<GLFWwindow*>(WindowManager::find(this)->native_handle());
             const auto& userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
             
             return userPointer;
         };
-               const auto& forward_glfw_error_callback        = [](fox::int32_t error, const fox::char_t* description)
+
+        const auto& forward_glfw_error_callback        = [](fox::int32_t error, const fox::char_t* description)
         {
             const auto& window = user_pointer()->glfwWindow;
             window->glfw_error_callback(error, description);
         };
-               const auto& forward_gl_debug_callback          = [](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* parameters)
+        const auto& forward_gl_debug_callback          = [](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* parameters)
         {
             //TODO: Make like this?
             //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)
@@ -77,22 +69,22 @@ namespace fox::wnd::api
 
             gl::debug_callback(source, type, id, severity, length, message, parameters);
         };
-               const auto& forward_glfw_input_key_callback    = [](GLFWwindow* window, fox::int32_t key, fox::int32_t scancode, fox::int32_t action, fox::int32_t mods)
+        const auto& forward_glfw_input_key_callback    = [](GLFWwindow* window, fox::int32_t key, fox::int32_t scancode, fox::int32_t action, fox::int32_t mods)
         {
             const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_key_callback(window, key, scancode, action, mods);
         };
-               const auto& forward_glfw_button_callback       = [](GLFWwindow* window, fox::int32_t button, fox::int32_t action, fox::int32_t mods)
+        const auto& forward_glfw_button_callback       = [](GLFWwindow* window, fox::int32_t button, fox::int32_t action, fox::int32_t mods)
         {
             const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_button_callback(window, button, action, mods);
         };
-               const auto& forward_glfw_input_cursor_callback = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
+        const auto& forward_glfw_input_cursor_callback = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
         {
             const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_cursor_callback(window, x, y);
         };
-               const auto& forward_glfw_input_scroll_callback = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
+        const auto& forward_glfw_input_scroll_callback = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
         {
             const auto& handler = user_pointer()->inputHandler;
             handler->glfw_input_scroll_callback(window, x, y);
