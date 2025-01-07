@@ -3,34 +3,34 @@
 #include "glad/gl.h"
 #include "glfw/glfw3.h"
 
-#include "Fox/Rendering/API/OpenGL/Query/Query.hpp"
-#include "Fox/Rendering/API/OpenGL/Types.hpp"
-#include "Fox/Rendering/Buffer/Buffer.hpp"
-#include "Fox/Rendering/Buffer/DataTypes.hpp"
-#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
-#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
-#include "Fox/Rendering/RenderState/RenderState.hpp"
-#include "Fox/Rendering/Shader/Pipeline.hpp"
-#include "Fox/Rendering/Shader/Shader.hpp"
-#include "Fox/Rendering/Texture/AntiAliasing.hpp"
-#include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Shader/Pipeline.hpp"
+#include "Fox/Rendering/RenderState/RenderState.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
+#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Buffer/DataTypes.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/API/OpenGL/Types.hpp"
+#include "Fox/Rendering/API/OpenGL/Query/Query.hpp"
 
 namespace fox::gfx::api::gl
 {
-    template<Dimensions DIMS, AntiAliasing AA>
+    template<gfx::Dimensions DIMS, gfx::AntiAliasing AA>
     static constexpr gl::enum_t                         map_texture_target()
     {
-        if constexpr (AA == AntiAliasing::None)
+        if constexpr (AA == gfx::AntiAliasing::None)
         {
-            if constexpr (DIMS == Dimensions::_1D) return GL_TEXTURE_1D;
-            if constexpr (DIMS == Dimensions::_2D) return GL_TEXTURE_2D;
-            if constexpr (DIMS == Dimensions::_3D) return GL_TEXTURE_3D;
+            if constexpr (DIMS == gfx::Dimensions::_1D) return GL_TEXTURE_1D;
+            if constexpr (DIMS == gfx::Dimensions::_2D) return GL_TEXTURE_2D;
+            if constexpr (DIMS == gfx::Dimensions::_3D) return GL_TEXTURE_3D;
         }
-        if constexpr (AA == AntiAliasing::MSAA)
+        if constexpr (AA == gfx::AntiAliasing::MSAA)
         {
-            if constexpr (DIMS == Dimensions::_2D) return GL_TEXTURE_2D_MULTISAMPLE;
-            if constexpr (DIMS == Dimensions::_3D) return GL_TEXTURE_2D_MULTISAMPLE_ARRAY; 
+            if constexpr (DIMS == gfx::Dimensions::_2D) return GL_TEXTURE_2D_MULTISAMPLE;
+            if constexpr (DIMS == gfx::Dimensions::_3D) return GL_TEXTURE_2D_MULTISAMPLE_ARRAY; 
         }
 
         throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
@@ -229,16 +229,7 @@ namespace fox::gfx::api::gl
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
-    }
-                                                 
-    //static constexpr gl::enum_t                         map_query_target(api::Query::Target target)
-    //{
-    //    switch (target)
-    //    {
-    //        return 0;
-    //    }
-    //    throw std::invalid_argument{ "Invalid target!" };
-    //}
+    }                                                
 
     static constexpr gl::Flags::DepthFunction           map_depth_function(api::RenderState::DepthFunction depthFunction)
     {

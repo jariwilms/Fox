@@ -2,6 +2,7 @@
 
 #include "stdafx.hpp"
 
+#include "Fox/Rendering/API/OpenGL/Types.hpp"
 #include "Fox/Rendering/API/OpenGL/Mapping.hpp"
 
 namespace fox::gfx::api::gl

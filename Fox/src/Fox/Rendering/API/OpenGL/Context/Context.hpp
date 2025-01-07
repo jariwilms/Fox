@@ -11,7 +11,7 @@ namespace fox::gfx::api::gl
 		static void init()
 		{
 			s_contextFlags = gl::integer_v(gl::Flags::Data::ContextFlags);
-			if (s_contextFlags & static_cast<gl::enum_t>(gl::Flags::Context::Flag::DebugBit))
+			if (s_contextFlags & static_cast<gl::enum_t>(gl::Flags::Context::Flag::Debug))
 			{
 				gl::enable(gl::Flags::Capability::DebugOutput);
 				gl::enable(gl::Flags::Capability::DebugOutputSynchronous);

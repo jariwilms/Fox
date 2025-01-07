@@ -47,23 +47,6 @@ namespace fox::gfx::api::gl
     {
         NullObject = gl::uint32_t{}, 
     };
-    enum : gl::enum_t
-    {
-        DontCare = GL_DONT_CARE, 
-    };
-
-    enum class DataType : gl::enum_t
-    {
-        Boolean       = GL_BOOL, 
-        Byte          = GL_BYTE, 
-        UnsignedByte  = GL_UNSIGNED_BYTE, 
-        Int           = GL_INT, 
-        UnsignedInt   = GL_UNSIGNED_INT, 
-        Short         = GL_SHORT, 
-        UnsignedShort = GL_UNSIGNED_SHORT, 
-        Float         = GL_FLOAT, 
-        Double        = GL_DOUBLE, 
-    };
 
 
 
@@ -167,7 +150,7 @@ namespace fox::gfx::api::gl
             };
             enum       StorageFlags : gl::bitfield_t
             {
-                None           = 0, 
+                None           = GL_NONE, 
                 DynamicStorage = GL_DYNAMIC_STORAGE_BIT,
                 MapRead        = GL_MAP_READ_BIT,
                 MapWrite       = GL_MAP_WRITE_BIT,
@@ -175,6 +158,24 @@ namespace fox::gfx::api::gl
                 MapCoherent    = GL_MAP_COHERENT_BIT,
                 ClientStorage  = GL_CLIENT_STORAGE_BIT,
             };
+        };
+        enum class Capability : gl::enum_t
+        {
+            Blending                 = GL_BLEND, 
+            FaceCulling              = GL_CULL_FACE, 
+
+            DepthTest                = GL_DEPTH_TEST, 
+            StencilTest              = GL_STENCIL_TEST, 
+            ScissorTest              = GL_SCISSOR_TEST, 
+
+            Multisampling            = GL_MULTISAMPLE, 
+            MultisampleCoverage      = GL_SAMPLE_COVERAGE, 
+            MultisampleAlphaCoverage = GL_SAMPLE_ALPHA_TO_COVERAGE, 
+
+            FrameBufferSRGB          = GL_FRAMEBUFFER_SRGB, 
+
+            DebugOutput              = GL_DEBUG_OUTPUT, 
+            DebugOutputSynchronous   = GL_DEBUG_OUTPUT_SYNCHRONOUS,
         };
         struct     Clip
         {
@@ -189,35 +190,28 @@ namespace fox::gfx::api::gl
                 ZeroToOne        = GL_ZERO_TO_ONE, 
             };
         };
-        enum class Capability : gl::enum_t
-        {
-            Blending                 = GL_BLEND, 
-            DepthTest                = GL_DEPTH_TEST, 
-            FaceCulling              = GL_CULL_FACE, 
-            ScissorTest              = GL_SCISSOR_TEST, 
-            StencilTest              = GL_STENCIL_TEST, 
-            MultisampleCoverage      = GL_SAMPLE_COVERAGE, 
-            MultisampleAlphaCoverage = GL_SAMPLE_ALPHA_TO_COVERAGE, 
-
-            Multisampling            = GL_MULTISAMPLE, 
-            FrameBufferSRGB          = GL_FRAMEBUFFER_SRGB, 
-
-            DebugOutput              = GL_DEBUG_OUTPUT, 
-            DebugOutputSynchronous   = GL_DEBUG_OUTPUT_SYNCHRONOUS,
-        };
         struct     Context
         {
-            enum class Flag
+            enum       Flag : gl::bitfield_t
             {
-                DebugBit             = GL_CONTEXT_FLAG_DEBUG_BIT, 
-                ForwardCompatibleBit = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
-                NoErrorBit           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
-                RobustAccessBit      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
+                Debug             = GL_CONTEXT_FLAG_DEBUG_BIT, 
+                ForwardCompatible = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
+                NoError           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
+                RobustAccess      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
             };
             enum class Profile
             {
                 Core          = GL_CONTEXT_CORE_PROFILE_BIT, 
                 Compatibility = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT, 
+            };
+        };
+        struct     Culling
+        {
+            enum class Face : gl::enum_t
+            {
+                Front     = GL_FRONT, 
+                Back      = GL_BACK, 
+                FrontBack = GL_FRONT_AND_BACK, 
             };
         };
         enum class Data : gl::enum_t
@@ -228,29 +222,30 @@ namespace fox::gfx::api::gl
             ContextProfile       = GL_CONTEXT_PROFILE_MASK, 
             ExtensionCount       = GL_NUM_EXTENSIONS, 
 
-            Blend                = GL_BLEND, 
-            DepthTest            = GL_DEPTH_TEST, 
-
             ArrayBufferBinding   = GL_ARRAY_BUFFER_BINDING, 
             ElementBufferBinding = GL_ELEMENT_ARRAY_BUFFER_BINDING, 
+            RenderBufferBinding  = GL_RENDERBUFFER_BINDING, 
+            FrameBufferBinding   = GL_FRAMEBUFFER_BINDING, 
+
+            ActiveTexture        = GL_ACTIVE_TEXTURE, 
+            CurrentProgram       = GL_CURRENT_PROGRAM, 
 
             Viewport             = GL_VIEWPORT, 
             ScissorBox           = GL_SCISSOR_BOX, 
-            FrameBufferBinding   = GL_FRAMEBUFFER_BINDING, 
-            RenderBufferBinding  = GL_RENDERBUFFER_BINDING, 
-            ActiveTexture        = GL_ACTIVE_TEXTURE, 
-                                 
-            CurrentProgram       = GL_CURRENT_PROGRAM, 
-            MaxTextureSize       = GL_MAX_TEXTURE_SIZE, 
-            MaxVertexAttributes  = GL_MAX_VERTEX_ATTRIBS, 
 
-            DepthFunction        = GL_DEPTH_FUNC, 
+            Blending             = GL_BLEND, 
+
             DepthRange           = GL_DEPTH_RANGE, 
+            DepthTest            = GL_DEPTH_TEST, 
+            DepthFunction        = GL_DEPTH_FUNC, 
             StencilFunctioin     = GL_STENCIL_FUNC, 
-                                 
-            PolygonMode          = GL_POLYGON_MODE, 
-            LineWidth            = GL_LINE_WIDTH, 
+
             PointSize            = GL_POINT_SIZE, 
+            LineWidth            = GL_LINE_WIDTH, 
+            PolygonMode          = GL_POLYGON_MODE, 
+
+            MaxTextureSize       = GL_MAX_TEXTURE_SIZE, 
+            MaxVertexAttributes  = GL_MAX_VERTEX_ATTRIBS,                      
         };
         struct     Debug
         {
@@ -289,30 +284,6 @@ namespace fox::gfx::api::gl
                 DontCare                  = GL_DONT_CARE, 
             };
         };
-        struct     Draw
-        {
-            enum class Mode : gl::enum_t
-            {
-                Points                 = GL_POINTS,
-                LineStrip              = GL_LINE_STRIP,
-                LineLoop               = GL_LINE_LOOP,
-                Lines                  = GL_LINES,
-                LineStripAdjacency     = GL_LINE_STRIP_ADJACENCY,
-                LinesAdjacency         = GL_LINES_ADJACENCY,
-                TriangleStrip          = GL_TRIANGLE_STRIP,
-                TriangleFan            = GL_TRIANGLE_FAN,
-                Triangles              = GL_TRIANGLES,
-                TriangleStripAdjacency = GL_TRIANGLE_STRIP_ADJACENCY,
-                TrianglesAdjacency     = GL_TRIANGLES_ADJACENCY,
-                Patches                = GL_PATCHES
-            };
-            enum class Type : gl::enum_t
-            {
-                UnsignedByte  = GL_UNSIGNED_BYTE, 
-                UnsignedShort = GL_UNSIGNED_SHORT, 
-                UnsignedInt   = GL_UNSIGNED_INT, 
-            };
-        };
         enum class DepthFunction : gl::enum_t
         {
             Always       = GL_ALWAYS, 
@@ -327,13 +298,28 @@ namespace fox::gfx::api::gl
             Greater      = GL_GREATER, 
             GreaterEqual = GL_GEQUAL, 
         };
-        struct     Culling
+        struct     Draw
         {
-            enum class Face : gl::enum_t
+            enum class Mode : gl::enum_t
             {
-                Front     = GL_FRONT, 
-                Back      = GL_BACK, 
-                FrontBack = GL_FRONT_AND_BACK, 
+                Points                 = GL_POINTS,
+                Lines                  = GL_LINES,
+                LineLoop               = GL_LINE_LOOP,
+                LineStrip              = GL_LINE_STRIP,
+                Triangles              = GL_TRIANGLES,
+                TriangleStrip          = GL_TRIANGLE_STRIP,
+                TriangleFan            = GL_TRIANGLE_FAN,
+                LinesAdjacency         = GL_LINES_ADJACENCY,
+                LineStripAdjacency     = GL_LINE_STRIP_ADJACENCY,
+                TrianglesAdjacency     = GL_TRIANGLES_ADJACENCY,
+                TriangleStripAdjacency = GL_TRIANGLE_STRIP_ADJACENCY,
+                Patches                = GL_PATCHES
+            };
+            enum class Type : gl::enum_t
+            {
+                UnsignedByte  = GL_UNSIGNED_BYTE, 
+                UnsignedShort = GL_UNSIGNED_SHORT, 
+                UnsignedInt   = GL_UNSIGNED_INT, 
             };
         };
         struct     FrameBuffer
@@ -362,11 +348,10 @@ namespace fox::gfx::api::gl
                 HalfFloat       = GL_HALF_FLOAT, 
                 Float           = GL_FLOAT, 
             };
-
-            enum class Buffer
+            enum class Buffer : gl::enum_t
             {
-                Color = GL_COLOR, 
-                Depth = GL_DEPTH, 
+                Color   = GL_COLOR, 
+                Depth   = GL_DEPTH, 
                 Stencil = GL_STENCIL, 
             };
             enum       Attachment : gl::enum_t
@@ -379,6 +364,7 @@ namespace fox::gfx::api::gl
             enum class Source : gl::enum_t
             {
                 None                 = GL_NONE, 
+
                 FrontLeft            = GL_FRONT_LEFT, 
                 FrontRight           = GL_FRONT_RIGHT, 
                 BackLeft             = GL_BACK_LEFT, 
@@ -388,12 +374,14 @@ namespace fox::gfx::api::gl
             enum class Status : gl::enum_t
             {
                 Complete                    = GL_FRAMEBUFFER_COMPLETE, 
+
                 IncompleteAttachment        = GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT, 
                 IncompleteMissingAttachment = GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT, 
                 IncompleteDrawBuffer        = GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER, 
                 IncompleteReadBuffer        = GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER, 
                 IncompleteMultisample       = GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE, 
                 IncompleteLayerTargets      = GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS, 
+
                 Undefined                   = GL_FRAMEBUFFER_UNDEFINED, 
                 Unsupported                 = GL_FRAMEBUFFER_UNSUPPORTED, 
             };
@@ -408,14 +396,54 @@ namespace fox::gfx::api::gl
                 Linear  = GL_LINEAR, 
             };
         };
+        struct     Memory
+        {
+            enum       Barrier : gl::bitfield_t
+            {
+                VertexAttributeArray = GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT,
+                ElementArray         = GL_ELEMENT_ARRAY_BARRIER_BIT,
+                Uniform              = GL_UNIFORM_BARRIER_BIT,
+                TextureFetch         = GL_TEXTURE_FETCH_BARRIER_BIT,
+                ShaderImageAccess    = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT,
+                Command              = GL_COMMAND_BARRIER_BIT,
+                PixelBuffer          = GL_PIXEL_BUFFER_BARRIER_BIT,
+                TextureUpdate        = GL_TEXTURE_UPDATE_BARRIER_BIT,
+                BufferUpdate         = GL_BUFFER_UPDATE_BARRIER_BIT,
+                FrameBuffer          = GL_FRAMEBUFFER_BARRIER_BIT,
+                TransformFeedback    = GL_TRANSFORM_FEEDBACK_BARRIER_BIT,
+                AtomicCounter        = GL_ATOMIC_COUNTER_BARRIER_BIT,
+                ShaderStorage        = GL_SHADER_STORAGE_BARRIER_BIT,
+                QueryBuffer          = GL_QUERY_BUFFER_BARRIER_BIT,
+
+                All                  = GL_ALL_BARRIER_BITS,
+            };
+        };
         enum class Orientation : gl::enum_t
         {
             Clockwise        = GL_CW, 
             CounterClockwise = GL_CCW, 
         };
+        struct     Patch
+        {
+            enum class Parameter : gl::enum_t
+            {
+                PatchVertices          = GL_PATCH_VERTICES, 
+                PatchDefaultOuterLevel = GL_PATCH_DEFAULT_OUTER_LEVEL, 
+                PatchDefaultInterLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
+            };
+        };
+        struct     Polygon
+        {
+            enum class Mode : gl::enum_t
+            {
+                Point = GL_POINT, 
+                Line  = GL_LINE, 
+                Fill  = GL_FILL, 
+            };
+        };
         struct     Program
         {
-            enum class Parameter
+            enum class Parameter : gl::enum_t
             {
                 ActiveAttributeMaxLength        = GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, 
                 ActiveAttributes                = GL_ACTIVE_ATTRIBUTES, 
@@ -436,56 +464,37 @@ namespace fox::gfx::api::gl
                 ValidateStatus                  = GL_VALIDATE_STATUS, 
             };
         };
-        struct     Shader
+        enum class ProvokingVertex : gl::enum_t
         {
+            FirstVertex = GL_FIRST_VERTEX_CONVENTION, 
+            LastVertex  = GL_LAST_VERTEX_CONVENTION, 
+        };
+        struct     Query
+        {
+            enum class Mode : gl::enum_t
+            {
+                QueryNoWait         = GL_QUERY_NO_WAIT, 
+                QueryNoWaitInverted = GL_QUERY_NO_WAIT_INVERTED, 
+                QueryRegionNoWait   = GL_QUERY_BY_REGION_NO_WAIT, 
+                QueryRegionWait     = GL_QUERY_BY_REGION_WAIT, 
+                QueryWait           = GL_QUERY_WAIT, 
+                QueryWaitInverted   = GL_QUERY_WAIT_INVERTED, 
+            };
+            enum class Target : gl::enum_t
+            {
+                AnySamplesPassed                   = GL_ANY_SAMPLES_PASSED, 
+                AnySamplesPassedConservative       = GL_ANY_SAMPLES_PASSED_CONSERVATIVE, 
+                PrimitivesGenerated                = GL_PRIMITIVES_GENERATED, 
+                SamplesPassed                      = GL_SAMPLES_PASSED, 
+                TimeElapsed                        = GL_TIME_ELAPSED, 
+                Timestamp                          = GL_TIMESTAMP, 
+                TransformFeedbackPrimitivesWritten = GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, 
+            };
             enum class Parameter : gl::enum_t
             {
-                CompileStatus = GL_COMPILE_STATUS, 
-                DeleteStatus  = GL_DELETE_STATUS, 
-                InfoLogLength = GL_INFO_LOG_LENGTH, 
-                SourceLength  = GL_SHADER_SOURCE_LENGTH, 
-                Type          = GL_SHADER_TYPE, 
-            };
-            enum class Type : gl::enum_t
-            {
-                Compute                = GL_COMPUTE_SHADER, 
-                Fragment               = GL_FRAGMENT_SHADER, 
-                Geometry               = GL_GEOMETRY_SHADER, 
-                TessellationControl    = GL_TESS_CONTROL_SHADER, 
-                TessellationEvaluation = GL_TESS_EVALUATION_SHADER, 
-                Vertex                 = GL_VERTEX_SHADER, 
-            };
-        };
-        struct     Texture
-        {
-            enum class Parameter : gl::enum_t
-            {
-                BaseLevel           = GL_TEXTURE_BASE_LEVEL, 
-                CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
-                CompareMode         = GL_TEXTURE_COMPARE_MODE, 
-                DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
-                LODBias             = GL_TEXTURE_LOD_BIAS, 
-                MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
-                MaximumLevel        = GL_TEXTURE_MAX_LEVEL, 
-                MaximumLOD          = GL_TEXTURE_MAX_LOD, 
-                MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
-                MinimumLOD          = GL_TEXTURE_MIN_LOD, 
-                SwizzleAlpha        = GL_TEXTURE_SWIZZLE_A,
-                SwizzleBlue         = GL_TEXTURE_SWIZZLE_B,
-                SwizzleGreen        = GL_TEXTURE_SWIZZLE_G,
-                SwizzleRed          = GL_TEXTURE_SWIZZLE_R, 
-                WrappingR           = GL_TEXTURE_WRAP_R, 
-                WrappingS           = GL_TEXTURE_WRAP_S, 
-                WrappingT           = GL_TEXTURE_WRAP_T, 
-            };
-        };
-        struct     TransformFeedback
-        {
-            enum class PrimitiveMode : gl::enum_t
-            {
-                Points    = GL_POINTS, 
-                Lines     = GL_LINES, 
-                Triangles = GL_TRIANGLES, 
+                Result          = GL_QUERY_RESULT, 
+                ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
+                ResultAvailable = GL_QUERY_RESULT_AVAILABLE, 
             };
         };
         struct     Sampler
@@ -505,27 +514,24 @@ namespace fox::gfx::api::gl
                 TextureCompareFunc = GL_TEXTURE_COMPARE_FUNC, 
             };
         };
-        struct     Patch
+        struct     Shader
         {
             enum class Parameter : gl::enum_t
             {
-                PatchVertices          = GL_PATCH_VERTICES, 
-                PatchDefaultOuterLevel = GL_PATCH_DEFAULT_OUTER_LEVEL, 
-                PatchDefaultInterLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
+                CompileStatus = GL_COMPILE_STATUS, 
+                DeleteStatus  = GL_DELETE_STATUS, 
+                InfoLogLength = GL_INFO_LOG_LENGTH, 
+                SourceLength  = GL_SHADER_SOURCE_LENGTH, 
+                Type          = GL_SHADER_TYPE, 
             };
-        };
-        enum class ProvokingVertex : gl::enum_t
-        {
-            FirstVertex = GL_FIRST_VERTEX_CONVENTION, 
-            LastVertex  = GL_LAST_VERTEX_CONVENTION, 
-        };
-        struct     Polygon
-        {
-            enum class Mode
+            enum class Type : gl::enum_t
             {
-                Point = GL_POINT, 
-                Line  = GL_LINE, 
-                Fill  = GL_FILL, 
+                Compute                = GL_COMPUTE_SHADER, 
+                Fragment               = GL_FRAGMENT_SHADER, 
+                Geometry               = GL_GEOMETRY_SHADER, 
+                TessellationControl    = GL_TESS_CONTROL_SHADER, 
+                TessellationEvaluation = GL_TESS_EVALUATION_SHADER, 
+                Vertex                 = GL_VERTEX_SHADER, 
             };
         };
         struct     Stencil
@@ -559,53 +565,36 @@ namespace fox::gfx::api::gl
                 Invert        = GL_INVERT, 
             };
         };
-        struct     Query
+        struct     Texture
         {
-            enum class Mode : gl::enum_t
-            {
-                QueryNoWait         = GL_QUERY_NO_WAIT, 
-                QueryNoWaitInverted = GL_QUERY_NO_WAIT_INVERTED, 
-                QueryRegionNoWait   = GL_QUERY_BY_REGION_NO_WAIT, 
-                QueryRegionWait     = GL_QUERY_BY_REGION_WAIT, 
-                QueryWait           = GL_QUERY_WAIT, 
-                QueryWaitInverted   = GL_QUERY_WAIT_INVERTED, 
-            };
-            enum class Target : gl::enum_t
-            {
-                AnySamplesPassed                   = GL_ANY_SAMPLES_PASSED, 
-                AnySamplesPassedConservative       = GL_ANY_SAMPLES_PASSED_CONSERVATIVE, 
-                PrimitivesGenerated                = GL_PRIMITIVES_GENERATED, 
-                SamplesPassed                      = GL_SAMPLES_PASSED, 
-                TimeElapsed                        = GL_TIME_ELAPSED, 
-                Timestamp                          = GL_TIMESTAMP, 
-                TransformFeedbackPrimitivesWritten = GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, 
-            };
             enum class Parameter : gl::enum_t
             {
-                Result          = GL_QUERY_RESULT, 
-                ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
-                ResultAvailable = GL_QUERY_RESULT_AVAILABLE, 
+                BaseLevel           = GL_TEXTURE_BASE_LEVEL, 
+                CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
+                CompareMode         = GL_TEXTURE_COMPARE_MODE, 
+                DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
+                LODBias             = GL_TEXTURE_LOD_BIAS, 
+                MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
+                MaximumLevel        = GL_TEXTURE_MAX_LEVEL, 
+                MaximumLOD          = GL_TEXTURE_MAX_LOD, 
+                MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
+                MinimumLOD          = GL_TEXTURE_MIN_LOD, 
+                SwizzleAlpha        = GL_TEXTURE_SWIZZLE_A,
+                SwizzleBlue         = GL_TEXTURE_SWIZZLE_B,
+                SwizzleGreen        = GL_TEXTURE_SWIZZLE_G,
+                SwizzleRed          = GL_TEXTURE_SWIZZLE_R, 
+                WrappingR           = GL_TEXTURE_WRAP_R, 
+                WrappingS           = GL_TEXTURE_WRAP_S, 
+                WrappingT           = GL_TEXTURE_WRAP_T, 
             };
         };
-        struct     Memory
+        struct     TransformFeedback
         {
-            enum class Barrier : gl::bitfield_t
+            enum class PrimitiveMode : gl::enum_t
             {
-                VertexAttributeArrayBarrier = GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT,
-                ElementArrayBarrier = GL_ELEMENT_ARRAY_BARRIER_BIT,
-                UniformBarrier = GL_UNIFORM_BARRIER_BIT,
-                TextureFetchBarrier = GL_TEXTURE_FETCH_BARRIER_BIT,
-                ShaderImageAccessBarrier = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT,
-                CommandBarrier = GL_COMMAND_BARRIER_BIT,
-                PixelBufferBarrier = GL_PIXEL_BUFFER_BARRIER_BIT,
-                TextureUpdateBarrier = GL_TEXTURE_UPDATE_BARRIER_BIT,
-                BufferUpdateBarrier = GL_BUFFER_UPDATE_BARRIER_BIT,
-                FrameBufferBarrier = GL_FRAMEBUFFER_BARRIER_BIT,
-                TransformFeedbackBarrier = GL_TRANSFORM_FEEDBACK_BARRIER_BIT,
-                AtomicCounterBarrier = GL_ATOMIC_COUNTER_BARRIER_BIT,
-                ShaderStorageBarrier = GL_SHADER_STORAGE_BARRIER_BIT,
-                QueryBufferBarrier = GL_QUERY_BUFFER_BARRIER_BIT,
-                AllBarrierBits = GL_ALL_BARRIER_BITS,
+                Points    = GL_POINTS, 
+                Lines     = GL_LINES, 
+                Triangles = GL_TRIANGLES, 
             };
         };
     };
