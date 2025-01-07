@@ -125,7 +125,7 @@ namespace fox::gfx::api
             gl::depth_function(gl::Flags::DepthFunction::Less);
 
             gl::enable(gl::Flags::Capability::FaceCulling);
-            gl::face_culling(gl::Flags::FaceCulling::Back);
+            gl::cull_face(gl::Flags::Culling::Face::Back);
             gl::front_face(gl::Flags::Orientation::CounterClockwise);
 
             gl::disable(gl::Flags::Capability::Blending);
@@ -165,10 +165,10 @@ namespace fox::gfx::api
 
 
             gl::enable(gl::Flags::Capability::Blending);
-            gl::blend_func(gl::Flags::Blending::Factor::SourceAlpha, gl::Flags::Blending::Factor::One);
+            gl::blend_function(gl::Flags::Blending::Factor::SourceAlpha, gl::Flags::Blending::Factor::One);
 
             gl::disable(gl::Flags::Capability::DepthTest);
-            gl::face_culling(gl::Flags::FaceCulling::Front);
+            gl::cull_face(gl::Flags::Culling::Face::Front);
 
             s_pipelines.at("Lighting")->bind();
 
@@ -183,31 +183,6 @@ namespace fox::gfx::api
 
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             gl::clear(gl::Flags::Buffer::Mask::All);
-
-
-
-
-
-
-
-
-            //s_TRANSFORMBUFFER->bind_index(gl::index_t{ 13 });
-            //const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
-            //sva->bind();
-
-            //for (int i = 0; i < 2; ++i)
-            //{
-            //    const auto& light = s_lightsTEMP.at(i);
-            //    auto sModel = fox::Transform{};
-            //    sModel.position = light.position;
-            //    sModel.dilate(fox::Vector3f{ light.radius });
-
-            //    s_TRANSFORMBUFFER->copy_index(i, sModel.matrix());
-            //}
-
-            //gl::draw_elements_instanced(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, 2, sva->index_buffer()->count());
-
-
 
 
 
@@ -234,7 +209,7 @@ namespace fox::gfx::api
 
 
             gl::disable(gl::Flags::Capability::Blending);
-            gl::face_culling(gl::Flags::FaceCulling::Back);
+            gl::cull_face(gl::Flags::Culling::Face::Back);
 
 #ifdef FOX_DEBUG
             s_pipelines.at("Debug")->bind();

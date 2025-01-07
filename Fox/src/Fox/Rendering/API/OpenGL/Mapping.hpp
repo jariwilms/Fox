@@ -256,13 +256,13 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    static constexpr gl::Flags::FaceCulling             map_culling_face(api::RenderState::FaceCulling cullingFace)
+    static constexpr gl::Flags::Culling::Face           map_culling_face(api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {
-            case api::RenderState::FaceCulling::Front:     return gl::Flags::FaceCulling::Front;
-            case api::RenderState::FaceCulling::Back:      return gl::Flags::FaceCulling::Back;
-            case api::RenderState::FaceCulling::FrontBack: return gl::Flags::FaceCulling::FrontBack;
+            case api::RenderState::FaceCulling::Front:     return gl::Flags::Culling::Face::Front;
+            case api::RenderState::FaceCulling::Back:      return gl::Flags::Culling::Face::Back;
+            case api::RenderState::FaceCulling::FrontBack: return gl::Flags::Culling::Face::FrontBack;
 
             default: throw std::invalid_argument{ "Invalid culling face!" };
         }

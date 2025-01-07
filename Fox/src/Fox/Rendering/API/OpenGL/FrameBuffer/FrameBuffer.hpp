@@ -62,7 +62,7 @@ namespace fox::gfx::api::gl
             const auto& it = m_identifierToTexture.find(identifier);
             if (it == m_identifierToTexture.end()) throw std::invalid_argument{ "Invalid texture identifier!" };
 
-            gl::bind_texture(it->second->handle(), slot);
+            gl::bind_texture_unit(it->second->handle(), slot);
         }
 
         FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
@@ -155,7 +155,7 @@ namespace fox::gfx::api::gl
             const auto& it = m_identifierToTexture.find(identifier);
             if (it == m_identifierToTexture.end()) throw std::invalid_argument{ "Invalid texture identifier!" };
 
-            gl::bind_texture(it->second->handle(), slot);
+            gl::bind_texture_unit(it->second->handle(), slot);
         }
 
         fox::uint8_t samples() const

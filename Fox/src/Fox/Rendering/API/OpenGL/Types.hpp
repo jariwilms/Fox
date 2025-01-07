@@ -17,9 +17,9 @@ namespace fox::gfx::api::gl
     using uint32_t   = GLuint;
     using int64_t    = GLint64;
     using uint64_t   = GLuint64;
-    using f16_t      = GLhalf;
-    using f32_t      = GLfloat;
-    using f64_t      = GLdouble;
+    using float16_t  = GLhalf;
+    using float32_t  = GLfloat;
+    using float64_t  = GLdouble;
 
     using size_t     = GLsizei;
     using enum_t     = GLenum;
@@ -89,6 +89,14 @@ namespace fox::gfx::api::gl
     {
         struct     Blending
         {
+            enum class Equation : gl::enum_t
+            {
+                Add             = GL_FUNC_ADD, 
+                Subtract        = GL_FUNC_SUBTRACT, 
+                ReverseSubtract = GL_FUNC_REVERSE_SUBTRACT, 
+                Minimum         = GL_MIN, 
+                Maximum         = GL_MAX, 
+            };
             enum class Factor : gl::enum_t
             {
                 Zero                     = GL_ZERO, 
@@ -168,6 +176,19 @@ namespace fox::gfx::api::gl
                 ClientStorage  = GL_CLIENT_STORAGE_BIT,
             };
         };
+        struct     Clip
+        {
+            enum class Origin : gl::enum_t
+            {
+                LowerLeft = GL_LOWER_LEFT, 
+                UpperLeft = GL_UPPER_LEFT, 
+            };
+            enum class DepthMode : gl::enum_t
+            {
+                NegativeOneToOne = GL_NEGATIVE_ONE_TO_ONE, 
+                ZeroToOne        = GL_ZERO_TO_ONE, 
+            };
+        };
         enum class Capability : gl::enum_t
         {
             Blending                 = GL_BLEND, 
@@ -184,18 +205,27 @@ namespace fox::gfx::api::gl
             DebugOutput              = GL_DEBUG_OUTPUT, 
             DebugOutputSynchronous   = GL_DEBUG_OUTPUT_SYNCHRONOUS,
         };
-        enum       Context : gl::enum_t
+        struct     Context
         {
-            ForwardCompatibleBit = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
-            DebugBit             = GL_CONTEXT_FLAG_DEBUG_BIT, 
-            RobustAccessBit      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
-            NoErrorBit           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
+            enum class Flag
+            {
+                DebugBit             = GL_CONTEXT_FLAG_DEBUG_BIT, 
+                ForwardCompatibleBit = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
+                NoErrorBit           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
+                RobustAccessBit      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
+            };
+            enum class Profile
+            {
+                Core          = GL_CONTEXT_CORE_PROFILE_BIT, 
+                Compatibility = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT, 
+            };
         };
         enum class Data : gl::enum_t
         {
             MajorVersion         = GL_MAJOR_VERSION, 
             MinorVersion         = GL_MINOR_VERSION, 
             ContextFlags         = GL_CONTEXT_FLAGS, 
+            ContextProfile       = GL_CONTEXT_PROFILE_MASK, 
             ExtensionCount       = GL_NUM_EXTENSIONS, 
 
             Blend                = GL_BLEND, 
@@ -297,14 +327,48 @@ namespace fox::gfx::api::gl
             Greater      = GL_GREATER, 
             GreaterEqual = GL_GEQUAL, 
         };
-        enum class FaceCulling : gl::enum_t
+        struct     Culling
         {
-            Front     = GL_FRONT, 
-            Back      = GL_BACK, 
-            FrontBack = GL_FRONT_AND_BACK, 
+            enum class Face : gl::enum_t
+            {
+                Front     = GL_FRONT, 
+                Back      = GL_BACK, 
+                FrontBack = GL_FRONT_AND_BACK, 
+            };
         };
         struct     FrameBuffer
         {
+            enum class Format : gl::enum_t
+            {
+                Red            = GL_RED, 
+                Green          = GL_GREEN, 
+                Blue           = GL_BLUE, 
+                RGB            = GL_RGB, 
+                RGBA           = GL_RGBA, 
+                BGR            = GL_BGR, 
+                BGRA           = GL_BGRA, 
+                DepthComponent = GL_DEPTH_COMPONENT, 
+                DepthStencil   = GL_DEPTH_STENCIL, 
+                StencilIndex   = GL_STENCIL_INDEX, 
+            };
+            enum class Type : gl::enum_t
+            {
+                Byte            = GL_BYTE,
+                UnsignedByte    = GL_UNSIGNED_BYTE,
+                Short           = GL_SHORT,
+                UnsignedShort   = GL_UNSIGNED_SHORT,
+                Integer         = GL_INT,
+                UnsignedInteger = GL_UNSIGNED_INT,
+                HalfFloat       = GL_HALF_FLOAT, 
+                Float           = GL_FLOAT, 
+            };
+
+            enum class Buffer
+            {
+                Color = GL_COLOR, 
+                Depth = GL_DEPTH, 
+                Stencil = GL_STENCIL, 
+            };
             enum       Attachment : gl::enum_t
             {
                 ColorIndex   = GL_COLOR_ATTACHMENT0, 
@@ -337,6 +401,11 @@ namespace fox::gfx::api::gl
             {
                 Read  = GL_READ_FRAMEBUFFER, 
                 Write = GL_DRAW_FRAMEBUFFER, 
+            };
+            enum class Filter
+            {
+                Nearest = GL_NEAREST, 
+                Linear  = GL_LINEAR, 
             };
         };
         enum class Orientation : gl::enum_t
@@ -410,6 +479,86 @@ namespace fox::gfx::api::gl
                 WrappingT           = GL_TEXTURE_WRAP_T, 
             };
         };
+        struct     TransformFeedback
+        {
+            enum class PrimitiveMode : gl::enum_t
+            {
+                Points    = GL_POINTS, 
+                Lines     = GL_LINES, 
+                Triangles = GL_TRIANGLES, 
+            };
+        };
+        struct     Sampler
+        {
+            enum class Parameter : gl::enum_t
+            {
+                TextureWrapS       = GL_TEXTURE_WRAP_S, 
+                TextureWrapT       = GL_TEXTURE_WRAP_T, 
+                TextureWrapR       = GL_TEXTURE_WRAP_R, 
+                TextureMinFilter   = GL_TEXTURE_MIN_FILTER, 
+                TextureMagFilter   = GL_TEXTURE_MAG_FILTER, 
+                TextureBorderColor = GL_TEXTURE_BORDER_COLOR, 
+                TextureMinLod      = GL_TEXTURE_MIN_LOD, 
+                TextureMaxLod      = GL_TEXTURE_MAX_LOD, 
+                TextureLodBias     = GL_TEXTURE_LOD_BIAS, 
+                TextureCompareMode = GL_TEXTURE_COMPARE_MODE, 
+                TextureCompareFunc = GL_TEXTURE_COMPARE_FUNC, 
+            };
+        };
+        struct     Patch
+        {
+            enum class Parameter : gl::enum_t
+            {
+                PatchVertices          = GL_PATCH_VERTICES, 
+                PatchDefaultOuterLevel = GL_PATCH_DEFAULT_OUTER_LEVEL, 
+                PatchDefaultInterLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
+            };
+        };
+        enum class ProvokingVertex : gl::enum_t
+        {
+            FirstVertex = GL_FIRST_VERTEX_CONVENTION, 
+            LastVertex  = GL_LAST_VERTEX_CONVENTION, 
+        };
+        struct     Polygon
+        {
+            enum class Mode
+            {
+                Point = GL_POINT, 
+                Line  = GL_LINE, 
+                Fill  = GL_FILL, 
+            };
+        };
+        struct     Stencil
+        {
+            enum class Function : gl::enum_t
+            {
+                Always       = GL_ALWAYS, 
+                Never        = GL_NEVER, 
+                Equal        = GL_EQUAL, 
+                NotEqual     = GL_NOTEQUAL, 
+                Less         = GL_LESS, 
+                LessEqual    = GL_LEQUAL, 
+                Greater      = GL_GREATER, 
+                GreaterEqual = GL_GEQUAL, 
+            };
+            enum class Face : gl::enum_t
+            {
+                Front     = GL_FRONT, 
+                Back      = GL_BACK, 
+                FrontBack = GL_FRONT_AND_BACK, 
+            };
+            enum class Action : gl::enum_t
+            {
+                Keep          = GL_KEEP, 
+                Zero          = GL_ZERO, 
+                Replace       = GL_REPLACE, 
+                Increment     = GL_INCR, 
+                IncrementWrap = GL_INCR_WRAP, 
+                Decrement     = GL_DECR, 
+                DecrementWrap = GL_DECR_WRAP, 
+                Invert        = GL_INVERT, 
+            };
+        };
         struct     Query
         {
             enum class Mode : gl::enum_t
@@ -436,6 +585,27 @@ namespace fox::gfx::api::gl
                 Result          = GL_QUERY_RESULT, 
                 ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
                 ResultAvailable = GL_QUERY_RESULT_AVAILABLE, 
+            };
+        };
+        struct     Memory
+        {
+            enum class Barrier : gl::bitfield_t
+            {
+                VertexAttributeArrayBarrier = GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT,
+                ElementArrayBarrier = GL_ELEMENT_ARRAY_BARRIER_BIT,
+                UniformBarrier = GL_UNIFORM_BARRIER_BIT,
+                TextureFetchBarrier = GL_TEXTURE_FETCH_BARRIER_BIT,
+                ShaderImageAccessBarrier = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT,
+                CommandBarrier = GL_COMMAND_BARRIER_BIT,
+                PixelBufferBarrier = GL_PIXEL_BUFFER_BARRIER_BIT,
+                TextureUpdateBarrier = GL_TEXTURE_UPDATE_BARRIER_BIT,
+                BufferUpdateBarrier = GL_BUFFER_UPDATE_BARRIER_BIT,
+                FrameBufferBarrier = GL_FRAMEBUFFER_BARRIER_BIT,
+                TransformFeedbackBarrier = GL_TRANSFORM_FEEDBACK_BARRIER_BIT,
+                AtomicCounterBarrier = GL_ATOMIC_COUNTER_BARRIER_BIT,
+                ShaderStorageBarrier = GL_SHADER_STORAGE_BARRIER_BIT,
+                QueryBufferBarrier = GL_QUERY_BUFFER_BARRIER_BIT,
+                AllBarrierBits = GL_ALL_BARRIER_BITS,
             };
         };
     };
