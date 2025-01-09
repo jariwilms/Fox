@@ -42,6 +42,13 @@ namespace fox::gfx
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
             };
+            static inline const std::array<fox::float32_t, 12> tangents
+            {
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+            };
             static inline const std::array<fox::float32_t, 8>  coordinates
             {
                 1.0f, 1.0f,
@@ -94,6 +101,7 @@ namespace fox::gfx
                 return s_mesh;
             }
 
+            //Front, Back, Left, Right, Bottom, Top
             static inline const std::array<fox::float32_t, 72> positions
             {
                  0.5f,  0.5f,  0.5f, 
@@ -128,26 +136,6 @@ namespace fox::gfx
             };
             static inline const std::array<fox::float32_t, 72> normals
             {
-                 1.0f,  0.0f,  0.0f,
-                 1.0f,  0.0f,  0.0f,
-                 1.0f,  0.0f,  0.0f,
-                 1.0f,  0.0f,  0.0f,
-
-                -1.0f,  0.0f,  0.0f,
-                -1.0f,  0.0f,  0.0f,
-                -1.0f,  0.0f,  0.0f,
-                -1.0f,  0.0f,  0.0f,
-
-                 0.0f,  1.0f,  0.0f,
-                 0.0f,  1.0f,  0.0f,
-                 0.0f,  1.0f,  0.0f,
-                 0.0f,  1.0f,  0.0f,
-
-                 0.0f, -1.0f,  0.0f,
-                 0.0f, -1.0f,  0.0f,
-                 0.0f, -1.0f,  0.0f,
-                 0.0f, -1.0f,  0.0f,
-
                  0.0f,  0.0f,  1.0f,
                  0.0f,  0.0f,  1.0f,
                  0.0f,  0.0f,  1.0f,
@@ -157,6 +145,58 @@ namespace fox::gfx
                  0.0f,  0.0f, -1.0f,
                  0.0f,  0.0f, -1.0f,
                  0.0f,  0.0f, -1.0f,
+
+                -1.0f,  0.0f,  0.0f,
+                -1.0f,  0.0f,  0.0f,
+                -1.0f,  0.0f,  0.0f,
+                -1.0f,  0.0f,  0.0f,
+
+                 1.0f,  0.0f,  0.0f,
+                 1.0f,  0.0f,  0.0f,
+                 1.0f,  0.0f,  0.0f,
+                 1.0f,  0.0f,  0.0f,
+
+                 0.0f, -1.0f,  0.0f,
+                 0.0f, -1.0f,  0.0f,
+                 0.0f, -1.0f,  0.0f,
+                 0.0f, -1.0f,  0.0f,
+
+                 0.0f,  1.0f,  0.0f,
+                 0.0f,  1.0f,  0.0f,
+                 0.0f,  1.0f,  0.0f,
+                 0.0f,  1.0f,  0.0f,
+            };
+            static inline const std::array<fox::float32_t, 72> tangents
+            {
+                 0.5f,  0.5f,  0.5f, 
+                 0.5f, -0.5f,  0.5f, 
+                -0.5f, -0.5f,  0.5f, 
+                -0.5f,  0.5f,  0.5f, 
+
+                -0.5f,  0.5f, -0.5f, 
+                -0.5f, -0.5f, -0.5f, 
+                 0.5f, -0.5f, -0.5f, 
+                 0.5f,  0.5f, -0.5f, 
+                
+                -0.5f,  0.5f,  0.5f, 
+                -0.5f, -0.5f,  0.5f, 
+                -0.5f, -0.5f, -0.5f, 
+                -0.5f,  0.5f, -0.5f, 
+                
+                 0.5f,  0.5f, -0.5f, 
+                 0.5f, -0.5f, -0.5f, 
+                 0.5f, -0.5f,  0.5f, 
+                 0.5f,  0.5f,  0.5f, 
+                
+                -0.5f, -0.5f, -0.5f, 
+                -0.5f, -0.5f,  0.5f, 
+                 0.5f, -0.5f,  0.5f, 
+                 0.5f, -0.5f, -0.5f, 
+                
+                 0.5f,  0.5f,  0.5f, 
+                -0.5f,  0.5f,  0.5f, 
+                -0.5f,  0.5f, -0.5f, 
+                 0.5f,  0.5f, -0.5f, 
             };
             static inline const std::array<fox::float32_t, 48> coordinates
             {
