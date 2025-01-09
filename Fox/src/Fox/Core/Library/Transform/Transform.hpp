@@ -15,11 +15,7 @@ namespace fox
     {
     public:
         Transform() = default;
-        Transform(const Transform& transform)
-        {
-            *this = transform;
-        }
-        Transform(const fox::Vector3f& position, const fox::Vector3f& rotation, const fox::Vector3f& scale)
+        Transform(const fox::Vector3f& position, const fox::Vector3f&   rotation, const fox::Vector3f& scale)
             : position{ position }, rotation{ fox::Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
         Transform(const fox::Vector3f& position, const fox::Quaternion& rotation, const fox::Vector3f& scale)
             : position{ position }, rotation{ fox::Quaternion{ rotation } }, scale{ scale } {}
@@ -76,19 +72,6 @@ namespace fox
             return result;
         }
 
-        friend Transform operator*(const Transform& lhs, const Transform& rhs)
-        {
-            return Transform{ lhs.matrix() * rhs.matrix() };
-        }
-        
-        Transform& operator=(const fox::Transform& transform)
-        {
-            position = transform.position;
-            rotation = transform.rotation;
-            scale    = transform.scale;
-
-            return *this;
-        }
         Transform& operator=(const fox::Matrix4f& matrix)
         {
             fox::Vector3f skew{};
@@ -98,6 +81,10 @@ namespace fox
             rotation = glm::conjugate(rotation);
 
             return *this;
+        }
+        friend Transform operator*(const Transform& lhs, const Transform& rhs)
+        {
+            return Transform{ lhs.matrix() * rhs.matrix() };
         }
 
         fox::Vector3f   position{ 0.0f };
