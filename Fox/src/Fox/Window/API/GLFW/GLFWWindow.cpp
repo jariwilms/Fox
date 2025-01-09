@@ -56,47 +56,50 @@ namespace fox::wnd::api
             return userPointer;
         };
 
-        const auto& forward_glfw_error_callback        = [](fox::int32_t error, const fox::char_t* description)
-        {
-            const auto& window = user_pointer()->glfwWindow;
-            window->glfw_error_callback(error, description);
-        };
-        const auto& forward_gl_debug_callback          = [](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* parameters)
-        {
-            //TODO: Make like this?
-            //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)
-            //context->gl_debug_callback(source, type, id, severity, length, message, param);
+        const auto& glfw_error_callback               = [](fox::int32_t error, const fox::char_t* description)
+            {
+                const auto& window = user_pointer()->glfwWindow;
+                window->glfw_error_callback(error, description);
+            };
+        const auto& gl_debug_callback                 = [](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* parameters)
+            {
+                //TODO: Make like this?
+                //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)
+                //context->gl_debug_callback(source, type, id, severity, length, message, param);
 
-            gl::debug_callback(source, type, id, severity, length, message, parameters);
-        };
-        const auto& forward_glfw_input_key_callback    = [](GLFWwindow* window, fox::int32_t key, fox::int32_t scancode, fox::int32_t action, fox::int32_t mods)
-        {
-            const auto& handler = user_pointer()->inputHandler;
-            handler->glfw_input_key_callback(window, key, scancode, action, mods);
-        };
-        const auto& forward_glfw_button_callback       = [](GLFWwindow* window, fox::int32_t button, fox::int32_t action, fox::int32_t mods)
-        {
-            const auto& handler = user_pointer()->inputHandler;
-            handler->glfw_input_button_callback(window, button, action, mods);
-        };
-        const auto& forward_glfw_input_cursor_callback = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
-        {
-            const auto& handler = user_pointer()->inputHandler;
-            handler->glfw_input_cursor_callback(window, x, y);
-        };
-        const auto& forward_glfw_input_scroll_callback = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
-        {
-            const auto& handler = user_pointer()->inputHandler;
-            handler->glfw_input_scroll_callback(window, x, y);
-        };
+                gl::debug_callback(source, type, id, severity, length, message, parameters);
+            };
+        const auto& glfw_input_key_callback           = [](GLFWwindow* window, fox::int32_t key, fox::int32_t scancode, fox::int32_t action, fox::int32_t mods)
+            {
+                const auto& handler = user_pointer()->inputHandler;
+                handler->glfw_input_key_callback(window, key, scancode, action, mods);
+            };
+        const auto& glfw_button_callback              = [](GLFWwindow* window, fox::int32_t button, fox::int32_t action, fox::int32_t mods)
+            {
+                const auto& handler = user_pointer()->inputHandler;
+                handler->glfw_input_button_callback(window, button, action, mods);
+            };
+        const auto& glfw_input_cursor_callback        = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
+            {
+                const auto& handler = user_pointer()->inputHandler;
+                handler->glfw_input_cursor_callback(window, x, y);
+            };
+        const auto& glfw_input_scroll_callback        = [](GLFWwindow* window, fox::float64_t x, fox::float64_t y)
+            {
+                const auto& handler = user_pointer()->inputHandler;
+                handler->glfw_input_scroll_callback(window, x, y);
+            };
+        const auto& glfw_frame_buffer_resize_callback = [](GLFWwindow* window, fox::int32_t width, fox::int32_t height)
+            {
+                gl::viewport({ 0, 0, width, height });
+            };
 
-        glfwSetErrorCallback(                    forward_glfw_error_callback);
-        glfwSetKeyCallback(        m_glfwWindow, forward_glfw_input_key_callback);
-        glfwSetMouseButtonCallback(m_glfwWindow, forward_glfw_button_callback);
-        glfwSetCursorPosCallback(  m_glfwWindow, forward_glfw_input_cursor_callback);
-        glfwSetScrollCallback(     m_glfwWindow, forward_glfw_input_scroll_callback);
-
-
+        glfwSetErrorCallback(                        glfw_error_callback);
+        glfwSetKeyCallback(            m_glfwWindow, glfw_input_key_callback);
+        glfwSetMouseButtonCallback(    m_glfwWindow, glfw_button_callback);
+        glfwSetCursorPosCallback(      m_glfwWindow, glfw_input_cursor_callback);
+        glfwSetScrollCallback(         m_glfwWindow, glfw_input_scroll_callback);
+        glfwSetFramebufferSizeCallback(m_glfwWindow, glfw_frame_buffer_resize_callback);
 
 		input::api::init(m_userPointer->inputHandler);
 	}
