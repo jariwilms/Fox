@@ -34,7 +34,7 @@ project "FOX"
 	location "FOX"
 	kind "ConsoleApp"
 	language "C++"
-	cppdialect "C++20"
+	cppdialect "C++23"
 	staticruntime "On"
 	
 	targetdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")

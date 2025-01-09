@@ -10,17 +10,17 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags = gl::integer_v(gl::Flags::Data::ContextFlags);
-			if (s_contextFlags & static_cast<gl::enum_t>(gl::Flags::Context::Flag::Debug))
+			s_contextFlags = gl::integer_v(gl::flg::Data::ContextFlags);
+			if (s_contextFlags & static_cast<gl::enum_t>(gl::flg::Context::Flag::Debug))
 			{
-				gl::enable(gl::Flags::Capability::DebugOutput);
-				gl::enable(gl::Flags::Capability::DebugOutputSynchronous);
+				gl::enable(gl::flg::Capability::DebugOutput);
+				gl::enable(gl::flg::Capability::DebugOutputSynchronous);
 
 				gl::debug_message_callback(gl::debug_callback);
-				gl::debug_message_control(gl::True, gl::Flags::Debug::Source::DontCare, gl::Flags::Debug::Type::DontCare, gl::Flags::Debug::Severity::DontCare);
+				gl::debug_message_control(gl::True, gl::flg::Debug::Source::DontCare, gl::flg::Debug::Type::DontCare, gl::flg::Debug::Severity::DontCare);
 			}
 
-			s_contextProfile = gl::integer_v(gl::Flags::Data::ContextProfile);
+			s_contextProfile = gl::integer_v(gl::flg::Data::ContextProfile);
 
 
 		}

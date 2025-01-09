@@ -9,13 +9,13 @@ namespace fox::gfx::api
     public:
         enum class Stage
         {
-            Vertex,
-            TessellationControl,
-            TessellationEvaluation,
-            Geometry,
-            Fragment,
+            Vertex, 
+            TessellationControl, 
+            TessellationEvaluation, 
+            Geometry, 
+            Fragment, 
 
-            Compute,
+            Compute, 
         };
 
         Stage stage() const

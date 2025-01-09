@@ -75,10 +75,10 @@ namespace fox::gfx::api
         };
         enum class Wrapping
         {
-            Repeat,
-
             ClampToEdge,
             ClampToBorder,
+
+            Repeat,
 
             MirroredRepeat,
             MirroredClampToEdge,

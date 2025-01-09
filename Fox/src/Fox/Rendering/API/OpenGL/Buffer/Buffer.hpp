@@ -27,8 +27,8 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_buffer();
 
-            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Static);
-            gl::buffer_storage(m_handle, bufferAccess, data);
+            const auto& storageFlags = gl::flg::Buffer::StorageFlags::None;
+            gl::buffer_storage(m_handle, storageFlags, data);
         }
         Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
@@ -56,15 +56,24 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_buffer();
 
-            gl::buffer_storage(m_handle, gl::Flags::Buffer::StorageFlags::DynamicStorage, m_size);
+            const auto& storageFlags = 
+                gl::flg::Buffer::StorageFlags::DynamicStorage | 
+                gl::flg::Buffer::StorageFlags::MapRead        | 
+                gl::flg::Buffer::StorageFlags::MapWrite       ;
+
+            gl::buffer_storage(m_handle, storageFlags, m_size);
         }
         explicit Buffer(std::span<const T> data)
-            : Buffer<TYPE, api::Buffer::Access::Static, T>{ data }
+            : Buffer<TYPE, api::Buffer::Access::Static, T>{ data.size_bytes() }
         {
             m_handle = gl::create_buffer();
 
-            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(m_handle, bufferAccess, data);
+            const auto& storageFlags = 
+                gl::flg::Buffer::StorageFlags::DynamicStorage | 
+                gl::flg::Buffer::StorageFlags::MapRead        | 
+                gl::flg::Buffer::StorageFlags::MapWrite       ;
+
+            gl::buffer_storage(m_handle, storageFlags, data);
         }
         Buffer(Buffer&& other) noexcept = default;
         ~Buffer() = default;
@@ -116,8 +125,7 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_buffer();
 
-            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(m_handle, bufferAccess, std::span<const T>{ &data, 1u });
+            gl::buffer_storage(m_handle, gl::flg::Buffer::StorageFlags::DynamicStorage, std::span<const T>{ &data, 1u });
         }
         Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
@@ -127,7 +135,7 @@ namespace fox::gfx::api::gl
 
         void bind_index(gl::index_t index) const
         {
-            gl::bind_buffer_base(m_handle, gl::Flags::Buffer::TargetBase::UniformBuffer, index);
+            gl::bind_buffer_base(m_handle, gl::flg::Buffer::IndexedTarget::UniformBuffer, index);
         }
 
         void copy(const T& data)
@@ -164,16 +172,14 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_buffer();
 
-            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(m_handle, bufferAccess, gl::sizeptr_t{ count * sizeof(T) });
+            gl::buffer_storage(m_handle, gl::flg::Buffer::StorageFlags::DynamicStorage, gl::sizeptr_t{ count * sizeof(T) });
         }
         explicit Buffer(std::span<const T> data)
             : BufferObject{ data.size_bytes() }
         {
             m_handle = gl::create_buffer();
 
-            const auto& bufferAccess = gl::map_buffer_access(api::Buffer::Access::Dynamic);
-            gl::buffer_storage(m_handle, bufferAccess, data);
+            gl::buffer_storage(m_handle, gl::flg::Buffer::StorageFlags::DynamicStorage, data);
         }
         Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
@@ -183,11 +189,11 @@ namespace fox::gfx::api::gl
 
         void bind_index(gl::index_t index) const
         {
-            gl::bind_buffer_base(m_handle, gl::Flags::Buffer::TargetBase::UniformBuffer, index);
+            gl::bind_buffer_base(m_handle, gl::flg::Buffer::IndexedTarget::UniformBuffer, index);
         }
         void bind_index_range(gl::index_t binding, fox::count_t count, fox::count_t offset) const
         {
-            gl::bind_buffer_range(m_handle, Flags::Buffer::TargetRange::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
+            gl::bind_buffer_range(m_handle, gl::flg::Buffer::TargetRange::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
         }
 
         void copy(std::span<const T> data)
@@ -199,10 +205,15 @@ namespace fox::gfx::api::gl
         void copy_index(fox::uint32_t index, const T& data)
         {
             const auto& offset = index * sizeof(T);
+            if ((offset + sizeof(T)) > m_size) throw std::invalid_argument{"Index out of range!"};
 
-            if (offset > m_size) throw std::invalid_argument{ "Index out of range!" };
+            gl::buffer_sub_data(m_handle, offset, std::span<const T>{ &data, 1u });
+        }
+        void copy_range(fox::count_t offset, std::span<const T> data)
+        {
+            if ((offset * sizeof(T) + data.size_bytes()) > m_size) throw std::invalid_argument{ "Index out of range!" };
 
-            gl::buffer_sub_data(m_handle, index * sizeof(T), std::span<const T>{ &data, 1u });
+            gl::buffer_sub_data(m_handle, offset, data);
         }
 
         Buffer& operator=(Buffer&& other) noexcept = default;

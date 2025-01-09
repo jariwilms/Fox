@@ -11,7 +11,6 @@ namespace fox::gfx::api
         {
             Vertex,
             Index,
-
             Uniform,
             UniformArray, 
 

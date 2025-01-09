@@ -3,7 +3,6 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/API/OpenGL/Texture/TextureTarget.hpp"
 #include "Fox/Rendering/Texture/AntiAliasing.hpp"
 #include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/MipMap.hpp"
@@ -33,28 +32,26 @@ namespace fox::gfx::api::gl
         Texture(Format format, Filter filter, wrap_t wrapping, const vector_t& dimensions)
             : api::Texture{ format, filter }, m_mipmapLevels{ 1u }, m_wrapping{ wrapping }, m_dimensions{ dimensions }
         {
-            m_handle = gl::create_texture(gl::map_texture_target<DIMS, AntiAliasing::None>());
+            constexpr auto target = gl::map_texture_target<DIMS, gfx::AntiAliasing::None>();
+            m_handle = gl::create_texture(target);
 
             if (filter != Filter::None)
             {
-                gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MinificationFilter,  gl::map_texture_min_filter(m_filter));
-                gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::MagnificationFilter, gl::map_texture_mag_filter(m_filter));
+                gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::MinificationFilter,  gl::map_texture_min_filter(m_filter)); //TODO: Parameter variant
+                gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::MagnificationFilter, gl::map_texture_mag_filter(m_filter)); //TODO: Parameter variant
 
                 m_mipmapLevels = gfx::calculate_mipmap_level(m_dimensions);
             }
 
-                                                   gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingS, gl::map_texture_wrapping(m_wrapping.s));
-            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingT, gl::map_texture_wrapping(m_wrapping.t));
-            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingR, gl::map_texture_wrapping(m_wrapping.r));
+                                                   gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingS, gl::map_texture_wrapping(m_wrapping.s)); //TODO: Parameter variant
+            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingT, gl::map_texture_wrapping(m_wrapping.t)); //FR TODO: variant
+            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingR, gl::map_texture_wrapping(m_wrapping.r)); //TODO: Parameter variant
 
             if constexpr (DIMS == Dimensions::_1D) gl::texture_storage_1d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
         }
-        Texture(Texture&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Texture(Texture&& other) noexcept = default;
         ~Texture()
         {
             gl::delete_texture(m_handle);
@@ -87,9 +84,9 @@ namespace fox::gfx::api::gl
         {
             m_wrapping = wrapping;
 
-                                                   gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingS, gl::map_texture_wrapping(m_wrapping.s));
-            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingT, gl::map_texture_wrapping(m_wrapping.t));
-            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::Flags::Texture::Parameter::WrappingR, gl::map_texture_wrapping(m_wrapping.r));
+                                                   gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingS, std::to_underlying(gl::map_texture_wrapping(m_wrapping.s)));
+            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingT, std::to_underlying(gl::map_texture_wrapping(m_wrapping.t)));
+            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingR, std::to_underlying(gl::map_texture_wrapping(m_wrapping.r)));
         }
 
         fox::uint32_t   mipmap_levels() const
@@ -105,20 +102,7 @@ namespace fox::gfx::api::gl
             return m_dimensions;
         }
 
-        Texture& operator=(Texture&& other) noexcept
-        {
-            if (this != &other)
-            {
-                api::Texture::operator=(std::move(other));
-
-                m_handle       = std::exchange(other.m_handle,       m_handle);
-                m_mipmapLevels = std::exchange(other.m_mipmapLevels, m_mipmapLevels);
-                m_wrapping     = std::exchange(other.m_wrapping,     m_wrapping);
-                m_dimensions   = std::exchange(other.m_dimensions,   m_dimensions);
-            }
-
-            return *this;
-        }
+        Texture& operator=(Texture&& other) noexcept = default;
 
     private:
         fox::uint32_t m_mipmapLevels{};
@@ -134,7 +118,8 @@ namespace fox::gfx::api::gl
         Texture(Format format, const vector_t& dimensions, fox::uint8_t samples)
             : api::Texture{ format }, m_dimensions{ dimensions }, m_samples{ samples }
         {
-            m_handle = gl::create_texture(gl::map_texture_target<DIMS, AntiAliasing::MSAA>());
+            constexpr auto target = gl::map_texture_target<DIMS, gfx::AntiAliasing::None>();
+            m_handle = gl::create_texture(target);
 
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);

@@ -39,12 +39,12 @@ namespace fox::gfx::api::gl
             }
             else
             {
-                gl::frame_buffer_read_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
-                gl::frame_buffer_draw_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
+                gl::frame_buffer_read_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
+                gl::frame_buffer_draw_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
             }
 
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
-            if (frameBufferStatus != gl::Flags::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (frameBufferStatus != gl::flg::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         FrameBuffer(FrameBuffer&& other) noexcept = default;
         ~FrameBuffer()
@@ -68,7 +68,7 @@ namespace fox::gfx::api::gl
         FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
 
     private:
-        void attach(std::string_view identifier, api::Texture::Format format,      std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Texture::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_texture_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
@@ -132,12 +132,12 @@ namespace fox::gfx::api::gl
             }
             else
             {
-                gl::frame_buffer_read_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
-                gl::frame_buffer_draw_buffer(m_handle, gl::Flags::FrameBuffer::Source::None);
+                gl::frame_buffer_read_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
+                gl::frame_buffer_draw_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
             }
 
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
-            if (frameBufferStatus != gl::Flags::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (frameBufferStatus != gl::flg::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         FrameBuffer(FrameBuffer&& other) noexcept = default;
         ~FrameBuffer()

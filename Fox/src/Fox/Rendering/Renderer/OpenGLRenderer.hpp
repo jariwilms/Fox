@@ -121,14 +121,14 @@ namespace fox::gfx::api
         }
         static void finish()
         {
-            gl::enable(gl::Flags::Capability::DepthTest);
-            gl::depth_function(gl::Flags::DepthFunction::Less);
+            gl::enable(gl::flg::Capability::DepthTest);
+            gl::depth_function(gl::flg::DepthFunction::Less);
 
-            gl::enable(gl::Flags::Capability::FaceCulling);
-            gl::cull_face(gl::Flags::Culling::Face::Back);
-            gl::front_face(gl::Flags::Orientation::CounterClockwise);
+            gl::enable(gl::flg::Capability::FaceCulling);
+            gl::cull_face(gl::flg::Culling::Face::Back);
+            gl::front_face(gl::flg::Orientation::CounterClockwise);
 
-            gl::disable(gl::Flags::Capability::Blending);
+            gl::disable(gl::flg::Capability::Blending);
 
 
 
@@ -139,7 +139,7 @@ namespace fox::gfx::api
 
             s_pipelines.at("Mesh")->bind();
             s_gBuffer->bind(gfx::FrameBuffer::Target::Write);
-            gl::clear(gl::Flags::Buffer::Mask::All);
+            gl::clear(gl::flg::Buffer::Mask::All);
 
             for (auto& mmt : s_mmt)
             {
@@ -159,16 +159,16 @@ namespace fox::gfx::api
                 material->normal->bind(1);
                 material->arm->bind(2);
 
-                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, ind->count());
+                gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, ind->count());
             }
 
 
 
-            gl::enable(gl::Flags::Capability::Blending);
-            gl::blend_function(gl::Flags::Blending::Factor::SourceAlpha, gl::Flags::Blending::Factor::One);
+            gl::enable(gl::flg::Capability::Blending);
+            gl::blend_function(gl::flg::Blending::Factor::SourceAlpha, gl::flg::Blending::Factor::One);
 
-            gl::disable(gl::Flags::Capability::DepthTest);
-            gl::cull_face(gl::Flags::Culling::Face::Front);
+            gl::disable(gl::flg::Capability::DepthTest);
+            gl::cull_face(gl::flg::Culling::Face::Front);
 
             s_pipelines.at("Lighting")->bind();
 
@@ -182,7 +182,7 @@ namespace fox::gfx::api
             s_cameraBuffer->bind_index(gl::index_t{ 2 });
 
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            gl::clear(gl::Flags::Buffer::Mask::All);
+            gl::clear(gl::flg::Buffer::Mask::All);
 
 
 
@@ -201,15 +201,15 @@ namespace fox::gfx::api
                 s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model), std::make_tuple(sModel.matrix()));
                 s_INDEXBUFFER->copy(i);
 
-                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, sva->index_buffer()->count());
+                gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, sva->index_buffer()->count());
             }
 
 
 
 
 
-            gl::disable(gl::Flags::Capability::Blending);
-            gl::cull_face(gl::Flags::Culling::Face::Back);
+            gl::disable(gl::flg::Capability::Blending);
+            gl::cull_face(gl::flg::Culling::Face::Back);
 
 #ifdef FOX_DEBUG
             s_pipelines.at("Debug")->bind();
@@ -220,7 +220,7 @@ namespace fox::gfx::api
             for (const auto& transform : s_debugTransforms)
             {
                 s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(transform.matrix()));
-                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, cva->index_buffer()->count());
+                gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, cva->index_buffer()->count());
             }
 #endif
 
