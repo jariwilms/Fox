@@ -19,21 +19,56 @@
 namespace fox::gfx::api::gl
 {
     template<gfx::Dimensions DIMS, gfx::AntiAliasing AA>
-    static constexpr gl::flg::Texture::Target              map_texture_target()
+    static constexpr gl::flg::Buffer::Mapping              map_buffer_mapping(api::Buffer::Mapping mapping)
     {
-        if constexpr (AA == gfx::AntiAliasing::None)
+        switch (mapping)
         {
-            if constexpr (DIMS == gfx::Dimensions::_1D) return gl::flg::Texture::Target::_1D;
-            if constexpr (DIMS == gfx::Dimensions::_2D) return gl::flg::Texture::Target::_2D;
-            if constexpr (DIMS == gfx::Dimensions::_3D) return gl::flg::Texture::Target::_3D;
-        }
-        if constexpr (AA == gfx::AntiAliasing::MSAA)
-        {
-            if constexpr (DIMS == gfx::Dimensions::_2D) return gl::flg::Texture::Target::_2DMultisample;
-            if constexpr (DIMS == gfx::Dimensions::_3D) return gl::flg::Texture::Target::_2DMultisampleArray;
-        }
+            case api::Buffer::Mapping::Read:      return gl::flg::Buffer::Mapping::Read;
+            case api::Buffer::Mapping::Write:     return gl::flg::Buffer::Mapping::Write;
+            case api::Buffer::Mapping::ReadWrite: return gl::flg::Buffer::Mapping::ReadWrite;
 
-        throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
+            default: throw std::invalid_argument{ "Invalid Mapping!" };
+        }
+    }
+    static constexpr gl::flg::Buffer::StorageFlags         map_buffer_access(api::Buffer::Access access)
+    {
+        switch (access)
+        {
+            case api::Buffer::Access::Static:  return gl::flg::Buffer::StorageFlags::None;
+            case api::Buffer::Access::Dynamic: return gl::flg::Buffer::StorageFlags::DynamicStorage;
+
+            default: throw std::invalid_argument{ "Invalid access!" };
+        }
+    }
+    static constexpr gl::flg::Buffer::Target               map_buffer_target(api::Buffer::Type type)
+    {
+        switch (type)
+        {
+            case api::Buffer::Type::Vertex:  return gl::flg::Buffer::Target::ArrayBuffer;
+            case api::Buffer::Type::Index:   return gl::flg::Buffer::Target::ElementArrayBuffer;
+            case api::Buffer::Type::Uniform: return gl::flg::Buffer::Target::UniformBuffer;
+
+            default: throw std::invalid_argument{ "Invalid type!" };
+        }
+    }
+    static constexpr gl::flg::Texture::BaseFormat          map_texture_format_base(api::Texture::Format format)
+    {
+        const auto& flags = (static_cast<gl::int32_t>(format) & 0xFF00) >> 8;
+
+        switch (flags)
+        {
+            case 0x01: return gl::flg::Texture::BaseFormat::R;
+            case 0x02: return gl::flg::Texture::BaseFormat::RG;
+            case 0x03: return gl::flg::Texture::BaseFormat::RGB;
+            case 0x04: return gl::flg::Texture::BaseFormat::RGBA;
+
+            case 0x10: return gl::flg::Texture::BaseFormat::Depth;
+            case 0x20: return gl::flg::Texture::BaseFormat::Stencil;
+
+            case 0x30: throw std::invalid_argument{ "Invalid texture format!" };
+
+            default: throw std::invalid_argument{ "Invalid texture format!" };
+        }
     }
     static constexpr gl::flg::Texture::Format              map_texture_format(api::Texture::Format format)
     {
@@ -75,23 +110,16 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr gl::flg::Texture::BaseFormat          map_texture_format_base(api::Texture::Format format)
+    static constexpr gl::flg::Texture::MagnificationFilter map_texture_mag_filter(api::Texture::Filter filter)
     {
-        const auto& flags = (static_cast<gl::int32_t>(format) & 0xFF00) >> 8;
-
-        switch (flags)
+        switch (filter)
         {
-            case 0x01: return gl::flg::Texture::BaseFormat::R;
-            case 0x02: return gl::flg::Texture::BaseFormat::RG;
-            case 0x03: return gl::flg::Texture::BaseFormat::RGB;
-            case 0x04: return gl::flg::Texture::BaseFormat::RGBA;
+            case api::Texture::Filter::None:      return gl::flg::Texture::MagnificationFilter::Nearest;
+            case api::Texture::Filter::Nearest:   return gl::flg::Texture::MagnificationFilter::Nearest;
+            case api::Texture::Filter::Bilinear:  return gl::flg::Texture::MagnificationFilter::Linear;
+            case api::Texture::Filter::Trilinear: return gl::flg::Texture::MagnificationFilter::Linear;
 
-            case 0x10: return gl::flg::Texture::BaseFormat::Depth;
-            case 0x20: return gl::flg::Texture::BaseFormat::Stencil;
-
-            case 0x30: throw std::invalid_argument{ "Invalid texture format!" };
-
-            default: throw std::invalid_argument{ "Invalid texture format!" };
+            default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
     static constexpr gl::flg::Texture::MinificationFilter  map_texture_min_filter(api::Texture::Filter filter)
@@ -106,17 +134,21 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static constexpr gl::flg::Texture::MagnificationFilter map_texture_mag_filter(api::Texture::Filter filter)
+    static constexpr gl::flg::Texture::Target              map_texture_target()
     {
-        switch (filter)
+        if constexpr (AA == gfx::AntiAliasing::None)
         {
-            case api::Texture::Filter::None:      return gl::flg::Texture::MagnificationFilter::Nearest;
-            case api::Texture::Filter::Nearest:   return gl::flg::Texture::MagnificationFilter::Nearest;
-            case api::Texture::Filter::Bilinear:  return gl::flg::Texture::MagnificationFilter::Linear;
-            case api::Texture::Filter::Trilinear: return gl::flg::Texture::MagnificationFilter::Linear;
-
-            default: throw std::invalid_argument{ "Invalid filter!" };
+            if constexpr (DIMS == gfx::Dimensions::_1D) return gl::flg::Texture::Target::_1D;
+            if constexpr (DIMS == gfx::Dimensions::_2D) return gl::flg::Texture::Target::_2D;
+            if constexpr (DIMS == gfx::Dimensions::_3D) return gl::flg::Texture::Target::_3D;
         }
+        if constexpr (AA == gfx::AntiAliasing::MSAA)
+        {
+            if constexpr (DIMS == gfx::Dimensions::_2D) return gl::flg::Texture::Target::_2DMultisample;
+            if constexpr (DIMS == gfx::Dimensions::_3D) return gl::flg::Texture::Target::_2DMultisampleArray;
+        }
+
+        throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
     }
     static constexpr gl::flg::Texture::Wrapping            map_texture_wrapping(api::Texture::Wrapping wrapping)
     {
@@ -150,38 +182,6 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr gl::flg::Buffer::Target               map_buffer_target(api::Buffer::Type type)
-    {
-        switch (type)
-        {
-            case api::Buffer::Type::Vertex:  return gl::flg::Buffer::Target::ArrayBuffer;
-            case api::Buffer::Type::Index:   return gl::flg::Buffer::Target::ElementArrayBuffer;
-            case api::Buffer::Type::Uniform: return gl::flg::Buffer::Target::UniformBuffer;
-
-            default: throw std::invalid_argument{ "Invalid type!" };
-        }
-    }
-    static constexpr gl::flg::Buffer::StorageFlags         map_buffer_access(api::Buffer::Access access)
-    {
-        switch (access)
-        {
-            case api::Buffer::Access::Static:  return gl::flg::Buffer::StorageFlags::None;
-            case api::Buffer::Access::Dynamic: return gl::flg::Buffer::StorageFlags::DynamicStorage;
-
-            default: throw std::invalid_argument{ "Invalid access!" };
-        }
-    }
-    static constexpr gl::flg::Buffer::Mapping              map_buffer_mapping(api::Buffer::Mapping mapping)
-    {
-        switch (mapping)
-        {
-            case api::Buffer::Mapping::Read:      return gl::flg::Buffer::Mapping::Read;
-            case api::Buffer::Mapping::Write:     return gl::flg::Buffer::Mapping::Write;
-            case api::Buffer::Mapping::ReadWrite: return gl::flg::Buffer::Mapping::ReadWrite;
-
-            default: throw std::invalid_argument{ "Invalid Mapping!" };
-        }
-    }
     static constexpr gl::flg::FrameBuffer::Attachment      map_frame_buffer_attachment(api::FrameBuffer::Attachment attachment)
     {
         switch (attachment)
@@ -204,6 +204,20 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
+    static constexpr gl::flg::Shader::Stage                map_shader_stage(api::Shader::Stage stage)
+    {
+        switch (stage)
+        {
+            case api::Shader::Stage::Vertex:                 return gl::flg::Shader::Stage::Vertex;
+            case api::Shader::Stage::TessellationControl:    return gl::flg::Shader::Stage::TessellationControl;
+            case api::Shader::Stage::TessellationEvaluation: return gl::flg::Shader::Stage::TessellationEvaluation;
+            case api::Shader::Stage::Geometry:               return gl::flg::Shader::Stage::Geometry;
+            case api::Shader::Stage::Fragment:               return gl::flg::Shader::Stage::Fragment;
+            case api::Shader::Stage::Compute:                return gl::flg::Shader::Stage::Compute;
+
+            default: throw std::invalid_argument{ "Invalid stage!" };
+        }
+    }                                                                      
     static constexpr gl::flg::Shader::Type                 map_shader_type(api::Shader::Stage stage)
     {
         switch (stage)
@@ -218,21 +232,6 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    static constexpr gl::flg::Shader::Stage                map_shader_stage(api::Shader::Stage stage)
-    {
-        switch (stage)
-        {
-            case api::Shader::Stage::Vertex:                 return gl::flg::Shader::Stage::Vertex;
-            case api::Shader::Stage::TessellationControl:    return gl::flg::Shader::Stage::TessellationControl;
-            case api::Shader::Stage::TessellationEvaluation: return gl::flg::Shader::Stage::TessellationEvaluation;
-            case api::Shader::Stage::Geometry:               return gl::flg::Shader::Stage::Geometry;
-            case api::Shader::Stage::Fragment:               return gl::flg::Shader::Stage::Fragment;
-            case api::Shader::Stage::Compute:                return gl::flg::Shader::Stage::Compute;
-
-            default: throw std::invalid_argument{ "Invalid stage!" };
-        }
-    }                                                
-                                                             
     static constexpr gl::flg::DepthFunction                map_depth_function(api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
