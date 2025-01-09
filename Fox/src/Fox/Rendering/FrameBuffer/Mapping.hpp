@@ -10,14 +10,14 @@ namespace fox::gfx::api
 		{
 			case Texture::Format::D16_UNORM:
 			case Texture::Format::D24_UNORM:
-			case Texture::Format::D32_SFLOAT:         return FrameBuffer::Attachment::Depth;
+			case Texture::Format::D32_FLOAT:         return FrameBuffer::Attachment::Depth;
 
 			case Texture::Format::D24_UNORM_S8_UINT:
-			case Texture::Format::D32_SFLOAT_S8_UINT: return FrameBuffer::Attachment::DepthStencil;
+			case Texture::Format::D32_FLOAT_S8_UINT: return FrameBuffer::Attachment::DepthStencil;
 
-			case Texture::Format::S8_UINT:            return FrameBuffer::Attachment::Stencil;
+			case Texture::Format::S8_UINT:           return FrameBuffer::Attachment::Stencil;
 
-			default:                                  return FrameBuffer::Attachment::Color;
+			default:                                 return FrameBuffer::Attachment::Color;
 		}
 
 		throw std::invalid_argument{ "Invalid format!" };
@@ -28,14 +28,14 @@ namespace fox::gfx::api
 		{
 			case RenderBuffer::Format::D16_UNORM:
 			case RenderBuffer::Format::D24_UNORM:
-			case RenderBuffer::Format::D32_SFLOAT:         return FrameBuffer::Attachment::Depth;
+			case RenderBuffer::Format::D32_FLOAT:         return FrameBuffer::Attachment::Depth;
 
 			case RenderBuffer::Format::D24_UNORM_S8_UINT:
-			case RenderBuffer::Format::D32_SFLOAT_S8_UINT: return FrameBuffer::Attachment::DepthStencil;
+			case RenderBuffer::Format::D32_FLOAT_S8_UINT: return FrameBuffer::Attachment::DepthStencil;
 
-			case RenderBuffer::Format::S8_UINT:            return FrameBuffer::Attachment::Stencil;
+			case RenderBuffer::Format::S8_UINT:           return FrameBuffer::Attachment::Stencil;
 
-			default:                                       return FrameBuffer::Attachment::Color;
+			default:                                      return FrameBuffer::Attachment::Color;
 		}
 
 		throw std::invalid_argument{ "Invalid format!" };

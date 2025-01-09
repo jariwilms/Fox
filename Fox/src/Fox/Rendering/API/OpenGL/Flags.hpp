@@ -439,21 +439,21 @@ namespace fox::gfx::api::gl::flg
     {
         enum class Format : gl::enum_t
         {
-            R8                 = GL_R8, 
-            RG8                = GL_RG8, 
-            RGB8               = GL_RGB8, 
-            RGBA8              = GL_RGBA8, 
+            R8                = GL_R8, 
+            RG8               = GL_RG8, 
+            RGB8              = GL_RGB8, 
+            RGBA8             = GL_RGBA8, 
 
-            RGBA8_SRGB         = GL_SRGB8_ALPHA8, 
+            RGBA8_SRGB        = GL_SRGB8_ALPHA8, 
 
-            D16_UNORM          = GL_DEPTH_COMPONENT16, 
-            D24_UNORM          = GL_DEPTH_COMPONENT24, 
-            D32_SFLOAT         = GL_DEPTH_COMPONENT32, 
+            D16_UNORM         = GL_DEPTH_COMPONENT16, 
+            D24_UNORM         = GL_DEPTH_COMPONENT24, 
+            D32_FLOAT         = GL_DEPTH_COMPONENT32, 
 
-            D24_UNORM_S8_UINT  = GL_DEPTH24_STENCIL8, 
-            D32_SFLOAT_S8_UINT = GL_DEPTH32F_STENCIL8, 
+            D24_UNORM_S8_UINT = GL_DEPTH24_STENCIL8, 
+            D32_FLOAT_S8_UINT = GL_DEPTH32F_STENCIL8, 
 
-            S8_UINT            = GL_STENCIL_INDEX8, 
+            S8_UINT           = GL_STENCIL_INDEX8, 
         };
         enum class Target : gl::enum_t
         {
@@ -550,47 +550,47 @@ namespace fox::gfx::api::gl::flg
         };
         enum class Format : gl::enum_t
         {
-            R8_UNORM           = GL_R8, 
-            RG8_UNORM          = GL_RG8, 
-            RGB8_UNORM         = GL_RGB8, 
-            RGBA8_UNORM        = GL_RGBA8, 
+            R8_UNORM          = GL_R8, 
+            RG8_UNORM         = GL_RG8, 
+            RGB8_UNORM        = GL_RGB8, 
+            RGBA8_UNORM       = GL_RGBA8, 
 
-            R16_UNORM          = GL_R16, 
-            RG16_UNORM         = GL_RG16, 
-            RGB16_UNORM        = GL_RGB16, 
-            RGBA16_UNORM       = GL_RGBA16, 
+            R16_UNORM         = GL_R16, 
+            RG16_UNORM        = GL_RG16, 
+            RGB16_UNORM       = GL_RGB16, 
+            RGBA16_UNORM      = GL_RGBA16, 
 
-            R8_SNORM           = GL_R8_SNORM, 
-            RG8_SNORM          = GL_RG8_SNORM, 
-            RGB8_SNORM         = GL_RGB8_SNORM, 
-            RGBA8_SNORM        = GL_RGBA8_SNORM, 
+            R8_SNORM          = GL_R8_SNORM, 
+            RG8_SNORM         = GL_RG8_SNORM, 
+            RGB8_SNORM        = GL_RGB8_SNORM, 
+            RGBA8_SNORM       = GL_RGBA8_SNORM, 
 
-            R16_SNORM          = GL_R16_SNORM, 
-            RG16_SNORM         = GL_RG16_SNORM, 
-            RGB16_SNORM        = GL_RGB16_SNORM, 
-            RGBA16_SNORM       = GL_RGBA16_SNORM, 
+            R16_SNORM         = GL_R16_SNORM, 
+            RG16_SNORM        = GL_RG16_SNORM, 
+            RGB16_SNORM       = GL_RGB16_SNORM, 
+            RGBA16_SNORM      = GL_RGBA16_SNORM, 
 
-            RGB8_SRGB          = GL_SRGB8, 
-            RGBA8_SRGB         = GL_SRGB8_ALPHA8, 
+            RGB8_SRGB         = GL_SRGB8, 
+            RGBA8_SRGB        = GL_SRGB8_ALPHA8, 
 
-            R16_SFLOAT         = GL_R16F, 
-            RG16_SFLOAT        = GL_RG16F, 
-            RGB16_SFLOAT       = GL_RGB16F, 
-            RGBA16_SFLOAT      = GL_RGBA16F, 
+            R16_FLOAT         = GL_R16F, 
+            RG16_FLOAT        = GL_RG16F, 
+            RGB16_FLOAT       = GL_RGB16F, 
+            RGBA16_FLOAT      = GL_RGBA16F, 
 
-            R32_SFLOAT         = GL_R32F, 
-            RG32_SFLOAT        = GL_RG32F, 
-            RGB32_SFLOAT       = GL_RGB32F, 
-            RGBA32_SFLOAT      = GL_RGBA32F, 
+            R32_FLOAT         = GL_R32F, 
+            RG32_FLOAT        = GL_RG32F, 
+            RGB32_FLOAT       = GL_RGB32F, 
+            RGBA32_FLOAT      = GL_RGBA32F, 
 
-            D16_UNORM          = GL_DEPTH_COMPONENT16, 
-            D24_UNORM          = GL_DEPTH_COMPONENT24, 
-            D32_SFLOAT         = GL_DEPTH_COMPONENT32F, 
+            D16_UNORM         = GL_DEPTH_COMPONENT16, 
+            D24_UNORM         = GL_DEPTH_COMPONENT24, 
+            D32_FLOAT         = GL_DEPTH_COMPONENT32F, 
 
-            D24_UNORM_S8_UINT  = GL_DEPTH24_STENCIL8, 
-            D32_SFLOAT_S8_UINT = GL_DEPTH32F_STENCIL8, 
+            D24_UNORM_S8_UINT = GL_DEPTH24_STENCIL8, 
+            D32_FLOAT_S8_UINT = GL_DEPTH32F_STENCIL8, 
 
-            S8_UINT            = GL_STENCIL_INDEX8, 
+            S8_UINT           = GL_STENCIL_INDEX8, 
         };
         enum class MinificationFilter
         {

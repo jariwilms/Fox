@@ -34,9 +34,9 @@ namespace fox::gfx::api
 
             std::array<FM, 5> gBufferManifest
             {
-                FM{ "Position",     TF::RGB16_SFLOAT },
+                FM{ "Position",     TF::RGB16_FLOAT },
                 FM{ "Albedo",       TF::RGBA8_UNORM  },
-                FM{ "Normal",       TF::RGB16_SFLOAT },
+                FM{ "Normal",       TF::RGB16_FLOAT },
                 FM{ "ARM",          TF::RGB16_UNORM  },
 
                 FM{ "DepthStencil", RF::D24_UNORM_S8_UINT },

@@ -16,10 +16,10 @@ namespace fox::gfx::api
 
             D16_UNORM,
             D24_UNORM,
-            D32_SFLOAT, 
+            D32_FLOAT, 
 
             D24_UNORM_S8_UINT, 
-            D32_SFLOAT_S8_UINT, 
+            D32_FLOAT_S8_UINT, 
 
             S8_UINT, 
 		};

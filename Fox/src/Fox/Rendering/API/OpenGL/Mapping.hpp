@@ -73,38 +73,38 @@ namespace fox::gfx::api::gl
     {
         switch (format)
         {
-            case api::Texture::Format::R8_UNORM:           return gl::flg::Texture::Format::R8_UNORM;
-            case api::Texture::Format::RG8_UNORM:          return gl::flg::Texture::Format::RG8_UNORM;
-            case api::Texture::Format::RGB8_UNORM:         return gl::flg::Texture::Format::RGB8_UNORM;
-            case api::Texture::Format::RGBA8_UNORM:        return gl::flg::Texture::Format::RGBA8_UNORM;
-            case api::Texture::Format::R16_UNORM:          return gl::flg::Texture::Format::R16_UNORM;
-            case api::Texture::Format::RG16_UNORM:         return gl::flg::Texture::Format::RG16_UNORM;
-            case api::Texture::Format::RGB16_UNORM:        return gl::flg::Texture::Format::RGB16_UNORM;
-            case api::Texture::Format::RGBA16_UNORM:       return gl::flg::Texture::Format::RGBA16_UNORM;
-            case api::Texture::Format::R8_SNORM:           return gl::flg::Texture::Format::R8_SNORM;
-            case api::Texture::Format::RG8_SNORM:          return gl::flg::Texture::Format::RG8_SNORM;
-            case api::Texture::Format::RGB8_SNORM:         return gl::flg::Texture::Format::RGB8_SNORM;
-            case api::Texture::Format::RGBA8_SNORM:        return gl::flg::Texture::Format::RGBA8_SNORM;
-            case api::Texture::Format::R16_SNORM:          return gl::flg::Texture::Format::R16_SNORM;
-            case api::Texture::Format::RG16_SNORM:         return gl::flg::Texture::Format::RG16_SNORM;
-            case api::Texture::Format::RGB16_SNORM:        return gl::flg::Texture::Format::RGB16_SNORM;
-            case api::Texture::Format::RGBA16_SNORM:       return gl::flg::Texture::Format::RGBA16_SNORM;
-            case api::Texture::Format::RGB8_SRGB:          return gl::flg::Texture::Format::RGB8_SRGB;
-            case api::Texture::Format::RGBA8_SRGB:         return gl::flg::Texture::Format::RGBA8_SRGB;
-            case api::Texture::Format::R16_SFLOAT:         return gl::flg::Texture::Format::R16_SFLOAT;
-            case api::Texture::Format::RG16_SFLOAT:        return gl::flg::Texture::Format::RG16_SFLOAT;
-            case api::Texture::Format::RGB16_SFLOAT:       return gl::flg::Texture::Format::RGB16_SFLOAT;
-            case api::Texture::Format::RGBA16_SFLOAT:      return gl::flg::Texture::Format::RGBA16_SFLOAT;
-            case api::Texture::Format::R32_SFLOAT:         return gl::flg::Texture::Format::R32_SFLOAT;
-            case api::Texture::Format::RG32_SFLOAT:        return gl::flg::Texture::Format::RG32_SFLOAT;
-            case api::Texture::Format::RGB32_SFLOAT:       return gl::flg::Texture::Format::RGB32_SFLOAT;
-            case api::Texture::Format::RGBA32_SFLOAT:      return gl::flg::Texture::Format::RGBA32_SFLOAT;
-            case api::Texture::Format::D16_UNORM:          return gl::flg::Texture::Format::D16_UNORM;
-            case api::Texture::Format::D24_UNORM:          return gl::flg::Texture::Format::D24_UNORM;
-            case api::Texture::Format::D32_SFLOAT:         return gl::flg::Texture::Format::D32_SFLOAT;
-            case api::Texture::Format::D24_UNORM_S8_UINT:  return gl::flg::Texture::Format::D24_UNORM_S8_UINT;
-            case api::Texture::Format::D32_SFLOAT_S8_UINT: return gl::flg::Texture::Format::D32_SFLOAT_S8_UINT;
-            case api::Texture::Format::S8_UINT:            return gl::flg::Texture::Format::S8_UINT;
+            case api::Texture::Format::R8_UNORM:          return gl::flg::Texture::Format::R8_UNORM;
+            case api::Texture::Format::RG8_UNORM:         return gl::flg::Texture::Format::RG8_UNORM;
+            case api::Texture::Format::RGB8_UNORM:        return gl::flg::Texture::Format::RGB8_UNORM;
+            case api::Texture::Format::RGBA8_UNORM:       return gl::flg::Texture::Format::RGBA8_UNORM;
+            case api::Texture::Format::R16_UNORM:         return gl::flg::Texture::Format::R16_UNORM;
+            case api::Texture::Format::RG16_UNORM:        return gl::flg::Texture::Format::RG16_UNORM;
+            case api::Texture::Format::RGB16_UNORM:       return gl::flg::Texture::Format::RGB16_UNORM;
+            case api::Texture::Format::RGBA16_UNORM:      return gl::flg::Texture::Format::RGBA16_UNORM;
+            case api::Texture::Format::R8_SNORM:          return gl::flg::Texture::Format::R8_SNORM;
+            case api::Texture::Format::RG8_SNORM:         return gl::flg::Texture::Format::RG8_SNORM;
+            case api::Texture::Format::RGB8_SNORM:        return gl::flg::Texture::Format::RGB8_SNORM;
+            case api::Texture::Format::RGBA8_SNORM:       return gl::flg::Texture::Format::RGBA8_SNORM;
+            case api::Texture::Format::R16_SNORM:         return gl::flg::Texture::Format::R16_SNORM;
+            case api::Texture::Format::RG16_SNORM:        return gl::flg::Texture::Format::RG16_SNORM;
+            case api::Texture::Format::RGB16_SNORM:       return gl::flg::Texture::Format::RGB16_SNORM;
+            case api::Texture::Format::RGBA16_SNORM:      return gl::flg::Texture::Format::RGBA16_SNORM;
+            case api::Texture::Format::RGB8_SRGB:         return gl::flg::Texture::Format::RGB8_SRGB;
+            case api::Texture::Format::RGBA8_SRGB:        return gl::flg::Texture::Format::RGBA8_SRGB;
+            case api::Texture::Format::R16_FLOAT:         return gl::flg::Texture::Format::R16_FLOAT;
+            case api::Texture::Format::RG16_FLOAT:        return gl::flg::Texture::Format::RG16_FLOAT;
+            case api::Texture::Format::RGB16_FLOAT:       return gl::flg::Texture::Format::RGB16_FLOAT;
+            case api::Texture::Format::RGBA16_FLOAT:      return gl::flg::Texture::Format::RGBA16_FLOAT;
+            case api::Texture::Format::R32_FLOAT:         return gl::flg::Texture::Format::R32_FLOAT;
+            case api::Texture::Format::RG32_FLOAT:        return gl::flg::Texture::Format::RG32_FLOAT;
+            case api::Texture::Format::RGB32_FLOAT:       return gl::flg::Texture::Format::RGB32_FLOAT;
+            case api::Texture::Format::RGBA32_FLOAT:      return gl::flg::Texture::Format::RGBA32_FLOAT;
+            case api::Texture::Format::D16_UNORM:         return gl::flg::Texture::Format::D16_UNORM;
+            case api::Texture::Format::D24_UNORM:         return gl::flg::Texture::Format::D24_UNORM;
+            case api::Texture::Format::D32_FLOAT:         return gl::flg::Texture::Format::D32_FLOAT;
+            case api::Texture::Format::D24_UNORM_S8_UINT: return gl::flg::Texture::Format::D24_UNORM_S8_UINT;
+            case api::Texture::Format::D32_FLOAT_S8_UINT: return gl::flg::Texture::Format::D32_FLOAT_S8_UINT;
+            case api::Texture::Format::S8_UINT:           return gl::flg::Texture::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
@@ -167,17 +167,17 @@ namespace fox::gfx::api::gl
     {
         switch (format)
         {
-            case api::RenderBuffer::Format::R8_UNORM:           return gl::flg::RenderBuffer::Format::R8;
-            case api::RenderBuffer::Format::RG8_UNORM:          return gl::flg::RenderBuffer::Format::RG8;
-            case api::RenderBuffer::Format::RGB8_UNORM:         return gl::flg::RenderBuffer::Format::RGB8;
-            case api::RenderBuffer::Format::RGBA8_UNORM:        return gl::flg::RenderBuffer::Format::RGBA8;
-            case api::RenderBuffer::Format::RGBA8_SRGB:         return gl::flg::RenderBuffer::Format::RGBA8_SRGB;
-            case api::RenderBuffer::Format::D16_UNORM:          return gl::flg::RenderBuffer::Format::D16_UNORM;
-            case api::RenderBuffer::Format::D24_UNORM:          return gl::flg::RenderBuffer::Format::D24_UNORM;
-            case api::RenderBuffer::Format::D32_SFLOAT:         return gl::flg::RenderBuffer::Format::D32_SFLOAT;
-            case api::RenderBuffer::Format::D24_UNORM_S8_UINT:  return gl::flg::RenderBuffer::Format::D24_UNORM_S8_UINT;
-            case api::RenderBuffer::Format::D32_SFLOAT_S8_UINT: return gl::flg::RenderBuffer::Format::D32_SFLOAT_S8_UINT;
-            case api::RenderBuffer::Format::S8_UINT:            return gl::flg::RenderBuffer::Format::S8_UINT;
+            case api::RenderBuffer::Format::R8_UNORM:          return gl::flg::RenderBuffer::Format::R8;
+            case api::RenderBuffer::Format::RG8_UNORM:         return gl::flg::RenderBuffer::Format::RG8;
+            case api::RenderBuffer::Format::RGB8_UNORM:        return gl::flg::RenderBuffer::Format::RGB8;
+            case api::RenderBuffer::Format::RGBA8_UNORM:       return gl::flg::RenderBuffer::Format::RGBA8;
+            case api::RenderBuffer::Format::RGBA8_SRGB:        return gl::flg::RenderBuffer::Format::RGBA8_SRGB;
+            case api::RenderBuffer::Format::D16_UNORM:         return gl::flg::RenderBuffer::Format::D16_UNORM;
+            case api::RenderBuffer::Format::D24_UNORM:         return gl::flg::RenderBuffer::Format::D24_UNORM;
+            case api::RenderBuffer::Format::D32_FLOAT:         return gl::flg::RenderBuffer::Format::D32_FLOAT;
+            case api::RenderBuffer::Format::D24_UNORM_S8_UINT: return gl::flg::RenderBuffer::Format::D24_UNORM_S8_UINT;
+            case api::RenderBuffer::Format::D32_FLOAT_S8_UINT: return gl::flg::RenderBuffer::Format::D32_FLOAT_S8_UINT;
+            case api::RenderBuffer::Format::S8_UINT:           return gl::flg::RenderBuffer::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
