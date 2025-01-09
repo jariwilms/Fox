@@ -18,7 +18,6 @@
 
 namespace fox::gfx::api::gl
 {
-    template<gfx::Dimensions DIMS, gfx::AntiAliasing AA>
     static constexpr gl::flg::Buffer::Mapping              map_buffer_mapping(api::Buffer::Mapping mapping)
     {
         switch (mapping)
@@ -134,6 +133,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
+    template<gfx::Dimensions DIMS, gfx::AntiAliasing AA>
     static constexpr gl::flg::Texture::Target              map_texture_target()
     {
         if constexpr (AA == gfx::AntiAliasing::None)
