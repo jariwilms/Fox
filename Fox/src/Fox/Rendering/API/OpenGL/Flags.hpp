@@ -97,23 +97,36 @@ namespace fox::gfx::api::gl::flg
             UniformBuffer           = GL_UNIFORM_BUFFER,
         };
     };
-    enum class Capability : gl::enum_t
+    enum class Feature : gl::enum_t
     {
-        Blending                 = GL_BLEND, 
-        FaceCulling              = GL_CULL_FACE, 
-
-        DepthTest                = GL_DEPTH_TEST, 
-        StencilTest              = GL_STENCIL_TEST, 
-        ScissorTest              = GL_SCISSOR_TEST, 
-
-        Multisampling            = GL_MULTISAMPLE, 
-        MultisampleCoverage      = GL_SAMPLE_COVERAGE, 
-        MultisampleAlphaCoverage = GL_SAMPLE_ALPHA_TO_COVERAGE, 
-
-        FrameBufferSRGB          = GL_FRAMEBUFFER_SRGB, 
-
-        DebugOutput              = GL_DEBUG_OUTPUT, 
-        DebugOutputSynchronous   = GL_DEBUG_OUTPUT_SYNCHRONOUS,
+        Blending                   = GL_BLEND, 
+        ClipDistance               = GL_CLIP_DISTANCE0, 
+        ColorLogicOperation        = GL_COLOR_LOGIC_OP, 
+        FaceCulling                = GL_CULL_FACE, 
+        DebugOutput                = GL_DEBUG_OUTPUT, 
+        DebugOutputSynchronous     = GL_DEBUG_OUTPUT_SYNCHRONOUS, 
+        DepthClamp                 = GL_DEPTH_CLAMP, 
+        DepthTest                  = GL_DEPTH_TEST, 
+        Dither                     = GL_DITHER, 
+        FrameBufferSRGB            = GL_FRAMEBUFFER_SRGB, 
+        Multisampling              = GL_MULTISAMPLE, 
+        PolygonFillOffset          = GL_POLYGON_OFFSET_FILL, 
+        PolygonLineOffset          = GL_POLYGON_OFFSET_LINE, 
+        PolygonPointOffset         = GL_POLYGON_OFFSET_POINT, 
+        PolygonSmooth              = GL_POLYGON_SMOOTH, 
+        PrimitiveRestart           = GL_PRIMITIVE_RESTART, 
+        PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX, 
+        ProgramPointSize           = GL_PROGRAM_POINT_SIZE, 
+        RasterizerDiscard          = GL_RASTERIZER_DISCARD, 
+        SampleAlphaToCoverage      = GL_SAMPLE_ALPHA_TO_COVERAGE, 
+        SampleAlphaToOne           = GL_SAMPLE_ALPHA_TO_ONE, 
+        SampleCoverage             = GL_SAMPLE_COVERAGE, 
+        SampleMask                 = GL_SAMPLE_MASK, 
+        SampleShading              = GL_SAMPLE_SHADING, 
+        ScissorTest                = GL_SCISSOR_TEST, 
+        SeamlessCubeMapTexture     = GL_TEXTURE_CUBE_MAP_SEAMLESS, 
+        SmoothLines                = GL_LINE_SMOOTH, 
+        StencilTest                = GL_STENCIL_TEST, 
     };
     struct     Clip
     {

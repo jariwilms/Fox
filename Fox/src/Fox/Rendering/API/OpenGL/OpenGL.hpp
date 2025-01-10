@@ -163,9 +163,9 @@ namespace fox::gfx::api::gl
     {
         glDeleteTextures(1, reinterpret_cast<gl::uint32_t*>(&texture));
     }
-    static void                           bind_texture_unit(gl::handle_t texture, gl::uint32_t slot)
+    static void                           bind_texture_unit(gl::handle_t texture, gl::uint32_t unit)
     {
-        glBindTextureUnit(static_cast<gl::uint32_t>(slot), static_cast<gl::uint32_t>(texture));
+        glBindTextureUnit(static_cast<gl::uint32_t>(unit), static_cast<gl::uint32_t>(texture));
     }
     static void                           texture_parameter(gl::handle_t texture, gl::flg::Texture::Parameter parameter, gl::TextureParameter value)
     {
@@ -213,12 +213,12 @@ namespace fox::gfx::api::gl
     {
         glTextureStorage3DMultisample(static_cast<gl::uint32_t>(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), GL_TRUE);
     }
-    static void                           texture_sub_image_1d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector1u& dimensions, const gl::Vector1u& offset, gl::int32_t level, const void* data)
+    static void                           texture_sub_image_1d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector1u& dimensions, const gl::Vector1u& offset, gl::uint32_t level, const void* data)
     {
         glTextureSubImage1D(
             std::to_underlying(texture), 
             level, 
-            static_cast<gl::int32_t>(offset.x), static_cast<gl::size_t>(dimensions.x), 
+            offset.x, dimensions.x, 
             std::to_underlying(format), GL_UNSIGNED_BYTE, 
             data);
     }
@@ -227,18 +227,18 @@ namespace fox::gfx::api::gl
         glTextureSubImage2D(
             std::to_underlying(texture), 
             level, 
-            static_cast<gl::int32_t>(offset.x), static_cast<gl::int32_t>(offset.y), 
-            static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), 
+            offset.x,     offset.y, 
+            dimensions.x, dimensions.y, 
             std::to_underlying(format), GL_UNSIGNED_BYTE, 
             data);
     }
-    static void                           texture_sub_image_3d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector3u& dimensions, const gl::Vector3u& offset, gl::int32_t level, const void* data) //80 column rule my ass
+    static void                           texture_sub_image_3d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector3u& dimensions, const gl::Vector3u& offset, gl::uint32_t level, const void* data) //80 column rule my ass
     {
         glTextureSubImage3D(
             std::to_underlying(texture), 
             level, 
-            static_cast<gl::int32_t>(offset.x), static_cast<gl::int32_t>(offset.y), static_cast<gl::int32_t>(offset.z), 
-            static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), 
+            offset.x,     offset.y,     offset.z, 
+            dimensions.x, dimensions.y, dimensions.z, 
             std::to_underlying(format), GL_UNSIGNED_BYTE, 
             data);
     }
@@ -623,13 +623,13 @@ namespace fox::gfx::api::gl
     }
 
     //Control
-    static void                           enable(gl::flg::Capability capability)
+    static void                           enable(gl::flg::Feature feature)
     {
-        glEnable(static_cast<gl::enum_t>(capability));
+        glEnable(static_cast<gl::enum_t>(feature));
     }
-    static void                           disable(gl::flg::Capability capability)
+    static void                           disable(gl::flg::Feature feature)
     {
-        glDisable(static_cast<gl::enum_t>(capability));
+        glDisable(static_cast<gl::enum_t>(feature));
     }
 
     static void                           blend_color(const gl::Vector4f& color)
