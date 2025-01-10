@@ -9,9 +9,9 @@ namespace fox::io
 {
     void ModelImporter::init()
     {
-        s_defaultAlbedoTexture = load_texture("textures/albedo.png");
-        s_defaultNormalTexture = load_texture("textures/normal.png");
-        s_defaultARMTexture    = load_texture("textures/arm.png");
+        s_defaultAlbedoTexture = gfx::api::texture_from_file("textures/albedo.png");
+        s_defaultNormalTexture = gfx::api::texture_from_file("textures/normal.png");
+        s_defaultARMTexture    = gfx::api::texture_from_file("textures/arm.png");
     }
 
     std::shared_ptr<gfx::Model> ModelImporter::import2(const std::filesystem::path& path)
@@ -182,13 +182,6 @@ namespace fox::io
             create_nodes(model, childNodeIndex, asiScene, *asiChild);
         }
     }
-    std::shared_ptr<gfx::Texture2D> ModelImporter::load_texture(const std::filesystem::path & path)
-    {
-        const auto& textureFile  = io::load(path);
-        const auto& textureImage = fox::Image::decode(fox::Image::Layout::RGBA8, *textureFile->read());
-
-        return std::make_shared<gfx::Texture2D>(gfx::Texture::Format::RGBA8_UNORM, textureImage.dimensions(), textureImage.data());
-    }
     auto ModelImporter::to_assimp_type(TextureType type)
     {
         switch (type)
@@ -209,7 +202,7 @@ namespace fox::io
             aiString aiTextureName{};
             const auto& aiReturn = aiMaterial->GetTexture(to_assimp_type(type), 0, &aiTextureName);
 
-            if (aiReturn == AI_SUCCESS) textureOpt.emplace(load_texture(path / aiTextureName.C_Str()));
+            if (aiReturn == AI_SUCCESS) textureOpt.emplace(gfx::api::texture_from_file(path / aiTextureName.C_Str()));
         }
 
         return textureOpt;

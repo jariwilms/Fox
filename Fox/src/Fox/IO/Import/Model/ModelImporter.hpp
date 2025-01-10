@@ -26,7 +26,6 @@ namespace fox::io
 
     private:
         static void                                           create_nodes(gfx::Model& model, fox::uint32_t nodeIndex, const aiScene& asiScene, const aiNode& asiNode);
-        static std::shared_ptr<gfx::Texture2D>                load_texture(const std::filesystem::path& path);
         static auto                                           to_assimp_type(TextureType type);
         static std::optional<std::shared_ptr<gfx::Texture2D>> get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path);
 
