@@ -13,8 +13,8 @@ namespace fox::gfx::api::gl
 			s_contextFlags = gl::integer_v(gl::flg::Data::ContextFlags);
 			if (s_contextFlags & static_cast<gl::enum_t>(gl::flg::Context::Flag::Debug))
 			{
-				gl::enable(gl::flg::Capability::DebugOutput);
-				gl::enable(gl::flg::Capability::DebugOutputSynchronous);
+				gl::enable(gl::flg::Feature::DebugOutput);
+				gl::enable(gl::flg::Feature::DebugOutputSynchronous);
 
 				gl::debug_message_callback(gl::debug_callback);
 				gl::debug_message_control(gl::True, gl::flg::Debug::Source::DontCare, gl::flg::Debug::Type::DontCare, gl::flg::Debug::Severity::DontCare);
