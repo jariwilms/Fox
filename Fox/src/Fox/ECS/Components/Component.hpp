@@ -17,7 +17,7 @@ namespace fox::ecs
 		Component(const Entity& owner, const T& value)
 			: m_owner{ owner },  m_value{ value } {}
 
-		      ecs::Entity& owner()
+		ecs::Entity& owner()
 		{
 			return m_owner;
 		}
@@ -26,11 +26,20 @@ namespace fox::ecs
 			return m_owner;
 		}
 
-		      T& get()
+		T& get()
 		{
 			return m_value;
 		}
 		const T& get() const
+		{
+			return m_value;
+		}
+
+		operator T& ()
+		{
+			return m_value;
+		}
+		operator T& () const
 		{
 			return m_value;
 		}
