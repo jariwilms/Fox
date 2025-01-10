@@ -39,23 +39,23 @@ namespace fox
         }
         virtual ~Image() = default;
 
-        static std::vector<byte>   encode(Format format, const Image& image);
-        static Image               decode(Layout layout, std::span<const fox::byte> data);
+        static std::vector<fox::byte> encode(Format format, const Image& image);
+        static Image                  decode(Layout layout, std::span<const fox::byte> data);
 
-        Layout                     layout()     const
+        Layout                        layout()     const
         {
             return m_layout;
         }
-        const fox::Vector2u&       dimensions() const
+        const fox::Vector2u&          dimensions() const
         {
             return m_dimensions;
         }
 
-        std::span<fox::byte>       data()
+        std::span<fox::byte>          data()
         {
             return m_data;
         }
-        std::span<const fox::byte> data() const
+        std::span<const fox::byte>    data() const
         {
             return m_data;
         }
