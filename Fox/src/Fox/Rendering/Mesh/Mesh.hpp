@@ -4,7 +4,7 @@
 
 namespace fox::gfx
 {
-    class Mesh
+    struct Mesh
     {
     public:
         Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
