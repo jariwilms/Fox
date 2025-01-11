@@ -16,5 +16,6 @@ void main()
 {
 	v_TexCoord = a_Position;
 	
-	gl_Position = UMatrices.projection * u_Matrices.view * vec4(a_Position, 1.0);
+	vec4 worldPosition = u_Matrices.projection * mat4(mat3(u_Matrices.view)) * vec4(a_Position, 1.0);
+	gl_Position = worldPosition.xyww;
 }

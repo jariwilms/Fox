@@ -52,7 +52,7 @@ void main()
     const vec3  gPosition = texture(t_Position, uv).xyz;
 	const vec3  gAlbedo   = texture(t_Albedo,   uv).rgb; //TODO: Alpha component
     const vec3  gNormal   = texture(t_Normal,   uv).rgb;
-    const float gARM      = texture(t_ARM,      uv).b;   //Temporary usage of roughness component for specularity
+    const float gARM      = texture(t_ARM,      uv).g;   //Temporary usage of roughness component for specularity
     
 	
 	
