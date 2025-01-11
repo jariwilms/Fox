@@ -109,18 +109,6 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr gl::flg::Texture::MagnificationFilter map_texture_mag_filter(api::Texture::Filter filter)
-    {
-        switch (filter)
-        {
-            case api::Texture::Filter::None:      return gl::flg::Texture::MagnificationFilter::Nearest;
-            case api::Texture::Filter::Nearest:   return gl::flg::Texture::MagnificationFilter::Nearest;
-            case api::Texture::Filter::Bilinear:  return gl::flg::Texture::MagnificationFilter::Linear;
-            case api::Texture::Filter::Trilinear: return gl::flg::Texture::MagnificationFilter::Linear;
-
-            default: throw std::invalid_argument{ "Invalid filter!" };
-        }
-    }
     static constexpr gl::flg::Texture::MinificationFilter  map_texture_min_filter(api::Texture::Filter filter)
     {
         switch (filter)
@@ -129,6 +117,18 @@ namespace fox::gfx::api::gl
             case api::Texture::Filter::Nearest:   return gl::flg::Texture::MinificationFilter::NearestMipmapNearest;
             case api::Texture::Filter::Bilinear:  return gl::flg::Texture::MinificationFilter::LinearMipmapNearest;
             case api::Texture::Filter::Trilinear: return gl::flg::Texture::MinificationFilter::LinearMipmapLinear;
+
+            default: throw std::invalid_argument{ "Invalid filter!" };
+        }
+    }
+    static constexpr gl::flg::Texture::MagnificationFilter map_texture_mag_filter(api::Texture::Filter filter)
+    {
+        switch (filter)
+        {
+            case api::Texture::Filter::None:      return gl::flg::Texture::MagnificationFilter::Nearest;
+            case api::Texture::Filter::Nearest:   return gl::flg::Texture::MagnificationFilter::Nearest;
+            case api::Texture::Filter::Bilinear:  return gl::flg::Texture::MagnificationFilter::Linear;
+            case api::Texture::Filter::Trilinear: return gl::flg::Texture::MagnificationFilter::Linear;
 
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
