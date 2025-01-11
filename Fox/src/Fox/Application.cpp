@@ -53,8 +53,8 @@ namespace fox
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
-        io::ModelImporter::init();
         gfx::Geometry::init();
+        io::ModelImporter::init();
         gfx::Renderer::init();
     }
     Application::~Application()
@@ -64,19 +64,89 @@ namespace fox
 
     int Application::run()
     {
+        //Scene creation and camera setup
         auto  scene           = std::make_shared<scn::Scene>();
-        auto  model           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
-        //auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
-        //auto  model           = io::ModelImporter::import2("models/sphere/Sphere.gltf");
 
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
         auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
 
-        cameraTransform.translate(fox::Vector3f{ 0.0f, 0.0f, 5.0f });
+        cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
+        cameraTransform.look_at(fox::Vector3f{});
 
-        auto& actor = scene->create_actor();
-        model_to_scene_graph(*scene, actor, *model, model->nodes.at(model->rootNode));
+
+
+
+
+        //Loading models
+        auto& helmetActor           = scene->create_actor();
+        auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
+        auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+
+        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
+
+
+
+        const auto& defaultAlbedo   = gfx::api::texture_from_file("textures/albedo.png");
+        const auto& defaultNormal   = gfx::api::texture_from_file("textures/normal.png");
+        const auto& defaultARM      = gfx::api::texture_from_file("textures/arm.png");
+        const auto& defaultEmissive = gfx::api::texture_from_file("textures/emissive.png");
+
+        auto defaultMaterial        = std::make_shared<gfx::Material>();
+        defaultMaterial->albedo     = defaultAlbedo;
+        defaultMaterial->normal     = defaultNormal;
+        defaultMaterial->arm        = defaultARM;
+        defaultMaterial->emissive   = defaultEmissive;
+
+        auto& floorActor            = scene->create_actor();
+        auto& fatc                  = floorActor.get_component<ecs::TransformComponent>().get();
+        auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().get();
+
+        famfc.mesh       = gfx::Geometry::Plane::mesh();
+        famfc.material   = defaultMaterial;
+        fatc.translate(fox::Vector3f{ 0.0f, -1.0f, 0.0f });
+        fatc.rotate(fox::Vector3f{ -90.0f, 0.0f, 0.0f });
+        fatc.dilate(fox::Vector3f{ 10.0f });
+
+
+
+
+
+        //Skybox setup
+        const fox::Vector2u skyboxDimensions{ 2048, 2048 };
+        std::array<std::filesystem::path, 6> skyboxImageFiles
+        {
+            "textures/skybox_space/right.png", 
+            "textures/skybox_space/left.png",
+            "textures/skybox_space/top.png",
+            "textures/skybox_space/bottom.png",
+            "textures/skybox_space/front.png",
+            "textures/skybox_space/back.png",
+        };
+        gfx::CubemapTexture::Layout cubemapLayout
+        {
+            gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Layout::RGB8), 
+            gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Layout::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(2), fox::Image::Layout::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(3), fox::Image::Layout::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Layout::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Layout::RGB8),
+        };
+        gfx::CubemapTexture skybox{ cubemapLayout.right.dimensions(), cubemapLayout};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -88,8 +158,8 @@ namespace fox
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 2.0f }, fox::Vector3f{ -1.0f, 0.0f, 1.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 2.0f }, fox::Vector3f{  1.0f, 0.0f, 1.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f }, fox::Vector3f{  -3.0f, 0.0f, 3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f }, fox::Vector3f{   3.0f, 0.0f, 3.0f }), 
         };
 
 
@@ -122,6 +192,10 @@ namespace fox
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
         };
+        const auto& rotate_helmet = [&]
+            {
+                helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * Time::delta(), 0.0f });
+            };
         const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, fox::uint32_t amount)
             {
                 for (const auto& i : std::ranges::iota_view(0u, amount))
@@ -146,12 +220,13 @@ namespace fox
 
 
             move_camera();
+            rotate_helmet();
 
 
 
 
 
-            gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights };
+            gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights, skybox };
 
             gfx::Renderer::start(renderInfo);
             const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
