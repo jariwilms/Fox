@@ -31,7 +31,7 @@ namespace fox::gfx::api
     }
     static auto texture_from_file(const std::filesystem::path& path)
     {
-        const auto& image = image_from_file(path);
+        const auto& image = image_from_file(path, fox::Image::Layout::RGBA8);
         
         return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
