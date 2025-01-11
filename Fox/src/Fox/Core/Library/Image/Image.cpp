@@ -43,7 +43,7 @@ namespace fox
     }
     Image                  Image::decode(Layout layout, std::span<const fox::byte> data)
     {
-        stbi_set_flip_vertically_on_load(Config::IO::flipImages);
+        stbi_set_flip_vertically_on_load(fox::Config::IO::flipImages);
 
         fox::int32_t x{}, y{}, c{}, channels{ static_cast<fox::int32_t>(layout) };
         auto* decodedData = reinterpret_cast<fox::byte*>(stbi_load_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &x, &y, &c, channels));
