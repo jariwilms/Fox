@@ -14,6 +14,6 @@ namespace fox::gfx
         std::tuple<const fox::Camera&, const fox::Transform&> camera;
         std::span<const std::tuple<fox::Light, fox::Vector3f>> lights;
 
-        gfx::CubemapTexture& skybox;
+        std::shared_ptr<const gfx::CubemapTexture> skybox;
     };
 }
