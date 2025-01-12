@@ -29,7 +29,7 @@ namespace fox::gfx::api::gl
             gl::generate_texture_mipmap(m_handle);
         }
 
-        void bind_index(gl::uint32_t index)
+        void bind_index(gl::uint32_t index) const
         {
             gl::bind_texture_unit(m_handle, index);
         }
