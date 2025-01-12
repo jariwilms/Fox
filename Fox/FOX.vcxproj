@@ -64,7 +64,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -86,7 +86,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -138,16 +138,20 @@
     <ClInclude Include="src\Fox\Rendering\API\GraphicsAPI.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Context\Context.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Flags.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Object\Object.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Parameters.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Query\Query.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderBuffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\RenderState.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Sampler\Sampler.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\TextureTarget.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Types.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Vulkan\VK.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Vulkan\VKMappings.hpp" />
@@ -156,6 +160,7 @@
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
     <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Context\Context.hpp" />
     <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
@@ -177,6 +182,7 @@
     <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Rendering.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Sampler\Sampler.hpp" />
     <ClInclude Include="src\Fox\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Fox\Rendering\Shader\Shader.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\AntiAliasing.hpp" />
