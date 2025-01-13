@@ -4,7 +4,7 @@
 
 namespace fox::gfx
 {
-    struct UContext  //Binding 0
+    struct UInput    //Binding 0
     {
         fox::Vector2f  resolution{};
         fox::float32_t time{};
