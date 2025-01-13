@@ -116,12 +116,12 @@ namespace fox
         const fox::Vector2u skyboxDimensions{ 2048, 2048 };
         std::array<std::filesystem::path, 6> skyboxImageFiles
         {
-            "textures/skybox_space/right.png", 
-            "textures/skybox_space/left.png",
-            "textures/skybox_space/top.png",
-            "textures/skybox_space/bottom.png",
-            "textures/skybox_space/front.png",
-            "textures/skybox_space/back.png",
+            "textures/skybox_space2/right.png", 
+            "textures/skybox_space2/left.png",
+            "textures/skybox_space2/top.png",
+            "textures/skybox_space2/bottom.png",
+            "textures/skybox_space2/front.png",
+            "textures/skybox_space2/back.png",
         };
         gfx::CubemapTexture::Layout cubemapLayout
         {
@@ -132,7 +132,8 @@ namespace fox
             gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Layout::RGB8),
             gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Layout::RGB8),
         };
-        gfx::CubemapTexture skybox{ cubemapLayout.right.dimensions(), cubemapLayout};
+
+        auto skybox = std::make_shared<gfx::CubemapTexture>(skyboxDimensions, cubemapLayout);
 
 
 
