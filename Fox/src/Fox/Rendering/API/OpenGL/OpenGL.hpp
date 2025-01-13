@@ -858,7 +858,8 @@ namespace fox::gfx::api::gl
             }
         }();
 
-        //if (severityMessage != "NOTIFICATION") __debugbreak();
+        if (severityMessage == "NOTIFICATION") return;
+
         std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}", sourceMessage, typeMessage, severityMessage, id, message) << std::endl;
     }
     static void                           debug_message_callback(decltype(debug_callback) callback)
