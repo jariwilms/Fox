@@ -23,20 +23,20 @@ namespace fox::gfx::api::gl
         const auto& uv = std::to_underlying(buffer);
         glDeleteBuffers(gl::size_t{ 1 }, &uv);
     }
-    static void                           bind_buffer_base(gl::handle_t buffer, gl::flg::Buffer::IndexedTarget target, gl::index_t index)
+    static void                           bind_buffer_base(gl::handle_t buffer, glf::Buffer::IndexedTarget target, gl::index_t index)
     {
         glBindBufferBase(std::to_underlying(target), std::to_underlying(index), std::to_underlying(buffer));
     }
-    static void                           bind_buffer_range(gl::handle_t buffer, gl::flg::Buffer::IndexedTarget target, gl::index_t index, gl::sizeptr_t size, gl::intptr_t offset)
+    static void                           bind_buffer_range(gl::handle_t buffer, glf::Buffer::IndexedTarget target, gl::index_t index, gl::sizeptr_t size, gl::intptr_t offset)
     {
         glBindBufferRange(std::to_underlying(target), std::to_underlying(index), std::to_underlying(buffer), offset, size);
     }
-    static void                           buffer_storage(gl::handle_t buffer, gl::flg::Buffer::StorageFlags flags, gl::sizeptr_t size)
+    static void                           buffer_storage(gl::handle_t buffer, glf::Buffer::StorageFlags flags, gl::sizeptr_t size)
     {
         glNamedBufferStorage(std::to_underlying(buffer), size, nullptr, flags);
     }
     template<typename T>                  
-    static void                           buffer_storage(gl::handle_t buffer, gl::flg::Buffer::StorageFlags flags, std::span<const T> data)
+    static void                           buffer_storage(gl::handle_t buffer, glf::Buffer::StorageFlags flags, std::span<const T> data)
     {
         glNamedBufferStorage(std::to_underlying(buffer), static_cast<gl::sizeptr_t>(data.size_bytes()), data.data(), flags);
     }
@@ -49,11 +49,11 @@ namespace fox::gfx::api::gl
     {
         glCopyNamedBufferSubData(static_cast<gl::uint32_t>(source), static_cast<gl::uint32_t>(destination), sourceOffset, destinationOffset, size);
     }
-    static void*                          map_buffer(gl::handle_t buffer, gl::flg::Buffer::Mapping mapping) //TODO: Keep mapped buffer data in context and return reference to that data, allows better management of memory
+    static void*                          map_buffer(gl::handle_t buffer, glf::Buffer::Mapping mapping) //TODO: Keep mapped buffer data in context and return reference to that data, allows better management of memory
     {
         return glMapNamedBuffer(std::to_underlying(buffer), std::to_underlying(mapping));
     }
-    static void*                          map_buffer_range(gl::handle_t buffer, gl::flg::Buffer::Mapping mapping, gl::sizeptr_t size, gl::intptr_t offset)
+    static void*                          map_buffer_range(gl::handle_t buffer, glf::Buffer::Mapping mapping, gl::sizeptr_t size, gl::intptr_t offset)
     {
         return glMapNamedBufferRange(static_cast<gl::uint32_t>(buffer), offset, size, std::to_underlying(mapping));
     }
@@ -87,7 +87,7 @@ namespace fox::gfx::api::gl
     {
         glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, static_cast<gl::uint32_t>(buffer));
     }
-    static void                           begin_transform_feedback(gl::flg::TransformFeedback::PrimitiveMode mode)
+    static void                           begin_transform_feedback(glf::TransformFeedback::PrimitiveMode mode)
     {
         glBeginTransformFeedback(static_cast<gl::enum_t>(mode));
     }
@@ -132,7 +132,7 @@ namespace fox::gfx::api::gl
     {
         glDisableVertexArrayAttrib(static_cast<gl::uint32_t>(vertexArray), index);
     }
-    static void                           vertex_array_attribute_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, gl::flg::Type type, gl::int32_t count, gl::bool_t normalized)
+    static void                           vertex_array_attribute_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, glf::Type type, gl::int32_t count, gl::bool_t normalized)
     {
         glVertexArrayAttribFormat(static_cast<gl::uint32_t>(vertexArray), index, count, std::to_underlying(type), normalized, offset);
     }
@@ -152,7 +152,7 @@ namespace fox::gfx::api::gl
 
 
     //Texture
-    static gl::handle_t                   create_texture(gl::flg::Texture::Target target)
+    static gl::handle_t                   create_texture(glf::Texture::Target target)
     {
         gl::uint32_t handle{};
         glCreateTextures(std::to_underlying(target), 1, &handle);
@@ -167,25 +167,25 @@ namespace fox::gfx::api::gl
     {
         glBindTextureUnit(static_cast<gl::uint32_t>(unit), static_cast<gl::uint32_t>(texture));
     }
-    static void                           texture_parameter(gl::handle_t texture, gl::flg::Texture::Parameter parameter, gl::TextureParameter value)
+    static void                           texture_parameter(gl::handle_t texture, glf::Texture::Parameter parameter, gl::TextureParameter value)
     {
-        if (std::holds_alternative<gl::flg::Texture::MinificationFilter>(value))
+        if (std::holds_alternative<glf::Texture::MinificationFilter>(value))
         {
-            const auto& v = std::get<gl::flg::Texture::MinificationFilter>(value);
+            const auto& v = std::get<glf::Texture::MinificationFilter>(value);
             glTextureParameteri(static_cast<gl::uint32_t>(texture), static_cast<gl::enum_t>(parameter), std::to_underlying(v));
 
             return;
         }
-        if (std::holds_alternative<gl::flg::Texture::MagnificationFilter>(value))
+        if (std::holds_alternative<glf::Texture::MagnificationFilter>(value))
         {
-            const auto& v = std::get<gl::flg::Texture::MagnificationFilter>(value);
+            const auto& v = std::get<glf::Texture::MagnificationFilter>(value);
             glTextureParameteri(static_cast<gl::uint32_t>(texture), static_cast<gl::enum_t>(parameter), std::to_underlying(v));
 
             return;
         }
-        if (std::holds_alternative<gl::flg::Texture::Wrapping>(value))
+        if (std::holds_alternative<glf::Texture::Wrapping>(value))
         {
-            const auto& v = std::get<gl::flg::Texture::Wrapping>(value);
+            const auto& v = std::get<glf::Texture::Wrapping>(value);
             glTextureParameteri(static_cast<gl::uint32_t>(texture), static_cast<gl::enum_t>(parameter), std::to_underlying(v));
 
             return;
@@ -193,27 +193,27 @@ namespace fox::gfx::api::gl
 
         throw std::invalid_argument{ "Invalid Texture Parameter!" };
     }
-    static void                           texture_storage_1d(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector1u& dimensions, gl::size_t levels)
+    static void                           texture_storage_1d(gl::handle_t texture, glf::Texture::Format format, const gl::Vector1u& dimensions, gl::size_t levels)
     {
         glTextureStorage1D(static_cast<gl::uint32_t>(texture), levels, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x));
     }
-    static void                           texture_storage_2d(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t levels)
+    static void                           texture_storage_2d(gl::handle_t texture, glf::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t levels)
     {
         glTextureStorage2D(static_cast<gl::uint32_t>(texture), levels, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
-    static void                           texture_storage_3d(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t levels)
+    static void                           texture_storage_3d(gl::handle_t texture, glf::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t levels)
     {
         glTextureStorage3D(static_cast<gl::uint32_t>(texture), levels, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z));
     }
-    static void                           texture_storage_2d_multisample(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t samples)
+    static void                           texture_storage_2d_multisample(gl::handle_t texture, glf::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t samples)
     {
         glTextureStorage2DMultisample(static_cast<gl::uint32_t>(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), gl::True);
     }
-    static void                           texture_storage_3d_multisample(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t samples)
+    static void                           texture_storage_3d_multisample(gl::handle_t texture, glf::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t samples)
     {
         glTextureStorage3DMultisample(static_cast<gl::uint32_t>(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), GL_TRUE);
     }
-    static void                           texture_sub_image_1d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector1u& dimensions, const gl::Vector1u& offset, gl::uint32_t level, const void* data)
+    static void                           texture_sub_image_1d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::Vector1u& dimensions, const gl::Vector1u& offset, gl::uint32_t level, const void* data)
     {
         glTextureSubImage1D(
             std::to_underlying(texture), 
@@ -222,7 +222,7 @@ namespace fox::gfx::api::gl
             std::to_underlying(format), GL_UNSIGNED_BYTE, 
             data);
     }
-    static void                           texture_sub_image_2d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector2u& dimensions, const gl::Vector2u& offset, gl::uint32_t level, const void* data)
+    static void                           texture_sub_image_2d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::Vector2u& dimensions, const gl::Vector2u& offset, gl::uint32_t level, const void* data)
     {
         glTextureSubImage2D(
             std::to_underlying(texture), 
@@ -232,7 +232,7 @@ namespace fox::gfx::api::gl
             std::to_underlying(format), GL_UNSIGNED_BYTE, 
             data);
     }
-    static void                           texture_sub_image_3d(gl::handle_t texture, gl::flg::Texture::BaseFormat format, const gl::Vector3u& dimensions, const gl::Vector3u& offset, gl::uint32_t level, const void* data) //80 column rule my ass
+    static void                           texture_sub_image_3d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::Vector3u& dimensions, const gl::Vector3u& offset, gl::uint32_t level, const void* data) //80 column rule my ass
     {
         glTextureSubImage3D(
             std::to_underlying(texture), 
@@ -305,7 +305,7 @@ namespace fox::gfx::api::gl
     {
         glBindSamplers(index, count, reinterpret_cast<const gl::uint32_t*>(samplers.data()));
     }
-    static void                           sampler_parameter(gl::handle_t sampler, gl::flg::Sampler::Parameter parameter, std::span<const gl::int32_t> value)
+    static void                           sampler_parameter(gl::handle_t sampler, glf::Sampler::Parameter parameter, std::span<const gl::int32_t> value)
     {
         glSamplerParameteriv(static_cast<gl::uint32_t>(sampler), static_cast<gl::enum_t>(parameter), value.data());
     }
@@ -322,11 +322,11 @@ namespace fox::gfx::api::gl
     {
         glDeleteRenderbuffers(1, reinterpret_cast<gl::uint32_t*>(&renderBuffer));
     }
-    static void                           render_buffer_storage(gl::handle_t renderBuffer, gl::flg::RenderBuffer::Format format, const gl::Vector2u& dimensions)
+    static void                           render_buffer_storage(gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions)
     {
         glNamedRenderbufferStorage(static_cast<gl::uint32_t>(renderBuffer), std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
-    static void                           render_buffer_storage_multisample(gl::handle_t renderBuffer, gl::flg::RenderBuffer::Format format, const gl::Vector2u& dimensions, std::uint8_t samples)
+    static void                           render_buffer_storage_multisample(gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions, std::uint8_t samples)
     {
         glNamedRenderbufferStorageMultisample(static_cast<gl::uint32_t>(renderBuffer), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
@@ -345,15 +345,15 @@ namespace fox::gfx::api::gl
     {
         glDeleteFramebuffers(1, reinterpret_cast<gl::uint32_t*>(&frameBuffer));
     }
-    static void                           bind_frame_buffer(gl::handle_t frameBuffer, gl::flg::FrameBuffer::Target target)
+    static void                           bind_frame_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Target target)
     {
         glBindFramebuffer(static_cast<gl::enum_t>(target), static_cast<gl::uint32_t>(frameBuffer));
     }
-    static void                           frame_buffer_read_buffer(gl::handle_t frameBuffer, gl::flg::FrameBuffer::Source source)
+    static void                           frame_buffer_read_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Source source)
     {
         glNamedFramebufferReadBuffer(static_cast<gl::uint32_t>(frameBuffer), static_cast<gl::enum_t>(source));
     }
-    static void                           frame_buffer_draw_buffer(gl::handle_t frameBuffer, gl::flg::FrameBuffer::Source source)
+    static void                           frame_buffer_draw_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Source source)
     {
         glNamedFramebufferDrawBuffer(static_cast<gl::uint32_t>(frameBuffer), static_cast<gl::enum_t>(source));
     }
@@ -373,9 +373,9 @@ namespace fox::gfx::api::gl
     {
         glNamedFramebufferRenderbuffer(static_cast<gl::uint32_t>(frameBuffer), attachment, GL_RENDERBUFFER, static_cast<gl::uint32_t>(renderBuffer));
     }
-    static gl::flg::FrameBuffer::Status   check_frame_buffer_status(gl::handle_t frameBuffer)
+    static glf::FrameBuffer::Status   check_frame_buffer_status(gl::handle_t frameBuffer)
     {
-        return gl::flg::FrameBuffer::Status{ glCheckNamedFramebufferStatus(static_cast<gl::uint32_t>(frameBuffer), GL_FRAMEBUFFER) };
+        return glf::FrameBuffer::Status{ glCheckNamedFramebufferStatus(static_cast<gl::uint32_t>(frameBuffer), GL_FRAMEBUFFER) };
     }
     static void                           invalidate_frame_buffer(gl::handle_t frameBuffer, std::span<gl::enum_t> attachments)
     {
@@ -397,7 +397,7 @@ namespace fox::gfx::api::gl
 
 
     //Shader
-    static gl::handle_t                   create_shader(gl::flg::Shader::Type type)
+    static gl::handle_t                   create_shader(glf::Shader::Type type)
     {
         gl::uint32_t shader{};
         shader = glCreateShader(static_cast<gl::enum_t>(type));
@@ -424,7 +424,7 @@ namespace fox::gfx::api::gl
     {
         glSpecializeShader(static_cast<gl::uint32_t>(shader), entry.data(), 0, nullptr, nullptr);
     }
-    static gl::int32_t                    shader_iv(gl::handle_t shader, gl::flg::Shader::Parameter parameter)
+    static gl::int32_t                    shader_iv(gl::handle_t shader, glf::Shader::Parameter parameter)
     {
         gl::int32_t result{};
         glGetShaderiv(static_cast<gl::uint32_t>(shader), static_cast<gl::enum_t>(parameter), &result);
@@ -433,7 +433,7 @@ namespace fox::gfx::api::gl
     }
     static std::string                    shader_infolog(gl::handle_t shader)
     {
-        const auto& length = shader_iv(shader, gl::flg::Shader::Parameter::InfoLogLength);
+        const auto& length = shader_iv(shader, glf::Shader::Parameter::InfoLogLength);
 
         std::string infolog{};
         infolog.resize(length);
@@ -456,11 +456,11 @@ namespace fox::gfx::api::gl
     {
         glLinkProgram(static_cast<gl::uint32_t>(program));
     }
-    static void                           program_parameter(gl::handle_t program, gl::flg::Program::Parameter parameter, gl::int32_t value)
+    static void                           program_parameter(gl::handle_t program, glf::Program::Parameter parameter, gl::int32_t value)
     {
         glProgramParameteri(static_cast<gl::uint32_t>(program), static_cast<gl::enum_t>(parameter), value);
     }
-    static gl::int32_t                    program_iv(gl::handle_t program, gl::flg::Program::Parameter parameter)
+    static gl::int32_t                    program_iv(gl::handle_t program, glf::Program::Parameter parameter)
     {
         gl::int32_t result{};
         glGetProgramiv(static_cast<gl::uint32_t>(program), static_cast<gl::enum_t>(parameter), &result);
@@ -470,7 +470,7 @@ namespace fox::gfx::api::gl
     static std::string                    program_infolog(gl::handle_t program)
     {
         std::string infolog{};
-        const auto& infoLogLength = program_iv(program, gl::flg::Program::Parameter::InfoLogLength);
+        const auto& infoLogLength = program_iv(program, glf::Program::Parameter::InfoLogLength);
 
         infolog.resize(infoLogLength);
         glGetProgramInfoLog(static_cast<gl::uint32_t>(program), infoLogLength, nullptr, infolog.data());
@@ -494,7 +494,7 @@ namespace fox::gfx::api::gl
     {
         glBindProgramPipeline(static_cast<gl::uint32_t>(pipeline));
     }
-    static void                           use_program_stages(gl::handle_t pipeline, gl::handle_t program, gl::flg::Shader::Stage stages)
+    static void                           use_program_stages(gl::handle_t pipeline, gl::handle_t program, glf::Shader::Stage stages)
     {
         glUseProgramStages(static_cast<gl::uint32_t>(pipeline), std::to_underlying(stages), static_cast<gl::uint32_t>(program));
     }
@@ -502,36 +502,36 @@ namespace fox::gfx::api::gl
 
 
     //Rendering
-    static void                           draw_arrays(gl::flg::Draw::Mode mode, gl::size_t first, gl::size_t vertices)
+    static void                           draw_arrays(glf::Draw::Mode mode, gl::size_t first, gl::size_t vertices)
     {
         glDrawArrays(static_cast<gl::enum_t>(mode), first, vertices);
     }
-    static void                           draw_elements(gl::flg::Draw::Mode mode, gl::flg::Draw::Type type, gl::size_t indices)
+    static void                           draw_elements(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t indices)
     {
         glDrawElements(static_cast<gl::enum_t>(mode), indices, static_cast<gl::enum_t>(type), nullptr);
     }
-    static void                           draw_elements_base_vertex(gl::flg::Draw::Mode mode, gl::flg::Draw::Type type, gl::size_t indices, gl::uint32_t offset)
+    static void                           draw_elements_base_vertex(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t indices, gl::uint32_t offset)
     {
         glDrawElementsBaseVertex(static_cast<gl::enum_t>(mode), indices, static_cast<gl::enum_t>(type), nullptr, offset);
     }
-    static void                           draw_elements_range(gl::flg::Draw::Mode mode, gl::flg::Draw::Type type, const gl::Vector2u& range, gl::size_t indices)
+    static void                           draw_elements_range(glf::Draw::Mode mode, glf::Draw::Type type, const gl::Vector2u& range, gl::size_t indices)
     {
         glDrawRangeElements(static_cast<gl::enum_t>(mode), range.x, range.y, indices, static_cast<gl::enum_t>(type), nullptr);
     }
-    static void                           draw_elements_range_base_vertex(gl::flg::Draw::Mode mode, gl::flg::Draw::Type type, const gl::Vector2u& range, gl::size_t indices, gl::uint32_t offset)
+    static void                           draw_elements_range_base_vertex(glf::Draw::Mode mode, glf::Draw::Type type, const gl::Vector2u& range, gl::size_t indices, gl::uint32_t offset)
     {
         glDrawRangeElementsBaseVertex(static_cast<gl::enum_t>(mode), range.x, range.y, indices, static_cast<gl::enum_t>(type), nullptr, offset);
     }
-    static void                           draw_transform_feedback(gl::handle_t transformFeedback, gl::flg::Draw::Mode mode)
+    static void                           draw_transform_feedback(gl::handle_t transformFeedback, glf::Draw::Mode mode)
     {
         glDrawTransformFeedback(static_cast<gl::enum_t>(mode), static_cast<gl::uint32_t>(transformFeedback));
     }
-    static void                           draw_transform_feedback_stream(gl::handle_t transformFeedback, gl::handle_t stream, gl::flg::Draw::Mode mode)
+    static void                           draw_transform_feedback_stream(gl::handle_t transformFeedback, gl::handle_t stream, glf::Draw::Mode mode)
     {
         glDrawTransformFeedbackStream(static_cast<gl::enum_t>(mode), static_cast<gl::uint32_t>(transformFeedback), static_cast<gl::uint32_t>(stream));
     }
     
-    static void                           blit_framebuffer(gl::handle_t source, gl::handle_t destination, const gl::Vector4u& sourceArea, const gl::Vector4u& destinationArea, gl::flg::Buffer::Mask mask, gl::flg::FrameBuffer::Filter filter)
+    static void                           blit_framebuffer(gl::handle_t source, gl::handle_t destination, const gl::Vector4u& sourceArea, const gl::Vector4u& destinationArea, glf::Buffer::Mask mask, glf::FrameBuffer::Filter filter)
     {
         glBlitNamedFramebuffer(
             static_cast<gl::uint32_t>(source),
@@ -542,7 +542,7 @@ namespace fox::gfx::api::gl
     }
 
     //Conditional Rendering
-    static void                           begin_conditional_render(gl::handle_t query, gl::flg::Query::Mode mode)
+    static void                           begin_conditional_render(gl::handle_t query, glf::Query::Mode mode)
     {
         glBeginConditionalRender(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(mode));
     }
@@ -564,7 +564,7 @@ namespace fox::gfx::api::gl
 
 
     //Query
-    static gl::handle_t                   create_query(gl::flg::Query::Target target)
+    static gl::handle_t                   create_query(glf::Query::Target target)
     {
         gl::uint32_t query{};
         glCreateQueries(static_cast<gl::enum_t>(target), 1, &query);
@@ -575,20 +575,20 @@ namespace fox::gfx::api::gl
     {
         glDeleteQueries(1, reinterpret_cast<gl::uint32_t*>(&query));
     }
-    static void                           begin_query(gl::handle_t query, gl::flg::Query::Target target)
+    static void                           begin_query(gl::handle_t query, glf::Query::Target target)
     {
         //TODO: make template function? => automatic target deduction
         glBeginQuery(static_cast<gl::enum_t>(target), static_cast<gl::uint32_t>(query));
     }
-    static void                           begin_query_indexed(gl::handle_t query, gl::flg::Query::Target target, gl::uint32_t index)
+    static void                           begin_query_indexed(gl::handle_t query, glf::Query::Target target, gl::uint32_t index)
     {
         glBeginQueryIndexed(static_cast<gl::enum_t>(target), index, static_cast<gl::uint32_t>(query));
     }
-    static void                           end_query(gl::flg::Query::Target target)
+    static void                           end_query(glf::Query::Target target)
     {
         glEndQuery(static_cast<gl::enum_t>(target));
     }
-    static void                           end_query_indexed(gl::flg::Query::Target target, gl::uint32_t index)
+    static void                           end_query_indexed(glf::Query::Target target, gl::uint32_t index)
     {
         glEndQueryIndexed(static_cast<gl::enum_t>(target), index);
     }
@@ -596,14 +596,14 @@ namespace fox::gfx::api::gl
     {
         glQueryCounter(static_cast<gl::uint32_t>(query), GL_TIMESTAMP);
     }
-    static gl::int32_t                    get_query_iv(gl::flg::Query::Target target)
+    static gl::int32_t                    get_query_iv(glf::Query::Target target)
     {
         gl::int32_t params{};
         glGetQueryiv(static_cast<gl::enum_t>(target), GL_CURRENT_QUERY, &params);
 
         return params;
     }
-    static gl::int32_t                    get_query_object(gl::handle_t query, gl::flg::Query::Parameter parameter)
+    static gl::int32_t                    get_query_object(gl::handle_t query, glf::Query::Parameter parameter)
     {
         gl::int32_t result{};
         glGetQueryObjectiv(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(parameter), &result);
@@ -614,7 +614,7 @@ namespace fox::gfx::api::gl
 
 
     //State
-    static gl::int32_t                    integer_v(gl::flg::Data flag)
+    static gl::int32_t                    integer_v(glf::Data flag)
     {
         gl::int32_t result{};
         glGetIntegerv(static_cast<gl::enum_t>(flag), &result);
@@ -623,11 +623,11 @@ namespace fox::gfx::api::gl
     }
 
     //Control
-    static void                           enable(gl::flg::Feature feature)
+    static void                           enable(glf::Feature feature)
     {
         glEnable(static_cast<gl::enum_t>(feature));
     }
-    static void                           disable(gl::flg::Feature feature)
+    static void                           disable(glf::Feature feature)
     {
         glDisable(static_cast<gl::enum_t>(feature));
     }
@@ -636,24 +636,24 @@ namespace fox::gfx::api::gl
     {
         glBlendColor(color.r, color.g, color.b, color.a);
     }
-    static void                           blend_function(gl::flg::Blending::Factor source, gl::flg::Blending::Factor destination)
+    static void                           blend_function(glf::Blending::Factor source, glf::Blending::Factor destination)
     {
         glBlendFunc(static_cast<gl::enum_t>(source), static_cast<gl::enum_t>(destination));
     }
-    static void                           blend_function_separate(gl::flg::Blending::Factor sourceRGB, gl::flg::Blending::Factor sourceAlpha, gl::flg::Blending::Factor destinationRGB, gl::flg::Blending::Factor destinationAlpha)
+    static void                           blend_function_separate(glf::Blending::Factor sourceRGB, glf::Blending::Factor sourceAlpha, glf::Blending::Factor destinationRGB, glf::Blending::Factor destinationAlpha)
     {
         glBlendFuncSeparate(static_cast<gl::enum_t>(sourceRGB), static_cast<gl::enum_t>(destinationRGB), static_cast<gl::enum_t>(sourceAlpha), static_cast<gl::enum_t>(destinationAlpha));
     }
-    static void                           blend_equation(gl::flg::Blending::Equation equation)
+    static void                           blend_equation(glf::Blending::Equation equation)
     {
         glBlendEquation(static_cast<gl::enum_t>(equation));
     }
-    static void                           blend_equation_separate(gl::flg::Blending::Equation equationRGB, gl::flg::Blending::Equation equationAlpha)
+    static void                           blend_equation_separate(glf::Blending::Equation equationRGB, glf::Blending::Equation equationAlpha)
     {
         glBlendEquationSeparate(static_cast<gl::enum_t>(equationRGB), static_cast<gl::enum_t>(equationAlpha));
     }
 
-    static void                           depth_function(gl::flg::DepthFunction depthFunction)
+    static void                           depth_function(glf::DepthFunction depthFunction)
     {
         glDepthFunc(static_cast<gl::enum_t>(depthFunction));
     }
@@ -666,11 +666,11 @@ namespace fox::gfx::api::gl
         glDepthMask(flag);
     }
 
-    static void                           stencil_function(gl::flg::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
+    static void                           stencil_function(glf::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
     {
         glStencilFunc(static_cast<gl::enum_t>(function), value, mask);
     }
-    static void                           stencil_function_separate(gl::flg::Stencil::Face face, gl::flg::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
+    static void                           stencil_function_separate(glf::Stencil::Face face, glf::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
     {
         glStencilFuncSeparate(static_cast<gl::enum_t>(face), static_cast<gl::enum_t>(function), value, mask);
     }
@@ -678,15 +678,15 @@ namespace fox::gfx::api::gl
     {
         glStencilMask(mask);
     }
-    static void                           stencil_mask_separate(gl::flg::Stencil::Face face, gl::uint32_t mask)
+    static void                           stencil_mask_separate(glf::Stencil::Face face, gl::uint32_t mask)
     {
         glStencilMaskSeparate(static_cast<gl::enum_t>(face), mask);
     }
-    static void                           stencil_operation(gl::flg::Stencil::Action onStencilFail, gl::flg::Stencil::Action onDepthFail, gl::flg::Stencil::Action onDepthStencilPass)
+    static void                           stencil_operation(glf::Stencil::Action onStencilFail, glf::Stencil::Action onDepthFail, glf::Stencil::Action onDepthStencilPass)
     {
         glStencilOp(static_cast<gl::enum_t>(onStencilFail), static_cast<gl::enum_t>(onDepthFail), static_cast<gl::enum_t>(onDepthStencilPass));
     }
-    static void                           stencil_operation_separate(gl::flg::Stencil::Face face, gl::flg::Stencil::Action onStencilFail, gl::flg::Stencil::Action onDepthFail, gl::flg::Stencil::Action onDepthStencilPass)
+    static void                           stencil_operation_separate(glf::Stencil::Face face, glf::Stencil::Action onStencilFail, glf::Stencil::Action onDepthFail, glf::Stencil::Action onDepthStencilPass)
     {
         glStencilOpSeparate(static_cast<gl::enum_t>(face), static_cast<gl::enum_t>(onStencilFail), static_cast<gl::enum_t>(onDepthFail), static_cast<gl::enum_t>(onDepthStencilPass));
     }
@@ -717,7 +717,7 @@ namespace fox::gfx::api::gl
         glViewport(area.x, area.y, area.z, area.w);
     }
 
-    static void                           polygon_mode(gl::flg::Polygon::Mode mode)
+    static void                           polygon_mode(glf::Polygon::Mode mode)
     {
         glPolygonMode(GL_FRONT_AND_BACK, static_cast<gl::enum_t>(mode));
     }
@@ -735,16 +735,16 @@ namespace fox::gfx::api::gl
         glLineWidth(width);
     }
 
-    static void                           cull_face(gl::flg::Culling::Face face)
+    static void                           cull_face(glf::Culling::Face face)
     {
         glCullFace(static_cast<gl::enum_t>(face));
     }
-    static void                           front_face(gl::flg::Orientation orientation)
+    static void                           front_face(glf::Orientation orientation)
     {
         glFrontFace(static_cast<gl::enum_t>(orientation));
     }
 
-    static void                           clip_control(gl::flg::Clip::Origin origin, gl::flg::Clip::DepthMode mode)
+    static void                           clip_control(glf::Clip::Origin origin, glf::Clip::DepthMode mode)
     {
         glClipControl(static_cast<gl::enum_t>(origin), static_cast<gl::enum_t>(mode));
     }
@@ -754,7 +754,7 @@ namespace fox::gfx::api::gl
         glClampColor(GL_CLAMP_READ_COLOR, value);
     }
 
-    static void                           provoking_vertex(gl::flg::ProvokingVertex provokingVertex)
+    static void                           provoking_vertex(glf::ProvokingVertex provokingVertex)
     {
         glProvokingVertex(static_cast<gl::enum_t>(provokingVertex));
     }
@@ -763,16 +763,16 @@ namespace fox::gfx::api::gl
         glPrimitiveRestartIndex(index);
     }
 
-    static void                           patch_parameter(gl::flg::Patch::Parameter parameter, gl::int32_t value)
+    static void                           patch_parameter(glf::Patch::Parameter parameter, gl::int32_t value)
     {
         glPatchParameteri(static_cast<gl::enum_t>(parameter), value);
     }
 
-    static void                           memory_barrier(gl::flg::Memory::Barrier barrier)
+    static void                           memory_barrier(glf::Memory::Barrier barrier)
     {
         glMemoryBarrier(static_cast<gl::bitfield_t>(barrier));
     }
-    static void                           memory_barrier_by_region(gl::flg::Memory::Barrier barrier)
+    static void                           memory_barrier_by_region(glf::Memory::Barrier barrier)
     {
         glMemoryBarrierByRegion(static_cast<gl::bitfield_t>(barrier));
     }
@@ -865,11 +865,11 @@ namespace fox::gfx::api::gl
     {
         glDebugMessageCallback(callback, nullptr);
     }
-    static void                           debug_message_control(gl::bool_t state, gl::flg::Debug::Source source, gl::flg::Debug::Type type, gl::flg::Debug::Severity severity)
+    static void                           debug_message_control(gl::bool_t state, glf::Debug::Source source, glf::Debug::Type type, glf::Debug::Severity severity)
     {
         glDebugMessageControl(static_cast<gl::enum_t>(source), static_cast<gl::enum_t>(type), static_cast<gl::enum_t>(severity), 0, nullptr, state);
     }
-    static void                           debug_message_insert(gl::uint32_t id, gl::flg::Debug::Type type, gl::flg::Debug::Severity severity, std::string_view message)
+    static void                           debug_message_insert(gl::uint32_t id, glf::Debug::Type type, glf::Debug::Severity severity, std::string_view message)
     {
         glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, static_cast<gl::enum_t>(type), id, static_cast<gl::enum_t>(severity), static_cast<gl::size_t>(message.length()), message.data());
     }

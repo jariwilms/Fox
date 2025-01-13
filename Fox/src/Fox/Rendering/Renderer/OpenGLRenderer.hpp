@@ -18,8 +18,8 @@ namespace fox::gfx::api
     public:
         static void init()
         {
-            gl::enable(gl::flg::Feature::Multisampling);
-            gl::enable(gl::flg::Feature::SeamlessCubeMapTexture);
+            gl::enable(glf::Feature::Multisampling);
+            gl::enable(glf::Feature::SeamlessCubeMapTexture);
 
 
 
@@ -140,14 +140,14 @@ namespace fox::gfx::api
         }
         static void finish()
         {
-            gl::enable(gl::flg::Feature::DepthTest);
-            gl::depth_function(gl::flg::DepthFunction::Less);
+            gl::enable(glf::Feature::DepthTest);
+            gl::depth_function(glf::DepthFunction::Less);
 
-            gl::enable(gl::flg::Feature::FaceCulling);
-            gl::cull_face(gl::flg::Culling::Face::Back);
-            gl::front_face(gl::flg::Orientation::CounterClockwise);
+            gl::enable(glf::Feature::FaceCulling);
+            gl::cull_face(glf::Culling::Face::Back);
+            gl::front_face(glf::Orientation::CounterClockwise);
 
-            gl::disable(gl::flg::Feature::Blending);
+            gl::disable(glf::Feature::Blending);
 
 
 
@@ -163,7 +163,7 @@ namespace fox::gfx::api
 
             s_pipelines.at("Mesh")->bind();
             s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
-            gl::clear(gl::flg::Buffer::Mask::All);
+            gl::clear(glf::Buffer::Mask::All);
 
             for (auto& mmt : s_mmt)
             {
@@ -183,7 +183,7 @@ namespace fox::gfx::api
                 material->normal->bind(1);
                 material->arm->bind(2);
 
-                gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, ind->count());
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, ind->count());
             }
 
 
@@ -208,11 +208,11 @@ namespace fox::gfx::api
 
 
 
-            gl::enable(gl::flg::Feature::Blending);
-            gl::blend_function(gl::flg::Blending::Factor::SourceAlpha, gl::flg::Blending::Factor::One);
+            gl::enable(glf::Feature::Blending);
+            gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
 
-            gl::disable(gl::flg::Feature::DepthTest);
-            gl::cull_face(gl::flg::Culling::Face::Front);
+            gl::disable(glf::Feature::DepthTest);
+            gl::cull_face(glf::Culling::Face::Front);
 
             s_pipelines.at("Lighting")->bind();
 
@@ -226,7 +226,7 @@ namespace fox::gfx::api
             s_cameraBuffer->bind_index(gl::index_t{ 2 });
 
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            gl::clear(gl::flg::Buffer::Mask::All);
+            gl::clear(glf::Buffer::Mask::All);
 
 
 
@@ -245,13 +245,13 @@ namespace fox::gfx::api
                 s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model), std::make_tuple(sModel.matrix()));
                 s_INDEXBUFFER->copy(i);
 
-                gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, sva->index_buffer()->count());
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_buffer()->count());
             }
 
 
 
-            gl::disable(gl::flg::Feature::Blending);
-            gl::cull_face(gl::flg::Culling::Face::Back);
+            gl::disable(glf::Feature::Blending);
+            gl::cull_face(glf::Culling::Face::Back);
 
 
 
@@ -260,15 +260,15 @@ namespace fox::gfx::api
             const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
             cva->bind();
 
-            gl::blit_framebuffer(s_gBuffer->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, 1280, 720 }, fox::Vector4u{ 0, 0, 1280, 720 }, gl::flg::Buffer::Mask::DepthBuffer, gl::flg::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(s_gBuffer->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, 1280, 720 }, fox::Vector4u{ 0, 0, 1280, 720 }, glf::Buffer::Mask::DepthBuffer, glf::FrameBuffer::Filter::Nearest);
 
-            gl::enable(gl::flg::Feature::DepthTest);
-            gl::depth_function(gl::flg::DepthFunction::LessEqual);
-            gl::disable(gl::flg::Feature::FaceCulling);
+            gl::enable(glf::Feature::DepthTest);
+            gl::depth_function(glf::DepthFunction::LessEqual);
+            gl::disable(glf::Feature::FaceCulling);
             s_pipelines.at("Skybox")->bind();
             s_skybox->bind_index(0);
 
-            gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, cva->index_buffer()->count());
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_buffer()->count());
 
 
 
@@ -280,7 +280,7 @@ namespace fox::gfx::api
             for (const auto& transform : s_debugTransforms)
             {
                 s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model), std::make_tuple(transform.matrix()));
-                gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, cva->index_buffer()->count());
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_buffer()->count());
             }
 #endif
 

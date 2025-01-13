@@ -10,17 +10,17 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags = gl::integer_v(gl::flg::Data::ContextFlags);
-			if (s_contextFlags & static_cast<gl::enum_t>(gl::flg::Context::Flag::Debug))
+			s_contextFlags = gl::integer_v(glf::Data::ContextFlags);
+			if (s_contextFlags & static_cast<gl::enum_t>(glf::Context::Flag::Debug))
 			{
-				gl::enable(gl::flg::Feature::DebugOutput);
-				gl::enable(gl::flg::Feature::DebugOutputSynchronous);
+				gl::enable(glf::Feature::DebugOutput);
+				gl::enable(glf::Feature::DebugOutputSynchronous);
 
 				gl::debug_message_callback(gl::debug_callback);
-				gl::debug_message_control(gl::True, gl::flg::Debug::Source::DontCare, gl::flg::Debug::Type::DontCare, gl::flg::Debug::Severity::DontCare);
+				gl::debug_message_control(gl::True, glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare);
 			}
 
-			s_contextProfile = gl::integer_v(gl::flg::Data::ContextProfile);
+			s_contextProfile = gl::integer_v(glf::Data::ContextProfile);
 
 
 		}

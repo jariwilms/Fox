@@ -37,15 +37,15 @@ namespace fox::gfx::api::gl
 
             if (filter != Filter::None)
             {
-                gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::MinificationFilter,  gl::map_texture_min_filter(m_filter));
-                gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::MagnificationFilter, gl::map_texture_mag_filter(m_filter));
+                gl::texture_parameter(m_handle, glf::Texture::Parameter::MinificationFilter,  gl::map_texture_min_filter(m_filter));
+                gl::texture_parameter(m_handle, glf::Texture::Parameter::MagnificationFilter, gl::map_texture_mag_filter(m_filter));
 
                 m_mipmapLevels = gfx::calculate_mipmap_level(m_dimensions);
             }
 
-                                                   gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingS, gl::map_texture_wrapping(m_wrapping.s));
-            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingT, gl::map_texture_wrapping(m_wrapping.t));
-            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingR, gl::map_texture_wrapping(m_wrapping.r));
+                                                   gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingS, gl::map_texture_wrapping(m_wrapping.s));
+            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingT, gl::map_texture_wrapping(m_wrapping.t));
+            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingR, gl::map_texture_wrapping(m_wrapping.r));
 
             if constexpr (DIMS == Dimensions::_1D) gl::texture_storage_1d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
@@ -84,9 +84,9 @@ namespace fox::gfx::api::gl
         {
             m_wrapping = wrapping;
 
-                                                   gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingS, std::to_underlying(gl::map_texture_wrapping(m_wrapping.s)));
-            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingT, std::to_underlying(gl::map_texture_wrapping(m_wrapping.t)));
-            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, gl::flg::Texture::Parameter::WrappingR, std::to_underlying(gl::map_texture_wrapping(m_wrapping.r)));
+                                                   gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingS, std::to_underlying(gl::map_texture_wrapping(m_wrapping.s)));
+            if constexpr (DIMS >= Dimensions::_2D) gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingT, std::to_underlying(gl::map_texture_wrapping(m_wrapping.t)));
+            if constexpr (DIMS >= Dimensions::_3D) gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingR, std::to_underlying(gl::map_texture_wrapping(m_wrapping.r)));
         }
 
         fox::uint32_t   mipmap_levels() const

@@ -39,12 +39,12 @@ namespace fox::gfx::api::gl
             }
             else
             {
-                gl::frame_buffer_read_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
-                gl::frame_buffer_draw_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
+                gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::None);
+                gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::None);
             }
 
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
-            if (frameBufferStatus != gl::flg::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (frameBufferStatus != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         FrameBuffer(FrameBuffer&& other) noexcept = default;
         ~FrameBuffer()
@@ -132,12 +132,12 @@ namespace fox::gfx::api::gl
             }
             else
             {
-                gl::frame_buffer_read_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
-                gl::frame_buffer_draw_buffer(m_handle, gl::flg::FrameBuffer::Source::None);
+                gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::None);
+                gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::None);
             }
 
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
-            if (frameBufferStatus != gl::flg::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (frameBufferStatus != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         FrameBuffer(FrameBuffer&& other) noexcept = default;
         ~FrameBuffer()

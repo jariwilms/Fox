@@ -29,8 +29,8 @@ namespace fox::gfx::api::gl
         gl::int32_t   sValue{};
     };
 
-    using FT = flg::Texture;
+    using FT = glf::Texture;
 
     using TextureParameter = std::variant<FT::MinificationFilter, FT::MagnificationFilter, FT::Wrapping>;
-    using ClearValue = std::variant<color_t<gl::int32_t>, color_t<gl::uint32_t>, color_t<gl::float32_t>, depth_t, stencil_t, depthstencil_t>;
+    using ClearValue       = std::variant<color_t<gl::int32_t>, color_t<gl::uint32_t>, color_t<gl::float32_t>, depth_t, stencil_t, depthstencil_t>;
 }

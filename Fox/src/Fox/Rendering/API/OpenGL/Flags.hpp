@@ -4,7 +4,7 @@
 
 #include "Fox/Rendering/API/OpenGL/Types.hpp"
 
-namespace fox::gfx::api::gl::flg
+namespace fox::gfx::api::glf
 {
     struct     Blending
     {

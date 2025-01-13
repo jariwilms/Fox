@@ -18,17 +18,17 @@ namespace fox::gfx::api::gl
             const auto& type   = gl::map_shader_type(stage);
             const auto& shader = gl::create_shader(type);
 
-            gl::program_parameter(m_handle, gl::flg::Program::Parameter::Separable, gl::True);
+            gl::program_parameter(m_handle, glf::Program::Parameter::Separable, gl::True);
             gl::shader_binary(shader, binary);
             gl::specialize_shader(shader, "main");
 
-            const auto& compileStatus = gl::shader_iv(shader, gl::flg::Shader::Parameter::CompileStatus);
+            const auto& compileStatus = gl::shader_iv(shader, glf::Shader::Parameter::CompileStatus);
             if (compileStatus != gl::True) throw std::runtime_error{ gl::shader_infolog(shader) };
             
             gl::attach_shader(m_handle, shader);
             gl::link_program(m_handle);
 
-            const auto& linkStatus = gl::program_iv(m_handle, gl::flg::Program::Parameter::LinkStatus);
+            const auto& linkStatus = gl::program_iv(m_handle, glf::Program::Parameter::LinkStatus);
             if (linkStatus != gl::True) throw std::runtime_error{ gl::program_infolog(m_handle) };
 
             gl::detach_shader(m_handle, shader);
