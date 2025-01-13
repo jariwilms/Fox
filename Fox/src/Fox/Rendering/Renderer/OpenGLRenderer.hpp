@@ -58,8 +58,8 @@ namespace fox::gfx::api
             };
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
+            s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
             s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
-            //s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
             //s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
             //s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
 
@@ -86,12 +86,6 @@ namespace fox::gfx::api
             s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0), .fragment = lightingShaders.at(1) }));
             s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),   .fragment = skyboxShaders.at(1) }));
             s_pipelines.emplace("Debug",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),    .fragment = debugShaders.at(1) }));
-
-
-
-
-
-
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
