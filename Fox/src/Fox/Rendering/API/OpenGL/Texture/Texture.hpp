@@ -19,7 +19,7 @@ namespace fox::gfx::api::gl
     public:
         using wrap_t   = gfx::DimensionsToWrappingMap<DIMS>::wrap_t;
         using vector_t = gfx::DimensionsToVectorMap<DIMS>::type;
-
+        
         Texture(Format format, const vector_t& dimensions, std::span<const fox::byte> data)
             : Texture{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {
         }
@@ -118,7 +118,7 @@ namespace fox::gfx::api::gl
         Texture(Format format, const vector_t& dimensions, fox::uint8_t samples)
             : api::Texture{ format }, m_dimensions{ dimensions }, m_samples{ samples }
         {
-            constexpr auto target = gl::map_texture_target<DIMS, gfx::AntiAliasing::None>();
+            constexpr auto target = gl::map_texture_target<DIMS, gfx::AntiAliasing::MSAA>();
             m_handle = gl::create_texture(target);
 
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);
@@ -150,6 +150,4 @@ namespace fox::gfx::api::gl
         vector_t     m_dimensions{};
         fox::uint8_t m_samples{};
     };
-
-
 }

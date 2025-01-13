@@ -207,7 +207,7 @@ namespace fox::gfx::api::gl
     }
     static void                           texture_storage_2d_multisample(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t samples)
     {
-        glTextureStorage2DMultisample(static_cast<gl::uint32_t>(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), GL_TRUE);
+        glTextureStorage2DMultisample(static_cast<gl::uint32_t>(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), gl::True);
     }
     static void                           texture_storage_3d_multisample(gl::handle_t texture, gl::flg::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t samples)
     {
@@ -531,7 +531,7 @@ namespace fox::gfx::api::gl
         glDrawTransformFeedbackStream(static_cast<gl::enum_t>(mode), static_cast<gl::uint32_t>(transformFeedback), static_cast<gl::uint32_t>(stream));
     }
     
-    static void                           blit_framebuffer(gl::handle_t source, gl::handle_t destination, const gl::Vector4u& sourceArea, const gl::Vector4u& destinationArea, gl::bitfield_t mask, gl::flg::FrameBuffer::Filter filter)
+    static void                           blit_framebuffer(gl::handle_t source, gl::handle_t destination, const gl::Vector4u& sourceArea, const gl::Vector4u& destinationArea, gl::flg::Buffer::Mask mask, gl::flg::FrameBuffer::Filter filter)
     {
         glBlitNamedFramebuffer(
             static_cast<gl::uint32_t>(source),

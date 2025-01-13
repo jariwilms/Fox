@@ -8,6 +8,8 @@
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Using.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Core/Library/Time/Time.hpp"
+#include "Fox/Input/Input.hpp"
 
 namespace fox::gfx::api
 {
@@ -16,11 +18,10 @@ namespace fox::gfx::api
     public:
         static void init()
         {
-            using FM = gfx::FrameBuffer::Manifest;
-            using FA = gfx::FrameBuffer::Attachment;
-            using FR = gfx::FrameBuffer::Resample;
-            using TF = gfx::Texture::Format;
-            using RF = gfx::RenderBuffer::Format;
+            gl::enable(gl::flg::Feature::Multisampling);
+            gl::enable(gl::flg::Feature::SeamlessCubeMapTexture);
+
+
 
 
 
@@ -30,6 +31,12 @@ namespace fox::gfx::api
             const fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
 
 
+
+            using FM = gfx::FrameBuffer::Manifest;
+            using FA = gfx::FrameBuffer::Attachment;
+            using FR = gfx::FrameBuffer::Resample;
+            using TF = gfx::Texture::Format;
+            using RF = gfx::RenderBuffer::Format;
 
             std::array<FM, 5> gBufferManifest
             {
@@ -51,11 +58,12 @@ namespace fox::gfx::api
             };
 
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
-            //s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
+            s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
             //s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
             //s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
             //s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
 
+            s_inputBuffer        = std::make_unique<gfx::UniformBuffer<UInput>>();
             s_matricesBuffer     = std::make_unique<gfx::UniformBuffer<UMatrices>>();
             s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
             s_cameraBuffer       = std::make_unique<gfx::UniformBuffer<UCamera>>();
@@ -83,7 +91,7 @@ namespace fox::gfx::api
 
 
 
-            gl::enable(gl::flg::Feature::SeamlessCubeMapTexture);
+
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
@@ -118,7 +126,7 @@ namespace fox::gfx::api
 
 
 
-            s_skybox = &renderInfo.skybox;
+            s_skybox = renderInfo.skybox;
 
 
 
@@ -143,13 +151,18 @@ namespace fox::gfx::api
 
 
 
+            s_inputBuffer->bind_index(gl::index_t{ 0 });
             s_matricesBuffer->bind_index(gl::index_t{ 1 });
             s_materialBuffer->bind_index(gl::index_t{ 3 });
 
 
 
+            s_inputBuffer->copy(UInput{ {1280, 720}, static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), input::cursor_position() });
+
+
+
             s_pipelines.at("Mesh")->bind();
-            s_gBuffer->bind(gfx::FrameBuffer::Target::Write);
+            s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
             gl::clear(gl::flg::Buffer::Mask::All);
 
             for (auto& mmt : s_mmt)
@@ -172,6 +185,26 @@ namespace fox::gfx::api
 
                 gl::draw_elements(gl::flg::Draw::Mode::Triangles, gl::flg::Draw::Type::UnsignedInt, ind->count());
             }
+
+
+
+
+
+            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, they need to be drawn to a regular framebuffer first
+            const fox::Vector2u dimensions{ 1280, 720 };
+            const auto& gBufferHandle   = static_cast<gl::uint32_t>(s_gBuffer->handle());
+            const auto& gBufferMSHandle = static_cast<gl::uint32_t>(s_gBufferMultisample->handle());
+
+            for (auto i{ 0u }; i < 4; ++i)
+            {
+                glNamedFramebufferReadBuffer(gBufferMSHandle, GL_COLOR_ATTACHMENT0 + i);
+                glNamedFramebufferDrawBuffer(gBufferHandle,   GL_COLOR_ATTACHMENT0 + i);
+                glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            }
+            glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+
+
 
 
 
@@ -227,7 +260,7 @@ namespace fox::gfx::api
             const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
             cva->bind();
 
-            gl::blit_framebuffer(s_gBuffer->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, 1280, 720 }, fox::Vector4u{ 0, 0, 1280, 720 }, GL_DEPTH_BUFFER_BIT, gl::flg::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(s_gBuffer->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, 1280, 720 }, fox::Vector4u{ 0, 0, 1280, 720 }, gl::flg::Buffer::Mask::DepthBuffer, gl::flg::FrameBuffer::Filter::Nearest);
 
             gl::enable(gl::flg::Feature::DepthTest);
             gl::depth_function(gl::flg::DepthFunction::LessEqual);
@@ -257,21 +290,7 @@ namespace fox::gfx::api
 
 
 
-            //gfx::RenderState::apply<api::RenderState::Parameter::FaceCullingAlpha>(false);
 
-            ////Multisampled framebuffer textures can not be sampled like a regular framebuffer, they need to be drawn to a regular framebuffer first
-            //const auto width{ 1280 };
-            //const auto height{ 720 };
-            //const auto& gBufferInternal   = static_cast<gl::uint32_t>(s_gBuffer->handle());
-            //const auto& gBufferMsInternal = static_cast<gl::uint32_t>(s_gBufferMultisample->handle());
-
-            //for (auto i{ 0u }; i < 4; ++i)
-            //{
-            //    glNamedFramebufferReadBuffer(gBufferMsInternal, GL_COLOR_ATTACHMENT0 + i);
-            //    glNamedFramebufferDrawBuffer(gBufferInternal, GL_COLOR_ATTACHMENT0 + i);
-            //    glBlitNamedFramebuffer(gBufferMsInternal, gBufferInternal, 0, 0, width, height, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
-            //}
-            //glBlitNamedFramebuffer(gBufferMsInternal, gBufferInternal, 0, 0, width, height, 0, 0, width, height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
 
 
 
@@ -321,6 +340,7 @@ namespace fox::gfx::api
         static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2> s_ppBuffers{};
         static inline std::unique_ptr<gfx::FrameBufferMultisample>     s_gBufferMultisample{};
         
+        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UInput>>      s_inputBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMatrices>>   s_matricesBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMaterial>>   s_materialBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>>     s_cameraBuffer{};
@@ -331,7 +351,7 @@ namespace fox::gfx::api
         static inline std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> s_mmt{};
 
 
-        static inline gfx::CubemapTexture* s_skybox{};
+        static inline std::shared_ptr<const gfx::CubemapTexture> s_skybox{};
         
 
         static inline std::unique_ptr<gfx::UniformBuffer<fox::int32_t>> s_INDEXBUFFER{};
