@@ -60,8 +60,8 @@ namespace fox::gfx::api
             s_gBuffer            = std::make_unique<gfx::FrameBuffer>(dimensions, gBufferManifest);
             s_sBuffer            = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, sBufferManifest);
             s_gBufferMultisample = std::make_unique<gfx::FrameBufferMultisample>(dimensions, samples, gBufferManifest);
-            //s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
-            //s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
+            s_ppBuffers.at(0)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
+            s_ppBuffers.at(1)    = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
 
             s_inputBuffer        = std::make_unique<gfx::UniformBuffer<UInput>>();
             s_matricesBuffer     = std::make_unique<gfx::UniformBuffer<UMatrices>>();
@@ -78,12 +78,14 @@ namespace fox::gfx::api
             const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv",               "shaders/compiled/mesh_deferred.frag.spv");
             const auto& blitShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/render_gbuffer_texture.vert.spv",      "shaders/compiled/render_gbuffer_texture.frag.spv");
             const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere.frag.spv");
+            const auto& ambientShaders  = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/ambient.vert.spv",                     "shaders/compiled/ambient.frag.spv");
             const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",                      "shaders/compiled/skybox.frag.spv");
             const auto& debugShaders    = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/debug.vert.spv",                       "shaders/compiled/debug.frag.spv");
 
             s_pipelines.emplace("Mesh",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = meshShaders.at(0),     .fragment = meshShaders.at(1) }));
             s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = blitShaders.at(0),     .fragment = blitShaders.at(1) }));
             s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0), .fragment = lightingShaders.at(1) }));
+            s_pipelines.emplace("Ambient",  std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = ambientShaders.at(0),  .fragment = ambientShaders.at(1) }));
             s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),   .fragment = skyboxShaders.at(1) }));
             s_pipelines.emplace("Debug",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),    .fragment = debugShaders.at(1) }));
         }
@@ -134,26 +136,31 @@ namespace fox::gfx::api
         }
         static void finish()
         {
-            gl::enable(glf::Feature::DepthTest);
-            gl::depth_function(glf::DepthFunction::Less);
+            const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
+            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+            const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
 
-            gl::enable(glf::Feature::FaceCulling);
-            gl::cull_face(glf::Culling::Face::Back);
-            gl::front_face(glf::Orientation::CounterClockwise);
-
-            gl::disable(glf::Feature::Blending);
-
-
-
+            //Bind Uniform Buffers to correct indices
             s_inputBuffer->bind_index(gl::index_t{ 0 });
             s_matricesBuffer->bind_index(gl::index_t{ 1 });
+            s_cameraBuffer->bind_index(gl::index_t{ 2 });
             s_materialBuffer->bind_index(gl::index_t{ 3 });
-
-
+            s_lightBuffer->bind_index(gl::index_t{ 4 });
+            s_INDEXBUFFER->bind_index(gl::index_t{ 12 });
 
             s_inputBuffer->copy(UInput{ {1280, 720}, static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), input::cursor_position() });
 
 
+
+            //Render Meshes
+            gl::enable(glf::Feature::FaceCulling);
+            gl::cull_face(glf::Culling::Face::Back);
+            gl::front_face(glf::Orientation::CounterClockwise);
+
+            gl::enable(glf::Feature::DepthTest);
+            gl::depth_function(glf::DepthFunction::Less);
+
+            gl::disable(glf::Feature::Blending);
 
             s_pipelines.at("Mesh")->bind();
             s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
@@ -202,32 +209,24 @@ namespace fox::gfx::api
 
 
 
+            //Lighting
+            gl::disable(glf::Feature::DepthTest);
+
             gl::enable(glf::Feature::Blending);
             gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
 
-            gl::disable(glf::Feature::DepthTest);
             gl::cull_face(glf::Culling::Face::Front);
 
             s_pipelines.at("Lighting")->bind();
 
-            s_gBuffer->bind(gfx::FrameBuffer::Target::Read);
             s_gBuffer->bind_texture("Position", 0);
             s_gBuffer->bind_texture("Albedo",   1);
             s_gBuffer->bind_texture("Normal",   2);
             s_gBuffer->bind_texture("ARM",      3);
 
-            s_lightBuffer->bind_index(gl::index_t{ 4 });
-            s_cameraBuffer->bind_index(gl::index_t{ 2 });
-
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+            s_ppBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
 
-
-
-
-            
-            s_INDEXBUFFER->bind_index(gl::index_t{ 12 });
-            const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
             sva->bind();
             for (int i = 0; i < 2; ++i)
             {
@@ -244,17 +243,28 @@ namespace fox::gfx::api
 
 
 
-            gl::disable(glf::Feature::Blending);
+
+
+            //Ambient Lighting
             gl::cull_face(glf::Culling::Face::Back);
 
+            s_gBuffer->bind_texture("Albedo", 0);
+            s_ppBuffers.at(0)->bind_texture("Color", 1);
+            s_pipelines.at("Ambient")->bind();
+            pva->bind();
+            gl::bind_frame_buffer(s_ppBuffers.at(1)->handle(), glf::FrameBuffer::Target::Write);
+            gl::clear(glf::Buffer::Mask::All);
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_buffer()->count());
 
 
 
 
-            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+
+            gl::disable(glf::Feature::Blending);
+
             cva->bind();
 
-            gl::blit_framebuffer(s_gBuffer->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, 1280, 720 }, fox::Vector4u{ 0, 0, 1280, 720 }, glf::Buffer::Mask::DepthBuffer, glf::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(s_gBuffer->handle(), s_ppBuffers.at(1)->handle(), fox::Vector4u{0, 0, 1280, 720}, fox::Vector4u{0, 0, 1280, 720}, glf::Buffer::Mask::DepthBuffer, glf::FrameBuffer::Filter::Nearest);
 
             gl::enable(glf::Feature::DepthTest);
             gl::depth_function(glf::DepthFunction::LessEqual);
@@ -282,39 +292,7 @@ namespace fox::gfx::api
 
 
 
-
-
-
-
-
-
-
-            //Lighting pass render into ppBuffer
-            //glDisable(GL_BLEND);
-
-            //s_pipelines.at("Lighting")->bind();
-            //s_ppBuffers[0]->bind(gfx::FrameBuffer::Target::Write);
-            //s_gBuffer->bind_texture("Position", 0);
-            //s_gBuffer->bind_texture("Albedo", 1);
-            //s_gBuffer->bind_texture("Normal", 2);
-            //s_gBuffer->bind_texture("ARM", 3);
-
-            //glFrontFace(GL_CCW);
-            //glCullFace(GL_BACK);
-
-            //glDisable(GL_DEPTH_TEST);
-            //gfx::Geometry::Plane::mesh()->vertexArray->bind();
-            //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-            //glEnable(GL_BLEND);
-
-
-
-
-
-
-
-            //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // write to default framebuffer
-            //glBlitFramebuffer(0, 0, 1280, 720, 0, 0, 1280, 720, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+            gl::blit_framebuffer(s_ppBuffers.at(1)->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, dimensions }, fox::Vector4u{ 0, 0, dimensions }, glf::Buffer::Mask::ColorBuffer, glf::FrameBuffer::Filter::Nearest);
         }
 
         static void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
