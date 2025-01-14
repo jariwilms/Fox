@@ -65,7 +65,6 @@ void main()
 	
 	
 
-	vec3 fragmentColor;
 	// diffuse
 	const vec3 lightDirection = normalize(lightPosition - gPosition);
 	      vec3 diffuse        = max(dot(gNormal, lightDirection), 0.0) * gAlbedo * lightColor;
@@ -73,7 +72,7 @@ void main()
 	// specular
 	const vec3  viewDirection = normalize(u_Camera.position.xyz - gPosition);
 	const vec3  bisector      = normalize(lightDirection + viewDirection);  
-	      vec3  specular      = lightColor * pow(max(dot(gNormal, bisector), 0.0), 16.0) * gARM;
+	      vec3  specular      = lightColor * pow(max(dot(gNormal, bisector), 0.0), 8.0) * gARM;
 	
 	// attenuation
 	const float fragmentDistance = length(lightPosition - gPosition);	
@@ -81,13 +80,11 @@ void main()
 	
 	diffuse       *= attenuation;
 	specular      *= attenuation;
-	fragmentColor  = diffuse + specular;
 	
 	
 	
+	const vec3  fragmentColor   = diffuse + specular;
 	const float smoothingFactor = smoothstep(1.0, 0.6, fragmentDistance / lightRadius);
-
-
 
 	f_Color = vec4(fragmentColor * smoothingFactor, 1.0);
 }
