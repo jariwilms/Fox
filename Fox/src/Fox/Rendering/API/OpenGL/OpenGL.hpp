@@ -691,7 +691,7 @@ namespace fox::gfx::api::gl
         glStencilOpSeparate(static_cast<gl::enum_t>(face), static_cast<gl::enum_t>(onStencilFail), static_cast<gl::enum_t>(onDepthFail), static_cast<gl::enum_t>(onDepthStencilPass));
     }
 
-    static void                           clear(gl::bitfield_t mask)
+    static void                           clear(glf::Buffer::Mask mask)
     {
         glClear(mask);
     }
