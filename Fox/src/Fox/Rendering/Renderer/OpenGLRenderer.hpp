@@ -228,7 +228,7 @@ namespace fox::gfx::api
             gl::clear(glf::Buffer::Mask::All);
 
             sva->bind();
-            for (int i = 0; i < 2; ++i)
+            for (int i = 0; i < 3; ++i)
             {
                 const auto& light = s_lightsTEMP.at(i);
                 auto sModel = fox::Transform{};

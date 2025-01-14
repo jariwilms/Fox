@@ -72,7 +72,6 @@ namespace fox
         auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
 
         cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
-        cameraTransform.look_at(fox::Vector3f{});
 
 
 
@@ -84,7 +83,7 @@ namespace fox
         auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
 
         model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
-
+        helmetTransform.translate({ 0.0f, 1.0f, 0.0f });
 
 
         const auto& defaultAlbedo   = gfx::api::texture_from_file("textures/albedo.png");
@@ -159,8 +158,9 @@ namespace fox
         fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
         std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f }, fox::Vector3f{  -3.0f, 0.0f, 3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f }, fox::Vector3f{   3.0f, 0.0f, 3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f }, fox::Vector3f{ -2.0f,  6.0f, -1.0f }),
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f }, fox::Vector3f{ -3.0f,  0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f }, fox::Vector3f{  3.0f,  0.0f,  3.0f }), 
         };
 
 
@@ -245,7 +245,7 @@ namespace fox
                     gfx::Renderer::render(mesh, material, transformProduct);
                 });
 
-            render_lights_debug(lights, 2);
+            render_lights_debug(lights, 3);
 
             gfx::Renderer::finish();
 
