@@ -47,14 +47,13 @@ namespace fox::gfx::api
 
                 FM{ "DepthStencil", RF::D24_UNORM_S8_UINT },
             };
-            std::array<FM, 2> sBufferManifest
+            std::array<FM, 1> sBufferManifest
             {
-                FM{ "Color",        TF::R16_UNORM },
                 FM{ "Depth",        TF::D24_UNORM },
             };
             std::array<FM, 2> ppBufferManifest
             {
-                FM{ "Color",        TF::RGB16_UNORM },
+                FM{ "Color",        TF::RGBA8_UNORM },
                 FM{ "Depth",        RF::D24_UNORM_S8_UINT },
             };
 
@@ -79,7 +78,7 @@ namespace fox::gfx::api
 
             const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv",               "shaders/compiled/mesh_deferred.frag.spv");
             const auto& blitShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/render_gbuffer_texture.vert.spv",      "shaders/compiled/render_gbuffer_texture.frag.spv");
-            const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere.frag.spv");
+            const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere_shadow_2.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere_shadow_2.frag.spv");
             const auto& ambientShaders  = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/ambient.vert.spv",                     "shaders/compiled/ambient.frag.spv");
             const auto& shadowShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/shadow.vert.spv",                      "shaders/compiled/shadow.frag.spv");
             const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",                      "shaders/compiled/skybox.frag.spv");
@@ -170,6 +169,7 @@ namespace fox::gfx::api
             s_sBuffer->bind(api::FrameBuffer::Target::Write);
 
             gl::clear(glf::Buffer::Mask::Depth);
+            gl::cull_face(glf::Culling::Face::Front);
 
             const auto& lightProjection  = gfx::Projection::create<gfx::Projection::Type::Orthographic>(10.0f, -10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
             const auto& lightView        = glm::lookAt(depthLightPosition, fox::Vector3f{}, fox::Vector3f{ 0.0f, 1.0f, 0.0f });
@@ -265,12 +265,13 @@ namespace fox::gfx::api
             s_gBuffer->bind_texture("Albedo",   1);
             s_gBuffer->bind_texture("Normal",   2);
             s_gBuffer->bind_texture("ARM",      3);
+            s_sBuffer->bind_texture("Depth",    4);
 
             s_ppBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
 
             sva->bind();
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < 1; ++i)
             {
                 const auto& light = s_lightsTEMP.at(i);
                 auto sModel = fox::Transform{};
