@@ -33,14 +33,14 @@ namespace fox::gfx::api::gl
                     std::visit([&, this](auto&& f) { attach(identifier, f, colorBufferIndices); }, format);
                 });
 
-            if (!colorBufferIndices.empty())
-            {
-                gl::frame_buffer_draw_buffers(m_handle, colorBufferIndices);
-            }
-            else
+            if (colorBufferIndices.empty())
             {
                 gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::None);
                 gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::None);
+            }
+            else
+            {
+                gl::frame_buffer_draw_buffers(m_handle, colorBufferIndices);
             }
 
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
@@ -126,14 +126,14 @@ namespace fox::gfx::api::gl
                     std::visit([&, this](auto&& f) { attach(identifier, f, colorBufferIndices); }, format);
                 });
 
-            if (!colorBufferIndices.empty())
-            {
-                gl::frame_buffer_draw_buffers(m_handle, colorBufferIndices);
-            }
-            else
+            if (colorBufferIndices.empty())
             {
                 gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::None);
                 gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::None);
+            }
+            else
+            {
+                gl::frame_buffer_draw_buffers(m_handle, colorBufferIndices);
             }
 
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
