@@ -62,11 +62,11 @@ namespace fox::gfx::api::glf
         };
         enum       Mask : gl::bitfield_t
         {
-            ColorBuffer   = GL_COLOR_BUFFER_BIT,
-            DepthBuffer   = GL_DEPTH_BUFFER_BIT,
-            StencilBuffer = GL_STENCIL_BUFFER_BIT,
+            Color   = GL_COLOR_BUFFER_BIT,
+            Depth   = GL_DEPTH_BUFFER_BIT,
+            Stencil = GL_STENCIL_BUFFER_BIT,
 
-            All = ColorBuffer | DepthBuffer | StencilBuffer
+            All = Color | Depth | Stencil, 
         };
         enum       StorageFlags : gl::bitfield_t
         {

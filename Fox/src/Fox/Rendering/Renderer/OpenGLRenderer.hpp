@@ -47,8 +47,9 @@ namespace fox::gfx::api
 
                 FM{ "DepthStencil", RF::D24_UNORM_S8_UINT },
             };
-            std::array<FM, 1> sBufferManifest
+            std::array<FM, 2> sBufferManifest
             {
+                FM{ "Color",        TF::R16_UNORM },
                 FM{ "Depth",        TF::D24_UNORM },
             };
             std::array<FM, 2> ppBufferManifest
@@ -68,6 +69,7 @@ namespace fox::gfx::api
             s_materialBuffer     = std::make_unique<gfx::UniformBuffer<UMaterial>>();
             s_cameraBuffer       = std::make_unique<gfx::UniformBuffer<UCamera>>();
             s_lightBuffer        = std::make_unique<gfx::UniformArrayBuffer<ULight>>(lightCount);
+            s_shadowBuffer       = std::make_unique<gfx::UniformBuffer<UShadow>>();
 
             s_INDEXBUFFER        = std::make_unique<gfx::UniformBuffer<fox::int32_t>>();
             
@@ -79,6 +81,7 @@ namespace fox::gfx::api
             const auto& blitShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/render_gbuffer_texture.vert.spv",      "shaders/compiled/render_gbuffer_texture.frag.spv");
             const auto& lightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere.frag.spv");
             const auto& ambientShaders  = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/ambient.vert.spv",                     "shaders/compiled/ambient.frag.spv");
+            const auto& shadowShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/shadow.vert.spv",                      "shaders/compiled/shadow.frag.spv");
             const auto& skyboxShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv",                      "shaders/compiled/skybox.frag.spv");
             const auto& debugShaders    = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/debug.vert.spv",                       "shaders/compiled/debug.frag.spv");
 
@@ -86,6 +89,7 @@ namespace fox::gfx::api
             s_pipelines.emplace("Blit",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = blitShaders.at(0),     .fragment = blitShaders.at(1) }));
             s_pipelines.emplace("Lighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0), .fragment = lightingShaders.at(1) }));
             s_pipelines.emplace("Ambient",  std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = ambientShaders.at(0),  .fragment = ambientShaders.at(1) }));
+            s_pipelines.emplace("Shadow",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = shadowShaders.at(0),   .fragment = shadowShaders.at(1) }));
             s_pipelines.emplace("Skybox",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),   .fragment = skyboxShaders.at(1) }));
             s_pipelines.emplace("Debug",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),    .fragment = debugShaders.at(1) }));
         }
@@ -136,6 +140,10 @@ namespace fox::gfx::api
         }
         static void finish()
         {
+            const fox::Vector2u dimensions{ 1280, 720 };
+            const fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
+            const fox::Vector3f depthLightPosition{ -2.0f,  6.0f, -1.0f };
+
             const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
             const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
             const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
@@ -146,11 +154,46 @@ namespace fox::gfx::api
             s_cameraBuffer->bind_index(gl::index_t{ 2 });
             s_materialBuffer->bind_index(gl::index_t{ 3 });
             s_lightBuffer->bind_index(gl::index_t{ 4 });
+            s_shadowBuffer->bind_index(gl::index_t{ 5 });
             s_INDEXBUFFER->bind_index(gl::index_t{ 12 });
 
-            s_inputBuffer->copy(UInput{ {1280, 720}, static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), input::cursor_position() });
+            s_inputBuffer->copy(UInput{ dimensions, static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), input::cursor_position() });
 
 
+
+
+
+            //Render to shadow map
+            gl::viewport(fox::Vector4u{ 0u, 0u, shadowMapDimensions });
+
+            s_pipelines.at("Shadow")->bind();
+            s_sBuffer->bind(api::FrameBuffer::Target::Write);
+
+            gl::clear(glf::Buffer::Mask::Depth);
+
+            const auto& lightProjection  = gfx::Projection::create<gfx::Projection::Type::Orthographic>(10.0f, -10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
+            const auto& lightView        = glm::lookAt(depthLightPosition, fox::Vector3f{}, fox::Vector3f{ 0.0f, 1.0f, 0.0f });
+            const auto& lightSpaceMatrix = lightProjection.matrix() * lightView;
+
+            for (const auto& mmt : s_mmt)
+            {
+                const auto& [mesh, material, transform] = mmt;
+                const auto& vao                         = mesh->vertexArray;
+                const auto& ind                         = vao->index_buffer();
+
+                const auto& modelMatrix  = transform.matrix();
+                
+                s_shadowBuffer->copy(UShadow{ modelMatrix, lightSpaceMatrix });
+
+                vao->bind();
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, ind->count());
+            }
+
+
+
+
+
+            gl::viewport(fox::Vector4u{ 0u, 0u, dimensions });
 
             //Render Meshes
             gl::enable(glf::Feature::FaceCulling);
@@ -166,7 +209,7 @@ namespace fox::gfx::api
             s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
 
-            for (auto& mmt : s_mmt)
+            for (const auto& mmt : s_mmt)
             {
                 const auto& [mesh, material, transform] = mmt;
                 const auto& vao                         = mesh->vertexArray;
@@ -191,8 +234,7 @@ namespace fox::gfx::api
 
 
 
-            //Multisampled framebuffer textures can not be sampled like a regular framebuffer, they need to be drawn to a regular framebuffer first
-            const fox::Vector2u dimensions{ 1280, 720 };
+            //Resolve multisampled frame buffer
             const auto& gBufferHandle   = static_cast<gl::uint32_t>(s_gBuffer->handle());
             const auto& gBufferMSHandle = static_cast<gl::uint32_t>(s_gBufferMultisample->handle());
 
@@ -209,7 +251,7 @@ namespace fox::gfx::api
 
 
 
-            //Lighting
+            //Regular Lighting
             gl::disable(glf::Feature::DepthTest);
 
             gl::enable(glf::Feature::Blending);
@@ -259,12 +301,12 @@ namespace fox::gfx::api
 
 
 
-
+            //Skybox
             gl::disable(glf::Feature::Blending);
 
             cva->bind();
 
-            gl::blit_framebuffer(s_gBuffer->handle(), s_ppBuffers.at(1)->handle(), fox::Vector4u{0, 0, 1280, 720}, fox::Vector4u{0, 0, 1280, 720}, glf::Buffer::Mask::DepthBuffer, glf::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(s_gBuffer->handle(), s_ppBuffers.at(1)->handle(), fox::Vector4u{0, 0, 1280, 720}, fox::Vector4u{0, 0, 1280, 720}, glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest);
 
             gl::enable(glf::Feature::DepthTest);
             gl::depth_function(glf::DepthFunction::LessEqual);
@@ -278,6 +320,7 @@ namespace fox::gfx::api
 
 
 
+            //Debug cubes
 #ifdef FOX_DEBUG
             s_pipelines.at("Debug")->bind();
 
@@ -292,7 +335,7 @@ namespace fox::gfx::api
 
 
 
-            gl::blit_framebuffer(s_ppBuffers.at(1)->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, dimensions }, fox::Vector4u{ 0, 0, dimensions }, glf::Buffer::Mask::ColorBuffer, glf::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(s_ppBuffers.at(1)->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, dimensions }, fox::Vector4u{ 0, 0, dimensions }, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest);
         }
 
         static void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
@@ -317,6 +360,7 @@ namespace fox::gfx::api
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMaterial>>   s_materialBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>>     s_cameraBuffer{};
         static inline std::unique_ptr<gfx::UniformArrayBuffer<gfx::ULight>> s_lightBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UShadow>>     s_shadowBuffer{};
 
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
 

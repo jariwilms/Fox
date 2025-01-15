@@ -12,7 +12,9 @@ void main()
 	vec3 albedo   = texture(t_Albedo, v_TexCoord).rgb;
 	vec3 lighting = texture(t_Color,  v_TexCoord).rgb;
 	
-	vec3 ambientColor = clamp((albedo * 0.1) + lighting, 0.0, 1.0);
+	const vec3  ambientColor  = vec3(1.0, 0.95, 0.45);
+	const float ambientFactor = 0.0;
+	const vec3  result        = clamp(((albedo * ambientColor) * ambientFactor) + lighting, 0.0, 1.0);
 	
-	f_Color = vec4(ambientColor, 1.0);
+	f_Color = vec4(result, 1.0);
 }

@@ -37,4 +37,9 @@ namespace fox::gfx
         fox::float32_t quadraticFalloff{ 1.0f };
         fox::float32_t _padding{};
     };
+    struct UShadow   //Binding 5
+    {
+        fox::Matrix4f model{};
+        fox::Matrix4f light{};
+    };
 }

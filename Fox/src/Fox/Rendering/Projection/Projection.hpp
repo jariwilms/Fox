@@ -15,7 +15,6 @@ namespace fox::gfx
             Orthographic,
         };
 
-                 Projection() = default;
         explicit Projection(const fox::Matrix4f& matrix)
             : m_matrix{matrix} {}
 

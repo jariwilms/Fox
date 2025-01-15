@@ -1,13 +1,14 @@
 #version 460 core
 
-layout(location = 0) in  vec3 a_Position;
-layout(location = 3) in  vec2 a_TexCoord;
+layout(set = 0, binding = 5) uniform ULightSpace
+{
+	mat4 model;
+	mat4 matrix;
+} u_LightSpace;
 
-layout(location = 0) out vec2 v_TexCoord;
+layout (location = 0) in vec3 a_Position;
 
 void main()
 {
-	v_TexCoord = a_TexCoord;
-	
-	gl_Position = vec4(a_Position, 1.0);
-}
+    gl_Position = u_LightSpace.matrix * u_LightSpace.model * vec4(a_Position, 1.0);
+}  
