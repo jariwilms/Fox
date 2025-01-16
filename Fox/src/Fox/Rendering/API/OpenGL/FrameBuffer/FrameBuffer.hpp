@@ -65,6 +65,15 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(it->second->handle(), slot);
         }
 
+        auto find_texture(const std::string& identifier)
+        {
+            return m_identifierToTexture.find(identifier)->second;
+        }
+        auto find_render_buffer(const std::string& identifier)
+        {
+            return m_identifierToRenderBuffer.find(identifier)->second;
+        }
+
         FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
 
     private:
@@ -80,7 +89,7 @@ namespace fox::gfx::api::gl
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
-            const auto& texture = std::make_shared<texture_t>(format, api::Texture::Filter::None, api::Texture::Wrapping::ClampToBorder, m_dimensions);
+            const auto& texture = std::make_shared<texture_t>(format, api::Texture::Filter::Nearest, api::Texture::Wrapping::ClampToBorder, m_dimensions);
             gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, 0);
 
             m_identifierToTexture.emplace(identifier, texture);
@@ -156,6 +165,15 @@ namespace fox::gfx::api::gl
             if (it == m_identifierToTexture.end()) throw std::invalid_argument{ "Invalid texture identifier!" };
 
             gl::bind_texture_unit(it->second->handle(), slot);
+        }
+
+        auto find_texture(const std::string& identifier)
+        {
+            return m_identifierToTexture.find(identifier)->second;
+        }
+        auto find_render_buffer(const std::string& identifier)
+        {
+            return m_identifierToRenderBuffer.find(identifier)->second;
         }
 
         fox::uint8_t samples() const

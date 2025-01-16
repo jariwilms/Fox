@@ -74,6 +74,14 @@ namespace fox::gfx::api
             
 
 
+            const auto& depthTexture = s_sBuffer->find_texture("Depth");
+            const std::array<gl::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
+            glTextureParameteri(static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTextureParameteri(static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameterfv(static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_BORDER_COLOR, borderColor.data());
+
+
+
 
 
             const auto& meshShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv",               "shaders/compiled/mesh_deferred.frag.spv");
@@ -169,6 +177,8 @@ namespace fox::gfx::api
             s_sBuffer->bind(api::FrameBuffer::Target::Write);
 
             gl::clear(glf::Buffer::Mask::Depth);
+
+            gl::enable(glf::Feature::FaceCulling);
             gl::cull_face(glf::Culling::Face::Front);
 
             const auto& lightProjection  = gfx::Projection::create<gfx::Projection::Type::Orthographic>(10.0f, -10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
