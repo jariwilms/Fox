@@ -18,7 +18,7 @@ namespace fox
 		class IO
 		{
 		public:
-			static inline bool flipImages{ true };
+			static inline constexpr bool flipImages{ true };
 		};
 
 		class Rendering
