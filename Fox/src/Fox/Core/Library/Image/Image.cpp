@@ -7,52 +7,55 @@
 
 namespace fox
 {
-    struct Context
+    struct STBContext
     {
         std::vector<fox::byte_t>& data;
     };
     static void write_func(void* context, void* data, int size)
     {
-        const auto* ctx       = reinterpret_cast<Context*>(context);
+        const auto* ctx       = reinterpret_cast<STBContext*>(context);
         const auto* imageData = reinterpret_cast<const fox::byte_t*>(data);
 
         ctx->data = std::vector<fox::byte_t>{ imageData, imageData + size };
     }
 
-    std::vector<fox::byte_t> Image::encode(Format format, const Image& image)
+    std::vector<fox::byte_t> Image::encode(Extension extension, const Image& image)
     {
-        stbi_flip_vertically_on_write(Config::IO::flipImages);
+        stbi_flip_vertically_on_write(fox::Config::IO::flipImages);
 
         const auto& dimensions = image.dimensions();
-        const auto& channels   = static_cast<fox::int32_t>(image.layout());
+        const auto& channels   = std::to_underlying(image.format());
         const auto* data       = image.data().data();
 
         std::vector<fox::byte_t> v{};
-        Context ctx{ v };
+        STBContext ctx{ v };
 
-        switch (format)
+        switch (extension)
         {
-            case Format::BMP:  stbi_write_bmp_to_func(write_func, reinterpret_cast<void*>(&ctx), dimensions.x, dimensions.y, channels, data);    break;
-            case Format::JPEG: stbi_write_jpg_to_func(write_func, reinterpret_cast<void*>(&ctx), dimensions.x, dimensions.y, channels, data, 0); break;
-            case Format::PNG:  stbi_write_png_to_func(write_func, reinterpret_cast<void*>(&ctx), dimensions.x, dimensions.y, channels, data, 0); break;
+            case Extension::BMP:  stbi_write_bmp_to_func(write_func, &ctx, dimensions.x, dimensions.y, channels, data);    break;
+            case Extension::JPEG: stbi_write_jpg_to_func(write_func, &ctx, dimensions.x, dimensions.y, channels, data, 0); break;
+            case Extension::PNG:  stbi_write_png_to_func(write_func, &ctx, dimensions.x, dimensions.y, channels, data, 0); break;
 
-            default: throw std::invalid_argument{ "Invalid format!" };
+            default: throw std::invalid_argument{ "Invalid extension!" };
         }
 
         return v;
     }
-    Image                  Image::decode(Layout layout, std::span<const fox::byte_t> data)
+    Image                    Image::decode(Format format, std::span<const fox::byte_t> data)
     {
         stbi_set_flip_vertically_on_load(fox::Config::IO::flipImages);
 
-        fox::int32_t x{}, y{}, c{}, channels{ static_cast<fox::int32_t>(layout) };
-        auto* decodedData = reinterpret_cast<fox::byte_t*>(stbi_load_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &x, &y, &c, channels));
+        fox::Vector2i dimensions{};
 
-        const auto& size = x * y * channels;
-        std::vector<fox::byte_t> v{ decodedData, decodedData + size };
+        const auto&  channels   = std::to_underlying(format);
+        const auto&  dataLength = static_cast<fox::int32_t>(data.size_bytes());
+              auto*  imageData  = stbi_load_from_memory(data.data(), dataLength, &dimensions.x, &dimensions.y, nullptr, channels);
+        const auto&  totalSize  = dimensions.x * dimensions.y * channels;
 
-        stbi_image_free(decodedData);
+        std::vector<fox::byte_t> v{ imageData, imageData + totalSize };
 
-        return Image{ layout, fox::Vector2u{ static_cast<fox::uint32_t>(x), static_cast<fox::uint32_t>(y) }, std::move(v) };
+        stbi_image_free(imageData);
+
+        return Image{ format, dimensions, std::move(v) };
     }
 }
