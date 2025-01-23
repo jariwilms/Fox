@@ -13,7 +13,7 @@
 #include "Fox/Rendering/API/OpenGL/RenderState/RenderState.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Pipeline.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Shader.hpp"
-#include "Fox/Rendering/API/OpenGL/Texture/CubemapTexture.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/Cubemap.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
 #include "Fox/Rendering/Layout/Layout.hpp"
 #include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
@@ -45,7 +45,7 @@ namespace fox::gfx
     using Texture3D              = api::gl::Texture<Dimensions::_3D, AntiAliasing::None>;
     using Texture2DMultisample   = api::gl::Texture<Dimensions::_2D, AntiAliasing::MSAA>;
     using Texture3DMultisample   = api::gl::Texture<Dimensions::_3D, AntiAliasing::MSAA>;
-    using CubemapTexture         = api::gl::CubemapTexture;
+    using Cubemap                = api::gl::Cubemap;
 
     using RenderBuffer           = api::RenderBuffer;
 

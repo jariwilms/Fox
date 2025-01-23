@@ -122,7 +122,7 @@ namespace fox
             "textures/skybox_space2/front.png",
             "textures/skybox_space2/back.png",
         };
-        gfx::CubemapTexture::Layout cubemapLayout
+        gfx::Cubemap::Layout cubemapLayout
         {
             gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Layout::RGB8), 
             gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Layout::RGB8),
@@ -132,7 +132,7 @@ namespace fox
             gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Layout::RGB8),
         };
 
-        auto skybox = std::make_shared<gfx::CubemapTexture>(skyboxDimensions, cubemapLayout);
+        auto skybox = std::make_shared<gfx::Cubemap>(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapLayout);
 
 
 

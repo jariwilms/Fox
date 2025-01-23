@@ -42,4 +42,13 @@ namespace fox::gfx
         fox::Matrix4f model{};
         fox::Matrix4f light{};
     };
+    struct ULightShadow //Binding 6
+    {
+        fox::Vector4f  position{};
+        fox::float32_t farPlane{};
+    };
+    struct UShadowMatrices //Binding 13
+    {
+        std::array<fox::Matrix4f, 6> projection{};
+    };
 }

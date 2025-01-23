@@ -51,4 +51,18 @@ namespace fox::gfx::api
             std::make_shared<Shader>(Shader::Stage::Fragment, *fragmentFile->read()), 
         };
     }
+    template<typename Shader>
+    static auto shaders_from_binaries(std::string_view vertex, std::string_view geometry, std::string_view fragment)
+    {
+        const auto& vertexFile   = io::load(vertex);
+        const auto& geometryFile = io::load(geometry);
+        const auto& fragmentFile = io::load(fragment);
+
+        return std::array<std::shared_ptr<Shader>, 3>
+        {
+            std::make_shared<Shader>(Shader::Stage::Vertex,   *vertexFile->read()), 
+            std::make_shared<Shader>(Shader::Stage::Geometry, *geometryFile->read()),
+            std::make_shared<Shader>(Shader::Stage::Fragment, *fragmentFile->read()), 
+        };
+    }
 }

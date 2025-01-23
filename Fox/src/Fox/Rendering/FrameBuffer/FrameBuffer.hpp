@@ -4,6 +4,7 @@
 
 #include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Texture/Cubemap.hpp"
 
 namespace fox::gfx::api
 {
@@ -22,15 +23,10 @@ namespace fox::gfx::api
             Stencil, 
             DepthStencil, 
         };
-        enum class Resample
-        {
-            No, 
-            Yes, 
-        };
 
         struct Manifest
         {
-            using var_t = std::variant<Texture::Format, RenderBuffer::Format>;
+            using var_t = std::variant<Texture::Format, RenderBuffer::Format, Cubemap::Format>;
 
             Manifest(const std::string& identifier, var_t format)
                 : identifier{ identifier }, format{ format } {}

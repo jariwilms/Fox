@@ -15,6 +15,7 @@
 #include "Fox/Rendering/Texture/AntiAliasing.hpp"
 #include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Texture/Cubemap.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -178,6 +179,46 @@ namespace fox::gfx::api::gl
             case api::RenderBuffer::Format::D24_UNORM_S8_UINT: return glf::RenderBuffer::Format::D24_UNORM_S8_UINT;
             case api::RenderBuffer::Format::D32_FLOAT_S8_UINT: return glf::RenderBuffer::Format::D32_FLOAT_S8_UINT;
             case api::RenderBuffer::Format::S8_UINT:           return glf::RenderBuffer::Format::S8_UINT;
+
+            default: throw std::invalid_argument{ "Invalid format!" };
+        }
+    }
+    static constexpr glf::Texture::Format              map_cubemap_texture_format(api::Cubemap::Format format)
+    {
+        switch (format)
+        {
+            case api::Cubemap::Format::R8_UNORM:          return glf::Texture::Format::R8_UNORM;
+            case api::Cubemap::Format::RG8_UNORM:         return glf::Texture::Format::RG8_UNORM;
+            case api::Cubemap::Format::RGB8_UNORM:        return glf::Texture::Format::RGB8_UNORM;
+            case api::Cubemap::Format::RGBA8_UNORM:       return glf::Texture::Format::RGBA8_UNORM;
+            case api::Cubemap::Format::R16_UNORM:         return glf::Texture::Format::R16_UNORM;
+            case api::Cubemap::Format::RG16_UNORM:        return glf::Texture::Format::RG16_UNORM;
+            case api::Cubemap::Format::RGB16_UNORM:       return glf::Texture::Format::RGB16_UNORM;
+            case api::Cubemap::Format::RGBA16_UNORM:      return glf::Texture::Format::RGBA16_UNORM;
+            case api::Cubemap::Format::R8_SNORM:          return glf::Texture::Format::R8_SNORM;
+            case api::Cubemap::Format::RG8_SNORM:         return glf::Texture::Format::RG8_SNORM;
+            case api::Cubemap::Format::RGB8_SNORM:        return glf::Texture::Format::RGB8_SNORM;
+            case api::Cubemap::Format::RGBA8_SNORM:       return glf::Texture::Format::RGBA8_SNORM;
+            case api::Cubemap::Format::R16_SNORM:         return glf::Texture::Format::R16_SNORM;
+            case api::Cubemap::Format::RG16_SNORM:        return glf::Texture::Format::RG16_SNORM;
+            case api::Cubemap::Format::RGB16_SNORM:       return glf::Texture::Format::RGB16_SNORM;
+            case api::Cubemap::Format::RGBA16_SNORM:      return glf::Texture::Format::RGBA16_SNORM;
+            case api::Cubemap::Format::RGB8_SRGB:         return glf::Texture::Format::RGB8_SRGB;
+            case api::Cubemap::Format::RGBA8_SRGB:        return glf::Texture::Format::RGBA8_SRGB;
+            case api::Cubemap::Format::R16_FLOAT:         return glf::Texture::Format::R16_FLOAT;
+            case api::Cubemap::Format::RG16_FLOAT:        return glf::Texture::Format::RG16_FLOAT;
+            case api::Cubemap::Format::RGB16_FLOAT:       return glf::Texture::Format::RGB16_FLOAT;
+            case api::Cubemap::Format::RGBA16_FLOAT:      return glf::Texture::Format::RGBA16_FLOAT;
+            case api::Cubemap::Format::R32_FLOAT:         return glf::Texture::Format::R32_FLOAT;
+            case api::Cubemap::Format::RG32_FLOAT:        return glf::Texture::Format::RG32_FLOAT;
+            case api::Cubemap::Format::RGB32_FLOAT:       return glf::Texture::Format::RGB32_FLOAT;
+            case api::Cubemap::Format::RGBA32_FLOAT:      return glf::Texture::Format::RGBA32_FLOAT;
+            case api::Cubemap::Format::D16_UNORM:         return glf::Texture::Format::D16_UNORM;
+            case api::Cubemap::Format::D24_UNORM:         return glf::Texture::Format::D24_UNORM;
+            case api::Cubemap::Format::D32_FLOAT:         return glf::Texture::Format::D32_FLOAT;
+            case api::Cubemap::Format::D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
+            case api::Cubemap::Format::D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
+            case api::Cubemap::Format::S8_UINT:           return glf::Texture::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }

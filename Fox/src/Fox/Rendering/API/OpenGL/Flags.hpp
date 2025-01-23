@@ -97,37 +97,6 @@ namespace fox::gfx::api::glf
             UniformBuffer           = GL_UNIFORM_BUFFER,
         };
     };
-    enum class Feature : gl::enum_t
-    {
-        Blending                   = GL_BLEND, 
-        ClipDistance               = GL_CLIP_DISTANCE0, 
-        ColorLogicOperation        = GL_COLOR_LOGIC_OP, 
-        FaceCulling                = GL_CULL_FACE, 
-        DebugOutput                = GL_DEBUG_OUTPUT, 
-        DebugOutputSynchronous     = GL_DEBUG_OUTPUT_SYNCHRONOUS, 
-        DepthClamp                 = GL_DEPTH_CLAMP, 
-        DepthTest                  = GL_DEPTH_TEST, 
-        Dither                     = GL_DITHER, 
-        FrameBufferSRGB            = GL_FRAMEBUFFER_SRGB, 
-        Multisampling              = GL_MULTISAMPLE, 
-        PolygonFillOffset          = GL_POLYGON_OFFSET_FILL, 
-        PolygonLineOffset          = GL_POLYGON_OFFSET_LINE, 
-        PolygonPointOffset         = GL_POLYGON_OFFSET_POINT, 
-        PolygonSmooth              = GL_POLYGON_SMOOTH, 
-        PrimitiveRestart           = GL_PRIMITIVE_RESTART, 
-        PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX, 
-        ProgramPointSize           = GL_PROGRAM_POINT_SIZE, 
-        RasterizerDiscard          = GL_RASTERIZER_DISCARD, 
-        SampleAlphaToCoverage      = GL_SAMPLE_ALPHA_TO_COVERAGE, 
-        SampleAlphaToOne           = GL_SAMPLE_ALPHA_TO_ONE, 
-        SampleCoverage             = GL_SAMPLE_COVERAGE, 
-        SampleMask                 = GL_SAMPLE_MASK, 
-        SampleShading              = GL_SAMPLE_SHADING, 
-        ScissorTest                = GL_SCISSOR_TEST, 
-        SeamlessCubeMapTexture     = GL_TEXTURE_CUBE_MAP_SEAMLESS, 
-        SmoothLines                = GL_LINE_SMOOTH, 
-        StencilTest                = GL_STENCIL_TEST, 
-    };
     struct     Clip
     {
         enum class Origin : gl::enum_t
@@ -154,6 +123,23 @@ namespace fox::gfx::api::glf
         {
             Core          = GL_CONTEXT_CORE_PROFILE_BIT, 
             Compatibility = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT, 
+        };
+    };
+    struct     Cubemap
+    {
+        enum class Format
+        {
+            RGB8_UNORM   = GL_RGB8, 
+            RGBA8_UNORM  = GL_RGBA8, 
+
+            RGB8_SRGB    = GL_SRGB8, 
+            RGBA8_SRGB   = GL_SRGB8_ALPHA8, 
+
+            RGB16_FLOAT  = GL_RGB16F, 
+            RGBA16_FLOAT = GL_RGBA16F, 
+
+            RGB32_FLOAT  = GL_RGB32F, 
+            RGBA32_FLOAT = GL_RGBA32F, 
         };
     };
     struct     Culling
@@ -272,6 +258,37 @@ namespace fox::gfx::api::glf
             UnsignedShort = GL_UNSIGNED_SHORT, 
             UnsignedInt   = GL_UNSIGNED_INT, 
         };
+    };
+    enum class Feature : gl::enum_t
+    {
+        Blending                   = GL_BLEND, 
+        ClipDistance               = GL_CLIP_DISTANCE0, 
+        ColorLogicOperation        = GL_COLOR_LOGIC_OP, 
+        FaceCulling                = GL_CULL_FACE, 
+        DebugOutput                = GL_DEBUG_OUTPUT, 
+        DebugOutputSynchronous     = GL_DEBUG_OUTPUT_SYNCHRONOUS, 
+        DepthClamp                 = GL_DEPTH_CLAMP, 
+        DepthTest                  = GL_DEPTH_TEST, 
+        Dither                     = GL_DITHER, 
+        FrameBufferSRGB            = GL_FRAMEBUFFER_SRGB, 
+        Multisampling              = GL_MULTISAMPLE, 
+        PolygonFillOffset          = GL_POLYGON_OFFSET_FILL, 
+        PolygonLineOffset          = GL_POLYGON_OFFSET_LINE, 
+        PolygonPointOffset         = GL_POLYGON_OFFSET_POINT, 
+        PolygonSmooth              = GL_POLYGON_SMOOTH, 
+        PrimitiveRestart           = GL_PRIMITIVE_RESTART, 
+        PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX, 
+        ProgramPointSize           = GL_PROGRAM_POINT_SIZE, 
+        RasterizerDiscard          = GL_RASTERIZER_DISCARD, 
+        SampleAlphaToCoverage      = GL_SAMPLE_ALPHA_TO_COVERAGE, 
+        SampleAlphaToOne           = GL_SAMPLE_ALPHA_TO_ONE, 
+        SampleCoverage             = GL_SAMPLE_COVERAGE, 
+        SampleMask                 = GL_SAMPLE_MASK, 
+        SampleShading              = GL_SAMPLE_SHADING, 
+        ScissorTest                = GL_SCISSOR_TEST, 
+        SeamlessCubeMapTexture     = GL_TEXTURE_CUBE_MAP_SEAMLESS, 
+        SmoothLines                = GL_LINE_SMOOTH, 
+        StencilTest                = GL_STENCIL_TEST, 
     };
     struct     FrameBuffer
     {
