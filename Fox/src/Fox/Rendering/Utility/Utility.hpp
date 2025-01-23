@@ -9,7 +9,7 @@
 
 namespace fox::gfx::api
 {
-    static auto image_from_file(const std::filesystem::path& path, fox::Image::Layout layout = fox::Image::Layout::RGBA8)
+    static auto image_from_file(const std::filesystem::path& path, fox::Image::Format layout = fox::Image::Format::RGBA8)
     {
         const auto& file    = io::load(path);
         const auto& dataptr = file->read();
@@ -24,14 +24,14 @@ namespace fox::gfx::api
 
         for (const auto& path : paths)
         {
-            images.emplace_back(image_from_file(path, fox::Image::Layout::RGB8));
+            images.emplace_back(image_from_file(path, fox::Image::Format::RGB8));
         }
 
         return images;
     }
     static auto texture_from_file(const std::filesystem::path& path)
     {
-        const auto& image = image_from_file(path, fox::Image::Layout::RGBA8);
+        const auto& image = image_from_file(path, fox::Image::Format::RGBA8);
         
         return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
