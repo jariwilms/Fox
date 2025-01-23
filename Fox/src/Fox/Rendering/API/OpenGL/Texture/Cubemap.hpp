@@ -44,8 +44,7 @@ namespace fox::gfx::api::gl
     protected:
         void attach_image(const fox::Image& image, fox::uint32_t index)
         {
-            if (image.layout()     != fox::Image::Layout::RGB8) throw std::invalid_argument{ "Only RGB images are allowed! (for now)" };
-            if (image.dimensions() != m_dimensions)             throw std::invalid_argument{ "Image dimensions must be equal!" };
+            if (image.dimensions() != m_dimensions) throw std::invalid_argument{ "Image dimensions must be equal!" };
 
             gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, gl::Vector3u{ m_dimensions, 1u }, gl::Vector3u{ 0u, 0u, index }, 0, image.data().data());
         }

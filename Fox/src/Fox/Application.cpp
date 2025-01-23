@@ -85,7 +85,6 @@ namespace fox
         model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
         helmetTransform.translate({ 0.0f, 1.0f, 0.0f });
 
-
         const auto& defaultAlbedo   = gfx::api::texture_from_file("textures/albedo.png");
         const auto& defaultNormal   = gfx::api::texture_from_file("textures/normal.png");
         const auto& defaultARM      = gfx::api::texture_from_file("textures/arm.png");
@@ -124,12 +123,12 @@ namespace fox
         };
         gfx::Cubemap::Layout cubemapLayout
         {
-            gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Layout::RGB8), 
-            gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Layout::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(2), fox::Image::Layout::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(3), fox::Image::Layout::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Layout::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Layout::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
+            gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
         };
 
         auto skybox = std::make_shared<gfx::Cubemap>(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapLayout);
@@ -138,29 +137,12 @@ namespace fox
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        namespace gl = gfx::api::gl;
-
-        Time::reset();
-        fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
-        std::array<std::tuple<fox::Light, fox::Vector3f>, 32u> lights
+        //Lights
+        std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f }, fox::Vector3f{ -2.0f,  6.0f, -1.0f }),
-            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f }, fox::Vector3f{ -3.0f,  0.0f,  3.0f }), 
-            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f }, fox::Vector3f{  3.0f,  0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true  }, fox::Vector3f{ -2.0f,  6.0f, -1.0f }),
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, false }, fox::Vector3f{ -3.0f,  0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, false }, fox::Vector3f{  3.0f,  0.0f,  3.0f }), 
         };
 
 
@@ -197,9 +179,9 @@ namespace fox
             {
                 helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * Time::delta(), 0.0f });
             };
-        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, fox::uint32_t amount)
+        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, fox::uint32_t limit)
             {
-                for (const auto& i : std::ranges::iota_view(0u, amount))
+                for (const auto& i : std::ranges::iota_view(0u, limit))
                 {
                     const auto& [l, p] = lights[i];
 
@@ -210,6 +192,11 @@ namespace fox
                     gfx::Renderer::render_debug(t);
                 }
             };
+
+
+
+        Time::reset();
+        fox::CyclicBuffer<fox::float32_t, 144> frametimes{};
 
         while (!m_window->should_close())
         {
