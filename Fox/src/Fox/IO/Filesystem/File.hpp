@@ -33,18 +33,18 @@ namespace fox::io
             m_stream.flush();
         }
 
-        std::unique_ptr<const std::vector<byte>> read(fox::uint32_t limit = 0u)
+        std::unique_ptr<const std::vector<byte_t>> read(fox::uint32_t limit = 0u)
         {
             //The default vector allocator initializes all data when resizing. This is redundant because we want the vector to take ownership of existing data.
-                  auto  buffer     = std::make_unique<std::vector<byte>>();
+                  auto  buffer     = std::make_unique<std::vector<byte_t>>();
             const auto& bufferSize = limit > 0 ? limit : size();
 
-            reinterpret_cast<std::vector<byte, utl::default_init_allocator<byte>>*>(buffer.get())->resize(bufferSize);
+            reinterpret_cast<std::vector<byte_t, utl::default_init_allocator<byte_t>>*>(buffer.get())->resize(bufferSize);
             read_data(reinterpret_cast<char*>(buffer->data()), buffer->size());
 
             return buffer;
         }
-        void write(std::span<const byte> data)
+        void write(std::span<const byte_t> data)
         {
             write_data(reinterpret_cast<const char*>(data.data()), data.size_bytes());
         }

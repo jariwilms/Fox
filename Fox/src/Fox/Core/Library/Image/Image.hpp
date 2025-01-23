@@ -21,7 +21,7 @@ namespace fox
             RGBA8, 
         };
 
-        Image(Layout layout, const fox::Vector2u& dimensions, std::span<const fox::byte> data)
+        Image(Layout layout, const fox::Vector2u& dimensions, std::span<const fox::byte_t> data)
             : m_layout{ layout }, m_dimensions{ dimensions }, m_data{ data.data(), data.data() + data.size_bytes() }
         {
             const auto& channels  = static_cast<fox::int32_t>(layout);
@@ -29,7 +29,7 @@ namespace fox
 
             if (imageSize > m_data.size()) throw std::runtime_error{ "Invalid image dimensions or layout!" };
         }
-        Image(Layout layout, const fox::Vector2u& dimensions, std::vector<fox::byte>&& data)
+        Image(Layout layout, const fox::Vector2u& dimensions, std::vector<fox::byte_t>&& data)
             : m_layout{ layout }, m_dimensions{ dimensions }, m_data{ std::move(data) }
         {
             const auto& channels  = static_cast<fox::int32_t>(layout);
@@ -39,8 +39,8 @@ namespace fox
         }
         virtual ~Image() = default;
 
-        static std::vector<fox::byte> encode(Format format, const Image& image);
-        static Image                  decode(Layout layout, std::span<const fox::byte> data);
+        static std::vector<fox::byte_t> encode(Format format, const Image& image);
+        static Image                  decode(Layout layout, std::span<const fox::byte_t> data);
 
         Layout                        layout()     const
         {
@@ -51,7 +51,7 @@ namespace fox
             return m_dimensions;
         }
 
-        std::span<fox::byte>          data()
+        std::span<fox::byte_t>          data()
         {
             return m_data;
         }
@@ -63,6 +63,6 @@ namespace fox
     private:
         Layout                 m_layout{};
         fox::Vector2u          m_dimensions{};
-        std::vector<fox::byte> m_data{};
+        std::vector<fox::byte_t> m_data{};
     };
 }

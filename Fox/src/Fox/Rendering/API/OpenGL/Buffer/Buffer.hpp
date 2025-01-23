@@ -150,7 +150,7 @@ namespace fox::gfx::api::gl
             //Arguments in a braced initializer list eg. tuple{ myval1, myval2 }, are required to be evaluated first to last
             //This guarantees that the data will be copied into the uniform buffer in order
 
-            std::array<fox::byte, (sizeof(T) + ... + 0u)> buffer{};
+            std::array<fox::byte_t, (sizeof(T) + ... + 0u)> buffer{};
 
             std::apply([&buffer](auto&&... args)
                 {
@@ -158,7 +158,7 @@ namespace fox::gfx::api::gl
                     ((std::memcpy(buffer.data() + size, &args, sizeof(args)), size += sizeof(args)), ...);
                 }, data);
 
-            gl::buffer_sub_data(m_handle, offset, std::span<const fox::byte>{ buffer.data(), buffer.size() });
+            gl::buffer_sub_data(m_handle, offset, std::span<const fox::byte_t>{ buffer.data(), buffer.size() });
         }
 
         Buffer& operator=(Buffer&& other) noexcept = default;

@@ -45,7 +45,7 @@ namespace fox::utl
         constexpr auto dynamic_extent = static_cast<fox::size_t>(-1);
         using return_type = std::span<const fox::byte, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
 
-        return return_type{ reinterpret_cast<const fox::byte*>(s.data()), s.size_bytes() };
+        return return_type{ reinterpret_cast<const fox::byte_t*>(s.data()), s.size_bytes() };
     }
 
 

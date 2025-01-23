@@ -20,10 +20,10 @@ namespace fox::gfx::api::gl
         using wrap_t   = gfx::DimensionsToWrappingMap<DIMS>::wrap_t;
         using vector_t = gfx::DimensionsToVectorMap<DIMS>::type;
         
-        Texture(Format format, const vector_t& dimensions, std::span<const fox::byte> data)
+        Texture(Format format, const vector_t& dimensions, std::span<const fox::byte_t> data)
             : Texture{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {
         }
-        Texture(Format format, Filter filter, wrap_t wrapping, const vector_t& dimensions, std::span<const fox::byte> data)
+        Texture(Format format, Filter filter, wrap_t wrapping, const vector_t& dimensions, std::span<const fox::byte_t> data)
             : Texture{ format, filter, wrapping, dimensions }
         {
             copy(format, data);
@@ -62,11 +62,11 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(m_handle, index);
         }
 
-        void copy(Format format, std::span<const fox::byte> data)
+        void copy(Format format, std::span<const fox::byte_t> data)
         {
             copy_range(format, m_dimensions, vector_t{}, data);
         }
-        void copy_range(Format format, const vector_t& dimensions, const vector_t& offset, std::span<const fox::byte> data)
+        void copy_range(Format format, const vector_t& dimensions, const vector_t& offset, std::span<const fox::byte_t> data)
         {
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };

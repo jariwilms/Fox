@@ -9,17 +9,17 @@ namespace fox
 {
     struct Context
     {
-        std::vector<fox::byte>& data;
+        std::vector<fox::byte_t>& data;
     };
     static void write_func(void* context, void* data, int size)
     {
         const auto* ctx       = reinterpret_cast<Context*>(context);
-        const auto* imageData = reinterpret_cast<const fox::byte*>(data);
+        const auto* imageData = reinterpret_cast<const fox::byte_t*>(data);
 
-        ctx->data = std::vector<fox::byte>{ imageData, imageData + size };
+        ctx->data = std::vector<fox::byte_t>{ imageData, imageData + size };
     }
 
-    std::vector<fox::byte> Image::encode(Format format, const Image& image)
+    std::vector<fox::byte_t> Image::encode(Format format, const Image& image)
     {
         stbi_flip_vertically_on_write(Config::IO::flipImages);
 
@@ -27,7 +27,7 @@ namespace fox
         const auto& channels   = static_cast<fox::int32_t>(image.layout());
         const auto* data       = image.data().data();
 
-        std::vector<fox::byte> v{};
+        std::vector<fox::byte_t> v{};
         Context ctx{ v };
 
         switch (format)
@@ -41,15 +41,15 @@ namespace fox
 
         return v;
     }
-    Image                  Image::decode(Layout layout, std::span<const fox::byte> data)
+    Image                  Image::decode(Layout layout, std::span<const fox::byte_t> data)
     {
         stbi_set_flip_vertically_on_load(fox::Config::IO::flipImages);
 
         fox::int32_t x{}, y{}, c{}, channels{ static_cast<fox::int32_t>(layout) };
-        auto* decodedData = reinterpret_cast<fox::byte*>(stbi_load_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &x, &y, &c, channels));
+        auto* decodedData = reinterpret_cast<fox::byte_t*>(stbi_load_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &x, &y, &c, channels));
 
         const auto& size = x * y * channels;
-        std::vector<fox::byte> v{ decodedData, decodedData + size };
+        std::vector<fox::byte_t> v{ decodedData, decodedData + size };
 
         stbi_image_free(decodedData);
 

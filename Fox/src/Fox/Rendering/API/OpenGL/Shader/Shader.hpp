@@ -10,7 +10,7 @@ namespace fox::gfx::api::gl
     class Shader : public api::Shader, public gl::Object
     {
     public:
-        Shader(Stage stage, std::span<const fox::byte> binary)
+        Shader(Stage stage, std::span<const fox::byte_t> binary)
             : api::Shader{ stage }
         {
             m_handle = gl::create_program();
