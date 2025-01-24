@@ -369,7 +369,7 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\CubemapTexture.hpp">
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Cubemap.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp">
@@ -477,7 +477,7 @@
     <ClInclude Include="src\Fox\Rendering\Texture\AntiAliasing.hpp">
       <Filter>Fox\Rendering\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\Texture\CubemapTexture.hpp">
+    <ClInclude Include="src\Fox\Rendering\Texture\Cubemap.hpp">
       <Filter>Fox\Rendering\Texture</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Texture\Dimensions.hpp">

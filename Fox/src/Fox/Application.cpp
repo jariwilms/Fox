@@ -99,9 +99,9 @@ namespace fox
         auto& floorActor            = scene->create_actor();
         auto& fatc                  = floorActor.get_component<ecs::TransformComponent>().get();
         auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().get();
+        famfc.mesh                  = gfx::Geometry::Plane::mesh();
+        famfc.material              = defaultMaterial;
 
-        famfc.mesh       = gfx::Geometry::Plane::mesh();
-        famfc.material   = defaultMaterial;
         fatc.translate(fox::Vector3f{ 0.0f, -1.0f, 0.0f });
         fatc.rotate(fox::Vector3f{ -90.0f, 0.0f, 0.0f });
         fatc.dilate(fox::Vector3f{ 10.0f });
@@ -149,7 +149,7 @@ namespace fox
 
 
 
-        const auto& move_camera = [&]
+        const auto& move_camera         = [&]
         {
             auto speed{ 5.0f * Time::delta() };
 
@@ -175,13 +175,13 @@ namespace fox
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
         };
-        const auto& rotate_helmet = [&]
+        const auto& rotate_helmet       = [&]
             {
                 helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * Time::delta(), 0.0f });
             };
-        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, fox::uint32_t limit)
+        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
             {
-                for (const auto& i : std::ranges::iota_view(0u, limit))
+                for (const auto& i : std::ranges::iota_view(0u, limit.value_or(lights.size())))
                 {
                     const auto& [l, p] = lights[i];
 
@@ -215,8 +215,8 @@ namespace fox
 
 
             gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights, skybox };
-
             gfx::Renderer::start(renderInfo);
+
             const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
             view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mfc)
                 {
@@ -232,7 +232,7 @@ namespace fox
                     gfx::Renderer::render(mesh, material, transformProduct);
                 });
 
-            render_lights_debug(lights, 1);
+            render_lights_debug(lights);
 
             gfx::Renderer::finish();
 
