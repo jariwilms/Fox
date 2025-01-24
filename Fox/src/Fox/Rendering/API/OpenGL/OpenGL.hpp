@@ -391,7 +391,7 @@ namespace fox::gfx::api::gl
     }
     static void                           clear_frame_buffer(gl::handle_t frameBuffer, gl::ClearValue value)
     {
-
+        __debugbreak();
     }
 
 
@@ -416,7 +416,7 @@ namespace fox::gfx::api::gl
     {
         glDetachShader(static_cast<gl::uint32_t>(program), static_cast<gl::uint32_t>(shader));
     }
-    static void                           shader_binary(gl::handle_t shader, std::span<const gl::uint8_t> binary)
+    static void                           shader_binary(gl::handle_t shader, std::span<const gl::byte_t> binary)
     {
         glShaderBinary(1, reinterpret_cast<gl::uint32_t*>(&shader), GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<gl::size_t>(binary.size_bytes()));
     }

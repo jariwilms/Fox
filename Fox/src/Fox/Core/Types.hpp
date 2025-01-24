@@ -6,14 +6,17 @@
 
 namespace fox
 {
-	enum
+	using bool_t     = bool;
+	using char_t     = char;          //Not equal to signed char apparently...
+	using uchar_t    = unsigned char;
+	using schar_t    = signed char;
+
+	enum : fox::bool_t
 	{
 		False = false, 
 		True  = true, 
 	};
-
-	using bool_t     = bool;
-	using char_t     = char;          //Not equal to signed char apparently...
+	
 	using int8_t     = std::int8_t;
 	using uint8_t    = std::uint8_t;
 	using int16_t    = std::int16_t;
@@ -26,7 +29,6 @@ namespace fox
 	using float64_t  = double;
 
 	using byte_t     = fox::uint8_t;
-
 	using size_t     = std::size_t;   //Offset in bytes
 	using count_t    = fox::uint32_t; //Number of elements
 	using offset_t   = fox::uint32_t; //Number of elements offset

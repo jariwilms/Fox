@@ -4,6 +4,19 @@
 
 namespace fox::utl
 {
+    template<typename T, auto MPTR>
+    static constexpr auto offset_of()
+    {
+        return reinterpret_cast<std::size_t>(
+            &reinterpret_cast<const volatile char&>(
+                ((static_cast<T*>(
+                    nullptr))->*MPTR)
+                )
+            );
+    }
+
+
+
     template<typename T, fox::size_t SIZE>
     auto to_span(const std::array<T, SIZE>& v)
     {

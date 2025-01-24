@@ -8,6 +8,7 @@
 #include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 #include "Fox/Rendering/Using.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Core/Library/Utility/Utility.hpp"
 #include "Fox/Core/Library/Time/Time.hpp"
 #include "Fox/Input/Input.hpp"
 
@@ -117,8 +118,12 @@ namespace fox::gfx::api
             const auto& viewMatrix          = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
             const auto& projectionMatrix    = camera.projection().matrix();
 
-            std::array<gfx::ULight, 32u> uLights{};
-            std::transform(lights.begin(), lights.end(), uLights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
+
+
+            s_lights.clear();
+            s_lights.resize(lights.size());
+
+            std::transform(lights.begin(), lights.end(), s_lights.begin(), [](const std::tuple<fox::Light, fox::Vector3f>& _)
                 {
                     const auto& [light, position] = _;
 
@@ -127,18 +132,10 @@ namespace fox::gfx::api
                         fox::Vector4f{ position,    0.0f },
                         fox::Vector4f{ light.color, 0.0f },
                         light.radius, 
-                        0.0001f, 
-                        0.0001f, 
+                        0.001f, //light.linearFalloff, 
+                        0.001f, //light.quadraticFalloff, 
                     };
                 });
-
-
-
-             
-
-            //REMOVE
-            s_lightsTEMP = uLights;
-
 
 
 
@@ -146,10 +143,9 @@ namespace fox::gfx::api
 
 
 
-
-            s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
+            s_matricesBuffer->copy_sub(utl::offset_of<gfx::UMatrices, &gfx::UMatrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
             s_cameraBuffer->copy(gfx::UCamera{ fox::Vector4f{ transform.position, 0.0f } });
-            s_lightBuffer->copy(uLights);
+            s_lightBuffer->copy(s_lights);
             
             s_mmt.clear();
             s_debugTransforms.clear();
@@ -223,7 +219,7 @@ namespace fox::gfx::api
             const fox::float32_t nearPlane = 0.1f;
             const fox::float32_t farPlane  = 100.0f;
 
-            const auto& currentLightPosition = s_lightsTEMP.at(0).position;
+            const auto& currentLightPosition = s_lights.at(0).position;
             const fox::Vector3f clp3f        = currentLightPosition;
 
             const auto& shadowProjection = glm::perspective(glm::radians(90.0f), shadowAspectRatio, nearPlane, farPlane);
@@ -370,7 +366,7 @@ namespace fox::gfx::api
             sva->bind();
             for (int i = 0; i < 1; ++i)
             {
-                const auto& light = s_lightsTEMP.at(i);
+                const auto& light = s_lights.at(i);
                 auto sModel = fox::Transform{};
                 sModel.position = light.position;
                 sModel.dilate(fox::Vector3f{ light.radius });
@@ -471,7 +467,7 @@ namespace fox::gfx::api
         
 
         static inline std::unique_ptr<gfx::UniformBuffer<fox::int32_t>> s_INDEXBUFFER{};
-        static inline std::array<gfx::ULight, 32u>                      s_lightsTEMP{};
+        static inline std::vector<gfx::ULight>                          s_lights{};
         static inline std::vector<fox::Transform>                       s_debugTransforms{};
         static inline std::unique_ptr<gfx::FrameBuffer>                 s_shadowCubemap{};
     };

@@ -21,12 +21,33 @@ namespace fox::gfx::api::gl
     using float32_t  = GLfloat;
     using float64_t  = GLdouble;
 
-    using size_t     = GLsizei;    //Sizes and dimensions (may not be negative)
-    using enum_t     = GLenum;     //Enumerated value of constants
-    using sizeptr_t  = GLsizeiptr; //Buffer size in bytes
-    using intptr_t   = GLintptr;   //Buffer offset in bytes
-    using sync_t     = GLsync;     //Synchronization primitive
-    using bitfield_t = GLbitfield; //Value containing one or more flags
+    using size_t     = GLsizei;     //Sizes and dimensions (may not be negative)
+    using enum_t     = GLenum;      //Enumerated value of constants
+    using sizeptr_t  = GLsizeiptr;  //Buffer size in bytes
+    using intptr_t   = GLintptr;    //Buffer offset in bytes
+    using sync_t     = GLsync;      //Synchronization primitive
+    using bitfield_t = GLbitfield;  //Value containing one or more flags
+
+    using byte_t     = gl::uint8_t;
+
+
+
+    //Strong aliases
+    enum class handle_t : gl::uint32_t {}; //Alias for OpenGL  Object handles
+    enum class query_t  : gl::uint32_t {}; //Alias for OpenGL  Query  handles
+    enum class index_t  : gl::uint32_t {}; //Alias for binding point  indices
+
+
+
+    enum : gl::bool_t
+    {
+        False = GL_FALSE,
+        True  = GL_TRUE,
+    };
+    enum : std::underlying_type_t<handle_t>
+    {
+        NullObject = gl::uint32_t{}, 
+    };
 
 
 
@@ -47,23 +68,4 @@ namespace fox::gfx::api::gl
     using Matrix3f   = glm::mat3;
     using Matrix4f   = glm::mat4;
     using Quaternion = glm::quat;
-
-
-
-    //Strong aliases
-    enum class handle_t : gl::uint32_t {}; //Alias for OpenGL  Object handles
-    enum class query_t  : gl::uint32_t {}; //Alias for OpenGL  Query  handles
-    enum class index_t  : gl::uint32_t {}; //Alias for binding point  indices
-
-
-
-    enum : gl::bool_t
-    {
-        False = GL_FALSE,
-        True  = GL_TRUE,
-    };
-    enum : gl::uint32_t
-    {
-        NullObject = gl::uint32_t{}, 
-    };
 }
