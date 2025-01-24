@@ -69,14 +69,14 @@ namespace fox::gfx::api
             s_ppBuffers.at(1)      = std::make_unique<gfx::FrameBuffer>(dimensions, ppBufferManifest);
             s_shadowCubemap        = std::make_unique<gfx::FrameBuffer>(shadowMapDimensions, scBufferManifest);
                                    
-            s_inputBuffer          = std::make_unique<gfx::UniformBuffer<gfx::UInput>>();
-            s_matricesBuffer       = std::make_unique<gfx::UniformBuffer<gfx::UMatrices>>();
-            s_materialBuffer       = std::make_unique<gfx::UniformBuffer<gfx::UMaterial>>();
-            s_cameraBuffer         = std::make_unique<gfx::UniformBuffer<gfx::UCamera>>();
-            s_lightBuffer          = std::make_unique<gfx::UniformArrayBuffer<gfx::ULight>>(lightCount);
-            s_shadowBuffer         = std::make_unique<gfx::UniformBuffer<gfx::UShadow>>();
-            s_lightShadowBuffer    = std::make_unique<gfx::UniformBuffer<gfx::ULightShadow>>();
-            s_shadowMatricesBuffer = std::make_unique<gfx::UniformBuffer<gfx::UShadowMatrices>>();
+            s_contextBuffer        = std::make_unique<gfx::UniformBuffer<unf::Context>>();
+            s_matricesBuffer       = std::make_unique<gfx::UniformBuffer<unf::Matrices>>();
+            s_materialBuffer       = std::make_unique<gfx::UniformBuffer<unf::Material>>();
+            s_cameraBuffer         = std::make_unique<gfx::UniformBuffer<unf::Camera>>();
+            s_lightArrayBuffer          = std::make_unique<gfx::UniformArrayBuffer<unf::Light>>(lightCount);
+            s_shadowBuffer         = std::make_unique<gfx::UniformBuffer<unf::Shadow>>();
+            s_lightShadowBuffer    = std::make_unique<gfx::UniformBuffer<unf::LightShadow>>();
+            s_shadowMatricesBuffer = std::make_unique<gfx::UniformBuffer<unf::ShadowMatrices>>();
 
             s_INDEXBUFFER        = std::make_unique<gfx::UniformBuffer<fox::int32_t>>();
             
@@ -127,7 +127,7 @@ namespace fox::gfx::api
                 {
                     const auto& [light, position] = _;
 
-                    return gfx::ULight
+                    return unf::Light
                     {
                         fox::Vector4f{ position,    0.0f },
                         fox::Vector4f{ light.color, 0.0f },
@@ -143,35 +143,35 @@ namespace fox::gfx::api
 
 
 
-            s_matricesBuffer->copy_sub(utl::offset_of<gfx::UMatrices, &gfx::UMatrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
-            s_cameraBuffer->copy(gfx::UCamera{ fox::Vector4f{ transform.position, 0.0f } });
-            s_lightBuffer->copy(s_lights);
+            s_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
+            s_cameraBuffer->copy(unf::Camera{ fox::Vector4f{ transform.position, 0.0f } });
+            s_lightArrayBuffer->copy(s_lights);
             
             s_mmt.clear();
             s_debugTransforms.clear();
         }
         static void finish()
         {
-            const fox::Vector2u dimensions{ 1280u, 720u };
-            const fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
-            const fox::Vector3f depthLightPosition{ -2.0f,  6.0f, -1.0f };
+            constexpr fox::Vector2u dimensions{ 1280u, 720u };
+            constexpr fox::Vector2u shadowMapDimensions{ 1024u, 1024u };
+            constexpr fox::Vector3f depthLightPosition{ -2.0f,  6.0f, -1.0f };
 
             const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
             const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
             const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
 
             //Bind Uniform Buffers to correct indices
-            s_inputBuffer->         bind_index(gl::index_t{  0 });
+            s_contextBuffer->       bind_index(gl::index_t{  0 });
             s_matricesBuffer->      bind_index(gl::index_t{  1 });
             s_cameraBuffer->        bind_index(gl::index_t{  2 });
             s_materialBuffer->      bind_index(gl::index_t{  3 });
-            s_lightBuffer->         bind_index(gl::index_t{  4 });
+            s_lightArrayBuffer->    bind_index(gl::index_t{  4 });
             s_shadowBuffer->        bind_index(gl::index_t{  5 });
             s_lightShadowBuffer->   bind_index(gl::index_t{  6 });
             s_shadowMatricesBuffer->bind_index(gl::index_t{ 13 });
             s_INDEXBUFFER->         bind_index(gl::index_t{ 12 });
 
-            s_inputBuffer->copy(UInput{ dimensions, static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), input::cursor_position() });
+            s_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), });
 
 
 
@@ -252,7 +252,7 @@ namespace fox::gfx::api
 
                 const auto& modelMatrix = transform.matrix();
 
-                s_shadowBuffer->copy(UShadow{ modelMatrix, lightSpaceMatrix });
+                s_shadowBuffer->copy(unf::Shadow{ modelMatrix, lightSpaceMatrix });
 
                 vao->bind();
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, ind->count());
@@ -310,8 +310,8 @@ namespace fox::gfx::api
                 const auto& modelMatrix  = transform.matrix();
                 const auto& normalMatrix = glm::transpose(glm::inverse(fox::Matrix3f{ modelMatrix }));
                 
-                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model),  std::make_tuple(modelMatrix));
-                s_materialBuffer->copy(gfx::UMaterial{ material->color, material->roughnessFactor, material->metallicFactor });
+                s_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(),  std::make_tuple(modelMatrix));
+                s_materialBuffer->copy(unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
 
                 vao->bind();
 
@@ -371,7 +371,7 @@ namespace fox::gfx::api
                 sModel.position = light.position;
                 sModel.dilate(fox::Vector3f{ light.radius });
 
-                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model), std::make_tuple(sModel.matrix()));
+                s_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sModel.matrix()));
                 s_INDEXBUFFER->copy(i);
 
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_buffer()->count());
@@ -391,6 +391,7 @@ namespace fox::gfx::api
             gl::bind_frame_buffer(s_ppBuffers.at(1)->handle(), glf::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_buffer()->count());
+
 
 
 
@@ -420,7 +421,7 @@ namespace fox::gfx::api
 
             for (const auto& transform : s_debugTransforms)
             {
-                s_matricesBuffer->copy_sub(offsetof(gfx::UMatrices, model), std::make_tuple(transform.matrix()));
+                s_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_buffer()->count());
             }
 #endif
@@ -429,6 +430,7 @@ namespace fox::gfx::api
 
 
 
+            //Final result of rendering copied to default framebuffer
             gl::blit_framebuffer(s_ppBuffers.at(1)->handle(), gl::handle_t{ 0 }, fox::Vector4u{ 0, 0, dimensions }, fox::Vector4u{ 0, 0, dimensions }, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest);
         }
 
@@ -445,18 +447,18 @@ namespace fox::gfx::api
         OpenGLRenderer() = delete;
 
         static inline std::unique_ptr<gfx::FrameBuffer>                         s_gBuffer{};
+        static inline std::unique_ptr<gfx::FrameBufferMultisample>              s_gBufferMultisample{}; 
         static inline std::unique_ptr<gfx::FrameBuffer>                         s_sBuffer{};
         static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2>          s_ppBuffers{};
-        static inline std::unique_ptr<gfx::FrameBufferMultisample>              s_gBufferMultisample{};
         
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UInput>>          s_inputBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMatrices>>       s_matricesBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UMaterial>>       s_materialBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UCamera>>         s_cameraBuffer{};
-        static inline std::unique_ptr<gfx::UniformArrayBuffer<gfx::ULight>>     s_lightBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UShadow>>         s_shadowBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::ULightShadow>>    s_lightShadowBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<gfx::UShadowMatrices>> s_shadowMatricesBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Context>>        s_contextBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Matrices>>       s_matricesBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Material>>       s_materialBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Camera>>         s_cameraBuffer{};
+        static inline std::unique_ptr<gfx::UniformArrayBuffer<unf::Light>>     s_lightArrayBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Shadow>>         s_shadowBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::LightShadow>>    s_lightShadowBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::ShadowMatrices>> s_shadowMatricesBuffer{};
 
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
 
@@ -467,7 +469,7 @@ namespace fox::gfx::api
         
 
         static inline std::unique_ptr<gfx::UniformBuffer<fox::int32_t>> s_INDEXBUFFER{};
-        static inline std::vector<gfx::ULight>                          s_lights{};
+        static inline std::vector<unf::Light>                          s_lights{};
         static inline std::vector<fox::Transform>                       s_debugTransforms{};
         static inline std::unique_ptr<gfx::FrameBuffer>                 s_shadowCubemap{};
     };

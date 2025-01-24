@@ -2,52 +2,63 @@
 
 #include "stdafx.hpp"
 
-namespace fox::gfx
+namespace fox::gfx::unf
 {
-    struct UInput    //Binding 0
+    //Binding 0
+    struct Context
     {
         fox::Vector2f  resolution{};
+        fox::Vector2f  mousePosition{};
         fox::float32_t time{};
         fox::float32_t deltaTime{};
-        fox::Vector2f  mousePosition{};
     };
-    struct UMatrices //Binding 1
+
+    //Binding 1
+    struct Matrices
     {
         fox::Matrix4f model{ 1.0f };
         fox::Matrix4f view{ 1.0f };
         fox::Matrix4f projection{ 1.0f };
         fox::Matrix4f normal{ 1.0f };
     };
-    struct UCamera   //Binding 2
+    //Binding 2
+    struct Camera
     {
         fox::Vector4f position{};
     };
-    struct UMaterial //Binding 3
+    //Binding 3
+    struct Material
     {
-        fox::Vector4f  color{ 1.0f, 1.0f, 1.0f, 1.0f };
+        fox::Vector4f  color{};
         fox::float32_t roughness{};
         fox::float32_t metallic{};
     };
-    struct ULight    //Binding 4
+
+    //Binding 4
+    struct Light
     {
         fox::Vector4f  position{};
-        fox::Vector4f  color{ 1.0f, 1.0f, 1.0f, 1.0f };
-        fox::float32_t radius{ 1.0f };
-        fox::float32_t linearFalloff{ 1.0f };
-        fox::float32_t quadraticFalloff{ 1.0f };
+        fox::Vector4f  color{};
+        fox::float32_t radius{};
+        fox::float32_t linearFalloff{};
+        fox::float32_t quadraticFalloff{};
+
         fox::float32_t _padding{};
     };
-    struct UShadow   //Binding 5
+    //Binding 5
+    struct Shadow
     {
         fox::Matrix4f model{};
         fox::Matrix4f light{};
     };
-    struct ULightShadow //Binding 6
+    //Binding 6
+    struct LightShadow
     {
         fox::Vector4f  position{};
         fox::float32_t farPlane{};
     };
-    struct UShadowMatrices //Binding 13
+    //Binding 13
+    struct ShadowMatrices
     {
         std::array<fox::Matrix4f, 6> projection{};
     };
