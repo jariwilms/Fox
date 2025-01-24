@@ -7,41 +7,41 @@ namespace fox
     class Time
     {
     public:
-        using DeltaTime  = fox::float32_t;
-        using Clock      = std::chrono::system_clock;
-        using TimePoint  = std::chrono::time_point<Clock>;
-        using Duration   = std::chrono::duration<DeltaTime>;
-        
-        static void reset()
+        using delta_t     = fox::float32_t;
+        using clock_t     = std::chrono::system_clock;
+        using timepoint_t = std::chrono::time_point<clock_t>;
+        using duration_t  = std::chrono::duration<delta_t>;
+
+        static void    update()
         {
-            s_t0 = Clock::now();
-            s_t1 = Clock::now();
+            s_t0    = std::exchange(s_t1, clock_t::now());
+            s_delta = std::chrono::duration_cast<duration_t>(s_t1 - s_t0).count();
+        }
+        static void    reset()
+        {
+            s_epoch = clock_t::now();
+
+            s_t0    = clock_t::now();
+            s_t1    = clock_t::now();
         }
 
-        static void update()
+        static delta_t since_epoch()
         {
-            s_t1    = Clock::now();
-            s_delta = std::chrono::duration_cast<Duration>(s_t1 - s_t0).count();
-            s_t0    = s_t1;
-        }
+            const auto& now   = clock_t::now();
+            const auto& delta = std::chrono::duration_cast<duration_t>(now - s_epoch).count();
 
-        static const Clock::time_point now()
-        {
-            return Clock::now();
+            return delta;
         }
-        static const std::chrono::seconds epoch()
-        {
-            const auto& time = now().time_since_epoch();
-            return std::chrono::duration_cast<std::chrono::seconds>(time);
-        }
-        static const DeltaTime& delta()
+        static delta_t delta()
         {
             return s_delta;
         }
 
     private:
-        static inline TimePoint s_t0{};    //Previous TimePoint
-        static inline TimePoint s_t1{};    //Current TimePoint
-        static inline DeltaTime s_delta{}; //DeltaTime as difference of (t1, t0)
+        static inline timepoint_t s_epoch{};
+
+        static inline timepoint_t s_t0{};
+        static inline timepoint_t s_t1{};
+        static inline delta_t     s_delta{};
     };
 }
