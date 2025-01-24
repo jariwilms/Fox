@@ -171,7 +171,7 @@ namespace fox::gfx::api
             s_shadowMatricesBuffer->bind_index(gl::index_t{ 13 });
             s_INDEXBUFFER->         bind_index(gl::index_t{ 12 });
 
-            s_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), static_cast<fox::float32_t>(glfwGetTime()), fox::Time::delta(), });
+            s_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta(),});
 
 
 
