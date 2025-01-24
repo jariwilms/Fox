@@ -373,7 +373,7 @@ namespace fox::gfx::api::gl
     {
         glNamedFramebufferRenderbuffer(static_cast<gl::uint32_t>(frameBuffer), attachment, GL_RENDERBUFFER, static_cast<gl::uint32_t>(renderBuffer));
     }
-    static glf::FrameBuffer::Status   check_frame_buffer_status(gl::handle_t frameBuffer)
+    static glf::FrameBuffer::Status       check_frame_buffer_status(gl::handle_t frameBuffer)
     {
         return glf::FrameBuffer::Status{ glCheckNamedFramebufferStatus(static_cast<gl::uint32_t>(frameBuffer), GL_FRAMEBUFFER) };
     }
