@@ -78,37 +78,39 @@ namespace fox::gfx::api
             s_lightShadowBuffer    = std::make_unique<gfx::UniformBuffer<unf::LightShadow>>();
             s_shadowMatricesBuffer = std::make_unique<gfx::UniformBuffer<unf::ShadowMatrices>>();
 
-            s_INDEXBUFFER        = std::make_unique<gfx::UniformBuffer<fox::int32_t>>();
+            s_lightIndexBuffer        = std::make_unique<gfx::UniformBuffer<fox::int32_t>>();
             
 
 
             const auto& depthTexture = s_sBuffer->find_texture("Depth");
             const std::array<gl::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
-            glTextureParameteri(static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTextureParameteri(static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTextureParameteri( static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_MIN_FILTER,   GL_NEAREST);
+            glTextureParameteri( static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_MAG_FILTER,   GL_NEAREST);
             glTextureParameterfv(static_cast<gl::uint32_t>(depthTexture->handle()), GL_TEXTURE_BORDER_COLOR, borderColor.data());
 
 
 
 
 
-            const auto& meshShaders        = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv", "shaders/compiled/mesh_deferred.frag.spv");
-            const auto& blitShaders        = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/render_gbuffer_texture.vert.spv", "shaders/compiled/render_gbuffer_texture.frag.spv");
-            const auto& lightingShaders    = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere_shadow_3.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere_shadow_3.frag.spv");
-            const auto& ambientShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/ambient.vert.spv", "shaders/compiled/ambient.frag.spv");
-            const auto& shadowShaders      = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/directional_shadow.vert.spv", "shaders/compiled/directional_shadow.frag.spv");
-            const auto& pointShadowShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/point_shadow.vert.spv", "shaders/compiled/point_shadow.geom.spv", "shaders/compiled/point_shadow.frag.spv");
-            const auto& skyboxShaders      = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv", "shaders/compiled/skybox.frag.spv");
-            const auto& debugShaders       = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/debug.vert.spv", "shaders/compiled/debug.frag.spv");
+            const auto& deferredMeshShaders        = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/mesh_deferred.vert.spv", "shaders/compiled/mesh_deferred.frag.spv");
+            const auto& lightingShaders            = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere.frag.spv");
+            const auto& directionalLightingShaders = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere_shadow_2.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere_shadow_2.frag.spv");
+            const auto& pointLightingShaders       = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/lighting_blinn-phong_sphere_shadow_3.vert.spv", "shaders/compiled/lighting_blinn-phong_sphere_shadow_3.frag.spv");
+            const auto& ambientLightingShaders     = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/ambient.vert.spv", "shaders/compiled/ambient.frag.spv");
+            const auto& directionalShadowShaders   = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/directional_shadow.vert.spv", "shaders/compiled/directional_shadow.frag.spv");
+            const auto& pointShadowShaders         = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/point_shadow.vert.spv", "shaders/compiled/point_shadow.geom.spv", "shaders/compiled/point_shadow.frag.spv");
+            const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/skybox.vert.spv", "shaders/compiled/skybox.frag.spv");
+            const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>("shaders/compiled/debug.vert.spv", "shaders/compiled/debug.frag.spv");
 
-            s_pipelines.emplace("Mesh",        std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = meshShaders.at(0),                                              .fragment = meshShaders.at(1) }));
-            s_pipelines.emplace("Blit",        std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = blitShaders.at(0),                                              .fragment = blitShaders.at(1) }));
-            s_pipelines.emplace("Lighting",    std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                          .fragment = lightingShaders.at(1) }));
-            s_pipelines.emplace("Ambient",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = ambientShaders.at(0),                                           .fragment = ambientShaders.at(1) }));
-            s_pipelines.emplace("Shadow",      std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = shadowShaders.at(0),                                            .fragment = shadowShaders.at(1) }));
-            s_pipelines.emplace("PointShadow", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0), .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
-            s_pipelines.emplace("Skybox",      std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                            .fragment = skyboxShaders.at(1) }));
-            s_pipelines.emplace("Debug",       std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                             .fragment = debugShaders.at(1) }));
+            s_pipelines.emplace("DeferredMesh",        std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
+            s_pipelines.emplace("Lighting",            std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
+            s_pipelines.emplace("DirectionalLighting", std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = directionalLightingShaders.at(0),                                       .fragment = directionalLightingShaders.at(1) }));
+            s_pipelines.emplace("PointLighting",       std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = pointLightingShaders.at(0),                                             .fragment = pointLightingShaders.at(1) }));
+            s_pipelines.emplace("AmbientLighting",     std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = ambientLightingShaders.at(0),                                           .fragment = ambientLightingShaders.at(1) }));
+            s_pipelines.emplace("DirectionalShadow",   std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = directionalShadowShaders.at(0),                                         .fragment = directionalShadowShaders.at(1) }));
+            s_pipelines.emplace("PointShadow",         std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0),         .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
+            s_pipelines.emplace("Skybox",              std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                                    .fragment = skyboxShaders.at(1) }));
+            s_pipelines.emplace("Debug",               std::make_unique<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
@@ -169,7 +171,7 @@ namespace fox::gfx::api
             s_shadowBuffer->        bind_index(gl::index_t{  5 });
             s_lightShadowBuffer->   bind_index(gl::index_t{  6 });
             s_shadowMatricesBuffer->bind_index(gl::index_t{ 13 });
-            s_INDEXBUFFER->         bind_index(gl::index_t{ 12 });
+            s_lightIndexBuffer->    bind_index(gl::index_t{ 12 });
 
             s_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta(),});
 
@@ -180,7 +182,7 @@ namespace fox::gfx::api
             //Render to shadow map (directional lighting)
             //gl::viewport(fox::Vector4u{ 0u, 0u, shadowMapDimensions });
 
-            //s_pipelines.at("Shadow")->bind();
+            //s_pipelines.at("DirectionalShadow")->bind();
             s_sBuffer->bind(api::FrameBuffer::Target::Write);
 
             gl::clear(glf::Buffer::Mask::Depth);
@@ -264,27 +266,6 @@ namespace fox::gfx::api
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             gl::viewport(fox::Vector4u{ 0u, 0u, dimensions });
 
             //Render Meshes
@@ -297,7 +278,7 @@ namespace fox::gfx::api
 
             gl::disable(glf::Feature::Blending);
 
-            s_pipelines.at("Mesh")->bind();
+            s_pipelines.at("DeferredMesh")->bind();
             s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
 
@@ -351,14 +332,13 @@ namespace fox::gfx::api
 
             gl::cull_face(glf::Culling::Face::Front);
 
-            s_pipelines.at("Lighting")->bind();
+            s_pipelines.at("PointLighting")->bind();
 
             s_gBuffer->bind_texture("Position", 0);
             s_gBuffer->bind_texture("Albedo",   1);
             s_gBuffer->bind_texture("Normal",   2);
             s_gBuffer->bind_texture("ARM",      3);
             s_shadowCubemap->bind_cubemap("Depth", 4);
-            //s_sBuffer->bind_texture("Depth",    4);
 
             s_ppBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
@@ -372,7 +352,7 @@ namespace fox::gfx::api
                 sModel.dilate(fox::Vector3f{ light.radius });
 
                 s_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sModel.matrix()));
-                s_INDEXBUFFER->copy(i);
+                s_lightIndexBuffer->copy(i);
 
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_buffer()->count());
             }
@@ -386,7 +366,7 @@ namespace fox::gfx::api
 
             s_gBuffer->bind_texture("Albedo", 0);
             s_ppBuffers.at(0)->bind_texture("Color", 1);
-            s_pipelines.at("Ambient")->bind();
+            s_pipelines.at("AmbientLighting")->bind();
             pva->bind();
             gl::bind_frame_buffer(s_ppBuffers.at(1)->handle(), glf::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
@@ -446,31 +426,28 @@ namespace fox::gfx::api
     private:
         OpenGLRenderer() = delete;
 
-        static inline std::unique_ptr<gfx::FrameBuffer>                         s_gBuffer{};
-        static inline std::unique_ptr<gfx::FrameBufferMultisample>              s_gBufferMultisample{}; 
-        static inline std::unique_ptr<gfx::FrameBuffer>                         s_sBuffer{};
-        static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2>          s_ppBuffers{};
-        
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::Context>>        s_contextBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::Matrices>>       s_matricesBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::Material>>       s_materialBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::Camera>>         s_cameraBuffer{};
-        static inline std::unique_ptr<gfx::UniformArrayBuffer<unf::Light>>     s_lightArrayBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::Shadow>>         s_shadowBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::LightShadow>>    s_lightShadowBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<unf::ShadowMatrices>> s_shadowMatricesBuffer{};
+        static inline std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> s_mmt{};
+        static inline std::vector<unf::Light>                                         s_lights{};
+        static inline std::vector<fox::Transform>                                     s_debugTransforms{};
+
+        static inline std::unique_ptr<gfx::FrameBuffer>                               s_gBuffer{};
+        static inline std::unique_ptr<gfx::FrameBufferMultisample>                    s_gBufferMultisample{}; 
+        static inline std::unique_ptr<gfx::FrameBuffer>                               s_sBuffer{};
+        static inline std::unique_ptr<gfx::FrameBuffer>                               s_shadowCubemap{};
+        static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2>                s_ppBuffers{};
+                                                                                      
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Context>>               s_contextBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Matrices>>              s_matricesBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Material>>              s_materialBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Camera>>                s_cameraBuffer{};
+        static inline std::unique_ptr<gfx::UniformArrayBuffer<unf::Light>>            s_lightArrayBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::Shadow>>                s_shadowBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::LightShadow>>           s_lightShadowBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<unf::ShadowMatrices>>        s_shadowMatricesBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<fox::int32_t>>               s_lightIndexBuffer{};
 
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
-
-        static inline std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> s_mmt{};
-
-
-        static inline std::shared_ptr<const gfx::Cubemap> s_skybox{};
-        
-
-        static inline std::unique_ptr<gfx::UniformBuffer<fox::int32_t>> s_INDEXBUFFER{};
-        static inline std::vector<unf::Light>                          s_lights{};
-        static inline std::vector<fox::Transform>                       s_debugTransforms{};
-        static inline std::unique_ptr<gfx::FrameBuffer>                 s_shadowCubemap{};
+                                                                                      
+        static inline std::shared_ptr<const gfx::Cubemap>                             s_skybox{};
     };
 }
