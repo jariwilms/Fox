@@ -35,12 +35,13 @@ namespace fox::gfx::api
         
         return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
+
     static auto shaders_from_source()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
     template<typename Shader>
-    static auto shaders_from_binaries(std::string_view vertex, std::string_view fragment)
+    static auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& fragmentFile = io::load(fragment);
@@ -52,7 +53,7 @@ namespace fox::gfx::api
         };
     }
     template<typename Shader>
-    static auto shaders_from_binaries(std::string_view vertex, std::string_view geometry, std::string_view fragment)
+    static auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& geometry, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& geometryFile = io::load(geometry);
