@@ -51,7 +51,7 @@ float calculate_shadow(vec4 shadowPosition, vec3 normal)
 {
     //Get closest depth value from light's perspective using [0,1] range v_ShadowPosition as coords
 	const vec3  lightDirection = vec4(shadowPosition - u_LightBuffer.lights[u_LightIndex.index].position).xyz;
-	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.01, 0.001);
+	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.05, 0.005);
     const float closestDepth   = texture(t_Shadow, lightDirection).r * u_LightShadow.farPlane;
 	const float currentDepth   = length(lightDirection);
 	const float shadow         = step(closestDepth, currentDepth - bias);
@@ -75,7 +75,7 @@ float calculate_shadow_pcf(vec4 shadowPosition, vec3 normal)
 	//const float diskRadius   = (1.0 + (viewDistance / u_LightShadow.farPlane)) / 10.0;  
 	
 	const vec3  lightDirection = vec4(shadowPosition - u_LightShadow.position).xyz;
-	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.01, 0.001);
+	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.05, 0.005);
     const float closestDepth   = texture(t_Shadow, lightDirection).r * u_LightShadow.farPlane;
 	const float currentDepth   = length(lightDirection);
 
