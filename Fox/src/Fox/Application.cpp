@@ -106,6 +106,14 @@ namespace fox
         fatc.rotate(fox::Vector3f{ -90.0f, 0.0f, 0.0f });
         fatc.dilate(fox::Vector3f{ 10.0f });
 
+        auto& boxActor = scene->create_actor();
+        auto& batc     = boxActor.get_component<ecs::TransformComponent>().get();
+        auto& bamfc    = boxActor.add_component<ecs::MeshFilterComponent>().get();
+        bamfc.mesh     = gfx::Geometry::Cube::mesh();
+        bamfc.material = defaultMaterial;
+
+        batc = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
+
 
 
 
@@ -140,9 +148,9 @@ namespace fox
         //Lights
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true  }, fox::Vector3f{ -2.0f,  6.0f, -1.0f }),
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, false }, fox::Vector3f{ -3.0f,  0.0f,  3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, false }, fox::Vector3f{  3.0f,  0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   0.0f,  3.0f }), 
         };
 
 
