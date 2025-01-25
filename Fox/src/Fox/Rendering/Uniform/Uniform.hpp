@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::gfx::unf
+namespace fox::gfx::uni
 {
     //Binding 0
     struct Context
@@ -19,7 +19,6 @@ namespace fox::gfx::unf
         fox::Matrix4f model{ 1.0f };
         fox::Matrix4f view{ 1.0f };
         fox::Matrix4f projection{ 1.0f };
-        fox::Matrix4f normal{ 1.0f };
     };
     //Binding 2
     struct Camera
@@ -45,12 +44,6 @@ namespace fox::gfx::unf
 
         fox::float32_t _padding{};
     };
-    //Binding 5
-    struct Shadow
-    {
-        fox::Matrix4f model{};
-        fox::Matrix4f light{};
-    };
     //Binding 6
     struct LightShadow
     {
@@ -58,7 +51,7 @@ namespace fox::gfx::unf
         fox::float32_t farPlane{};
     };
     //Binding 13
-    struct ShadowMatrices
+    struct ShadowProjections
     {
         std::array<fox::Matrix4f, 6> projection{};
     };

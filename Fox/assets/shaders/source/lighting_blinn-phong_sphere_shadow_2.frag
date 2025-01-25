@@ -13,27 +13,27 @@ struct Light
 	float _padding;
 };
 
-layout(std140, set = 0, binding =  0) uniform Input
+layout(set = 0, binding =  0) uniform Context
 {
 	vec2  resolution;
+	vec2  mousePosition;
 	float time;
 	float deltaTime;
-	vec2  mousePosition;
-} u_Input;
-layout(std140, set = 0, binding =  2) uniform Camera
+} u_Context;
+layout(set = 0, binding =  2) uniform Camera
 {
 	vec4 position;
 } u_Camera;
-layout(std140, set = 0, binding =  4) uniform LightBuffer
+layout(set = 0, binding =  4) uniform LightBuffer
 {
 	Light lights[NR_LIGHTS];
 } u_LightBuffer;
-layout(set = 0, binding = 5) uniform ULightSpace
+layout(set = 0, binding =  5) uniform LightSpace
 {
 	mat4 model;
 	mat4 matrix;
 } u_LightSpace;
-layout(std140, set = 0, binding = 12) uniform LightIndex
+layout(set = 0, binding = 12) uniform LightIndex
 {
 	int index;
 } u_LightIndex;
@@ -97,7 +97,7 @@ float calculate_shadow_pcf(vec4 shadowPosition, vec3 normal, vec3 lightDirection
 
 void main()
 {
-	const vec2 resolution = vec2(1280.0, 720.0);
+	const vec2 resolution = u_Context.resolution;
 	const vec2 uv         = gl_FragCoord.xy / resolution;
 	
 	
@@ -133,6 +133,7 @@ void main()
 	
 	diffuse  *= attenuation;
 	specular *= attenuation;
+	
 	
 	
 	const vec4  shadowPosition  = u_LightSpace.matrix * vec4(gPosition, 1.0);

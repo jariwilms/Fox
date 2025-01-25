@@ -13,13 +13,13 @@ struct Light
 	float _padding;
 };
 
-layout(std140, set = 0, binding =  0) uniform Input
+layout(std140, set = 0, binding =  0) uniform Context
 {
 	vec2  resolution;
+	vec2  mousePosition;
 	float time;
 	float deltaTime;
-	vec2  mousePosition;
-} u_Input;
+} u_Context;
 layout(std140, set = 0, binding =  2) uniform Camera
 {
 	vec4 position;
@@ -38,13 +38,11 @@ layout(binding = 1) uniform sampler2D t_Albedo;
 layout(binding = 2) uniform sampler2D t_Normal;
 layout(binding = 3) uniform sampler2D t_ARM;
 
-layout(location = 0) in  vec3 v_Position;
-
 layout(location = 0) out vec4 f_Color;
 
 void main()
 {
-	const vec2 resolution = vec2(1280.0, 720.0);
+	const vec2 resolution = u_Context.resolution;
 	const vec2 uv         = gl_FragCoord.xy / resolution;
 	
 	

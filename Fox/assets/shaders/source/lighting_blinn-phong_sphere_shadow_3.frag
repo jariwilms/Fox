@@ -4,41 +4,37 @@ const int NR_LIGHTS = 32;
 
 struct Light
 {
-	vec4 position;
-	vec4 color;
+	vec4  position;
+	vec4  color;
 	
 	float radius;
 	float linear;
 	float quadratic;
+	
 	float _padding;
 };
 
-layout(std140, set = 0, binding =  0) uniform Input
+layout(set = 0, binding =  0) uniform Context
 {
 	vec2  resolution;
+	vec2  mousePosition;
 	float time;
 	float deltaTime;
-	vec2  mousePosition;
-} u_Input;
-layout(std140, set = 0, binding =  2) uniform Camera
+} u_Context;
+layout(set = 0, binding =  2) uniform Camera
 {
 	vec4 position;
 } u_Camera;
-layout(std140, set = 0, binding =  4) uniform LightBuffer
+layout(set = 0, binding =  4) uniform LightBuffer
 {
 	Light lights[NR_LIGHTS];
 } u_LightBuffer;
-layout(set = 0, binding = 5) uniform ULightSpace
-{
-	mat4 model;
-	mat4 matrix;
-} u_LightSpace;
-layout(set = 0, binding = 6) uniform ULightShadow
+layout(set = 0, binding =  6) uniform LightShadow
 {
 	vec4  position;
 	float farPlane;
 } u_LightShadow;
-layout(std140, set = 0, binding = 12) uniform LightIndex
+layout(set = 0, binding = 12) uniform LightIndex
 {
 	int index;
 } u_LightIndex;
@@ -51,44 +47,43 @@ layout(binding = 4) uniform samplerCube t_Shadow;
 
 layout(location = 0) out vec4 f_Color;
 
-float calculate_shadow(vec4 shadowPosition, vec3 normal, vec3 lightDirection)
+float calculate_shadow(vec4 shadowPosition, vec3 normal)
 {
     //Get closest depth value from light's perspective using [0,1] range v_ShadowPosition as coords
-	const vec3  ldr          = vec4(shadowPosition - u_LightShadow.position).xyz;
-	const float bias         = max((1.0 - dot(normal, ldr)) * 0.05, 0.005);
-    const float closestDepth = texture(t_Shadow, ldr).r * u_LightShadow.farPlane;
-	const float currentDepth = length(ldr);
-	const float shadow       = step(closestDepth, currentDepth - bias);
+	const vec3  lightDirection = vec4(shadowPosition - u_LightBuffer.lights[u_LightIndex.index].position).xyz;
+	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.01, 0.001);
+    const float closestDepth   = texture(t_Shadow, lightDirection).r * u_LightShadow.farPlane;
+	const float currentDepth   = length(lightDirection);
+	const float shadow         = step(closestDepth, currentDepth - bias);
 	
     return shadow;
 }
-float calculate_shadow_pcf(vec4 shadowPosition, vec3 normal, vec3 lightDirection)
-{
-	float shadow = 0.0;
-	
+float calculate_shadow_pcf(vec4 shadowPosition, vec3 normal)
+{	
 	const int  SAMPLES = 20;
 	const vec3 sampleOffsetDirections[SAMPLES] = vec3[]
 	(
 	   vec3( 1,  1,  1), vec3( 1, -1,  1), vec3(-1, -1,  1), vec3(-1,  1,  1), 
-	   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1),
-	   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0),
-	   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1),
-	   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)
+	   vec3( 1,  1, -1), vec3( 1, -1, -1), vec3(-1, -1, -1), vec3(-1,  1, -1), 
+	   vec3( 1,  1,  0), vec3( 1, -1,  0), vec3(-1, -1,  0), vec3(-1,  1,  0), 
+	   vec3( 1,  0,  1), vec3(-1,  0,  1), vec3( 1,  0, -1), vec3(-1,  0, -1), 
+	   vec3( 0,  1,  1), vec3( 0, -1,  1), vec3( 0, -1, -1), vec3( 0,  1, -1)  
 	);
 	
 	const float viewDistance = length(u_Camera.position.xyz - shadowPosition.xyz);
 	const float diskRadius   = 0.01;
 	//const float diskRadius   = (1.0 + (viewDistance / u_LightShadow.farPlane)) / 10.0;  
 	
-	const vec3  ldr          = vec4(shadowPosition - u_LightShadow.position).xyz;
-	const float bias         = max((1.0 - dot(normal, ldr)) * 0.05, 0.005);
-    const float closestDepth = texture(t_Shadow, ldr).r * u_LightShadow.farPlane;
-	const float currentDepth = length(ldr);
-	
+	const vec3  lightDirection = vec4(shadowPosition - u_LightShadow.position).xyz;
+	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.01, 0.001);
+    const float closestDepth   = texture(t_Shadow, lightDirection).r * u_LightShadow.farPlane;
+	const float currentDepth   = length(lightDirection);
+
+	float shadow = 0.0;	
 	for (int i = 0; i < SAMPLES; ++i)
 	{
 		const vec3  resultingOffset = sampleOffsetDirections[i] * diskRadius;
-		const float closestDepth    = texture(t_Shadow, ldr + resultingOffset).r * u_LightShadow.farPlane;
+		const float closestDepth    = texture(t_Shadow, lightDirection + resultingOffset).r * u_LightShadow.farPlane;
 		
 		shadow += step(closestDepth, currentDepth - bias);
 	}
@@ -100,7 +95,7 @@ float calculate_shadow_pcf(vec4 shadowPosition, vec3 normal, vec3 lightDirection
 
 void main()
 {
-	const vec2 resolution = vec2(1280.0, 720.0);
+	const vec2 resolution = u_Context.resolution;
 	const vec2 uv         = gl_FragCoord.xy / resolution;
 	
 	
@@ -138,8 +133,8 @@ void main()
 	specular *= attenuation;
 	
 	
-	const vec4  shadowPosition  = u_LightSpace.matrix * vec4(gPosition, 1.0);
-	const float shadow          = calculate_shadow_pcf(vec4(gPosition, 1.0), gNormal, lightDirection);
+	
+	const float shadow          = calculate_shadow_pcf(vec4(gPosition, 1.0), gNormal);
 	const vec3  lighting        = diffuse + specular * (1.0 - shadow);
 	const float smoothingFactor = smoothstep(1.0, 0.6, fragmentDistance / lightRadius);
 
