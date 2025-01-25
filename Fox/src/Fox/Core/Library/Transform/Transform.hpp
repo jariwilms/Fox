@@ -9,8 +9,8 @@
 
 namespace fox
 {
-    //Represents a position, rotation, and scale
-    //Arguments pertaining to rotation are to be passed in degrees
+    //Represents spatial transformations as a position, rotation, and scale
+    //Rotation is stored in radians, arguments must be passed in degrees
     class Transform
     {
     public:
@@ -28,11 +28,11 @@ namespace fox
         {
             this->position += translation;
         }
-        void rotate(const fox::Vector3f& rotation)
+        void rotate(   const fox::Vector3f& rotation)
         {
             this->rotation *= fox::Quaternion{ glm::radians(rotation) };
         }
-        void dilate(const fox::Vector3f& scale)
+        void dilate(   const fox::Vector3f& scale)
         {
             this->scale *= scale;
         }
@@ -47,11 +47,11 @@ namespace fox
         {
             return rotation * fox::Vector3f{ 0.0f, 0.0f, -1.0f };
         }
-        fox::Vector3f right() const
+        fox::Vector3f right()   const
         {
             return rotation * fox::Vector3f{ 1.0f, 0.0f, 0.0f };
         }
-        fox::Vector3f up() const
+        fox::Vector3f up()      const
         {
             return rotation * fox::Vector3f{ 0.0f, 1.0f, 0.0f };
         }
@@ -60,16 +60,15 @@ namespace fox
         {
             return glm::degrees(glm::eulerAngles(rotation));
         }
-
-        fox::Matrix4f matrix() const
+        fox::Matrix4f matrix()       const
         {
-            fox::Matrix4f result{ 1.0f };
+            fox::Matrix4f matrix{ 1.0f };
 
-            result  = glm::translate(result, position);
-            result *= glm::mat4_cast(rotation);
-            result  = glm::scale(result, scale);
+            matrix  = glm::translate(matrix, position);
+            matrix *= glm::mat4_cast(rotation);
+            matrix  = glm::scale(    matrix, scale);
 
-            return result;
+            return matrix;
         }
 
         Transform& operator=(const fox::Matrix4f& matrix)
@@ -82,9 +81,10 @@ namespace fox
 
             return *this;
         }
-        friend Transform operator*(const Transform& lhs, const Transform& rhs)
+
+        friend Transform operator*(const Transform& first, const Transform& second)
         {
-            return Transform{ lhs.matrix() * rhs.matrix() };
+            return Transform{ first.matrix() * second.matrix() };
         }
 
         fox::Vector3f   position{ 0.0f };
