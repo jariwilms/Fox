@@ -42,7 +42,7 @@ namespace fox::gfx::api
             std::array<FM, 5> gBufferManifest
             {
                 FM{ "Position",     TF::RGB16_FLOAT },
-                FM{ "Albedo",       TF::RGBA8_UNORM  },
+                FM{ "Albedo",       TF::RGBA16_UNORM  },
                 FM{ "Normal",       TF::RGB16_FLOAT },
                 FM{ "ARM",          TF::RGB16_UNORM  },
 
@@ -54,7 +54,7 @@ namespace fox::gfx::api
             };
             std::array<FM, 2> ppBufferManifest
             {
-                FM{ "Color",        TF::RGBA8_UNORM },
+                FM{ "Color",        TF::RGBA16_UNORM },
                 FM{ "Depth",        RF::D24_UNORM_S8_UINT },
             };
             std::array<FM, 1> scBufferManifest
