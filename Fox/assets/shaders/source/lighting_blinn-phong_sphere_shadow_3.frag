@@ -118,7 +118,7 @@ void main()
 	const vec3  specular         = gARM * lightColor * specularFactor;
 	
 	//Lighting
-	const float smoothingFactor  = 1.0; //smoothstep(1.0, 0.6, fragmentDistance / lightRadius);
+	const float smoothingFactor  = smoothstep(1.0, 0.6, fragmentDistance / lightRadius);
 	const float shadow           = calculate_shadow_pcf(vec4(gPosition, 1.0), gNormal);
 	const vec3  lighting         = ((diffuse * attenuation) + (specular * attenuation)) * (1.0 - shadow) * smoothingFactor;
 	
