@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <stdfloat>
 
 #include <glm/glm.hpp>
 
@@ -25,16 +26,13 @@ namespace fox
 	using uint32_t   = std::uint32_t;
 	using int64_t    = std::int64_t;
 	using uint64_t   = std::uint64_t;
-	using float32_t  = float;
-	using float64_t  = double;
+	using float32_t  = float;         //MSVC please I beg
+	using float64_t  = double;		  //
 
 	using byte_t     = fox::uint8_t;
 	using size_t     = std::size_t;   //Offset in bytes
 	using count_t    = fox::uint32_t; //Number of elements
 	using offset_t   = fox::uint32_t; //Number of elements offset
-
-	using degrees_t  = fox::float32_t;
-	using radians_t  = fox::float32_t;
 
 
 
