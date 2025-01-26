@@ -81,7 +81,7 @@ namespace fox::gfx::api
             s_cameraBuffer            = std::make_unique<gfx::UniformBuffer<uni::Camera>>();
             s_lightBuffer             = std::make_unique<gfx::UniformBuffer<uni::Light>>();
             s_lightShadowBuffer       = std::make_unique<gfx::UniformBuffer<uni::LightShadow>>();
-            s_shadowProjectionsBuffer = std::make_unique<gfx::UniformArrayBuffer<uni::ShadowProjection>>(6u);
+            s_shadowProjectionsBuffer = std::make_unique<gfx::UniformArrayBuffer<uni::ShadowProjection, 6>>();
             
 
 
@@ -446,27 +446,27 @@ namespace fox::gfx::api
         OpenGLRenderer() = delete;
 
         static inline std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> s_mmt{};
-        static inline std::vector<uni::Light>                                         s_lights{};
-        static inline std::vector<uni::Light>                                         s_pointLights{};
-        static inline std::vector<uni::Light>                                         s_directionalLights{};
-        static inline std::vector<fox::Transform>                                     s_debugTransforms{};
+        static inline std::vector<uni::Light>                                            s_lights{};
+        static inline std::vector<uni::Light>                                            s_pointLights{};
+        static inline std::vector<uni::Light>                                            s_directionalLights{};
+        static inline std::vector<fox::Transform>                                        s_debugTransforms{};
+                                                                                         
+        static inline std::unique_ptr<gfx::FrameBuffer>                                  s_gBuffer{};
+        static inline std::unique_ptr<gfx::FrameBufferMultisample>                       s_gBufferMultisample{}; 
+        static inline std::unique_ptr<gfx::FrameBuffer>                                  s_sBuffer{};
+        static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 4>                   s_shadowCubemaps{}; //TODO: change to cube map array
+        static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2>                   s_ppBuffers{};
+                                                                                         
+        static inline std::unique_ptr<gfx::UniformBuffer<uni::Context>>                  s_contextBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<uni::Matrices>>                 s_matricesBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<uni::Material>>                 s_materialBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<uni::Camera>>                   s_cameraBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<uni::Light>>                    s_lightBuffer{};
+        static inline std::unique_ptr<gfx::UniformBuffer<uni::LightShadow>>              s_lightShadowBuffer{};
+        static inline std::unique_ptr<gfx::UniformArrayBuffer<uni::ShadowProjection, 6>> s_shadowProjectionsBuffer{};
 
-        static inline std::unique_ptr<gfx::FrameBuffer>                               s_gBuffer{};
-        static inline std::unique_ptr<gfx::FrameBufferMultisample>                    s_gBufferMultisample{}; 
-        static inline std::unique_ptr<gfx::FrameBuffer>                               s_sBuffer{};
-        static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 4>                s_shadowCubemaps{}; //TODO: change to cube map array
-        static inline std::array<std::unique_ptr<gfx::FrameBuffer>, 2>                s_ppBuffers{};
-                                                                                      
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::Context>>               s_contextBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::Matrices>>              s_matricesBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::Material>>              s_materialBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::Camera>>                s_cameraBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::Light>>                 s_lightBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::LightShadow>>           s_lightShadowBuffer{};
-        static inline std::unique_ptr<gfx::UniformArrayBuffer<uni::ShadowProjection>> s_shadowProjectionsBuffer{};
-
-        static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
-                                                                                      
-        static inline std::shared_ptr<const gfx::Cubemap>                             s_skybox{};
+        static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>>    s_pipelines{};
+                                                                                         
+        static inline std::shared_ptr<const gfx::Cubemap>                                s_skybox{};
     };
 }

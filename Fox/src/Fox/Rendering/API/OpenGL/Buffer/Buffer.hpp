@@ -15,6 +15,8 @@ namespace fox::gfx::api::gl
         ~BufferObject() = default;
     };
 
+
+
     template<api::Buffer::Type TYPE, api::Buffer::Access ACCESS, typename T>
     class Buffer;
 
@@ -30,7 +32,6 @@ namespace fox::gfx::api::gl
             const auto& storageFlags = glf::Buffer::StorageFlags::None;
             gl::buffer_storage(m_handle, storageFlags, data);
         }
-        Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
         {
             gl::delete_buffer(m_handle);
@@ -41,13 +42,11 @@ namespace fox::gfx::api::gl
             return static_cast<fox::count_t>(m_size / sizeof(T));
         }
 
-        Buffer& operator=(Buffer&& other) noexcept = default;
-
     protected:
         Buffer(fox::size_t size)
             : BufferObject{ size } {}
     };
-    template<api::Buffer::Type TYPE, typename T >
+    template<api::Buffer::Type TYPE, typename T>
     class Buffer<TYPE, api::Buffer::Access::Dynamic, T> : public Buffer<TYPE, api::Buffer::Access::Static, T>
     {
     public:
@@ -75,7 +74,6 @@ namespace fox::gfx::api::gl
 
             gl::buffer_storage(m_handle, storageFlags, data);
         }
-        Buffer(Buffer&& other) noexcept = default;
         ~Buffer() = default;
 
         void copy(std::span<const T> data)
@@ -110,8 +108,6 @@ namespace fox::gfx::api::gl
             gl::unmap_buffer(m_handle);
         }
 
-        Buffer& operator=(Buffer&& other) noexcept = default;
-
     protected:
         using Buffer<TYPE, api::Buffer::Access::Static, T>::m_handle;
         using Buffer<TYPE, api::Buffer::Access::Static, T>::m_size;
@@ -127,7 +123,6 @@ namespace fox::gfx::api::gl
 
             gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, std::span<const T>{ &data, 1u });
         }
-        Buffer(Buffer&& other) noexcept = default;
         ~Buffer()
         {
             gl::delete_buffer(m_handle);
@@ -146,7 +141,7 @@ namespace fox::gfx::api::gl
         void copy_sub(fox::size_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
         {
             //This method lets you copy a tuple of any amount of types into an allocated buffer
-            //There is no guarantee that a parameter pack will be evaluated in order of declaration, so we cannot use T... as a regular parameter
+            //There is no guarantee that a parameter pack will be evaluated in order of declaration, so it can not be used
             //Arguments in a braced initializer list eg. tuple{ myval1, myval2 }, are required to be evaluated first to last
             //This guarantees that the data will be copied into the uniform buffer in order
 
@@ -160,84 +155,33 @@ namespace fox::gfx::api::gl
 
             gl::buffer_sub_data(m_handle, offset, std::span<const fox::byte_t>{ buffer.data(), buffer.size() });
         }
-
-        Buffer& operator=(Buffer&& other) noexcept = default;
     };
+
+    //Not implemented
     template<typename T>
-    class Buffer<api::Buffer::Type::UniformArray, api::Buffer::Access::Dynamic, T> : public BufferObject
-    {
-    public:
-        explicit Buffer(fox::count_t count)
-            : BufferObject{ count * sizeof(T) }
-        {
-            m_handle = gl::create_buffer();
+    class Buffer<api::Buffer::Type::Uniform, api::Buffer::Access::Static, T>;
 
-            gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, gl::sizeptr_t{ count * sizeof(T) });
-        }
-        explicit Buffer(std::span<const T> data)
-            : BufferObject{ data.size_bytes() }
-        {
-            m_handle = gl::create_buffer();
 
-            gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, data);
-        }
-        Buffer(Buffer&& other) noexcept = default;
-        ~Buffer()
-        {
-            gl::delete_buffer(m_handle);
-        }
 
-        void bind_index(gl::index_t index) const
-        {
-            gl::bind_buffer_base(m_handle, glf::Buffer::IndexedTarget::UniformBuffer, index);
-        }
-        void bind_index_range(gl::index_t binding, fox::count_t count, fox::count_t offset) const
-        {
-            gl::bind_buffer_range(m_handle, glf::Buffer::TargetRange::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
-        }
-
-        void copy(std::span<const T> data)
-        {
-            if (data.size_bytes() > m_size) throw std::invalid_argument{ "Data size exceeds buffer size!" };
-
-            gl::buffer_sub_data(m_handle, 0, data);
-        }
-        void copy_index(fox::uint32_t index, const T& data)
-        {
-            const auto& offset = index * sizeof(T);
-            if ((offset + sizeof(T)) > m_size) throw std::invalid_argument{"Index out of range!"};
-
-            gl::buffer_sub_data(m_handle, offset, std::span<const T>{ &data, 1u });
-        }
-        void copy_range(fox::count_t offset, std::span<const T> data)
-        {
-            if ((offset * sizeof(T) + data.size_bytes()) > m_size) throw std::invalid_argument{ "Index out of range!" };
-
-            gl::buffer_sub_data(m_handle, offset, data);
-        }
-
-        Buffer& operator=(Buffer&& other) noexcept = default;
-    };
-    
     template<typename T, fox::count_t N>
-    class ArrayBuffer : public BufferObject
+    class UniformArrayBuffer : public BufferObject
     {
     public:
-        explicit ArrayBuffer()
+        explicit UniformArrayBuffer()
             : BufferObject{ N * sizeof(T) }
         {
             m_handle = gl::create_buffer();
 
             gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, gl::sizeptr_t{ N * sizeof(T) });
         }
-        explicit ArrayBuffer(std::span<const T> data)
+        explicit UniformArrayBuffer(std::span<const T> data)
             : BufferObject{ data.size_bytes() }
         {
             m_handle = gl::create_buffer();
 
             gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, data);
         }
-        ~ArrayBuffer()
+        ~UniformArrayBuffer()
         {
             gl::delete_buffer(m_handle);
         }
@@ -253,8 +197,6 @@ namespace fox::gfx::api::gl
 
         void copy(std::span<const T, N> data)
         {
-            if (data.size_bytes() > m_size) data = data.subspan(0u, N);
-
             gl::buffer_sub_data(m_handle, 0, data);
         }
         void copy_index(fox::offset_t offset, const T& data)
@@ -270,6 +212,4 @@ namespace fox::gfx::api::gl
             gl::buffer_sub_data(m_handle, offset, data);
         }
     };
-
-    //TODO: StorageBuffer (SSBO)
 }

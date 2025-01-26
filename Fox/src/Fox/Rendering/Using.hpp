@@ -28,8 +28,8 @@ namespace fox::gfx
     using IndexBuffer            = api::gl::Buffer<api::Buffer::Type::Index, ACCESS, fox::uint32_t>;
     template<typename T>
     using UniformBuffer          = api::gl::Buffer<api::Buffer::Type::Uniform, Buffer::Access::Dynamic, T>;
-    template<typename T>
-    using UniformArrayBuffer     = api::gl::Buffer<api::Buffer::Type::UniformArray, Buffer::Access::Dynamic, T>;
+    template<typename T, fox::count_t N>
+    using UniformArrayBuffer     = api::gl::UniformArrayBuffer<T, N>;
 
     using VertexArray            = api::gl::VertexArray;
 

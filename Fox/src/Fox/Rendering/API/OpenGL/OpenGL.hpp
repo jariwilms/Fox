@@ -40,8 +40,8 @@ namespace fox::gfx::api::gl
     {
         glNamedBufferStorage(std::to_underlying(buffer), static_cast<gl::sizeptr_t>(data.size_bytes()), data.data(), flags);
     }
-    template<typename T>                  
-    static void                           buffer_sub_data(gl::handle_t buffer, gl::intptr_t offset, std::span<const T> data)
+    template<typename T, auto N>
+    static void                           buffer_sub_data(gl::handle_t buffer, gl::intptr_t offset, std::span<const T, N> data)
     {
         glNamedBufferSubData(static_cast<gl::uint32_t>(buffer), offset, static_cast<gl::sizeptr_t>(data.size_bytes()), data.data());
     }
