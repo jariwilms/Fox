@@ -84,7 +84,6 @@ namespace fox::gfx::api::gl
     private:
         gl::uint32_t m_attributeIndex{};
         gl::uint32_t m_bindingPoint{};
-        gl::uint32_t m_indexCount{};
 
         std::unordered_map<gl::uint32_t, gl::handle_t> m_bindingPointToBufferMap{};
         std::unordered_map<gl::uint32_t, gl::handle_t> m_attributeIndexToBufferMap{};
