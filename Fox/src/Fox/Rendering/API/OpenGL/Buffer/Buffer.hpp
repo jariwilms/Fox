@@ -219,5 +219,57 @@ namespace fox::gfx::api::gl
         Buffer& operator=(Buffer&& other) noexcept = default;
     };
     
+    template<typename T, fox::count_t N>
+    class ArrayBuffer : public BufferObject
+    {
+    public:
+        explicit ArrayBuffer()
+            : BufferObject{ N * sizeof(T) }
+        {
+            m_handle = gl::create_buffer();
+
+            gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, gl::sizeptr_t{ N * sizeof(T) });
+        }
+        explicit ArrayBuffer(std::span<const T> data)
+            : BufferObject{ data.size_bytes() }
+        {
+            m_handle = gl::create_buffer();
+
+            gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, data);
+        }
+        ~ArrayBuffer()
+        {
+            gl::delete_buffer(m_handle);
+        }
+
+        void bind_index(gl::index_t index) const
+        {
+            gl::bind_buffer_base(m_handle, glf::Buffer::IndexedTarget::UniformBuffer, index);
+        }
+        void bind_index_range(gl::index_t binding, fox::count_t count, fox::offset_t offset) const
+        {
+            gl::bind_buffer_range(m_handle, glf::Buffer::IndexedTarget::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
+        }
+
+        void copy(std::span<const T, N> data)
+        {
+            if (data.size_bytes() > m_size) data = data.subspan(0u, N);
+
+            gl::buffer_sub_data(m_handle, 0, data);
+        }
+        void copy_index(fox::offset_t offset, const T& data)
+        {
+            if (offset + 1u > N) throw std::invalid_argument{ "Data exceeds buffer size!" };
+
+            gl::buffer_sub_data(m_handle, offset, std::span<const T>{ &data, 1u });
+        }
+        void copy_range(fox::offset_t offset, std::span<const T> data)
+        {
+            if (offset + data.size() > N) throw std::invalid_argument{"Data exceeds buffer size!"};
+
+            gl::buffer_sub_data(m_handle, offset, data);
+        }
+    };
+
     //TODO: StorageBuffer (SSBO)
 }
