@@ -81,7 +81,7 @@ namespace fox::gfx::api
             s_cameraBuffer            = std::make_unique<gfx::UniformBuffer<uni::Camera>>();
             s_lightBuffer             = std::make_unique<gfx::UniformBuffer<uni::Light>>();
             s_lightShadowBuffer       = std::make_unique<gfx::UniformBuffer<uni::LightShadow>>();
-            s_shadowProjectionsBuffer = std::make_unique<gfx::UniformBuffer<uni::ShadowProjections>>();
+            s_shadowProjectionsBuffer = std::make_unique<gfx::UniformArrayBuffer<uni::ShadowProjection>>(6u);
             
 
 
@@ -249,7 +249,7 @@ namespace fox::gfx::api
             for (const auto& pointLight : s_pointLights)
             {
                 const fox::Vector3f& pos3f = pointLight.position;
-                std::array<fox::Matrix4f, 6> shadowTransforms
+                std::array<const uni::ShadowProjection, 6> shadowTransforms
                 {
                     shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{  1.0, 0.0, 0.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
                     shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{ -1.0, 0.0, 0.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
@@ -266,7 +266,7 @@ namespace fox::gfx::api
                 s_shadowCubemaps.at(index++)->bind(api::FrameBuffer::Target::Write);
                 gl::clear(glf::Buffer::Mask::Depth);
 
-                s_shadowProjectionsBuffer->copy({ shadowTransforms });
+                s_shadowProjectionsBuffer->copy(shadowTransforms);
                 s_lightShadowBuffer->copy({ pointLight.position, farPlane });
 
                 for (const auto& mmt : s_mmt)
@@ -463,7 +463,7 @@ namespace fox::gfx::api
         static inline std::unique_ptr<gfx::UniformBuffer<uni::Camera>>                s_cameraBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<uni::Light>>                 s_lightBuffer{};
         static inline std::unique_ptr<gfx::UniformBuffer<uni::LightShadow>>           s_lightShadowBuffer{};
-        static inline std::unique_ptr<gfx::UniformBuffer<uni::ShadowProjections>>     s_shadowProjectionsBuffer{};
+        static inline std::unique_ptr<gfx::UniformArrayBuffer<uni::ShadowProjection>> s_shadowProjectionsBuffer{};
 
         static inline std::unordered_map<std::string, std::unique_ptr<gfx::Pipeline>> s_pipelines{};
                                                                                       

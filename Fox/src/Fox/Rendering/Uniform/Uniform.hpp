@@ -51,8 +51,8 @@ namespace fox::gfx::uni
         fox::float32_t farPlane{};
     };
     //Binding 13
-    struct ShadowProjections
+    struct ShadowProjection
     {
-        std::array<fox::Matrix4f, 6> projection{};
+        fox::Matrix4f projection{ 1.0f };
     };
 }
