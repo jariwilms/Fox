@@ -1,6 +1,6 @@
 #version 460 core
 
-layout(binding = 0) uniform samplerCube t_Skybox;
+layout(binding  = 0) uniform samplerCube t_Skybox;
 
 layout(location = 0) in  vec3 v_TexCoord;
 

@@ -1,8 +1,8 @@
 #version 460 core
 
-layout(binding = 0) uniform sampler2D t_Albedo;
-layout(binding = 1) uniform sampler2D t_Normal;
-layout(binding = 2) uniform sampler2D t_ARM;
+layout(binding  = 0) uniform sampler2D t_Albedo;
+layout(binding  = 1) uniform sampler2D t_Normal;
+layout(binding  = 2) uniform sampler2D t_ARM;
 
 layout(location = 0) in  vec3 v_Position;
 layout(location = 1) in  vec2 v_TexCoord;

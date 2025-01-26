@@ -14,16 +14,16 @@ namespace fox::gfx::uni
     };
 
     //Binding 1
+    struct Camera
+    {
+        fox::Vector4f position{};
+    };
+    //Binding 2
     struct Matrices
     {
         fox::Matrix4f model{ 1.0f };
         fox::Matrix4f view{ 1.0f };
         fox::Matrix4f projection{ 1.0f };
-    };
-    //Binding 2
-    struct Camera
-    {
-        fox::Vector4f position{};
     };
     //Binding 3
     struct Material

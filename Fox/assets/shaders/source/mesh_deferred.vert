@@ -1,11 +1,10 @@
 #version 460 core
 
-layout(set = 0, binding = 1) uniform UMatrices
+layout(set = 0, binding = 2) uniform UMatrices
 {
 	mat4 model;
 	mat4 view;
 	mat4 projection;
-	mat4 normal;
 } u_Matrices;
 
 layout(location = 0) in  vec3 a_Position;
@@ -19,15 +18,15 @@ layout(location = 2) out mat3 v_TBN;
 
 void main()
 {
-	vec3 T = normalize(mat3(u_Matrices.model) * a_Tangent);
-	vec3 N = normalize(mat3(u_Matrices.model) * a_Normal);
-	vec3 B = cross(N, T);
+	const vec3 N = normalize(mat3(u_Matrices.model) * a_Normal);
+	const vec3 T = normalize(mat3(u_Matrices.model) * a_Tangent);
+	const vec3 B = cross(N, T);
 	
 	v_TBN  = mat3(T, B, N);
 
 	
 
-	vec4 worldPosition = u_Matrices.model * vec4(a_Position, 1.0);
+	const vec4 worldPosition = u_Matrices.model * vec4(a_Position, 1.0);
 
 	v_Position = worldPosition.xyz;
 	v_TexCoord = a_TexCoord;

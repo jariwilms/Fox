@@ -9,12 +9,16 @@ layout(location = 0) out vec4 f_Color;
 
 void main()
 {
-	vec3 albedo   = texture(t_Albedo, v_TexCoord).rgb;
-	vec3 lighting = texture(t_Color,  v_TexCoord).rgb;
+	const vec3  albedo        = texture(t_Albedo, v_TexCoord).rgb;
+	const vec3  lighting      = texture(t_Color,  v_TexCoord).rgb;
+	
+	
 	
 	const vec3  ambientColor  = vec3(1.0, 1.0, 1.0);
 	const float ambientFactor = 0.05;
-	const vec3  result        = clamp(((albedo * ambientColor) * ambientFactor) + lighting, 0.0, 1.0);
+	const vec3  ambient       = clamp((albedo * (ambientColor * ambientFactor)) + lighting, 0.0, 1.0);
 	
-	f_Color = vec4(result, 1.0);
+	
+	
+	f_Color = vec4(ambient, 1.0);
 }

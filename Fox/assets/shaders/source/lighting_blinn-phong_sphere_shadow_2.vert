@@ -1,13 +1,13 @@
 #version 460 core
 
-layout(set = 0, binding = 1) uniform Matrices
+layout(set = 0, binding = 2) uniform Matrices
 {
 	mat4 model;
 	mat4 view;
 	mat4 projection;
 } u_Matrices;
 
-layout(location = 0) in  vec3 a_Position;
+layout(location = 0) in vec3 a_Position;
 
 void main()
 {

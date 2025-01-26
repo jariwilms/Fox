@@ -1,6 +1,6 @@
 #version 460 core
 
-layout(set = 0, binding = 1) uniform Matrices
+layout(set = 0, binding = 2) uniform Matrices
 {
 	mat4 model;
 	mat4 view;
