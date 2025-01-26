@@ -30,23 +30,12 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid Mapping!" };
         }
     }
-    static constexpr glf::Buffer::StorageFlags         map_buffer_access(api::Buffer::Access access)
-    {
-        switch (access)
-        {
-            case api::Buffer::Access::Static:  return glf::Buffer::StorageFlags::None;
-            case api::Buffer::Access::Dynamic: return glf::Buffer::StorageFlags::DynamicStorage;
-
-            default: throw std::invalid_argument{ "Invalid access!" };
-        }
-    }
     static constexpr glf::Buffer::Target               map_buffer_target(api::Buffer::Type type)
     {
         switch (type)
         {
             case api::Buffer::Type::Vertex:  return glf::Buffer::Target::ArrayBuffer;
             case api::Buffer::Type::Index:   return glf::Buffer::Target::ElementArrayBuffer;
-            case api::Buffer::Type::Uniform: return glf::Buffer::Target::UniformBuffer;
 
             default: throw std::invalid_argument{ "Invalid type!" };
         }

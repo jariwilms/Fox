@@ -22,12 +22,13 @@
 namespace fox::gfx
 {
 	using Buffer                 = api::Buffer;
-    template<Buffer::Access ACCESS, typename T>
-    using VertexBuffer           = api::gl::Buffer<api::Buffer::Type::Vertex, ACCESS, T>;
-    template<Buffer::Access ACCESS>
-    using IndexBuffer            = api::gl::Buffer<api::Buffer::Type::Index, ACCESS, fox::uint32_t>;
     template<typename T>
-    using UniformBuffer          = api::gl::Buffer<api::Buffer::Type::Uniform, Buffer::Access::Dynamic, T>;
+    using VertexBuffer           = api::gl::StaticBuffer<api::Buffer::Type::Vertex, T>;
+    using IndexBuffer            = api::gl::StaticBuffer<api::Buffer::Type::Index, fox::uint32_t>;
+    template<typename T>
+    using DynamicBuffer          = api::gl::DynamicBuffer<api::Buffer::Type::Vertex, T>;
+    template<typename T>
+    using UniformBuffer          = api::gl::UniformBuffer<T>;
     template<typename T, fox::count_t N>
     using UniformArrayBuffer     = api::gl::UniformArrayBuffer<T, N>;
 

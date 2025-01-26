@@ -273,12 +273,11 @@ namespace fox::gfx::api
                 {
                     const auto& [mesh, material, transform] = mmt;
                     const auto& vao = mesh->vertexArray;
-                    const auto& ind = vao->index_buffer();
 
                     s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(transform.matrix()));
 
                     vao->bind();
-                    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, ind->count());
+                    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
                 }
             }
 
@@ -306,7 +305,6 @@ namespace fox::gfx::api
             {
                 const auto& [mesh, material, transform] = mmt;
                 const auto& vao                         = mesh->vertexArray;
-                const auto& ind                         = vao->index_buffer();
 
                 const auto& modelMatrix  = transform.matrix();
                 const auto& normalMatrix = glm::transpose(glm::inverse(fox::Matrix3f{ modelMatrix }));
@@ -320,7 +318,7 @@ namespace fox::gfx::api
                 material->normal->bind(1);
                 material->arm->bind(2);
 
-                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, ind->count());
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
             }
 
 
@@ -374,7 +372,7 @@ namespace fox::gfx::api
 
                 ++li;
 
-                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_buffer()->count());
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
             }
 
 
@@ -390,7 +388,7 @@ namespace fox::gfx::api
             pva->bind();
             gl::bind_frame_buffer(s_ppBuffers.at(1)->handle(), glf::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_buffer()->count());
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
 
 
 
@@ -408,7 +406,7 @@ namespace fox::gfx::api
             gl::blit_framebuffer(s_gBuffer->handle(), s_ppBuffers.at(1)->handle(), fox::Vector4u{0, 0, 1280, 720}, fox::Vector4u{0, 0, 1280, 720}, glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest);
 
             cva->bind();
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_buffer()->count());
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
 
 
 
@@ -421,7 +419,7 @@ namespace fox::gfx::api
             for (const auto& transform : s_debugTransforms)
             {
                 s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(transform.matrix()));
-                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_buffer()->count());
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
             }
 #endif
 

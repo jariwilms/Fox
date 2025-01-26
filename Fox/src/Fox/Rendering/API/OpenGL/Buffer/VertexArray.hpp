@@ -14,10 +14,6 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_vertex_array();
         }
-        VertexArray(VertexArray&& other) noexcept
-        {
-            *this = std::move(other);
-        }
         ~VertexArray()
         {
             gl::delete_vertex_array(m_handle);
@@ -42,7 +38,7 @@ namespace fox::gfx::api::gl
             gl::vertex_array_binding_divisor(m_handle, attribute, divisor);
         }
 
-        void tie(std::shared_ptr<const gl::BufferObject> buffer, VertexLayout layout)
+        void tie(std::shared_ptr<const gl::BufferObject<api::Buffer::Type::Vertex>> buffer, VertexLayout layout)
         {
             gl::vertex_array_vertex_buffer(m_handle, buffer->handle(), m_bindingPoint, static_cast<gl::size_t>(layout.stride()));
 
@@ -64,9 +60,10 @@ namespace fox::gfx::api::gl
             m_bindingPointToBufferMap.emplace(m_bindingPoint, buffer->handle());
             ++m_bindingPoint;
         }
-        void tie(std::shared_ptr<const gl::Buffer<api::Buffer::Type::Index, api::Buffer::Access::Static, gl::uint32_t>> buffer)
+        void tie(std::shared_ptr<const gl::StaticBuffer<api::Buffer::Type::Index, fox::uint32_t>> buffer)
         {
             gl::vertex_array_element_buffer(m_handle, buffer->handle());
+
             m_indexBuffer = buffer;
         }
 
@@ -79,32 +76,19 @@ namespace fox::gfx::api::gl
             return m_attributeIndexToBufferMap;
         }
 
-        std::shared_ptr<const gl::Buffer<api::Buffer::Type::Index, api::Buffer::Access::Static, gl::uint32_t>> index_buffer() const
+        fox::count_t index_count() const
         {
-            return m_indexBuffer;
-        }
-
-        VertexArray& operator=(VertexArray&& other) noexcept
-        {
-            m_handle               = other.m_handle;
-            m_attributeIndex       = other.m_attributeIndex;
-            m_bindingPoint         = other.m_bindingPoint;
-            m_indexBuffer          = std::move(other.m_indexBuffer);
-
-            other.m_handle         = {};
-            other.m_attributeIndex = 0u;
-            other.m_bindingPoint   = 0u;
-            other.m_indexBuffer.reset();
-
-            return *this;
+            return static_cast<fox::count_t>(m_indexBuffer->size() / sizeof(fox::uint32_t));
         }
 
     private:
         gl::uint32_t m_attributeIndex{};
         gl::uint32_t m_bindingPoint{};
+        gl::uint32_t m_indexCount{};
 
         std::unordered_map<gl::uint32_t, gl::handle_t> m_bindingPointToBufferMap{};
         std::unordered_map<gl::uint32_t, gl::handle_t> m_attributeIndexToBufferMap{};
-        std::shared_ptr<const gl::Buffer<api::Buffer::Type::Index, api::Buffer::Access::Static, gl::uint32_t>> m_indexBuffer{};
+
+        std::shared_ptr<const gl::StaticBuffer<api::Buffer::Type::Index, gl::uint32_t>> m_indexBuffer{};
     };
 }

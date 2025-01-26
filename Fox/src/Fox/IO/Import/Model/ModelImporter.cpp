@@ -109,11 +109,11 @@ namespace fox::io
             layout3f.specify<fox::float32_t>(3);
 
             auto vertexArray      = std::make_shared<gfx::VertexArray>();
-            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(positionsVector);
-            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(normalsVector);
-            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(tangentsVector);
-            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector2f>>(texCoordsVector);
-            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indicesVector);
+            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(positionsVector);
+            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(normalsVector);
+            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(tangentsVector);
+            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector2f>>(texCoordsVector);
+            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer>(indicesVector);
 
             vertexArray->tie(positionsBuffer,  layout3f);
             vertexArray->tie(normalsBuffer,    layout3f);

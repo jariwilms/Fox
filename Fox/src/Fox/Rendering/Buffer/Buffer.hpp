@@ -9,21 +9,22 @@ namespace fox::gfx::api
     public:
         enum class Type
         {
-            Vertex,
-            Index,
-            Uniform,
+            Vertex, 
+            Index, 
+            Uniform, 
 
-            //DrawIndirect, 
-            //PixelPack, 
-            //PixelUnpack, 
-            //ShaderStorage, 
-            //Texture, 
+            //SSBO, 
             //TransformFeedback, 
+            
+            //DrawIndirect?, 
+            //PixelPack?, 
+            //PixelUnpack?, 
+            //Texture?, 
         };
         enum class Access
         {
-            Static,
-            Dynamic,
+            Static, 
+            Dynamic, 
         };
         enum class Mapping
         {
