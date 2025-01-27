@@ -3,19 +3,19 @@
 #include "glad/gl.h"
 #include "glfw/glfw3.h"
 
-#include "Fox/Rendering/API/OpenGL/Query/Query.hpp"
 #include "Fox/Rendering/API/OpenGL/Types.hpp"
 #include "Fox/Rendering/Buffer/Buffer.hpp"
 #include "Fox/Rendering/Buffer/DataTypes.hpp"
 #include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Query/Query.hpp"
 #include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/RenderState/RenderState.hpp"
 #include "Fox/Rendering/Shader/Pipeline.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
 #include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Texture/Cubemap.hpp"
 #include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/Texture/Cubemap.hpp"
 
 namespace fox::gfx::api::gl
 {

@@ -20,6 +20,8 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_buffer(gl::handle_t buffer)
     {
+        if (buffer == gl::NullObject) return;
+
         const auto& uv = std::to_underlying(buffer);
         glDeleteBuffers(gl::size_t{ 1 }, &uv);
     }
@@ -49,13 +51,19 @@ namespace fox::gfx::api::gl
     {
         glCopyNamedBufferSubData(static_cast<gl::uint32_t>(source), static_cast<gl::uint32_t>(destination), sourceOffset, destinationOffset, size);
     }
-    static void*                          map_buffer(gl::handle_t buffer, glf::Buffer::Mapping mapping) //TODO: Keep mapped buffer data in context and return reference to that data, allows better management of memory
+    template<typename T>
+    static T*                             map_buffer(gl::handle_t buffer, glf::Buffer::Mapping mapping) //TODO: Keep mapped buffer data in context and return reference to that data, allows better management of memory
     {
-        return glMapNamedBuffer(std::to_underlying(buffer), std::to_underlying(mapping));
+        auto* data = glMapNamedBuffer(std::to_underlying(buffer), std::to_underlying(mapping));
+
+        return reinterpret_cast<T*>(data);
     }
-    static void*                          map_buffer_range(gl::handle_t buffer, glf::Buffer::Mapping mapping, gl::sizeptr_t size, gl::intptr_t offset)
+    template<typename T>
+    static T*                             map_buffer_range(gl::handle_t buffer, glf::Buffer::Mapping mapping, gl::sizeptr_t size, gl::intptr_t offset)
     {
-        return glMapNamedBufferRange(static_cast<gl::uint32_t>(buffer), offset, size, std::to_underlying(mapping));
+        auto* data = glMapNamedBufferRange(std::to_underlying(buffer), offset, size, std::to_underlying(mapping));
+
+        return reinterpret_cast<T*>(data);
     }
     static void                           unmap_buffer(gl::handle_t buffer)
     {
@@ -81,7 +89,10 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_transform_feedback(gl::handle_t transformFeedback)
     {
-        glDeleteTransformFeedbacks(1, reinterpret_cast<gl::uint32_t*>(&transformFeedback));
+        if (transformFeedback == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(transformFeedback);
+        glDeleteTransformFeedbacks(1, &uv);
     }
     static void                           bind_transform_feedback(gl::handle_t buffer)
     {
@@ -114,7 +125,10 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_vertex_array(gl::handle_t vertexArray)
     {
-        glDeleteVertexArrays(1, reinterpret_cast<gl::uint32_t*>(&vertexArray));
+        if (vertexArray == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(vertexArray);
+        glDeleteVertexArrays(1, &uv);
     }
     static void                           bind_vertex_array(gl::handle_t vertexArray)
     {
@@ -161,7 +175,10 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_texture(gl::handle_t texture)
     {
-        glDeleteTextures(1, reinterpret_cast<gl::uint32_t*>(&texture));
+        if (texture == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(texture);
+        glDeleteTextures(1, &uv);
     }
     static void                           bind_texture_unit(gl::handle_t texture, gl::uint32_t unit)
     {
@@ -295,7 +312,10 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_sampler(gl::handle_t sampler)
     {
-        glDeleteSamplers(1, reinterpret_cast<gl::uint32_t*>(&sampler));
+        if (sampler == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(sampler);
+        glDeleteSamplers(1, &uv);
     }
     static void                           bind_sampler(gl::handle_t sampler, gl::uint32_t slot)
     {
@@ -320,15 +340,18 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_render_buffer(gl::handle_t renderBuffer)
     {
-        glDeleteRenderbuffers(1, reinterpret_cast<gl::uint32_t*>(&renderBuffer));
+        if (renderBuffer == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(renderBuffer);
+        glDeleteRenderbuffers(1, &uv);
     }
     static void                           render_buffer_storage(gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions)
     {
-        glNamedRenderbufferStorage(static_cast<gl::uint32_t>(renderBuffer), std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
+        glNamedRenderbufferStorage(std::to_underlying(renderBuffer), std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
     static void                           render_buffer_storage_multisample(gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions, std::uint8_t samples)
     {
-        glNamedRenderbufferStorageMultisample(static_cast<gl::uint32_t>(renderBuffer), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
+        glNamedRenderbufferStorageMultisample(std::to_underlying(renderBuffer), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
 
 
@@ -343,7 +366,10 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_frame_buffer(gl::handle_t frameBuffer)
     {
-        glDeleteFramebuffers(1, reinterpret_cast<gl::uint32_t*>(&frameBuffer));
+        if (frameBuffer == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(frameBuffer);
+        glDeleteFramebuffers(1, &uv);
     }
     static void                           bind_frame_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Target target)
     {
@@ -406,7 +432,9 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_shader(gl::handle_t shader)
     {
-        glDeleteShader(static_cast<gl::uint32_t>(shader));
+        if (shader == gl::NullObject) return;
+
+        glDeleteShader(std::to_underlying(shader));
     }
     static void                           attach_shader(gl::handle_t program, gl::handle_t shader)
     {
@@ -450,7 +478,9 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_program(gl::handle_t program)
     {
-        glDeleteProgram(static_cast<gl::uint32_t>(program));
+        if (program == gl::NullObject) return;
+
+        glDeleteProgram(std::to_underlying(program));
     }
     static void                           link_program(gl::handle_t program)
     {
@@ -488,7 +518,10 @@ namespace fox::gfx::api::gl
     }
     static void                           delete_program_pipeline(gl::handle_t pipeline)
     {
-        glDeleteProgramPipelines(1, reinterpret_cast<gl::uint32_t*>(&pipeline));
+        if (pipeline == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(pipeline);
+        glDeleteProgramPipelines(1, &uv);
     }
     static void                           bind_program_pipeline(gl::handle_t pipeline)
     {
@@ -497,6 +530,59 @@ namespace fox::gfx::api::gl
     static void                           use_program_stages(gl::handle_t pipeline, gl::handle_t program, glf::Shader::Stage stages)
     {
         glUseProgramStages(static_cast<gl::uint32_t>(pipeline), std::to_underlying(stages), static_cast<gl::uint32_t>(program));
+    }
+
+
+
+    //Query
+    static gl::handle_t                   create_query(glf::Query::Target target)
+    {
+        gl::uint32_t query{};
+        glCreateQueries(static_cast<gl::enum_t>(target), 1, &query);
+
+        return gl::handle_t{ query };
+    }
+    static void                           delete_query(gl::handle_t query)
+    {
+        if (query == gl::NullObject) return;
+
+        const auto& uv = std::to_underlying(query);
+        glDeleteQueries(1, &uv);
+    }
+    static void                           begin_query(gl::handle_t query, glf::Query::Target target)
+    {
+        //TODO: make template function? => automatic target deduction
+        glBeginQuery(static_cast<gl::enum_t>(target), static_cast<gl::uint32_t>(query));
+    }
+    static void                           begin_query_indexed(gl::handle_t query, glf::Query::Target target, gl::uint32_t index)
+    {
+        glBeginQueryIndexed(static_cast<gl::enum_t>(target), index, static_cast<gl::uint32_t>(query));
+    }
+    static void                           end_query(glf::Query::Target target)
+    {
+        glEndQuery(static_cast<gl::enum_t>(target));
+    }
+    static void                           end_query_indexed(glf::Query::Target target, gl::uint32_t index)
+    {
+        glEndQueryIndexed(static_cast<gl::enum_t>(target), index);
+    }
+    static void                           query_counter(gl::handle_t query)
+    {
+        glQueryCounter(static_cast<gl::uint32_t>(query), GL_TIMESTAMP);
+    }
+    static gl::int32_t                    get_query_iv(glf::Query::Target target)
+    {
+        gl::int32_t params{};
+        glGetQueryiv(static_cast<gl::enum_t>(target), GL_CURRENT_QUERY, &params);
+
+        return params;
+    }
+    static gl::int32_t                    get_query_object(gl::handle_t query, glf::Query::Parameter parameter)
+    {
+        gl::int32_t result{};
+        glGetQueryObjectiv(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(parameter), &result);
+
+        return result;
     }
 
 
@@ -559,56 +645,6 @@ namespace fox::gfx::api::gl
     static void                           dispatch_compute_indirect(gl::intptr_t offset)
     {
         glDispatchComputeIndirect(offset);
-    }
-
-
-
-    //Query
-    static gl::handle_t                   create_query(glf::Query::Target target)
-    {
-        gl::uint32_t query{};
-        glCreateQueries(static_cast<gl::enum_t>(target), 1, &query);
-
-        return gl::handle_t{ query };
-    }
-    static void                           delete_query(gl::handle_t query)
-    {
-        glDeleteQueries(1, reinterpret_cast<gl::uint32_t*>(&query));
-    }
-    static void                           begin_query(gl::handle_t query, glf::Query::Target target)
-    {
-        //TODO: make template function? => automatic target deduction
-        glBeginQuery(static_cast<gl::enum_t>(target), static_cast<gl::uint32_t>(query));
-    }
-    static void                           begin_query_indexed(gl::handle_t query, glf::Query::Target target, gl::uint32_t index)
-    {
-        glBeginQueryIndexed(static_cast<gl::enum_t>(target), index, static_cast<gl::uint32_t>(query));
-    }
-    static void                           end_query(glf::Query::Target target)
-    {
-        glEndQuery(static_cast<gl::enum_t>(target));
-    }
-    static void                           end_query_indexed(glf::Query::Target target, gl::uint32_t index)
-    {
-        glEndQueryIndexed(static_cast<gl::enum_t>(target), index);
-    }
-    static void                           query_counter(gl::handle_t query)
-    {
-        glQueryCounter(static_cast<gl::uint32_t>(query), GL_TIMESTAMP);
-    }
-    static gl::int32_t                    get_query_iv(glf::Query::Target target)
-    {
-        gl::int32_t params{};
-        glGetQueryiv(static_cast<gl::enum_t>(target), GL_CURRENT_QUERY, &params);
-
-        return params;
-    }
-    static gl::int32_t                    get_query_object(gl::handle_t query, glf::Query::Parameter parameter)
-    {
-        gl::int32_t result{};
-        glGetQueryObjectiv(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(parameter), &result);
-
-        return result;
     }
 
 

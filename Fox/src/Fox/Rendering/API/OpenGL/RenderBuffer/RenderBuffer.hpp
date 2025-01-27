@@ -20,7 +20,7 @@ namespace fox::gfx::api::gl
             const auto& renderBufferFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage(m_handle, renderBufferFormat, m_dimensions);
         }
-        RenderBuffer(RenderBuffer&& other) noexcept = default;
+        RenderBuffer(RenderBuffer&&) noexcept = default;
         ~RenderBuffer()
         {
             gl::delete_render_buffer(m_handle);
@@ -31,7 +31,7 @@ namespace fox::gfx::api::gl
             return m_dimensions;
         }
 
-        RenderBuffer& operator=(RenderBuffer&& other) noexcept = default;
+        RenderBuffer& operator=(RenderBuffer&&) noexcept = default;
 
     private:
         fox::Vector2u m_dimensions{};
@@ -48,7 +48,7 @@ namespace fox::gfx::api::gl
             const auto& renderBufferFormat = gl::map_render_buffer_format(format);
             gl::render_buffer_storage_multisample(m_handle, renderBufferFormat, m_dimensions, m_samples);
         }
-        RenderBuffer(RenderBuffer&& other) noexcept = default;
+        RenderBuffer(RenderBuffer&&) noexcept = default;
         ~RenderBuffer()
         {
             gl::delete_render_buffer(m_handle);
@@ -63,7 +63,7 @@ namespace fox::gfx::api::gl
             return m_samples;
         }
 
-        RenderBuffer& operator=(RenderBuffer&& other) noexcept = default;
+        RenderBuffer& operator=(RenderBuffer&&) noexcept = default;
 
     private:
         fox::Vector2u m_dimensions{};

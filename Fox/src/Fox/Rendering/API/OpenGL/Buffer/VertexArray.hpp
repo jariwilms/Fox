@@ -3,17 +3,19 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/API/OpenGL/Buffer/Buffer.hpp"
+#include "Fox/Rendering/Buffer/VertexArray.hpp"
 #include "Fox/Rendering/Layout/VertexLayout.hpp"
 
 namespace fox::gfx::api::gl
 {
-    class VertexArray : public gl::Object
+    class VertexArray : public api::VertexArray, public gl::Object
     {
     public:
         VertexArray()
         {
             m_handle = gl::create_vertex_array();
         }
+        VertexArray(VertexArray&&) noexcept = default;
         ~VertexArray()
         {
             gl::delete_vertex_array(m_handle);
@@ -80,6 +82,8 @@ namespace fox::gfx::api::gl
         {
             return static_cast<fox::count_t>(m_indexBuffer->size() / sizeof(fox::uint32_t));
         }
+
+        VertexArray& operator=(VertexArray&&) noexcept = default;
 
     private:
         gl::uint32_t m_attributeIndex{};

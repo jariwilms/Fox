@@ -22,7 +22,7 @@ namespace fox::gfx::api::gl
             if (const auto& shader = m_layout.geometry;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
             if (const auto& shader = m_layout.fragment;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
         }
-        Pipeline(Pipeline&& other) noexcept = default;
+        Pipeline(Pipeline&&) noexcept = default;
         ~Pipeline()
         {
             gl::delete_program_pipeline(m_handle);
@@ -38,7 +38,7 @@ namespace fox::gfx::api::gl
             return m_layout;
         }
 
-        Pipeline& operator=(Pipeline&& other) noexcept = default;
+        Pipeline& operator=(Pipeline&&) noexcept = default;
 
     private:
         Layout m_layout{};

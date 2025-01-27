@@ -19,6 +19,5 @@ namespace fox::gfx::api
 
     protected:
         Pipeline() = default;
-        ~Pipeline() = default;
     };
 }

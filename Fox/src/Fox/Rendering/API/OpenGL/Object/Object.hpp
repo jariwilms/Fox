@@ -4,18 +4,32 @@
 
 namespace fox::gfx::api::gl
 {
-    struct Object
+    class Object
     {
     public:
+        Object(Object&& other) noexcept
+        {
+            m_handle = std::exchange(other.m_handle, gl::NullObject);
+        }
+
         gl::handle_t handle() const
         {
             return m_handle;
         }
 
+        Object& operator=(Object&& other) noexcept
+        {
+            if (this != &other)
+            {
+                m_handle = std::exchange(other.m_handle, m_handle);
+            }
+
+            return *this;
+        }
+
     protected:
         Object() = default;
-        ~Object() = default;
 
-        gl::handle_t m_handle{};
+        gl::handle_t m_handle{ gl::NullObject };
     };
 }

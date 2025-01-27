@@ -34,12 +34,12 @@ namespace fox::gfx::api::gl
             gl::detach_shader(m_handle, shader);
             gl::delete_shader(shader);
         }
-        Shader(gl::Shader&& other) noexcept = default;
+        Shader(Shader&&) noexcept = default;
         ~Shader()
         {
             gl::delete_program(m_handle);
         }
 
-        Shader& operator=(Shader&& other) noexcept = default;
+        Shader& operator=(Shader&&) noexcept = default;
     };
 }

@@ -13,7 +13,7 @@ namespace fox::gfx::api::gl
         Cubemap(Format format, const gl::Vector2u& dimensions)
             : Cubemap{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions } {}
         Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions)
-            : api::Cubemap{ format }, m_dimensions{ dimensions }, m_mipmapLevels{ 1u }
+            : api::Cubemap{ format }, m_mipmapLevels{ 1u }, m_dimensions{ dimensions }
         {
             m_handle = gl::create_texture(glf::Texture::Target::CubeMap);
 
@@ -35,11 +35,18 @@ namespace fox::gfx::api::gl
             attach_images(layout);
             gl::generate_texture_mipmap(m_handle);
         }
+        Cubemap(Cubemap&&) noexcept = default;
+        ~Cubemap()
+        {
+            gl::delete_texture(m_handle);
+        }
 
         void bind(gl::uint32_t index) const
         {
             gl::bind_texture_unit(m_handle, index);
         }
+
+        Cubemap& operator=(Cubemap&&) noexcept = default;
 
     protected:
         void attach_image(const fox::Image& image, fox::uint32_t index)
@@ -58,7 +65,7 @@ namespace fox::gfx::api::gl
             attach_image(layout.back,   5);
         }
 
-        gl::Vector2u  m_dimensions{};
         fox::uint32_t m_mipmapLevels{};
+        gl::Vector2u  m_dimensions{};
     };
 }

@@ -51,7 +51,7 @@ namespace fox::gfx::api::gl
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
         }
-        Texture(Texture&& other) noexcept = default;
+        Texture(Texture&&) noexcept = default;
         ~Texture()
         {
             gl::delete_texture(m_handle);
@@ -102,7 +102,7 @@ namespace fox::gfx::api::gl
             return m_dimensions;
         }
 
-        Texture& operator=(Texture&& other) noexcept = default;
+        Texture& operator=(Texture&&) noexcept = default;
 
     private:
         wrap_t        m_wrapping{};
@@ -124,7 +124,7 @@ namespace fox::gfx::api::gl
             if constexpr (DIMS == Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);
             if constexpr (DIMS == Dimensions::_3D) gl::texture_storage_3d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);
         }
-        Texture(Texture&& other) noexcept = default;
+        Texture(Texture&&) noexcept = default;
         ~Texture()
         {
             gl::delete_texture(m_handle);
@@ -144,7 +144,7 @@ namespace fox::gfx::api::gl
             return m_dimensions;
         }
 
-        Texture& operator=(Texture&& other) noexcept = default;
+        Texture& operator=(Texture&&) noexcept = default;
 
     private:
         vector_t     m_dimensions{};

@@ -44,11 +44,7 @@ namespace fox::gfx::api::gl
         False = GL_FALSE,
         True  = GL_TRUE,
     };
-    enum : std::underlying_type_t<handle_t>
-    {
-        NullObject = gl::uint32_t{}, 
-    };
-
+    constexpr gl::handle_t NullObject{ 0u };
 
 
     //Vector types

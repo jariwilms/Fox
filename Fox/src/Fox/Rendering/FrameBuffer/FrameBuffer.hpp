@@ -23,8 +23,7 @@ namespace fox::gfx::api
             Stencil, 
             DepthStencil, 
         };
-
-        struct Manifest
+        struct     Manifest
         {
             using var_t = std::variant<Texture::Format, RenderBuffer::Format, Cubemap::Format>;
 
@@ -35,10 +34,14 @@ namespace fox::gfx::api
             var_t       format;
         };
 
+        FrameBuffer(FrameBuffer&& other) noexcept = default;
+
         const fox::Vector2u& dimensions() const
         {
             return m_dimensions;
         }
+
+        FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
 
     protected:
         FrameBuffer(const fox::Vector2u& dimensions)

@@ -9,24 +9,20 @@ namespace fox::gfx::api
 	public:
         enum class Parameter
         {
-            TextureWrapS, 
-            TextureWrapT, 
-            TextureWrapR, 
-            TextureMinFilter, 
-            TextureMagFilter, 
-            TextureBorderColor, 
-            TextureMinLod, 
-            TextureMaxLod, 
-            TextureLodBias, 
-            TextureCompareMode, 
-            TextureCompareFunc, 
+            WrappingS, 
+            WrappingT, 
+            WrappingR, 
+            MinificationFilter, 
+            MagnificationFilter, 
+            BorderColor, 
+            MinimumLod, 
+            MaximumLod, 
+            LodBias, 
+            CompareMode, 
+            CompareFunc, 
         };
 
 	protected:
 		Sampler() = default;
-		Sampler(Sampler&& other) = default;
-		~Sampler() = default;
-
-		Sampler& operator=(Sampler&& other) = default;
 	};
 }

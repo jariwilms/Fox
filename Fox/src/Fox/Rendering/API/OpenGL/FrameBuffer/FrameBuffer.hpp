@@ -48,7 +48,7 @@ namespace fox::gfx::api::gl
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
             if (frameBufferStatus != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        FrameBuffer(FrameBuffer&& other) noexcept = default;
+        FrameBuffer(FrameBuffer&&) noexcept = default;
         ~FrameBuffer()
         {
             gl::delete_frame_buffer(m_handle);
@@ -81,7 +81,7 @@ namespace fox::gfx::api::gl
             return m_identifierToCubemap.at(identifier);
         }
 
-        FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
+        FrameBuffer& operator=(FrameBuffer&&) noexcept = default;
 
     private:
         void attach(std::string_view identifier, api::Texture::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
@@ -173,7 +173,7 @@ namespace fox::gfx::api::gl
             const auto& frameBufferStatus = gl::check_frame_buffer_status(m_handle);
             if (frameBufferStatus != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-        FrameBuffer(FrameBuffer&& other) noexcept = default;
+        FrameBuffer(FrameBuffer&&) noexcept = default;
         ~FrameBuffer()
         {
             gl::delete_frame_buffer(m_handle);
@@ -206,10 +206,10 @@ namespace fox::gfx::api::gl
             return m_samples;
         }
 
-        FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
+        FrameBuffer& operator=(FrameBuffer&&) noexcept = default;
 
     private:
-        void attach(std::string_view identifier, api::Texture::Format format,      std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Texture::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_texture_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
@@ -243,7 +243,7 @@ namespace fox::gfx::api::gl
 
             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
         }
-        void attach(std::string_view identifier, api::Cubemap::Format format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
         {
             __debugbreak();
             throw std::logic_error{ "The method or operation has not been implemented!" };

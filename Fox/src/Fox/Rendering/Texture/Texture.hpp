@@ -100,10 +100,6 @@ namespace fox::gfx::api
     protected:
         Texture(Format format, Filter filter = Filter::None)
             : m_format{ format }, m_filter{ filter } {}
-        Texture(Texture&& other) noexcept = default;
-        ~Texture() = default;
-
-        Texture& operator=(Texture&& other) noexcept = default;
 
         Format m_format{};
         Filter m_filter{};

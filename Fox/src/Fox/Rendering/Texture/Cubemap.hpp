@@ -10,7 +10,7 @@ namespace fox::gfx::api
 	class Cubemap
 	{
 	public:
-        enum class Format //TODO: replace with using Texture::Format
+        enum class Format //TODO: replace with using Texture::Format?
         {
             //UNORM => stored as unsigned integer, sampled             as floating point   in range [        0,         1]
             //SNORM => stored as   signed integer, sampled             as floating point   in range [       -1,         1]
@@ -62,9 +62,9 @@ namespace fox::gfx::api
 
             S8_UINT           = 0x08'00'20'21, 
         };
-        using Filter   = api::Texture::Filter;
-        using Wrapping = api::Texture::Wrapping;
-		struct Layout
+        using      Filter   = api::Texture::Filter;
+        using      Wrapping = api::Texture::Wrapping;
+		struct     Layout
 		{
 			fox::Image right;
 			fox::Image left;
@@ -77,7 +77,6 @@ namespace fox::gfx::api
 	protected:
 		Cubemap(Format format)
 			: m_format{ format } {}
-		~Cubemap() = default;
 
 		Format m_format{};
 	};

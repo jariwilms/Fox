@@ -13,7 +13,7 @@ namespace fox::gfx::api::gl
 		{
 			m_handle = gl::create_sampler();
 		}
-		Sampler(Sampler&& other) = default;
+		Sampler(Sampler&&) noexcept = default;
 		~Sampler()
 		{
 			gl::delete_sampler(m_handle);
@@ -24,8 +24,6 @@ namespace fox::gfx::api::gl
 			gl::bind_sampler(m_handle, slot);
 		}
 
-		Sampler& operator=(Sampler&& other) = default;
-
-	private:
+		Sampler& operator=(Sampler&&) noexcept = default;
 	};
 }

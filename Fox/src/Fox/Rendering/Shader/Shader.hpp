@@ -26,10 +26,6 @@ namespace fox::gfx::api
     protected:
         Shader(Stage stage)
             : m_stage{ stage } {}
-        Shader(Shader&& other) noexcept = default;
-        ~Shader() = default;
-
-        Shader& operator=(Shader&& other) noexcept = default;
 
         Stage m_stage{};
     };

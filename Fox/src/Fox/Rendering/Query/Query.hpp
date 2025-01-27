@@ -17,10 +17,6 @@ namespace fox::gfx::api
 	protected:
 		Query(Target target)
 			: m_target{ target } {}
-		Query(Query&& other) = default;
-		~Query() = default;
-
-		Query& operator=(Query&& other) = default;
 
 		Target m_target{};
 	};
