@@ -5,16 +5,19 @@
 namespace fox::ecs
 {
 	class Entity;
+}
+namespace fox::cmp
+{
 	template<typename T>
 	class Component
 	{
 	public:
-		Component(const Entity& owner)
+		Component(const ecs::Entity& owner)
 			: m_owner{ owner }, m_value{} {}
 		template<typename... Args>
-		Component(const Entity& owner, Args... args)
+		Component(const ecs::Entity& owner, Args... args)
  			: m_owner{ owner }, m_value{ std::forward<Args>(args)... } {}
-		Component(const Entity& owner, const T& value)
+		Component(const ecs::Entity& owner, const T& value)
 			: m_owner{ owner },  m_value{ value } {}
 
 		ecs::Entity& owner()
@@ -26,7 +29,7 @@ namespace fox::ecs
 			return m_owner;
 		}
 
-		T& get()
+		      T& get()
 		{
 			return m_value;
 		}
@@ -45,7 +48,7 @@ namespace fox::ecs
 		}
 
 	protected:
-		Entity m_owner;
-		T      m_value;
+		ecs::Entity m_owner;
+		T           m_value;
 	};
 }

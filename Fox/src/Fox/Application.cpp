@@ -23,10 +23,10 @@ namespace fox
 {
     static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
-        auto& tc = actor.get_component<ecs::TransformComponent>().get();
+        auto& tc = actor.get_component<cmp::TransformComponent>().get();
         tc = node.localTransform;
 
-        auto& mf = actor.add_component<ecs::MeshFilterComponent>().get();
+        auto& mf = actor.add_component<cmp::MeshFilterComponent>().get();
         if (node.meshIndex)     mf.mesh     = model.meshes.at(node.meshIndex.value());
         if (node.materialIndex) mf.material = model.materials.at(node.materialIndex.value());
 
@@ -43,8 +43,8 @@ namespace fox
         if (!relation.parent) return transform;
 
         const auto& parent = scene.find_actor(relation.parent.value());
-        const auto& rel    = parent.get_component<ecs::RelationshipComponent>().get();
-        const auto& trs    = parent.get_component<ecs::TransformComponent>().get();
+        const auto& rel    = parent.get_component<cmp::RelationshipComponent>().get();
+        const auto& trs    = parent.get_component<cmp::TransformComponent>().get();
 
         return transform_product(scene, rel, trs) * transform;
     }
@@ -68,8 +68,8 @@ namespace fox
         auto  scene           = std::make_shared<scn::Scene>();
 
         auto& observer        = scene->create_actor();
-        auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f).get();
-        auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
+        auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f).get();
+        auto& cameraTransform = observer.get_component<cmp::TransformComponent>().get();
 
         cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
 
@@ -79,7 +79,7 @@ namespace fox
 
         //Loading models
         auto& helmetActor           = scene->create_actor();
-        auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
+        auto& helmetTransform       = helmetActor.get_component<cmp::TransformComponent>().get();
         auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
 
         model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
@@ -97,29 +97,25 @@ namespace fox
         defaultMaterial->emissive   = defaultEmissive;
 
         auto& floorActor            = scene->create_actor();
-        auto& fatc                  = floorActor.get_component<ecs::TransformComponent>().get();
-        auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().get();
+        auto& fatc                  = floorActor.get_component<cmp::TransformComponent>().get();
+        auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
         famfc.mesh                  = gfx::Geometry::Plane::mesh();
         famfc.material              = defaultMaterial;
-
-        fatc.translate(fox::Vector3f{ 0.0f, -1.0f, 0.0f });
-        fatc.rotate(fox::Vector3f{ -90.0f, 0.0f, 0.0f });
-        fatc.dilate(fox::Vector3f{ 10.0f });
+        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 10.0f } };
 
         auto& boxActor = scene->create_actor();
-        auto& batc     = boxActor.get_component<ecs::TransformComponent>().get();
-        auto& bamfc    = boxActor.add_component<ecs::MeshFilterComponent>().get();
+        auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
+        auto& bamfc    = boxActor.add_component<cmp::MeshFilterComponent>().get();
         bamfc.mesh     = gfx::Geometry::Cube::mesh();
         bamfc.material = defaultMaterial;
-
-        batc = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
+        batc           = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
 
 
 
 
 
         //Skybox setup
-        const fox::Vector2u skyboxDimensions{ 2048, 2048 };
+        const fox::Vector2u skyboxDimensions{ 2048u, 2048u };
         std::array<std::filesystem::path, 6> skyboxImageFiles
         {
             "textures/skybox_space2/right.png", 
@@ -175,7 +171,7 @@ namespace fox
             {
                 static fox::Vector3f rotation{};
 
-                auto& ct  = observer.get_component<ecs::TransformComponent>().get();
+                auto& ct  = observer.get_component<cmp::TransformComponent>().get();
                 const auto& cpr = input::cursor_position_relative() / 10.0f;
 
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
@@ -225,8 +221,8 @@ namespace fox
             gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights, skybox };
             gfx::Renderer::start(renderInfo);
 
-            const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
-            view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mfc)
+            const auto& view = reg::view<cmp::RelationshipComponent, cmp::TransformComponent, cmp::MeshFilterComponent>();
+            view.each([&](auto entity, const cmp::RelationshipComponent& rlc, const cmp::TransformComponent& tc, const cmp::MeshFilterComponent& mfc)
                 {
                     const auto& relation   = rlc.get();
                     const auto& transform  = tc.get();
