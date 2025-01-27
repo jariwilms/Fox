@@ -25,11 +25,11 @@ namespace fox::gfx::api::gl
         const auto& uv = std::to_underlying(buffer);
         glDeleteBuffers(gl::size_t{ 1 }, &uv);
     }
-    static void                           bind_buffer_base(gl::handle_t buffer, glf::Buffer::IndexedTarget target, gl::index_t index)
+    static void                           bind_buffer_base(gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index)
     {
         glBindBufferBase(std::to_underlying(target), std::to_underlying(index), std::to_underlying(buffer));
     }
-    static void                           bind_buffer_range(gl::handle_t buffer, glf::Buffer::IndexedTarget target, gl::index_t index, gl::sizeptr_t size, gl::intptr_t offset)
+    static void                           bind_buffer_range(gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::sizeptr_t size, gl::intptr_t offset)
     {
         glBindBufferRange(std::to_underlying(target), std::to_underlying(index), std::to_underlying(buffer), offset, size);
     }
@@ -656,6 +656,12 @@ namespace fox::gfx::api::gl
         glGetIntegerv(static_cast<gl::enum_t>(flag), &result);
 
         return result;
+    }
+    static std::string                    string(glf::Connection connection)
+    {
+        auto* data = reinterpret_cast<const gl::char_t*>(glGetString(std::to_underlying(connection)));
+
+        return std::string{ data };
     }
 
     //Control

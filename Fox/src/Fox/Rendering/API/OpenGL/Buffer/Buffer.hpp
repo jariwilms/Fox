@@ -178,7 +178,7 @@ namespace fox::gfx::api::gl
 
         void bind_index(gl::index_t index) const
         {
-            gl::bind_buffer_base(m_handle, glf::Buffer::IndexedTarget::UniformBuffer, index);
+            gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
         }
 
         void copy(const T& data)
@@ -232,11 +232,11 @@ namespace fox::gfx::api::gl
 
         void bind_index(gl::index_t index) const
         {
-            gl::bind_buffer_base(m_handle, glf::Buffer::IndexedTarget::UniformBuffer, index);
+            gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
         }
         void bind_index_range(gl::index_t binding, fox::count_t count, fox::offset_t offset) const
         {
-            gl::bind_buffer_range(m_handle, glf::Buffer::IndexedTarget::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
+            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
         }
 
         void copy(std::span<const T, N> data)

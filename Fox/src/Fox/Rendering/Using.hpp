@@ -26,7 +26,8 @@ namespace fox::gfx
     using VertexBuffer           = api::gl::StaticBuffer<api::Buffer::Type::Vertex, T>;
     using IndexBuffer            = api::gl::StaticBuffer<api::Buffer::Type::Index, fox::uint32_t>;
     template<typename T>
-    using DynamicBuffer          = api::gl::DynamicBuffer<api::Buffer::Type::Vertex, T>;
+    using DynamicVertexBuffer    = api::gl::DynamicBuffer<api::Buffer::Type::Vertex, T>;
+    using DynamicIndexBuffer     = api::gl::DynamicBuffer<api::Buffer::Type::Index, fox::uint32_t>;
     template<typename T>
     using UniformBuffer          = api::gl::UniformBuffer<T>;
     template<typename T, fox::count_t N>

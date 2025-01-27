@@ -47,7 +47,7 @@ namespace fox::gfx::api::glf
             Write     = GL_WRITE_ONLY,
             ReadWrite = GL_READ_WRITE,
         };
-        enum class IndexedTarget : gl::enum_t
+        enum class BaseTarget : gl::enum_t
         {
             AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
             TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
@@ -125,6 +125,15 @@ namespace fox::gfx::api::glf
             Compatibility = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT, 
         };
     };
+    enum class Connection : gl::enum_t
+    {
+        Vendor, 
+        Renderer, 
+        Version, 
+        ShadingLanguageVersion, 
+
+        //Extensions, 
+    };
     struct     Cubemap
     {
         enum class Format
@@ -153,36 +162,113 @@ namespace fox::gfx::api::glf
     };
     enum class Data : gl::enum_t
     {
-        MajorVersion         = GL_MAJOR_VERSION, 
-        MinorVersion         = GL_MINOR_VERSION, 
-        ContextFlags         = GL_CONTEXT_FLAGS, 
-        ContextProfile       = GL_CONTEXT_PROFILE_MASK, 
-        ExtensionCount       = GL_NUM_EXTENSIONS, 
+        ContextProfile                           = GL_CONTEXT_PROFILE_MASK, 
+        ContextFlags                             = GL_CONTEXT_FLAGS, 
+        MajorVersion                             = GL_MAJOR_VERSION, 
+        MinorVersion                             = GL_MINOR_VERSION, 
+        ExtensionCount                           = GL_NUM_EXTENSIONS, 
+                                                 
+        DoubleBuffering                          = GL_DOUBLEBUFFER, 
+                                                 
+        DrawBuffer                               = GL_DRAW_BUFFER, 
+                                                 
+        ArrayBufferBinding                       = GL_ARRAY_BUFFER_BINDING, 
+        IndexBufferBinding                       = GL_ELEMENT_ARRAY_BUFFER_BINDING, 
+        RenderBufferBinding                      = GL_RENDERBUFFER_BINDING, 
+        FrameBufferBinding                       = GL_FRAMEBUFFER_BINDING, 
+        DrawFrameBufferBinding                   = GL_DRAW_FRAMEBUFFER_BINDING, 
+        ReadFrameBufferBinding                   = GL_READ_FRAMEBUFFER_BINDING, 
+                                                 
+        ActiveTexture                            = GL_ACTIVE_TEXTURE, 
+        CurrentProgram                           = GL_CURRENT_PROGRAM, 
+                                                 
+        Viewport                                 = GL_VIEWPORT, 
+        ScissorBox                               = GL_SCISSOR_BOX, 
+                                                 
+        FaceCulling                              = GL_CULL_FACE, 
+                                                 
+        Blending                                 = GL_BLEND, 
+        BlendingColor                            = GL_BLEND_COLOR, 
+        BlendingSourceRGB                        = GL_BLEND_SRC_RGB, 
+        BlendingSourceAlpha                      = GL_BLEND_SRC_ALPHA, 
+        BlendingDestinationRGB                   = GL_BLEND_DST_RGB, 
+        BlendingDestinationAlpha                 = GL_BLEND_DST_ALPHA, 
+        BlendingEquationRGB                      = GL_BLEND_EQUATION_RGB, 
+        BlendingEquationAlpha                    = GL_BLEND_EQUATION_ALPHA, 
+                                                 
+        DepthRange                               = GL_DEPTH_RANGE, 
+        DepthTest                                = GL_DEPTH_TEST, 
+        DepthWriteMask                           = GL_DEPTH_WRITEMASK, 
+        DepthClearValue                          = GL_DEPTH_CLEAR_VALUE, 
+        DepthFunction                            = GL_DEPTH_FUNC, 
+                                                 
+        StencilFunction                          = GL_STENCIL_FUNC, 
+                                                 
+        Dithering                                = GL_DITHER, 
+                                                 
+        PointSize                                = GL_POINT_SIZE, 
+        LineSmooth                               = GL_LINE_SMOOTH, 
+        LineWidth                                = GL_LINE_WIDTH, 
+        PolygonMode                              = GL_POLYGON_MODE, 
+                                                 
+        ColorClearValue                          = GL_COLOR_CLEAR_VALUE, 
+        ColorLogicOperation                      = GL_COLOR_LOGIC_OP, 
+        ColorWriteMask                           = GL_COLOR_WRITEMASK, 
+                                                 
+        MaximumTextureSize                       = GL_MAX_TEXTURE_SIZE, 
+        MaximumVertexAttributes                  = GL_MAX_VERTEX_ATTRIBS, 
+                                                 
+        AliasedLineWidthRange                    = GL_ALIASED_LINE_WIDTH_RANGE, 
+                                                 
+        CompressedTextureFormats                 = GL_COMPRESSED_TEXTURE_FORMATS, 
+                                                 
+        MaximumComputeShaderStorageBlocks        = GL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS, 
+        MaximumCombinedShaderStorageBlocks       = GL_MAX_COMBINED_SHADER_STORAGE_BLOCKS, 
+        MaximumComputeUniformBlocks              = GL_MAX_COMPUTE_UNIFORM_BLOCKS, 
+        MaximumComputeUniformComponents          = GL_MAX_COMPUTE_UNIFORM_COMPONENTS, 
+        MaximumComputeTextureImageUnits          = GL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS, 
+        MaximumComputeAtomicCounter              = GL_MAX_COMPUTE_ATOMIC_COUNTERS, 
+        MaximumComputeAtomicCounterBuffers       = GL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS, 
+        MaximumComputeWorkGroupInvocations       = GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, 
+        MaximumComputeWorkGroupCount             = GL_MAX_COMPUTE_WORK_GROUP_COUNT, 
+        MaximumComputeWorkGroupSize              = GL_MAX_COMPUTE_WORK_GROUP_SIZE, 
+        MaximumCombinedComputeUniformComponents  = GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS, 
+        Maximum3DTextureSize                     = GL_MAX_3D_TEXTURE_SIZE, 
+        MaximumArrayTextureLayers                = GL_MAX_ARRAY_TEXTURE_LAYERS, 
+        MaximumClipDistances                     = GL_MAX_CLIP_DISTANCES, 
+        MaximumColorTextureSamples               = GL_MAX_COLOR_TEXTURE_SAMPLES, 
+        MaximumCombinedAtomicCounters            = GL_MAX_COMBINED_ATOMIC_COUNTERS, 
+        MaximumCombinedFragmentUniformComponents = GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS, 
+        MaximumCombinedGeometryUniformComponents = GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS, 
+        MaximumCombinedTextureImageUnits         = GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, 
+        MaximumCombinedUniformBlocks             = GL_MAX_COMBINED_UNIFORM_BLOCKS, 
+        MaximumCombinedVertexUniformComponents   = GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS, 
+        MaximumCubemapTextureSize                = GL_MAX_CUBE_MAP_TEXTURE_SIZE, 
+        MaximumDepthTextureSamples               = GL_MAX_DEPTH_TEXTURE_SAMPLES, 
+        MaximumDrawBuffers                       = GL_MAX_DRAW_BUFFERS, 
+        MaximumDualSourceDrawBuffers             = GL_MAX_DUAL_SOURCE_DRAW_BUFFERS, 
+        MaximumVertexElements                    = GL_MAX_ELEMENTS_VERTICES, 
+        MaximumIndexElements                     = GL_MAX_ELEMENTS_INDICES, 
+        MaximumFragmentAtomicCounters            = GL_MAX_FRAGMENT_ATOMIC_COUNTERS, 
+        MaximumFragmentShaderStorageBlocks       = GL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS, 
+        MaximumFragmentInputComponents           = GL_MAX_FRAGMENT_INPUT_COMPONENTS, 
 
-        ArrayBufferBinding   = GL_ARRAY_BUFFER_BINDING, 
-        ElementBufferBinding = GL_ELEMENT_ARRAY_BUFFER_BINDING, 
-        RenderBufferBinding  = GL_RENDERBUFFER_BINDING, 
-        FrameBufferBinding   = GL_FRAMEBUFFER_BINDING, 
-
-        ActiveTexture        = GL_ACTIVE_TEXTURE, 
-        CurrentProgram       = GL_CURRENT_PROGRAM, 
-
-        Viewport             = GL_VIEWPORT, 
-        ScissorBox           = GL_SCISSOR_BOX, 
-
-        Blending             = GL_BLEND, 
-
-        DepthRange           = GL_DEPTH_RANGE, 
-        DepthTest            = GL_DEPTH_TEST, 
-        DepthFunction        = GL_DEPTH_FUNC, 
-        StencilFunctioin     = GL_STENCIL_FUNC, 
-
-        PointSize            = GL_POINT_SIZE, 
-        LineWidth            = GL_LINE_WIDTH, 
-        PolygonMode          = GL_POLYGON_MODE, 
-
-        MaxTextureSize       = GL_MAX_TEXTURE_SIZE, 
-        MaxVertexAttributes  = GL_MAX_VERTEX_ATTRIBS,                      
+        DispatchIndirectBufferBinding            = GL_DISPATCH_INDIRECT_BUFFER_BINDING, 
+                                                 
+        DebugGroupStackDepth                     = GL_DEBUG_GROUP_STACK_DEPTH, 
+        MaximumDebugGroupStackDepth              = GL_MAX_DEBUG_GROUP_STACK_DEPTH, 
+                                                 
+        CurrentProgram                           = GL_CURRENT_PROGRAM, 
+                                                 
+        FragmentShaderDerivativeHint             = GL_FRAGMENT_SHADER_DERIVATIVE_HINT, 
+        LineSmoothHint                           = GL_LINE_SMOOTH_HINT,
+                                                 
+        ImplementationColorReadFormat            = GL_IMPLEMENTATION_COLOR_READ_FORMAT, 
+        ImplementationColorReadType              = GL_IMPLEMENTATION_COLOR_READ_TYPE, 
+                                                 
+        LayerProvokingVertex                     = GL_LAYER_PROVOKING_VERTEX, 
+                                                 
+        LogicOperationMode                       = GL_LOGIC_OP_MODE, 
     };
     struct     Debug
     {
