@@ -23,14 +23,22 @@ namespace fox::gfx::api
         };
         enum class Access
         {
-            Static, 
-            Dynamic, 
-        };
-        enum class Mapping
-        {
             Read, 
             Write, 
             ReadWrite, 
+
+            ReadPersistent, 
+            WritePersistent, 
+            ReadWritePersistent, 
+
+            ReadCoherent, 
+            WriteCoherent, 
+            ReadWriteCoherent, 
+
+            //InvalidateRange, 
+            //InvalidateBuffer, 
+            //FlushExplicit, 
+            //Unsynchronized, 
         };
 
         Buffer(Buffer&& other) noexcept
