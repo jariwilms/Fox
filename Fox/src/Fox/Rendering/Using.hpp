@@ -6,32 +6,34 @@
 
 #if FOX_GRAPHICS_API == OpenGL
 
+//TODO: check if all includes present/correct
 #include "Fox/Rendering/API/OpenGL/Buffer/Buffer.hpp"
-#include "Fox/Rendering/API/OpenGL/Buffer/FrameBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/VertexArray.hpp"
-#include "Fox/Rendering/API/OpenGL/Layout/VertexLayout.hpp"
+#include "Fox/Rendering/API/OpenGL/FrameBuffer/FrameBuffer.hpp"
 #include "Fox/Rendering/API/OpenGL/RenderState/RenderState.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Pipeline.hpp"
 #include "Fox/Rendering/API/OpenGL/Shader/Shader.hpp"
+#include "Fox/Rendering/API/OpenGL/Texture/Cubemap.hpp"
 #include "Fox/Rendering/API/OpenGL/Texture/Texture.hpp"
+#include "Fox/Rendering/Layout/Layout.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/Uniform/Uniform.hpp"
 
 namespace fox::gfx
 {
 	using Buffer                 = api::Buffer;
-    template<Buffer::Access ACCESS, typename T>
-    using VertexBuffer           = api::gl::Buffer<api::Buffer::Type::Vertex, ACCESS, T>;
-    template<Buffer::Access ACCESS>
-    using IndexBuffer            = api::gl::Buffer<api::Buffer::Type::Index, ACCESS, std::uint32_t>;
     template<typename T>
-    using UniformBuffer          = api::gl::Buffer<api::Buffer::Type::Uniform, Buffer::Access::Dynamic, T>;
-    template<Buffer::Access ACCESS, typename T>
-    using UniformArrayBuffer     = api::gl::Buffer<api::Buffer::Type::UniformArray, ACCESS, T>;
+    using VertexBuffer           = api::gl::StaticBuffer<api::Buffer::Type::Vertex, T>;
+    using IndexBuffer            = api::gl::StaticBuffer<api::Buffer::Type::Index, fox::uint32_t>;
+    template<typename T>
+    using DynamicVertexBuffer    = api::gl::DynamicBuffer<api::Buffer::Type::Vertex, T>;
+    using DynamicIndexBuffer     = api::gl::DynamicBuffer<api::Buffer::Type::Index, fox::uint32_t>;
+    template<typename T>
+    using UniformBuffer          = api::gl::UniformBuffer<T>;
+    template<typename T, fox::count_t N>
+    using UniformArrayBuffer     = api::gl::UniformArrayBuffer<T, N>;
 
     using VertexArray            = api::gl::VertexArray;
-
-    template<typename... T>
-    using VertexLayout           = api::gl::VertexLayout<T...>;
 
     using FrameBuffer            = api::gl::FrameBuffer<AntiAliasing::None>;
     using FrameBufferMultisample = api::gl::FrameBuffer<AntiAliasing::MSAA>;
@@ -45,8 +47,9 @@ namespace fox::gfx
     using Texture3D              = api::gl::Texture<Dimensions::_3D, AntiAliasing::None>;
     using Texture2DMultisample   = api::gl::Texture<Dimensions::_2D, AntiAliasing::MSAA>;
     using Texture3DMultisample   = api::gl::Texture<Dimensions::_3D, AntiAliasing::MSAA>;
+    using Cubemap                = api::gl::Cubemap;
 
-    using TextureBlueprint       = api::TextureBlueprint;
+    using RenderBuffer           = api::RenderBuffer;
 
     using RenderState            = api::gl::RenderState;
 }

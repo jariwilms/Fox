@@ -4,6 +4,19 @@
 
 namespace fox::utl
 {
+    template<typename T, auto MPTR>
+    static constexpr auto offset_of()
+    {
+        return reinterpret_cast<std::size_t>(
+            &reinterpret_cast<const volatile char&>(
+                ((static_cast<T*>(
+                    nullptr))->*MPTR)
+                )
+            );
+    }
+
+
+
     template<typename T, fox::size_t SIZE>
     auto to_span(const std::array<T, SIZE>& v)
     {
@@ -43,16 +56,16 @@ namespace fox::utl
     auto as_bytes(std::span<T, EXTENT> s)
     {
         constexpr auto dynamic_extent = static_cast<fox::size_t>(-1);
-        using return_type = std::span<const fox::byte, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
+        using return_type = std::span<const fox::byte_t, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
 
-        return return_type{ reinterpret_cast<const fox::byte*>(s.data()), s.size_bytes() };
+        return return_type{ reinterpret_cast<const fox::byte_t*>(s.data()), s.size_bytes() };
     }
 
 
 
     //https://stackoverflow.com/a/21028912
     //There is an instance where we want a vector to take ownership of a large amount of preallocated data without allocation or initialization
-    //This allocator does just that, nothing
+    //This allocator does just that; nothing
     template <typename T, typename A = std::allocator<T>>
     class default_init_allocator : public A
     {

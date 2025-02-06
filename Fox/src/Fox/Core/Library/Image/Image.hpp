@@ -7,62 +7,67 @@ namespace fox
     class Image
     {
     public:
-        enum class Format
+        enum class Extension
         {
             BMP, 
             JPEG, 
             PNG, 
         };
-        enum class Layout
+        enum class Format : fox::uint32_t
         {
-            R8 = 1, 
+            R8 = 1u, 
             RG8, 
             RGB8, 
             RGBA8, 
         };
 
-        Image(Layout layout, const fox::Vector2u& dimensions, std::span<const fox::byte> data)
-            : m_layout{ layout }, m_dimensions{ dimensions }, m_data{ data.data(), data.data() + data.size_bytes() }
+        Image(Format format, const fox::Vector2u& dimensions, std::span<const fox::byte_t> data)
         {
-            const auto& channels  = static_cast<fox::int32_t>(layout);
-            const auto& imageSize = static_cast<fox::size_t>(m_dimensions.x) * m_dimensions.y * channels;
+            const auto& channels  = std::to_underlying(format);
+            const auto& totalSize = static_cast<fox::size_t>(dimensions.x) * dimensions.y * channels;
 
-            if (imageSize > m_data.size()) throw std::runtime_error{ "Invalid image dimensions or layout!" };
+            if (totalSize > data.size()) throw std::runtime_error{ "Invalid image format or dimensions!" };
+
+            m_format     = format;
+            m_dimensions = dimensions;
+            m_data       = { data.begin(), data.end() };
         }
-        Image(Layout layout, const fox::Vector2u& dimensions, std::vector<fox::byte>&& data)
-            : m_layout{ layout }, m_dimensions{ dimensions }, m_data{ std::move(data) }
+        Image(Format format, const fox::Vector2u& dimensions, std::vector<fox::byte_t>&& data)
         {
-            const auto& channels  = static_cast<fox::int32_t>(layout);
-            const auto& imageSize = static_cast<fox::size_t>(m_dimensions.x) * m_dimensions.y * channels;
+            const auto& channels  = std::to_underlying(format);
+            const auto& totalSize = static_cast<fox::size_t>(dimensions.x) * dimensions.y * channels;
 
-            if (imageSize > m_data.size()) throw std::runtime_error{ "Invalid image dimensions or layout!" };
+            if (totalSize > data.size()) throw std::runtime_error{ "Invalid image format or dimensions!" };
+
+            m_format     = format;
+            m_dimensions = dimensions;
+            m_data       = std::move(data);
         }
-        virtual ~Image() = default;
 
-        static std::vector<byte>   encode(Format format, const Image& image);
-        static Image               decode(Layout layout, std::span<const fox::byte> data);
+        static std::vector<fox::byte_t> encode(Extension extension, const Image& image);
+        static Image                    decode(Format layout, std::span<const fox::byte_t> data);
 
-        Layout                     layout()     const
+        Format                          format()     const
         {
-            return m_layout;
+            return m_format;
         }
-        const fox::Vector2u&       dimensions() const
+        const fox::Vector2u&            dimensions() const
         {
             return m_dimensions;
         }
 
-        std::span<fox::byte>       data()
+        std::span<fox::byte_t>          data()
         {
             return m_data;
         }
-        std::span<const fox::byte> data() const
+        std::span<const fox::byte_t>    data() const
         {
             return m_data;
         }
 
     private:
-        Layout                 m_layout{};
-        fox::Vector2u          m_dimensions{};
-        std::vector<fox::byte> m_data{};
+        Format                   m_format{};
+        fox::Vector2u            m_dimensions{};
+        std::vector<fox::byte_t> m_data{};
     };
 }

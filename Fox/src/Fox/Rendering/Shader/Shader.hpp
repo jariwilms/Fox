@@ -9,13 +9,13 @@ namespace fox::gfx::api
     public:
         enum class Stage
         {
-            Vertex,
-            TessellationControl,
-            TessellationEvaluation,
-            Geometry,
-            Fragment,
+            Vertex, 
+            TessellationControl, 
+            TessellationEvaluation, 
+            Geometry, 
+            Fragment, 
 
-            Compute,
+            Compute, 
         };
 
         Stage stage() const
@@ -26,17 +26,6 @@ namespace fox::gfx::api
     protected:
         Shader(Stage stage)
             : m_stage{ stage } {}
-        Shader(Shader&& other) noexcept
-        {
-            *this = std::move(other);
-        }
-
-        Shader& operator=(Shader&& other) noexcept
-        {
-            m_stage = other.m_stage;
-
-            other.m_stage = {};
-        }
 
         Stage m_stage{};
     };

@@ -2,33 +2,20 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/API/OpenGL/Buffer/Buffer.hpp"
-#include "Fox/Rendering/API/OpenGL/Layout/VertexLayout.hpp"
+#include "Fox/Rendering/Buffer/VertexArray.hpp"
+#include "Fox/Rendering/Layout/VertexLayout.hpp"
 
 namespace fox::gfx::api::gl
 {
-    class VertexArray : public gl::Object
+    class VertexArray : public api::VertexArray, public gl::Object
     {
     public:
-        template<api::Buffer::Access ACCESS, typename T>
-        using vertex_t             = Buffer<api::Buffer::Type::Vertex, ACCESS, T>;
-        template<api::Buffer::Access ACCESS>
-        using index_t              = Buffer<api::Buffer::Type::Index, ACCESS, std::uint32_t>;
-        template<api::Buffer::Access ACCESS, typename T>
-        using vertex_pointer       = std::shared_ptr<vertex_t<ACCESS, T>>;
-        template<api::Buffer::Access ACCESS, typename T>
-        using const_vertex_pointer = std::shared_ptr<const vertex_t<ACCESS, T>>;
-        using const_index_pointer  = std::shared_ptr<const index_t<api::Buffer::Access::Static>>;
-
         VertexArray()
         {
             m_handle = gl::create_vertex_array();
         }
-        VertexArray(VertexArray&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        VertexArray(VertexArray&&) noexcept = default;
         ~VertexArray()
         {
             gl::delete_vertex_array(m_handle);
@@ -39,75 +26,72 @@ namespace fox::gfx::api::gl
             gl::bind_vertex_array(m_handle);
         }
 
-        template<api::Buffer::Access ACCESS, typename T, typename... U>
-        void tie(vertex_pointer<ACCESS, T> buffer, VertexLayout<U...> layout)
+        void enable_attribute(gl::uint32_t index)
         {
-            tie(static_pointer_cast<const vertex_t<ACCESS, T>>(buffer), layout);
+            gl::enable_vertex_array_attribute(m_handle, index);
         }
-        template<api::Buffer::Access ACCESS, typename T, typename... U>
-        void tie(const_vertex_pointer<ACCESS, T> buffer, VertexLayout<U...> layout)
+        void disable_attribute(gl::uint32_t index)
         {
-            //TODO: this value (MaxVertexAttribs) should be pulled from gl::State Object
-            //if (m_arrayBindingIndex > static_cast<gl::uint32_t>(gl::integer_v(GL_MAX_VERTEX_ATTRIBS))) throw std::runtime_error{ "Maximum vertex attributes exceeded!" };
+            gl::disable_vertex_array_attribute(m_handle, index);
+        }
 
-            gl::vertex_array_vertex_buffer(m_handle, buffer->handle(), m_arrayBindingIndex, static_cast<gl::size_t>(layout.stride()));
+        void set_attribute_divisor(gl::uint32_t attribute, gl::uint32_t divisor)
+        {
+            gl::vertex_array_binding_divisor(m_handle, attribute, divisor);
+        }
+
+        void tie(std::shared_ptr<const gl::BufferObject<api::Buffer::Type::Vertex>> buffer, VertexLayout layout)
+        {
+            gl::vertex_array_vertex_buffer(m_handle, buffer->handle(), m_bindingPoint, static_cast<gl::size_t>(layout.stride()));
 
             gl::uint32_t offset{};
             for (const auto& attribute : layout.attributes())
             {
-                gl::enable_vertex_array_attribute(m_handle, m_arrayAttributeIndex);
-                gl::vertex_array_attribute_format(m_handle, m_arrayAttributeIndex, offset, attribute.type, attribute.count, attribute.isNormalized);
-                gl::vertex_array_attribute_binding(m_handle, m_arrayAttributeIndex, m_arrayBindingIndex);
+                enable_attribute(m_attributeIndex);
 
-                offset           += static_cast<gl::uint32_t>(attribute.stride());
-                m_primitiveCount += static_cast<fox::uint32_t>(buffer->size() / attribute.stride());
+                gl::vertex_array_attribute_format(m_handle,  m_attributeIndex, offset, gl::map_data_type(attribute.dataType), attribute.count, attribute.isNormalized);
+                gl::vertex_array_attribute_binding(m_handle, m_attributeIndex, m_bindingPoint);
+                if (attribute.isStatic) set_attribute_divisor(m_attributeIndex, attribute.divisionRate);
 
-                ++m_arrayAttributeIndex;
+                offset += static_cast<gl::uint32_t>(attribute.stride());
+
+                m_attributeIndexToBufferMap.emplace(m_attributeIndex, buffer->handle());
+                ++m_attributeIndex;
             }
 
-            ++m_arrayBindingIndex;
+            m_bindingPointToBufferMap.emplace(m_bindingPoint, buffer->handle());
+            ++m_bindingPoint;
         }
-        void tie(const_index_pointer buffer)
+        void tie(std::shared_ptr<const gl::StaticBuffer<api::Buffer::Type::Index, fox::uint32_t>> buffer)
         {
+            gl::vertex_array_element_buffer(m_handle, buffer->handle());
+
             m_indexBuffer = buffer;
-            gl::vertex_array_element_buffer(m_handle, m_indexBuffer->handle());
         }
 
-        bool                is_indexed()      const
+        const std::unordered_map<gl::uint32_t, gl::handle_t>& binding_points() const
         {
-            return m_indexBuffer.get() != nullptr;
+            return m_bindingPointToBufferMap;
         }
-        const_index_pointer index_buffer()    const
+        const std::unordered_map<gl::uint32_t, gl::handle_t>& attributes()     const
         {
-            return m_indexBuffer;
-        }
-        unsigned int        primitive_count() const
-        {
-            return m_primitiveCount;
+            return m_attributeIndexToBufferMap;
         }
 
-        VertexArray& operator=(VertexArray&& other) noexcept
+        fox::count_t index_count() const
         {
-            m_handle              = other.m_handle;
-            m_arrayAttributeIndex = other.m_arrayAttributeIndex;
-            m_arrayBindingIndex   = other.m_arrayBindingIndex;
-            m_primitiveCount      = other.m_primitiveCount;
-            m_indexBuffer         = std::move(other.m_indexBuffer);
-
-            other.m_handle              = {};
-            other.m_arrayAttributeIndex = 0u;
-            other.m_arrayBindingIndex   = 0u;
-            other.m_primitiveCount      = 0u;
-            other.m_indexBuffer.reset();
-
-            return *this;
+            return static_cast<fox::count_t>(m_indexBuffer->size() / sizeof(fox::uint32_t));
         }
+
+        VertexArray& operator=(VertexArray&&) noexcept = default;
 
     private:
-        gl::uint32_t m_arrayAttributeIndex{};
-        gl::uint32_t m_arrayBindingIndex{};
+        gl::uint32_t m_attributeIndex{};
+        gl::uint32_t m_bindingPoint{};
 
-        const_index_pointer m_indexBuffer{};
-        fox::uint32_t m_primitiveCount{};
+        std::unordered_map<gl::uint32_t, gl::handle_t> m_bindingPointToBufferMap{};
+        std::unordered_map<gl::uint32_t, gl::handle_t> m_attributeIndexToBufferMap{};
+
+        std::shared_ptr<const gl::StaticBuffer<api::Buffer::Type::Index, gl::uint32_t>> m_indexBuffer{};
     };
 }

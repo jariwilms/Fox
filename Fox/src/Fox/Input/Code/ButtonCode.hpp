@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::inp::btn
+namespace fox::input::btn
 {
     using btn_t = fox::int32_t;
 

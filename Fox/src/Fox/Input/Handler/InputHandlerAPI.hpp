@@ -6,7 +6,7 @@
 #include "Fox/Input/Code/ButtonCode.hpp"
 #include "Fox/Input/Code/ModifierCode.hpp"
 
-namespace fox::inp
+namespace fox::input
 {
     class InputHandlerAPI
     {

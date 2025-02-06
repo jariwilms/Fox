@@ -3,6 +3,8 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/Mesh/Mesh.hpp"
+#include "Fox/IO/Import/Model/ModelImporter.hpp"
+
 
 namespace fox::gfx
 {
@@ -13,6 +15,7 @@ namespace fox::gfx
         {
             Plane::init();
             Cube::init();
+            Sphere::init();
         }
 
         struct Plane
@@ -39,14 +42,21 @@ namespace fox::gfx
                 0.0f, 0.0f, 1.0f,
                 0.0f, 0.0f, 1.0f,
             };
-            static inline const std::array<fox::float32_t, 8> coordinates
+            static inline const std::array<fox::float32_t, 12> tangents
+            {
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+                1.0f, 0.0f, 0.0f,
+            };
+            static inline const std::array<fox::float32_t, 8>  coordinates
             {
                 1.0f, 1.0f,
                 0.0f, 1.0f,
                 0.0f, 0.0f,
                 1.0f, 0.0f,
             };
-            static inline const std::array<fox::uint32_t, 6> indices
+            static inline const std::array<fox::uint32_t, 6>   indices
             {
                 0, 1, 2,
                 0, 2, 3,
@@ -55,72 +65,74 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto& layout3f = VertexLayout<float>{ 3 };
-                const auto& layout2f = VertexLayout<float>{ 2 };
+                gfx::VertexLayout layout2f{};
+                gfx::VertexLayout layout3f{};
 
-                s_positions   = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                s_normals     = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(normals);
-                s_coordinates = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(coordinates);
-                s_indices     = std::make_shared<IndexBuffer<Buffer::Access::Static>>(indices);
+                layout2f.specify<fox::float32_t>(2);
+                layout3f.specify<fox::float32_t>(3);
 
-                auto vertexArray = std::make_shared<VertexArray>();
-                vertexArray->tie(s_positions,   layout3f);
-                vertexArray->tie(s_normals,     layout3f);
-                vertexArray->tie(s_coordinates, layout2f);
-                vertexArray->tie(s_indices);
+                const auto& positionsVBO   = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(positions);
+                const auto& normalsVBO     = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(normals);
+                const auto& tangentsVBO    = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(tangents);
+                const auto& coordinatesVBO = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(coordinates);
+                const auto& indicesIBO     = std::make_shared<gfx::IndexBuffer>(indices);
 
-                s_mesh = std::make_shared<Mesh>(vertexArray);
+                auto vertexArray = std::make_shared<gfx::VertexArray>();
+                vertexArray->tie(positionsVBO,   layout3f);
+                vertexArray->tie(normalsVBO,     layout3f);
+                vertexArray->tie(tangentsVBO,    layout3f);
+                vertexArray->tie(coordinatesVBO, layout2f);
+                vertexArray->tie(indicesIBO);
+
+                s_mesh = std::make_shared<gfx::Mesh>(vertexArray);
             }
 
-            static inline std::shared_ptr<Mesh> s_mesh{};
-            static inline std::shared_ptr<VertexBuffer<Buffer::Access::Static, float>> s_positions{};
-            static inline std::shared_ptr<VertexBuffer<Buffer::Access::Static, float>> s_normals{};
-            static inline std::shared_ptr<VertexBuffer<Buffer::Access::Static, float>> s_coordinates{};
-            static inline std::shared_ptr<IndexBuffer<Buffer::Access::Static>> s_indices{};
+            static inline std::shared_ptr<gfx::Mesh> s_mesh{};
         };
         struct Cube
         {
         public:
             friend Geometry;
 
-            static const std::shared_ptr<Mesh> mesh()
+            static const std::shared_ptr<gfx::Mesh> mesh()
             {
                 return s_mesh;
             }
 
-            static inline const std::array<float, 72> positions
+            //Right, Left, Top, Bottom, Front, Back
+            static inline const std::array<fox::float32_t, 72> positions
             {
-                 0.5f,  0.5f,  0.5f, 
-                -0.5f,  0.5f,  0.5f, 
-                -0.5f, -0.5f,  0.5f, 
-                 0.5f, -0.5f,  0.5f, 
-
-                -0.5f,  0.5f, -0.5f, 
-                 0.5f,  0.5f, -0.5f, 
-                 0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-
+                 0.5f,  0.5f, -0.5f,  
+                 0.5f,  0.5f,  0.5f,  
+                 0.5f, -0.5f,  0.5f,  
+                 0.5f, -0.5f, -0.5f,  
+                                     
                 -0.5f,  0.5f,  0.5f, 
                 -0.5f,  0.5f, -0.5f, 
                 -0.5f, -0.5f, -0.5f, 
                 -0.5f, -0.5f,  0.5f, 
-
-                 0.5f,  0.5f, -0.5f,
-                 0.5f,  0.5f,  0.5f,
-                 0.5f, -0.5f,  0.5f,
-                 0.5f, -0.5f, -0.5f,
-
+                                     
+                 0.5f,  0.5f, -0.5f, 
+                -0.5f,  0.5f, -0.5f, 
+                -0.5f,  0.5f,  0.5f, 
+                 0.5f,  0.5f,  0.5f, 
+                                     
                  0.5f, -0.5f,  0.5f, 
                 -0.5f, -0.5f,  0.5f, 
                 -0.5f, -0.5f, -0.5f, 
                  0.5f, -0.5f, -0.5f, 
-
-                 0.5f,  0.5f, -0.5f,
-                -0.5f,  0.5f, -0.5f,
-                -0.5f,  0.5f,  0.5f,
-                 0.5f,  0.5f,  0.5f,
+                                     
+                 0.5f,  0.5f,  0.5f, 
+                -0.5f,  0.5f,  0.5f, 
+                -0.5f, -0.5f,  0.5f, 
+                 0.5f, -0.5f,  0.5f, 
+                                     
+                -0.5f,  0.5f, -0.5f, 
+                 0.5f,  0.5f, -0.5f, 
+                 0.5f, -0.5f, -0.5f, 
+                -0.5f, -0.5f, -0.5f, 
             };
-            static inline const std::array<float, 72> normals
+            static inline const std::array<fox::float32_t, 72> normals
             {
                  1.0f,  0.0f,  0.0f,
                  1.0f,  0.0f,  0.0f,
@@ -152,7 +164,39 @@ namespace fox::gfx
                  0.0f,  0.0f, -1.0f,
                  0.0f,  0.0f, -1.0f,
             };
-            static inline const std::array<float, 48> coordinates
+            static inline const std::array<fox::float32_t, 72> tangents
+            {
+                 0.0f,  0.0f, -1.0f,   
+                 0.0f,  0.0f, -1.0f,   
+                 0.0f,  0.0f, -1.0f,   
+                 0.0f,  0.0f, -1.0f,
+                        
+                 0.0f,  0.0f,  1.0f,  
+                 0.0f,  0.0f,  1.0f,  
+                 0.0f,  0.0f,  1.0f,  
+                 0.0f,  0.0f,  1.0f,
+                        
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,
+                               
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,
+                               
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,   
+                 1.0f,  0.0f,  0.0f,
+                               
+                -1.0f,  0.0f,  0.0f,  
+                -1.0f,  0.0f,  0.0f,  
+                -1.0f,  0.0f,  0.0f,  
+                -1.0f,  0.0f,  0.0f
+            };
+            static inline const std::array<fox::float32_t, 48> coordinates
             {
                  1.0f, 1.0f,
                  0.0f, 1.0f,
@@ -184,7 +228,7 @@ namespace fox::gfx
                  0.0f, 0.0f,
                  1.0f, 0.0f,
             };
-            static inline const std::array<unsigned int, 36> indices
+            static inline const std::array<fox::uint32_t, 36> indices
             {
                  0,  1,  2,
                  0,  2,  3,
@@ -208,17 +252,22 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto layout3f = VertexLayout<float>{ 3 };
-                const auto layout2f = VertexLayout<float>{ 2 };
+                gfx::VertexLayout layout2f{};
+                gfx::VertexLayout layout3f{};
 
-                const auto& positionsVBO   = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                const auto& normalsVBO     = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                const auto& coordinatesVBO = std::make_shared<VertexBuffer<Buffer::Access::Static, float>>(positions);
-                const auto& indicesIBO     = std::make_shared<IndexBuffer<Buffer::Access::Static>>(indices);
+                layout2f.specify<fox::float32_t>(2);
+                layout3f.specify<fox::float32_t>(3);
+
+                const auto& positionsVBO   = std::make_shared<VertexBuffer<fox::float32_t>>(positions);
+                const auto& normalsVBO     = std::make_shared<VertexBuffer<fox::float32_t>>(normals);
+                const auto& tangentsVBO    = std::make_shared<VertexBuffer<fox::float32_t>>(tangents);
+                const auto& coordinatesVBO = std::make_shared<VertexBuffer<fox::float32_t>>(coordinates);
+                const auto& indicesIBO     = std::make_shared<IndexBuffer>(indices);
 
                 auto vertexArray = std::make_shared<VertexArray>();
-                vertexArray->tie(positionsVBO, layout3f);
-                vertexArray->tie(normalsVBO, layout3f);
+                vertexArray->tie(positionsVBO,   layout3f);
+                vertexArray->tie(normalsVBO,     layout3f);
+                vertexArray->tie(tangentsVBO,    layout3f);
                 vertexArray->tie(coordinatesVBO, layout2f);
                 vertexArray->tie(indicesIBO);
 
@@ -226,6 +275,24 @@ namespace fox::gfx
             }
 
             static inline std::shared_ptr<Mesh> s_mesh{};
+        };
+        struct Sphere
+        {
+            friend Geometry;
+
+            static const std::shared_ptr<gfx::Mesh> mesh()
+            {
+                return s_mesh;
+            }
+
+        private:
+            static void init()
+            {
+                const auto& model = io::ModelImporter::import2("models/sphere/Sphere.gltf");
+                s_mesh = model->meshes.at(0);
+            }
+
+            static inline std::shared_ptr<gfx::Mesh> s_mesh{};
         };
     };
 }

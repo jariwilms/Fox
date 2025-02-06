@@ -28,29 +28,37 @@ namespace fox::io
             return std::make_shared<File>(path);
         }
 
-        void save()
+        std::unique_ptr<const std::vector<fox::byte_t>> read(std::optional<fox::size_t> limit = {})
         {
-            m_stream.flush();
-        }
+            //The default vector allocator initializes all data when resizing.
+            //This is redundant because we want the vector to take ownership of existing data.
+                  auto buffer  = std::make_unique<std::vector<fox::byte_t>>();
+            const auto maxSize = std::min(limit.value_or(size()), size());
 
-        std::unique_ptr<const std::vector<byte>> read(std::uint32_t limit = 0u)
-        {
-            //The default vector allocator initializes all data when resizing. This is redundant because we wrap the vector around existing data
-            auto buffer = std::make_unique<std::vector<byte>>();
-            reinterpret_cast<std::vector<byte, utl::default_init_allocator<byte>>*>(buffer.get())->resize(limit ? limit : size());
+            using vec_t = std::vector<fox::byte_t, utl::default_init_allocator<fox::byte_t>>;
 
-            read_data(reinterpret_cast<char*>(buffer->data()), buffer->size());
+            reinterpret_cast<vec_t*>(buffer.get())->resize(maxSize);
+            read_data(reinterpret_cast<fox::char_t*>(buffer->data()), buffer->size());
+
             return buffer;
         }
-        void write(std::span<const byte> data)
+        void                                            write(std::span<const fox::byte_t> data)
         {
             write_data(reinterpret_cast<const char*>(data.data()), data.size_bytes());
         }
-        void write(std::string_view data)
+        void                                            write(std::string_view data)
         {
             write_data(data.data(), data.size());
         }
 
+        void save()
+        {
+            m_stream.flush();
+        }
+        void resize(fox::size_t size)
+        {
+            std::filesystem::resize_file(m_path, size);
+        }
         void truncate()
         {
             m_stream.open(m_path, std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
@@ -64,17 +72,17 @@ namespace fox::io
         {
             return std::filesystem::last_write_time(m_path);
         }
-        size_t                          size()            const
+        fox::size_t                     size()            const
         {
             return std::filesystem::file_size(m_path);
         }
 
 	protected:
-        void read_data(char* buffer, size_t size)
+        void read_data(fox::char_t* buffer, fox::size_t size)
         {
             m_stream.read(buffer, size);
         }
-        void write_data(const char* data, size_t size)
+        void write_data(const fox::char_t* data, fox::size_t size)
         {
             m_stream.write(data, size);
         }

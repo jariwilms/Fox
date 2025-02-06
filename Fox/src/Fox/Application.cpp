@@ -10,19 +10,25 @@
 #include "Fox/Input/Input.hpp"
 #include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
+#include "Fox/Rendering/Geometry/Geometry.hpp"
 #include "Fox/Rendering/Model/Model.hpp"
+#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/Utility/Utility.hpp"
+#include "Fox/Scene/Actor.hpp"
 #include "Fox/Scene/Scene.hpp"
 #include "Fox/Window/WindowManager.hpp"
-#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
 
 namespace fox
 {
     static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
-        auto& mrc = actor.add_component<ecs::MeshRendererComponent>();
-        if (node.meshIndex)     mrc.mesh     = model.meshes.at(node.meshIndex.value());
-        if (node.materialIndex) mrc.material = model.materials.at(node.materialIndex.value());
+        auto& tc = actor.get_component<cmp::TransformComponent>().get();
+        tc = node.localTransform;
+
+        auto& mf = actor.add_component<cmp::MeshFilterComponent>().get();
+        if (node.meshIndex)     mf.mesh     = model.meshes.at(node.meshIndex.value());
+        if (node.materialIndex) mf.material = model.materials.at(node.materialIndex.value());
 
         for (auto& childIndex : node.children)
         {
@@ -32,54 +38,24 @@ namespace fox
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    static fox::Transform transform_product(const scn::Scene& scene, const scn::Actor& actor)
+    static fox::Transform transform_product(const scn::Scene& scene, const Relationship& relation, const fox::Transform& transform)
     {
-        const auto& rc = actor.get_component<ecs::RelationshipComponent>();
-        const auto& tc = actor.get_component<ecs::TransformComponent>();
+        if (!relation.parent) return transform;
 
-        if (rc.parent)
-        {
-            const auto& actor = scene.find_actor(rc.parent.value());
+        const auto& parent = scene.find_actor(relation.parent.value());
+        const auto& rel    = parent.get_component<cmp::RelationshipComponent>().get();
+        const auto& trs    = parent.get_component<cmp::TransformComponent>().get();
 
-            return transform_product(scene, actor) * tc.transform();
-        }
-        else
-        {
-            return tc.transform();
-        }
-    }
-    static void           render_actor(scn::Scene& scene, scn::Actor& actor, gfx::UniformBuffer<gfx::UMatrices>& matrices)
-    {
-        const auto& view = reg::view<ecs::TransformComponent, ecs::MeshRendererComponent>();
-
-        view.each([&](auto entity, const ecs::TransformComponent& tc, const ecs::MeshRendererComponent& mrc)
-            {
-                namespace gl = fox::gfx::api::gl;
-
-                const auto& mesh     = mrc.mesh;
-                const auto& material = mrc.material;
-
-                if (!mesh || !material) return;
-
-                const auto& matrix = transform_product(scene, actor).matrix();
-                matrices.copy_tuple(offsetof(gfx::UMatrices, model), std::make_tuple(matrix));
-
-                material->albedo->bind(0);
-                material->normal->bind(1);
-                material->arm->bind(2);
-
-                mesh->vertexArray->bind();
-                gl::draw_elements(gl::Flags::Draw::Mode::Triangles, gl::Flags::Draw::Type::UnsignedInt, mesh->vertexArray->index_buffer()->count());
-            });
+        return transform_product(scene, rel, trs) * transform;
     }
 
     Application::Application(int argc, char* argv[])
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
+        gfx::Geometry::init();
         io::ModelImporter::init();
-        //gfx::Geometry::init();
-        //gfx::Renderer::init();
+        gfx::Renderer::init();
     }
     Application::~Application()
     {
@@ -88,92 +64,183 @@ namespace fox
 
     int Application::run()
     {
+        //Scene creation and camera setup
         auto  scene           = std::make_shared<scn::Scene>();
-        auto  model           = io::ModelImporter::import2("models/sponza/Sponza.gltf");
+
         auto& observer        = scene->create_actor();
-        auto& camera          = observer.add_component<ecs::CameraComponent>().camera();
-        auto& cameraTransform = observer.get_component<ecs::TransformComponent>().transform();
+        auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f).get();
+        auto& cameraTransform = observer.get_component<cmp::TransformComponent>().get();
 
-        cameraTransform.translate(Vector3f{ 0.0f, 0.0f, 5.0f });
-
-        auto& actor = scene->create_actor();
-        model_to_scene_graph(*scene, actor, *model, model->nodes.at(model->rootNode));
-
-
-
-        namespace gl = gfx::api::gl;
-
-        const auto& shaders          = gfx::api::shaders_from_binaries<gfx::Shader>("shaders/compiled/test.vert.spv", "shaders/compiled/test.frag.spv");
-              auto  testPipeline     = std::make_shared<gfx::Pipeline>(gfx::Pipeline::Layout{ .vertexShader = shaders.at(0), .fragmentShader = shaders.at(1) });
-
-        const auto& file             = io::load("images/anna.png");
-        const auto& data             = file->read();
-        const auto& image            = fox::Image::decode(fox::Image::Layout::RGBA8, *data);
-              auto  texture          = std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
-
-        const auto& renderInfo       = gfx::RenderInfo{ { camera, cameraTransform }, {} };
-        const auto& modelMatrix      = fox::Matrix4f{ 1.0f };
-        const auto& viewMatrix       = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
-        const auto& projectionMatrix = camera.projection().matrix();
-
-              auto  matricesBuffer   = std::make_shared<gfx::UniformBuffer<gfx::UMatrices>>();
-              auto  cameraBuffer     = std::make_shared<gfx::UniformBuffer<gfx::UCamera>>();
+        cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
 
 
 
 
 
-        Time::reset();
-        fox::CyclicBuffer<fox::float32_t, 128> frametimes{};
+        //Loading models
+        auto& helmetActor           = scene->create_actor();
+        auto& helmetTransform       = helmetActor.get_component<cmp::TransformComponent>().get();
+        auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
 
-        gl::clear_color(fox::Vector4f{ 0.16f, 0.38f, 0.58f, 1.0f });
-        gl::enable(gl::Flags::Capability::DepthTest);
-        gl::depth_function(gl::Flags::DepthFunction::Less);
+        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
+        helmetTransform.translate({ 0.0f, 1.0f, 0.0f });
+
+        const auto& defaultAlbedo   = gfx::api::texture_from_file("textures/albedo.png");
+        const auto& defaultNormal   = gfx::api::texture_from_file("textures/normal.png");
+        const auto& defaultARM      = gfx::api::texture_from_file("textures/arm.png");
+        const auto& defaultEmissive = gfx::api::texture_from_file("textures/emissive.png");
+
+        auto defaultMaterial        = std::make_shared<gfx::Material>();
+        defaultMaterial->albedo     = defaultAlbedo;
+        defaultMaterial->normal     = defaultNormal;
+        defaultMaterial->arm        = defaultARM;
+        defaultMaterial->emissive   = defaultEmissive;
+
+        auto& floorActor            = scene->create_actor();
+        auto& fatc                  = floorActor.get_component<cmp::TransformComponent>().get();
+        auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
+        famfc.mesh                  = gfx::Geometry::Plane::mesh();
+        famfc.material              = defaultMaterial;
+        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 10.0f } };
+
+        auto& boxActor = scene->create_actor();
+        auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
+        auto& bamfc    = boxActor.add_component<cmp::MeshFilterComponent>().get();
+        bamfc.mesh     = gfx::Geometry::Cube::mesh();
+        bamfc.material = defaultMaterial;
+        batc           = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
 
 
 
-        while (!m_window->should_close())
+
+
+        //Skybox setup
+        const fox::Vector2u skyboxDimensions{ 2048u, 2048u };
+        std::array<std::filesystem::path, 6> skyboxImageFiles
         {
-            Time::update();
-            m_window->poll_events();
+            "textures/skybox_space2/right.png", 
+            "textures/skybox_space2/left.png",
+            "textures/skybox_space2/top.png",
+            "textures/skybox_space2/bottom.png",
+            "textures/skybox_space2/front.png",
+            "textures/skybox_space2/back.png",
+        };
+        gfx::Cubemap::Layout cubemapLayout
+        {
+            gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
+            gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
+            gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
+        };
+
+        auto skybox = std::make_shared<gfx::Cubemap>(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapLayout);
 
 
 
-            auto speed{ 10.0f * Time::delta() };
-            if (inp::key_pressed(inp::key::LeftShift))   speed *= 10.0f;
-            if (inp::key_pressed(inp::key::LeftControl)) speed /=  5.0f;
-            if (inp::key_pressed(inp::key::W)) cameraTransform.position += cameraTransform.forward() * speed;
-            if (inp::key_pressed(inp::key::A)) cameraTransform.position -= cameraTransform.right()   * speed;
-            if (inp::key_pressed(inp::key::S)) cameraTransform.position -= cameraTransform.forward() * speed;
-            if (inp::key_pressed(inp::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
-            if (inp::key_pressed(inp::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
-            if (inp::key_pressed(inp::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
 
-            if (inp::button_pressed(inp::btn::RightMouse)) //RMB
+
+        //Lights
+        std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
+        {
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   0.0f,  3.0f }), 
+        };
+
+
+
+
+
+        const auto& move_camera         = [&]
+        {
+            auto speed{ 5.0f * Time::delta() };
+
+            if (input::key_pressed(input::key::Escape))      m_window->close();
+            if (input::key_pressed(input::key::LeftShift))   speed *= 10.0f;
+            if (input::key_pressed(input::key::LeftControl)) speed /=  5.0f;
+            if (input::key_pressed(input::key::W)) cameraTransform.position += cameraTransform.forward() * speed;
+            if (input::key_pressed(input::key::A)) cameraTransform.position -= cameraTransform.right()   * speed;
+            if (input::key_pressed(input::key::S)) cameraTransform.position -= cameraTransform.forward() * speed;
+            if (input::key_pressed(input::key::D)) cameraTransform.position += cameraTransform.right()   * speed;
+            if (input::key_pressed(input::key::E)) cameraTransform.position += cameraTransform.up()      * speed;
+            if (input::key_pressed(input::key::Q)) cameraTransform.position -= cameraTransform.up()      * speed;
+
+            if (input::button_pressed(input::btn::RightMouse))
             {
                 static fox::Vector3f rotation{};
-                const auto& cpr = inp::cursor_position_relative() / 10.0f;
+
+                auto& ct  = observer.get_component<cmp::TransformComponent>().get();
+                const auto& cpr = input::cursor_position_relative() / 10.0f;
 
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
+        };
+        const auto& rotate_helmet       = [&]
+            {
+                helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * Time::delta(), 0.0f });
+            };
+        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
+            {
+                for (const auto& i : std::ranges::iota_view(0u, limit.value_or(lights.size())))
+                {
+                    const auto& [l, p] = lights[i];
 
-            gl::clear(gl::Flags::Buffer::Mask::All);
+                    fox::Transform t{};
+                    t.position = p;
+                    t.dilate({ 0.1f, 0.1f, 0.1f });
 
-            auto& tc = actor.get_component<ecs::TransformComponent>();
-            tc.transform().scale = fox::Vector3f{ 0.008f, 0.008f, 0.008f };
+                    gfx::Renderer::render_debug(t);
+                }
+            };
 
-            const auto& viewMatrix = glm::lookAt(cameraTransform.position, cameraTransform.position + cameraTransform.forward(), cameraTransform.up());
 
-            matricesBuffer->bind_index(gfx::api::gl::index_t{ 0 });
-            matricesBuffer->copy_tuple(offsetof(gfx::UMatrices, view), std::make_tuple(viewMatrix, projectionMatrix));
-            cameraBuffer->bind_index(gfx::api::gl::index_t{ 2 });
-            cameraBuffer->copy(gfx::UCamera{ Vector4f{ cameraTransform.position, 1.0f } });
 
-            testPipeline->bind();
+        Time::reset();
+        fox::CyclicBuffer<fox::float32_t, 144> frametimes{};
 
-            render_actor(*scene, actor, *matricesBuffer);
+        while (!m_window->should_close())
+        {
+            fox::Time::update();
+            m_window->poll_events();
+
+
+
+
+
+            move_camera();
+            rotate_helmet();
+
+
+
+
+
+            gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights, skybox };
+            gfx::Renderer::start(renderInfo);
+
+            const auto& view = reg::view<cmp::RelationshipComponent, cmp::TransformComponent, cmp::MeshFilterComponent>();
+            view.each([&](auto entity, const cmp::RelationshipComponent& rlc, const cmp::TransformComponent& tc, const cmp::MeshFilterComponent& mfc)
+                {
+                    const auto& relation   = rlc.get();
+                    const auto& transform  = tc.get();
+                    const auto& meshFilter = mfc.get();
+                    const auto& mesh       = meshFilter.mesh;
+                    const auto& material   = meshFilter.material;
+                    
+                    if (!mesh || !material) return;
+
+                    const auto& transformProduct = transform_product(*scene, relation, transform);
+                    gfx::Renderer::render(mesh, material, transformProduct);
+                });
+
+            render_lights_debug(lights);
+
+            gfx::Renderer::finish();
+
+
 
 
 

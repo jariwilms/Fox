@@ -9,27 +9,56 @@ namespace fox::gfx::api
     public:
         enum class Type
         {
-            Vertex,
-            Index,
+            Vertex, 
+            Index, 
+            Uniform, 
 
-            Uniform,
-            UniformArray, 
+            //SSBO, 
+            //TransformFeedback, 
+            
+            //DrawIndirect?, 
+            //PixelPack?, 
+            //PixelUnpack?, 
+            //Texture?, 
         };
         enum class Access
-        {
-            Static,
-            Dynamic,
-        };
-        enum class Mapping
         {
             Read, 
             Write, 
             ReadWrite, 
+
+            ReadPersistent, 
+            WritePersistent, 
+            ReadWritePersistent, 
+
+            ReadCoherent, 
+            WriteCoherent, 
+            ReadWriteCoherent, 
+
+            //InvalidateRange, 
+            //InvalidateBuffer, 
+            //FlushExplicit, 
+            //Unsynchronized, 
         };
+
+        Buffer(Buffer&& other) noexcept
+        {
+            m_size = std::exchange(other.m_size, fox::size_t{ 0u });
+        }
 
         fox::size_t size() const
         {
             return m_size;
+        }
+
+        Buffer& operator=(Buffer&& other) noexcept
+        {
+            if (this != &other)
+            {
+                m_size = std::exchange(other.m_size, m_size);
+            }
+
+            return *this;
         }
 
     protected:

@@ -6,20 +6,20 @@
 
 namespace fox::gfx::api
 {
-    template<typename T, std::uint32_t COUNT>
+    template<typename T, fox::uint32_t COUNT>
     concept LayoutRequirements = requires
     {
         std::is_fundamental_v<T>;
-        NonZero<decltype(COUNT), COUNT>; //TODO greater than zero concept instead of non zero
+        GreaterThanZero<decltype(COUNT), COUNT>;
     };
 
-    template<typename T, std::uint32_t COUNT, bool NORM = false> requires LayoutRequirements<T, COUNT>
+    template<typename T, fox::uint32_t COUNT, fox::bool_t NORM = false> requires LayoutRequirements<T, COUNT>
     class Layout
     {
     public:
         using type = T;
 
-        static inline const std::uint32_t count        = COUNT;
-        static inline const bool          isNormalized = NORM;
+        static inline const fox::uint32_t count        = COUNT;
+        static inline const fox::bool_t   isNormalized = NORM;
     };
 }

@@ -7,7 +7,7 @@ namespace fox::scn
     Actor& Scene::create_actor()
     {
         auto actor = std::make_shared<scn::Actor>();
-        const auto& it = m_actors.emplace(std::make_pair(static_cast<fox::uint32_t>(actor->id()), std::move(actor)));
+        const auto& it = m_actors.emplace(std::make_pair(actor->id(), std::move(actor)));
         
         return *it.first->second;
     }
@@ -15,42 +15,42 @@ namespace fox::scn
     {
         unset_parent(actor);
 
-        auto& rc = actor.get_component<ecs::RelationshipComponent>();
-        for (auto& id : rc.children)
+        auto& rls = actor.get_component<cmp::RelationshipComponent>().get();
+        for (auto& id : rls.children)
         {
-            auto& childActor = m_actors.at(static_cast<fox::uint32_t>(id));
+            auto& childActor = m_actors.at(id);
             destroy_actor(*childActor);
         }
 
-        m_actors.erase(static_cast<fox::uint32_t>(actor.id()));
+        m_actors.erase(actor.id());
     }
 
     void Scene::set_parent(Actor& parent, Actor& child)
     {
         unset_parent(child);
 
-        auto& rc  = child.get_component<ecs::RelationshipComponent>();
-        auto& prc = parent.get_component<ecs::RelationshipComponent>();
+        auto& rel  = child.get_component<cmp::RelationshipComponent>().get();
+        auto& prel = parent.get_component<cmp::RelationshipComponent>().get();
 
-        prc.children.emplace_back(child.id());
-        rc.parent = parent.id();
+        prel.children.emplace_back(child.id());
+        rel.parent = parent.id();
     }
     void Scene::unset_parent(Actor& child)
     {
-        auto& rc = child.get_component<ecs::RelationshipComponent>();
+        auto& rel = child.get_component<cmp::RelationshipComponent>().get();
 
-        if (rc.parent)
+        if (rel.parent)
         {
-            const auto& parent = rc.parent.value();
-                  auto& prc    = reg::get_component<ecs::RelationshipComponent>(parent);
+            const auto& parent = rel.parent.value();
+                  auto& prel    = reg::get_component<cmp::RelationshipComponent>(parent).get();
 
-            const auto& it = std::find(prc.children.begin(), prc.children.end(), child.id());
-            if (it != prc.children.end())
+            const auto& it = std::find(prel.children.begin(), prel.children.end(), child.id());
+            if (it != prel.children.end())
             {
-                prc.children.erase(it);
+                prel.children.erase(it);
             }
 
-            rc.parent = std::nullopt;
+            rel.parent = std::nullopt;
         }
     }
 }

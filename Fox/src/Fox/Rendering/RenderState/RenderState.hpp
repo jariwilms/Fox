@@ -44,6 +44,7 @@ namespace fox::gfx::api
 
     protected:
         RenderState() = default;
+        ~RenderState() = default;
 
         static inline bool          s_depthTestingAlpha{};
         static inline bool          s_cullingFaceAlpha{};

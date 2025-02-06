@@ -1,257 +1,326 @@
 #pragma once
 
-#include "glad/glad.h"
+#include "glad/gl.h"
 #include "glfw/glfw3.h"
 
 #include "Fox/Rendering/API/OpenGL/Types.hpp"
 #include "Fox/Rendering/Buffer/Buffer.hpp"
-#include "Fox/Rendering/Buffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Buffer/DataTypes.hpp"
+#include "Fox/Rendering/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/Query/Query.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/RenderState/RenderState.hpp"
 #include "Fox/Rendering/Shader/Pipeline.hpp"
 #include "Fox/Rendering/Shader/Shader.hpp"
+#include "Fox/Rendering/Texture/AntiAliasing.hpp"
+#include "Fox/Rendering/Texture/Cubemap.hpp"
+#include "Fox/Rendering/Texture/Dimensions.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::gfx::api::gl
 {
-    //This file converts universal mappings to their equivalent OpenGL names
-    //ie. Texture::Format::RGBA32_SFLOAT => GL_RGBA32F
-    //TODO: create enum of all OpenGL values used in code
-
-    static constexpr gl::enum_t                         map_texture_format(api::Texture::Format format)
+    static constexpr glf::Buffer::Mapping::AccessFlags map_buffer_access(api::Buffer::Access mapping)
     {
-        switch (format)
+        switch (mapping)
         {
-            case api::Texture::Format::R8_UNORM:          return GL_R8;
-            case api::Texture::Format::RG8_UNORM:         return GL_RG8;
-            case api::Texture::Format::RGB8_UNORM:        return GL_RGB8;
-            case api::Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
-            case api::Texture::Format::R16_UNORM:         return GL_R16;
-            case api::Texture::Format::RG16_UNORM:        return GL_RG16;
-            case api::Texture::Format::RGB16_UNORM:       return GL_RGB16;
-            case api::Texture::Format::RGBA16_UNORM:      return GL_RGBA16;
-            case api::Texture::Format::R8_SNORM:          return GL_R8_SNORM;
-            case api::Texture::Format::RG8_SNORM:         return GL_RG8_SNORM;
-            case api::Texture::Format::RGB8_SNORM:        return GL_RGB8_SNORM;
-            case api::Texture::Format::RGBA8_SNORM:       return GL_RGBA8_SNORM;
-            case api::Texture::Format::R16_SNORM:         return GL_R16_SNORM;
-            case api::Texture::Format::RG16_SNORM:        return GL_RG16_SNORM;
-            case api::Texture::Format::RGB16_SNORM:       return GL_RGB16_SNORM;
-            case api::Texture::Format::RGBA16_SNORM:      return GL_RGBA16_SNORM;
-            case api::Texture::Format::R8_SRGB:           throw std::invalid_argument{ "This format is not supported in OpenGL!" };
-            case api::Texture::Format::RG8_SRGB:          throw std::invalid_argument{ "This format is not supported in OpenGL!" };
-            case api::Texture::Format::RGB8_SRGB:         return GL_SRGB8;
-            case api::Texture::Format::RGBA8_SRGB:        return GL_SRGB8_ALPHA8;
-            case api::Texture::Format::R16_SFLOAT:        return GL_R16F;
-            case api::Texture::Format::RG16_SFLOAT:       return GL_RG16F;
-            case api::Texture::Format::RGB16_SFLOAT:      return GL_RGB16F;
-            case api::Texture::Format::RGBA16_SFLOAT:     return GL_RGBA16F;
-            case api::Texture::Format::R32_SFLOAT:        return GL_R32F;
-            case api::Texture::Format::RG32_SFLOAT:       return GL_RG32F;
-            case api::Texture::Format::RGB32_SFLOAT:      return GL_RGB32F;
-            case api::Texture::Format::RGBA32_SFLOAT:     return GL_RGBA32F;
-            case api::Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
-            case api::Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
-            case api::Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32F;
-            case api::Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
-            case api::Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
-            case api::Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
+            case api::Buffer::Access::Read:                return glf::Buffer::Mapping::AccessFlags::Read;
+            case api::Buffer::Access::Write:               return glf::Buffer::Mapping::AccessFlags::Write;
+            case api::Buffer::Access::ReadWrite:           return glf::Buffer::Mapping::AccessFlags::ReadWrite;
 
-            default: throw std::invalid_argument{ "Invalid format!" };
+            case api::Buffer::Access::ReadPersistent:      return glf::Buffer::Mapping::AccessFlags::ReadPersistent;
+            case api::Buffer::Access::WritePersistent:     return glf::Buffer::Mapping::AccessFlags::WritePersistent;
+            case api::Buffer::Access::ReadWritePersistent: return glf::Buffer::Mapping::AccessFlags::ReadWritePersistent;
+
+            case api::Buffer::Access::ReadCoherent:        return glf::Buffer::Mapping::AccessFlags::ReadCoherent;
+            case api::Buffer::Access::WriteCoherent:       return glf::Buffer::Mapping::AccessFlags::WriteCoherent;
+            case api::Buffer::Access::ReadWriteCoherent:   return glf::Buffer::Mapping::AccessFlags::ReadWriteCoherent;
+
+            default: throw std::invalid_argument{ "Invalid Mapping!" };
         }
     }
-    static constexpr gl::enum_t                         map_texture_format_base(api::Texture::Format format)
+    static constexpr glf::Buffer::Target               map_buffer_target(api::Buffer::Type type)
     {
-        const auto& flags = (static_cast<fox::int32_t>(format) & 0xFF00) >> 8;
+        switch (type)
+        {
+            case api::Buffer::Type::Vertex:  return glf::Buffer::Target::ArrayBuffer;
+            case api::Buffer::Type::Index:   return glf::Buffer::Target::ElementArrayBuffer;
+
+            default: throw std::invalid_argument{ "Invalid type!" };
+        }
+    }
+    static constexpr glf::Texture::BaseFormat          map_texture_format_base(api::Texture::Format format)
+    {
+        const auto& flags = (static_cast<gl::int32_t>(format) & 0xFF00) >> 8;
+
         switch (flags)
         {
-            case 0x01: return GL_RED;
-            case 0x02: return GL_RG;
-            case 0x03: return GL_RGB;
-            case 0x04: return GL_RGBA;
+            case 0x01: return glf::Texture::BaseFormat::R;
+            case 0x02: return glf::Texture::BaseFormat::RG;
+            case 0x03: return glf::Texture::BaseFormat::RGB;
+            case 0x04: return glf::Texture::BaseFormat::RGBA;
 
-            case 0x10: return GL_DEPTH_COMPONENT;
-            case 0x20: return GL_STENCIL_INDEX;
+            case 0x10: return glf::Texture::BaseFormat::D;
+            case 0x20: return glf::Texture::BaseFormat::S;
+
             case 0x30: throw std::invalid_argument{ "Invalid texture format!" };
 
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    static constexpr gl::enum_t                         map_texture_min_filter(api::Texture::Filter filter)
-    {
-        switch (filter)
-        {
-            case api::Texture::Filter::None:      return GL_NEAREST;
-            case api::Texture::Filter::Nearest:   return GL_NEAREST_MIPMAP_NEAREST;
-            case api::Texture::Filter::Bilinear:  return GL_LINEAR_MIPMAP_NEAREST;
-            case api::Texture::Filter::Trilinear: return GL_LINEAR_MIPMAP_LINEAR;
-
-            default: throw std::invalid_argument{ "Invalid filter!" };
-        }
-    }
-    static constexpr gl::enum_t                         map_texture_mag_filter(api::Texture::Filter filter)
-    {
-        switch (filter)
-        {
-            case api::Texture::Filter::None:      return GL_NEAREST;
-            case api::Texture::Filter::Nearest:   return GL_NEAREST;
-            case api::Texture::Filter::Bilinear:  return GL_LINEAR;
-            case api::Texture::Filter::Trilinear: return GL_LINEAR;
-
-            default: throw std::invalid_argument{ "Invalid filter!" };
-        }
-    }
-    static constexpr gl::enum_t                         map_texture_wrapping(api::Texture::Wrapping wrapping)
-    {
-        switch (wrapping)
-        {
-            case api::Texture::Wrapping::ClampToEdge:         return GL_CLAMP_TO_EDGE;
-            case api::Texture::Wrapping::ClampToBorder:       return GL_CLAMP_TO_BORDER;
-            case api::Texture::Wrapping::MirroredRepeat:      return GL_MIRRORED_REPEAT;
-            case api::Texture::Wrapping::Repeat:              return GL_REPEAT;
-            case api::Texture::Wrapping::MirroredClampToEdge: return GL_MIRROR_CLAMP_TO_EDGE;
-
-            default: throw std::invalid_argument{ "Invalid wrapping!" };
-        }
-    }
-    static constexpr gl::enum_t                         map_render_buffer_format(api::Texture::Format format)
+    static constexpr glf::Texture::Format              map_texture_format(api::Texture::Format format)
     {
         switch (format)
         {
-            case api::Texture::Format::R8_UNORM:          return GL_R8;
-            case api::Texture::Format::RG8_UNORM:         return GL_RG8;
-            case api::Texture::Format::RGB8_UNORM:        return GL_RGB8;
-            case api::Texture::Format::RGBA8_UNORM:       return GL_RGBA8;
-            case api::Texture::Format::D16_UNORM:         return GL_DEPTH_COMPONENT16;
-            case api::Texture::Format::D24_UNORM:         return GL_DEPTH_COMPONENT24;
-            case api::Texture::Format::D32_FLOAT:         return GL_DEPTH_COMPONENT32;
-            case api::Texture::Format::D24_UNORM_S8_UINT: return GL_DEPTH24_STENCIL8;
-            case api::Texture::Format::D32_FLOAT_S8_UINT: return GL_DEPTH32F_STENCIL8;
-            case api::Texture::Format::S8_UINT:           return GL_STENCIL_INDEX8;
+            case api::Texture::Format::R8_UNORM:          return glf::Texture::Format::R8_UNORM;
+            case api::Texture::Format::RG8_UNORM:         return glf::Texture::Format::RG8_UNORM;
+            case api::Texture::Format::RGB8_UNORM:        return glf::Texture::Format::RGB8_UNORM;
+            case api::Texture::Format::RGBA8_UNORM:       return glf::Texture::Format::RGBA8_UNORM;
+            case api::Texture::Format::R16_UNORM:         return glf::Texture::Format::R16_UNORM;
+            case api::Texture::Format::RG16_UNORM:        return glf::Texture::Format::RG16_UNORM;
+            case api::Texture::Format::RGB16_UNORM:       return glf::Texture::Format::RGB16_UNORM;
+            case api::Texture::Format::RGBA16_UNORM:      return glf::Texture::Format::RGBA16_UNORM;
+            case api::Texture::Format::R8_SNORM:          return glf::Texture::Format::R8_SNORM;
+            case api::Texture::Format::RG8_SNORM:         return glf::Texture::Format::RG8_SNORM;
+            case api::Texture::Format::RGB8_SNORM:        return glf::Texture::Format::RGB8_SNORM;
+            case api::Texture::Format::RGBA8_SNORM:       return glf::Texture::Format::RGBA8_SNORM;
+            case api::Texture::Format::R16_SNORM:         return glf::Texture::Format::R16_SNORM;
+            case api::Texture::Format::RG16_SNORM:        return glf::Texture::Format::RG16_SNORM;
+            case api::Texture::Format::RGB16_SNORM:       return glf::Texture::Format::RGB16_SNORM;
+            case api::Texture::Format::RGBA16_SNORM:      return glf::Texture::Format::RGBA16_SNORM;
+            case api::Texture::Format::RGB8_SRGB:         return glf::Texture::Format::RGB8_SRGB;
+            case api::Texture::Format::RGBA8_SRGB:        return glf::Texture::Format::RGBA8_SRGB;
+            case api::Texture::Format::R16_FLOAT:         return glf::Texture::Format::R16_FLOAT;
+            case api::Texture::Format::RG16_FLOAT:        return glf::Texture::Format::RG16_FLOAT;
+            case api::Texture::Format::RGB16_FLOAT:       return glf::Texture::Format::RGB16_FLOAT;
+            case api::Texture::Format::RGBA16_FLOAT:      return glf::Texture::Format::RGBA16_FLOAT;
+            case api::Texture::Format::R32_FLOAT:         return glf::Texture::Format::R32_FLOAT;
+            case api::Texture::Format::RG32_FLOAT:        return glf::Texture::Format::RG32_FLOAT;
+            case api::Texture::Format::RGB32_FLOAT:       return glf::Texture::Format::RGB32_FLOAT;
+            case api::Texture::Format::RGBA32_FLOAT:      return glf::Texture::Format::RGBA32_FLOAT;
+            case api::Texture::Format::D16_UNORM:         return glf::Texture::Format::D16_UNORM;
+            case api::Texture::Format::D24_UNORM:         return glf::Texture::Format::D24_UNORM;
+            case api::Texture::Format::D32_FLOAT:         return glf::Texture::Format::D32_FLOAT;
+            case api::Texture::Format::D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
+            case api::Texture::Format::D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
+            case api::Texture::Format::S8_UINT:           return glf::Texture::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr gl::enum_t                         map_buffer_target(api::Buffer::Type type)
+    static constexpr glf::Texture::MinificationFilter  map_texture_min_filter(api::Texture::Filter filter)
     {
-        switch (type)
+        switch (filter)
         {
-            case api::Buffer::Type::Vertex:  return GL_ARRAY_BUFFER;
-            case api::Buffer::Type::Index:   return GL_ELEMENT_ARRAY_BUFFER;
-            case api::Buffer::Type::Uniform: return GL_UNIFORM_BUFFER;
+            case api::Texture::Filter::None:      return glf::Texture::MinificationFilter::Nearest;
+            case api::Texture::Filter::Nearest:   return glf::Texture::MinificationFilter::NearestMipmapNearest;
+            case api::Texture::Filter::Bilinear:  return glf::Texture::MinificationFilter::LinearMipmapNearest;
+            case api::Texture::Filter::Trilinear: return glf::Texture::MinificationFilter::LinearMipmapLinear;
 
-            default: throw std::invalid_argument{ "Invalid type!" };
+            default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static constexpr gl::Flags::Buffer::StorageFlags    map_buffer_access(api::Buffer::Access access)
+    static constexpr glf::Texture::MagnificationFilter map_texture_mag_filter(api::Texture::Filter filter)
     {
-        switch (access)
+        switch (filter)
         {
-            case api::Buffer::Access::Static:  return Flags::Buffer::StorageFlags::None;
-            case api::Buffer::Access::Dynamic: return Flags::Buffer::StorageFlags::DynamicStorage;
+            case api::Texture::Filter::None:      return glf::Texture::MagnificationFilter::Nearest;
+            case api::Texture::Filter::Nearest:   return glf::Texture::MagnificationFilter::Nearest;
+            case api::Texture::Filter::Bilinear:  return glf::Texture::MagnificationFilter::Linear;
+            case api::Texture::Filter::Trilinear: return glf::Texture::MagnificationFilter::Linear;
 
-            default: throw std::invalid_argument{ "Invalid access!" };
+            default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static constexpr gl::enum_t                         map_buffer_mapping(api::Buffer::Mapping mapping)
+    template<gfx::Dimensions DIMS, gfx::AntiAliasing AA>
+    static constexpr glf::Texture::Target              map_texture_target()
     {
-        switch (mapping)
+        if constexpr (AA == gfx::AntiAliasing::None)
         {
-            case api::Buffer::Mapping::Read:      return GL_READ_ONLY;
-            case api::Buffer::Mapping::Write:     return GL_WRITE_ONLY;
-            case api::Buffer::Mapping::ReadWrite: return GL_READ_WRITE;
+            if constexpr (DIMS == gfx::Dimensions::_1D) return glf::Texture::Target::_1D;
+            if constexpr (DIMS == gfx::Dimensions::_2D) return glf::Texture::Target::_2D;
+            if constexpr (DIMS == gfx::Dimensions::_3D) return glf::Texture::Target::_3D;
+        }
+        if constexpr (AA == gfx::AntiAliasing::MSAA)
+        {
+            if constexpr (DIMS == gfx::Dimensions::_2D) return glf::Texture::Target::_2DMultisample;
+            if constexpr (DIMS == gfx::Dimensions::_3D) return glf::Texture::Target::_2DMultisampleArray;
+        }
 
-            default: throw std::invalid_argument{ "Invalid Map!" };
+        throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
+    }
+    static constexpr glf::Texture::Wrapping            map_texture_wrapping(api::Texture::Wrapping wrapping)
+    {
+        switch (wrapping)
+        {
+            case api::Texture::Wrapping::ClampToEdge:         return glf::Texture::Wrapping::ClampToEdge;
+            case api::Texture::Wrapping::ClampToBorder:       return glf::Texture::Wrapping::ClampToBorder;
+            case api::Texture::Wrapping::Repeat:              return glf::Texture::Wrapping::Repeat;
+            case api::Texture::Wrapping::MirroredRepeat:      return glf::Texture::Wrapping::MirroredRepeat;
+            case api::Texture::Wrapping::MirroredClampToEdge: return glf::Texture::Wrapping::MirroredClampToEdge;
+
+            default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    static constexpr gl::Flags::FrameBuffer::Attachment map_frame_buffer_attachment(api::FrameBuffer::Attachment attachment)
+    static constexpr glf::RenderBuffer::Format         map_render_buffer_format(api::RenderBuffer::Format format)
+    {
+        switch (format)
+        {
+            case api::RenderBuffer::Format::R8_UNORM:          return glf::RenderBuffer::Format::R8;
+            case api::RenderBuffer::Format::RG8_UNORM:         return glf::RenderBuffer::Format::RG8;
+            case api::RenderBuffer::Format::RGB8_UNORM:        return glf::RenderBuffer::Format::RGB8;
+            case api::RenderBuffer::Format::RGBA8_UNORM:       return glf::RenderBuffer::Format::RGBA8;
+            case api::RenderBuffer::Format::RGBA8_SRGB:        return glf::RenderBuffer::Format::RGBA8_SRGB;
+            case api::RenderBuffer::Format::D16_UNORM:         return glf::RenderBuffer::Format::D16_UNORM;
+            case api::RenderBuffer::Format::D24_UNORM:         return glf::RenderBuffer::Format::D24_UNORM;
+            case api::RenderBuffer::Format::D32_FLOAT:         return glf::RenderBuffer::Format::D32_FLOAT;
+            case api::RenderBuffer::Format::D24_UNORM_S8_UINT: return glf::RenderBuffer::Format::D24_UNORM_S8_UINT;
+            case api::RenderBuffer::Format::D32_FLOAT_S8_UINT: return glf::RenderBuffer::Format::D32_FLOAT_S8_UINT;
+            case api::RenderBuffer::Format::S8_UINT:           return glf::RenderBuffer::Format::S8_UINT;
+
+            default: throw std::invalid_argument{ "Invalid format!" };
+        }
+    }
+    static constexpr glf::Texture::Format              map_cubemap_texture_format(api::Cubemap::Format format)
+    {
+        switch (format)
+        {
+            case api::Cubemap::Format::R8_UNORM:          return glf::Texture::Format::R8_UNORM;
+            case api::Cubemap::Format::RG8_UNORM:         return glf::Texture::Format::RG8_UNORM;
+            case api::Cubemap::Format::RGB8_UNORM:        return glf::Texture::Format::RGB8_UNORM;
+            case api::Cubemap::Format::RGBA8_UNORM:       return glf::Texture::Format::RGBA8_UNORM;
+            case api::Cubemap::Format::R16_UNORM:         return glf::Texture::Format::R16_UNORM;
+            case api::Cubemap::Format::RG16_UNORM:        return glf::Texture::Format::RG16_UNORM;
+            case api::Cubemap::Format::RGB16_UNORM:       return glf::Texture::Format::RGB16_UNORM;
+            case api::Cubemap::Format::RGBA16_UNORM:      return glf::Texture::Format::RGBA16_UNORM;
+            case api::Cubemap::Format::R8_SNORM:          return glf::Texture::Format::R8_SNORM;
+            case api::Cubemap::Format::RG8_SNORM:         return glf::Texture::Format::RG8_SNORM;
+            case api::Cubemap::Format::RGB8_SNORM:        return glf::Texture::Format::RGB8_SNORM;
+            case api::Cubemap::Format::RGBA8_SNORM:       return glf::Texture::Format::RGBA8_SNORM;
+            case api::Cubemap::Format::R16_SNORM:         return glf::Texture::Format::R16_SNORM;
+            case api::Cubemap::Format::RG16_SNORM:        return glf::Texture::Format::RG16_SNORM;
+            case api::Cubemap::Format::RGB16_SNORM:       return glf::Texture::Format::RGB16_SNORM;
+            case api::Cubemap::Format::RGBA16_SNORM:      return glf::Texture::Format::RGBA16_SNORM;
+            case api::Cubemap::Format::RGB8_SRGB:         return glf::Texture::Format::RGB8_SRGB;
+            case api::Cubemap::Format::RGBA8_SRGB:        return glf::Texture::Format::RGBA8_SRGB;
+            case api::Cubemap::Format::R16_FLOAT:         return glf::Texture::Format::R16_FLOAT;
+            case api::Cubemap::Format::RG16_FLOAT:        return glf::Texture::Format::RG16_FLOAT;
+            case api::Cubemap::Format::RGB16_FLOAT:       return glf::Texture::Format::RGB16_FLOAT;
+            case api::Cubemap::Format::RGBA16_FLOAT:      return glf::Texture::Format::RGBA16_FLOAT;
+            case api::Cubemap::Format::R32_FLOAT:         return glf::Texture::Format::R32_FLOAT;
+            case api::Cubemap::Format::RG32_FLOAT:        return glf::Texture::Format::RG32_FLOAT;
+            case api::Cubemap::Format::RGB32_FLOAT:       return glf::Texture::Format::RGB32_FLOAT;
+            case api::Cubemap::Format::RGBA32_FLOAT:      return glf::Texture::Format::RGBA32_FLOAT;
+            case api::Cubemap::Format::D16_UNORM:         return glf::Texture::Format::D16_UNORM;
+            case api::Cubemap::Format::D24_UNORM:         return glf::Texture::Format::D24_UNORM;
+            case api::Cubemap::Format::D32_FLOAT:         return glf::Texture::Format::D32_FLOAT;
+            case api::Cubemap::Format::D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
+            case api::Cubemap::Format::D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
+            case api::Cubemap::Format::S8_UINT:           return glf::Texture::Format::S8_UINT;
+
+            default: throw std::invalid_argument{ "Invalid format!" };
+        }
+    }
+    static constexpr glf::FrameBuffer::Attachment      map_frame_buffer_attachment(api::FrameBuffer::Attachment attachment)
     {
         switch (attachment)
         {
-            case api::FrameBuffer::Attachment::Color:        return gl::Flags::FrameBuffer::Attachment::ColorIndex;
-            case api::FrameBuffer::Attachment::Depth:        return gl::Flags::FrameBuffer::Attachment::Depth;
-            case api::FrameBuffer::Attachment::Stencil:      return gl::Flags::FrameBuffer::Attachment::Stencil;
-            case api::FrameBuffer::Attachment::DepthStencil: return gl::Flags::FrameBuffer::Attachment::DepthStencil;
+            case api::FrameBuffer::Attachment::Color:        return glf::FrameBuffer::Attachment::ColorIndex;
+            case api::FrameBuffer::Attachment::Depth:        return glf::FrameBuffer::Attachment::Depth;
+            case api::FrameBuffer::Attachment::Stencil:      return glf::FrameBuffer::Attachment::Stencil;
+            case api::FrameBuffer::Attachment::DepthStencil: return glf::FrameBuffer::Attachment::DepthStencil;
 
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    static constexpr gl::Flags::FrameBuffer::Target     map_frame_buffer_target(api::FrameBuffer::Target target)
+    static constexpr glf::FrameBuffer::Target          map_frame_buffer_target(api::FrameBuffer::Target target)
     {
         switch (target)
         {
-            case api::FrameBuffer::Target::Read:  return gl::Flags::FrameBuffer::Target::Read;
-            case api::FrameBuffer::Target::Write: return gl::Flags::FrameBuffer::Target::Write;
+            case api::FrameBuffer::Target::Read:  return glf::FrameBuffer::Target::Read;
+            case api::FrameBuffer::Target::Write: return glf::FrameBuffer::Target::Write;
 
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    static constexpr gl::Flags::Shader::Type            map_shader_type(api::Shader::Stage stage)
+    static constexpr glf::Program::Stage               map_program_stage(api::Shader::Stage stage)
     {
         switch (stage)
         {
-            case api::Shader::Stage::Vertex:                 return gl::Flags::Shader::Type::Vertex;
-            case api::Shader::Stage::TessellationControl:    return gl::Flags::Shader::Type::TessellationControl;
-            case api::Shader::Stage::TessellationEvaluation: return gl::Flags::Shader::Type::TessellationEvaluation;
-            case api::Shader::Stage::Geometry:               return gl::Flags::Shader::Type::Geometry;
-            case api::Shader::Stage::Fragment:               return gl::Flags::Shader::Type::Fragment;
-            case api::Shader::Stage::Compute:                return gl::Flags::Shader::Type::Compute;
+            case api::Shader::Stage::Vertex:                 return glf::Program::Stage::Vertex;
+            case api::Shader::Stage::TessellationControl:    return glf::Program::Stage::TessellationControl;
+            case api::Shader::Stage::TessellationEvaluation: return glf::Program::Stage::TessellationEvaluation;
+            case api::Shader::Stage::Geometry:               return glf::Program::Stage::Geometry;
+            case api::Shader::Stage::Fragment:               return glf::Program::Stage::Fragment;
+            case api::Shader::Stage::Compute:                return glf::Program::Stage::Compute;
+
+            default: throw std::invalid_argument{ "Invalid stage!" };
+        }
+    }                                                                      
+    static constexpr glf::Shader::Type                 map_shader_type(api::Shader::Stage stage)
+    {
+        switch (stage)
+        {
+            case api::Shader::Stage::Vertex:                 return glf::Shader::Type::Vertex;
+            case api::Shader::Stage::TessellationControl:    return glf::Shader::Type::TessellationControl;
+            case api::Shader::Stage::TessellationEvaluation: return glf::Shader::Type::TessellationEvaluation;
+            case api::Shader::Stage::Geometry:               return glf::Shader::Type::Geometry;
+            case api::Shader::Stage::Fragment:               return glf::Shader::Type::Fragment;
+            case api::Shader::Stage::Compute:                return glf::Shader::Type::Compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    static constexpr gl::enum_t                         map_shader_stage(api::Shader::Stage stage)
-    {
-        switch (stage)
-        {
-            case api::Shader::Stage::Vertex:                 return GL_VERTEX_SHADER_BIT;
-            case api::Shader::Stage::TessellationControl:    return GL_TESS_CONTROL_SHADER_BIT;
-            case api::Shader::Stage::TessellationEvaluation: return GL_TESS_EVALUATION_SHADER_BIT;
-            case api::Shader::Stage::Geometry:               return GL_GEOMETRY_SHADER_BIT;
-            case api::Shader::Stage::Fragment:               return GL_FRAGMENT_SHADER_BIT;
-            case api::Shader::Stage::Compute:                return GL_COMPUTE_SHADER_BIT;
-
-            default: throw std::invalid_argument{ "Invalid stage!" };
-        }
-    }
-                                                        
-    static constexpr gl::Flags::DepthFunction           map_depth_function(api::RenderState::DepthFunction depthFunction)
+    static constexpr glf::DepthFunction                map_depth_function(api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
         {
-            case api::RenderState::DepthFunction::Always:       return gl::Flags::DepthFunction::Always;
-            case api::RenderState::DepthFunction::Never:        return gl::Flags::DepthFunction::Never;
-            case api::RenderState::DepthFunction::Equal:        return gl::Flags::DepthFunction::Equal;
-            case api::RenderState::DepthFunction::NotEqual:     return gl::Flags::DepthFunction::NotEqual;
-            case api::RenderState::DepthFunction::Less:         return gl::Flags::DepthFunction::Less;
-            case api::RenderState::DepthFunction::LessEqual:    return gl::Flags::DepthFunction::LessEqual;
-            case api::RenderState::DepthFunction::Greater:      return gl::Flags::DepthFunction::Greater;
-            case api::RenderState::DepthFunction::GreaterEqual: return gl::Flags::DepthFunction::GreaterEqual;
+            case api::RenderState::DepthFunction::Always:       return glf::DepthFunction::Always;
+            case api::RenderState::DepthFunction::Never:        return glf::DepthFunction::Never;
+            case api::RenderState::DepthFunction::Equal:        return glf::DepthFunction::Equal;
+            case api::RenderState::DepthFunction::NotEqual:     return glf::DepthFunction::NotEqual;
+            case api::RenderState::DepthFunction::Less:         return glf::DepthFunction::Less;
+            case api::RenderState::DepthFunction::LessEqual:    return glf::DepthFunction::LessEqual;
+            case api::RenderState::DepthFunction::Greater:      return glf::DepthFunction::Greater;
+            case api::RenderState::DepthFunction::GreaterEqual: return glf::DepthFunction::GreaterEqual;
 
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    static constexpr gl::Flags::FaceCulling             map_culling_face(api::RenderState::FaceCulling cullingFace)
+    static constexpr glf::Culling::Face                map_culling_face(api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {
-            case api::RenderState::FaceCulling::Front:     return gl::Flags::FaceCulling::Front;
-            case api::RenderState::FaceCulling::Back:      return gl::Flags::FaceCulling::Back;
-            case api::RenderState::FaceCulling::FrontBack: return gl::Flags::FaceCulling::FrontBack;
+            case api::RenderState::FaceCulling::Front:     return glf::Culling::Face::Front;
+            case api::RenderState::FaceCulling::Back:      return glf::Culling::Face::Back;
+            case api::RenderState::FaceCulling::FrontBack: return glf::Culling::Face::FrontBack;
 
             default: throw std::invalid_argument{ "Invalid culling face!" };
         }
     }
-                                                        
-    template<typename T>                                
-    constexpr gl::enum_t                                map_type() requires (std::is_fundamental_v<T>)
+                                                             
+    template<typename T>                                     
+    static constexpr glf::DataType                     map_type() requires (std::is_fundamental_v<T>)
     {
-        if constexpr (std::is_same_v<T, fox::int8_t>)   return GL_BYTE;
-        if constexpr (std::is_same_v<T, fox::uint8_t>)  return GL_UNSIGNED_BYTE;
-        if constexpr (std::is_same_v<T, fox::int16_t>)  return GL_SHORT;
-        if constexpr (std::is_same_v<T, fox::uint16_t>) return GL_UNSIGNED_SHORT;
-        if constexpr (std::is_same_v<T, fox::int32_t>)  return GL_INT;
-        if constexpr (std::is_same_v<T, fox::uint32_t>) return GL_UNSIGNED_INT;
-        if constexpr (std::is_same_v<T, fox::float32_t>)    return GL_FLOAT;
-        if constexpr (std::is_same_v<T, fox::float64_t>)    return GL_DOUBLE;
+        if constexpr (std::is_same_v<T, gl::int8_t>)    return glf::DataType::Byte;
+        if constexpr (std::is_same_v<T, gl::uint8_t>)   return glf::DataType::UnsignedByte;
+        if constexpr (std::is_same_v<T, gl::int16_t>)   return glf::DataType::Short;
+        if constexpr (std::is_same_v<T, gl::uint16_t>)  return glf::DataType::UnsignedShort;
+        if constexpr (std::is_same_v<T, gl::int32_t>)   return glf::DataType::Integer;
+        if constexpr (std::is_same_v<T, gl::uint32_t>)  return glf::DataType::UnsignedInteger;
+        if constexpr (std::is_same_v<T, gl::float32_t>) return glf::DataType::Float;
+        if constexpr (std::is_same_v<T, gl::float64_t>) return glf::DataType::Double;
+    }
+    static constexpr glf::DataType                     map_data_type(gfx::DataType dataType)
+    {
+        if (dataType == gfx::DataType::Byte)            return glf::DataType::Byte;
+        if (dataType == gfx::DataType::UnsignedByte)    return glf::DataType::UnsignedByte;
+        if (dataType == gfx::DataType::Short)           return glf::DataType::Short;
+        if (dataType == gfx::DataType::UnsignedShort)   return glf::DataType::UnsignedShort;
+        if (dataType == gfx::DataType::Integer)         return glf::DataType::Integer;
+        if (dataType == gfx::DataType::UnsignedInteger) return glf::DataType::UnsignedInteger;
+        if (dataType == gfx::DataType::Float)           return glf::DataType::Float;
+        if (dataType == gfx::DataType::Double)          return glf::DataType::Double;
+
+        throw std::invalid_argument{ "Invalid Data Type!" };
     }
 }

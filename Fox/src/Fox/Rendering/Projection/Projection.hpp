@@ -15,10 +15,9 @@ namespace fox::gfx
             Orthographic,
         };
 
-        Projection() = default;
-        Projection(const fox::Matrix4f& matrix)
-            : m_matrix{ matrix } {}
-        
+        explicit Projection(const fox::Matrix4f& matrix)
+            : m_matrix{matrix} {}
+
         template<Type T, typename... Args>
         static Projection create(Args... args) = delete;
         template<> 

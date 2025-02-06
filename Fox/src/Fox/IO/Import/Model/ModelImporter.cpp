@@ -9,9 +9,9 @@ namespace fox::io
 {
     void ModelImporter::init()
     {
-        s_defaultAlbedoTexture = load_texture("textures/albedo.png");
-        s_defaultNormalTexture = load_texture("textures/normal.png");
-        s_defaultARMTexture    = load_texture("textures/arm.png");
+        s_defaultAlbedoTexture = gfx::api::texture_from_file("textures/albedo.png");
+        s_defaultNormalTexture = gfx::api::texture_from_file("textures/normal.png");
+        s_defaultARMTexture    = gfx::api::texture_from_file("textures/arm.png");
     }
 
     std::shared_ptr<gfx::Model> ModelImporter::import2(const std::filesystem::path& path)
@@ -79,14 +79,6 @@ namespace fox::io
                 tangentsVector.emplace_back(asiTangent.x, asiTangent.y, asiTangent.z);
             }
 
-            std::vector<fox::Vector3f> bitangentsVector{};
-            bitangentsVector.reserve(asiNumVertices);
-            std::span<const aiVector3D> asiBitangents{ asiMesh->mBitangents, asiMesh->mNumVertices };
-            for (const auto& asiBitangent : asiBitangents)
-            {
-                bitangentsVector.emplace_back(asiBitangent.x, asiBitangent.y, asiBitangent.z);
-            }
-
             std::vector<fox::Vector2f> texCoordsVector{};
             texCoordsVector.reserve(asiNumVertices);
             std::span<const aiVector3D> asiTexCoords{ asiMesh->mTextureCoords[0], asiNumVertices };
@@ -110,21 +102,22 @@ namespace fox::io
 
 
 
-            const auto& layout2f = gfx::VertexLayout<float>({ 2u });
-            const auto& layout3f = gfx::VertexLayout<float>({ 3u });
+            gfx::VertexLayout layout2f{};
+            gfx::VertexLayout layout3f{};
+
+            layout2f.specify<fox::float32_t>(2);
+            layout3f.specify<fox::float32_t>(3);
 
             auto vertexArray      = std::make_shared<gfx::VertexArray>();
-            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(positionsVector);
-            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(normalsVector);
-            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(tangentsVector);
-            auto bitangentsBuffer = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector3f>>(bitangentsVector);
-            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<gfx::api::Buffer::Access::Static, fox::Vector2f>>(texCoordsVector);
-            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer<gfx::api::Buffer::Access::Static>>(indicesVector);
+            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(positionsVector);
+            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(normalsVector);
+            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(tangentsVector);
+            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector2f>>(texCoordsVector);
+            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer>(indicesVector);
 
             vertexArray->tie(positionsBuffer,  layout3f);
             vertexArray->tie(normalsBuffer,    layout3f);
             vertexArray->tie(tangentsBuffer,   layout3f);
-            vertexArray->tie(bitangentsBuffer, layout3f);
             vertexArray->tie(texCoordsBuffer,  layout2f);
             vertexArray->tie(indicesBuffer);
 
@@ -163,8 +156,7 @@ namespace fox::io
 	}
     void ModelImporter::create_nodes(gfx::Model& model, fox::uint32_t nodeIndex , const aiScene& asiScene, const aiNode& asiNode)
     {
-        const auto& matrix = *reinterpret_cast<const fox::Matrix4f*>(&asiNode.mTransformation);
-
+        const auto& matrix = glm::transpose(*reinterpret_cast<const fox::Matrix4f*>(&asiNode.mTransformation));
         model.nodes.at(nodeIndex).localTransform = matrix;
 
         std::span<fox::uint32_t> asiNodeMeshIndices{ asiNode.mMeshes, asiNode.mNumMeshes };
@@ -190,13 +182,6 @@ namespace fox::io
             create_nodes(model, childNodeIndex, asiScene, *asiChild);
         }
     }
-    ModelImporter::texptr_t ModelImporter::load_texture(const std::filesystem::path& path)
-    {
-        const auto& textureFile  = io::load(path);
-        const auto& textureImage = fox::Image::decode(fox::Image::Layout::RGBA8, *textureFile->read());
-
-        return std::make_shared<gfx::Texture2D>(gfx::Texture::Format::RGBA8_UNORM, textureImage.dimensions(), textureImage.data());
-    }
     auto ModelImporter::to_assimp_type(TextureType type)
     {
         switch (type)
@@ -208,7 +193,7 @@ namespace fox::io
             default: throw std::invalid_argument{ "Invalid texture type!" };
         }
     }
-    std::optional<ModelImporter::texptr_t> ModelImporter::get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path)
+    std::optional<std::shared_ptr<gfx::Texture2D>> ModelImporter::get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path)
     {
         std::optional<std::shared_ptr<gfx::Texture2D>> textureOpt{};
 
@@ -217,7 +202,7 @@ namespace fox::io
             aiString aiTextureName{};
             const auto& aiReturn = aiMaterial->GetTexture(to_assimp_type(type), 0, &aiTextureName);
 
-            if (aiReturn == AI_SUCCESS) textureOpt.emplace(load_texture(path / aiTextureName.C_Str()));
+            if (aiReturn == AI_SUCCESS) textureOpt.emplace(gfx::api::texture_from_file(path / aiTextureName.C_Str()));
         }
 
         return textureOpt;

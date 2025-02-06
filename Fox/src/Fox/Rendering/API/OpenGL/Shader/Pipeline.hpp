@@ -16,16 +16,13 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_program_pipeline();
 
-            if (const auto& shader = m_layout.vertexShader;                 shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
-            if (const auto& shader = m_layout.tessellationControlShader;    shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
-            if (const auto& shader = m_layout.tessellationEvaluationShader; shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
-            if (const auto& shader = m_layout.geometryShader;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
-            if (const auto& shader = m_layout.fragmentShader;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_shader_stage(shader->stage()));
+            if (const auto& shader = m_layout.vertex;                 shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = m_layout.tessellationControl;    shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = m_layout.tessellationEvaluation; shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = m_layout.geometry;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = m_layout.fragment;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
         }
-        Pipeline(Pipeline&& other) noexcept
-        {
-            *this = std::move(other);
-        }
+        Pipeline(Pipeline&&) noexcept = default;
         ~Pipeline()
         {
             gl::delete_program_pipeline(m_handle);
@@ -41,16 +38,7 @@ namespace fox::gfx::api::gl
             return m_layout;
         }
 
-        Pipeline& operator=(Pipeline&& other) noexcept
-        {
-            m_handle = other.m_handle;
-            m_layout = other.m_layout;
-
-            other.m_handle = {};
-            other.m_layout = {};
-
-            return *this;
-        }
+        Pipeline& operator=(Pipeline&&) noexcept = default;
 
     private:
         Layout m_layout{};

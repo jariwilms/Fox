@@ -2,8 +2,7 @@
 
 #include "Fox/ECS/Entity/Entity.hpp"
 #include "Fox/ECS/Registry.hpp"
-#include "Fox/ECS/Components/RelationshipComponent.hpp"
-#include "Fox/ECS/Components/TransformComponent.hpp"
+#include "Fox/ECS/Components/Components.hpp"
 
 namespace fox::scn
 {
@@ -13,8 +12,8 @@ namespace fox::scn
         Actor()
             : ecs::Entity{ reg::create() }
         {
-            add_component<ecs::RelationshipComponent>();
-            add_component<ecs::TransformComponent>();
+            add_component<cmp::RelationshipComponent>();
+            add_component<cmp::TransformComponent>();
         }
         virtual ~Actor() override
         {
@@ -47,7 +46,7 @@ namespace fox::scn
         {
             reg::remove_component<T>(m_id);
         }
-        template<> void remove_component<ecs::RelationshipComponent>() = delete;
-        template<> void remove_component<ecs::TransformComponent>()    = delete;
+        template<> void remove_component<cmp::RelationshipComponent>() = delete;
+        template<> void remove_component<cmp::TransformComponent>()    = delete;
     };
 }
