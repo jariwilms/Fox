@@ -184,13 +184,13 @@ namespace fox::gfx::api
             const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
 
             //Bind Uniform Buffers to correct indices
-            s_contextBuffer->          bind_index(gl::index_t{  0 });
-            s_cameraBuffer->           bind_index(gl::index_t{  1 });
-            s_matricesBuffer->         bind_index(gl::index_t{  2 });
-            s_materialBuffer->         bind_index(gl::index_t{  3 });
-            s_lightBuffer->            bind_index(gl::index_t{  4 });
-            s_lightShadowBuffer->      bind_index(gl::index_t{  6 });
-            s_shadowProjectionsBuffer->bind_index(gl::index_t{ 13 });
+            s_contextBuffer->          bind_index( 0);
+            s_cameraBuffer->           bind_index( 1);
+            s_matricesBuffer->         bind_index( 2);
+            s_materialBuffer->         bind_index( 3);
+            s_lightBuffer->            bind_index( 4);
+            s_lightShadowBuffer->      bind_index( 6);
+            s_shadowProjectionsBuffer->bind_index(13);
 
             s_contextBuffer->copy(uni::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta(),});
 
