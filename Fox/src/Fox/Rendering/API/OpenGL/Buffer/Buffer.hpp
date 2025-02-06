@@ -58,8 +58,8 @@ namespace fox::gfx::api::gl
             glf::Buffer::StorageFlags storageFlags
             {
                 glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::MapRead        | 
-                glf::Buffer::StorageFlags::MapWrite       
+                glf::Buffer::StorageFlags::Read           | 
+                glf::Buffer::StorageFlags::Write          , 
             };
 
             gl::buffer_storage(m_handle, storageFlags, m_size);
@@ -71,9 +71,8 @@ namespace fox::gfx::api::gl
 
             glf::Buffer::StorageFlags storageFlags
             {
-                glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::MapRead        | 
-                glf::Buffer::StorageFlags::MapWrite       
+                glf::Buffer::StorageFlags::ReadWrite      | 
+                glf::Buffer::StorageFlags::DynamicStorage , 
             };
 
             gl::buffer_storage(m_handle, storageFlags, data);
@@ -100,32 +99,24 @@ namespace fox::gfx::api::gl
             gl::buffer_sub_data(m_handle, byteOffset, data);
         }
 
-        template<api::Buffer::Mapping MAPPING = api::Buffer::Mapping::ReadWrite>
-        auto map()
+        template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
+        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::offset_t> offset = {})
         {
             if (is_mapped()) throw std::runtime_error{ "Buffer is already mapped!" };
 
-            const auto& bufferMapping = gl::map_buffer_mapping(MAPPING);
-                  auto* data          = gl::map_buffer<T>(m_handle, bufferMapping);
+            const auto& accessFlags = gl::map_buffer_access(ACCESS);
+            const auto& sizeBytes   = elements.value_or(count()) * sizeof(T);
+            const auto& offsetBytes = offset.value_or(0)         * sizeof(T);
+
+            auto* data = gl::map_buffer_range(m_handle, accessFlags, gl::sizeptr_t{ sizeBytes }, gl::intptr_t{ offsetBytes });
 
             m_mappedData = std::make_shared<std::span<T>>(data, count());
 
-            using data_t = std::conditional_t<MAPPING == api::Buffer::Mapping::Read, const T, T>;
-            return std::weak_ptr<std::span<data_t>>{ m_mappedData };
-        }
-        template<api::Buffer::Mapping MAPPING = api::Buffer::Mapping::ReadWrite>
-        auto map_range(fox::count_t elements, fox::offset_t offset)
-        {
-            if (is_mapped())                  throw std::runtime_error{ "Buffer is already mapped!" };
-            if (elements + offset >= count()) throw std::invalid_argument{ "Data size and/or offset too large!" };
-
-            const auto& bufferMapping = gl::map_buffer_mapping(MAPPING);
-                  auto* data          = gl::map_buffer_range<T>(m_handle, bufferMapping, elements * sizeof(T), offset * sizeof(T));
-
-            m_mappedData = std::make_shared<std::span<T>>(data, count());
-
-            using data_t = std::conditional_t<MAPPING == api::Buffer::Mapping::Read, const T, T>;
-            return std::weak_ptr<std::span<data_t>>{ m_mappedData };
+            using ret_t = std::conditional_t<
+                ACCESS == api::Buffer::Access::Read           ||
+                ACCESS == api::Buffer::Access::ReadPersistent ||
+                ACCESS == api::Buffer::Access::ReadCoherent    , const T, T>;
+            return std::weak_ptr<std::span<ret_t>>{ m_mappedData };
         }
         void unmap()
         {
@@ -176,7 +167,7 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind_index(gl::index_t index) const
+        void bind_index(gl::uint32_t index) const
         {
             gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
         }
@@ -230,13 +221,13 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind_index(gl::index_t index) const
+        void bind_index(gl::uint32_t index) const
         {
             gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
         }
-        void bind_index_range(gl::index_t binding, fox::count_t count, fox::offset_t offset) const
+        void bind_index_range(gl::uint32_t index, fox::count_t count, fox::offset_t offset) const
         {
-            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, binding, count * sizeof(T), offset * sizeof(T));
+            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, count * sizeof(T), offset * sizeof(T));
         }
 
         void copy(std::span<const T, N> data)

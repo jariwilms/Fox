@@ -19,13 +19,21 @@
 
 namespace fox::gfx::api::gl
 {
-    static constexpr glf::Buffer::Mapping              map_buffer_mapping(api::Buffer::Mapping mapping)
+    static constexpr glf::Buffer::Mapping::AccessFlags map_buffer_access(api::Buffer::Access mapping)
     {
         switch (mapping)
         {
-            case api::Buffer::Mapping::Read:      return glf::Buffer::Mapping::Read;
-            case api::Buffer::Mapping::Write:     return glf::Buffer::Mapping::Write;
-            case api::Buffer::Mapping::ReadWrite: return glf::Buffer::Mapping::ReadWrite;
+            case api::Buffer::Access::Read:                return glf::Buffer::Mapping::AccessFlags::Read;
+            case api::Buffer::Access::Write:               return glf::Buffer::Mapping::AccessFlags::Write;
+            case api::Buffer::Access::ReadWrite:           return glf::Buffer::Mapping::AccessFlags::ReadWrite;
+
+            case api::Buffer::Access::ReadPersistent:      return glf::Buffer::Mapping::AccessFlags::ReadPersistent;
+            case api::Buffer::Access::WritePersistent:     return glf::Buffer::Mapping::AccessFlags::WritePersistent;
+            case api::Buffer::Access::ReadWritePersistent: return glf::Buffer::Mapping::AccessFlags::ReadWritePersistent;
+
+            case api::Buffer::Access::ReadCoherent:        return glf::Buffer::Mapping::AccessFlags::ReadCoherent;
+            case api::Buffer::Access::WriteCoherent:       return glf::Buffer::Mapping::AccessFlags::WriteCoherent;
+            case api::Buffer::Access::ReadWriteCoherent:   return glf::Buffer::Mapping::AccessFlags::ReadWriteCoherent;
 
             default: throw std::invalid_argument{ "Invalid Mapping!" };
         }
@@ -51,8 +59,8 @@ namespace fox::gfx::api::gl
             case 0x03: return glf::Texture::BaseFormat::RGB;
             case 0x04: return glf::Texture::BaseFormat::RGBA;
 
-            case 0x10: return glf::Texture::BaseFormat::Depth;
-            case 0x20: return glf::Texture::BaseFormat::Stencil;
+            case 0x10: return glf::Texture::BaseFormat::D;
+            case 0x20: return glf::Texture::BaseFormat::S;
 
             case 0x30: throw std::invalid_argument{ "Invalid texture format!" };
 
@@ -234,16 +242,16 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    static constexpr glf::Shader::Stage                map_shader_stage(api::Shader::Stage stage)
+    static constexpr glf::Program::Stage               map_program_stage(api::Shader::Stage stage)
     {
         switch (stage)
         {
-            case api::Shader::Stage::Vertex:                 return glf::Shader::Stage::Vertex;
-            case api::Shader::Stage::TessellationControl:    return glf::Shader::Stage::TessellationControl;
-            case api::Shader::Stage::TessellationEvaluation: return glf::Shader::Stage::TessellationEvaluation;
-            case api::Shader::Stage::Geometry:               return glf::Shader::Stage::Geometry;
-            case api::Shader::Stage::Fragment:               return glf::Shader::Stage::Fragment;
-            case api::Shader::Stage::Compute:                return glf::Shader::Stage::Compute;
+            case api::Shader::Stage::Vertex:                 return glf::Program::Stage::Vertex;
+            case api::Shader::Stage::TessellationControl:    return glf::Program::Stage::TessellationControl;
+            case api::Shader::Stage::TessellationEvaluation: return glf::Program::Stage::TessellationEvaluation;
+            case api::Shader::Stage::Geometry:               return glf::Program::Stage::Geometry;
+            case api::Shader::Stage::Fragment:               return glf::Program::Stage::Fragment;
+            case api::Shader::Stage::Compute:                return glf::Program::Stage::Compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
@@ -291,27 +299,27 @@ namespace fox::gfx::api::gl
     }
                                                              
     template<typename T>                                     
-    static constexpr glf::Type                         map_type() requires (std::is_fundamental_v<T>)
+    static constexpr glf::DataType                     map_type() requires (std::is_fundamental_v<T>)
     {
-        if constexpr (std::is_same_v<T, fox::int8_t>)    return glf::Type::Byte;
-        if constexpr (std::is_same_v<T, fox::uint8_t>)   return glf::Type::UnsignedByte;
-        if constexpr (std::is_same_v<T, fox::int16_t>)   return glf::Type::Short;
-        if constexpr (std::is_same_v<T, fox::uint16_t>)  return glf::Type::UnsignedShort;
-        if constexpr (std::is_same_v<T, fox::int32_t>)   return glf::Type::Integer;
-        if constexpr (std::is_same_v<T, fox::uint32_t>)  return glf::Type::UnsignedInteger;
-        if constexpr (std::is_same_v<T, fox::float32_t>) return glf::Type::Float;
-        if constexpr (std::is_same_v<T, fox::float64_t>) return glf::Type::Double;
+        if constexpr (std::is_same_v<T, gl::int8_t>)    return glf::DataType::Byte;
+        if constexpr (std::is_same_v<T, gl::uint8_t>)   return glf::DataType::UnsignedByte;
+        if constexpr (std::is_same_v<T, gl::int16_t>)   return glf::DataType::Short;
+        if constexpr (std::is_same_v<T, gl::uint16_t>)  return glf::DataType::UnsignedShort;
+        if constexpr (std::is_same_v<T, gl::int32_t>)   return glf::DataType::Integer;
+        if constexpr (std::is_same_v<T, gl::uint32_t>)  return glf::DataType::UnsignedInteger;
+        if constexpr (std::is_same_v<T, gl::float32_t>) return glf::DataType::Float;
+        if constexpr (std::is_same_v<T, gl::float64_t>) return glf::DataType::Double;
     }
-    static constexpr glf::Type                         map_data_type(gfx::DataType dataType)
+    static constexpr glf::DataType                     map_data_type(gfx::DataType dataType)
     {
-        if (dataType == gfx::DataType::Byte)            return glf::Type::Byte;
-        if (dataType == gfx::DataType::UnsignedByte)    return glf::Type::UnsignedByte;
-        if (dataType == gfx::DataType::Short)           return glf::Type::Short;
-        if (dataType == gfx::DataType::UnsignedShort)   return glf::Type::UnsignedShort;
-        if (dataType == gfx::DataType::Integer)         return glf::Type::Integer;
-        if (dataType == gfx::DataType::UnsignedInteger) return glf::Type::UnsignedInteger;
-        if (dataType == gfx::DataType::Float)           return glf::Type::Float;
-        if (dataType == gfx::DataType::Double)          return glf::Type::Double;
+        if (dataType == gfx::DataType::Byte)            return glf::DataType::Byte;
+        if (dataType == gfx::DataType::UnsignedByte)    return glf::DataType::UnsignedByte;
+        if (dataType == gfx::DataType::Short)           return glf::DataType::Short;
+        if (dataType == gfx::DataType::UnsignedShort)   return glf::DataType::UnsignedShort;
+        if (dataType == gfx::DataType::Integer)         return glf::DataType::Integer;
+        if (dataType == gfx::DataType::UnsignedInteger) return glf::DataType::UnsignedInteger;
+        if (dataType == gfx::DataType::Float)           return glf::DataType::Float;
+        if (dataType == gfx::DataType::Double)          return glf::DataType::Double;
 
         throw std::invalid_argument{ "Invalid Data Type!" };
     }

@@ -33,9 +33,9 @@ namespace fox::gfx::api::gl
 
 
     //Strong aliases
-    enum class handle_t : gl::uint32_t {}; //Alias for OpenGL  Object handles
-    enum class query_t  : gl::uint32_t {}; //Alias for OpenGL  Query  handles
-    enum class index_t  : gl::uint32_t {}; //Alias for binding point  indices
+    enum class handle_t : gl::uint32_t {}; //Alias for OpenGL Object handles
+    enum class query_t  : gl::uint32_t {}; //Alias for OpenGL Query  handles
+    enum class format_t : gl::enum_t   {}; //Alias for OpenGL Binary Formats
 
 
 
@@ -47,7 +47,11 @@ namespace fox::gfx::api::gl
     constexpr gl::handle_t NullObject{ 0u };
 
 
+
     //Vector types
+    template<typename T, gl::uint32_t N>
+    using Vector     = glm::vec<N, T, glm::packed_highp>;
+
     using Vector1i   = glm::ivec1;
     using Vector2i   = glm::ivec2;
     using Vector3i   = glm::ivec3;
@@ -64,4 +68,28 @@ namespace fox::gfx::api::gl
     using Matrix3f   = glm::mat3;
     using Matrix4f   = glm::mat4;
     using Quaternion = glm::quat;
+
+
+
+    template<typename T>
+    struct Area
+    {
+        using vec_t = gl::Vector<T, 2>;
+
+        Area() = default;
+        Area(T originX, T originY, T extentX, T extentY)
+            : origin{ originX, originY }, extent{ extentX, extentY } {}
+        Area(const vec_t& origin, const vec_t& extent)
+            : origin{ origin }, extent{ extent } {}
+
+        vec_t origin{};
+        vec_t extent{};
+    };
+
+    template<typename T>
+    struct Range
+    {
+        T min{};
+        T max{};
+    };
 }

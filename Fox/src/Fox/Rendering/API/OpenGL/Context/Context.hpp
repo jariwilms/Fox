@@ -20,7 +20,7 @@ namespace fox::gfx::api::gl
 				gl::debug_message_control(gl::True, glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare);
 			}
 
-			s_contextProfile         = gl::integer_v(glf::Data::ContextProfile);
+			//s_contextProfile         = gl::integer_v(glf::Data::ContextProfile);
 			s_majorVersion           = gl::integer_v(glf::Data::MajorVersion);
 			s_minorVersion           = gl::integer_v(glf::Data::MinorVersion);
 
