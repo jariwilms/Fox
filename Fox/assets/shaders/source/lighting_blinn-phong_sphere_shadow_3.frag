@@ -123,6 +123,5 @@ void main()
 	const vec3  lighting         = ((diffuse * attenuation) + (specular * attenuation)) * (1.0 - shadow) * smoothingFactor;
 	
 	
-	
 	f_Color = vec4(lighting, 1.0);
 }
