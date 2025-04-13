@@ -49,7 +49,7 @@ namespace fox::gfx::api::gl
 
 
     //Vector types
-    template<typename T, gl::uint32_t N>
+    template<typename T, gl::uint64_t N>
     using Vector     = glm::vec<N, T, glm::packed_highp>;
 
     using Vector1i   = glm::ivec1;
@@ -71,20 +71,26 @@ namespace fox::gfx::api::gl
 
 
 
-    template<typename T>
-    struct Area
-    {
-        using vec_t = gl::Vector<T, 2>;
 
-        Area() = default;
-        Area(T originX, T originY, T extentX, T extentY)
-            : origin{ originX, originY }, extent{ extentX, extentY } {}
-        Area(const vec_t& origin, const vec_t& extent)
+
+
+
+    template<typename T, gl::uint64_t N>
+    struct PlaceHolderName
+    {
+        using vector_t = gl::Vector<T, N>;
+
+        PlaceHolderName() = default;
+        PlaceHolderName(const vector_t& origin, const vector_t& extent)
             : origin{ origin }, extent{ extent } {}
 
-        vec_t origin{};
-        vec_t extent{};
+        vector_t origin{};
+        vector_t extent{};
     };
+
+    template<typename T> using Line   = PlaceHolderName<T, 1>;
+    template<typename T> using Area   = PlaceHolderName<T, 2>;
+    template<typename T> using Volume = PlaceHolderName<T, 3>;
 
     template<typename T>
     struct Range

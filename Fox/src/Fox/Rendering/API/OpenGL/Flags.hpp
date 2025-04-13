@@ -24,6 +24,42 @@ namespace fox::gfx::api::glf
             ReferencedByComputeShader                = GL_ATOMIC_COUNTER_BUFFER_REFERENCED_BY_COMPUTE_SHADER, 
         };
     };
+    struct     Memory
+    {
+        enum class Barrier : gl::bitfield_t
+        {
+            VertexAttributeArrayBit = GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT, 
+            IndexArrayBit           = GL_ELEMENT_ARRAY_BARRIER_BIT, 
+            UniformBit              = GL_UNIFORM_BARRIER_BIT, 
+            TextureFetchBit         = GL_TEXTURE_FETCH_BARRIER_BIT, 
+
+            ShaderImageAccessBit    = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT, 
+            CommandBit              = GL_COMMAND_BARRIER_BIT, 
+            PixelBufferBit          = GL_PIXEL_BUFFER_BARRIER_BIT, 
+
+            TextureUpdateBit        = GL_TEXTURE_UPDATE_BARRIER_BIT, 
+            BufferUpdateBit         = GL_BUFFER_UPDATE_BARRIER_BIT, 
+            ClientMappedBufferBit   = GL_CLIENT_MAPPED_BUFFER_BARRIER_BIT, 
+            QueryBufferBit          = GL_QUERY_BUFFER_BARRIER_BIT, 
+            FrameBufferBit          = GL_FRAMEBUFFER_BARRIER_BIT, 
+            TransformFeedbackBit    = GL_TRANSFORM_FEEDBACK_BARRIER_BIT, 
+            AtomicCounterBit        = GL_ATOMIC_COUNTER_BARRIER_BIT, 
+            ShaderStorageBit        = GL_SHADER_STORAGE_BARRIER_BIT, 
+
+            All                     = GL_ALL_BARRIER_BITS, 
+        };
+        enum class RegionalBarrier : gl::bitfield_t
+        {
+            AtomicCounterBit     = GL_ATOMIC_COUNTER_BARRIER_BIT_EXT, 
+            FrameBufferBit       = GL_FRAMEBUFFER_BARRIER_BIT, 
+            ShaderImageAccessBit = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT, 
+            ShaderStorageBit     = GL_SHADER_STORAGE_BARRIER_BIT, 
+            TextureFetchBit      = GL_TEXTURE_FETCH_BARRIER_BIT, 
+            UniformBit           = GL_UNIFORM_BARRIER_BIT, 
+
+            All                  = GL_ALL_BARRIER_BITS, 
+        };
+    };
     struct     Blending
     {
         enum class Equation : gl::enum_t
@@ -764,6 +800,14 @@ namespace fox::gfx::api::glf
             Nearest = GL_NEAREST, 
             Linear  = GL_LINEAR, 
         };
+        enum class Parameter : gl::enum_t
+        {
+            DefaultWidth                = GL_FRAMEBUFFER_DEFAULT_WIDTH, 
+            DefaultHeight               = GL_FRAMEBUFFER_DEFAULT_HEIGHT, 
+            DefaultLayers               = GL_FRAMEBUFFER_DEFAULT_LAYERS, 
+            DefaultSamples              = GL_FRAMEBUFFER_DEFAULT_SAMPLES, 
+            DefaultFixedSampleLocations = GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS, 
+        };
     };
     struct     Geometry
     {
@@ -788,26 +832,59 @@ namespace fox::gfx::api::glf
             TriangleStrip = GL_TRIANGLE_STRIP, 
         };
     };
-    struct     Memory
+    struct     Image
     {
-        enum       Barrier : gl::bitfield_t
+        enum class Access : gl::enum_t
         {
-            VertexAttributeArray = GL_VERTEX_ATTRIB_ARRAY_BARRIER_BIT,
-            ElementArray         = GL_ELEMENT_ARRAY_BARRIER_BIT,
-            Uniform              = GL_UNIFORM_BARRIER_BIT,
-            TextureFetch         = GL_TEXTURE_FETCH_BARRIER_BIT,
-            ShaderImageAccess    = GL_SHADER_IMAGE_ACCESS_BARRIER_BIT,
-            Command              = GL_COMMAND_BARRIER_BIT,
-            PixelBuffer          = GL_PIXEL_BUFFER_BARRIER_BIT,
-            TextureUpdate        = GL_TEXTURE_UPDATE_BARRIER_BIT,
-            BufferUpdate         = GL_BUFFER_UPDATE_BARRIER_BIT,
-            FrameBuffer          = GL_FRAMEBUFFER_BARRIER_BIT,
-            TransformFeedback    = GL_TRANSFORM_FEEDBACK_BARRIER_BIT,
-            AtomicCounter        = GL_ATOMIC_COUNTER_BARRIER_BIT,
-            ShaderStorage        = GL_SHADER_STORAGE_BARRIER_BIT,
-            QueryBuffer          = GL_QUERY_BUFFER_BARRIER_BIT,
+            ReadOnly  = GL_READ_ONLY, 
+            WriteOnly = GL_WRITE_ONLY, 
+            ReadWrite = GL_READ_WRITE, 
+        };
+        enum class Format : gl::enum_t
+        {
+            R8_UNORM          = GL_R8,
+            R16_UNORM         = GL_R16,
+            RG8_UNORM         = GL_RG8,
+            RG16_UNORM        = GL_RG16,
+            RGBA8_UNORM       = GL_RGBA8,
+            RGBA16_UNORM      = GL_RGBA16,
+            RGB10_A2_UNORM    = GL_RGB10_A2,
 
-            All                  = GL_ALL_BARRIER_BITS,
+            R8_SNORM          = GL_R8_SNORM,
+            R16_SNORM         = GL_R16_SNORM,
+            RG8_SNORM         = GL_RG8_SNORM,
+            RG16_SNORM        = GL_RG16_SNORM,
+            RGBA8_SNORM       = GL_RGBA8_SNORM,
+            RGBA16_SNORM      = GL_RGBA16_SNORM,
+                              
+            R16_FLOAT         = GL_R16F,
+            R32_FLOAT         = GL_R32F,
+            RG16_FLOAT        = GL_RG16F,
+            RG32_FLOAT        = GL_RG32F,
+            RGBA16_FLOAT      = GL_RGBA16F,
+            RGBA32_FLOAT      = GL_RGBA32F,
+            R11_G11_B10_FLOAT = GL_R11F_G11F_B10F,
+
+            R8_INT            = GL_R8I,
+            R16_INT           = GL_R16I,
+            R32_INT           = GL_R32I,
+            RG8_INT           = GL_RG8I,
+            RG16_INT          = GL_RG16I,
+            RG32_INT          = GL_RG32I,
+            RGBA8_INT         = GL_RGBA8I,
+            RGBA16_INT        = GL_RGBA16I,
+            RGBA32_INT        = GL_RGBA32I,
+                                      
+            R8_UINT           = GL_R8UI,
+            R16_UINT          = GL_R16UI,
+            R32_UINT          = GL_R32UI,
+            RG8_UINT          = GL_RG8UI,
+            RG16_UINT         = GL_RG16UI,
+            RG32_UINT         = GL_RG32UI,
+            RGBA8_UINT        = GL_RGBA8UI,
+            RGBA16_UINT       = GL_RGBA16UI,
+            RGBA32_UINT       = GL_RGBA32UI,
+            RGB10_A2_UINT     = GL_RGB10_A2UI,
         };
     };
     enum class Orientation : gl::enum_t
@@ -870,14 +947,14 @@ namespace fox::gfx::api::glf
         };
         enum class Parameter : gl::enum_t
         {
-            IsSeparable                      = GL_PROGRAM_SEPARABLE, 
+            IsSeparable                           = GL_PROGRAM_SEPARABLE, 
             DeleteStatus                          = GL_DELETE_STATUS, 
             LinkStatus                            = GL_LINK_STATUS, 
             ValidateStatus                        = GL_VALIDATE_STATUS, 
             AttachedShaders                       = GL_ATTACHED_SHADERS, 
             InfoLogLength                         = GL_INFO_LOG_LENGTH, 
             BinaryLength                          = GL_PROGRAM_BINARY_LENGTH, 
-            IsBinaryRetrievable                     = GL_PROGRAM_BINARY_RETRIEVABLE_HINT, 
+            IsBinaryRetrievable                   = GL_PROGRAM_BINARY_RETRIEVABLE_HINT, 
             ComputeWorkGroupSize                  = GL_COMPUTE_WORK_GROUP_SIZE, 
             ActiveUniforms                        = GL_ACTIVE_UNIFORMS, 
             ActiveUniformMaximumLength            = GL_ACTIVE_UNIFORM_MAX_LENGTH,
@@ -947,6 +1024,29 @@ namespace fox::gfx::api::glf
             Compute                = GL_COMPUTE_SHADER_BIT, 
 
             All                    = GL_ALL_SHADER_BITS, 
+        };
+        enum class StageProperty : gl::enum_t
+        {
+            ActiveSubroutineUniformLocations     = GL_ACTIVE_SUBROUTINE_UNIFORM_LOCATIONS, 
+            ActiveSubroutineUniforms             = GL_ACTIVE_SUBROUTINE_UNIFORMS, 
+            ActiveSubroutines                    = GL_ACTIVE_SUBROUTINES, 
+            ActiveSubroutineUniformMaximumLength = GL_ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH, 
+            ActiveSubroutineMaximumLength        = GL_ACTIVE_SUBROUTINE_MAX_LENGTH, 
+        };
+        struct     Pipeline
+        {
+            enum class Property : gl::enum_t
+            {
+                ActiveProgram                = GL_ACTIVE_PROGRAM, 
+                VertexShader                 = GL_VERTEX_SHADER, 
+                TessellationControlShader    = GL_TESS_CONTROL_SHADER, 
+                TessellationEvaluationShader = GL_TESS_EVALUATION_SHADER, 
+                GeometryShader               = GL_GEOMETRY_SHADER, 
+                FragmentShader               = GL_FRAGMENT_SHADER, 
+                ComputeShader                = GL_COMPUTE_SHADER, 
+                ValidateStatus               = GL_VALIDATE_STATUS, 
+                InfoLogLength                = GL_INFO_LOG_LENGTH, 
+            };
         };
     };
     enum class ProvokingVertex : gl::enum_t
@@ -1030,17 +1130,18 @@ namespace fox::gfx::api::glf
     {
         enum class Parameter : gl::enum_t
         {
-            TextureWrapS       = GL_TEXTURE_WRAP_S, 
-            TextureWrapT       = GL_TEXTURE_WRAP_T, 
-            TextureWrapR       = GL_TEXTURE_WRAP_R, 
-            TextureMinFilter   = GL_TEXTURE_MIN_FILTER, 
-            TextureMagFilter   = GL_TEXTURE_MAG_FILTER, 
-            TextureBorderColor = GL_TEXTURE_BORDER_COLOR, 
-            TextureMinLod      = GL_TEXTURE_MIN_LOD, 
-            TextureMaxLod      = GL_TEXTURE_MAX_LOD, 
-            TextureLodBias     = GL_TEXTURE_LOD_BIAS, 
-            TextureCompareMode = GL_TEXTURE_COMPARE_MODE, 
-            TextureCompareFunc = GL_TEXTURE_COMPARE_FUNC, 
+            BorderColor         = GL_TEXTURE_BORDER_COLOR, 
+            CompareMode         = GL_TEXTURE_COMPARE_MODE, 
+            CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
+            MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
+            MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
+            MaximumAnisotropy   = GL_TEXTURE_MAX_ANISOTROPY, 
+            LodBias             = GL_TEXTURE_LOD_BIAS, 
+            MaximumLod          = GL_TEXTURE_MAX_LOD, 
+            MinimumLod          = GL_TEXTURE_MIN_LOD, 
+            WrappingS           = GL_TEXTURE_WRAP_S, 
+            WrappingT           = GL_TEXTURE_WRAP_T, 
+            WrappingR           = GL_TEXTURE_WRAP_R, 
         };
     };
     struct     Shader
@@ -1051,7 +1152,18 @@ namespace fox::gfx::api::glf
             DeleteStatus  = GL_DELETE_STATUS, 
             InfoLogLength = GL_INFO_LOG_LENGTH, 
             SourceLength  = GL_SHADER_SOURCE_LENGTH, 
+            SpirVBinary   = GL_SPIR_V_BINARY, 
             Type          = GL_SHADER_TYPE, 
+        };
+        enum class PrecisionFormat : gl::enum_t
+        {
+            LowInteger    = GL_LOW_INT, 
+            MediumInteger = GL_MEDIUM_INT, 
+            HighInteger   = GL_HIGH_INT, 
+
+            LowFloat      = GL_LOW_FLOAT, 
+            MediumFloat   = GL_MEDIUM_FLOAT, 
+            HighFloat     = GL_HIGH_FLOAT, 
         };
         enum class Type : gl::enum_t
         {
@@ -1061,6 +1173,13 @@ namespace fox::gfx::api::glf
             Geometry               = GL_GEOMETRY_SHADER, 
             Fragment               = GL_FRAGMENT_SHADER, 
             Compute                = GL_COMPUTE_SHADER, 
+        };
+        enum class SubroutineParameter : gl::enum_t
+        {
+            NumberCompatibleSubroutines, 
+            CompatibleSubroutines, 
+            UniformSize, 
+            UniformNameLength, 
         };
     };
     struct     Stencil
@@ -1141,6 +1260,25 @@ namespace fox::gfx::api::glf
             D    = GL_DEPTH_COMPONENT, 
             S    = GL_STENCIL_INDEX, 
         };
+        enum class ComparisonFunction : gl::enum_t
+        {
+            Always       = GL_ALWAYS, 
+            Never        = GL_NEVER, 
+
+            Equal        = GL_EQUAL, 
+            NotEqual     = GL_NOTEQUAL, 
+
+            Less         = GL_LESS, 
+            LessEqual    = GL_LEQUAL, 
+
+            Greater      = GL_GREATER, 
+            GreaterEqual = GL_GEQUAL, 
+        };
+        enum class ComparisonMode : gl::enum_t
+        {
+            None      = GL_NONE, 
+            Reference = GL_COMPARE_REF_TO_TEXTURE, 
+        };
         enum class CompressedFormat : gl::enum_t
         {
             RGB8_C_ETC2           = GL_COMPRESSED_RGB8_ETC2, 
@@ -1198,6 +1336,11 @@ namespace fox::gfx::api::glf
 
             S8_UINT           = GL_STENCIL_INDEX8, 
         };
+        enum class MagnificationFilter
+        {
+            Nearest = GL_NEAREST, 
+            Linear  = GL_LINEAR, 
+        };
         enum class MinificationFilter
         {
             Nearest              = GL_NEAREST, 
@@ -1208,11 +1351,6 @@ namespace fox::gfx::api::glf
 
             LinearMipmapNearest  = GL_LINEAR_MIPMAP_NEAREST, 
             LinearMipmapLinear   = GL_LINEAR_MIPMAP_LINEAR, 
-        };
-        enum class MagnificationFilter
-        {
-            Nearest = GL_NEAREST, 
-            Linear  = GL_LINEAR, 
         };
         enum class Parameter : gl::enum_t
         {
@@ -1250,6 +1388,16 @@ namespace fox::gfx::api::glf
 
             Rectangle           = GL_TEXTURE_RECTANGLE, 
             Buffer              = GL_TEXTURE_BUFFER, 
+        };
+        enum class Type : gl::enum_t
+        {
+            Byte               = GL_BYTE, 
+            UnsignedByte       = GL_UNSIGNED_BYTE, 
+            Short              = GL_SHORT, 
+            UnsignedShort      = GL_UNSIGNED_SHORT, 
+            Integer            = GL_INT, 
+            UnsignedInteger    = GL_UNSIGNED_INT, 
+            Float              = GL_FLOAT, 
         };
         enum class Wrapping : gl::enum_t
         {
@@ -1455,4 +1603,58 @@ namespace fox::gfx::api::glf
             Pointer = GL_VERTEX_ATTRIB_ARRAY_POINTER, 
         };
     };
+    enum class PackingMode : gl::enum_t
+    {
+        PackSwapBytes               = GL_PACK_SWAP_BYTES, 
+        PackLsbFirst                = GL_PACK_LSB_FIRST, 
+        PackRowLength               = GL_PACK_ROW_LENGTH, 
+        PackSkipRows                = GL_PACK_SKIP_ROWS, 
+        PackSkipPixels              = GL_PACK_SKIP_PIXELS, 
+        PackAlignment               = GL_PACK_ALIGNMENT, 
+        PackImageHeight             = GL_PACK_IMAGE_HEIGHT, 
+        PackSkipImages              = GL_PACK_SKIP_IMAGES, 
+        PackCompressedBlockWidth    = GL_PACK_COMPRESSED_BLOCK_WIDTH, 
+        PackCompressedBlockHeight   = GL_PACK_COMPRESSED_BLOCK_HEIGHT, 
+        PackCompressedBlockDepth    = GL_PACK_COMPRESSED_BLOCK_DEPTH, 
+        PackCompressedBlockSize     = GL_PACK_COMPRESSED_BLOCK_SIZE, 
+
+        UnpackSwapBytes             = GL_UNPACK_SWAP_BYTES, 
+        UnpackLsbFirst              = GL_UNPACK_LSB_FIRST, 
+        UnpackRowLength             = GL_UNPACK_ROW_LENGTH, 
+        UnpackSkipRows              = GL_UNPACK_SKIP_ROWS, 
+        UnpackSkipPixels            = GL_UNPACK_SKIP_PIXELS, 
+        UnpackAlignment             = GL_UNPACK_ALIGNMENT, 
+        UnpackImageHeight           = GL_UNPACK_IMAGE_HEIGHT, 
+        UnpackSkipImages            = GL_UNPACK_SKIP_IMAGES, 
+        UnpackCompressedBlockWidth  = GL_UNPACK_COMPRESSED_BLOCK_WIDTH, 
+        UnpackCompressedBlockHeight = GL_UNPACK_COMPRESSED_BLOCK_HEIGHT, 
+        UnpackCompressedBlockDepth  = GL_UNPACK_COMPRESSED_BLOCK_DEPTH, 
+        UnpackCompressedBlockSize   = GL_UNPACK_COMPRESSED_BLOCK_SIZE, 
+    };
+
+
+
+
+
+
+
+    template<typename T>
+    concept ValidBitmaskTypeConcept = std::is_same_v<std::underlying_type_t<T>, gl::bitfield_t>;
+
+    template<typename T> requires ValidBitmaskTypeConcept<T>
+    struct BitmaskTraits { static constexpr bool enable_bitmask_operations = false; };
+
+    template<> struct BitmaskTraits<glf::Memory::Barrier>         { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Memory::RegionalBarrier> { static constexpr bool enable_bitmask_operations = true; };
+
+    template<typename T> 
+    concept ValidBitmaskEnumClassConcept = std::is_enum_v<T> && BitmaskTraits<T>::enable_bitmask_operations;
+
+    template<ValidBitmaskEnumClassConcept T> constexpr T  operator| (T  first, T second) { return static_cast<T>( std::to_underlying(first) | std::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T> constexpr T  operator& (T  first, T second) { return static_cast<T>( std::to_underlying(first) & std::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T> constexpr T  operator^ (T  first, T second) { return static_cast<T>( std::to_underlying(first) ^ std::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T> constexpr T  operator~ (T  value          ) { return static_cast<T>(~std::to_underlying(value)); }
+    template<ValidBitmaskEnumClassConcept T> constexpr T& operator|=(T& first, T second) { return first = first | second; }
+    template<ValidBitmaskEnumClassConcept T> constexpr T& operator&=(T& first, T second) { return first = first & second; }
+    template<ValidBitmaskEnumClassConcept T> constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
 }

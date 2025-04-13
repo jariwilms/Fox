@@ -53,7 +53,7 @@ namespace fox::gfx::api::gl
         {
             if (image.dimensions() != m_dimensions) throw std::invalid_argument{ "Image dimensions must be equal!" };
 
-            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, gl::Vector3u{ m_dimensions, 1u }, gl::Vector3u{ 0u, 0u, index }, 0, image.data().data());
+            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, gl::Vector3u{ m_dimensions, 1u }, gl::Vector3u{ 0u, 0u, index }, 0, image.data());
         }
         void attach_images(const Layout& layout)
         {

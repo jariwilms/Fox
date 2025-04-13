@@ -517,6 +517,7 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">

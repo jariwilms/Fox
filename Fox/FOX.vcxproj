@@ -160,6 +160,7 @@
     <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\Context\Context.hpp" />
     <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp" />

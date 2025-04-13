@@ -198,130 +198,161 @@ namespace fox::gfx::api
 
 
 
-            //Render to shadow map (directional lighting)
-            //gl::viewport(fox::Vector4u{ 0u, 0u, shadowMapDimensions });
+            const auto& nearPlane = 0.1f;
+            const auto& farPlane = 100.0f;
 
-            //s_pipelines.at("DirectionalShadow")->bind();
-            s_sBuffer->bind(api::FrameBuffer::Target::Write);
-
-            gl::clear(glf::Buffer::Mask::Depth);
-
-            //gl::enable(glf::Feature::FaceCulling);
-            //gl::cull_face(glf::Culling::Face::Back);
-
-            //const auto& lightProjection  = gfx::Projection::create<gfx::Projection::Type::Orthographic>(10.0f, -10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
-            //const auto& lightView        = glm::lookAt(depthLightPosition, fox::Vector3f{}, fox::Vector3f{ 0.0f, 1.0f, 0.0f });
-            //const auto& lightSpaceMatrix = lightProjection.matrix() * lightView;
-
-            //for (const auto& mmt : s_mmt)
-            //{
-            //    const auto& [mesh, material, transform] = mmt;
-            //    const auto& vao                         = mesh->vertexArray;
-            //    const auto& ind                         = vao->index_buffer();
-
-            //    const auto& modelMatrix  = transform.matrix();
-            //    
-            //    s_shadowBuffer->copy(UShadow{ modelMatrix, lightSpaceMatrix });
-
-            //    vao->bind();
-            //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, ind->count());
-            //}
-
-
-
-
-
-
-
-
-            //Render to shadow map (point lighting)
-            gl::viewport(fox::Vector4u{ 0u, 0u, shadowMapDimensions });
-
-            gl::enable(glf::Feature::FaceCulling);
-            gl::cull_face(glf::Culling::Face::Back);
-
-            const auto& nearPlane         = 0.1f;
-            const auto& farPlane          = 100.0f;
-            const auto& shadowAspectRatio = static_cast<fox::float32_t>(shadowMapDimensions.x) / shadowMapDimensions.y;
-            const auto& shadowProjection  = glm::perspective(glm::radians(90.0f), shadowAspectRatio, nearPlane, farPlane);
-
-            fox::uint32_t index{};
-            for (const auto& pointLight : s_pointLights)
-            {
-                const fox::Vector3f& pos3f = pointLight.position;
-                std::array<const uni::ShadowProjection, 6> shadowTransforms
+            //viewport
+            //
+            const auto& render_meshes = [&]()
                 {
-                    shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{  1.0, 0.0, 0.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
-                    shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{ -1.0, 0.0, 0.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
-                    shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{  0.0, 1.0, 0.0 }, fox::Vector3f{ 0.0, 0.0, 1.0 }), 
-                    shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{  0.0,-1.0, 0.0 }, fox::Vector3f{ 0.0, 0.0,-1.0 }), 
-                    shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{  0.0, 0.0, 1.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
-                    shadowProjection * glm::lookAt(pos3f, pos3f + fox::Vector3f{  0.0, 0.0,-1.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
+                    gl::viewport(fox::Vector4u{ 0u, 0u, s_gBufferMultisample->dimensions() });
+
+                    gl::enable(glf::Feature::FaceCulling);
+                    gl::cull_face(glf::Culling::Face::Back);
+                    gl::front_face(glf::Orientation::CounterClockwise);
+
+                    gl::enable(glf::Feature::DepthTest);
+                    gl::depth_function(glf::DepthFunction::Less);
+
+                    gl::disable(glf::Feature::Blending);
+
+                    s_pipelines.at("DeferredMesh")->bind();
+                    s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
+                    gl::clear(glf::Buffer::Mask::All);
+
+                    for (const auto& _ : s_mmt)
+                    {
+                        const auto& [mesh, material, transform] = _;
+
+                        s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(transform.matrix()));
+                        s_materialBuffer->copy(uni::Material{ material->color, material->roughnessFactor, material->metallicFactor });
+
+                        material->albedo->bind(0);
+                        material->normal->bind(1);
+                        material->arm->bind(2);
+
+                        mesh->vertexArray->bind();
+                        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
+                    }
+                };
+            const auto& render_shadow_map_directional = [&](const fox::Light& light, const fox::Vector3f& position)
+                {
+                    //s_sBuffer->bind(api::FrameBuffer::Target::Write);
+                    //gl::clear(glf::Buffer::Mask::Depth);
+
+                    //gl::viewport(fox::Vector4u{ 0u, 0u, shadowMapDimensions });
+                    //s_pipelines.at("DirectionalShadow")->bind();
+
+                    //gl::enable(glf::Feature::FaceCulling);
+                    //gl::cull_face(glf::Culling::Face::Back);
+
+                    //const auto& lightProjection  = gfx::Projection::create<gfx::Projection::Type::Orthographic>(10.0f, -10.0f, -10.0f, 10.0f, 0.1f, 100.0f);
+                    //const auto& lightView        = glm::lookAt(position, fox::Vector3f{}, fox::Vector3f{ 0.0f, 1.0f, 0.0f });
+                    //const auto& lightSpaceMatrix = lightProjection.matrix() * lightView;
+
+                    //for (const auto& mmt : s_mmt)
+                    //{
+                    //    const auto& [mesh, material, transform] = mmt;
+                    //    const auto& vao                         = mesh->vertexArray;
+
+                    //    const auto& modelMatrix  = transform.matrix();
+                    //    
+                    //    s_shadowProjectionsBuffer->copy(UShadow{ modelMatrix, lightSpaceMatrix });
+
+                    //    vao->bind();
+                    //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
+                    //}
+                };
+            const auto& render_shadow_map_point       = [&](
+                const fox::Vector3f& position, 
+                const fox::Vector2u& dimensions, fox::float32_t nearPlane, fox::float32_t farPlane, 
+                const std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>>& mmt, 
+                gfx::FrameBuffer& cubemap)
+                {
+                    cubemap.bind(api::FrameBuffer::Target::Write);
+
+                    gl::clear(glf::Buffer::Mask::Depth);
+
+                    gl::viewport(fox::Vector4u{ 0u, 0u, dimensions });
+
+                    gl::enable(glf::Feature::FaceCulling);
+                    gl::cull_face(glf::Culling::Face::Back);
+
+
+
+                    const auto& aspectRatio = static_cast<fox::float32_t>(dimensions.x) / dimensions.y;
+                    const auto& projection  = glm::perspective(glm::radians(90.0f), aspectRatio, nearPlane, farPlane);
+
+                    std::array<const uni::ShadowProjection, 6> shadowTransforms
+                    {
+                        projection * glm::lookAt(position, position + fox::Vector3f{  1.0, 0.0, 0.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
+                        projection * glm::lookAt(position, position + fox::Vector3f{ -1.0, 0.0, 0.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
+                        projection * glm::lookAt(position, position + fox::Vector3f{  0.0, 1.0, 0.0 }, fox::Vector3f{ 0.0, 0.0, 1.0 }), 
+                        projection * glm::lookAt(position, position + fox::Vector3f{  0.0,-1.0, 0.0 }, fox::Vector3f{ 0.0, 0.0,-1.0 }), 
+                        projection * glm::lookAt(position, position + fox::Vector3f{  0.0, 0.0, 1.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
+                        projection * glm::lookAt(position, position + fox::Vector3f{  0.0, 0.0,-1.0 }, fox::Vector3f{ 0.0,-1.0, 0.0 }), 
+                    };
+
+                    s_pipelines.at("PointShadow")->bind();
+                    s_shadowProjectionsBuffer->copy(shadowTransforms);
+                    s_lightShadowBuffer->copy({ fox::Vector4f{ position, 1.0f }, farPlane });
+
+                    for (const auto& _ : mmt)
+                    {
+                        const auto& [mesh, material, transform] = _;
+                        const auto& vao = mesh->vertexArray;
+
+                        s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(transform.matrix()));
+
+                        vao->bind();
+                        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
+                    }
+                };
+            const auto& render_lighting = [&](fox::float32_t farPlane)
+                {
+                    gl::enable(glf::Feature::FaceCulling);
+                    gl::cull_face(glf::Culling::Face::Front);
+                    gl::enable(glf::Feature::Blending);
+                    gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
+                    gl::disable(glf::Feature::DepthTest);
+
+                    s_pipelines.at("PointLighting")->bind();
+
+                    s_ppBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
+                    gl::clear(glf::Buffer::Mask::All);
+
+                    s_gBuffer->bind_texture("Position", 0);
+                    s_gBuffer->bind_texture("Albedo",   1);
+                    s_gBuffer->bind_texture("Normal",   2);
+                    s_gBuffer->bind_texture("ARM",      3);
+
+                    sva->bind();
+                    fox::uint32_t li{};
+
+                    for (const auto& light : s_pointLights)
+                    {
+                        fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
+
+                        s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+                        s_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+                        s_lightShadowBuffer->copy({ light.position, farPlane });
+                        s_shadowCubemaps.at(li++)->bind_cubemap("Depth", 4);
+
+                        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
+                    }
                 };
 
 
 
-                s_pipelines.at("PointShadow")->bind();
-
-                s_shadowCubemaps.at(index++)->bind(api::FrameBuffer::Target::Write);
-                gl::clear(glf::Buffer::Mask::Depth);
-
-                s_shadowProjectionsBuffer->copy(shadowTransforms);
-                s_lightShadowBuffer->copy({ pointLight.position, farPlane });
-
-                for (const auto& mmt : s_mmt)
-                {
-                    const auto& [mesh, material, transform] = mmt;
-                    const auto& vao = mesh->vertexArray;
-
-                    s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(transform.matrix()));
-
-                    vao->bind();
-                    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
-                }
-            }
-
-
-
-
-
-            //Render Meshes
-            gl::viewport(fox::Vector4u{ 0u, 0u, dimensions });
-
-            gl::enable(glf::Feature::FaceCulling);
-            gl::cull_face(glf::Culling::Face::Back);
-            gl::front_face(glf::Orientation::CounterClockwise);
-
-            gl::enable(glf::Feature::DepthTest);
-            gl::depth_function(glf::DepthFunction::Less);
-
-            gl::disable(glf::Feature::Blending);
-
-            s_pipelines.at("DeferredMesh")->bind();
-            s_gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
-            gl::clear(glf::Buffer::Mask::All);
-
-            for (const auto& mmt : s_mmt)
+            fox::uint32_t index{};
+            for (const auto& pointLight : s_pointLights)
             {
-                const auto& [mesh, material, transform] = mmt;
-                const auto& vao                         = mesh->vertexArray;
-
-                const auto& modelMatrix  = transform.matrix();
-                const auto& normalMatrix = glm::transpose(glm::inverse(fox::Matrix3f{ modelMatrix }));
-                
-                s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(),  std::make_tuple(modelMatrix));
-                s_materialBuffer->copy(uni::Material{ material->color, material->roughnessFactor, material->metallicFactor });
-
-                vao->bind();
-
-                material->albedo->bind(0);
-                material->normal->bind(1);
-                material->arm->bind(2);
-
-                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
+                render_shadow_map_point(pointLight.position, shadowMapDimensions, nearPlane, farPlane, s_mmt, *s_shadowCubemaps.at(index++));
             }
 
 
+
+            render_meshes();
 
 
 
@@ -335,47 +366,12 @@ namespace fox::gfx::api
                 glNamedFramebufferDrawBuffer(gBufferHandle,   GL_COLOR_ATTACHMENT0 + i);
                 glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
             }
-            glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+            glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_DEPTH_BUFFER_BIT,   GL_NEAREST);
             glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_STENCIL_BUFFER_BIT, GL_NEAREST);
 
 
 
-
-
-            //Regular Lighting
-            gl::enable(glf::Feature::FaceCulling);
-            gl::cull_face(glf::Culling::Face::Front);
-            gl::enable(glf::Feature::Blending);
-            gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
-            gl::disable(glf::Feature::DepthTest);
-
-            s_pipelines.at("PointLighting")->bind();
-
-            s_ppBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
-            gl::clear(glf::Buffer::Mask::All);
-
-            s_gBuffer->bind_texture("Position", 0);
-            s_gBuffer->bind_texture("Albedo",   1);
-            s_gBuffer->bind_texture("Normal",   2);
-            s_gBuffer->bind_texture("ARM",      3);
-
-            sva->bind();
-            fox::uint32_t li{};
-            for (const auto& light : s_pointLights)
-            {
-                fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
-
-                s_matricesBuffer->copy_sub(utl::offset_of<uni::Matrices, &uni::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-                s_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
-                s_lightShadowBuffer->copy({ light.position, farPlane });
-                s_shadowCubemaps.at(li)->bind_cubemap("Depth", 4);
-
-                ++li;
-
-                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
-            }
-
-
+            render_lighting(farPlane);
 
 
 
