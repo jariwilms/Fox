@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <stdfloat>
+#include <bitset>
 
 #include <glm/glm.hpp>
 
@@ -26,15 +27,13 @@ namespace fox
 	using uint32_t   = std::uint32_t;
 	using int64_t    = std::int64_t;
 	using uint64_t   = std::uint64_t;
-	using float32_t  = float;         //MSVC please I beg
+	using float32_t  = float;         //Thanks Microsoft...
 	using float64_t  = double;		  //
 
 	using byte_t     = fox::uint8_t;
 	using size_t     = std::size_t;   //Offset in bytes
 	using count_t    = fox::uint32_t; //Number of elements
 	using offset_t   = fox::uint32_t; //Number of elements offset
-
-
 
 	using Vector1i   = glm::ivec1;
 	using Vector2i   = glm::ivec2;
@@ -52,4 +51,6 @@ namespace fox
 	using Matrix3f   = glm::mat3;
 	using Matrix4f   = glm::mat4;
 	using Quaternion = glm::quat;
+
+	using UUID       = std::bitset<128>;
 }

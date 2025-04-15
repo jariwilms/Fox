@@ -49,7 +49,7 @@ namespace fox
         return transform_product(scene, rel, trs) * transform;
     }
 
-    Application::Application(int argc, char* argv[])
+    Application::Application(int argc, char** argv)
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
@@ -80,15 +80,15 @@ namespace fox
         //Loading models
         auto& helmetActor           = scene->create_actor();
         auto& helmetTransform       = helmetActor.get_component<cmp::TransformComponent>().get();
-        auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+        auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
 
         model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
         helmetTransform.translate({ 0.0f, 1.0f, 0.0f });
 
-        const auto& defaultAlbedo   = gfx::api::texture_from_file("textures/albedo.png");
-        const auto& defaultNormal   = gfx::api::texture_from_file("textures/normal.png");
-        const auto& defaultARM      = gfx::api::texture_from_file("textures/arm.png");
-        const auto& defaultEmissive = gfx::api::texture_from_file("textures/emissive.png");
+        const auto& defaultAlbedo   = io::load<io::Asset::Texture2D>("textures/albedo.png");
+        const auto& defaultNormal   = io::load<io::Asset::Texture2D>("textures/normal.png");
+        const auto& defaultARM      = io::load<io::Asset::Texture2D>("textures/arm.png");
+        const auto& defaultEmissive = io::load<io::Asset::Texture2D>("textures/emissive.png");
 
         auto defaultMaterial        = std::make_shared<gfx::Material>();
         defaultMaterial->albedo     = defaultAlbedo;
@@ -112,7 +112,7 @@ namespace fox
 
 
 
-
+        
 
         //Skybox setup
         const fox::Vector2u skyboxDimensions{ 2048u, 2048u };
@@ -127,12 +127,12 @@ namespace fox
         };
         gfx::Cubemap::Layout cubemapLayout
         {
-            gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
-            gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
         };
 
         auto skybox = std::make_shared<gfx::Cubemap>(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapLayout);
@@ -199,7 +199,7 @@ namespace fox
 
 
 
-        Time::reset();
+        fox::Time::reset();
         fox::CyclicBuffer<fox::float32_t, 144> frametimes{};
 
         while (!m_window->should_close())

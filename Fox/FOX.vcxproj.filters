@@ -333,6 +333,9 @@
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Context\Context.hpp">
       <Filter>Fox\Rendering\API\OpenGL\Context</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Enum.hpp">
+      <Filter>Fox\Rendering\API\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\OpenGL\Flags.hpp">
       <Filter>Fox\Rendering\API\OpenGL</Filter>
     </ClInclude>
@@ -394,6 +397,9 @@
       <Filter>Fox\Rendering\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp">
+      <Filter>Fox\Rendering\Buffer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp">
       <Filter>Fox\Rendering\Buffer</Filter>
     </ClInclude>
     <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp">
@@ -517,7 +523,9 @@
       <Filter>Fox\Window</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\IO\UUID\UUID.hpp" />
+    <ClInclude Include="src\Fox\IO\Registry\Registry.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Using.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Fox\Application.cpp">
@@ -547,7 +555,6 @@
     <ClCompile Include="src\Fox\test.cpp">
       <Filter>Fox</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
 </Project>

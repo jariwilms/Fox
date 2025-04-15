@@ -22,7 +22,7 @@ namespace fox::io
 
         static void init();
 
-        static std::shared_ptr<gfx::Model> import2(const std::filesystem::path& path);
+        static std::shared_ptr<gfx::Model> import(const std::filesystem::path& path);
 
     private:
         static void                                           create_nodes(gfx::Model& model, fox::uint32_t nodeIndex, const aiScene& asiScene, const aiNode& asiNode);

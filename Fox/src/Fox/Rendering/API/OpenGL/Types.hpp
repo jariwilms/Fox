@@ -21,15 +21,21 @@ namespace fox::gfx::api::gl
     using float32_t  = GLfloat;
     using float64_t  = GLdouble;
 
-    using size_t     = GLsizei;     //Sizes and dimensions (may not be negative)
+    using size_t     = GLsizei;     //Sizes and dimensions (should not be negative)
     using enum_t     = GLenum;      //Enumerated value of constants
-    using sizeptr_t  = GLsizeiptr;  //Buffer size in bytes
+    using sizeptr_t  = GLsizeiptr;  //Buffer size   in bytes
     using intptr_t   = GLintptr;    //Buffer offset in bytes
     using sync_t     = GLsync;      //Synchronization primitive
     using bitfield_t = GLbitfield;  //Value containing one or more flags
 
     using byte_t     = gl::uint8_t;
 
+    enum : gl::bool_t
+    {
+        False = GL_FALSE,
+        True  = GL_TRUE,
+    };
+    
 
 
     //Strong aliases
@@ -37,19 +43,12 @@ namespace fox::gfx::api::gl
     enum class query_t  : gl::uint32_t {}; //Alias for OpenGL Query  handles
     enum class format_t : gl::enum_t   {}; //Alias for OpenGL Binary Formats
 
-
-
-    enum : gl::bool_t
-    {
-        False = GL_FALSE,
-        True  = GL_TRUE,
-    };
-    constexpr gl::handle_t NullObject{ 0u };
+    constexpr gl::handle_t NullObject{};
 
 
 
     //Vector types
-    template<typename T, gl::uint64_t N>
+    template<typename T, std::uint32_t N>
     using Vector     = glm::vec<N, T, glm::packed_highp>;
 
     using Vector1i   = glm::ivec1;
@@ -71,26 +70,21 @@ namespace fox::gfx::api::gl
 
 
 
+    template<typename T, std::uint32_t N>
+    using Point = gl::Vector<T, N>;
 
+    template<typename T, std::uint32_t N>
+    using Line = gl::Vector<gl::Point<T, N>, 2>;
 
-
-
-    template<typename T, gl::uint64_t N>
-    struct PlaceHolderName
+    template<typename T, std::uint32_t N>
+    struct Area
     {
-        using vector_t = gl::Vector<T, N>;
-
-        PlaceHolderName() = default;
-        PlaceHolderName(const vector_t& origin, const vector_t& extent)
-            : origin{ origin }, extent{ extent } {}
-
-        vector_t origin{};
-        vector_t extent{};
+        Point<T, N> origin{};
+        Point<T, N> extent{};
     };
 
-    template<typename T> using Line   = PlaceHolderName<T, 1>;
-    template<typename T> using Area   = PlaceHolderName<T, 2>;
-    template<typename T> using Volume = PlaceHolderName<T, 3>;
+    //template<typename T, std::uint32_t N>
+    //using Area = gl::Vector<gl::Point<T, N>, 2>;
 
     template<typename T>
     struct Range

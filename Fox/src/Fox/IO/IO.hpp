@@ -7,23 +7,44 @@
 
 namespace fox::io
 {
-    template<typename T>
-    concept PathConstructible = requires (T t)
+    enum class Asset
     {
-        T{ std::filesystem::path{} };
+        File,
+        Image,
+        Texture1D,
+        Texture2D,
+        Texture3D,
+        Shader, 
+        Model, 
     };
 
-    static const Directory& root()
-    {
-        static Directory rootDirectory{ ASSET_DIR };
+    static inline const fox::Directory root{ FOX_ASSET_DIR };
 
-        return rootDirectory;
+    template<Asset A = Asset::File, typename... Args>
+    static auto _load(const std::filesystem::path& path, Args... args) = delete;
+
+    template<> static auto _load<io::Asset::File>     (const std::filesystem::path& path)
+    {
+        return std::make_shared<io::File>(path);
+    }
+    template<> static auto _load<io::Asset::Image>    (const std::filesystem::path& path, fox::Image::Format format)
+    {
+        const auto& file = io::_load(path);
+        const auto& data = file->read();
+        const auto& image = fox::Image::decode(format, *data);
+
+        return image;
+    }
+    template<> static auto _load<io::Asset::Texture2D>(const std::filesystem::path& path)
+    {
+        const auto& image = io::_load<io::Asset::Image>(path, fox::Image::Format::RGBA8);
+
+        return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
 
-    static std::shared_ptr<File> load(const std::filesystem::path& path)
+    template<Asset A = Asset::File, typename... Args>
+    static auto load(const std::filesystem::path& path, Args... args)
     {
-        const auto& filePath = (root().path() / path).lexically_normal();
-
-        return std::make_shared<File>(filePath);
+        return _load<A>(path.is_absolute() ? path : root / path, args...);
     }
 }

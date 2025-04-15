@@ -288,7 +288,7 @@ namespace fox::gfx
         private:
             static void init()
             {
-                const auto& model = io::ModelImporter::import2("models/sphere/Sphere.gltf");
+                const auto& model = io::ModelImporter::import("models/sphere/Sphere.gltf");
                 s_mesh = model->meshes.at(0);
             }
 

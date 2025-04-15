@@ -9,33 +9,6 @@
 
 namespace fox::gfx::api
 {
-    static auto image_from_file(const std::filesystem::path& path, fox::Image::Format layout = fox::Image::Format::RGBA8)
-    {
-        const auto& file    = io::load(path);
-        const auto& dataptr = file->read();
-        const auto& image   = fox::Image::decode(layout, *dataptr);
-
-        return image;
-    }
-    static auto images_from_files(std::span<std::filesystem::path> paths)
-    {
-        std::vector<fox::Image> images{};
-        images.reserve(paths.size());
-
-        for (const auto& path : paths)
-        {
-            images.emplace_back(image_from_file(path, fox::Image::Format::RGB8));
-        }
-
-        return images;
-    }
-    static auto texture_from_file(const std::filesystem::path& path)
-    {
-        const auto& image = image_from_file(path, fox::Image::Format::RGBA8);
-        
-        return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
-    }
-
     static auto shaders_from_source()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };

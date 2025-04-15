@@ -1,6 +1,6 @@
 workspace "Fox"
 	architecture "x64"
-	startproject "FOX"
+	startproject "RUN"
 	
 	configurations
 	{
@@ -32,7 +32,7 @@ group ""
 group "Application"
 project "FOX"
 	location "FOX"
-	kind "ConsoleApp"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++23"
 	staticruntime "On"
@@ -45,8 +45,8 @@ project "FOX"
 	
 	defines
 	{
-		'PROJECT_DIR=R"($(ProjectDir).)"', 
-		'ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
+		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
+		'FOX_ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 		
 		"GLFW_INCLUDE_NONE", 
 		"GLM_ENABLE_EXPERIMENTAL", 
@@ -55,10 +55,7 @@ project "FOX"
 	files
 	{
 		"Fox/src/**.hpp", 
-		"Fox/src/**.h", 
-		
 		"Fox/src/**.cpp", 
-		"Fox/src/**.c", 
 	}
 	
 	includedirs
@@ -103,7 +100,57 @@ project "FOX"
 		symbols "On"
 		
 	filter "configurations:Release"
-		defines "FOX_RELEASE"
-		runtime "Release"
+		defines  "FOX_RELEASE"
+		runtime  "Release"
+		optimize "On"
+
+
+
+project "RUN"
+	location "RUN"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++23"
+	staticruntime "On"
+	
+	targetdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")
+	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
+	
+	defines
+	{
+		"GLFW_INCLUDE_NONE", 
+		"GLM_ENABLE_EXPERIMENTAL", 
+	}
+	
+	files
+	{
+		"Run/src/**.hpp", 
+		"Run/src/**.cpp", 
+	}
+	
+	includedirs
+	{
+		"Fox/src", 
+		
+		"%{includedir.ASSIMP}", 
+		"%{includedir.ENTT}", 
+		"%{includedir.GLAD}", 
+		"%{includedir.GLFW}", 
+		"%{includedir.GLM}", 
+		"%{includedir.STB}", 
+		"%{includedir.TINYGLTF}", 
+	}
+	
+	links
+	{
+		"FOX", 
+	}
+	
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "On"
+		
+	filter "configurations:Release"
+		runtime  "Release"
 		optimize "On"
 group ""

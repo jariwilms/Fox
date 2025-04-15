@@ -82,13 +82,13 @@ namespace fox
 			return m_count;
 		}
 
-		std::filesystem::path operator/(const std::filesystem::path& rhs)
+		std::filesystem::path operator/(const std::filesystem::path& rhs) const
 		{
 			return m_path / rhs;
 		}
 
 	private:
 		Children m_children{};
-		size_t m_count{};
+		size_t   m_count{};
 	};
 }
