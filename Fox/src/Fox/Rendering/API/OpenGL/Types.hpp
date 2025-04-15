@@ -73,18 +73,9 @@ namespace fox::gfx::api::gl
     template<typename T, std::uint32_t N>
     using Point = gl::Vector<T, N>;
 
-    template<typename T, std::uint32_t N>
-    using Line = gl::Vector<gl::Point<T, N>, 2>;
-
-    template<typename T, std::uint32_t N>
-    struct Area
-    {
-        Point<T, N> origin{};
-        Point<T, N> extent{};
-    };
-
-    //template<typename T, std::uint32_t N>
-    //using Area = gl::Vector<gl::Point<T, N>, 2>;
+    template<typename T> using Line   = gl::Vector<gl::Point<T, 1>, 2>;
+    template<typename T> using Area   = gl::Vector<gl::Point<T, 2>, 2>;
+    template<typename T> using Volume = gl::Vector<gl::Point<T, 3>, 2>;
 
     template<typename T>
     struct Range
