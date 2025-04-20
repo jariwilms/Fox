@@ -8,16 +8,16 @@ workspace "Fox"
 		"Release", 
 	}
 	
-	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
-	
 	includedir = {}
 	includedir["ASSIMP"]   = "Fox/vendor/assimp/include"
 	includedir["ENTT"]     = "Fox/vendor/entt/include"
 	includedir["GLAD"]     = "Fox/vendor/glad/include"
 	includedir["GLFW"]     = "Fox/vendor/glfw/include"
 	includedir["GLM"]      = "Fox/vendor/glm/include"
+	includedir["MIMALLOC"] = "Fox/vendor/mimalloc/include"
 	includedir["STB"]      = "Fox/vendor/stb/include"
-	includedir["TINYGLTF"] = "Fox/vendor/tinygltf/include"
+	
+	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
 group "Dependencies"
 	include "Fox/vendor/assimp"
@@ -25,20 +25,20 @@ group "Dependencies"
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
 	include "Fox/vendor/glm"
+	include "Fox/vendor/mimalloc"
 	include "Fox/vendor/stb"
-	include "Fox/vendor/tinygltf"
 group ""
 
 group "Application"
 project "FOX"
-	location "FOX"
-	kind "StaticLib"
-	language "C++"
-	cppdialect "C++23"
+	location      "FOX"
+	language      "C++"
+	cppdialect    "C++23"
+	kind          "StaticLib"
 	staticruntime "On"
 	
-	targetdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 	
 	pchheader "stdafx.hpp"
 	pchsource "Fox/src/stdafx.cpp"
@@ -47,6 +47,7 @@ project "FOX"
 	{
 		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
 		'FOX_ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
+		"FOX_MALLOC", 
 		
 		"GLFW_INCLUDE_NONE", 
 		"GLM_ENABLE_EXPERIMENTAL", 
@@ -67,8 +68,8 @@ project "FOX"
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
+		"%{includedir.MIMALLOC}", 
 		"%{includedir.STB}", 
-		"%{includedir.TINYGLTF}", 
 	}
 	
 	links
@@ -78,8 +79,8 @@ project "FOX"
 		"GLAD", 
 		"GLFW", 
 		"GLM", 
+		"MIMALLOC", 
 		"STB_IMAGE", 
-		"TINYGLTF", 
 		
 		"opengl32.lib", 
 	}
@@ -107,14 +108,14 @@ project "FOX"
 
 
 project "RUN"
-	location "RUN"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++23"
+	location      "RUN"
+	language      "C++"
+	cppdialect    "C++23"
+	kind          "ConsoleApp"
 	staticruntime "On"
 	
-	targetdir ("%{wks.location}/bin/"  .. outputdir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
+	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
+	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 	
 	defines
 	{
@@ -138,7 +139,6 @@ project "RUN"
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
 		"%{includedir.STB}", 
-		"%{includedir.TINYGLTF}", 
 	}
 	
 	links

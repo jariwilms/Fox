@@ -208,9 +208,6 @@
     <Filter Include="Fox\Rendering\Uniform">
       <UniqueIdentifier>{AE93EA34-1A00-A62F-E3F3-3D8D4F1FC897}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fox\Rendering\Utility">
-      <UniqueIdentifier>{82B8EC42-EE24-A83D-B718-409B2344CAA5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fox\Scene">
       <UniqueIdentifier>{0FA6B3C5-7B10-683C-C44E-19E230F84591}</UniqueIdentifier>
     </Filter>
@@ -387,6 +384,9 @@
     <ClInclude Include="src\Fox\Rendering\API\Shader\Shader.hpp">
       <Filter>Fox\Rendering\API\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="src\Fox\Rendering\API\Shader\Utility.hpp">
+      <Filter>Fox\Rendering\API\Shader</Filter>
+    </ClInclude>
     <ClInclude Include="src\Fox\Rendering\API\Texture\AntiAliasing.hpp">
       <Filter>Fox\Rendering\API\Texture</Filter>
     </ClInclude>
@@ -540,9 +540,6 @@
     <ClInclude Include="src\Fox\Rendering\Uniform\Uniform.hpp">
       <Filter>Fox\Rendering\Uniform</Filter>
     </ClInclude>
-    <ClInclude Include="src\Fox\Rendering\Utility\Utility.hpp">
-      <Filter>Fox\Rendering\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="src\Fox\Scene\Actor.hpp">
       <Filter>Fox\Scene</Filter>
     </ClInclude>
@@ -590,9 +587,6 @@
     </ClCompile>
     <ClCompile Include="src\Fox\Window\WindowManager.cpp">
       <Filter>Fox\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Fox\test.cpp">
-      <Filter>Fox</Filter>
     </ClCompile>
     <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>

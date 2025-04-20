@@ -1,11 +1,11 @@
 project "ENTT"
-	kind "StaticLib"
-	language "C++"
-	cppdialect "C++20"
+	language      "C++"
+	cppdialect    "C++20"
+	kind          "StaticLib"
 	staticruntime "On"
 
 	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("%{wks.location}/bin_obj/" .. outputdir .. "/%{prj.name}")
+	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 
 	files
 	{

@@ -42,14 +42,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Debug\windows\RUN\</OutDir>
-    <IntDir>..\bin_obj\Debug\windows\RUN\</IntDir>
+    <IntDir>..\bin\Debug\windows\RUN\obj\</IntDir>
     <TargetName>RUN</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Release\windows\RUN\</OutDir>
-    <IntDir>..\bin_obj\Release\windows\RUN\</IntDir>
+    <IntDir>..\bin\Release\windows\RUN\obj\</IntDir>
     <TargetName>RUN</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\stb\include;..\Fox\vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -75,7 +75,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\stb\include;..\Fox\vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

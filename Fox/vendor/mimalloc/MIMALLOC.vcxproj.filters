@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="prim">
+      <UniqueIdentifier>{DD6C9C7C-C9A3-9D0D-7290-83105EA6190F}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\alloc-aligned.c" />
+    <ClCompile Include="src\alloc-posix.c" />
+    <ClCompile Include="src\alloc.c" />
+    <ClCompile Include="src\arena.c" />
+    <ClCompile Include="src\bitmap.c" />
+    <ClCompile Include="src\heap.c" />
+    <ClCompile Include="src\init.c" />
+    <ClCompile Include="src\libc.c" />
+    <ClCompile Include="src\options.c" />
+    <ClCompile Include="src\os.c" />
+    <ClCompile Include="src\page.c" />
+    <ClCompile Include="src\prim\prim.c">
+      <Filter>prim</Filter>
+    </ClCompile>
+    <ClCompile Include="src\random.c" />
+    <ClCompile Include="src\segment-map.c" />
+    <ClCompile Include="src\segment.c" />
+    <ClCompile Include="src\stats.c" />
+  </ItemGroup>
+</Project>
