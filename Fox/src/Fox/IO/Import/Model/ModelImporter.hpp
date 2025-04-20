@@ -7,6 +7,9 @@
 #include "assimp/postprocess.h"
 
 #include "Fox/Rendering/Model/Model.hpp"
+#include "Fox/Rendering/Buffer/Buffer.hpp"
+#include "Fox/Rendering/Buffer/VertexArray.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::io
 {

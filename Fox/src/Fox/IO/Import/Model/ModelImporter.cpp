@@ -2,7 +2,7 @@
 
 #include "ModelImporter.hpp"
 
-#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/IO/IO.hpp"
 #include "Fox/Core/Library/Image/Image.hpp"
 
 namespace fox::io
@@ -108,12 +108,12 @@ namespace fox::io
             layout2f.specify<fox::float32_t>(2);
             layout3f.specify<fox::float32_t>(3);
 
-            auto vertexArray      = std::make_shared<gfx::VertexArray>();
-            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(positionsVector);
-            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(normalsVector);
-            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(tangentsVector);
-            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector2f>>(texCoordsVector);
-            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer>(indicesVector);
+            auto vertexArray      = gfx::VertexArray::create();
+            auto positionsBuffer  = gfx::VertexBuffer<fox::Vector3f>::create(positionsVector);
+            auto normalsBuffer    = gfx::VertexBuffer<fox::Vector3f>::create(normalsVector);
+            auto tangentsBuffer   = gfx::VertexBuffer<fox::Vector3f>::create(tangentsVector);
+            auto texCoordsBuffer  = gfx::VertexBuffer<fox::Vector2f>::create(texCoordsVector);
+            auto indicesBuffer    = gfx::IndexBuffer::create(indicesVector);
 
             vertexArray->tie(positionsBuffer,  layout3f);
             vertexArray->tie(normalsBuffer,    layout3f);

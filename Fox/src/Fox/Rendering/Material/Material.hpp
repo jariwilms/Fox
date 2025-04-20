@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/Using.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::gfx
 {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <stdfloat>
 #include <bitset>
 
 #include <glm/glm.hpp>
@@ -18,7 +17,7 @@ namespace fox
 		False = false, 
 		True  = true, 
 	};
-	
+
 	using int8_t     = std::int8_t;
 	using uint8_t    = std::uint8_t;
 	using int16_t    = std::int16_t;
@@ -34,6 +33,8 @@ namespace fox
 	using size_t     = std::size_t;   //Offset in bytes
 	using count_t    = fox::uint32_t; //Number of elements
 	using offset_t   = fox::uint32_t; //Number of elements offset
+
+	using uuid_t     = std::bitset<128>;
 
 	using Vector1i   = glm::ivec1;
 	using Vector2i   = glm::ivec2;
@@ -51,6 +52,4 @@ namespace fox
 	using Matrix3f   = glm::mat3;
 	using Matrix4f   = glm::mat4;
 	using Quaternion = glm::quat;
-
-	using UUID       = std::bitset<128>;
 }

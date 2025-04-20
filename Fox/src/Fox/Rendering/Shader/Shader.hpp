@@ -1,32 +1,44 @@
 #pragma once
 
-#include "stdafx.hpp"
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Shader.hpp"
+#endif
 
-namespace fox::gfx::api
+namespace fox::gfx
 {
+    namespace impl
+    {
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using Shader = api::gl::Shader;
+#endif
+    }
+
+
+
     class Shader
     {
     public:
-        enum class Stage
-        {
-            Vertex, 
-            TessellationControl, 
-            TessellationEvaluation, 
-            Geometry, 
-            Fragment, 
+        using Stage = api::Shader::Stage;
 
-            Compute, 
-        };
-
-        Stage stage() const
+        static inline auto create(Stage stage, std::span<const fox::byte_t> binary)
         {
-            return m_stage;
+            return std::shared_ptr<Shader>(new Shader{ stage, binary });
+        }
+
+        Stage         stage()  const
+        {
+            return _->stage();
+        }
+        gfx::handle_t handle() const
+        {
+            return _->handle();
         }
 
     protected:
-        Shader(Stage stage)
-            : m_stage{ stage } {}
+        Shader(Stage stage, std::span<const fox::byte_t> binary)
+            : _{ std::make_shared<impl::Shader>(stage, binary) } {}
 
-        Stage m_stage{};
+        std::shared_ptr<impl::Shader> _;
     };
 }

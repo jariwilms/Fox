@@ -1,6 +1,6 @@
 #pragma once
 
-namespace fox::gfx::api
+namespace fox::gfx
 {
 	enum class RenderMode
 	{

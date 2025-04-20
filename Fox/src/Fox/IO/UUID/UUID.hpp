@@ -4,9 +4,9 @@
 
 namespace fox::io::uuid
 {
-    static inline fox::UUID generate()
+    static inline fox::uuid_t generate()
     {
-        fox::UUID uuid{};
+        fox::uuid_t uuid{};
 
         uuid  |= distribution(generator);;
         uuid <<= 64;

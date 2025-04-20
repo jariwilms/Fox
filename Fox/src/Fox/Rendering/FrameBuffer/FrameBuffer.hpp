@@ -1,52 +1,122 @@
 #pragma once
 
-#include "stdafx.hpp"
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
+#endif
 
-#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
-#include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/Texture/Cubemap.hpp"
-
-namespace fox::gfx::api
+namespace fox::gfx
 {
+    namespace impl
+    {
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using FrameBuffer            = api::gl::FrameBuffer<api::AntiAliasing::None>;
+        using FrameBufferMultisample = api::gl::FrameBuffer<api::AntiAliasing::MSAA>;
+#endif
+    }
+
+
+
     class FrameBuffer
     {
     public:
-        enum class Target
-        {
-            Read, 
-            Write, 
-        };
-        enum class Attachment
-        {
-            Color, 
-            Depth, 
-            Stencil, 
-            DepthStencil, 
-        };
-        struct     Manifest
-        {
-            using var_t = std::variant<Texture::Format, RenderBuffer::Format, Cubemap::Format>;
+        using Target     = impl::FrameBuffer::Target;
+        using Attachment = impl::FrameBuffer::Attachment;
+        using Manifest   = impl::FrameBuffer::Manifest;
 
-            Manifest(const std::string& identifier, var_t format)
-                : identifier{ identifier }, format{ format } {}
+        static inline auto create(const fox::Vector2u& dimensions, std::span<const Manifest> manifests)
+        {
+            return std::shared_ptr<FrameBuffer>(new FrameBuffer{ dimensions, manifests });
+        }
 
-            std::string identifier{};
-            var_t       format;
-        };
+        void bind(Target target)
+        {
+            _->bind(target);
+        }
+        void bind_texture(const std::string& identifier, fox::uint32_t slot)
+        {
+            _->bind_texture(identifier, slot);
+        }
+        void bind_cubemap(const std::string& identifier, fox::uint32_t slot)
+        {
+            _->bind_cubemap(identifier, slot);
+        }
 
-        FrameBuffer(FrameBuffer&& other) noexcept = default;
+        auto find_texture(const std::string& identifier)
+        {
+            return _->find_texture(identifier);
+        }
+        auto find_render_buffer(const std::string& identifier)
+        {
+            return _->find_render_buffer(identifier);
+        }
+        auto find_cubemap(const std::string& identifier)
+        {
+            return _->find_cubemap(identifier);
+        }
 
         const fox::Vector2u& dimensions() const
         {
-            return m_dimensions;
+            return _->dimensions();
+        }
+              gfx::handle_t  handle()     const
+        {
+            return _->handle();
         }
 
-        FrameBuffer& operator=(FrameBuffer&& other) noexcept = default;
+    protected:
+        FrameBuffer(const fox::Vector2u& dimensions, std::span<const Manifest> manifests)
+            : _{ std::make_shared<impl::FrameBuffer>(dimensions, manifests) } {}
+
+        std::shared_ptr<impl::FrameBuffer> _;
+    };
+    class FrameBufferMultisample
+    {
+    public:
+        using Target     = impl::FrameBuffer::Target;
+        using Attachment = impl::FrameBuffer::Attachment;
+        using Manifest   = impl::FrameBuffer::Manifest;
+
+        static inline auto create(const fox::Vector2u& dimensions, fox::uint8_t samples, std::span<const Manifest> manifests)
+        {
+            return std::shared_ptr<FrameBufferMultisample>(new FrameBufferMultisample{ dimensions, samples, manifests });
+        }
+
+        void bind(Target target)
+        {
+            _->bind(target);
+        }
+        void bind_texture(const std::string& identifier, fox::uint32_t slot)
+        {
+            _->bind_texture(identifier, slot);
+        }
+
+        auto find_texture(const std::string& identifier)
+        {
+            _->find_texture(identifier);
+        }
+        auto find_render_buffer(const std::string& identifier)
+        {
+            _->find_render_buffer(identifier);
+        }
+
+              fox::uint8_t   samples()    const
+        {
+            return _->samples();
+        }
+        const fox::Vector2u& dimensions() const
+        {
+            return _->dimensions();
+        }
+              gfx::handle_t  handle()     const
+        {
+            return _->handle();
+        }
 
     protected:
-        FrameBuffer(const fox::Vector2u& dimensions)
-            : m_dimensions{ dimensions } {}
+        FrameBufferMultisample(const fox::Vector2u& dimensions, fox::uint8_t samples, std::span<const Manifest> manifests)
+            : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, samples, manifests) } {}
 
-        fox::Vector2u m_dimensions{};
+        std::shared_ptr<impl::FrameBufferMultisample> _;
     };
-};
+}

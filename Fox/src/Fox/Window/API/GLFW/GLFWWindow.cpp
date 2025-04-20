@@ -3,8 +3,8 @@
 #include "GLFWWindow.hpp"
 
 #include "Fox/Window/WindowManager.hpp"
-#include "Fox/Rendering/API/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/API/OpenGL/Context/Context.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Context/Context.hpp"
 
 namespace fox::wnd::api
 {

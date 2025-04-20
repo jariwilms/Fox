@@ -4,6 +4,8 @@
 
 #include "Filesystem/File.hpp"
 #include "Filesystem/Directory.hpp"
+#include "Fox/Core/Library/Image/Image.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::io
 {
@@ -39,7 +41,7 @@ namespace fox::io
     {
         const auto& image = io::_load<io::Asset::Image>(path, fox::Image::Format::RGBA8);
 
-        return std::make_shared<gfx::Texture2D>(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
+        return gfx::Texture2D::create(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
 
     template<Asset A = Asset::File, typename... Args>

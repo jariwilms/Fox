@@ -10,11 +10,9 @@
 #include "Fox/Input/Input.hpp"
 #include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
-#include "Fox/Rendering/Geometry/Geometry.hpp"
-#include "Fox/Rendering/Model/Model.hpp"
-#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/API/Shader/Utility.hpp"
+#include "Fox/Rendering/Renderer/Renderer.hpp"
 #include "Fox/Rendering/Rendering.hpp"
-#include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Scene/Actor.hpp"
 #include "Fox/Scene/Scene.hpp"
 #include "Fox/Window/WindowManager.hpp"
@@ -125,7 +123,7 @@ namespace fox
             "textures/skybox_space2/front.png",
             "textures/skybox_space2/back.png",
         };
-        gfx::Cubemap::Layout cubemapLayout
+        gfx::Cubemap::Faces cubemapFaces
         {
             io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
             io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
@@ -135,7 +133,7 @@ namespace fox
             io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
         };
 
-        auto skybox = std::make_shared<gfx::Cubemap>(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapLayout);
+        auto skybox = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
 
 
 

@@ -1,10 +1,7 @@
 #pragma once
 
 //FOX
-#include "Fox/Config.hpp"
 #include "Fox/Core/Types.hpp"
-
-
 
 //STL
 #include <typeinfo>

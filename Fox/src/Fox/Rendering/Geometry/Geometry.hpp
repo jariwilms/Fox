@@ -3,8 +3,6 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/Mesh/Mesh.hpp"
-#include "Fox/IO/Import/Model/ModelImporter.hpp"
-
 
 namespace fox::gfx
 {
@@ -13,8 +11,8 @@ namespace fox::gfx
     public:
         static void init()
         {
-            Plane::init();
-            Cube::init();
+            Plane ::init();
+            Cube  ::init();
             Sphere::init();
         }
 
@@ -63,29 +61,7 @@ namespace fox::gfx
             };
 
         private:
-            static void init()
-            {
-                gfx::VertexLayout layout2f{};
-                gfx::VertexLayout layout3f{};
-
-                layout2f.specify<fox::float32_t>(2);
-                layout3f.specify<fox::float32_t>(3);
-
-                const auto& positionsVBO   = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(positions);
-                const auto& normalsVBO     = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(normals);
-                const auto& tangentsVBO    = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(tangents);
-                const auto& coordinatesVBO = std::make_shared<gfx::VertexBuffer<fox::float32_t>>(coordinates);
-                const auto& indicesIBO     = std::make_shared<gfx::IndexBuffer>(indices);
-
-                auto vertexArray = std::make_shared<gfx::VertexArray>();
-                vertexArray->tie(positionsVBO,   layout3f);
-                vertexArray->tie(normalsVBO,     layout3f);
-                vertexArray->tie(tangentsVBO,    layout3f);
-                vertexArray->tie(coordinatesVBO, layout2f);
-                vertexArray->tie(indicesIBO);
-
-                s_mesh = std::make_shared<gfx::Mesh>(vertexArray);
-            }
+            static void init();
 
             static inline std::shared_ptr<gfx::Mesh> s_mesh{};
         };
@@ -250,29 +226,7 @@ namespace fox::gfx
             };
 
         private:
-            static void init()
-            {
-                gfx::VertexLayout layout2f{};
-                gfx::VertexLayout layout3f{};
-
-                layout2f.specify<fox::float32_t>(2);
-                layout3f.specify<fox::float32_t>(3);
-
-                const auto& positionsVBO   = std::make_shared<VertexBuffer<fox::float32_t>>(positions);
-                const auto& normalsVBO     = std::make_shared<VertexBuffer<fox::float32_t>>(normals);
-                const auto& tangentsVBO    = std::make_shared<VertexBuffer<fox::float32_t>>(tangents);
-                const auto& coordinatesVBO = std::make_shared<VertexBuffer<fox::float32_t>>(coordinates);
-                const auto& indicesIBO     = std::make_shared<IndexBuffer>(indices);
-
-                auto vertexArray = std::make_shared<VertexArray>();
-                vertexArray->tie(positionsVBO,   layout3f);
-                vertexArray->tie(normalsVBO,     layout3f);
-                vertexArray->tie(tangentsVBO,    layout3f);
-                vertexArray->tie(coordinatesVBO, layout2f);
-                vertexArray->tie(indicesIBO);
-
-                s_mesh = std::make_shared<Mesh>(vertexArray);
-            }
+            static void init();
 
             static inline std::shared_ptr<Mesh> s_mesh{};
         };
@@ -286,11 +240,7 @@ namespace fox::gfx
             }
 
         private:
-            static void init()
-            {
-                const auto& model = io::ModelImporter::import("models/sphere/Sphere.gltf");
-                s_mesh = model->meshes.at(0);
-            }
+            static void init();
 
             static inline std::shared_ptr<gfx::Mesh> s_mesh{};
         };

@@ -7,6 +7,8 @@
 
 namespace fox
 {
+    constexpr auto FLIP_IMAGES = true; //TODO: => Config
+
     struct STBContext
     {
         std::vector<fox::byte_t>& data;
@@ -21,7 +23,7 @@ namespace fox
 
     std::vector<fox::byte_t> Image::encode(Extension extension, const Image& image)
     {
-        stbi_flip_vertically_on_write(fox::Config::IO::flipImages);
+        stbi_flip_vertically_on_write(FLIP_IMAGES);
 
         const auto& dimensions = image.dimensions();
         const auto& channels   = std::to_underlying(image.format());
@@ -43,7 +45,7 @@ namespace fox
     }
     Image                    Image::decode(Format format, std::span<const fox::byte_t> data)
     {
-        stbi_set_flip_vertically_on_load(fox::Config::IO::flipImages);
+        stbi_set_flip_vertically_on_load(FLIP_IMAGES);
 
         fox::Vector2i dimensions{};
 

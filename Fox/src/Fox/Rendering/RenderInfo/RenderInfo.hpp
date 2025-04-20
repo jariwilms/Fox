@@ -5,7 +5,7 @@
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/Core/Library/Camera/Camera.hpp"
 #include "Fox/Core/Library/Lighting/Light.hpp"
-#include "Fox/Rendering/Using.hpp"
+#include "Fox/Rendering/Texture/Cubemap.hpp"
 
 namespace fox::gfx
 {
