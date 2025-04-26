@@ -2,164 +2,94 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Flags.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Mapping.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Object/Object.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Parameters.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Types.hpp"
+#include "Flags.hpp"
+#include "Mapping.hpp"
+#include "Object/Object.hpp"
+#include "Parameters.hpp"
+#include "Types.hpp"
 
 namespace fox::gfx::api::gl
 {
+    //OpenGL wrapper library
+    //Functions are ordered according to their appearance in the OpenGL 4.6 core specification
     //https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
 
 
 
-    static gl::bool_t                     bool_v(glf::Data flag)
+    static gl::bool_t                     get_boolean_v(glf::Data flag)
     {
         gl::bool_t value{};
-        glGetBooleanv(std::to_underlying(flag), &value);
+        glGetBooleanv(gl::to_underlying(flag), &value);
 
         return value;
     }
-    static gl::int32_t                    integer_v(glf::Data flag)
+    static gl::int32_t                    get_integer_v(glf::Data flag)
     {
         gl::int32_t value{};
-        glGetIntegerv(static_cast<gl::enum_t>(flag), &value);
+        glGetIntegerv(gl::to_underlying(flag), &value);
 
         return value;
     }
-    static gl::int32_t                    integer_iv(glf::Data flag, gl::uint32_t index)
+    static gl::int32_t                    get_integer_index_v(glf::Data flag, gl::uint32_t index)
     {
         gl::int32_t value{};
-        glGetIntegeri_v(std::to_underlying(flag), index, &value);
+        glGetIntegeri_v(gl::to_underlying(flag), index, &value);
 
         return value;
     }
+
+    static auto integer_test(glf::Data flag, std::optional<gl::uint32_t> index)
+    {
+        gl::int32_t value{};
+
+        if (index.has_value()) glGetIntegeri_v(gl::to_underlying(flag), index.value(), &value);
+        else                   glGetIntegerv  (gl::to_underlying(flag),                &value);
+
+        return value;
+    }
+
+
     static gl::int64_t                    integer64_v(glf::Data flag)
     {
         gl::int64_t value{};
-        glGetInteger64v(std::to_underlying(flag), &value);
+        glGetInteger64v(gl::to_underlying(flag), &value);
 
         return value;
     }
     static gl::int64_t                    integer64_iv(glf::Data flag, gl::uint32_t index)
     {
         gl::int64_t value{};
-        glGetInteger64i_v(std::to_underlying(flag), index, &value);
+        glGetInteger64i_v(gl::to_underlying(flag), index, &value);
 
         return value;
     }
     static gl::float32_t                  float_v(glf::Data flag)
     {
         gl::float32_t value{};
-        glGetFloatv(std::to_underlying(flag), &value);
+        glGetFloatv(gl::to_underlying(flag), &value);
 
         return value;
     }
     static gl::float64_t                  float64_v(glf::Data flag)
     {
         gl::float64_t value{};
-        glGetDoublev(std::to_underlying(flag), &value);
+        glGetDoublev(gl::to_underlying(flag), &value);
 
         return value;
     }
     static std::string                    string(glf::Connection connection)
     {
-        const auto* value = reinterpret_cast<const gl::char_t*>(glGetString(std::to_underlying(connection)));
+        const auto* value = reinterpret_cast<const gl::char_t*>(glGetString(gl::to_underlying(connection)));
 
         return std::string{ value };
     }
 
-    template<glf::VertexAttribute::Parameter P, gl::uint32_t U>
-    static auto                           vertex_attribute_iv()
-    {
-        constexpr auto uv = std::to_underlying(P);
 
-        if constexpr (P == glf::VertexAttribute::Parameter::Enabled)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::bool_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::Size)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return value;
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::Stride)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::uint32_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::Type)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return glf::DataType{ value };
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::IsNormalized)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::bool_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::IsIntegerData)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::bool_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::IsLongData)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::bool_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::Divisor)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::uint32_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::Binding)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::uint32_t>(value);
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::BufferBinding)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return value;
-        }
-        if constexpr (P == glf::VertexAttribute::Parameter::RelativeOffset)
-        {
-            gl::int32_t value{};
-            glGetVertexAttribiv(U, uv, &value);
-
-            return static_cast<gl::uint32_t>(value);
-        }
-
-        throw std::invalid_argument{ "Invalid Parameter!" };
-    }
 
     template<glf::Feature F>
     static gl::bool_t                     is_enabled()
     {
-        constexpr auto uv = std::to_underlying(F);
+        constexpr auto uv = gl::to_underlying(F);
 
         if constexpr (F == glf::Feature::PrimitiveRestart)           return glIsEnabled(uv);
         if constexpr (F == glf::Feature::PrimitiveRestartFixedIndex) return glIsEnabled(uv);
@@ -170,7 +100,7 @@ namespace fox::gfx::api::gl
     template<glf::Feature F, gl::uint32_t I>
     static gl::bool_t                     is_enabled()
     {
-        constexpr auto uv = std::to_underlying(F);
+        constexpr auto uv = gl::to_underlying(F);
 
         if constexpr (F == glf::Feature::ClipDistance)               return glIsEnabledi(uv, I);
 
@@ -182,7 +112,7 @@ namespace fox::gfx::api::gl
     template<glf::Data D>
     static auto                           get_v()
     {
-        constexpr auto uv = std::to_underlying(D);
+        constexpr auto uv = gl::to_underlying(D);
 
 
 
@@ -191,32 +121,30 @@ namespace fox::gfx::api::gl
             std::array<gl::float32_t, 4> values{};
             glGetFloatv(uv, values.data());
 
-            return fox::Vector4f{ values.at(0), values.at(1), values.at(2), values.at(3) };
+            return gl::Vector4f{ values.at(0), values.at(1), values.at(2), values.at(3) };
         }
         if constexpr (D == glf::Data::PatchDefaultInnerLevel)
         {
             std::array<gl::float32_t, 2> values{};
             glGetFloatv(uv, values.data());
 
-            return fox::Vector2f{ values.at(0), values.at(1) };
+            return gl::Vector2f{ values.at(0), values.at(1) };
         }
 
-        if constexpr (D == glf::Data::IndexArrayBufferBinding)        return static_cast<gl::uint32_t>(gl::integer_v(D));
+        if constexpr (D == glf::Data::IndexArrayBufferBinding)        return static_cast<gl::uint32_t>(gl::get_integer_v(D));
                                                                       
-        if constexpr (D == glf::Data::ArrayBufferBinding)             return static_cast<gl::uint32_t>(gl::integer_v(D));
-        if constexpr (D == glf::Data::DrawIndirectBufferBinding)      return static_cast<gl::uint32_t>(gl::integer_v(D));
-        if constexpr (D == glf::Data::VertexArrayBinding)             return static_cast<gl::uint32_t>(gl::integer_v(D));
-        if constexpr (D == glf::Data::ParameterBufferBinding)         return static_cast<gl::uint32_t>(gl::integer_v(D));
+        if constexpr (D == glf::Data::ArrayBufferBinding)             return static_cast<gl::uint32_t>(gl::get_integer_v(D));
+        if constexpr (D == glf::Data::DrawIndirectBufferBinding)      return static_cast<gl::uint32_t>(gl::get_integer_v(D));
+        if constexpr (D == glf::Data::VertexArrayBinding)             return static_cast<gl::uint32_t>(gl::get_integer_v(D));
+        if constexpr (D == glf::Data::ParameterBufferBinding)         return static_cast<gl::uint32_t>(gl::get_integer_v(D));
                                                                       
-        if constexpr (D == glf::Data::PrimitiveRestartIndex)          return static_cast<gl::uint32_t>(gl::integer_v(D));
+        if constexpr (D == glf::Data::PrimitiveRestartIndex)          return static_cast<gl::uint32_t>(gl::get_integer_v(D));
                                                                       
-        if constexpr (D == glf::Data::ClipOrigin)                     return glf::Clip::Origin{ gl::integer_v(D) };
-        if constexpr (D == glf::Data::ClipDepthMode)                  return glf::Clip::DepthMode{ gl::integer_v(D) };
+        if constexpr (D == glf::Data::ClipOrigin)                     return glf::Clip::Origin{ gl::get_integer_v(D) };
+        if constexpr (D == glf::Data::ClipDepthMode)                  return glf::Clip::DepthMode{ gl::get_integer_v(D) };
 
-        if constexpr (D == glf::Data::TransformFeedbackBinding)       return static_cast<gl::uint32_t>(gl::integer_v(D));
-        if constexpr (D == glf::Data::TransformFeedbackBufferBinding) return static_cast<gl::uint32_t>(gl::integer_v(D));
-
-
+        if constexpr (D == glf::Data::TransformFeedbackBinding)       return static_cast<gl::uint32_t>(gl::get_integer_v(D));
+        if constexpr (D == glf::Data::TransformFeedbackBufferBinding) return static_cast<gl::uint32_t>(gl::get_integer_v(D));
 
 
 
@@ -226,22 +154,26 @@ namespace fox::gfx::api::gl
 
 
 
-        if constexpr (D == glf::Data::MaximumVertexAttributeBindings) return static_cast<gl::uint32_t>(gl::integer_v(D));
-
-        if constexpr (D == glf::Data::MaximumViewports)               return static_cast<gl::uint32_t>(gl::integer_v(D));
 
 
+        if constexpr (D == glf::Data::MaximumVertexAttributeBindings) return static_cast<gl::uint32_t>(gl::get_integer_v(D));
+        if constexpr (D == glf::Data::MaximumVertexAttributes)        return static_cast<gl::uint32_t>(gl::get_integer_v(D));
 
 
-
-
-        if constexpr (D == glf::Data::ResetNotificationStrategy)      return  glf::Context::ResetStrategy{ gl::integer_v(D) };
+        if constexpr (D == glf::Data::MaximumViewports)               return static_cast<gl::uint32_t>(gl::get_integer_v(D));
 
 
 
 
 
-        if constexpr (D == glf::Data::ActiveTexture)                     return gl::integer_v(D);
+
+        if constexpr (D == glf::Data::ResetNotificationStrategy)      return  glf::Context::ResetStrategy{ gl::get_integer_v(D) };
+
+
+
+
+
+        if constexpr (D == glf::Data::ActiveTexture)                     return gl::get_integer_v(D);
         if constexpr (D == glf::Data::AliasedLineWidthRange) 
         {
             std::array<gl::float32_t, 2> values{};
@@ -249,7 +181,7 @@ namespace fox::gfx::api::gl
 
             return gl::Vector2f{ values.at(0), values.at(1) };
         }
-        if constexpr (D == glf::Data::ArrayBufferBinding)                return gl::integer_v(D);
+        if constexpr (D == glf::Data::ArrayBufferBinding)                return gl::get_integer_v(D);
         if constexpr (D == glf::Data::BlendColor)
         {
             std::array<gl::float32_t, 4> values{};
@@ -257,13 +189,13 @@ namespace fox::gfx::api::gl
 
             return gl::Vector4f{ values.at(0), values.at(1), values.at(2), values.at(3) };
         }
-        if constexpr (D == glf::Data::BlendEquationAlpha)                return glf::Blending::Factor{ gl::integer_v(D) };
-        if constexpr (D == glf::Data::BlendDestinationRGB)               return glf::Blending::Factor{ gl::integer_v(D) };
-        if constexpr (D == glf::Data::BlendEquationAlpha)                return glf::Blending::Equation{ gl::integer_v(D) };
-        if constexpr (D == glf::Data::BlendEquationRGB)                  return glf::Blending::Equation{ gl::integer_v(D) };
-        if constexpr (D == glf::Data::Blending)                          return gl::bool_v(D);
-        if constexpr (D == glf::Data::BlendSourceAlpha)                  return glf::Blending::Factor{ gl::integer_v(D) };
-        if constexpr (D == glf::Data::BlendSourceRGB)                    return glf::Blending::Factor{ gl::integer_v(D) };
+        if constexpr (D == glf::Data::BlendEquationAlpha)                return glf::Blending::Factor{ gl::get_integer_v(D) };
+        if constexpr (D == glf::Data::BlendDestinationRGB)               return glf::Blending::Factor{ gl::get_integer_v(D) };
+        if constexpr (D == glf::Data::BlendEquationAlpha)                return glf::Blending::Equation{ gl::get_integer_v(D) };
+        if constexpr (D == glf::Data::BlendEquationRGB)                  return glf::Blending::Equation{ gl::get_integer_v(D) };
+        if constexpr (D == glf::Data::Blending)                          return gl::get_boolean_v(D);
+        if constexpr (D == glf::Data::BlendSourceAlpha)                  return glf::Blending::Factor{ gl::get_integer_v(D) };
+        if constexpr (D == glf::Data::BlendSourceRGB)                    return glf::Blending::Factor{ gl::get_integer_v(D) };
         if constexpr (D == glf::Data::ColorClearValue)
         {
             std::array<gl::float32_t, 4> values{};
@@ -271,7 +203,7 @@ namespace fox::gfx::api::gl
 
             return gl::Vector4f{ values.at(0), values.at(1), values.at(2), values.at(3) };
         }
-        if constexpr (D == glf::Data::ColorLogicOperation)               return gl::bool_v(D);
+        if constexpr (D == glf::Data::ColorLogicOperation)               return gl::get_boolean_v(D);
         if constexpr (D == glf::Data::ColorWritemask)
         {
             std::array<gl::bool_t, 4> values{};
@@ -296,18 +228,18 @@ namespace fox::gfx::api::gl
 
             return results;
         }
-        if constexpr (D == glf::Data::ContextFlags)                      return gl::integer_v(D);
-        if constexpr (D == glf::Data::ContextFlags)                      return gl::integer_v(D);
-        if constexpr (D == glf::Data::FaceCulling)                       return gl::bool_v(D);
+        if constexpr (D == glf::Data::ContextFlags)                      return gl::get_integer_v(D);
+        if constexpr (D == glf::Data::ContextFlags)                      return gl::get_integer_v(D);
+        if constexpr (D == glf::Data::FaceCulling)                       return gl::get_boolean_v(D);
 
 
 
 
-        if constexpr (D == glf::Data::MaximumComputeShaderStorageBlocks) return gl::integer_v(D);
+        if constexpr (D == glf::Data::MaximumComputeShaderStorageBlocks) return gl::get_integer_v(D);
 
 
 
-        if constexpr (D == glf::Data::NumberCompressedTextureFormats) return gl::integer_v(D);
+        if constexpr (D == glf::Data::NumberCompressedTextureFormats) return gl::get_integer_v(D);
 
 
 
@@ -321,7 +253,7 @@ namespace fox::gfx::api::gl
     template<glf::Data D, gl::uint32_t I>
     static auto                           get_v()
     {
-        const auto& uv = std::to_underlying(D);
+        const auto& uv = gl::to_underlying(D);
 
         if constexpr (
             D == glf::Data::VertexBindingOffset  ||
@@ -396,21 +328,21 @@ namespace fox::gfx::api::gl
     }
     static void                            fence_sync()
     {
-        glFenceSync(std::to_underlying(glf::Synchronization::Condition::GPUCommandsComplete), gl::bitfield_t{ 0 });
+        glFenceSync(gl::to_underlying(glf::Synchronization::Condition::GPUCommandsComplete), gl::bitfield_t{ 0 });
     }
     static void                            client_wait_sync(gl::sync_t sync, gl::uint64_t timeout)
     {
-        glClientWaitSync(sync, std::to_underlying(glf::Synchronization::FlushBehavior::FlushCommands), timeout);
+        glClientWaitSync(sync, gl::to_underlying(glf::Synchronization::FlushBehavior::FlushCommands), timeout);
     }
     static void                            server_wait_sync(gl::sync_t sync)
     {
-        glWaitSync(sync, gl::bitfield_t{ 0 }, std::to_underlying(glf::Synchronization::Timeout::Ignored));
+        glWaitSync(sync, gl::bitfield_t{ 0 }, gl::to_underlying(glf::Synchronization::Timeout::Ignored));
     }
     template<glf::Synchronization::Property P>
     static auto                            get_sync_v(gl::sync_t sync)
     {
         gl::int32_t value{};
-        glGetSynciv(sync, std::to_underlying(P), sizeof(value), nullptr, &value);
+        glGetSynciv(sync, gl::to_underlying(P), sizeof(value), nullptr, &value);
 
         if constexpr (P == glf::Synchronization::Property::Type)      return glf::Synchronization::Type{ value };
         if constexpr (P == glf::Synchronization::Property::Status)    return glf::Synchronization::Status{ value };
@@ -421,7 +353,7 @@ namespace fox::gfx::api::gl
     static gl::handle_t                    create_query(glf::Query::Target target)
     {
         gl::uint32_t query{};
-        glCreateQueries(std::to_underlying(target), gl::size_t{ 1 }, &query);
+        glCreateQueries(gl::to_underlying(target), gl::size_t{ 1 }, &query);
 
         return gl::handle_t{ query };
     }
@@ -429,30 +361,30 @@ namespace fox::gfx::api::gl
     {
         if (query == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(query);
+        const auto& uv = gl::to_underlying(query);
         glDeleteQueries(gl::size_t{ 1 }, &uv);
     }
     static void                            begin_query(gl::handle_t query, glf::Query::Target target)
     {
-        glBeginQuery(std::to_underlying(target), std::to_underlying(query));
+        glBeginQuery(gl::to_underlying(target), gl::to_underlying(query));
     }
     static void                            begin_query_indexed(gl::handle_t query, glf::Query::Target target, gl::uint32_t index)
     {
-        glBeginQueryIndexed(std::to_underlying(target), index, std::to_underlying(query));
+        glBeginQueryIndexed(gl::to_underlying(target), index, gl::to_underlying(query));
     }
     static void                            end_query(glf::Query::Target target)
     {
-        glEndQuery(std::to_underlying(target));
+        glEndQuery(gl::to_underlying(target));
     }
     static void                            end_query_indexed(glf::Query::Target target, gl::uint32_t index)
     {
-        glEndQueryIndexed(std::to_underlying(target), index);
+        glEndQueryIndexed(gl::to_underlying(target), index);
     }
     template<glf::Query::Target T, glf::Query::TargetParameter TP>
     static auto                            get_query_v()
     {
         gl::int32_t value{};
-        glGetQueryiv(std::to_underlying(T), std::to_underlying(TP), &value);
+        glGetQueryiv(gl::to_underlying(T), gl::to_underlying(TP), &value);
 
         return value;
     }
@@ -460,14 +392,14 @@ namespace fox::gfx::api::gl
     static auto                            get_query_indexed_v(gl::uint32_t index)
     {
         gl::int32_t value{};
-        glGetQueryIndexediv(std::to_underlying(T), index, std::to_underlying(TP), &value);
+        glGetQueryIndexediv(gl::to_underlying(T), index, gl::to_underlying(TP), &value);
 
         return value;
     }
     //Time Queries [4.3]
     static void                            query_counter(gl::handle_t query)
     {
-        glQueryCounter(std::to_underlying(query), GL_TIMESTAMP);
+        glQueryCounter(gl::to_underlying(query), GL_TIMESTAMP);
     }
 
 
@@ -485,101 +417,106 @@ namespace fox::gfx::api::gl
     {
         if (buffer == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(buffer);
+        const auto& uv = gl::to_underlying(buffer);
         glDeleteBuffers(gl::size_t{ 1 }, &uv);
     }
     static void                            bind_buffer_base(gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::uint32_t index)
     {
-        glBindBufferBase(std::to_underlying(target), index, std::to_underlying(buffer));
+        glBindBufferBase(gl::to_underlying(target), index, gl::to_underlying(buffer));
     }
     static void                            bind_buffer_range(gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::uint32_t index, gl::sizeptr_t size, gl::intptr_t offset)
     {
-        glBindBufferRange(std::to_underlying(target), index, std::to_underlying(buffer), offset, size);
+        glBindBufferRange(gl::to_underlying(target), index, gl::to_underlying(buffer), offset, size);
     }
+    
     //Creating and Modifying Buffer Object Data Stores [6.2]
     static void                            buffer_storage(gl::handle_t buffer, glf::Buffer::StorageFlags flags, gl::sizeptr_t size)
     {
-        glNamedBufferStorage(std::to_underlying(buffer), size, nullptr, std::to_underlying(flags));
+        glNamedBufferStorage(gl::to_underlying(buffer), size, nullptr, gl::to_underlying(flags));
     }
     template<typename T>                  
     static void                            buffer_storage(gl::handle_t buffer, glf::Buffer::StorageFlags flags, std::span<const T> data)
     {
-        glNamedBufferStorage(std::to_underlying(buffer), static_cast<gl::sizeptr_t>(data.size_bytes()), data.data(), std::to_underlying(flags));
+        glNamedBufferStorage(gl::to_underlying(buffer), static_cast<gl::sizeptr_t>(data.size_bytes()), data.data(), gl::to_underlying(flags));
     }
     template<typename T, auto N>
     static void                            buffer_sub_data(gl::handle_t buffer, gl::intptr_t offset, std::span<const T, N> data)
     {
-        glNamedBufferSubData(std::to_underlying(buffer), offset, static_cast<gl::sizeptr_t>(data.size_bytes()), data.data());
+        glNamedBufferSubData(gl::to_underlying(buffer), offset, static_cast<gl::sizeptr_t>(data.size_bytes()), data.data());
     }
     static void                            clear_buffer_data(gl::handle_t buffer, glf::DataType type, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, const void* data)
     {
-        glClearNamedBufferData(std::to_underlying(buffer), std::to_underlying(format), std::to_underlying(baseFormat), std::to_underlying(type), data);
+        glClearNamedBufferData(gl::to_underlying(buffer), gl::to_underlying(format), gl::to_underlying(baseFormat), gl::to_underlying(type), data);
     }
     static void                            clear_buffer_sub_data(gl::handle_t buffer, glf::DataType type, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, gl::sizeptr_t size, gl::intptr_t offset, const void* data)
     {
-        glClearNamedBufferSubData(std::to_underlying(buffer), std::to_underlying(format), offset, size, std::to_underlying(baseFormat), std::to_underlying(type), data);
+        glClearNamedBufferSubData(gl::to_underlying(buffer), gl::to_underlying(format), offset, size, gl::to_underlying(baseFormat), gl::to_underlying(type), data);
     }
+    
     //Mapping and Unmapping Buffer Data [6.3]
     template<typename T>
     static T*                              map_buffer(gl::handle_t buffer, glf::Buffer::Mapping::Access access)
     {
-        auto* data = glMapNamedBuffer(std::to_underlying(buffer), std::to_underlying(access));
+        auto* data = glMapNamedBuffer(gl::to_underlying(buffer), gl::to_underlying(access));
 
         return reinterpret_cast<T*>(data);
     }
     template<typename T>
     static T*                              map_buffer_range(gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access, gl::sizeptr_t size, gl::intptr_t offset)
     {
-        auto* data = glMapNamedBufferRange(std::to_underlying(buffer), offset, size, std::to_underlying(access));
+        auto* data = glMapNamedBufferRange(gl::to_underlying(buffer), offset, size, gl::to_underlying(access));
 
         return reinterpret_cast<T*>(data);
     }
     static void                            flush_mapped_buffer_range(gl::handle_t buffer, gl::sizeptr_t length, gl::intptr_t offset)
     {
-        glFlushMappedNamedBufferRange(std::to_underlying(buffer), offset, length);
+        glFlushMappedNamedBufferRange(gl::to_underlying(buffer), offset, length);
     }
     static void                            unmap_buffer(gl::handle_t buffer)
     {
-        const auto& isValidState = glUnmapNamedBuffer(std::to_underlying(buffer));
+        const auto& isValidState = glUnmapNamedBuffer(gl::to_underlying(buffer));
         if (isValidState != gl::True) throw std::runtime_error{ "Buffer data store may be undefined!" };
     }
+    
     //Invalidating Buffer Data [6.5]
     static void                            invalidate_buffer_data(gl::handle_t buffer)
     {
-        glInvalidateBufferData(std::to_underlying(buffer));
+        glInvalidateBufferData(gl::to_underlying(buffer));
     }
     static void                            invalidate_buffer_sub_data(gl::handle_t buffer, gl::sizeptr_t size, gl::intptr_t offset)
     {
-        glInvalidateBufferSubData(std::to_underlying(buffer), offset, size);
+        glInvalidateBufferSubData(gl::to_underlying(buffer), offset, size);
     }
+    
     //Copying Between Buffers [6.6]
     static void                            copy_buffer_sub_data(gl::handle_t source, gl::handle_t destination, gl::sizeptr_t size, gl::intptr_t sourceOffset, gl::intptr_t destinationOffset)
     {
-        glCopyNamedBufferSubData(std::to_underlying(source), std::to_underlying(destination), sourceOffset, destinationOffset, size);
+        glCopyNamedBufferSubData(gl::to_underlying(source), gl::to_underlying(destination), sourceOffset, destinationOffset, size);
     }
+    
     //Buffer Object Queries [6.7]
     template<typename T>
     static std::vector<T>                  get_buffer_sub_data(gl::handle_t buffer, gl::sizeptr_t size, gl::intptr_t offset)
     {
         std::vector<T> value{ size / sizeof(T) };
-        glGetNamedBufferSubData(std::to_underlying(buffer), offset, size, value.data());
+        glGetNamedBufferSubData(gl::to_underlying(buffer), offset, size, value.data());
 
         return value;
     }
     template<glf::Buffer::Parameter P>
     static auto                            get_buffer_parameter_v(gl::handle_t buffer)
     {
-        const auto& get_buffer_parameter_iv   = [](gl::handle_t buffer, glf::Buffer::Parameter parameter) -> gl::int32_t
+        const auto& get_buffer_parameter_iv   = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
             {
                 gl::int32_t value{};
-                glGetNamedBufferParameteriv(std::to_underlying(buffer), std::to_underlying(parameter), &value);
+                glGetNamedBufferParameteriv(gl::to_underlying(buffer), gl::to_underlying(parameter), &value);
 
                 return value;
             };
         const auto& get_buffer_parameter_i64v = [](gl::handle_t buffer, glf::Buffer::Parameter parameter) -> gl::int64_t
             {
                 gl::int64_t value{};
-                glGetNamedBufferParameteri64v(std::to_underlying(buffer), std::to_underlying(parameter), &value);
+                glGetNamedBufferParameteri64v(gl::to_underlying(buffer), gl::to_underlying(parameter), &value);
 
                 return value;
             };
@@ -606,7 +543,7 @@ namespace fox::gfx::api::gl
         const auto& get_shader_iv = [](gl::handle_t shader, glf::Shader::Parameter parameter)
             {
                 gl::int32_t value{};
-                glGetShaderiv(std::to_underlying(shader), std::to_underlying(parameter), &value);
+                glGetShaderiv(gl::to_underlying(shader), gl::to_underlying(parameter), &value);
 
                 return value;
             };
@@ -627,7 +564,7 @@ namespace fox::gfx::api::gl
         const auto& program_iv = [](gl::handle_t program, glf::Program::Parameter parameter) -> gl::int32_t
             {
                 gl::int32_t value{};
-                glGetProgramiv(std::to_underlying(program), std::to_underlying(parameter), &value);
+                glGetProgramiv(gl::to_underlying(program), gl::to_underlying(parameter), &value);
 
                 return value;
             };
@@ -643,7 +580,7 @@ namespace fox::gfx::api::gl
         if constexpr (P == glf::Program::Parameter::ComputeWorkGroupSize)
         {
             std::array<gl::int32_t, 3> values{};
-            glGetProgramiv(std::to_underlying(program), std::to_underlying(P), values.data());
+            glGetProgramiv(gl::to_underlying(program), gl::to_underlying(P), values.data());
 
             return gl::Vector3u{ values.at(0), values.at(1), values.at(2) };
         }
@@ -670,7 +607,7 @@ namespace fox::gfx::api::gl
     static auto                            get_program_pipeline_v(gl::handle_t pipeline, glf::Program::Pipeline::Property property)
     {
         gl::int32_t value{};
-        glGetProgramPipelineiv(std::to_underlying(pipeline), std::to_underlying(property), &value);
+        glGetProgramPipelineiv(gl::to_underlying(pipeline), gl::to_underlying(property), &value);
 
         return static_cast<gl::uint32_t>(value);
     }
@@ -680,7 +617,7 @@ namespace fox::gfx::api::gl
     static auto                            get_program_stage_v(gl::handle_t program, glf::Shader::Type type)
     {
         gl::int32_t value{};
-        glGetProgramStageiv(std::to_underlying(program), std::to_underlying(type), std::to_underlying(P), &value);
+        glGetProgramStageiv(gl::to_underlying(program), gl::to_underlying(type), gl::to_underlying(P), &value);
 
         return static_cast<gl::uint32_t>(value);
     }
@@ -689,18 +626,18 @@ namespace fox::gfx::api::gl
     static gl::handle_t                    create_shader(glf::Shader::Type type)
     {
         gl::uint32_t shader{};
-        shader = glCreateShader(std::to_underlying(type));
+        shader = glCreateShader(gl::to_underlying(type));
 
         return gl::handle_t{ shader };
     }
     static void                            shader_source(gl::handle_t shader, const std::string& source)
     {
         const auto* cstr = source.c_str();
-        glShaderSource(std::to_underlying(shader), gl::size_t{ 1 }, &cstr, nullptr);
+        glShaderSource(gl::to_underlying(shader), gl::size_t{ 1 }, &cstr, nullptr);
     }
     static void                            compile_shader(gl::handle_t shader)
     {
-        glCompileShader(std::to_underlying(shader));
+        glCompileShader(gl::to_underlying(shader));
     }
     static void                            release_shader_compiler()
     {
@@ -710,18 +647,18 @@ namespace fox::gfx::api::gl
     {
         if (shader == gl::NullObject) return;
 
-        glDeleteShader(std::to_underlying(shader));
+        glDeleteShader(gl::to_underlying(shader));
     }
     static void                            shader_binary(gl::handle_t shader, std::span<const gl::byte_t> binary)
     {
-        const auto& uv = std::to_underlying(shader);
+        const auto& uv = gl::to_underlying(shader);
         glShaderBinary(gl::size_t{ 1 }, &uv, GL_SHADER_BINARY_FORMAT_SPIR_V, binary.data(), static_cast<gl::size_t>(binary.size_bytes()));
     }
-    template<fox::uint32_t N = 0>
+    template<gl::uint32_t N = 0>
     static void                            specialize_shader(gl::handle_t shader, const std::string& entry, std::span<const gl::uint32_t, N> indices = {}, std::span<const gl::uint32_t, N> values = {})
     {
         const auto* cstr = entry.c_str();
-        glSpecializeShader(std::to_underlying(shader), cstr, N, indices.data(), values.data());
+        glSpecializeShader(gl::to_underlying(shader), cstr, N, indices.data(), values.data());
     }
     //Program Objects [7.3]
     static gl::handle_t                    create_program()
@@ -730,30 +667,30 @@ namespace fox::gfx::api::gl
     }
     static void                            attach_shader(gl::handle_t program, gl::handle_t shader)
     {
-        glAttachShader(std::to_underlying(program), std::to_underlying(shader));
+        glAttachShader(gl::to_underlying(program), gl::to_underlying(shader));
     }
     static void                            detach_shader(gl::handle_t program, gl::handle_t shader)
     {
-        glDetachShader(std::to_underlying(program), std::to_underlying(shader));
+        glDetachShader(gl::to_underlying(program), gl::to_underlying(shader));
     }
     static void                            link_program(gl::handle_t program)
     {
-        glLinkProgram(std::to_underlying(program));
+        glLinkProgram(gl::to_underlying(program));
     }
     static gl::handle_t                    create_shader_program(glf::Shader::Type type, const std::string& source)
     {
         const auto* cstr = source.c_str();
-        return gl::handle_t{ glCreateShaderProgramv(std::to_underlying(type), gl::size_t{ 1 }, &cstr) };
+        return gl::handle_t{ glCreateShaderProgramv(gl::to_underlying(type), gl::size_t{ 1 }, &cstr) };
     }
     static void                            program_specification(gl::handle_t program, glf::Program::Specification specification, gl::bool_t value)
     {
-        glProgramParameteri(std::to_underlying(program), std::to_underlying(specification), value);
+        glProgramParameteri(gl::to_underlying(program), gl::to_underlying(specification), value);
     }
     static void                            delete_program(gl::handle_t program)
     {
         if (program == gl::NullObject) return;
 
-        glDeleteProgram(std::to_underlying(program));
+        glDeleteProgram(gl::to_underlying(program));
     }
     //Program Interfaces [7.3.1]
     template<glf::Program::Interface I, glf::Program::Property P>
@@ -762,7 +699,7 @@ namespace fox::gfx::api::gl
         const auto& get_program_interface_iv = [](gl::handle_t program, glf::Program::Interface interface, glf::Program::Property property) -> gl::int32_t
             {
                 gl::int32_t value{};
-                glGetProgramInterfaceiv(std::to_underlying(program), std::to_underlying(interface), std::to_underlying(property), &value);
+                glGetProgramInterfaceiv(gl::to_underlying(program), gl::to_underlying(interface), gl::to_underlying(property), &value);
 
                 return value;
             };
@@ -801,7 +738,7 @@ namespace fox::gfx::api::gl
             I != glf::Program::Interface::TransformFeedbackBuffer)
         {
             const auto* cstr = identifier.c_str();
-            gl::uint32_t value = glGetProgramResourceIndex(std::to_underlying(program), std::to_underlying(I), cstr);
+            gl::uint32_t value = glGetProgramResourceIndex(gl::to_underlying(program), gl::to_underlying(I), cstr);
 
             return value;
         }
@@ -820,7 +757,7 @@ namespace fox::gfx::api::gl
 
             name.resize(maximumLength);
 
-            glGetProgramResourceName(std::to_underlying(program), std::to_underlying(I), index, maximumLength, &length, name.data());
+            glGetProgramResourceName(gl::to_underlying(program), gl::to_underlying(I), index, maximumLength, &length, name.data());
 
             if (length < maximumLength) name.resize(static_cast<fox::size_t>(length) - 1u);
             return name;
@@ -1016,12 +953,12 @@ namespace fox::gfx::api::gl
         if constexpr ((is_supported_resource.template operator()<I, R>() && ...))
         {
             constexpr auto resourceCount = sizeof...(R);
-            constexpr std::array<gl::enum_t,  resourceCount> resources{ std::to_underlying(R)... };
+            constexpr std::array<gl::enum_t,  resourceCount> resources{ gl::to_underlying(R)... };
                       std::array<gl::int32_t, resourceCount> values{};
      
             glGetProgramResourceiv(
-                std::to_underlying(program), 
-                std::to_underlying(I), 
+                gl::to_underlying(program), 
+                gl::to_underlying(I), 
                 index, 
                 static_cast<gl::size_t>(resources.size()),          resources.data(), 
                 static_cast<gl::size_t>(values.size()),    nullptr, values.data());
@@ -1045,7 +982,7 @@ namespace fox::gfx::api::gl
             I == glf::Program::Interface::TransformFeedbackBuffer)
         {
             const auto* cstr = identifier.c_str();
-            gl::int32_t value = glGetProgramResourceLocation(std::to_underlying(program), std::to_underlying(I), cstr);
+            gl::int32_t value = glGetProgramResourceLocation(gl::to_underlying(program), gl::to_underlying(I), cstr);
 
             if (value == -1) throw std::invalid_argument{ "Identifier does not match an active variable or does not have a valid location assigned!" };
 
@@ -1055,7 +992,7 @@ namespace fox::gfx::api::gl
     static auto                            get_program_resource_location_index(gl::handle_t program, const std::string& identifier)
     {
         const auto* cstr = identifier.c_str();
-        gl::int32_t value = glGetProgramResourceLocationIndex(std::to_underlying(program), std::to_underlying(glf::Program::Interface::ProgramOutput), cstr);
+        gl::int32_t value = glGetProgramResourceLocationIndex(gl::to_underlying(program), gl::to_underlying(glf::Program::Interface::ProgramOutput), cstr);
 
         if (value == -1) throw std::invalid_argument{ "Identifier does not match an active variable or does not have a valid location assigned!" };
 
@@ -1073,20 +1010,20 @@ namespace fox::gfx::api::gl
     {
         if (pipeline == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(pipeline);
+        const auto& uv = gl::to_underlying(pipeline);
         glDeleteProgramPipelines(gl::size_t{ 1 }, &uv);
     }
     static void                            bind_program_pipeline(gl::handle_t pipeline)
     {
-        glBindProgramPipeline(std::to_underlying(pipeline));
+        glBindProgramPipeline(gl::to_underlying(pipeline));
     }
     static void                            use_program_stages(gl::handle_t pipeline, gl::handle_t program, glf::Program::Stage stages)
     {
-        glUseProgramStages(std::to_underlying(pipeline), std::to_underlying(stages), std::to_underlying(program));
+        glUseProgramStages(gl::to_underlying(pipeline), gl::to_underlying(stages), gl::to_underlying(program));
     }
     static void                            active_shader_program(gl::handle_t pipeline, gl::handle_t program)
     {
-        glActiveShaderProgram(std::to_underlying(pipeline), std::to_underlying(program));
+        glActiveShaderProgram(gl::to_underlying(pipeline), gl::to_underlying(program));
     }
     //Program Binaries [7.5]
     static auto                            get_program_binary(gl::handle_t program)
@@ -1097,19 +1034,19 @@ namespace fox::gfx::api::gl
         const auto& binaryLength = gl::get_program_v<glf::Program::Parameter::BinaryLength>(program);
         binary.resize(binaryLength);
 
-        glGetProgramBinary(std::to_underlying(program), binaryLength, nullptr, &format, binary.data());
+        glGetProgramBinary(gl::to_underlying(program), binaryLength, nullptr, &format, binary.data());
 
         return std::make_tuple(binary, gl::format_t{ format });
     }
     static void                            program_binary(gl::handle_t program, gl::format_t format, std::span<const gl::uint8_t> binary)
     {
-        glProgramBinary(std::to_underlying(program), std::to_underlying(format), binary.data(), static_cast<gl::size_t>(binary.size()));
+        glProgramBinary(gl::to_underlying(program), gl::to_underlying(format), binary.data(), static_cast<gl::size_t>(binary.size()));
     }
     //Uniform Variables [7.6]
     static auto                            get_uniform_location(gl::handle_t program, const std::string& identifier)
     {
         const auto* cstr = identifier.c_str();
-        gl::int32_t value = glGetUniformLocation(std::to_underlying(program), cstr);
+        gl::int32_t value = glGetUniformLocation(gl::to_underlying(program), cstr);
 
         if (value == -1) throw std::invalid_argument{ "Identifier does not correspond to an active uniform variable!" };
 
@@ -1124,7 +1061,7 @@ namespace fox::gfx::api::gl
 
         name.resize(maximumLength);
 
-        glGetActiveUniformName(std::to_underlying(program), index, maximumLength, &length, name.data());
+        glGetActiveUniformName(gl::to_underlying(program), index, maximumLength, &length, name.data());
 
         if (length == 0)                          throw std::invalid_argument{ "Identifier does not correspond to an active uniform name!" };
         if (std::cmp_less(length, maximumLength)) name.resize(static_cast<fox::size_t>(length) - 1u);
@@ -1143,11 +1080,11 @@ namespace fox::gfx::api::gl
             {
                 return _.c_str();
             });
-        glGetUniformIndices(std::to_underlying(program), count, cstrs.data(), values.data());
+        glGetUniformIndices(gl::to_underlying(program), count, cstrs.data(), values.data());
 
         std::ranges::for_each(values, [](gl::uint32_t value)
             {
-                if (value == std::to_underlying(glf::Error::Sentinel::InvalidIndex)) throw std::invalid_argument{ "Identifier does not correspond to an active uniform name!" };
+                if (value == gl::to_underlying(glf::Error::Sentinel::InvalidIndex)) throw std::invalid_argument{ "Identifier does not correspond to an active uniform name!" };
             });
 
         return values;
@@ -1163,19 +1100,19 @@ namespace fox::gfx::api::gl
 
         name.resize(maximumLength);
 
-        glGetActiveUniform(std::to_underlying(program), index, maximumLength, &length, &size, &type, name.data());
+        glGetActiveUniform(gl::to_underlying(program), index, maximumLength, &length, &size, &type, name.data());
 
         if (std::cmp_less(length, maximumLength)) name.resize(static_cast<fox::size_t>(length) - 1u);
 
         return std::make_tuple(name, type);
     }
-    template<glf::Uniform::Property P, fox::uint32_t N>
+    template<glf::Uniform::Property P, gl::uint32_t N>
     static auto                            get_active_uniforms_v(gl::handle_t program, std::span<const gl::uint32_t, N> indices)
     {
         const auto& get_active_uniforms_iv               = [](gl::handle_t program, glf::Uniform::Property property, std::span<gl::uint32_t, N> indices) -> std::array<gl::int32_t, N>
             {
                 std::array<gl::int32_t, N> values{};
-                glGetActiveUniformsiv(std::to_underlying(program), static_cast<gl::size_t>(indices.size()), indices.data(), std::to_underlying(property), values.data());
+                glGetActiveUniformsiv(gl::to_underlying(program), static_cast<gl::size_t>(indices.size()), indices.data(), gl::to_underlying(property), values.data());
 
                 return values;
             };
@@ -1205,9 +1142,9 @@ namespace fox::gfx::api::gl
     static auto                            get_uniform_block_index(gl::handle_t program, const std::string& identifier)
     {
         const auto& cstr = identifier.c_str();
-        gl::uint32_t value = glGetUniformBlockIndex(std::to_underlying(program), cstr);
+        gl::uint32_t value = glGetUniformBlockIndex(gl::to_underlying(program), cstr);
 
-        if (value == std::to_underlying(glf::Error::Sentinel::InvalidIndex)) throw std::invalid_argument{ "Identifier does not identify an active uniform block!" };
+        if (value == gl::to_underlying(glf::Error::Sentinel::InvalidIndex)) throw std::invalid_argument{ "Identifier does not identify an active uniform block!" };
 
         return value;
     }
@@ -1223,7 +1160,7 @@ namespace fox::gfx::api::gl
 
         name.resize(maximumLength);
 
-        glGetActiveUniformBlockName(std::to_underlying(program), index, maximumLength, &length, name.data());
+        glGetActiveUniformBlockName(gl::to_underlying(program), index, maximumLength, &length, name.data());
 
         if (length ==         0) throw std::invalid_argument{ "A uniform block with the given index does not exist!" };
         if (length <  maximumLength) name.resize(static_cast<fox::size_t>(length) - 1u);
@@ -1236,7 +1173,7 @@ namespace fox::gfx::api::gl
         const auto& get_active_uniform_block_iv = [](gl::handle_t program, glf::UniformBlock::Info info, gl::uint32_t index)
             {
                 gl::int32_t value{};
-                glGetActiveUniformBlockiv(std::to_underlying(program), index, std::to_underlying(info), &value);
+                glGetActiveUniformBlockiv(gl::to_underlying(program), index, gl::to_underlying(info), &value);
 
                 return value;
             };
@@ -1257,7 +1194,7 @@ namespace fox::gfx::api::gl
             values.resize(activeUniforms);
             results.resize(activeUniforms);
 
-            glGetActiveUniformBlockiv(std::to_underlying(program), index, std::to_underlying(I), values.data());
+            glGetActiveUniformBlockiv(gl::to_underlying(program), index, gl::to_underlying(I), values.data());
 
             std::transform(values.begin(), values.end(), results.begin(), [](auto _)
                 {
@@ -1279,7 +1216,7 @@ namespace fox::gfx::api::gl
         const auto& get_active_atomic_counter_buffer_iv = [](gl::handle_t program, glf::AtomicCounterBuffer::Info info, gl::uint32_t index)
             {
                 gl::int32_t value{};
-                glGetActiveAtomicCounterBufferiv(std::to_underlying(program), index, std::to_underlying(info), &value);
+                glGetActiveAtomicCounterBufferiv(gl::to_underlying(program), index, gl::to_underlying(info), &value);
 
                 return value;
             };
@@ -1300,25 +1237,25 @@ namespace fox::gfx::api::gl
     }
     static void                            uniform_block_binding(gl::handle_t program, gl::uint32_t index, gl::uint32_t binding)
     {
-        glUniformBlockBinding(std::to_underlying(program), index, binding);
+        glUniformBlockBinding(gl::to_underlying(program), index, binding);
     }
     //Shader Buffer Variables and Shader Storage Blocks [7.8]
     static void                            shader_storage_block_binding(gl::handle_t program, gl::uint32_t index, gl::uint32_t binding)
     {
-        glShaderStorageBlockBinding(std::to_underlying(program), index, binding);
+        glShaderStorageBlockBinding(gl::to_underlying(program), index, binding);
     }
     //Invocation Groups [7.9]
     static auto                            get_subroutine_uniform_location(gl::handle_t program, glf::Shader::Type type, const std::string& identifier)
     {
         const auto* cstr = identifier.c_str();
-        gl::int32_t value = glGetSubroutineUniformLocation(std::to_underlying(program), std::to_underlying(type), cstr);
+        gl::int32_t value = glGetSubroutineUniformLocation(gl::to_underlying(program), gl::to_underlying(type), cstr);
 
         return value;
     }
     static auto                            get_subroutine_index(gl::handle_t program, glf::Shader::Type type, const std::string& identifier)
     {
         const auto* cstr = identifier.c_str();
-        gl::uint32_t value = glGetSubroutineIndex(std::to_underlying(program), std::to_underlying(type), cstr);
+        gl::uint32_t value = glGetSubroutineIndex(gl::to_underlying(program), gl::to_underlying(type), cstr);
 
         return value;
     }
@@ -1331,7 +1268,7 @@ namespace fox::gfx::api::gl
 
         name.resize(maximumSize);
 
-        glGetActiveSubroutineName(std::to_underlying(program), std::to_underlying(type), index, maximumSize, &length, name.data());
+        glGetActiveSubroutineName(gl::to_underlying(program), gl::to_underlying(type), index, maximumSize, &length, name.data());
 
         if (std::cmp_less(length, maximumSize)) name.resize(static_cast<fox::size_t>(length) - 1u);
 
@@ -1346,7 +1283,7 @@ namespace fox::gfx::api::gl
 
         name.resize(maximumSize);
 
-        glGetActiveSubroutineUniformName(std::to_underlying(program), std::to_underlying(type), index, maximumSize, &length, name.data());
+        glGetActiveSubroutineUniformName(gl::to_underlying(program), gl::to_underlying(type), index, maximumSize, &length, name.data());
 
         if (std::cmp_less(length, maximumSize)) name.resize(static_cast<fox::size_t>(length) - 1u);
 
@@ -1355,7 +1292,7 @@ namespace fox::gfx::api::gl
     template<glf::Shader::SubroutineParameter P>
     static auto                            get_active_subroutine_uniform_v(gl::handle_t program, glf::Shader::Type type, gl::uint32_t index)
     {
-        const auto& uv = std::to_underlying(P);
+        const auto& uv = gl::to_underlying(P);
 
         if constexpr (
             P == glf::Shader::SubroutineParameter::NumberCompatibleSubroutines ||
@@ -1363,7 +1300,7 @@ namespace fox::gfx::api::gl
             P == glf::Shader::SubroutineParameter::UniformNameLength            )
         {
             gl::int32_t value{};
-            glGetActiveSubroutineUniformiv(std::to_underlying(program), std::to_underlying(type), index, uv, &value);
+            glGetActiveSubroutineUniformiv(gl::to_underlying(program), gl::to_underlying(type), index, uv, &value);
 
             return static_cast<gl::uint32_t>(value);
         }
@@ -1375,23 +1312,23 @@ namespace fox::gfx::api::gl
 
             value.resize(numberCompatibleSubroutines);
 
-            glGetActiveSubroutineUniformiv(std::to_underlying(program), std::to_underlying(type), index, uv, value.data());
+            glGetActiveSubroutineUniformiv(gl::to_underlying(program), gl::to_underlying(type), index, uv, value.data());
 
             return value;
         }
     }
     static auto                            uniform_subroutines_v(glf::Shader::Type type, std::span<const gl::uint32_t> indices)
     {
-        glUniformSubroutinesuiv(std::to_underlying(type), static_cast<gl::size_t>(indices.size()), indices.data());
+        glUniformSubroutinesuiv(gl::to_underlying(type), static_cast<gl::size_t>(indices.size()), indices.data());
     }
     //Shader Memory Access [7.13]
     static void                            memory_barrier(glf::Memory::Barrier barrier)
     {
-        glMemoryBarrier(std::to_underlying(barrier));
+        glMemoryBarrier(gl::to_underlying(barrier));
     }
     static void                            memory_barrier_by_region(glf::Memory::RegionalBarrier barrier)
     {
-        glMemoryBarrierByRegion(std::to_underlying(barrier));
+        glMemoryBarrierByRegion(gl::to_underlying(barrier));
     }
     //Shader, Program, and Program Pipeline Queries [7.14]
     static auto                            get_attached_shaders(gl::handle_t program)
@@ -1403,7 +1340,7 @@ namespace fox::gfx::api::gl
 
         shaders.resize(shaderCount);
 
-        glGetAttachedShaders(std::to_underlying(program), shaderCount, &count, shaders.data());
+        glGetAttachedShaders(gl::to_underlying(program), shaderCount, &count, shaders.data());
 
         return shaders;
     }
@@ -1415,7 +1352,7 @@ namespace fox::gfx::api::gl
 
         log.resize(length);
 
-        glGetShaderInfoLog(std::to_underlying(shader), length, nullptr, log.data());
+        glGetShaderInfoLog(gl::to_underlying(shader), length, nullptr, log.data());
 
         if (not log.empty()) log.resize(log.size() - 1u);
 
@@ -1429,7 +1366,7 @@ namespace fox::gfx::api::gl
 
         log.resize(length);
 
-        glGetProgramInfoLog(std::to_underlying(program), length, nullptr, log.data());
+        glGetProgramInfoLog(gl::to_underlying(program), length, nullptr, log.data());
 
         if (not log.empty()) log.resize(log.size() - 1u);
 
@@ -1443,7 +1380,7 @@ namespace fox::gfx::api::gl
 
         log.resize(length);
 
-        glGetProgramPipelineInfoLog(std::to_underlying(pipeline), length, nullptr, log.data());
+        glGetProgramPipelineInfoLog(gl::to_underlying(pipeline), length, nullptr, log.data());
 
         if (not log.empty()) log.resize(log.size() - 1u);
 
@@ -1457,7 +1394,7 @@ namespace fox::gfx::api::gl
 
         source.resize(length);
 
-        glGetShaderSource(std::to_underlying(shader), length, nullptr, source.data());
+        glGetShaderSource(gl::to_underlying(shader), length, nullptr, source.data());
 
         if (not source.empty()) source.resize(source.size() - 1u);
 
@@ -1473,7 +1410,7 @@ namespace fox::gfx::api::gl
             std::array<gl::int32_t, 2> range{};
             gl::int32_t                precision{};
 
-            glGetShaderPrecisionFormat(std::to_underlying(T), std::to_underlying(format), range.data(), &precision);
+            glGetShaderPrecisionFormat(gl::to_underlying(T), gl::to_underlying(format), range.data(), &precision);
 
             return std::make_tuple(range, precision);
         }
@@ -1481,7 +1418,7 @@ namespace fox::gfx::api::gl
     template<glf::DataType D, gl::size_t C>
     static auto                            get_uniform_v(gl::handle_t program, gl::int32_t location)
     {
-        const auto& uv = std::to_underlying(program);
+        const auto& uv = gl::to_underlying(program);
 
         if constexpr (D == glf::DataType::Integer)
         {
@@ -1519,7 +1456,7 @@ namespace fox::gfx::api::gl
     static auto                            get_uniform_subroutine_v(glf::Shader::Type type, gl::int32_t location)
     {
         gl::uint32_t value{};
-        glGetUniformSubroutineuiv(std::to_underlying(type), location, &value);
+        glGetUniformSubroutineuiv(gl::to_underlying(type), location, &value);
 
         return value;
     }
@@ -1535,7 +1472,7 @@ namespace fox::gfx::api::gl
     static gl::handle_t                   create_texture(glf::Texture::Target target)
     {
         gl::uint32_t handle{};
-        glCreateTextures(std::to_underlying(target), 1, &handle);
+        glCreateTextures(gl::to_underlying(target), 1, &handle);
 
         return gl::handle_t{ handle };
     }
@@ -1543,7 +1480,7 @@ namespace fox::gfx::api::gl
     {
         if (texture == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(texture);
+        const auto& uv = gl::to_underlying(texture);
         glDeleteTextures(1, &uv);
     }
     static void                           bind_texture_unit(gl::handle_t texture, gl::uint32_t unit)
@@ -1562,7 +1499,7 @@ namespace fox::gfx::api::gl
     {
         if (sampler == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(sampler);
+        const auto& uv = gl::to_underlying(sampler);
         glDeleteSamplers(1, &uv);
     }
     static void                           bind_sampler(gl::handle_t sampler, gl::uint32_t slot)
@@ -1581,14 +1518,14 @@ namespace fox::gfx::api::gl
         const auto& get_sampler_parameter_iv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter)
             {
                 gl::int32_t value{};
-                glGetSamplerParameteriv(std::to_underlying(sampler), std::to_underlying(parameter), &value);
+                glGetSamplerParameteriv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
 
                 return value;
             };
         const auto& get_sampler_parameter_fv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter)
             {
                 gl::float32_t value{};
-                glGetSamplerParameterfv(std::to_underlying(sampler), std::to_underlying(parameter), &value);
+                glGetSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
 
                 return value;
             };
@@ -1597,7 +1534,7 @@ namespace fox::gfx::api::gl
         {
             std::array<gl::float32_t, 4> values{};
 
-            glGetSamplerParameterfv(std::to_underlying(sampler), std::to_underlying(P), values.data());
+            glGetSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(P), values.data());
 
             return gl::Vector4f{ values.at(0), values.at(1), values.at(2), values.at(3) };
         }
@@ -1618,43 +1555,43 @@ namespace fox::gfx::api::gl
     //[8.4.1] Pixel Storage Modes and Pixel Buffer Objects
     static auto                           pixel_store(glf::PackingMode mode, gl::int32_t parameter)
     {
-        glPixelStorei(std::to_underlying(mode), parameter);
+        glPixelStorei(gl::to_underlying(mode), parameter);
     }
     //[8.6.0] Alternate Texture Image Specification Commands
     static void                           texture_sub_image_1d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::Vector1u& dimensions, const gl::Vector1u& offset, gl::uint32_t level, std::span<const gl::byte_t> data)
     {
         glTextureSubImage1D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x, 
             dimensions.x,
-            std::to_underlying(format), GL_UNSIGNED_BYTE,
+            gl::to_underlying(format), GL_UNSIGNED_BYTE,
             data.data());
     }
     static void                           texture_sub_image_2d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::Vector2u& dimensions, const gl::Vector2u& offset, gl::uint32_t level, std::span<const gl::byte_t> data)
     {
         glTextureSubImage2D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x, offset.y,
             dimensions.x, dimensions.y,
-            std::to_underlying(format), GL_UNSIGNED_BYTE,
+            gl::to_underlying(format), GL_UNSIGNED_BYTE,
             data.data());
     }
     static void                           texture_sub_image_3d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::Vector3u& dimensions, const gl::Vector3u& offset, gl::uint32_t level, std::span<const gl::byte_t> data)
     {
         glTextureSubImage3D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x, offset.y, offset.z,
             dimensions.x, dimensions.y, dimensions.z,
-            std::to_underlying(format), GL_UNSIGNED_BYTE,
+            gl::to_underlying(format), GL_UNSIGNED_BYTE,
             data.data());
     }
     static void                           copy_texture_sub_image_1d(gl::handle_t texture, gl::uint32_t level, const gl::Vector1u& offset, const gl::Vector2u& target, const gl::Vector1u& dimensions)
     {
         glCopyTextureSubImage1D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level, 
             offset.x,
             target.x,     target.y,
@@ -1663,7 +1600,7 @@ namespace fox::gfx::api::gl
     static void                           copy_texture_sub_image_2d(gl::handle_t texture, gl::uint32_t level, const gl::Vector2u& offset, const gl::Vector2u& target, const gl::Vector2u& dimensions)
     {
         glCopyTextureSubImage2D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x,     offset.y,
             target.x,     target.y,
@@ -1672,7 +1609,7 @@ namespace fox::gfx::api::gl
     static void                           copy_texture_sub_image_3d(gl::handle_t texture, gl::uint32_t level, const gl::Vector3u& offset, const gl::Vector2u& target, const gl::Vector2u& dimensions)
     {
         glCopyTextureSubImage3D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x,     offset.y,     offset.z,
             target.x,     target.y,
@@ -1682,41 +1619,41 @@ namespace fox::gfx::api::gl
     static void                           compressed_texture_sub_image_1d(gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, const gl::Vector1u& dimensions, const gl::Vector1u& offset, std::span<const gl::byte_t> data)
     {
         glCompressedTextureSubImage1D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x, 
             dimensions.x, 
-            std::to_underlying(format),
+            gl::to_underlying(format),
             static_cast<gl::size_t>(data.size()),  data.data());
     }
     static void                           compressed_texture_sub_image_2d(gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, const gl::Vector2u& dimensions, const gl::Vector2u& offset, std::span<const gl::byte_t> data)
     {
         glCompressedTextureSubImage2D(
-            std::to_underlying(texture), 
+            gl::to_underlying(texture), 
             level, 
             offset.x,     offset.y, 
             dimensions.x, dimensions.y, 
-            std::to_underlying(format), 
+            gl::to_underlying(format), 
             static_cast<gl::size_t>(data.size()),  data.data());
     }
     static void                           compressed_texture_sub_image_3d(gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, const gl::Vector3u& dimensions, const gl::Vector3u& offset, std::span<const gl::byte_t> data)
     {
         glCompressedTextureSubImage3D(
-            std::to_underlying(texture),
+            gl::to_underlying(texture),
             level,
             offset.x,     offset.y,     offset.z,
             dimensions.x, dimensions.y, dimensions.z,
-            std::to_underlying(format),
+            gl::to_underlying(format),
             static_cast<gl::size_t>(data.size()),  data.data());
     }
     //[8.9.0] Buffer Textures
     static void                           texture_buffer(gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format)
     {
-        glTextureBuffer(std::to_underlying(texture), std::to_underlying(format), std::to_underlying(buffer));
+        glTextureBuffer(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer));
     }
     static void                           texture_buffer_range(gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, gl::sizeptr_t size, gl::intptr_t offset)
     {
-        glTextureBufferRange(std::to_underlying(texture), std::to_underlying(format), std::to_underlying(buffer), offset, size);
+        glTextureBufferRange(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer), offset, size);
     }
     //[8.10.0] Texture Parameters
     static void                           texture_parameter(gl::handle_t texture, glf::Texture::Parameter parameter, gl::TextureParameter value) //TODO: implement further
@@ -1724,21 +1661,21 @@ namespace fox::gfx::api::gl
         if (std::holds_alternative<glf::Texture::MinificationFilter>(value))
         {
             const auto& v = std::get<glf::Texture::MinificationFilter>(value);
-            glTextureParameteri(static_cast<gl::uint32_t>(texture), static_cast<gl::enum_t>(parameter), std::to_underlying(v));
+            glTextureParameteri(static_cast<gl::uint32_t>(texture), gl::to_underlying(parameter), gl::to_underlying(v));
 
             return;
         }
         if (std::holds_alternative<glf::Texture::MagnificationFilter>(value))
         {
             const auto& v = std::get<glf::Texture::MagnificationFilter>(value);
-            glTextureParameteri(static_cast<gl::uint32_t>(texture), static_cast<gl::enum_t>(parameter), std::to_underlying(v));
+            glTextureParameteri(static_cast<gl::uint32_t>(texture), gl::to_underlying(parameter), gl::to_underlying(v));
 
             return;
         }
         if (std::holds_alternative<glf::Texture::Wrapping>(value))
         {
             const auto& v = std::get<glf::Texture::Wrapping>(value);
-            glTextureParameteri(static_cast<gl::uint32_t>(texture), static_cast<gl::enum_t>(parameter), std::to_underlying(v));
+            glTextureParameteri(static_cast<gl::uint32_t>(texture), gl::to_underlying(parameter), gl::to_underlying(v));
 
             return;
         }
@@ -1750,44 +1687,44 @@ namespace fox::gfx::api::gl
     //[8.14.4] Manual Mipmap Generation
     static void                           generate_texture_mipmap(gl::handle_t texture)
     {
-        glGenerateTextureMipmap(std::to_underlying(texture));
+        glGenerateTextureMipmap(gl::to_underlying(texture));
     }
     //[8.18.0] Texture Views
     static void texture_view(gl::handle_t source, gl::handle_t destination, gl::enum_t target, gl::enum_t format, const gl::Vector2u& levels, const gl::Vector2u& layers)
     {
         //TODO target and format checking
-        glTextureView(std::to_underlying(destination), target, std::to_underlying(source), format, levels.x, levels.y, layers.x, layers.y);
+        glTextureView(gl::to_underlying(destination), target, gl::to_underlying(source), format, levels.x, levels.y, layers.x, layers.y);
     }
     //[8.19.0] Immutable-Format Texture Images
     static void                           texture_storage_1d(gl::handle_t texture, glf::Texture::Format format, const gl::Vector1u& dimensions, gl::size_t levels)
     {
-        glTextureStorage1D(std::to_underlying(texture), levels, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x));
+        glTextureStorage1D(gl::to_underlying(texture), levels, gl::to_underlying(format), static_cast<gl::size_t>(dimensions.x));
     }
     static void                           texture_storage_2d(gl::handle_t texture, glf::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t levels)
     {
-        glTextureStorage2D(std::to_underlying(texture), levels, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
+        glTextureStorage2D(gl::to_underlying(texture), levels, gl::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
     static void                           texture_storage_3d(gl::handle_t texture, glf::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t levels)
     {
-        glTextureStorage3D(std::to_underlying(texture), levels, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z));
+        glTextureStorage3D(gl::to_underlying(texture), levels, gl::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z));
     }
     static void                           texture_storage_2d_multisample(gl::handle_t texture, glf::Texture::Format format, const gl::Vector2u& dimensions, gl::size_t samples, gl::bool_t fixed = gl::True)
     {
-        glTextureStorage2DMultisample(std::to_underlying(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), fixed);
+        glTextureStorage2DMultisample(gl::to_underlying(texture), samples, gl::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), fixed);
     }
     static void                           texture_storage_3d_multisample(gl::handle_t texture, glf::Texture::Format format, const gl::Vector3u& dimensions, gl::size_t samples, gl::bool_t fixed = gl::True)
     {
-        glTextureStorage3DMultisample(std::to_underlying(texture), samples, std::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), fixed);
+        glTextureStorage3DMultisample(gl::to_underlying(texture), samples, gl::to_underlying(format), static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y), static_cast<gl::size_t>(dimensions.z), fixed);
     }
     //[8.20.0] Invalidating Texture Image Data
     static void                           invalidate_texture_image(gl::handle_t texture, gl::int32_t level)
     {
-        glInvalidateTexImage(std::to_underlying(texture), level);
+        glInvalidateTexImage(gl::to_underlying(texture), level);
     }
     static void                           invalidate_texture_sub_image(gl::handle_t texture, gl::uint32_t level, const gl::Vector3u& size, const gl::Vector3u& offset)
     {
         glInvalidateTexSubImage(
-            std::to_underlying(texture), 
+            gl::to_underlying(texture), 
             static_cast<gl::int32_t>(level),
             static_cast<gl::int32_t>(offset.x), static_cast<gl::int32_t>(offset.y), static_cast<gl::int32_t>(offset.z),
             static_cast<gl::size_t> (size.x),   static_cast<gl::size_t> (size.y),   static_cast<gl::size_t> (size.z));
@@ -1796,33 +1733,33 @@ namespace fox::gfx::api::gl
     static void                           clear_texture_image_data(gl::handle_t texture, gl::uint32_t level, glf::Texture::BaseFormat format, glf::Texture::Type type, std::span<const gl::byte_t> data)
     {
         glClearTexImage(
-            std::to_underlying(texture), 
+            gl::to_underlying(texture), 
             static_cast<gl::int32_t>(level), 
-            std::to_underlying(format), 
-            std::to_underlying(type),
+            gl::to_underlying(format), 
+            gl::to_underlying(type),
             data.data());
     }
     static void                           clear_texture_sub_image_data(gl::handle_t texture, const gl::Vector3u& dimensions, const gl::Vector3u& offset, gl::uint32_t level, glf::Texture::BaseFormat format, glf::Texture::Type type, std::span<const gl::byte_t> data)
     {
         glClearTexSubImage(
-            std::to_underlying(texture), 
+            gl::to_underlying(texture), 
             static_cast<gl::int32_t>(level), 
             static_cast<gl::int32_t>(offset.x),     static_cast<gl::int32_t>(offset.y),     static_cast<gl::int32_t>(offset.z),
             static_cast<gl::int32_t>(dimensions.x), static_cast<gl::int32_t>(dimensions.y), static_cast<gl::int32_t>(dimensions.z), 
-            std::to_underlying(format), 
-            std::to_underlying(type), 
+            gl::to_underlying(format), 
+            gl::to_underlying(type), 
             data.data());
     }
     //[8.26.0] Texture Image Loads and Stores
     static void bind_image_texture(gl::handle_t image, gl::handle_t texture, glf::Image::Format format, glf::Image::Access access, gl::uint32_t level, gl::bool_t isLayered, gl::uint32_t layer)
     {
         glBindImageTexture(
-            std::to_underlying(image), 
-            std::to_underlying(texture),
+            gl::to_underlying(image), 
+            gl::to_underlying(texture),
             static_cast<gl::int32_t>(level),
             isLayered, layer, 
-            std::to_underlying(access), 
-            std::to_underlying(format));
+            gl::to_underlying(access), 
+            gl::to_underlying(format));
     }
 
 
@@ -1839,21 +1776,21 @@ namespace fox::gfx::api::gl
     {
         if (frameBuffer == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(frameBuffer);
+        const auto& uv = gl::to_underlying(frameBuffer);
         glDeleteFramebuffers(1, &uv);
     }
     static void                           bind_frame_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Target target)
     {
-        glBindFramebuffer(std::to_underlying(target), std::to_underlying(frameBuffer));
+        glBindFramebuffer(gl::to_underlying(target), gl::to_underlying(frameBuffer));
     }
     //[9.2.1] FrameBuffer Object Parameters
-    static void frame_buffer_parameter(gl::handle_t frameBuffer, glf::FrameBuffer::Parameter parameter, gl::uint32_t value)
+    static void                           frame_buffer_parameter(gl::handle_t frameBuffer, glf::FrameBuffer::Parameter parameter, gl::uint32_t value)
     {
-        glNamedFramebufferParameteri(std::to_underlying(frameBuffer), std::to_underlying(parameter), static_cast<gl::int32_t>(value));
+        glNamedFramebufferParameteri(gl::to_underlying(frameBuffer), gl::to_underlying(parameter), static_cast<gl::int32_t>(value));
     }
     //[9.2.3] FrameBuffer Object Queries
-    static auto get_named_frame_buffer_parameter_v() { throw std::logic_error{ "The method or operation has not been implemented!" }; }
-    static auto get_named_frame_buffer_parameter_attachment_v() { throw std::logic_error{ "The method or operation has not been implemented!" }; }
+    static auto                           get_named_frame_buffer_parameter_v() { throw std::logic_error{ "The method or operation has not been implemented!" }; }
+    static auto                           get_named_frame_buffer_parameter_attachment_v() { throw std::logic_error{ "The method or operation has not been implemented!" }; }
     //[9.2.4] RenderBuffer Objects
     static gl::handle_t                   create_render_buffer()
     {
@@ -1866,129 +1803,406 @@ namespace fox::gfx::api::gl
     {
         if (renderBuffer == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(renderBuffer);
+        const auto& uv = gl::to_underlying(renderBuffer);
         glDeleteRenderbuffers(1, &uv);
     }
     static void                           render_buffer_storage(gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions)
     {
         glNamedRenderbufferStorage(
-            std::to_underlying(renderBuffer), 
-            std::to_underlying(format), 
+            gl::to_underlying(renderBuffer), 
+            gl::to_underlying(format), 
             static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
     static void                           render_buffer_storage_multisample(gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions, gl::uint8_t samples)
     {
         glNamedRenderbufferStorageMultisample(
-            std::to_underlying(renderBuffer),
+            gl::to_underlying(renderBuffer),
             samples, 
-            std::to_underlying(format), 
+            gl::to_underlying(format), 
             static_cast<gl::size_t>(dimensions.x), static_cast<gl::size_t>(dimensions.y));
     }
     //[9.2.6] RenderBuffer Object Queries
-    static auto get_render_buffer_parameter_v() { throw std::logic_error{ "The method or operation has not been implemented!" }; }
+    static auto                           get_render_buffer_parameter_v() { throw std::logic_error{ "The method or operation has not been implemented!" }; }
     //[9.2.7] Attaching RenderBuffer Images to a FrameBuffer
-    static void                           frame_buffer_render_buffer(gl::handle_t frameBuffer, gl::handle_t renderBuffer, gl::enum_t attachment)
+    static void                           frame_buffer_render_buffer(gl::handle_t frameBuffer, gl::handle_t renderBuffer, glf::FrameBuffer::Source attachment)
     {
-        glNamedFramebufferRenderbuffer(std::to_underlying(frameBuffer), attachment, GL_RENDERBUFFER, std::to_underlying(renderBuffer));
+        glNamedFramebufferRenderbuffer(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), GL_RENDERBUFFER, gl::to_underlying(renderBuffer));
     }
-
-
-
-
-
-
-
-
-
-    static void                           frame_buffer_read_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Source source)
+    //[9.2.8] Attaching Texture Images to a FrameBuffer
+    static void                           frame_buffer_texture(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Source attachment, gl::int32_t level)
     {
-        glNamedFramebufferReadBuffer(static_cast<gl::uint32_t>(frameBuffer), static_cast<gl::enum_t>(source));
-    }
-    static void                           frame_buffer_draw_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Source source)
-    {
-        glNamedFramebufferDrawBuffer(static_cast<gl::uint32_t>(frameBuffer), static_cast<gl::enum_t>(source));
-    }
-    static void                           frame_buffer_draw_buffers(gl::handle_t frameBuffer, std::span<const gl::enum_t> buffers)
-    {
-        glNamedFramebufferDrawBuffers(static_cast<gl::uint32_t>(frameBuffer), static_cast<gl::size_t>(buffers.size()), buffers.data());
-    }
-    static void                           frame_buffer_texture(gl::handle_t frameBuffer, gl::handle_t texture, gl::enum_t attachment, gl::int32_t level)
-    {
-        glNamedFramebufferTexture(static_cast<gl::uint32_t>(frameBuffer), attachment, static_cast<gl::uint32_t>(texture), level);
+        glNamedFramebufferTexture(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), gl::to_underlying(texture), level);
     }
     static void                           frame_buffer_texture_layer(gl::handle_t frameBuffer, gl::handle_t texture, gl::enum_t attachment, gl::uint32_t level, gl::uint32_t layer)
     {
-        glNamedFramebufferTextureLayer(static_cast<gl::uint32_t>(frameBuffer), attachment, static_cast<gl::uint32_t>(texture), level, layer);
+        glNamedFramebufferTextureLayer(gl::to_underlying(frameBuffer), attachment, gl::to_underlying(texture), level, layer);
     }
-    
-    static glf::FrameBuffer::Status       check_frame_buffer_status(gl::handle_t frameBuffer)
-    {
-        return glf::FrameBuffer::Status{ glCheckNamedFramebufferStatus(static_cast<gl::uint32_t>(frameBuffer), GL_FRAMEBUFFER) };
-    }
-    static void                           invalidate_frame_buffer(gl::handle_t frameBuffer, std::span<gl::enum_t> attachments)
-    {
-        glInvalidateNamedFramebufferData(static_cast<gl::uint32_t>(frameBuffer), static_cast<gl::size_t>(attachments.size()), attachments.data());
-    }
-    static void                           invalidate_frame_buffer_sub_data(gl::handle_t frameBuffer, std::span<gl::enum_t> attachments, const gl::Vector2u& position, const gl::Vector2u& size)
-    {
-        glInvalidateNamedFramebufferSubData(
-            static_cast<gl::uint32_t>(frameBuffer),
-            static_cast<gl::size_t>(attachments.size()), attachments.data(),
-            position.x, position.y,
-            size.x, size.y);
-    }
-    static void                           clear_frame_buffer(gl::handle_t frameBuffer, gl::ClearValue value)
-    {
-        __debugbreak();
-    }
-
-
-
-
-
-
-
-
-
-
-
+    //[9.3.1] Rendering Feedback Loops
     static void                           texture_barrier()
     {
         glTextureBarrier();
     }
-
-
-    static void test23()
+    //[9.4.2] Whole FrameBuffer Completeness
+    static glf::FrameBuffer::Status       check_frame_buffer_status(gl::handle_t frameBuffer)
     {
-
+        return glf::FrameBuffer::Status{ glCheckNamedFramebufferStatus(gl::to_underlying(frameBuffer), GL_FRAMEBUFFER) };
     }
 
 
 
 
+    //[10.1.15] Separate Patches
+    static void                           patch_parameter_separate(glf::Patch::Parameter parameter, gl::int32_t value)
+    {
+        glPatchParameteri(gl::to_underlying(parameter), value);
+    }
+    //[10.2.1] Current Generic Attributes
+    template<typename T, int N, gl::bool_t NORM = gl::False>
+    static void                           vertex_attribute(gl::uint32_t index, const gl::Vector<T, N>& value)
+    {
+        const auto& maximumAttributes = gl::get_v<glf::Data::MaximumVertexAttributes>();
 
-#pragma region TransformFeedback
+        if (index > maximumAttributes) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
+
+
+
+             if constexpr (std::is_same_v<T, gl::int16_t>   and N == 1 and NORM == gl::False) glVertexAttrib1s  (index, value.x);
+        else if constexpr (std::is_same_v<T, gl::int16_t>   and N == 2 and NORM == gl::False) glVertexAttrib2s  (index, value.x, value.y);
+        else if constexpr (std::is_same_v<T, gl::int16_t>   and N == 3 and NORM == gl::False) glVertexAttrib3s  (index, value.x, value.y, value.z);
+        else if constexpr (std::is_same_v<T, gl::int16_t>   and N == 4 and NORM == gl::False) glVertexAttrib4s  (index, value.x, value.y, value.z, value.w);
+
+        else if constexpr (std::is_same_v<T, gl::float32_t> and N == 1 and NORM == gl::False) glVertexAttrib1f  (index, value.x);
+        else if constexpr (std::is_same_v<T, gl::float32_t> and N == 2 and NORM == gl::False) glVertexAttrib2f  (index, value.x, value.y);
+        else if constexpr (std::is_same_v<T, gl::float32_t> and N == 3 and NORM == gl::False) glVertexAttrib3f  (index, value.x, value.y, value.z);
+        else if constexpr (std::is_same_v<T, gl::float32_t> and N == 4 and NORM == gl::False) glVertexAttrib4f  (index, value.x, value.y, value.z, value.w);
+
+        else if constexpr (std::is_same_v<T, gl::float64_t> and N == 1 and NORM == gl::False) glVertexAttribL1d (index, value.x);
+        else if constexpr (std::is_same_v<T, gl::float64_t> and N == 2 and NORM == gl::False) glVertexAttribL2d (index, value.x, value.y);
+        else if constexpr (std::is_same_v<T, gl::float64_t> and N == 3 and NORM == gl::False) glVertexAttribL3d (index, value.x, value.y, value.z);
+        else if constexpr (std::is_same_v<T, gl::float64_t> and N == 4 and NORM == gl::False) glVertexAttribL4d (index, value.x, value.y, value.z, value.w);
+                                                                                                           
+        else if constexpr (std::is_same_v<T, gl::uint8_t>   and N == 4 and NORM == gl::True ) glVertexAttrib4Nub(index, value.x, value.y, value.z, value.w);
+
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 1 and NORM == gl::False) glVertexAttribI1i (index, value.x);
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 2 and NORM == gl::False) glVertexAttribI2i (index, value.x, value.y);
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 3 and NORM == gl::False) glVertexAttribI3i (index, value.x, value.y, value.z);
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 4 and NORM == gl::False) glVertexAttribI4i (index, value.x, value.y, value.z, value.w);
+
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 1 and NORM == gl::False) glVertexAttribI1ui(index, value.x);
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 2 and NORM == gl::False) glVertexAttribI2ui(index, value.x, value.y);
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 3 and NORM == gl::False) glVertexAttribI3ui(index, value.x, value.y, value.z);
+        else if constexpr (std::is_same_v<T, gl::int32_t>   and N == 4 and NORM == gl::False) glVertexAttribI4ui(index, value.x, value.y, value.z, value.w);
+
+        else    static_assert(false, "The given input does not match a valid Vertex Attribute function!");
+    }
+
+
+
+    //[10.3.0] Vertex Arrays
+    //[10.3.1] Vertex Array Objects
+    static gl::handle_t                   create_vertex_array()
+    {
+        gl::uint32_t handle{};
+        glCreateVertexArrays(1, &handle);
+
+        return gl::handle_t{ handle };
+    }
+    static void                           delete_vertex_array(gl::handle_t vertexArray)
+    {
+        if (vertexArray == gl::NullObject) return;
+
+        const auto& uv = gl::to_underlying(vertexArray);
+        glDeleteVertexArrays(1, &uv);
+    }
+    static void                           bind_vertex_array(gl::handle_t vertexArray)
+    {
+        glBindVertexArray(gl::to_underlying(vertexArray));
+    }
+    static void                           vertex_array_element_buffer(gl::handle_t vertexArray, gl::handle_t elementBuffer)
+    {
+        glVertexArrayElementBuffer(gl::to_underlying(vertexArray), gl::to_underlying(elementBuffer));
+    }
+    //[10.3.2] Specifying Arrays for Generic Vertex Attributes TODO: put *, I, and L attrib format in one function?
+    static void                           vertex_array_attribute_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, glf::DataType type, gl::int32_t count, gl::bool_t normalized = gl::False)
+    {
+        const auto& maximumVertexAttributes = gl::get_v<glf::Data::MaximumVertexAttributes>();
+
+        if (index > maximumVertexAttributes) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
+
+        glVertexArrayAttribFormat(gl::to_underlying(vertexArray), index, count, gl::to_underlying(type), normalized, offset);
+    }
+    static void                           vertex_array_attribute_integer_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, glf::DataType type, gl::int32_t count)
+    {
+        const auto& maximumVertexAttributes = gl::get_v<glf::Data::MaximumVertexAttributes>();
+
+        if (index > maximumVertexAttributes) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
+
+        glVertexArrayAttribIFormat(gl::to_underlying(vertexArray), index, count, gl::to_underlying(type), offset);
+    }
+    static void                           vertex_array_attribute_double_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, glf::DataType type, gl::int32_t count)
+    {
+        const auto& maximumVertexAttributes = gl::get_v<glf::Data::MaximumVertexAttributes>();
+
+        if (index > maximumVertexAttributes) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
+
+        glVertexArrayAttribLFormat(gl::to_underlying(vertexArray), index, count, gl::to_underlying(type), offset);
+
+    }
+    static void                           vertex_array_vertex_buffer(gl::handle_t vertexArray, gl::handle_t buffer, gl::uint32_t index, gl::size_t stride)
+    {
+        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), index, gl::to_underlying(buffer), 0, stride);
+    }
+    static void                           vertex_array_attribute_binding(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t binding)
+    {
+        glVertexArrayAttribBinding(gl::to_underlying(vertexArray), index, binding);
+    }
+    static void                           enable_vertex_array_attribute(gl::handle_t vertexArray, gl::uint32_t index)
+    {
+        glEnableVertexArrayAttrib(gl::to_underlying(vertexArray), index);
+    }
+    static void                           disable_vertex_array_attribute(gl::handle_t vertexArray, gl::uint32_t index)
+    {
+        glDisableVertexArrayAttrib(gl::to_underlying(vertexArray), index);
+    }
+    //[10.3.4] Vertex Attribute Divisors
+    static void                           vertex_array_binding_divisor(gl::handle_t vertexArray, gl::uint32_t binding, gl::uint32_t divisor)
+    {
+        glVertexArrayBindingDivisor(gl::to_underlying(vertexArray), binding, divisor);
+    }
+    //[10.3.6] Primitive Restart
+    static void                           enable(glf::Feature feature)
+    {
+        glEnable(gl::to_underlying(feature));
+    }
+    static void                           disable(glf::Feature feature)
+    {
+        glDisable(gl::to_underlying(feature));
+    }
+    static void                           primitive_restart_index(gl::uint32_t index)
+    {
+        glPrimitiveRestartIndex(index);
+    }
+    //[10.4.0] Drawing Commands Using Vertex Arrays
+    static void                           draw_arrays(glf::Draw::Mode mode, gl::size_t first, gl::size_t vertices)
+    {
+        glDrawArrays(gl::to_underlying(mode), first, vertices);
+    }
+    static void                           draw_arrays_instanced_base_instance(glf::Draw::Mode mode, gl::size_t first, gl::size_t count, gl::size_t instanceCount, gl::uint32_t baseInstance)
+    {
+        glDrawArraysInstancedBaseInstance(gl::to_underlying(mode), first, count, instanceCount, baseInstance);
+    }
+    static void                           draw_arrays_instanced(glf::Draw::Mode mode, gl::size_t first, gl::size_t count, gl::size_t instanceCount)
+    {
+        glDrawArraysInstanced(gl::to_underlying(mode), first, count, instanceCount);
+    }
+    static void                           draw_elements(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t indices)
+    {
+        glDrawElements(gl::to_underlying(mode), indices, gl::to_underlying(type), nullptr);
+    }
+    static void                           draw_elements_instanced_base_instance(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t count, gl::size_t instanceCount, gl::uint32_t baseInstance)
+    {
+        glDrawElementsInstancedBaseInstance(gl::to_underlying(mode), count, gl::to_underlying(type), nullptr, instanceCount, baseInstance);
+    }
+    static void                           draw_elements_instanced(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t count, gl::size_t instanceCount)
+    {
+        glDrawElementsInstanced(gl::to_underlying(mode), count, gl::to_underlying(type), nullptr, instanceCount);
+    }
+    //[10.5.0] Vertex Array and Vertex Array Object Queries
+    template<glf::VertexArray::Parameter P>
+    static auto                           vertex_array_v(gl::handle_t vertexArray)
+    {
+        const auto& get_vertex_array_iv = [](gl::handle_t vertexArray, glf::VertexArray::Parameter parameter)
+            {
+                gl::int32_t value{};
+                glGetVertexArrayiv(gl::to_underlying(vertexArray), gl::to_underlying(parameter), &value);
+
+                return value;
+            };
+
+        if constexpr (P == glf::VertexArray::Parameter::ElementArrayBufferBinding) return gl::handle_t{ get_vertex_array_iv(vertexArray, P) };
+    }
+    template<glf::VertexArray::IndexedParameter P>
+    static auto                           vertex_array_indexed_v(gl::handle_t vertexArray, gl::uint32_t index)
+    {
+        const auto& get_vertex_array_indexed_iv   = [](gl::handle_t vertexArray, glf::VertexArray::IndexedParameter parameter, gl::uint32_t index)
+            {
+                gl::int32_t value{};
+                glGetVertexArrayIndexediv(gl::to_underlying(vertexArray), index, gl::to_underlying(parameter), &value);
+
+                return value;
+            };
+        const auto& get_vertex_array_indexed64_iv = [](gl::handle_t vertexArray, glf::VertexArray::IndexedParameter parameter, gl::uint32_t index)
+            {
+                gl::int64_t value{};
+                glGetVertexArrayIndexed64iv(gl::to_underlying(vertexArray), index, gl::to_underlying(parameter), &value);
+
+                return value;
+            };
+
+        if constexpr (P == glf::VertexArray::IndexedParameter::Enabled)        return static_cast<gl::bool_t>            (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::Stride)         return static_cast<gl::size_t>            (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::Size)           return static_cast<gl::size_t>            (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::Type)           return static_cast<glf::VertexArray::Type>(get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::IsNormalized)   return static_cast<gl::bool_t>            (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::IsIntegerData)  return static_cast<gl::bool_t>            (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::IsLongData)     return static_cast<gl::bool_t>            (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::Divisor)        return static_cast<gl::uint32_t>          (get_vertex_array_indexed_iv(vertexArray, P, index));
+        if constexpr (P == glf::VertexArray::IndexedParameter::RelativeOffset) return static_cast<gl::uint32_t>          (get_vertex_array_indexed_iv(vertexArray, P, index));
+        
+        if constexpr (P == glf::VertexArray::IndexedParameter::BindingOffset); return static_cast<gl::uint64_t>          (get_vertex_array_indexed64_iv(vertexArray, P, index));
+    }
+    template<glf::VertexAttribute::Parameter P>
+    static auto                           vertex_attribute_v(gl::uint32_t index)
+    {
+        const auto& get_vertex_attribute_iv = [](glf::VertexAttribute::Parameter P, gl::uint32_t index)
+            {
+                gl::int32_t value{};
+                glGetVertexAttribIiv(index, gl::to_underlying(P), &value);
+
+                return value;
+            };
+        const auto& get_vertex_attribute_uiv = [](glf::VertexAttribute::Parameter P, gl::uint32_t index)
+            {
+                gl::uint32_t value{};
+                glGetVertexAttribIuiv(index, gl::to_underlying(P), &value);
+
+                return value;
+            };
+
+        if constexpr (P == glf::VertexAttribute::Parameter::Enabled)        return static_cast<gl::bool_t>   (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::Size)           return static_cast<gl::int32_t>  (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::Stride)         return static_cast<gl::uint32_t> (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::Type)           return static_cast<glf::DataType>(get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::IsNormalized)   return static_cast<gl::bool_t>   (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::IsIntegerData)  return static_cast<gl::bool_t>   (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::IsLongData)     return static_cast<gl::bool_t>   (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::Divisor)        return static_cast<gl::uint32_t> (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::BufferBinding)  return static_cast<gl::uint32_t> (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::Binding)        return static_cast<gl::uint32_t> (get_vertex_attribute_iv(P, index));
+        if constexpr (P == glf::VertexAttribute::Parameter::RelativeOffset) return static_cast<gl::uint32_t> (get_vertex_attribute_iv(P, index));
+    }
+    //[10.9.0] Conditional Rendering
+    static void                           begin_conditional_render(gl::handle_t query, glf::Query::Mode mode)
+    {
+        glBeginConditionalRender(gl::to_underlying(query), gl::to_underlying(mode));
+    }
+    static void                           end_conditional_render()
+    {
+        glEndConditionalRender();
+    }
+    //[11.1.1] Vertex Attributes
+    static void                           bind_attribute_location(gl::handle_t program, gl::uint32_t index, const std::string& identifier)
+    {
+        const auto* cstr = identifier.c_str();
+        glBindAttribLocation(gl::to_underlying(program), index, cstr);
+    }
+    static auto                           active_attribute(gl::handle_t program, gl::uint32_t index, gl::size_t, gl::int32_t, gl::enum_t)
+    {
+        const auto& maximumLength = gl::get_program_v<glf::Program::Parameter::ActiveAttributeMaximumLength>(program);
+
+        std::string name{};
+        gl::size_t  length{};
+        gl::size_t  size{};
+        gl::enum_t  type{};
+
+        name.resize(maximumLength);
+
+        glGetActiveAttrib(gl::to_underlying(program), index, maximumLength, &length, &size, &type, name.data());
+
+        if (length < maximumLength) name.resize(static_cast<fox::size_t>(length) - 1u);
+
+        __debugbreak();
+        //struct result{ std::string name; glf::DataType type; gl::size_t size; };
+        //return result{ name, glf::DataType{ type }, size };
+    }
+    static auto                           get_attribute_location(gl::handle_t program)
+    {
+        gl::char_t* identifier{};
+        glGetAttribLocation(gl::to_underlying(program), identifier);
+
+        if (identifier) return std::string{ identifier };
+        else            return std::string{};
+    }
+    //11.1.2] Vertex Shader Variables
+    template<gl::uint32_t N>
+    static void                           transform_feedback_varyings(gl::handle_t program, std::span<const std::string, N> varyings, glf::TransformFeedback::BufferMode mode)
+    {
+        //const auto& transform = [](const std::string& identifier) { return identifier.c_str(); };
+        //std::transform(varyings.begin(), varyings.end(), names.begin(), transform);
+
+        std::array<const gl::char_t*, N> names{};
+
+        std::uint32_t index{};
+        for (const auto& varying : varyings)
+        {
+            names.at(index++) = varying.c_str();
+        }
+
+        glTransformFeedbackVaryings(gl::to_underlying(program), names.size(), names.data(), gl::to_underlying(mode));
+    }
+    static auto                           get_transform_feedback_varying(gl::handle_t program, gl::uint32_t index)
+    {
+        const auto& maximumIndex  = gl::get_program_v<glf::Program::Parameter::TransformFeedbackVaryings>(program);
+        const auto& maximumLength = gl::get_program_v<glf::Program::Parameter::TransformFeedbackVaryingMaximumLength>(program);
+
+        if (index >= maximumIndex) throw std::invalid_argument{ "The given index is out of range!" };
+
+        std::string name{};
+        gl::size_t  length{};
+        gl::size_t  size{};
+        gl::enum_t  type{};
+
+        name.resize(maximumLength);
+
+        glGetTransformFeedbackVarying(gl::to_underlying(program), index, maximumLength, &length, &size, &type, name.data());
+
+        if (length < maximumLength) name.resize(static_cast<fox::size_t>(length) - 1u);
+        glf::DataType t{ type };
+        __debugbreak();
+        //struct result{ std::string identifier; glf::DataType type; gl::size_t size; };
+        //return result{ name, glf::DataType{ type }, size };
+    }
+    //[11.1.3] Shader Execution
+    static void                           validate_program(gl::handle_t program)
+    {
+        glValidateProgram(gl::to_underlying(program));
+    }
+    static void                           validate_program_pipeline(gl::handle_t pipeline)
+    {
+        glValidateProgramPipeline(gl::to_underlying(pipeline));
+    }
+    //[11.2.2] Tessellation Primitive Generation
+    template<glf::Patch::Parameter P>
+    static void                           patch_parameter(std::span<const gl::float32_t, 4> values)
+    {
+        glPatchParameterfv(gl::to_underlying(P), values.data());
+    }
+
+
+
+    //[13.0.0] Fixed-Function Vertex Post-Processing
+    //[13.3.1] Transform Feedback Objects
     static gl::handle_t                   create_transform_feedback()
     {
-        gl::uint32_t transformFeedback{};
-        glCreateTransformFeedbacks(1, &transformFeedback);
+        gl::uint32_t handle{};
+        glCreateTransformFeedbacks(1, &handle);
 
-        return gl::handle_t{ transformFeedback };
+        return gl::handle_t{ handle };
     }
     static void                           delete_transform_feedback(gl::handle_t transformFeedback)
     {
         if (transformFeedback == gl::NullObject) return;
 
-        const auto& uv = std::to_underlying(transformFeedback);
-        glDeleteTransformFeedbacks(1, &uv);
-    }
-    static void                           bind_transform_feedback(gl::handle_t buffer)
-    {
-        glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, static_cast<gl::uint32_t>(buffer));
+        const auto& uv = gl::to_underlying(transformFeedback);
+        glDeleteTransformFeedbacks(gl::size_t{ 1 }, &uv);
     }
     static void                           begin_transform_feedback(glf::TransformFeedback::PrimitiveMode mode)
     {
-        glBeginTransformFeedback(static_cast<gl::enum_t>(mode));
+        glBeginTransformFeedback(gl::to_underlying(mode));
+    }
+    static void                           end_transform_feedback()
+    {
+        glEndTransformFeedback();
     }
     static void                           resume_transform_feedback()
     {
@@ -1998,200 +2212,222 @@ namespace fox::gfx::api::gl
     {
         glPauseTransformFeedback();
     }
-    static void                           end_transform_feedback()
+    static void                           transform_feedback_buffer_range(gl::handle_t transformFeedback, gl::handle_t buffer, gl::uint32_t index, gl::sizeptr_t size, gl::intptr_t offset)
     {
-        glEndTransformFeedback();
+        glTransformFeedbackBufferRange(gl::to_underlying(transformFeedback), index, gl::to_underlying(buffer), offset, size);
     }
-#pragma endregion
-
-#pragma region VertexArray
-    static gl::handle_t                   create_vertex_array()
+    static void                           transform_feedback_buffer_base(gl::handle_t transformFeedback, gl::handle_t buffer, gl::uint32_t index)
     {
-        gl::uint32_t vertexArray{};
-        glCreateVertexArrays(1, &vertexArray);
-
-        return gl::handle_t{ vertexArray };
+        glTransformFeedbackBufferBase(gl::to_underlying(transformFeedback), index, gl::to_underlying(buffer));
     }
-    static void                           delete_vertex_array(gl::handle_t vertexArray)
-    {
-        if (vertexArray == gl::NullObject) return;
-
-        const auto& uv = std::to_underlying(vertexArray);
-        glDeleteVertexArrays(1, &uv);
-    }
-    static void                           bind_vertex_array(gl::handle_t vertexArray)
-    {
-        glBindVertexArray(static_cast<gl::uint32_t>(vertexArray));
-    }
-    static void                           vertex_array_vertex_buffer(gl::handle_t vertexArray, gl::handle_t buffer, gl::uint32_t index, gl::size_t stride)
-    {
-        glVertexArrayVertexBuffer(static_cast<gl::uint32_t>(vertexArray), index, static_cast<gl::uint32_t>(buffer), 0, stride);
-    }
-    static void                           enable_vertex_array_attribute(gl::handle_t vertexArray, gl::uint32_t index)
-    {
-        glEnableVertexArrayAttrib(static_cast<gl::uint32_t>(vertexArray), index);
-    }
-    static void                           disable_vertex_array_attribute(gl::handle_t vertexArray, gl::uint32_t index)
-    {
-        glDisableVertexArrayAttrib(static_cast<gl::uint32_t>(vertexArray), index);
-    }
-    static void                           vertex_array_attribute_format(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t offset, glf::DataType type, gl::int32_t count, gl::bool_t normalized)
-    {
-        glVertexArrayAttribFormat(static_cast<gl::uint32_t>(vertexArray), index, count, std::to_underlying(type), normalized, offset);
-    }
-    static void                           vertex_array_attribute_binding(gl::handle_t vertexArray, gl::uint32_t index, gl::uint32_t binding)
-    {
-        glVertexArrayAttribBinding(static_cast<gl::uint32_t>(vertexArray), index, binding);
-    }
-    static void                           vertex_array_element_buffer(gl::handle_t vertexArray, gl::handle_t buffer)
-    {
-        glVertexArrayElementBuffer(static_cast<gl::uint32_t>(vertexArray), static_cast<gl::uint32_t>(buffer));
-    }
-    static void                           vertex_array_binding_divisor(gl::handle_t vertexArray, gl::uint32_t binding, gl::uint32_t divisor)
-    {
-        glVertexArrayBindingDivisor(static_cast<gl::uint32_t>(vertexArray), binding, divisor);
-    }
-#pragma endregion
-
-#pragma region RenderBuffer
-#pragma endregion
-
-#pragma region FrameBuffer
-#pragma endregion
-
-
-
-
-
-    //Rendering
-    static void                           draw_arrays(glf::Draw::Mode mode, gl::size_t first, gl::size_t vertices)
-    {
-        glDrawArrays(static_cast<gl::enum_t>(mode), first, vertices);
-    }
-    static void                           draw_elements(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t indices)
-    {
-        glDrawElements(static_cast<gl::enum_t>(mode), indices, static_cast<gl::enum_t>(type), nullptr);
-    }
-    static void                           draw_elements_base_vertex(glf::Draw::Mode mode, glf::Draw::Type type, gl::size_t indices, gl::uint32_t offset)
-    {
-        glDrawElementsBaseVertex(static_cast<gl::enum_t>(mode), indices, static_cast<gl::enum_t>(type), nullptr, offset);
-    }
-    static void                           draw_elements_range(glf::Draw::Mode mode, glf::Draw::Type type, const gl::Vector2u& range, gl::size_t indices)
-    {
-        glDrawRangeElements(static_cast<gl::enum_t>(mode), range.x, range.y, indices, static_cast<gl::enum_t>(type), nullptr);
-    }
-    static void                           draw_elements_range_base_vertex(glf::Draw::Mode mode, glf::Draw::Type type, const gl::Vector2u& range, gl::size_t indices, gl::uint32_t offset)
-    {
-        glDrawRangeElementsBaseVertex(static_cast<gl::enum_t>(mode), range.x, range.y, indices, static_cast<gl::enum_t>(type), nullptr, offset);
-    }
+    //[13.3.3]
     static void                           draw_transform_feedback(gl::handle_t transformFeedback, glf::Draw::Mode mode)
     {
-        glDrawTransformFeedback(static_cast<gl::enum_t>(mode), static_cast<gl::uint32_t>(transformFeedback));
+        glDrawTransformFeedback(gl::to_underlying(mode), gl::to_underlying(transformFeedback));
     }
-    static void                           draw_transform_feedback_stream(gl::handle_t transformFeedback, gl::handle_t stream, glf::Draw::Mode mode)
+    static void                           draw_transform_feedback_instanced(gl::handle_t transformFeedback, glf::Draw::Mode mode, gl::size_t instanceCount)
     {
-        glDrawTransformFeedbackStream(static_cast<gl::enum_t>(mode), static_cast<gl::uint32_t>(transformFeedback), static_cast<gl::uint32_t>(stream));
+        glDrawTransformFeedbackInstanced(gl::to_underlying(mode), gl::to_underlying(transformFeedback), instanceCount);
     }
-    
-    static void                           blit_framebuffer(gl::handle_t source, gl::handle_t destination, const gl::Vector4u& sourceArea, const gl::Vector4u& destinationArea, glf::Buffer::Mask mask, glf::FrameBuffer::Filter filter)
+    static void                           draw_transform_feedback_stream(gl::handle_t transformFeedback, glf::Draw::Mode mode, gl::uint32_t stream)
     {
-        glBlitNamedFramebuffer(
-            static_cast<gl::uint32_t>(source),
-            static_cast<gl::uint32_t>(destination),
-            sourceArea.x,      sourceArea.y,      sourceArea.z,      sourceArea.w,
-            destinationArea.x, destinationArea.y, destinationArea.z, destinationArea.w,
-            mask, static_cast<gl::enum_t>(filter));
+        glDrawTransformFeedbackStream(gl::to_underlying(mode), gl::to_underlying(transformFeedback), stream);
     }
-
-    //Conditional Rendering
-    static void                           begin_conditional_render(gl::handle_t query, glf::Query::Mode mode)
+    static void                           draw_transform_feedback_stream_instanced(gl::handle_t transformFeedback, glf::Draw::Mode mode, gl::uint32_t stream, gl::size_t instanceCount)
     {
-        glBeginConditionalRender(static_cast<gl::uint32_t>(query), static_cast<gl::enum_t>(mode));
+        glDrawTransformFeedbackStreamInstanced(gl::to_underlying(mode), gl::to_underlying(transformFeedback), stream, instanceCount);
     }
-    static void                           end_conditional_render()
+    //[13.6.0] Flatshading
+    static void                           provoking_vertex(glf::ProvokingVertex provokingVertex)
     {
-        glEndConditionalRender();
+        glProvokingVertex(gl::to_underlying(provokingVertex));
     }
-
-    //Compute
-    static void                           dispatch_compute(const gl::Vector3u& groups)
+    //[13.7.0] Primitive Clipping
+    static void                           clip_control(glf::Clip::Origin origin, glf::Clip::DepthMode mode)
     {
-        glDispatchCompute(groups.x, groups.y, groups.z);
+        glClipControl(gl::to_underlying(origin), gl::to_underlying(mode));
     }
-    static void                           dispatch_compute_indirect(gl::intptr_t offset)
+    //[13.8.1] Controlling the Viewport
+    static void                           depth_range_array_v(gl::uint32_t first, std::span<const gl::Vector2d> ranges)
     {
-        glDispatchComputeIndirect(offset);
+        glDepthRangeArrayv(first, ranges.size(), glm::value_ptr(*ranges.data()));
     }
-
-
-
-
-
-
-
-
-
-    static void test()
+    static void                           depth_range_indexed(gl::uint32_t index, const gl::Vector2d& range)
     {
-        auto res1 = gl::get_v<glf::Data::ActiveTexture>();
-        auto res2 = gl::get_v<glf::Data::AliasedLineWidthRange>();
-        auto res3 = gl::get_v<glf::Data::CompressedTextureFormats>();
-        auto res4 = gl::get_v<glf::Data::VertexBindingOffset, 15>();
-
-        auto res5 = gl::vertex_attribute_iv<glf::VertexAttribute::Parameter::Type, 0>();
+        glDepthRangeIndexed(index, range.x, range.y);
     }
-
-#pragma region Control
-    static void                           enable(glf::Feature feature)
+    static void                           depth_range(const gl::Vector2d& range)
     {
-        glEnable(static_cast<gl::enum_t>(feature));
-    }
-    static void                           disable(glf::Feature feature)
-    {
-        glDisable(static_cast<gl::enum_t>(feature));
-    }
-
-    static void                           blend_color(const gl::Vector4f& color)
-    {
-        glBlendColor(color.r, color.g, color.b, color.a);
-    }
-    static void                           blend_function(glf::Blending::Factor source, glf::Blending::Factor destination)
-    {
-        glBlendFunc(static_cast<gl::enum_t>(source), static_cast<gl::enum_t>(destination));
-    }
-    static void                           blend_function_separate(glf::Blending::Factor sourceRGB, glf::Blending::Factor sourceAlpha, glf::Blending::Factor destinationRGB, glf::Blending::Factor destinationAlpha)
-    {
-        glBlendFuncSeparate(static_cast<gl::enum_t>(sourceRGB), static_cast<gl::enum_t>(destinationRGB), static_cast<gl::enum_t>(sourceAlpha), static_cast<gl::enum_t>(destinationAlpha));
-    }
-    static void                           blend_equation(glf::Blending::Equation equation)
-    {
-        glBlendEquation(static_cast<gl::enum_t>(equation));
-    }
-    static void                           blend_equation_separate(glf::Blending::Equation equationRGB, glf::Blending::Equation equationAlpha)
-    {
-        glBlendEquationSeparate(static_cast<gl::enum_t>(equationRGB), static_cast<gl::enum_t>(equationAlpha));
-    }
-
-    static void                           depth_function(glf::DepthFunction depthFunction)
-    {
-        glDepthFunc(static_cast<gl::enum_t>(depthFunction));
+        glDepthRange(range.x, range.y);
     }
     static void                           depth_range(const gl::Vector2f& range)
     {
         glDepthRangef(range.x, range.y);
     }
-    static void                           depth_mask(gl::bool_t flag)
+    static void                           viewport_array_v(gl::uint32_t first, std::span<const gl::Vector2f> ranges)
     {
-        glDepthMask(flag);
+        glViewportArrayv(first, ranges.size(), glm::value_ptr(*ranges.data()));
+    }
+    static void                           viewport_indexed(gl::uint32_t index, const gl::Area<gl::float32_t>& area)
+    {
+        glViewportIndexedf(index, area.origin.x, area.origin.y, area.extent.x, area.extent.y);
+    }
+    static void                           viewport(const gl::Area<gl::uint32_t>& area)
+    {
+        glViewport(area.origin.x, area.origin.y, area.extent.x, area.extent.y);
     }
 
+
+
+    //[14.0.0] Fixed-Function Primitive Assembly and Rasterization
+    //[14.3.1] Multisampling
+    static auto                           multisample_v(gl::uint32_t index)
+    {
+        gl::Vector2f value{};
+        glGetMultisamplefv(gl::to_underlying(glf::Multisample::Parameter::SamplePosition), index, glm::value_ptr(value));
+
+        return value;
+    }
+    static void                           minimum_sample_shading(gl::float32_t value)
+    {
+        glMinSampleShading(value);
+    }
+    //[14.4.0] Points
+    static void                           point_size(gl::float32_t size)
+    {
+        glPointSize(size);
+    }
+    template<glf::Point::Parameter, typename... Args> 
+    static void                           point_parameter(Args... args) = delete;
+    template<> 
+    static void                           point_parameter<glf::Point::Parameter::FadeThresholdSize>(gl::float32_t value)
+    {
+        glPointParameterf(gl::to_underlying(glf::Point::Parameter::FadeThresholdSize), value);
+    }
+    template<> 
+    static void                           point_parameter<glf::Point::Parameter::SpriteCoordinateOrigin>(glf::Point::CoordinateOrigin origin)
+    {
+        glPointParameteri(gl::to_underlying(glf::Point::Parameter::SpriteCoordinateOrigin), gl::to_underlying(origin));
+    }
+    //[14.5.0] Line Segments
+    static void                           line_width(gl::float32_t value)
+    {
+        glLineWidth(value);
+    }
+    //[14.6.0] Polygons
+    static void                           front_face(glf::Orientation orientation)
+    {
+        glFrontFace(gl::to_underlying(orientation));
+    }
+    static void                           cull_face(glf::Culling::Face face)
+    {
+        glCullFace(gl::to_underlying(face));
+    }
+    //[14.6.4] Options Controlling Polygon Rasterization
+    static void                           polygon_mode(glf::Polygon::Mode mode)
+    {
+        glPolygonMode(gl::to_underlying(glf::Polygon::Face::FrontAndBack), gl::to_underlying(mode));
+    }
+    static void                           polygon_offset(gl::float32_t factor, gl::float32_t units, gl::float32_t clamp = 0.0f)
+    {
+        glPolygonOffsetClamp(factor, units, clamp);
+    }
+    //[14.9.2] Scissor Test
+    static void                           scissor(const gl::Area<gl::uint32_t>& area)
+    {
+        glScissor(area.origin.x, area.origin.y, area.extent.x, area.extent.y);
+    }
+    
+
+    
+    //[15.2.0] Shader Execution
+    //[15.2.3] Shader Outputs
+    static void                           bind_frag_data_location(gl::handle_t program, gl::uint32_t binding, const std::string& identifier, gl::uint32_t index = 0)
+    {
+        const auto* cstr = identifier.c_str();
+        glBindFragDataLocationIndexed(gl::to_underlying(program), binding, index, cstr);
+    }
+    static void                           get_frag_data_location(gl::handle_t program, const std::string& identifier)
+    {
+        const auto& cstr = identifier.c_str();
+        glGetFragDataLocation(gl::to_underlying(program), cstr);
+    }
+    static void                           get_frag_data_index(gl::handle_t program, const std::string& identifier)
+    {
+        const auto& cstr = identifier.c_str();
+        glGetFragDataIndex(gl::to_underlying(program), cstr);
+    }
+
+
+
+    //[17.0.0] Writing Fragments and Samples to the Framebuffer
+    //[17.3.3] Stencil Test
     static void                           stencil_function(glf::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
     {
-        glStencilFunc(static_cast<gl::enum_t>(function), value, mask);
+        glStencilFunc(gl::to_underlying(function), value, mask);
     }
     static void                           stencil_function_separate(glf::Stencil::Face face, glf::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
     {
-        glStencilFuncSeparate(static_cast<gl::enum_t>(face), static_cast<gl::enum_t>(function), value, mask);
+        glStencilFuncSeparate(gl::to_underlying(face), gl::to_underlying(function), value, mask);
+    }
+    static void                           stencil_operation(glf::Stencil::Action onStencilFail, glf::Stencil::Action onDepthFail, glf::Stencil::Action onDepthStencilPass)
+    {
+        glStencilOp(gl::to_underlying(onStencilFail), gl::to_underlying(onDepthFail), gl::to_underlying(onDepthStencilPass));
+    }
+    static void                           stencil_operation_separate(glf::Stencil::Face face, glf::Stencil::Action onStencilFail, glf::Stencil::Action onDepthFail, glf::Stencil::Action onDepthStencilPass)
+    {
+        glStencilOpSeparate(gl::to_underlying(face), gl::to_underlying(onStencilFail), gl::to_underlying(onDepthFail), gl::to_underlying(onDepthStencilPass));
+    }
+    //[17.3.4] Depth Buffer Test
+    static void                           depth_function(glf::DepthFunction depthFunction)
+    {
+        glDepthFunc(gl::to_underlying(depthFunction));
+    }
+    //[17.3.6] Blending
+    static void                           blend_equation(glf::Blending::Equation equation)
+    {
+        glBlendEquation(gl::to_underlying(equation));
+    }
+    static void                           blend_equation_separate(glf::Blending::Equation equationRGB, glf::Blending::Equation equationAlpha)
+    {
+        glBlendEquationSeparate(gl::to_underlying(equationRGB), gl::to_underlying(equationAlpha));
+    }
+    //There are blend equation functions for individual buffers. Add -here-?
+    static void                           blend_function(glf::Blending::Factor source, glf::Blending::Factor destination)
+    {
+        glBlendFunc(gl::to_underlying(source), gl::to_underlying(destination));
+    }
+    static void                           blend_function_separate(glf::Blending::Factor sourceRGB, glf::Blending::Factor sourceAlpha, glf::Blending::Factor destinationRGB, glf::Blending::Factor destinationAlpha)
+    {
+        glBlendFuncSeparate(gl::to_underlying(sourceRGB), gl::to_underlying(destinationRGB), gl::to_underlying(sourceAlpha), gl::to_underlying(destinationAlpha));
+    }
+    //There are blend functions for individual buffers. Add -here-?
+    static void                           blend_color(const gl::Vector4f& color)
+    {
+        glBlendColor(color.r, color.g, color.b, color.a);
+    }
+    //[17.3.9] Logical Operation
+    static void                           logical_pixel_operation(glf::Logic::Operation operation)
+    {
+        glLogicOp(gl::to_underlying(operation));
+    }
+    //[17.4.1] Selecting Buffers for Writing
+    static void                           frame_buffer_draw_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Source source)
+    {
+        glNamedFramebufferDrawBuffer(gl::to_underlying(frameBuffer), gl::to_underlying(source));
+    }
+    static void                           frame_buffer_draw_buffers(gl::handle_t frameBuffer, std::span<const glf::FrameBuffer::Source> sources)
+    {
+        glNamedFramebufferDrawBuffers(gl::to_underlying(frameBuffer), sources.size(), reinterpret_cast<const std::underlying_type_t<glf::FrameBuffer::Source>*>(sources.data()));
+    }
+    //[17.4.2] Fine Control of Buffer Updates
+    static void color_mask(const gl::Vector4b& mask)
+    {
+        glColorMask(mask.r, mask.g, mask.b, mask.a);
+    }
+    static void                           depth_mask(gl::bool_t flag)
+    {
+        glDepthMask(flag);
     }
     static void                           stencil_mask(gl::uint32_t mask)
     {
@@ -2199,17 +2435,9 @@ namespace fox::gfx::api::gl
     }
     static void                           stencil_mask_separate(glf::Stencil::Face face, gl::uint32_t mask)
     {
-        glStencilMaskSeparate(static_cast<gl::enum_t>(face), mask);
+        glStencilMaskSeparate(gl::to_underlying(face), mask);
     }
-    static void                           stencil_operation(glf::Stencil::Action onStencilFail, glf::Stencil::Action onDepthFail, glf::Stencil::Action onDepthStencilPass)
-    {
-        glStencilOp(static_cast<gl::enum_t>(onStencilFail), static_cast<gl::enum_t>(onDepthFail), static_cast<gl::enum_t>(onDepthStencilPass));
-    }
-    static void                           stencil_operation_separate(glf::Stencil::Face face, glf::Stencil::Action onStencilFail, glf::Stencil::Action onDepthFail, glf::Stencil::Action onDepthStencilPass)
-    {
-        glStencilOpSeparate(static_cast<gl::enum_t>(face), static_cast<gl::enum_t>(onStencilFail), static_cast<gl::enum_t>(onDepthFail), static_cast<gl::enum_t>(onDepthStencilPass));
-    }
-
+    //[17.4.3] Clearing the Buffers
     static void                           clear(glf::Buffer::Mask mask)
     {
         glClear(mask);
@@ -2226,73 +2454,89 @@ namespace fox::gfx::api::gl
     {
         glClearStencil(index);
     }
-    
-    static void                           scissor(const gl::Vector4u& area)
+    static void                           clear_frame_buffer(gl::handle_t frameBuffer, gl::int32_t index, gl::ClearValue value)
     {
-        glScissor(area.x, area.y, area.z, area.w);
+        //TODO
+        __debugbreak();
+
+        if (std::holds_alternative<gl::color_t<gl::int32_t>>(value))
+        {
+            const auto& v = std::get<gl::color_t<gl::int32_t>>(value);
+
+            glClearNamedFramebufferiv(gl::to_underlying(frameBuffer), v.buffer, index, glm::value_ptr(v.value));
+        }
+
+        //
     }
-    static void                           viewport(const gl::Vector4u& area)
+    //[17.4.4] Invalidating Frame Buffers
+    static void                           invalidate_frame_buffer_data(gl::handle_t frameBuffer, std::span<const glf::FrameBuffer::Attachment> attachments, std::optional<gl::Area<gl::uint32_t>> area)
     {
-        glViewport(area.x, area.y, area.z, area.w);
+        if (area.has_value())
+        {
+            const auto& v = area.value();
+            glInvalidateNamedFramebufferSubData(gl::to_underlying(frameBuffer), attachments.size(), reinterpret_cast<const std::underlying_type_t<glf::FrameBuffer::Attachment>*>(attachments.data()), v.origin.x, v.origin.y, v.extent.x, v.extent.y);
+        }
+        else glInvalidateNamedFramebufferData(gl::to_underlying(frameBuffer), attachments.size(), reinterpret_cast<const std::underlying_type_t<glf::FrameBuffer::Attachment>*>(attachments.data()));
     }
 
-    static void                           polygon_mode(glf::Polygon::Mode mode)
-    {
-        glPolygonMode(GL_FRONT_AND_BACK, static_cast<gl::enum_t>(mode));
-    }
-    static void                           polygon_offset(gl::float32_t factor, gl::float32_t units)
-    {
-        glPolygonOffset(factor, units);
-    }
 
-    static void                           point_size(gl::float32_t size)
-    {
-        glPointSize(size);
-    }
-    static void                           line_width(gl::float32_t width)
-    {
-        glLineWidth(width);
-    }
 
-    static void                           cull_face(glf::Culling::Face face)
+    //Chapter 18    - Reading and Copying Pixels
+    //Section  2. 1 - Reading Pixels
+    static void                           frame_buffer_read_buffer(gl::handle_t frameBuffer, glf::FrameBuffer::Source source)
     {
-        glCullFace(static_cast<gl::enum_t>(face));
+        glNamedFramebufferReadBuffer(gl::to_underlying(frameBuffer), gl::to_underlying(source));
     }
-    static void                           front_face(glf::Orientation orientation)
+    static void                           read_pixels(glf::PixelData::Format format, glf::PixelData::Type type, gl::Area<gl::uint32_t> area)
     {
-        glFrontFace(static_cast<gl::enum_t>(orientation));
-    }
+        const auto& size = gl::Vector2f{ area.extent.x - area.origin.x, area.extent.y - area.origin.y };
 
-    static void                           clip_control(glf::Clip::Origin origin, glf::Clip::DepthMode mode)
-    {
-        glClipControl(static_cast<gl::enum_t>(origin), static_cast<gl::enum_t>(mode));
+        __debugbreak();
+        //glReadnPixels(area.origin.x, area.origin.y, area.extent.x, area.extent.y, gl::to_underlying(format), gl::to_underlying(type), );
     }
-
+    //[18.2.8] Final Conversion
     static void                           clamp_color(gl::bool_t value)
     {
-        glClampColor(GL_CLAMP_READ_COLOR, value);
+        glClampColor(gl::to_underlying(glf::ClampColor::Read), value);
     }
-
-    static void                           provoking_vertex(glf::ProvokingVertex provokingVertex)
+    //[18.3.1] Blitting Pixel Rectangles
+    static void                           blit_framebuffer(gl::handle_t source, gl::handle_t destination, const gl::Area<gl::uint32_t> sourceArea, const gl::Area<gl::uint32_t> destinationArea, glf::Buffer::Mask mask, glf::FrameBuffer::Filter filter)
     {
-        glProvokingVertex(static_cast<gl::enum_t>(provokingVertex));
+        glBlitNamedFramebuffer(
+            gl::to_underlying(source),
+            gl::to_underlying(destination),
+            sourceArea.origin.x,      sourceArea.origin.y,      sourceArea.extent.x,      sourceArea.extent.y,
+            destinationArea.origin.x, destinationArea.origin.y, destinationArea.extent.x, destinationArea.extent.y,
+            mask, gl::to_underlying(filter));
     }
-    static void                           primitive_restart_index(gl::uint32_t index)
+    //[18.3.2] Copying Between Images
+    static void copy_image_sub_data(gl::handle_t source, glf::Texture::Target sourceTarget, gl::uint32_t sourceLevel, gl::Volume<gl::uint32_t> sourceVolume, gl::handle_t destination, glf::Texture::Target destinationTarget, gl::uint32_t destinationLevel, gl::Volume<gl::uint32_t> destinationVolume)
     {
-        glPrimitiveRestartIndex(index);
+        __debugbreak(); //prob wrong
+
+        glCopyImageSubData(
+            gl::to_underlying(source),      gl::to_underlying(sourceTarget),      sourceLevel, 
+            sourceVolume.origin.x,           sourceVolume.origin.y,                 sourceVolume.origin.z,
+            gl::to_underlying(destination), gl::to_underlying(destinationTarget), destinationLevel,
+            destinationVolume.origin.x,      destinationVolume.origin.y,            destinationVolume.origin.z, 
+            sourceVolume.extent.x,           sourceVolume.extent.y,                 sourceVolume.extent.z);
     }
 
-    static void                           patch_parameter(glf::Patch::Parameter parameter, gl::int32_t value)
+
+
+    //[19.0.0] Compute Shaders
+    static void dispatch_compute(const gl::Vector3u& groups)
     {
-        glPatchParameteri(static_cast<gl::enum_t>(parameter), value);
+        glDispatchCompute(groups.x, groups.y, groups.z);
     }
-#pragma endregion
+    static void dispatch_compute_indirect(gl::intptr_t offset)
+    {
+        glDispatchComputeIndirect(offset);
+    }
 
 
 
-
-
-    //Debug
+    //Chapter 20 - Debug Output
     static void                           debug_callback(gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* user_param)
     {
         const auto& sourceMessage   = [source]() -> std::string
@@ -2347,11 +2591,11 @@ namespace fox::gfx::api::gl
     }
     static void                           debug_message_control(gl::bool_t state, glf::Debug::Source source, glf::Debug::Type type, glf::Debug::Severity severity)
     {
-        glDebugMessageControl(static_cast<gl::enum_t>(source), static_cast<gl::enum_t>(type), static_cast<gl::enum_t>(severity), 0, nullptr, state);
+        glDebugMessageControl(gl::to_underlying(source), gl::to_underlying(type), gl::to_underlying(severity), 0, nullptr, state);
     }
     static void                           debug_message_insert(gl::uint32_t id, glf::Debug::Type type, glf::Debug::Severity severity, std::string_view message)
     {
-        glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, static_cast<gl::enum_t>(type), id, static_cast<gl::enum_t>(severity), static_cast<gl::size_t>(message.length()), message.data());
+        glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, gl::to_underlying(type), id, gl::to_underlying(severity), static_cast<gl::size_t>(message.length()), message.data());
     }
     static void                           push_debug_group(gl::uint32_t id, std::string_view message)
     {
@@ -2361,6 +2605,45 @@ namespace fox::gfx::api::gl
     {
         glPopDebugGroup();
     }
+    static void                           object_label(gl::handle_t handle, glf::Object::Type type, const std::string& identifier)
+    {
+        const auto* cstr = identifier.c_str();
+        glObjectLabel(gl::to_underlying(type), gl::to_underlying(handle), identifier.length(), cstr);
+    }
+    static void                           object_pointer_label(gl::sync_t sync, const std::string& identifier)
+    {
+        const auto* cstr = identifier.c_str();
+        glObjectPtrLabel(sync, identifier.length(), cstr);
+    }
+    static void                           get_debug_message_log()
+    {
+        __debugbreak();
+        //glGetDebugMessageLog()
+    }
+    static void                           get_object_label()
+    {
+        __debugbreak();
+        //glGetObjectLabel();
+    }
+    static void                           get_object_pointer_label()
+    {
+        __debugbreak();
+        //glGetObjectPtrLabel();
+    }
+
+
+
+    //[21.5.0] Hints
+    static void hint(glf::Hint::Target target, glf::Hint::Mode mode)
+    {
+        glHint(gl::to_underlying(target), gl::to_underlying(mode));
+    }
+
+
+
+
+
+
 
 
 

@@ -10,10 +10,10 @@ namespace fox::gfx::api::gl
     template<typename T>
     struct color_t
     {
-        using Vector = glm::vec<4, T, glm::packed_highp>;
+        using vector_t = glm::vec<4, T, glm::packed_highp>;
 
-        gl::uint32_t buffer{};
-        Vector       value{};
+        gl::enum_t       buffer{};
+        gl::Vector<T, 4> value{};
     };
     struct depth_t
     {

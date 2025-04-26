@@ -27,7 +27,7 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_frame_buffer();
 
-            std::vector<gl::enum_t> colorBufferIndices{};
+            std::vector<glf::FrameBuffer::Source> colorBufferIndices{};
             std::ranges::for_each(manifests, [&, this](const Manifest& manifest)
                 {
                     const auto& [identifier, format] = manifest;
@@ -84,15 +84,15 @@ namespace fox::gfx::api::gl
         FrameBuffer& operator=(FrameBuffer&&) noexcept = default;
 
     private:
-        void attach(std::string_view identifier, api::Texture::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Texture::Format      format, std::vector<glf::FrameBuffer::Source>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_texture_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                  auto  attachmentIndex       = static_cast<glf::FrameBuffer::Source>(frameBufferAttachment);
 
             if (attachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                attachmentIndex += static_cast<glf::FrameBuffer::Source>(colorBufferIndices.size());
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
@@ -101,15 +101,15 @@ namespace fox::gfx::api::gl
 
             m_identifierToTexture.emplace(identifier, texture);
         }
-        void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<glf::FrameBuffer::Source>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_render_buffer_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                  auto  attachmentIndex       = static_cast<glf::FrameBuffer::Source>(frameBufferAttachment);
 
             if (attachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                attachmentIndex += static_cast<glf::FrameBuffer::Source>(colorBufferIndices.size());
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
@@ -118,15 +118,15 @@ namespace fox::gfx::api::gl
 
             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
         }
-        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<glf::FrameBuffer::Source>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_cubemap_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                  auto  attachmentIndex       = static_cast<glf::FrameBuffer::Source>(frameBufferAttachment);
 
             if (attachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                attachmentIndex += static_cast<glf::FrameBuffer::Source>(colorBufferIndices.size());
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
@@ -152,7 +152,7 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_frame_buffer();
 
-            std::vector<gl::enum_t> colorBufferIndices{};
+            std::vector<glf::FrameBuffer::Source> colorBufferIndices{};
             std::ranges::for_each(manifests, [&, this](const Manifest& manifest)
                 {
                     const auto& [identifier, format] = manifest;
@@ -209,15 +209,15 @@ namespace fox::gfx::api::gl
         FrameBuffer& operator=(FrameBuffer&&) noexcept = default;
 
     private:
-        void attach(std::string_view identifier, api::Texture::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Texture::Format      format, std::vector<glf::FrameBuffer::Source>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_texture_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                  auto  attachmentIndex       = static_cast<glf::FrameBuffer::Source>(frameBufferAttachment);
 
             if (attachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                attachmentIndex += static_cast<glf::FrameBuffer::Source>(colorBufferIndices.size());
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
@@ -226,15 +226,15 @@ namespace fox::gfx::api::gl
 
             m_identifierToTexture.emplace(identifier, texture);
         }
-        void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<glf::FrameBuffer::Source>& colorBufferIndices)
         {
             const auto& attachment            = api::map_frame_buffer_render_buffer_attachment(format);
             const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(attachment);
-                  auto  attachmentIndex       = static_cast<gl::enum_t>(frameBufferAttachment);
+                  auto  attachmentIndex       = static_cast<glf::FrameBuffer::Source>(frameBufferAttachment);
 
             if (attachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<gl::enum_t>(colorBufferIndices.size());
+                attachmentIndex += static_cast<glf::FrameBuffer::Source>(colorBufferIndices.size());
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
@@ -243,7 +243,7 @@ namespace fox::gfx::api::gl
 
             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
         }
-        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<gl::enum_t>& colorBufferIndices)
+        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<glf::FrameBuffer::Source>& colorBufferIndices)
         {
             __debugbreak();
             throw std::logic_error{ "The method or operation has not been implemented!" };

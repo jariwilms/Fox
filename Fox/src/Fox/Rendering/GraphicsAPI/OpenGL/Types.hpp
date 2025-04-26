@@ -3,6 +3,7 @@
 #include "glad/gl.h"
 #include "glfw/glfw3.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -48,34 +49,52 @@ namespace fox::gfx::api::gl
 
 
     //Vector types
-    template<typename T, std::uint32_t N>
-    using Vector     = glm::vec<N, T, glm::packed_highp>;
+    template<typename T, gl::int32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
+    template<typename T, gl::int32_t N> using Matrix     = glm::mat<N, N, T>;
+                                        using Quaternion = glm::quat;
 
-    using Vector1i   = glm::ivec1;
-    using Vector2i   = glm::ivec2;
-    using Vector3i   = glm::ivec3;
-    using Vector4i   = glm::ivec4;
-    using Vector1u   = glm::uvec1;
-    using Vector2u   = glm::uvec2;
-    using Vector3u   = glm::uvec3;
-    using Vector4u   = glm::uvec4;
-    using Vector1f   = glm::vec1;
-    using Vector2f   = glm::vec2;
-    using Vector3f   = glm::vec3;
-    using Vector4f   = glm::vec4;
-    using Matrix2f   = glm::mat2;
-    using Matrix3f   = glm::mat3;
-    using Matrix4f   = glm::mat4;
-    using Quaternion = glm::quat;
+    using Vector1b   = gl::Vector<gl::bool_t,    1>;
+    using Vector2b   = gl::Vector<gl::bool_t,    2>;
+    using Vector3b   = gl::Vector<gl::bool_t,    3>;
+    using Vector4b   = gl::Vector<gl::bool_t,    4>;
+
+    using Vector1i   = gl::Vector<gl::int32_t,   1>;
+    using Vector2i   = gl::Vector<gl::int32_t,   2>;
+    using Vector3i   = gl::Vector<gl::int32_t,   3>;
+    using Vector4i   = gl::Vector<gl::int32_t,   4>;
+
+    using Vector1u   = gl::Vector<gl::uint32_t,  1>;
+    using Vector2u   = gl::Vector<gl::uint32_t,  2>;
+    using Vector3u   = gl::Vector<gl::uint32_t,  3>;
+    using Vector4u   = gl::Vector<gl::uint32_t,  4>;
+    
+    using Vector1f   = gl::Vector<gl::float32_t, 1>;
+    using Vector2f   = gl::Vector<gl::float32_t, 2>;
+    using Vector3f   = gl::Vector<gl::float32_t, 3>;
+    using Vector4f   = gl::Vector<gl::float32_t, 4>;
+    
+    using Vector1d   = gl::Vector<gl::float64_t, 1>;
+    using Vector2d   = gl::Vector<gl::float64_t, 2>;
+    using Vector3d   = gl::Vector<gl::float64_t, 3>;
+    using Vector4d   = gl::Vector<gl::float64_t, 4>;
+    
+    using Matrix2f   = gl::Matrix<gl::float32_t, 2>;
+    using Matrix3f   = gl::Matrix<gl::float32_t, 3>;
+    using Matrix4f   = gl::Matrix<gl::float32_t, 4>;
 
 
 
-    template<typename T, std::uint32_t N>
-    using Point = gl::Vector<T, N>;
+    //Size and Range Types
+    template<typename T, gl::uint32_t N>
+    struct Dimensions
+    {
+        gl::Vector<T, N> origin;
+        gl::Vector<T, N> extent;
+    };
 
-    template<typename T> using Line   = gl::Vector<gl::Point<T, 1>, 2>;
-    template<typename T> using Area   = gl::Vector<gl::Point<T, 2>, 2>;
-    template<typename T> using Volume = gl::Vector<gl::Point<T, 3>, 2>;
+    template<typename T> using Line   = Dimensions<T, 1>;
+    template<typename T> using Area   = Dimensions<T, 2>;
+    template<typename T> using Volume = Dimensions<T, 3>;
 
     template<typename T>
     struct Range

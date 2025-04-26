@@ -9,7 +9,7 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags = gl::integer_v(glf::Data::ContextFlags);
+			s_contextFlags = gl::get_integer_v(glf::Data::ContextFlags);
 			if (s_contextFlags & std::to_underlying(glf::Context::Flag::Debug))
 			{
 				gl::enable(glf::Feature::DebugOutput);
@@ -19,9 +19,9 @@ namespace fox::gfx::api::gl
 				gl::debug_message_control(gl::True, glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare);
 			}
 
-			//s_contextProfile         = gl::integer_v(glf::Data::ContextProfile);
-			s_majorVersion           = gl::integer_v(glf::Data::MajorVersion);
-			s_minorVersion           = gl::integer_v(glf::Data::MinorVersion);
+			//s_contextProfile         = gl::get_integer_v(glf::Data::ContextProfile);
+			s_majorVersion           = gl::get_integer_v(glf::Data::MajorVersion);
+			s_minorVersion           = gl::get_integer_v(glf::Data::MinorVersion);
 
 			s_vendor                 = gl::string(glf::Connection::Vendor);
 			s_renderer               = gl::string(glf::Connection::Renderer);
