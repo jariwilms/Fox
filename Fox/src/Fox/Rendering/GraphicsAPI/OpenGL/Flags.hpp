@@ -1319,6 +1319,13 @@ namespace fox::gfx::api::glf
     };
     struct     Shader
     {
+        struct Binary
+        {
+            enum class Format : gl::enum_t
+            {
+
+            };
+        };
         enum class Parameter : gl::enum_t
         {
             CompileStatus = GL_COMPILE_STATUS, 

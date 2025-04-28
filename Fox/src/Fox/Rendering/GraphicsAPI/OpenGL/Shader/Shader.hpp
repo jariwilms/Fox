@@ -19,7 +19,7 @@ namespace fox::gfx::api::gl
             const auto& shader = gl::create_shader(type);
 
             gl::program_specification(m_handle, glf::Program::Specification::Separable, gl::True);
-            gl::shader_binary(shader, binary);
+            gl::shader_binary(shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary);
             gl::specialize_shader(shader, "main");
 
             const auto& compileStatus = gl::get_shader_v<glf::Shader::Parameter::CompileStatus>(shader);

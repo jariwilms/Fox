@@ -45,7 +45,6 @@ namespace fox::gfx::api::gl
     //Strong aliases
     enum class handle_t : gl::uint32_t {}; //Alias for OpenGL Object handles
     enum class query_t  : gl::uint32_t {}; //Alias for OpenGL Query  handles
-    enum class format_t : gl::enum_t   {}; //Alias for OpenGL Binary Formats
 
     constexpr gl::handle_t NullObject{};
 
