@@ -105,13 +105,13 @@ namespace fox::gfx
         {
             _->copy(data);
         }
-        void copy_range(fox::offset_t offset, std::span<const T> data)
+        void copy_range(fox::count_t offset, std::span<const T> data)
         {
             _->copy_range(offset, data);
         }
 
         template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
-        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::offset_t> offset = {})
+        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::count_t> offset = {})
         {
             _->map<ACCESS>(elements, offset);
         }
@@ -161,13 +161,13 @@ namespace fox::gfx
         {
             _->copy(data);
         }
-        void copy_range(fox::offset_t offset, std::span<const fox::uint32_t> data)
+        void copy_range(fox::count_t offset, std::span<const fox::uint32_t> data)
         {
             _->copy_range(offset, data);
         }
 
         template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
-        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::offset_t> offset = {})
+        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::count_t> offset = {})
         {
             _->map<ACCESS>(elements, offset);
         }
@@ -257,7 +257,7 @@ namespace fox::gfx
         {
             _->bind_index(index);
         }
-        void bind_index_range(fox::uint32_t index, fox::count_t count, fox::offset_t offset) const
+        void bind_index_range(fox::uint32_t index, fox::count_t count, fox::count_t offset) const
         {
             _->bind_index_range(index, count, offset);
         }
@@ -266,11 +266,11 @@ namespace fox::gfx
         {
             _->copy(data);
         }
-        void copy_index(fox::offset_t offset, const T& data)
+        void copy_index(fox::count_t offset, const T& data)
         {
             _->copy_index(offset, data);
         }
-        void copy_range(fox::offset_t offset, std::span<const T> data)
+        void copy_range(fox::count_t offset, std::span<const T> data)
         {
             _->copy_range(offset, data);
         }

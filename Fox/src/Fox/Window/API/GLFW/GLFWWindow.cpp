@@ -62,7 +62,7 @@ namespace fox::wnd::api
                 const auto& window = user_pointer()->glfwWindow;
                 window->glfw_error_callback(error, description);
             };
-        const auto& gl_debug_callback                 = [](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::size_t length, const gl::char_t* message, const void* parameters)
+        const auto& gl_debug_callback                 = [](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::sizei_t length, const gl::char_t* message, const void* parameters)
             {
                 //TODO: Make like this?
                 //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)

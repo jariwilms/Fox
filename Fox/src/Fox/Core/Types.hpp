@@ -30,9 +30,9 @@ namespace fox
 	using float64_t  = double;		  //
 
 	using byte_t     = fox::uint8_t;
-	using size_t     = std::size_t;   //Offset in bytes
-	using count_t    = fox::uint32_t; //Number of elements
-	using offset_t   = fox::uint32_t; //Number of elements offset
+	using size_t     = fox::uint64_t; //Number of bytes
+	using offset_t   = fox::uint64_t; //Number of bytes offset
+	using count_t    = fox::uint64_t; //Number of elements
 
 	using uuid_t     = std::bitset<128>;
 

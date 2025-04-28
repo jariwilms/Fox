@@ -4,6 +4,16 @@
 
 namespace fox::utl
 {
+    template<typename T>
+    static constexpr auto size_of()
+    {
+        return sizeof(T);
+    }
+    template<typename T>
+    static constexpr auto size_of(const T& value)
+    {
+        return sizeof(value);
+    }
     template<typename T, auto MPTR>
     static constexpr auto offset_of()
     {

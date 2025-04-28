@@ -8,11 +8,22 @@
 namespace fox::gfx::api::gl
 {
     template<api::Buffer::Type TYPE>
-    class BufferObject : public api::Buffer, public gl::Object
+    class BufferObject : public gl::Object
     {
+    public:
+        using Access = api::Buffer::Access;
+        using Type   = api::Buffer::Type;
+
+        gl::size_t size()  const
+        {
+            return m_size;
+        }
+
     protected:
-        BufferObject(fox::size_t size)
-            : api::Buffer{ size } {}
+        BufferObject(gl::size_t size)
+            : m_size{ size } {}
+
+        gl::size_t m_size{};
     };
 
     template<api::Buffer::Type TYPE, typename T>
@@ -23,7 +34,7 @@ namespace fox::gfx::api::gl
         using BufferObject<TYPE>::handle;
 
         explicit StaticBuffer(std::span<const T> data)
-            : BufferObject<TYPE>{ data.size_bytes() }
+            : BufferObject<TYPE>{ static_cast<gl::size_t>(data.size_bytes()) }
         {
             m_handle = gl::create_buffer();
             
@@ -35,7 +46,7 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        fox::count_t count() const
+        gl::count_t count() const
         {
             return static_cast<fox::count_t>(m_size / sizeof(T));
         }
@@ -43,10 +54,10 @@ namespace fox::gfx::api::gl
         StaticBuffer& operator=(StaticBuffer&&) noexcept = default;
 
     protected:
-        explicit StaticBuffer(fox::size_t size)
+        explicit StaticBuffer(gl::size_t size)
             : BufferObject<TYPE>{ size } {}
 
-        using api::Buffer::m_size;
+        using gl::BufferObject<TYPE>::m_size;
         using gl::Object::m_handle;
     };
     template<api::Buffer::Type TYPE, typename T>
@@ -56,7 +67,7 @@ namespace fox::gfx::api::gl
         using StaticBuffer<TYPE, T>::count;
 
         explicit DynamicBuffer(fox::count_t count)
-            : StaticBuffer<TYPE, T>{ count * sizeof(T) }
+            : StaticBuffer<TYPE, T>{ static_cast<gl::size_t>(count * sizeof(T)) }
         {
             m_handle = gl::create_buffer();
 
@@ -70,7 +81,7 @@ namespace fox::gfx::api::gl
             gl::buffer_storage(m_handle, storageFlags, m_size);
         }
         explicit DynamicBuffer(std::span<const T> data)
-            : StaticBuffer<TYPE, T>{ data.size_bytes() }
+            : StaticBuffer<TYPE, T>{ static_cast<gl::size_t>(data.size_bytes()) }
         {
             m_handle = gl::create_buffer();
 
@@ -94,14 +105,14 @@ namespace fox::gfx::api::gl
 
         void copy(std::span<const T> data)
         {
-            gl::buffer_sub_data(m_handle, 0u, data);
+            gl::buffer_data(m_handle, 0u, data);
         }
         void copy_range(fox::offset_t offset, std::span<const T> data)
         {
             const auto& byteOffset = offset * sizeof(T);
-            if (byteOffset + data.size() >= m_size) throw std::invalid_argument{ "Data exceeds buffer size!" };
+            if (std::cmp_greater_equal(byteOffset + data.size(), m_size)) throw std::invalid_argument{ "Data exceeds buffer size!" };
 
-            gl::buffer_sub_data(m_handle, byteOffset, data);
+            gl::buffer_data(m_handle, byteOffset, data);
         }
 
         template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
@@ -113,7 +124,7 @@ namespace fox::gfx::api::gl
             const auto& sizeBytes   = elements.value_or(count()) * sizeof(T);
             const auto& offsetBytes = offset.value_or(0)         * sizeof(T);
 
-            auto* data = gl::map_buffer_range(m_handle, accessFlags, gl::sizeptr_t{ sizeBytes }, gl::intptr_t{ offsetBytes });
+            auto* data = gl::map_buffer_range(m_handle, accessFlags, gl::size_t{ sizeBytes }, gl::offset_t{ offsetBytes });
 
             m_mappedData = std::make_shared<std::span<T>>(data, count());
 
@@ -148,7 +159,7 @@ namespace fox::gfx::api::gl
         }
 
     protected:
-        using api::Buffer::m_size;
+        using gl::BufferObject<TYPE>::m_size;
         using gl::Object::m_handle;
 
         std::shared_ptr<std::span<T>> m_mappedData{};
@@ -178,25 +189,25 @@ namespace fox::gfx::api::gl
 
         void copy(const T& data)
         {
-            gl::buffer_sub_data(m_handle, 0, std::span<const T>{ &data, 1u });
+            gl::buffer_data(m_handle, 0, std::span<const T>{ &data, 1u });
         }
         template<typename... T>
-        void copy_sub(fox::size_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
+        void copy_sub(gl::offset_t offset, const std::tuple<T...>& data) //TODO: check if used with std::tie instead of std::make_tuple?
         {
             //This method lets you copy a tuple of any amount of types into an allocated buffer
             //There is no guarantee that a parameter pack will be evaluated in order of declaration, so it can not be used
             //Arguments in a braced initializer list eg. tuple{ myval1, myval2 }, are required to be evaluated first to last
             //This guarantees that the data will be copied into the uniform buffer in order
 
-            std::array<fox::byte_t, (sizeof(T) + ... + 0u)> buffer{};
+            std::array<gl::byte_t, (sizeof(T) + ... + 0u)> buffer{};
 
             std::apply([&buffer](auto&&... args)
                 {
-                    fox::size_t size{};
+                    gl::size_t size{};
                     ((std::memcpy(buffer.data() + size, &args, sizeof(args)), size += sizeof(args)), ...);
                 }, data);
 
-            gl::buffer_sub_data(m_handle, offset, std::span<const fox::byte_t>{ buffer.data(), buffer.size() });
+            gl::buffer_data(m_handle, offset, std::span<const gl::byte_t>{ buffer.data(), buffer.size() });
         }
 
         UniformBuffer& operator=(UniformBuffer&&) noexcept = default;
@@ -210,7 +221,7 @@ namespace fox::gfx::api::gl
         {
             m_handle = gl::create_buffer();
 
-            gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, gl::sizeptr_t{ N * sizeof(T) });
+            gl::buffer_storage(m_handle, glf::Buffer::StorageFlags::DynamicStorage, gl::size_t{ N * sizeof(T) });
         }
         explicit UniformArrayBuffer(std::span<const T> data)
             : BufferObject{ data.size_bytes() }
@@ -229,26 +240,26 @@ namespace fox::gfx::api::gl
         {
             gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
         }
-        void bind_index_range(gl::uint32_t index, fox::count_t count, fox::offset_t offset) const
+        void bind_index_range(gl::uint32_t index, fox::count_t count, gl::offset_t offset) const
         {
-            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, count * sizeof(T), offset * sizeof(T));
+            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::range_t{ count * sizeof(T), offset * sizeof(T) });
         }
 
         void copy(std::span<const T, N> data)
         {
-            gl::buffer_sub_data(m_handle, 0, data);
+            gl::buffer_data(m_handle, 0, std::span<const T>{ data.data(), data.size() });
         }
         void copy_index(fox::offset_t offset, const T& data)
         {
             if (offset + 1u > N) throw std::invalid_argument{ "Data exceeds buffer size!" };
 
-            gl::buffer_sub_data(m_handle, offset * sizeof(T), std::span<const T>{ &data, 1u });
+            gl::buffer_data(m_handle, offset * sizeof(T), std::span<const T>{ &data, 1u });
         }
         void copy_range(fox::offset_t offset, std::span<const T> data)
         {
             if (offset + data.size() > N) throw std::invalid_argument{ "Data exceeds buffer size!" };
 
-            gl::buffer_sub_data(m_handle, offset * sizeof(T), data);
+            gl::buffer_data(m_handle, offset * sizeof(T), data);
         }
 
         UniformArrayBuffer& operator=(UniformArrayBuffer&&) noexcept = default;

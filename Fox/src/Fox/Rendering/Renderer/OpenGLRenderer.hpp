@@ -199,7 +199,7 @@ namespace fox::gfx::api
 
             const auto& render_meshes = [&]()
                 {
-                    gl::viewport({ {}, gBufferMultisample->dimensions() });
+                    gl::viewport(gBufferMultisample->dimensions());
 
                     gl::enable(glf::Feature::FaceCulling);
                     gl::cull_face(glf::Culling::Face::Back);
@@ -267,7 +267,7 @@ namespace fox::gfx::api
 
                     gl::clear(glf::Buffer::Mask::Depth);
 
-                    gl::viewport({ {}, dimensions });
+                    gl::viewport(dimensions);
 
                     gl::enable(glf::Feature::FaceCulling);
                     gl::cull_face(glf::Culling::Face::Back);

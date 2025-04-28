@@ -11,6 +11,16 @@ namespace fox::gfx::api::gl
     {
         return static_cast<std::underlying_type_t<T>>(value);
     }
+    template<typename T>
+    static constexpr auto to_underlying_ptr(T* value)
+    {
+        return reinterpret_cast<std::underlying_type_t<T>*>(value);
+    }
+    template<typename T>
+    static constexpr auto to_underlying_ptr(const T* value)
+    {
+        return reinterpret_cast<const std::underlying_type_t<T>*>(value);
+    }
 
 
 

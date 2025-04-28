@@ -199,6 +199,8 @@ namespace fox::gfx::api::glf
             ReadCoherent        = GL_MAP_COHERENT_BIT   | ReadPersistent,
             WriteCoherent       = GL_MAP_COHERENT_BIT   | WritePersistent,
             ReadWriteCoherent   = GL_MAP_COHERENT_BIT   | ReadWritePersistent, 
+
+            Default             = ReadWrite | DynamicStorage
         };
         enum class Target : gl::enum_t
         {
@@ -230,6 +232,14 @@ namespace fox::gfx::api::glf
             DynamicDraw = GL_DYNAMIC_DRAW, 
             DynamicRead = GL_DYNAMIC_READ, 
             DynamicCopy = GL_DYNAMIC_COPY, 
+        };
+    };
+    struct     Callback
+    {
+        enum class Pointer : gl::enum_t
+        {
+            DebugCallbackFunction      = GL_DEBUG_CALLBACK_FUNCTION, 
+            DebugCallbackUserParameter = GL_DEBUG_CALLBACK_USER_PARAM, 
         };
     };
     enum class ClampColor : gl::enum_t
@@ -271,12 +281,12 @@ namespace fox::gfx::api::glf
     };
     enum class Connection : gl::enum_t
     {
-        Vendor                 = GL_VENDOR, 
         Renderer               = GL_RENDERER, 
+        Vendor                 = GL_VENDOR, 
         Version                = GL_VERSION, 
         ShadingLanguageVersion = GL_SHADING_LANGUAGE_VERSION, 
-
         Extensions             = GL_EXTENSIONS, 
+        SpirVExtensions        = GL_SPIR_V_EXTENSIONS, 
     };
     struct     Cubemap
     {
@@ -995,7 +1005,6 @@ namespace fox::gfx::api::glf
             PatchDefaultOuterLevel = GL_PATCH_DEFAULT_OUTER_LEVEL, 
             PatchDefaultInterLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
         };
-        //enum class 
     };
     struct     PixelData
     {
@@ -1215,6 +1224,10 @@ namespace fox::gfx::api::glf
     };
     struct     Query
     {
+        enum class Counter : gl::enum_t
+        {
+            Timestamp = GL_TIMESTAMP, 
+        };
         enum class Mode : gl::enum_t
         {
             QueryNoWait         = GL_QUERY_NO_WAIT, 
@@ -1228,23 +1241,24 @@ namespace fox::gfx::api::glf
         {
             AnySamplesPassed                        = GL_ANY_SAMPLES_PASSED, 
             AnySamplesPassedConservative            = GL_ANY_SAMPLES_PASSED_CONSERVATIVE, 
-            PrimitivesGenerated                     = GL_PRIMITIVES_GENERATED, 
-            SamplesPassed                           = GL_SAMPLES_PASSED, 
-            TimeElapsed                             = GL_TIME_ELAPSED, 
-            PrimitivesSubmitted                     = GL_PRIMITIVES_SUBMITTED, 
-            VerticesSubmitted                       = GL_VERTICES_SUBMITTED, 
-            TransformFeedbackPrimitivesWritten      = GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, 
-            TransformFeedbackOverflow               = GL_TRANSFORM_FEEDBACK_OVERFLOW,  
-            TransformFeedbackStreamOverflow         = GL_TRANSFORM_FEEDBACK_STREAM_OVERFLOW, 
-            VertexShaderInvocations                 = GL_VERTEX_SHADER_INVOCATIONS, 
-            TessellationEvaluationShaderInvocations = GL_TESS_EVALUATION_SHADER_INVOCATIONS, 
-            TessellationControlShaderPatches        = GL_TESS_CONTROL_SHADER_PATCHES, 
-            GeometryShaderInvocations               = GL_GEOMETRY_SHADER_INVOCATIONS, 
-            FragmentShaderInvocations               = GL_FRAGMENT_SHADER_INVOCATIONS, 
-            ComputeShaderInvocations                = GL_COMPUTE_SHADER_INVOCATIONS, 
-            GeometryShaderPrimitivesEmitted         = GL_GEOMETRY_SHADER_PRIMITIVES_EMITTED, 
             ClippingInputPrimitives                 = GL_CLIPPING_INPUT_PRIMITIVES, 
             ClippingOutputPrimitives                = GL_CLIPPING_OUTPUT_PRIMITIVES, 
+            ComputeShaderInvocations                = GL_COMPUTE_SHADER_INVOCATIONS, 
+            FragmentShaderInvocations               = GL_FRAGMENT_SHADER_INVOCATIONS, 
+            GeometryShaderInvocations               = GL_GEOMETRY_SHADER_INVOCATIONS, 
+            GeometryShaderPrimitivesEmitted         = GL_GEOMETRY_SHADER_PRIMITIVES_EMITTED, 
+            PrimitivesGenerated                     = GL_PRIMITIVES_GENERATED, 
+            PrimitivesSubmitted                     = GL_PRIMITIVES_SUBMITTED, 
+            SamplesPassed                           = GL_SAMPLES_PASSED, 
+            TessellationControlShaderPatches        = GL_TESS_CONTROL_SHADER_PATCHES, 
+            TessellationEvaluationShaderInvocations = GL_TESS_EVALUATION_SHADER_INVOCATIONS, 
+            TimeElapsed                             = GL_TIME_ELAPSED, 
+            Timestamp                               = GL_TIMESTAMP, 
+            TransformFeedbackOverflow               = GL_TRANSFORM_FEEDBACK_OVERFLOW,  
+            TransformFeedbackPrimitivesWritten      = GL_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN, 
+            TransformFeedbackStreamOverflow         = GL_TRANSFORM_FEEDBACK_STREAM_OVERFLOW, 
+            VertexShaderInvocations                 = GL_VERTEX_SHADER_INVOCATIONS, 
+            VerticesSubmitted                       = GL_VERTICES_SUBMITTED, 
         };
         enum class ObjectParameter : gl::enum_t
         {
@@ -1374,17 +1388,29 @@ namespace fox::gfx::api::glf
     };
     struct     Synchronization
     {
-        enum class Condition : gl::enum_t
+        enum class FlushingBehavior : gl::enum_t
         {
-            GPUCommandsComplete = GL_SYNC_GPU_COMMANDS_COMPLETE, 
+            Commands = GL_SYNC_FLUSH_COMMANDS_BIT, 
         };
-        enum class Flags : gl::enum_t
+        struct     Object
         {
-
-        };
-        enum       FlushBehavior : gl::enum_t
-        {
-            FlushCommands = GL_SYNC_FLUSH_COMMANDS_BIT
+            enum class Condition : gl::enum_t
+            {
+                GPUCommandsComplete = GL_SYNC_GPU_COMMANDS_COMPLETE, 
+            };
+            enum class Flags : gl::enum_t
+            {
+                None = GL_NONE, 
+            };
+            enum class Status : gl::enum_t
+            {
+                Signaled   = GL_SIGNALED, 
+                Unsignaled = GL_UNSIGNALED, 
+            };
+            enum class Type : gl::enum_t
+            {
+                Fence = GL_SYNC_FENCE, 
+            };
         };
         enum class Property : gl::enum_t
         {
@@ -1395,16 +1421,14 @@ namespace fox::gfx::api::glf
         };
         enum class Status : gl::enum_t
         {
-            Signaled   = GL_SIGNALED, 
-            Unsignaled = GL_UNSIGNALED, 
+            AlreadySignaled    = GL_ALREADY_SIGNALED, 
+            TimeoutExpired     = GL_TIMEOUT_EXPIRED, 
+            ConditionSatisfied = GL_CONDITION_SATISFIED, 
+            WaitFailed         = GL_WAIT_FAILED, 
         };
         enum class Timeout : gl::uint64_t
         {
             Ignored = GL_TIMEOUT_IGNORED, 
-        };
-        enum class Type : gl::enum_t
-        {
-            Fence = GL_SYNC_FENCE, 
         };
     };
     struct     Texture
@@ -1593,6 +1617,14 @@ namespace fox::gfx::api::glf
         {
             InterleavedAttributes = GL_INTERLEAVED_ATTRIBS, 
             SeparateAttributes    = GL_SEPARATE_ATTRIBS, 
+        };
+        enum class Property : gl::enum_t
+        {
+            BufferBinding = GL_TRANSFORM_FEEDBACK_BUFFER_BINDING, 
+            BufferStart   = GL_TRANSFORM_FEEDBACK_BUFFER_START, 
+            BufferSize    = GL_TRANSFORM_FEEDBACK_BUFFER_SIZE, 
+            Paused        = GL_TRANSFORM_FEEDBACK_PAUSED, 
+            Active        = GL_TRANSFORM_FEEDBACK_ACTIVE, 
         };
         enum class PrimitiveMode : gl::enum_t
         {

@@ -8,8 +8,11 @@
 namespace fox::gfx::api::gl
 {
     //Fundamental types
+    using void_t     = void;
     using bool_t     = GLboolean;
     using char_t     = GLchar;
+    using byte_t     = GLubyte;
+
     using int8_t     = GLbyte;
     using uint8_t    = GLubyte;
     using int16_t    = GLshort;
@@ -22,14 +25,14 @@ namespace fox::gfx::api::gl
     using float32_t  = GLfloat;
     using float64_t  = GLdouble;
 
-    using size_t     = GLsizei;     //Sizes and dimensions (should not be negative)
+    using sizei_t    = GLsizei;     //Sizes and dimensions (should not be negative)
     using enum_t     = GLenum;      //Enumerated value of constants
-    using sizeptr_t  = GLsizeiptr;  //Buffer size   in bytes
-    using intptr_t   = GLintptr;    //Buffer offset in bytes
+    using size_t     = GLsizeiptr;  //Buffer size   in bytes
+    using offset_t   = GLintptr;    //Buffer offset in bytes
     using sync_t     = GLsync;      //Synchronization primitive
-    using bitfield_t = GLbitfield;  //Value containing one or more flags
-
-    using byte_t     = gl::uint8_t;
+    using bitfield_t = GLbitfield;  //Value which contains one or multiple flags
+    
+    using count_t    = gl::uint64_t;
 
     enum : gl::bool_t
     {
@@ -88,18 +91,22 @@ namespace fox::gfx::api::gl
     template<typename T, gl::uint32_t N>
     struct Dimensions
     {
-        gl::Vector<T, N> origin;
-        gl::Vector<T, N> extent;
+        Dimensions(gl::Vector<T, N> origin, gl::Vector<T, N> extent)
+            : origin{ origin }, extent{ extent } {}
+        Dimensions(gl::Vector<T, N> extent)
+            : origin{}, extent{ extent } {}
+
+        gl::Vector<T, N> origin{};
+        gl::Vector<T, N> extent{};
     };
 
     template<typename T> using Line   = Dimensions<T, 1>;
     template<typename T> using Area   = Dimensions<T, 2>;
     template<typename T> using Volume = Dimensions<T, 3>;
 
-    template<typename T>
-    struct Range
+    struct range_t
     {
-        T min{};
-        T max{};
+        gl::size_t   size{};
+        gl::offset_t offset{};
     };
 }
