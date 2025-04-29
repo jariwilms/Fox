@@ -393,7 +393,7 @@ namespace fox::gfx::api
             pipelines.at("Skybox")->bind();
             skybox->bind(0);
 
-            gl::blit_framebuffer(gBuffer->handle(), ppBuffers.at(1)->handle(), gl::Area<gl::uint32_t>{ {}, { 1280, 720 } }, gl::Area<gl::uint32_t>{ {}, { 1280, 720 } }, glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(gBuffer->handle(), ppBuffers.at(1)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, gl::area_t<gl::uint32_t>{ {}, { 1280, 720 } }, gl::area_t<gl::uint32_t>{ {}, { 1280, 720 } });
 
             cva->bind();
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -418,7 +418,7 @@ namespace fox::gfx::api
 
 
             //Final result of rendering copied to default framebuffer
-            gl::blit_framebuffer(ppBuffers.at(1)->handle(), gl::handle_t{ 0 }, gl::Area<gl::uint32_t>{ {}, dimensions }, gl::Area<gl::uint32_t>{ {}, dimensions }, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest);
+            gl::blit_framebuffer(ppBuffers.at(1)->handle(), gl::handle_t{ 0 }, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, gl::area_t<gl::uint32_t>{ {}, dimensions }, gl::area_t<gl::uint32_t>{ {}, dimensions });
         }
 
         void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)

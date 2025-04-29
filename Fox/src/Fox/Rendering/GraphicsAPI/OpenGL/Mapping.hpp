@@ -310,16 +310,16 @@ namespace fox::gfx::api::gl
         if constexpr (std::is_same_v<T, gl::float32_t>) return glf::DataType::Float;
         if constexpr (std::is_same_v<T, gl::float64_t>) return glf::DataType::Double;
     }
-    static constexpr glf::DataType                     map_data_type(api::DataType dataType)
+    static constexpr glf::VertexArray::Attribute::Type map_data_type(api::DataType dataType)
     {
-        if (dataType == api::DataType::Byte)            return glf::DataType::Byte;
-        if (dataType == api::DataType::UnsignedByte)    return glf::DataType::UnsignedByte;
-        if (dataType == api::DataType::Short)           return glf::DataType::Short;
-        if (dataType == api::DataType::UnsignedShort)   return glf::DataType::UnsignedShort;
-        if (dataType == api::DataType::Integer)         return glf::DataType::Integer;
-        if (dataType == api::DataType::UnsignedInteger) return glf::DataType::UnsignedInteger;
-        if (dataType == api::DataType::Float)           return glf::DataType::Float;
-        if (dataType == api::DataType::Double)          return glf::DataType::Double;
+        if (dataType == api::DataType::Byte)            return glf::VertexArray::Attribute::Type::Byte;
+        if (dataType == api::DataType::UnsignedByte)    return glf::VertexArray::Attribute::Type::UnsignedByte;
+        if (dataType == api::DataType::Short)           return glf::VertexArray::Attribute::Type::Short;
+        if (dataType == api::DataType::UnsignedShort)   return glf::VertexArray::Attribute::Type::UnsignedShort;
+        if (dataType == api::DataType::Integer)         return glf::VertexArray::Attribute::Type::Integer;
+        if (dataType == api::DataType::UnsignedInteger) return glf::VertexArray::Attribute::Type::UnsignedInteger;
+        if (dataType == api::DataType::Float)           return glf::VertexArray::Attribute::Type::Float;
+        if (dataType == api::DataType::Double)          return glf::VertexArray::Attribute::Type::Double;
 
         throw std::invalid_argument{ "Invalid Data Type!" };
     }

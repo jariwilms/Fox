@@ -32,7 +32,7 @@ namespace fox::gfx::api::gl
     using sync_t     = GLsync;      //Synchronization primitive
     using bitfield_t = GLbitfield;  //Value which contains one or multiple flags
     
-    using count_t    = gl::uint64_t;
+    using count_t    = gl::uint32_t;
 
     enum : gl::bool_t
     {
@@ -99,12 +99,23 @@ namespace fox::gfx::api::gl
         gl::Vector<T, N> extent{};
     };
 
-    template<typename T> using Line   = Dimensions<T, 1>;
-    template<typename T> using Area   = Dimensions<T, 2>;
-    template<typename T> using Volume = Dimensions<T, 3>;
+    template<typename T> using line_t   = Dimensions<T, 1>;
+    template<typename T> using area_t   = Dimensions<T, 2>;
+    template<typename T> using volume_t = Dimensions<T, 3>;
 
     struct range_t
     {
+        explicit range_t(gl::count_t count, gl::count_t offset = {})
+            : count{ count }, offset{ offset } {}
+
+        gl::count_t count{};
+        gl::count_t offset{};
+    };
+    struct byterange_t
+    {
+        explicit byterange_t(gl::size_t size, gl::offset_t offset = {})
+            : size{ size }, offset{ offset } {}
+
         gl::size_t   size{};
         gl::offset_t offset{};
     };

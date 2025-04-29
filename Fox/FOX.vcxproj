@@ -169,6 +169,7 @@
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\GraphicsAPI.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Context\Context.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Enum.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Flags.hpp" />

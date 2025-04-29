@@ -18,7 +18,8 @@ namespace fox::gfx::api::gl
     {
     public:
         using wrap_t   = api::DimensionsToWrappingMap<DIMS>::wrap_t;
-        using vector_t = api::DimensionsToVectorMap<DIMS>::type;
+        using vector_t = api::DimensionsToVectorMap  <DIMS>::type;
+        using range_t  = api::DimensionsToRangeMap   <DIMS>::type;
 
         Texture(Format format, const vector_t& dimensions, std::span<const fox::byte_t> data)
             : Texture{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {
@@ -71,9 +72,9 @@ namespace fox::gfx::api::gl
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
-            if constexpr (DIMS == api::Dimensions::_1D) gl::texture_sub_image_1d(m_handle, gl::map_texture_format_base(format), dimensions, offset, 0, data);
-            if constexpr (DIMS == api::Dimensions::_2D) gl::texture_sub_image_2d(m_handle, gl::map_texture_format_base(format), dimensions, offset, 0, data);
-            if constexpr (DIMS == api::Dimensions::_3D) gl::texture_sub_image_3d(m_handle, gl::map_texture_format_base(format), dimensions, offset, 0, data);
+            if constexpr (DIMS == api::Dimensions::_1D) gl::texture_sub_image_1d(m_handle, gl::map_texture_format_base(format), range_t{ offset, dimensions }, 0, data);
+            if constexpr (DIMS == api::Dimensions::_2D) gl::texture_sub_image_2d(m_handle, gl::map_texture_format_base(format), range_t{ offset, dimensions }, 0, data);
+            if constexpr (DIMS == api::Dimensions::_3D) gl::texture_sub_image_3d(m_handle, gl::map_texture_format_base(format), range_t{ offset, dimensions }, 0, data);
         }
 
         void apply_wrapping(wrap_t wrapping)

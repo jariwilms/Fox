@@ -10,6 +10,7 @@ namespace fox::gfx::api::gl
     {
     public:
         using texture_t = gl::Texture<api::Dimensions::_2D, api::AntiAliasing::None>;
+        using range_t   = gl::Texture<api::Dimensions::_3D, api::AntiAliasing::None>::range_t;
 
         Cubemap(Format format, const gl::Vector2u& dimensions)
             : Cubemap{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions } {}
@@ -67,7 +68,7 @@ namespace fox::gfx::api::gl
         {
             if (image.dimensions() != m_dimensions) throw std::invalid_argument{ "Image dimensions must be equal!" };
 
-            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, gl::Vector3u{ m_dimensions, 1u }, gl::Vector3u{ 0u, 0u, index }, 0, image.data());
+            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, range_t{ gl::Vector3u{ 0u, 0u, index }, gl::Vector3u{ m_dimensions, 1u } }, 0, image.data());
         }
         void attach_images(const Faces& face)
         {

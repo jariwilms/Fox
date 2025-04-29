@@ -242,7 +242,7 @@ namespace fox::gfx::api::gl
         }
         void bind_index_range(gl::uint32_t index, fox::count_t count, gl::offset_t offset) const
         {
-            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::range_t{ count * sizeof(T), offset * sizeof(T) });
+            gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::byterange_t{ count * sizeof(T), offset * sizeof(T) });
         }
 
         void copy(std::span<const T, N> data)

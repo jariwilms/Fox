@@ -132,7 +132,7 @@ namespace fox::gfx::api::glf
             RGBA16_UINT  = GL_RGBA16UI,
             RGBA32_UINT  = GL_RGBA32UI,
         };
-        enum       Mask : gl::bitfield_t
+        enum class Mask : gl::bitfield_t
         {
             Color   = GL_COLOR_BUFFER_BIT,
             Depth   = GL_DEPTH_BUFFER_BIT,
@@ -771,8 +771,10 @@ namespace fox::gfx::api::glf
         };
         enum class Target : gl::enum_t
         {
-            Read  = GL_READ_FRAMEBUFFER, 
-            Write = GL_DRAW_FRAMEBUFFER, 
+            Read        = GL_READ_FRAMEBUFFER, 
+            Write       = GL_DRAW_FRAMEBUFFER, 
+
+            FrameBuffer = Write, 
         };
         enum class Filter
         {
@@ -1782,6 +1784,31 @@ namespace fox::gfx::api::glf
     };
     struct     VertexArray
     {
+        struct Attribute
+        {
+            enum class Format : gl::enum_t
+            {
+                Integer,
+                Float,
+                Double,
+            };
+            enum class Type : gl::enum_t
+            {
+                Byte                                  = GL_BYTE, 
+                Double                                = GL_DOUBLE, 
+                Fixed                                 = GL_FIXED, 
+                Float                                 = GL_FLOAT, 
+                HalfFloat                             = GL_HALF_FLOAT, 
+                Integer                               = GL_INT, 
+                Int_2_10_10_10_Rev                    = GL_INT_2_10_10_10_REV, 
+                Short                                 = GL_SHORT, 
+                UnsignedByte                          = GL_UNSIGNED_BYTE, 
+                UnsignedShort                         = GL_UNSIGNED_SHORT, 
+                UnsignedInteger                       = GL_UNSIGNED_INT, 
+                UnsignedInteger_2_10_10_10_Rev        = GL_UNSIGNED_INT_2_10_10_10_REV, 
+                UnsignedInteger_10_11_11_11_Float_Rev = GL_UNSIGNED_INT_10F_11F_11F_REV, 
+            };
+        };
         enum class IndexedParameter : gl::enum_t
         {
             Enabled        = GL_VERTEX_ATTRIB_ARRAY_ENABLED, 
@@ -1799,22 +1826,6 @@ namespace fox::gfx::api::glf
         enum class Parameter : gl::enum_t
         {
             ElementArrayBufferBinding = GL_ELEMENT_ARRAY_BUFFER_BINDING, 
-        };
-        enum class Type : gl::enum_t
-        {
-            Byte                              = GL_BYTE, 
-            Double                            = GL_DOUBLE, 
-            Fixed                             = GL_FIXED, 
-            Float                             = GL_FLOAT, 
-            HalfFloat                         = GL_HALF_FLOAT, 
-            Int                               = GL_INT, 
-            Int_2_10_10_10_Rev                = GL_INT_2_10_10_10_REV, 
-            Short                             = GL_SHORT, 
-            UnsignedByte                      = GL_UNSIGNED_BYTE, 
-            UnsignedShort                     = GL_UNSIGNED_SHORT, 
-            UnsignedInt                       = GL_UNSIGNED_INT, 
-            UnsignedInt_2_10_10_10_Rev        = GL_UNSIGNED_INT_2_10_10_10_REV, 
-            UnsignedInt_10_11_11_11_Float_Rev = GL_UNSIGNED_INT_10F_11F_11F_REV, 
         };
     };
     struct     VertexAttribute
@@ -1845,6 +1856,7 @@ namespace fox::gfx::api::glf
 }
 namespace fox::gfx::api::gl
 {
+    template<> struct BitmaskTraits<glf::Buffer::Mask>            { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Source>     { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::Barrier>         { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::RegionalBarrier> { static constexpr bool enable_bitmask_operations = true; };
