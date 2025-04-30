@@ -382,6 +382,7 @@ namespace fox::gfx::api::glf
         MaximumComputeWorkGroupSize                      = GL_MAX_COMPUTE_WORK_GROUP_SIZE, 
         MaximumCubemapTextureSize                        = GL_MAX_CUBE_MAP_TEXTURE_SIZE, 
         MaximumDebugGroupStackDepth                      = GL_MAX_DEBUG_GROUP_STACK_DEPTH, 
+        MaximumDebugMessageLength                        = GL_MAX_DEBUG_MESSAGE_LENGTH, 
         MaximumDepthTextureSamples                       = GL_MAX_DEPTH_TEXTURE_SAMPLES, 
         MaximumDrawBuffers                               = GL_MAX_DRAW_BUFFERS, 
         MaximumDualSourceDrawBuffers                     = GL_MAX_DUAL_SOURCE_DRAW_BUFFERS, 
@@ -577,14 +578,14 @@ namespace fox::gfx::api::glf
     {
         enum class Source : gl::enum_t 
         {
-            DebugSourceAPI            = GL_DEBUG_SOURCE_API,
-            DebugSourceWindowSystem   = GL_DEBUG_SOURCE_WINDOW_SYSTEM,
-            DebugSourceShaderCompiler = GL_DEBUG_SOURCE_SHADER_COMPILER,
-            DebugSourceThirdParty     = GL_DEBUG_SOURCE_THIRD_PARTY,
-            DebugSourceApplication    = GL_DEBUG_SOURCE_APPLICATION,
-            DebugSourceOther          = GL_DEBUG_SOURCE_OTHER, 
+            API            = GL_DEBUG_SOURCE_API,
+            WindowSystem   = GL_DEBUG_SOURCE_WINDOW_SYSTEM,
+            ShaderCompiler = GL_DEBUG_SOURCE_SHADER_COMPILER,
+            ThirdParty     = GL_DEBUG_SOURCE_THIRD_PARTY,
+            Application    = GL_DEBUG_SOURCE_APPLICATION,
+            Other          = GL_DEBUG_SOURCE_OTHER, 
 
-            DontCare                  = GL_DONT_CARE, 
+            DontCare       = GL_DONT_CARE, 
         };
         enum class Type : gl::enum_t 
         {

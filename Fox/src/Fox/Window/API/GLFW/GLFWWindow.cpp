@@ -8,6 +8,57 @@
 
 namespace fox::wnd::api
 {
+    static void debug_callback(gfx::api::gl::enum_t source, gfx::api::gl::enum_t type, gfx::api::gl::uint32_t id, gfx::api::gl::enum_t severity, gfx::api::gl::sizei_t length, const gfx::api::gl::char_t* message, const void* parameter)
+    {
+        const auto& sourceMessage = [source]() -> std::string
+            {
+                switch (source)
+                {
+                    case GL_DEBUG_SOURCE_API:             return "API";
+                    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   return "WINDOW_SYSTEM";
+                    case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER_COMPILER";
+                    case GL_DEBUG_SOURCE_THIRD_PARTY:     return "THIRD_PARTY";
+                    case GL_DEBUG_SOURCE_APPLICATION:     return "APPLICATION";
+                    case GL_DEBUG_SOURCE_OTHER:           return "OTHER";
+
+                    default:                              throw std::invalid_argument{ "Invalid source!" };
+                }
+            }();
+        const auto& typeMessage = [type]() -> std::string
+            {
+                switch (type)
+                {
+                    case GL_DEBUG_TYPE_ERROR:               return "ERROR";
+                    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
+                    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  return "UNDEFINED_BEHAVIOR";
+                    case GL_DEBUG_TYPE_PORTABILITY:         return "PORTABILITY";
+                    case GL_DEBUG_TYPE_PERFORMANCE:         return "PERFORMANCE";
+                    case GL_DEBUG_TYPE_MARKER:              return "MARKER";
+                    case GL_DEBUG_TYPE_OTHER:               return "OTHER";
+
+                    default:                                throw std::invalid_argument{ "Invalid type!" };
+                }
+            }();
+        const auto& severityMessage = [severity]() -> std::string
+            {
+                switch (severity)
+                {
+                    case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
+                    case GL_DEBUG_SEVERITY_LOW:          return "LOW";
+                    case GL_DEBUG_SEVERITY_MEDIUM:       return "MEDIUM";
+                    case GL_DEBUG_SEVERITY_HIGH:         return "HIGH";
+
+                    default:                             throw std::invalid_argument{ "Invalid severity!" };
+                }
+            }();
+
+        if (severityMessage == "NOTIFICATION") return;
+
+        std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}", sourceMessage, typeMessage, severityMessage, id, message) << std::endl;
+    }
+
+
+
 	GLFWWindow::GLFWWindow(const std::string& name, const fox::Vector2u& dimensions)
         : Window{ name, dimensions }
 	{
@@ -68,7 +119,7 @@ namespace fox::wnd::api
                 //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)
                 //context->gl_debug_callback(source, type, id, severity, length, message, param);
 
-                gl::debug_callback(source, type, id, severity, length, message, parameters);
+                debug_callback(source, type, id, severity, length, message, parameters);
             };
         const auto& glfw_input_key_callback           = [](GLFWwindow* window, fox::int32_t key, fox::int32_t scancode, fox::int32_t action, fox::int32_t mods)
             {

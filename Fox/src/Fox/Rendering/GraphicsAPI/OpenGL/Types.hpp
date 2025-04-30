@@ -7,8 +7,7 @@
 
 namespace fox::gfx::api::gl
 {
-    //Fundamental types
-    using void_t     = void;
+    using void_t     = GLvoid;
     using bool_t     = GLboolean;
     using char_t     = GLchar;
     using byte_t     = GLubyte;
@@ -25,14 +24,14 @@ namespace fox::gfx::api::gl
     using float32_t  = GLfloat;
     using float64_t  = GLdouble;
 
-    using sizei_t    = GLsizei;     //Sizes and dimensions (should not be negative)
-    using enum_t     = GLenum;      //Enumerated value of constants
-    using size_t     = GLsizeiptr;  //Buffer size   in bytes
-    using offset_t   = GLintptr;    //Buffer offset in bytes
-    using sync_t     = GLsync;      //Synchronization primitive
-    using bitfield_t = GLbitfield;  //Value which contains one or multiple flags
+    using enum_t     = GLenum;       //Enumerated value of constants
+    using sizei_t    = GLsizei;      //Sizes and dimensions (should not be negative)
+    using size_t     = GLsizeiptr;   //Buffer size in bytes
+    using offset_t   = GLintptr;     //Buffer offset in bytes
+    using sync_t     = GLsync;       //Synchronization primitive
+    using bitfield_t = GLbitfield;   //Value representing a combination of binary flags
     
-    using count_t    = gl::uint32_t;
+    using count_t    = gl::uint32_t; //Element count
 
     enum : gl::bool_t
     {
@@ -42,15 +41,11 @@ namespace fox::gfx::api::gl
     
 
 
-    //Strong aliases
-    enum class handle_t : gl::uint32_t {}; //Alias for OpenGL Object handles
-    enum class query_t  : gl::uint32_t {}; //Alias for OpenGL Query  handles
-
+    enum class handle_t : gl::uint32_t {}; //OpenGL Object handle
     constexpr gl::handle_t NullObject{};
 
 
 
-    //Vector types
     template<typename T, gl::int32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
     template<typename T, gl::int32_t N> using Matrix     = glm::mat<N, N, T>;
                                         using Quaternion = glm::quat;
@@ -86,7 +81,6 @@ namespace fox::gfx::api::gl
 
 
 
-    //Size and Range Types
     template<typename T, gl::uint32_t N>
     struct Dimensions
     {
@@ -119,4 +113,9 @@ namespace fox::gfx::api::gl
         gl::size_t   size{};
         gl::offset_t offset{};
     };
+
+
+
+    static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const void*) {}
+    using debug_callback_t = decltype(_debug_callback);
 }
