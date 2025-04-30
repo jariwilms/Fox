@@ -774,8 +774,6 @@ namespace fox::gfx::api::glf
         {
             Read        = GL_READ_FRAMEBUFFER, 
             Write       = GL_DRAW_FRAMEBUFFER, 
-
-            FrameBuffer = Write, 
         };
         enum class Filter
         {
@@ -1263,7 +1261,7 @@ namespace fox::gfx::api::glf
             VertexShaderInvocations                 = GL_VERTEX_SHADER_INVOCATIONS, 
             VerticesSubmitted                       = GL_VERTICES_SUBMITTED, 
         };
-        enum class ObjectParameter : gl::enum_t
+        enum class Parameter : gl::enum_t
         {
             Result          = GL_QUERY_RESULT, 
             ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
@@ -1271,7 +1269,7 @@ namespace fox::gfx::api::glf
 
             Target          = GL_QUERY_TARGET, 
         };
-        enum class TargetParameter : gl::enum_t
+        enum class Symbol : gl::enum_t
         {
             Current     = GL_CURRENT_QUERY, 
             CounterBits = GL_QUERY_COUNTER_BITS, 
@@ -1322,7 +1320,7 @@ namespace fox::gfx::api::glf
     };
     struct     Shader
     {
-        struct Binary
+        struct     Binary
         {
             enum class Format : gl::enum_t
             {

@@ -29,6 +29,8 @@ namespace fox::gfx::api::gl
         gl::int32_t   sValue{};
     };
 
+    using dispatch_t = std::variant<gl::Vector3u, gl::offset_t>;
+
     using FT = glf::Texture;
 
     using TextureParameter = std::variant<FT::MinificationFilter, FT::MagnificationFilter, FT::Wrapping>;
