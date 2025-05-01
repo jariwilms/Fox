@@ -7,32 +7,36 @@
 
 namespace fox::gfx::api::gl
 {
-    template<typename T>
-    struct color_t
-    {
-        using vector_t = glm::vec<4, T, glm::packed_highp>;
-
-        gl::enum_t       buffer{};
-        gl::Vector<T, 4> value{};
-    };
-    struct depth_t
-    {
-        gl::float32_t value{};
-    };
-    struct stencil_t
-    {
-        gl::int32_t value{};
-    };
-    struct depthstencil_t
-    {
-        gl::float32_t dValue{};
-        gl::int32_t   sValue{};
-    };
-
     using dispatch_t = std::variant<gl::Vector3u, gl::offset_t>;
 
-    using FT = glf::Texture;
+    using TextureParameter = std::variant<glf::Texture::MinificationFilter, glf::Texture::MagnificationFilter, glf::Texture::Wrapping>;
 
-    using TextureParameter = std::variant<FT::MinificationFilter, FT::MagnificationFilter, FT::Wrapping>;
-    using ClearValue       = std::variant<color_t<gl::int32_t>, color_t<gl::uint32_t>, color_t<gl::float32_t>, depth_t, stencil_t, depthstencil_t>;
+
+
+
+
+
+
+
+
+    struct color_p
+    {
+        gl::uint32_t                                           index{};
+        std::variant<gl::Vector4i, gl::Vector4u, gl::Vector4f> color{};
+    };
+    struct depth_p
+    {
+        std::variant<gl::int32_t, gl::uint32_t, gl::float32_t> value{};
+    };
+    struct stencil_p
+    {
+        std::variant<gl::int32_t, gl::uint32_t, gl::float32_t> value{};
+    };
+    struct depthstencil_p
+    {
+        gl::float32_t depth{};
+        gl::int32_t   stencil{};
+    };
+
+    using clear_v = std::variant<color_p, depth_p, stencil_p, depthstencil_p>;
 }

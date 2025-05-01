@@ -316,7 +316,7 @@ namespace fox::gfx::api::glf
     };
     enum class Data : gl::enum_t
     {
-        ActiveTexture                                    = GL_ACTIVE_TEXTURE, 
+        //ActiveTexture                                    = GL_ACTIVE_TEXTURE, 
         AliasedLineWidthRange                            = GL_ALIASED_LINE_WIDTH_RANGE, 
         ArrayBufferBinding                               = GL_ARRAY_BUFFER_BINDING, 
         BlendColor                                       = GL_BLEND_COLOR, 
