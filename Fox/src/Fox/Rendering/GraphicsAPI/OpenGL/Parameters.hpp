@@ -16,9 +16,6 @@ namespace fox::gfx::api::gl
 
 
 
-
-
-
     struct color_p
     {
         gl::uint32_t                                           index{};

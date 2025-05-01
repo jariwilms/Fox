@@ -9,7 +9,7 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags = gl::get_integer_v(glf::Data::ContextFlags);
+			s_contextFlags = gl::query_value<glf::Data::ContextFlags>();
 			if (s_contextFlags & std::to_underlying(glf::Context::Flag::Debug))
 			{
 				gl::enable(glf::Feature::DebugOutput);
@@ -20,13 +20,13 @@ namespace fox::gfx::api::gl
 			}
 
 			//s_contextProfile         = gl::get_integer_v(glf::Data::ContextProfile);
-			s_majorVersion           = gl::get_integer_v(glf::Data::MajorVersion);
-			s_minorVersion           = gl::get_integer_v(glf::Data::MinorVersion);
+			s_majorVersion           = gl::query_value<glf::Data::MajorVersion>();
+			s_minorVersion           = gl::query_value<glf::Data::MinorVersion>();
 
-			s_vendor                 = gl::get_string(glf::Connection::Vendor);
-			s_renderer               = gl::get_string(glf::Connection::Renderer);
-			s_version                = gl::get_string(glf::Connection::Version);
-			s_shadingLanguageVersion = gl::get_string(glf::Connection::ShadingLanguageVersion);
+			s_vendor                 = gl::get_string(glf::Connection::Vendor,                 {});
+			s_renderer               = gl::get_string(glf::Connection::Renderer,               {});
+			s_version                = gl::get_string(glf::Connection::Version,                {});
+			s_shadingLanguageVersion = gl::get_string(glf::Connection::ShadingLanguageVersion, {});
 		}
 
 	private:

@@ -42,7 +42,7 @@ namespace fox::gfx::api::gl
 
         void tie(gl::handle_t vertexBuffer, VertexLayout layout)
         {
-            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer, m_bindingPoint, static_cast<gl::sizei_t>(layout.stride()));
+            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer, m_bindingPoint, static_cast<gl::sizei_t>(layout.stride()), gl::offset_t{});
 
             gl::uint32_t offset{};
             for (const auto& attribute : layout.attributes())
