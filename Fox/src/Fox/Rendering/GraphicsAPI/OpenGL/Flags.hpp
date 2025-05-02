@@ -172,7 +172,7 @@ namespace fox::gfx::api::glf
         {
             Access       = GL_BUFFER_ACCESS, 
             AccessFlags  = GL_BUFFER_ACCESS_FLAGS, 
-            IsImmutable  = GL_BUFFER_IMMUTABLE_STORAGE, 
+            Immutable    = GL_BUFFER_IMMUTABLE_STORAGE, 
             IsMapped     = GL_BUFFER_MAPPED, 
             MapLength    = GL_BUFFER_MAP_LENGTH, 
             MapOffset    = GL_BUFFER_MAP_OFFSET, 
@@ -496,7 +496,7 @@ namespace fox::gfx::api::glf
         StencilBackFunction                              = GL_STENCIL_BACK_FUNC, 
         StencilBackPassDepthFail                         = GL_STENCIL_BACK_PASS_DEPTH_FAIL, 
         StencilBackPassDepthPass                         = GL_STENCIL_BACK_PASS_DEPTH_PASS, 
-        StencilBackRef                                   = GL_STENCIL_BACK_REF, 
+        StencilBackReference                                   = GL_STENCIL_BACK_REF, 
         StencilBackValueMask                             = GL_STENCIL_BACK_VALUE_MASK, 
         StencilBackWritemask                             = GL_STENCIL_BACK_WRITEMASK, 
         StencilClearValue                                = GL_STENCIL_CLEAR_VALUE, 
@@ -1217,10 +1217,20 @@ namespace fox::gfx::api::glf
             };
         };
     };
-    enum class ProvokingVertex : gl::enum_t
+    struct     ProvokingVertex
     {
-        FirstVertex = GL_FIRST_VERTEX_CONVENTION, 
-        LastVertex  = GL_LAST_VERTEX_CONVENTION, 
+        enum class Mode : gl::enum_t
+        {
+            FirstVertex = GL_FIRST_VERTEX_CONVENTION,
+            LastVertex = GL_LAST_VERTEX_CONVENTION,
+
+        };
+        enum class Convention : gl::enum_t
+        {
+            ProvokingVertex = GL_PROVOKING_VERTEX,
+            FirstVertex     = GL_FIRST_VERTEX_CONVENTION,
+            LastVertex      = GL_LAST_VERTEX_CONVENTION,
+        };
     };
     struct     Query
     {
@@ -1850,12 +1860,6 @@ namespace fox::gfx::api::glf
         {
             Array = GL_VERTEX_ATTRIB_ARRAY_POINTER, 
         };
-    };
-    enum class ViewportIndexConvention
-    {
-        ProvokingVertex = GL_PROVOKING_VERTEX, 
-        FirstVertex     = GL_FIRST_VERTEX_CONVENTION, 
-        LastVertex      = GL_LAST_VERTEX_CONVENTION, 
     };
 }
 namespace fox::gfx::api::gl

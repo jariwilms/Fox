@@ -60,9 +60,12 @@ namespace fox::gfx::api::gl
 
         return value;
     }
-    static void get_pointer_v            (glf::Callback::Pointer pointer, gl::void_t* value)
+    static auto get_pointer_v            (glf::Callback::Pointer pointer)
     {
+        gl::void_t* value{};
         glGetPointerv(gl::to_underlying(pointer), &value);
+
+        return value;
     }
     static auto get_string               (glf::Connection connection, std::optional<gl::uint32_t> index)
     {
@@ -73,61 +76,62 @@ namespace fox::gfx::api::gl
 
         return std::string{ reinterpret_cast<const gl::char_t*>(value) };
     }
-    static void get_internal_format_v    (gl::enum_t target, gl::enum_t internalformat, gl::enum_t pname, gl::sizei_t bufsize)
+    static void get_internal_format_iv   (gl::enum_t target, gl::enum_t internalformat, gl::enum_t pname, gl::sizei_t bufsize)
     {
+        //@OpenGL devs: This function is plain ridiculous
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
-    static void get_transform_feedback_v (gl::handle_t transformFeedback, glf::TransformFeedback::Property property, gl::int32_t* value)
+    static void get_transform_feedback_iv(gl::handle_t transformFeedback, glf::TransformFeedback::Property property, gl::int32_t* value)
     {
         glGetTransformFeedbackiv(gl::to_underlying(transformFeedback), gl::to_underlying(property), value);
     }
     
     template<glf::Data D>
-    static auto query_value(std::optional<gl::uint32_t> index = {})
+    static auto get_value(std::optional<gl::uint32_t> index = {})
     {
-        const auto& _bool_t         = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _bool_t          = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::bool_t value{};
                 gl::get_boolean_v(data, index, &value);
 
                 return value;
             };
-        const auto& _int32_t        = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _int32_t         = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::int32_t value{};
                 gl::get_integer32_v(data, index, &value);
 
                 return value;
             };
-        const auto& _int64_t        = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _i64_t           = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::int64_t value{};
                 gl::get_integer64_v(data, index, &value);
 
                 return value;
             };
-        const auto& _uint32_t       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _uint32_t        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::int32_t value{};
                 gl::get_integer32_v(data, index, &value);
 
                 return static_cast<gl::uint32_t>(value);
             };
-        const auto& _uint64_t       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _uint64_t        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::int64_t value{};
                 gl::get_integer64_v(data, index, &value);
 
                 return static_cast<gl::uint64_t>(value);
             };
-        const auto& _float32_t      = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _float32_t       = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::float32_t value{};
                 gl::get_float32_v(data, index, &value);
 
                 return value;
             };
-        const auto& _float64_t      = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _float64_t       = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::float64_t value{};
                 gl::get_float64_v(data, index, &value);
@@ -135,50 +139,50 @@ namespace fox::gfx::api::gl
                 return value;
             };
                                     
-        const auto& _vector4b       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _vector4b        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::Vector4b value{};
                 gl::get_boolean_v(data, index, glm::value_ptr(value));
 
                 return value;
             };
-        const auto& _vector2i       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _vector2i        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::Vector2i value{};
                 gl::get_integer32_v(data, index, glm::value_ptr(value));
 
                 return value;
             };
-        const auto& _vector2f       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _vector2f        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::Vector2f value{};
                 gl::get_float32_v(data, index, glm::value_ptr(value));
 
                 return value;
             };
-        const auto& _vector4f       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _vector4f        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::Vector4f value{};
                 gl::get_float32_v(data, index, glm::value_ptr(value));
 
                 return value;
             };
-        const auto& _vector2d       = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _vector2d        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::Vector2d value{};
                 gl::get_float64_v(data, index, glm::value_ptr(value));
 
                 return value;
             };
-
-        const auto& _handle_t       = [](glf::Data data, std::optional<gl::uint32_t> index)
+                                           
+        const auto& _handle_t        = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::int32_t value{};
                 gl::get_integer32_v(data, index, &value);
 
                 return gl::handle_t{ static_cast<gl::uint32_t>(value) };
             };
-        const auto& _bitfield_t     = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _bitfield_t      = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::int32_t value{};
                 gl::get_integer32_v(data, index, &value);
@@ -186,7 +190,7 @@ namespace fox::gfx::api::gl
                 return static_cast<gl::bitfield_t>(value);
             };
 
-        const auto& _binary_formats = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _binary_format_t = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 throw std::logic_error{ "The method or operation has not been implemented!" };
                 return 0;
@@ -200,7 +204,7 @@ namespace fox::gfx::api::gl
 
                 //return formats;
             };
-        const auto& _area_t         = [](glf::Data data, std::optional<gl::uint32_t> index)
+        const auto& _area_t          = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
                 gl::area_t<gl::uint32_t> value{ {} };
                 gl::get_integer32_v(data, index, reinterpret_cast<gl::int32_t*>(&value));
@@ -210,266 +214,249 @@ namespace fox::gfx::api::gl
 
 
 
-        if constexpr (D == glf::Data::AliasedLineWidthRange)                            return _vector2f      (D, index);
-        if constexpr (D == glf::Data::BlendColor)                                       return _vector4f      (D, index);
-        if constexpr (D == glf::Data::BlendDestinationAlpha)                            return glf::Blending::Factor       { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::BlendDestinationRGB)                              return glf::Blending::Factor       { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::BlendEquationAlpha)                               return glf::Blending::Equation     { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::BlendEquationRGB)                                 return glf::Blending::Equation     { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::BlendSourceAlpha)                                 return glf::Blending::Factor       { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::BlendSourceRGB)                                   return glf::Blending::Factor       { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::ColorClearValue)                                  return _vector4f      (D, index);
-        if constexpr (D == glf::Data::ColorWritemask)                                   return _vector4b      (D, index);
-        if constexpr (D == glf::Data::ContextFlags)                                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::CopyReadBufferBinding)                            return _handle_t      (D, index);
-        if constexpr (D == glf::Data::CopyWriteBufferBinding)                           return _handle_t      (D, index);
-        if constexpr (D == glf::Data::CurrentProgram)                                   return _handle_t      (D, index);
-        if constexpr (D == glf::Data::DebugGroupStackDepth)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::DebugLoggedMessages)                              return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::DepthClearValue)                                  return _float64_t     (D, index);
-        if constexpr (D == glf::Data::DepthFunction)                                    return glf::DepthFunction          { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::DepthRange)                                       return _vector2d      (D, index);
-        if constexpr (D == glf::Data::DispatchIndirectBufferBinding)                    return _handle_t      (D, index);
-        if constexpr (D == glf::Data::DoubleBuffer)                                     return _bool_t        (D, index);
-        if constexpr (D == glf::Data::DrawBuffer)                                       return glf::FrameBuffer::Source    { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::DrawFramebufferBinding)                           return _handle_t      (D, index);
-        if constexpr (D == glf::Data::DrawIndirectBufferBinding)                        return _handle_t      (D, index);
-        if constexpr (D == glf::Data::FragmentShaderDerivativeHint)                     return glf::Hint::Mode             { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::ImplementationColorReadFormat)                    return glf::PixelData::Format      { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::ImplementationColorReadType)                      return glf::PixelData::Type        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::IndexArrayBufferBinding)                          return _handle_t      (D, index);
-        if constexpr (D == glf::Data::LayerProvokingVertex)                             return glf::ProvokingVertex        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::LineSmoothHint)                                   return glf::Hint::Mode             { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::LineWidth)                                        return _float64_t     (D, index);
-        if constexpr (D == glf::Data::LogicOperationMode)                               return glf::Logic::Operation       { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::MajorVersion)                                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::Maximum3DTextureSize)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumArrayTextureLayers)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumClipDistances)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumColorTextureSamples)                       return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedAtomicCounters)                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedComputeUniformComponents)          return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedFragmentUniformComponents)         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedGeometryUniformComponents)         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedShaderStorageBlocks)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedTextureImageUnits)                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedUniformBlocks)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCombinedVertexUniformComponents)           return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeAtomicCounterBuffers)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeAtomicCounters)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeShaderStorageBlocks)                return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeTextureImageUnits)                  return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeUniformBlocks)                      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeUniformComponents)                  return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeWorkGroupCount)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeWorkGroupInvocations)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumComputeWorkGroupSize)                      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumCubemapTextureSize)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumDebugGroupStackDepth)                      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumDebugMessageLength)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumDepthTextureSamples)                       return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumDrawBuffers)                               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumDualSourceDrawBuffers)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumElementIndex)                              return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFragmentAtomicCounters)                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFragmentInputComponents)                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFragmentShaderStorageBlocks)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFragmentUniformBlocks)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFragmentUniformComponents)                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFragmentUniformVectors)                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFrameBufferHeight)                         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFrameBufferLayers)                         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFrameBufferSamples)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumFrameBufferWidth)                          return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryAtomicCounters)                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryInputComponents)                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryOutputComponents)                  return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryShaderStorageBlocks)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryTextureImageUnits)                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryUniformBlocks)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumGeometryUniformComponents)                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumIndexElements)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumIntegerSamples)                            return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumLabelLength)                               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumProgramTexelOffset)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumRectangleTextureSize)                      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumRenderBufferSize)                          return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumSampleMaskWords)                           return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumServerWaitTimeout)                         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumShaderStorageBufferBindings)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTessellationControlAtomicCounters)         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTessellationControlShaderStorageBlocks)    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTessellationEvaluationAtomicCounters)      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTessellationEvaluationShaderStorageBlocks) return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTextureBufferSize)                         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTextureImageUnits)                         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTextureLODBias)                            return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumTextureSize)                               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumUniformBlockSize)                          return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumUniformBufferBindings)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumUniformLocations)                          return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVaryingComponents)                         return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVaryingFloats)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVaryingVectors)                            return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexAtomicCounters)                      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexAttributeBindings)                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexAttributeRelativeOffset)             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexAttributes)                          return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexElements)                            return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexOutputComponents)                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexShaderStorageBlocks)                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexTextureImageUnits)                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexUniformBlocks)                       return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexUniformComponents)                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumVertexUniformVectors)                      return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumViewportDimensions)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MaximumViewports)                                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MinimumMapBufferAlignment)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::MinimumProgramTexelOffset)                        return _int32_t       (D, index);
-        if constexpr (D == glf::Data::MinorVersion)                                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::NumberCompressedTextureFormats)                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::NumberExtensions)                                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::NumberProgramBinaryFormats)                       return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::NumberShaderBinaryFormats)                        return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackAlignment)                                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackImageHeight)                                  return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackRowLength)                                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackSkipImages)                                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackSkipPixels)                                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackSkipRows)                                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::PackSwapBytes)                                    return _bool_t        (D, index);
-        if constexpr (D == glf::Data::PixelPackBufferBinding)                           return _handle_t      (D, index);
-        if constexpr (D == glf::Data::PixelUnpackBufferBinding)                         return _handle_t      (D, index);
-        if constexpr (D == glf::Data::PointFadeThresholdSize)                           return _float32_t     (D, index);
-        if constexpr (D == glf::Data::PointSize)                                        return _float32_t     (D, index);
-        if constexpr (D == glf::Data::PointSizeGranularity)                             return _float32_t     (D, index);
-        if constexpr (D == glf::Data::PointSizeRange)                                   return _vector2f      (D, index);
-        if constexpr (D == glf::Data::PolygonOffsetFactor)                              return _float32_t     (D, index);
-        if constexpr (D == glf::Data::PolygonOffsetUnits)                               return _float32_t     (D, index);
-        if constexpr (D == glf::Data::PolygonSmoothHint)                                return glf::Hint::Mode             { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::PrimitiveRestartIndex)                            return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::ProgramBinaryFormats)                             return _binary_formats(D, index);
-        if constexpr (D == glf::Data::ProgramPipelineBinding)                           return _handle_t      (D, index);
-        if constexpr (D == glf::Data::ProvokingVertex)                                  return glf::ProvokingVertex        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::QueryBufferBinding)                               return _handle_t      (D, index);
-        if constexpr (D == glf::Data::ReadBuffer)                                       return glf::FrameBuffer::Source    { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::ReadFrameBufferBinding)                           return _handle_t      (D, index);
-        if constexpr (D == glf::Data::RenderbufferBinding)                              return _handle_t      (D, index);
-        if constexpr (D == glf::Data::SampleBuffers)                                    return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::SampleCoverageInvert)                             return _bool_t        (D, index);
-        if constexpr (D == glf::Data::SampleCoverageValue)                              return _float32_t     (D, index);
-        if constexpr (D == glf::Data::SampleMaskValue)                                  return _bitfield_t    (D, index);
-        if constexpr (D == glf::Data::SamplerBinding)                                   return _handle_t      (D, index);
-        if constexpr (D == glf::Data::Samples)                                          return _bitfield_t    (D, index);
-        if constexpr (D == glf::Data::ScissorBox)                                       return _area_t        (D, index);
-        if constexpr (D == glf::Data::ShaderCompiler)                                   return _bool_t        (D, index);
-        if constexpr (D == glf::Data::ShaderStorageBufferBinding)                       return _handle_t      (D, index);
-        if constexpr (D == glf::Data::ShaderStorageBufferOffsetAlignment)               return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::ShaderStorageBufferSize)                          return _uint64_t      (D, index);
-        if constexpr (D == glf::Data::ShaderStorageBufferStart)                         return _uint64_t      (D, index);
-        if constexpr (D == glf::Data::SmoothLineWidthGranularity)                       return _float32_t     (D, index);
-        if constexpr (D == glf::Data::SmoothLineWidthRange)                             return _vector2f      (D, index);
-        if constexpr (D == glf::Data::StencilBackFail)                                  return glf::Stencil::Action        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilBackFunction)                              return glf::Stencil::Function      { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilBackPassDepthFail)                         return glf::Stencil::Action        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilBackPassDepthPass)                         return glf::Stencil::Action        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilBackRef)                                   return _int32_t       (D, index);
-        if constexpr (D == glf::Data::StencilBackValueMask)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::StencilBackWritemask)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::StencilClearValue)                                return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::StencilFail)                                      return glf::Stencil::Action        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilFunction)                                  return glf::Stencil::Function      { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilPassDepthFail)                             return glf::Stencil::Action        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilPassDepthPass)                             return glf::Stencil::Action        { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::StencilReference)                                 return _int32_t       (D, index);
-        if constexpr (D == glf::Data::StencilValueMask)                                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::StencilWritemask)                                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::Stereo)                                           return _bool_t        (D, index);
-        if constexpr (D == glf::Data::SubpixelBits)                                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding1D)                                 return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding1DArray)                            return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding2D)                                 return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding2DArray)                            return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding2DMultisample)                      return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding2DMultisampleArray)                 return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBinding3D)                                 return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBindingBuffer)                             return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBindingCubemap)                            return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBindingRectangle)                          return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBufferBinding)                             return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TextureBufferOffsetAlignment)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::TextureCompressionHint)                           return glf::Hint::Mode             { _uint32_t(D, index) };
-        if constexpr (D == glf::Data::Timestamp)                                        return _int64_t       (D, index);
-        if constexpr (D == glf::Data::TransformFeedbackBufferBinding)                   return _handle_t      (D, index);
-        if constexpr (D == glf::Data::TransformfeedbackBufferSize)                      return _uint64_t      (D, index);
-        if constexpr (D == glf::Data::TransformFeedbackBufferStart)                     return _uint64_t      (D, index);
-        if constexpr (D == glf::Data::UniformBufferBinding)                             return _handle_t      (D, index);
-        if constexpr (D == glf::Data::UniformBufferOffsetAlignment)                     return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UniformBufferSize)                                return _uint64_t      (D, index);
-        if constexpr (D == glf::Data::UniformBufferStart)                               return _uint64_t      (D, index);
-        if constexpr (D == glf::Data::UnpackAlignment)                                  return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UnpackImageHeight)                                return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UnpackRowLength)                                  return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UnpackSkipImages)                                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UnpackSkipPixels)                                 return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UnpackSkipRows)                                   return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::UnpackSwapBytes)                                  return _bool_t        (D, index);
-        if constexpr (D == glf::Data::VertexArrayBinding)                               return _handle_t      (D, index);
-        if constexpr (D == glf::Data::VertexBindingDivisor)                             return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::VertexBindingOffset)                              return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::VertexBindingStride)                              return _uint32_t      (D, index);
-        if constexpr (D == glf::Data::Viewport)                                         return _area_t        (D, index);
-        if constexpr (D == glf::Data::ViewportBoundsRange)                              return _vector2i      (D, index);
-        if constexpr (D == glf::Data::ViewportIndexProvokingVertex)                     return glf::ViewportIndexConvention{ _uint32_t(D, index) };
-        if constexpr (D == glf::Data::ViewportSubPixelBits)                             return _uint32_t      (D, index);
+        if constexpr (D == glf::Data::AliasedLineWidthRange)                            return _vector2f(D, index);
+        if constexpr (D == glf::Data::BlendColor)                                       return _vector4f(D, index);
+        if constexpr (D == glf::Data::BlendDestinationAlpha)                            return glf::Blending::Factor           { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::BlendDestinationRGB)                              return glf::Blending::Factor           { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::BlendEquationAlpha)                               return glf::Blending::Equation         { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::BlendEquationRGB)                                 return glf::Blending::Equation         { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::BlendSourceAlpha)                                 return glf::Blending::Factor           { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::BlendSourceRGB)                                   return glf::Blending::Factor           { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::ColorClearValue)                                  return _vector4f(D, index);
+        if constexpr (D == glf::Data::ColorWritemask)                                   return _vector4b(D, index);
+        if constexpr (D == glf::Data::ContextFlags)                                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::CopyReadBufferBinding)                            return _handle_t(D, index);
+        if constexpr (D == glf::Data::CopyWriteBufferBinding)                           return _handle_t(D, index);
+        if constexpr (D == glf::Data::CurrentProgram)                                   return _handle_t(D, index);
+        if constexpr (D == glf::Data::DebugGroupStackDepth)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::DebugLoggedMessages)                              return _uint32_t(D, index);
+        if constexpr (D == glf::Data::DepthClearValue)                                  return _float64_t(D, index);
+        if constexpr (D == glf::Data::DepthFunction)                                    return glf::DepthFunction              { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::DepthRange)                                       return _vector2d(D, index);
+        if constexpr (D == glf::Data::DispatchIndirectBufferBinding)                    return _handle_t(D, index);
+        if constexpr (D == glf::Data::DoubleBuffer)                                     return _bool_t  (D, index);
+        if constexpr (D == glf::Data::DrawBuffer)                                       return glf::FrameBuffer::Source        { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::DrawFramebufferBinding)                           return _handle_t(D, index);
+        if constexpr (D == glf::Data::DrawIndirectBufferBinding)                        return _handle_t(D, index);
+        if constexpr (D == glf::Data::FragmentShaderDerivativeHint)                     return glf::Hint::Mode                 { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::ImplementationColorReadFormat)                    return glf::PixelData::Format          { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::ImplementationColorReadType)                      return glf::PixelData::Type            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::IndexArrayBufferBinding)                          return _handle_t(D, index);
+        if constexpr (D == glf::Data::LayerProvokingVertex)                             return glf::ProvokingVertex::Mode      { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::LineSmoothHint)                                   return glf::Hint::Mode                 { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::LineWidth)                                        return _float64_t(D, index);
+        if constexpr (D == glf::Data::LogicOperationMode)                               return glf::Logic::Operation           { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::MajorVersion)                                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::Maximum3DTextureSize)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumArrayTextureLayers)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumClipDistances)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumColorTextureSamples)                       return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedAtomicCounters)                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedComputeUniformComponents)          return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedFragmentUniformComponents)         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedGeometryUniformComponents)         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedShaderStorageBlocks)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedTextureImageUnits)                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedUniformBlocks)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCombinedVertexUniformComponents)           return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeAtomicCounterBuffers)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeAtomicCounters)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeShaderStorageBlocks)                return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeTextureImageUnits)                  return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeUniformBlocks)                      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeUniformComponents)                  return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeWorkGroupCount)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeWorkGroupInvocations)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumComputeWorkGroupSize)                      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumCubemapTextureSize)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumDebugGroupStackDepth)                      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumDebugMessageLength)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumDepthTextureSamples)                       return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumDrawBuffers)                               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumDualSourceDrawBuffers)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumElementIndex)                              return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFragmentAtomicCounters)                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFragmentInputComponents)                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFragmentShaderStorageBlocks)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFragmentUniformBlocks)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFragmentUniformComponents)                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFragmentUniformVectors)                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFrameBufferHeight)                         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFrameBufferLayers)                         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFrameBufferSamples)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumFrameBufferWidth)                          return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryAtomicCounters)                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryInputComponents)                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryOutputComponents)                  return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryShaderStorageBlocks)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryTextureImageUnits)                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryUniformBlocks)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumGeometryUniformComponents)                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumIndexElements)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumIntegerSamples)                            return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumLabelLength)                               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumProgramTexelOffset)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumRectangleTextureSize)                      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumRenderBufferSize)                          return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumSampleMaskWords)                           return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumServerWaitTimeout)                         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumShaderStorageBufferBindings)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTessellationControlAtomicCounters)         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTessellationControlShaderStorageBlocks)    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTessellationEvaluationAtomicCounters)      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTessellationEvaluationShaderStorageBlocks) return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTextureBufferSize)                         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTextureImageUnits)                         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTextureLODBias)                            return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumTextureSize)                               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumUniformBlockSize)                          return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumUniformBufferBindings)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumUniformLocations)                          return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVaryingComponents)                         return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVaryingFloats)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVaryingVectors)                            return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexAtomicCounters)                      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexAttributeBindings)                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexAttributeRelativeOffset)             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexAttributes)                          return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexElements)                            return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexOutputComponents)                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexShaderStorageBlocks)                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexTextureImageUnits)                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexUniformBlocks)                       return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexUniformComponents)                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumVertexUniformVectors)                      return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumViewportDimensions)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MaximumViewports)                                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MinimumMapBufferAlignment)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::MinimumProgramTexelOffset)                        return _int32_t(D, index);
+        if constexpr (D == glf::Data::MinorVersion)                                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::NumberCompressedTextureFormats)                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::NumberExtensions)                                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::NumberProgramBinaryFormats)                       return _uint32_t(D, index);
+        if constexpr (D == glf::Data::NumberShaderBinaryFormats)                        return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackAlignment)                                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackImageHeight)                                  return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackRowLength)                                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackSkipImages)                                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackSkipPixels)                                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackSkipRows)                                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::PackSwapBytes)                                    return _bool_t(D, index);
+        if constexpr (D == glf::Data::PixelPackBufferBinding)                           return _handle_t(D, index);
+        if constexpr (D == glf::Data::PixelUnpackBufferBinding)                         return _handle_t(D, index);
+        if constexpr (D == glf::Data::PointFadeThresholdSize)                           return _float32_t(D, index);
+        if constexpr (D == glf::Data::PointSize)                                        return _float32_t(D, index);
+        if constexpr (D == glf::Data::PointSizeGranularity)                             return _float32_t(D, index);
+        if constexpr (D == glf::Data::PointSizeRange)                                   return _vector2f(D, index);
+        if constexpr (D == glf::Data::PolygonOffsetFactor)                              return _float32_t(D, index);
+        if constexpr (D == glf::Data::PolygonOffsetUnits)                               return _float32_t(D, index);
+        if constexpr (D == glf::Data::PolygonSmoothHint)                                return glf::Hint::Mode                 { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::PrimitiveRestartIndex)                            return _uint32_t(D, index);
+        if constexpr (D == glf::Data::ProgramBinaryFormats)                             return _binary_format_t(D, index);
+        if constexpr (D == glf::Data::ProgramPipelineBinding)                           return _handle_t(D, index);
+        if constexpr (D == glf::Data::ProvokingVertex)                                  return glf::ProvokingVertex::Mode      { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::QueryBufferBinding)                               return _handle_t(D, index);
+        if constexpr (D == glf::Data::ReadBuffer)                                       return glf::FrameBuffer::Source        { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::ReadFrameBufferBinding)                           return _handle_t(D, index);
+        if constexpr (D == glf::Data::RenderbufferBinding)                              return _handle_t(D, index);
+        if constexpr (D == glf::Data::SampleBuffers)                                    return _uint32_t(D, index);
+        if constexpr (D == glf::Data::SampleCoverageInvert)                             return _bool_t(D, index);
+        if constexpr (D == glf::Data::SampleCoverageValue)                              return _float32_t(D, index);
+        if constexpr (D == glf::Data::SampleMaskValue)                                  return _bitfield_t(D, index);
+        if constexpr (D == glf::Data::SamplerBinding)                                   return _handle_t(D, index);
+        if constexpr (D == glf::Data::Samples)                                          return _bitfield_t(D, index);
+        if constexpr (D == glf::Data::ScissorBox)                                       return _area_t(D, index);
+        if constexpr (D == glf::Data::ShaderCompiler)                                   return _bool_t(D, index);
+        if constexpr (D == glf::Data::ShaderStorageBufferBinding)                       return _handle_t(D, index);
+        if constexpr (D == glf::Data::ShaderStorageBufferOffsetAlignment)               return _uint32_t(D, index);
+        if constexpr (D == glf::Data::ShaderStorageBufferSize)                          return _uint64_t(D, index);
+        if constexpr (D == glf::Data::ShaderStorageBufferStart)                         return _uint64_t(D, index);
+        if constexpr (D == glf::Data::SmoothLineWidthGranularity)                       return _float32_t(D, index);
+        if constexpr (D == glf::Data::SmoothLineWidthRange)                             return _vector2f (D, index);
+        if constexpr (D == glf::Data::StencilBackFail)                                  return glf::Stencil::Action            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilBackFunction)                              return glf::Stencil::Function          { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilBackPassDepthFail)                         return glf::Stencil::Action            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilBackPassDepthPass)                         return glf::Stencil::Action            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilBackReference)                             return _int32_t(D, index);
+        if constexpr (D == glf::Data::StencilBackValueMask)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::StencilBackWritemask)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::StencilClearValue)                                return _uint32_t(D, index);
+        if constexpr (D == glf::Data::StencilFail)                                      return glf::Stencil::Action            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilFunction)                                  return glf::Stencil::Function          { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilPassDepthFail)                             return glf::Stencil::Action            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilPassDepthPass)                             return glf::Stencil::Action            { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::StencilReference)                                 return _int32_t(D, index);
+        if constexpr (D == glf::Data::StencilValueMask)                                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::StencilWritemask)                                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::Stereo)                                           return _bool_t(D, index);
+        if constexpr (D == glf::Data::SubpixelBits)                                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding1D)                                 return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding1DArray)                            return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding2D)                                 return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding2DArray)                            return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding2DMultisample)                      return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding2DMultisampleArray)                 return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBinding3D)                                 return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBindingBuffer)                             return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBindingCubemap)                            return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBindingRectangle)                          return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBufferBinding)                             return _handle_t(D, index);
+        if constexpr (D == glf::Data::TextureBufferOffsetAlignment)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::TextureCompressionHint)                           return glf::Hint::Mode                 { _uint32_t(D, index) };
+        if constexpr (D == glf::Data::Timestamp)                                        return _i64_t(D, index);
+        if constexpr (D == glf::Data::TransformFeedbackBufferBinding)                   return _handle_t(D, index);
+        if constexpr (D == glf::Data::TransformfeedbackBufferSize)                      return _uint64_t(D, index);
+        if constexpr (D == glf::Data::TransformFeedbackBufferStart)                     return _uint64_t(D, index);
+        if constexpr (D == glf::Data::UniformBufferBinding)                             return _handle_t(D, index);
+        if constexpr (D == glf::Data::UniformBufferOffsetAlignment)                     return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UniformBufferSize)                                return _uint64_t(D, index);
+        if constexpr (D == glf::Data::UniformBufferStart)                               return _uint64_t(D, index);
+        if constexpr (D == glf::Data::UnpackAlignment)                                  return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UnpackImageHeight)                                return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UnpackRowLength)                                  return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UnpackSkipImages)                                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UnpackSkipPixels)                                 return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UnpackSkipRows)                                   return _uint32_t(D, index);
+        if constexpr (D == glf::Data::UnpackSwapBytes)                                  return _bool_t(D, index);
+        if constexpr (D == glf::Data::VertexArrayBinding)                               return _handle_t(D, index);
+        if constexpr (D == glf::Data::VertexBindingDivisor)                             return _uint32_t(D, index);
+        if constexpr (D == glf::Data::VertexBindingOffset)                              return _uint32_t(D, index);
+        if constexpr (D == glf::Data::VertexBindingStride)                              return _uint32_t(D, index);
+        if constexpr (D == glf::Data::Viewport)                                         return _area_t(D, index);
+        if constexpr (D == glf::Data::ViewportBoundsRange)                              return _vector2i(D, index);
+        if constexpr (D == glf::Data::ViewportIndexProvokingVertex)                     return glf::ProvokingVertex::Convention{ _uint32_t(D, index) };
+        if constexpr (D == glf::Data::ViewportSubPixelBits)                             return _uint32_t(D, index);
     }
-
-
 
 
 
     //Chapter 4 - Event Model
-    static auto get_sync_iv(gl::sync_t sync, glf::Synchronization::Property property)
+    static auto get_sync_iv                  (gl::sync_t sync, glf::Synchronization::Property property, gl::int32_t* value)
     {
-        gl::int32_t value{};
-        glGetSynciv(sync, gl::to_underlying(property), sizeof(gl::int32_t), nullptr, &value);
-
-        return value;
+        glGetSynciv(sync, gl::to_underlying(property), sizeof(gl::int32_t), nullptr, value);
     }
-    static auto get_query_iv                 (glf::Query::Target target, glf::Query::Symbol symbol, std::optional<gl::uint32_t> index = std::nullopt)
+    static auto get_query_iv                 (glf::Query::Target target, glf::Query::Symbol symbol, std::optional<gl::uint32_t> index)
     {
         gl::int32_t value{};
         glGetQueryIndexediv(gl::to_underlying(target), index.value_or(gl::uint32_t{ 0 }), gl::to_underlying(symbol), &value);
 
         return value;
     }
-    static auto get_query_object_iv          (gl::handle_t query, glf::Query::Parameter parameter)
+    static auto get_query_object_iv          (gl::handle_t query, glf::Query::Parameter parameter, gl::int32_t* value)
     {
-        gl::int32_t value{};
-        glGetQueryObjectiv(gl::to_underlying(query), gl::to_underlying(parameter), &value);
-
-        return value;
+        glGetQueryObjectiv(gl::to_underlying(query), gl::to_underlying(parameter), value);
     }
-    static auto get_query_object_uiv         (gl::handle_t query, glf::Query::Parameter parameter)
+    static auto get_query_object_uiv         (gl::handle_t query, glf::Query::Parameter parameter, gl::uint32_t* value)
     {
-        gl::uint32_t value{};
-        glGetQueryObjectuiv(gl::to_underlying(query), gl::to_underlying(parameter), &value);
-
-        return value;
+        glGetQueryObjectuiv(gl::to_underlying(query), gl::to_underlying(parameter), value);
     }
-    static auto get_query_object_i64v        (gl::handle_t query, glf::Query::Parameter parameter)
+    static auto get_query_object_i64v        (gl::handle_t query, glf::Query::Parameter parameter, gl::int64_t* value)
     {
-        gl::int64_t value{};
-        glGetQueryObjecti64v(gl::to_underlying(query), gl::to_underlying(parameter), &value);
-
-        return value;
+        glGetQueryObjecti64v(gl::to_underlying(query), gl::to_underlying(parameter), value);
     }
-    static auto get_query_object_ui64v       (gl::handle_t query, glf::Query::Parameter parameter)
+    static auto get_query_object_ui64v       (gl::handle_t query, glf::Query::Parameter parameter, gl::uint64_t* value)
     {
-        gl::uint64_t value{};
-        glGetQueryObjectui64v(gl::to_underlying(query), gl::to_underlying(parameter), &value);
-
-        return value;
+        glGetQueryObjectui64v(gl::to_underlying(query), gl::to_underlying(parameter), value);
     }
     static void get_query_buffer_object_iv   (gl::handle_t query, gl::handle_t buffer, glf::Query::Parameter parameter, gl::offset_t offset)
     {
@@ -488,22 +475,148 @@ namespace fox::gfx::api::gl
         glGetQueryBufferObjectui64v(gl::to_underlying(query), gl::to_underlying(buffer), gl::to_underlying(parameter), offset);
     }
 
+    template<glf::Synchronization::Property P>
+    static auto get_sync_value(gl::sync_t sync)
+    {
+        const auto& _sync_object_type      = [](gl::sync_t sync, glf::Synchronization::Property property)
+            {
+                gl::int32_t value{};
+                gl::get_sync_iv(sync, property, &value);
+
+                return glf::Synchronization::Object::Type{ static_cast<gl::uint32_t>(value) };
+            };
+        const auto& _sync_object_status    = [](gl::sync_t sync, glf::Synchronization::Property property)
+            {
+                gl::int32_t value{};
+                gl::get_sync_iv(sync, property, &value);
+
+                return glf::Synchronization::Object::Status{ static_cast<gl::uint32_t>(value) };
+            };
+        const auto& _sync_object_condition = [](gl::sync_t sync, glf::Synchronization::Property property)
+            {
+                gl::int32_t value{};
+                gl::get_sync_iv(sync, property, &value);
+
+                return glf::Synchronization::Object::Condition{ static_cast<gl::uint32_t>(value) };
+            };
+
+
+
+        if constexpr (P == glf::Synchronization::Property::Type)      return _sync_object_type     (sync, P);
+        if constexpr (P == glf::Synchronization::Property::Status)    return _sync_object_status   (sync, P);
+        if constexpr (P == glf::Synchronization::Property::Condition) return _sync_object_condition(sync, P);
+        if constexpr (P == glf::Synchronization::Property::Flags)     return gl::bitfield_t{};
+    }
+    template<glf::Query::Parameter P>
+    static auto get_query_object_value(gl::handle_t query)
+    {
+        const auto& _bool_t   = []()
+            {
+                gl::int32_t value{};
+                gl::get_query_object_iv(query, P, &value);
+
+                return gl::bool_t{ value };
+            };
+        const auto& _int32_t  = []()
+            {
+                gl::int32_t value{};
+                gl::get_query_object_iv(query, P, &value);
+
+                return value;
+            };
+        const auto& _uint32_t = []()
+            {
+                gl::uint32_t value{};
+                gl::get_query_object_uiv(query, P, &value);
+
+                return value;
+            };
+
+
+
+        if constexpr (P == glf::Query::Parameter::Result)          return _uint32_t(query, P);
+        if constexpr (P == glf::Query::Parameter::ResultNoWait)    return _uint32_t(query, P);
+        if constexpr (P == glf::Query::Parameter::ResultAvailable) return _bool_t  (query, P);
+        if constexpr (P == glf::Query::Parameter::Target)          return _int32_t (query, P);
+    }
+    template<glf::Query::Parameter P>
+    static void get_query_buffer_object_value(gl::handle_t query, gl::handle_t buffer, gl::offset_t offset)
+    {
+        if constexpr (P == glf::Query::Parameter::Result)          gl::get_query_buffer_object_uiv(query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::ResultNoWait)    gl::get_query_buffer_object_uiv(query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::ResultAvailable) gl::get_query_buffer_object_iv (query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::Target)          gl::get_query_buffer_object_iv (query, buffer, P, offset);
+    }
+
 
 
     //Chapter 6 - Buffer Objects
-    static auto get_buffer_parameter_iv  (gl::handle_t buffer, glf::Buffer::Parameter parameter)
+    static auto get_buffer_parameter_iv  (gl::handle_t buffer, glf::Buffer::Parameter parameter, gl::int32_t* value)
     {
-        gl::int32_t value{};
-        glGetNamedBufferParameteriv(gl::to_underlying(buffer), gl::to_underlying(parameter), &value);
-
-        return value;
+        glGetNamedBufferParameteriv(gl::to_underlying(buffer), gl::to_underlying(parameter), value);
     }
-    static auto get_buffer_parameter_i64v(gl::handle_t buffer, glf::Buffer::Parameter parameter)
+    static auto get_buffer_parameter_i64v(gl::handle_t buffer, glf::Buffer::Parameter parameter, gl::int64_t* value)
     {
-        gl::int64_t value{};
-        glGetNamedBufferParameteri64v(gl::to_underlying(buffer), gl::to_underlying(parameter), &value);
+        glGetNamedBufferParameteri64v(gl::to_underlying(buffer), gl::to_underlying(parameter), value);
+    }
 
-        return value;
+    template<glf::Buffer::Parameter P>
+    static auto get_buffer_parameter_value(gl::handle_t buffer)
+    {
+        const auto& _bool_t          = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
+            {
+                gl::int32_t value{};
+                gl::get_buffer_parameter_iv(buffer, parameter, &value);
+
+                return static_cast<gl::bool_t>(value);
+            };
+        const auto& _uint64_t        = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
+            {
+                gl::int64_t value{};
+                gl::get_buffer_parameter_i64v(buffer, parameter, &value);
+
+                return static_cast<gl::uint64_t>(value);
+            };
+        const auto& _access_t        = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
+            {
+                gl::int32_t value{};
+                gl::get_buffer_parameter_iv(buffer, parameter, &value);
+
+                return static_cast<glf::Buffer::Mapping::Access>(value);
+            };
+        const auto& _access_flags_t  = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
+            {
+                gl::int32_t value{};
+                gl::get_buffer_parameter_iv(buffer, parameter, &value);
+
+                return static_cast<glf::Buffer::Mapping::AccessFlags>(value);
+            };
+        const auto& _storage_flags_t = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
+            {
+                gl::int32_t value{};
+                gl::get_buffer_parameter_iv(buffer, parameter, &value);
+
+                return static_cast<glf::Buffer::StorageFlags>(value);
+            };
+        const auto& _usage_t         = [](gl::handle_t buffer, glf::Buffer::Parameter parameter)
+            {
+                gl::int32_t value{};
+                gl::get_buffer_parameter_iv(buffer, parameter, &value);
+
+                return static_cast<glf::Buffer::Usage>(value);
+            };
+
+
+
+        if constexpr (P == glf::Buffer::Parameter::Access)       return _access_t       (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::AccessFlags)  return _access_flags_t (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::Immutable)    return _bool_t         (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::IsMapped)     return _bool_t         (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::MapLength)    return _uint64_t       (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::MapOffset)    return _uint64_t       (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::Size)         return _uint64_t       (buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::StorageFlags) return _storage_flags_t(buffer, P);
+        if constexpr (P == glf::Buffer::Parameter::Usage)        return _usage_t        (buffer, P);
     }
 
 
@@ -1057,7 +1170,7 @@ namespace fox::gfx::api::gl
     static void invalidate_buffer_data   (gl::handle_t buffer, std::optional<gl::byterange_t> range)
     {
         if   (range.has_value()) glInvalidateBufferSubData(gl::to_underlying(buffer), range->offset, range->size);
-        else                     glInvalidateBufferSubData(gl::to_underlying(buffer), 0            , gl::get_buffer_parameter_iv(buffer, glf::Buffer::Parameter::Size));
+        else                     glInvalidateBufferSubData(gl::to_underlying(buffer), 0            , gl::get_buffer_parameter_value<glf::Buffer::Parameter::Size>(buffer));
     }
     
     static void copy_buffer_sub_data     (gl::handle_t source, gl::handle_t destination, gl::byterange_t sourceRange, gl::offset_t destinationOffset)
@@ -1701,7 +1814,7 @@ namespace fox::gfx::api::gl
     
     static void vertex_array_attribute_format(gl::handle_t vertexArray, gl::uint32_t index, gl::offset_t offset, glf::VertexArray::Attribute::Type type, gl::uint32_t count, gl::bool_t normalized = gl::False)
     {
-        const auto& maximumVertexAttributes = gl::query_value<glf::Data::MaximumVertexAttributes>();
+        const auto& maximumVertexAttributes = gl::get_value<glf::Data::MaximumVertexAttributes>();
         if (std::cmp_greater(index, maximumVertexAttributes)) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
 
         switch (type)
@@ -1931,7 +2044,7 @@ namespace fox::gfx::api::gl
         else                         glDrawTransformFeedbackStream         (gl::to_underlying(mode), gl::to_underlying(transformFeedback), stream);
     }
 
-    static void provoking_vertex(glf::ProvokingVertex provokingVertex)
+    static void provoking_vertex(glf::ProvokingVertex::Mode provokingVertex)
     {
         glProvokingVertex(gl::to_underlying(provokingVertex));
     }
@@ -2360,7 +2473,7 @@ namespace fox::gfx::api::gl
         std::vector<glf::Debug::Severity> severities{};
         std::vector<gl::sizei_t>          lengths{};
 
-        const auto& maximumLength = gl::query_value<glf::Data::MaximumDebugMessageLength>();
+        const auto& maximumLength = gl::get_value<glf::Data::MaximumDebugMessageLength>();
 
         messageLog.resize(count * static_cast<gl::uint64_t>(maximumLength));
         sources   .resize(count);
@@ -2418,7 +2531,7 @@ namespace fox::gfx::api::gl
         std::string label{};
         gl::sizei_t length{};
 
-        const auto& maximumLabelLength = gl::query_value<glf::Data::MaximumLabelLength>();
+        const auto& maximumLabelLength = gl::get_value<glf::Data::MaximumLabelLength>();
         label.resize(static_cast<std::size_t>(maximumLabelLength));
 
         glGetObjectLabel(gl::to_underlying(type), gl::to_underlying(handle), maximumLabelLength, &length, label.data());
@@ -2432,7 +2545,7 @@ namespace fox::gfx::api::gl
         std::string label{};
         gl::sizei_t length{};
 
-        const auto& maximumLabelLength = gl::query_value<glf::Data::MaximumLabelLength>();
+        const auto& maximumLabelLength = gl::get_value<glf::Data::MaximumLabelLength>();
         label.resize(static_cast<std::size_t>(maximumLabelLength));
 
         glGetObjectPtrLabel(sync, maximumLabelLength, &length, label.data());

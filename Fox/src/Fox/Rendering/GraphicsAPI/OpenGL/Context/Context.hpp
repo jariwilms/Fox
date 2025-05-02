@@ -9,7 +9,7 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags = gl::query_value<glf::Data::ContextFlags>();
+			s_contextFlags = gl::get_value<glf::Data::ContextFlags>();
 			if (s_contextFlags & std::to_underlying(glf::Context::Flag::Debug))
 			{
 				gl::enable(glf::Feature::DebugOutput);
@@ -19,9 +19,9 @@ namespace fox::gfx::api::gl
 				gl::debug_message_control(glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare, gl::True);
 			}
 
-			//s_contextProfile         = gl::get_integer_v(glf::Data::ContextProfile);
-			s_majorVersion           = gl::query_value<glf::Data::MajorVersion>();
-			s_minorVersion           = gl::query_value<glf::Data::MinorVersion>();
+			s_contextProfile         = gl::get_value<glf::Data::ContextFlags>();
+			s_majorVersion           = gl::get_value<glf::Data::MajorVersion>();
+			s_minorVersion           = gl::get_value<glf::Data::MinorVersion>();
 
 			s_vendor                 = gl::get_string(glf::Connection::Vendor,                 {});
 			s_renderer               = gl::get_string(glf::Connection::Renderer,               {});
@@ -30,7 +30,7 @@ namespace fox::gfx::api::gl
 		}
 
 	private:
-		Context() = delete;
+		 Context() = delete;
 		~Context() = delete;
 
 		static inline gl::enum_t  s_contextFlags{};
