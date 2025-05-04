@@ -110,7 +110,7 @@ void main()
 	const vec3  lightDirection   = normalize(lightPosition - gPosition);
 	const float diffuseFactor    = max(dot(gNormal, lightDirection), 0.0);
 	const vec3  diffuse          = gAlbedo * lightColor * diffuseFactor;
-		  
+	
 	//Specular
 	const vec3  viewDirection    = normalize(u_Camera.position.xyz - gPosition);
 	const vec3  bisector         = normalize(lightDirection + viewDirection);  
@@ -121,6 +121,7 @@ void main()
 	const float smoothingFactor  = smoothstep(1.0, 0.6, fragmentDistance / lightRadius);
 	const float shadow           = calculate_shadow_pcf(vec4(gPosition, 1.0), gNormal);
 	const vec3  lighting         = ((diffuse * attenuation) + (specular * attenuation)) * (1.0 - shadow) * smoothingFactor;
+	
 	
 	
 	f_Color = vec4(lighting, 1.0);
