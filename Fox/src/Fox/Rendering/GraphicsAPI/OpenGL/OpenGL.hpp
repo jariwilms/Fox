@@ -2171,13 +2171,13 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 17 - Writing Fragments and Samples to the Framebuffer
-    static void stencil_function(glf::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
+    static void stencil_function(glf::Stencil::Function function, std::optional<gl::uint32_t> reference, std::optional<gl::uint32_t> mask)
     {
-        glStencilFunc(gl::to_underlying(function), value, mask);
+        glStencilFunc(gl::to_underlying(function), reference.value_or(gl::uint32_t{ 0u }), mask.value_or(gl::uint32_t{ 0u }));
     }
-    static void stencil_function_separate(glf::Stencil::Face face, glf::Stencil::Function function, gl::int32_t value, gl::uint32_t mask)
+    static void stencil_function_separate(glf::Stencil::Face face, glf::Stencil::Function function, std::optional<gl::uint32_t> reference, std::optional<gl::uint32_t> mask)
     {
-        glStencilFuncSeparate(gl::to_underlying(face), gl::to_underlying(function), value, mask);
+        glStencilFuncSeparate(gl::to_underlying(face), gl::to_underlying(function), reference.value_or(gl::uint32_t{ 0u }), mask.value_or(gl::uint32_t{ 0u }));
     }
     static void stencil_operation(glf::Stencil::Action stencil, glf::Stencil::Action depth, glf::Stencil::Action depthStencil)
     {
