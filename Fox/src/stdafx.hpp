@@ -2,6 +2,7 @@
 
 //FOX
 #include "Fox/Core/Types.hpp"
+#include "Fox/Core/Library/Library.hpp"
 
 //STL
 #include <typeinfo>
