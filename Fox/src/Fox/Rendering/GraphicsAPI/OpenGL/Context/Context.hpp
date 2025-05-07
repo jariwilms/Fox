@@ -10,7 +10,7 @@ namespace fox::gfx::api::gl
 		static void init()
 		{
 			s_contextFlags = gl::get_value<glf::Data::ContextFlags>();
-			if (s_contextFlags & std::to_underlying(glf::Context::Flag::Debug))
+			if (s_contextFlags & fox::to_underlying(glf::Context::Flag::Debug))
 			{
 				gl::enable(glf::Feature::DebugOutput);
 				gl::enable(glf::Feature::DebugOutputSynchronous);

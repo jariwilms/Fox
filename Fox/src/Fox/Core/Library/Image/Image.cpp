@@ -26,7 +26,7 @@ namespace fox
         stbi_flip_vertically_on_write(FLIP_IMAGES);
 
         const auto& dimensions = image.dimensions();
-        const auto& channels   = std::to_underlying(image.format());
+        const auto& channels   = fox::to_underlying(image.format());
         const auto* data       = image.data().data();
 
         std::vector<fox::byte_t> v{};
@@ -49,7 +49,7 @@ namespace fox
 
         fox::Vector2i dimensions{};
 
-        const auto&  channels   = std::to_underlying(format);
+        const auto&  channels   = fox::to_underlying(format);
         const auto&  dataLength = static_cast<fox::int32_t>(data.size_bytes());
               auto*  imageData  = stbi_load_from_memory(data.data(), dataLength, &dimensions.x, &dimensions.y, nullptr, channels);
         const auto&  totalSize  = dimensions.x * dimensions.y * channels;

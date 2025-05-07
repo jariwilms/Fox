@@ -23,7 +23,7 @@ namespace fox
 
         Image(Format format, const fox::Vector2u& dimensions, std::span<const fox::byte_t> data)
         {
-            const auto& channels  = std::to_underlying(format);
+            const auto& channels  = fox::to_underlying(format);
             const auto& totalSize = static_cast<fox::size_t>(dimensions.x) * dimensions.y * channels;
 
             if (totalSize > data.size()) throw std::runtime_error{ "Invalid image format or dimensions!" };
@@ -34,7 +34,7 @@ namespace fox
         }
         Image(Format format, const fox::Vector2u& dimensions, std::vector<fox::byte_t>&& data)
         {
-            const auto& channels  = std::to_underlying(format);
+            const auto& channels  = fox::to_underlying(format);
             const auto& totalSize = static_cast<fox::size_t>(dimensions.x) * dimensions.y * channels;
 
             if (totalSize > data.size()) throw std::runtime_error{ "Invalid image format or dimensions!" };
