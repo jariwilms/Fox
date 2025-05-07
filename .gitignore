@@ -3,7 +3,6 @@ bin_obj/
 Fox/assets/shaders/compiled
 /doc/temp
 
-**/*.vcxproj
 **/*.vcxproj.filters
 **/*.vcxproj.user
 
