@@ -3,6 +3,10 @@ bin_obj/
 Fox/assets/shaders/compiled
 /doc/temp
 
+**/*.vcxproj
+**/*.vcxproj.filters
+**/*.vcxproj.user
+
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio
 
