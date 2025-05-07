@@ -25,9 +25,9 @@ namespace fox::gfx::api::gl
 
             gl::texture_parameter(m_handle, glf::Texture::Parameter::MinificationFilter,  gl::map_texture_min_filter(m_filter));
             gl::texture_parameter(m_handle, glf::Texture::Parameter::MagnificationFilter, gl::map_texture_mag_filter(m_filter));
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingS, gl::TextureParameter{ gl::map_texture_wrapping(m_wrapping) });
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingT, gl::TextureParameter{ gl::map_texture_wrapping(m_wrapping) });
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingR, gl::TextureParameter{ gl::map_texture_wrapping(m_wrapping) });
+            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingS, gl::texture_v{ gl::map_texture_wrapping(m_wrapping) });
+            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingT, gl::texture_v{ gl::map_texture_wrapping(m_wrapping) });
+            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingR, gl::texture_v{ gl::map_texture_wrapping(m_wrapping) });
         }
         Cubemap(Format format, const gl::Vector2u& dimensions, const Faces& face)
             : Cubemap{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions, face } {}

@@ -46,6 +46,41 @@ namespace fox::gfx::api::gl
 
 
 
+
+
+    class Object
+    {
+    public:
+        Object(Object&& other) noexcept
+        {
+            m_handle = std::exchange(other.m_handle, gl::NullObject);
+        }
+
+        gl::handle_t handle() const
+        {
+            return m_handle;
+        }
+
+        Object& operator=(Object&& other) noexcept
+        {
+            if (this != &other)
+            {
+                m_handle = std::exchange(other.m_handle, m_handle);
+            }
+
+            return *this;
+        }
+
+    protected:
+        Object() = default;
+
+        gl::handle_t m_handle{ gl::NullObject };
+    };
+
+
+
+
+
     template<typename T, gl::int32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
     template<typename T, gl::int32_t N> using Matrix     = glm::mat<N, N, T>;
                                         using Quaternion = glm::quat;
@@ -82,22 +117,22 @@ namespace fox::gfx::api::gl
 
 
     template<typename T, gl::uint32_t N>
-    struct Dimensions
+    struct dimension_t
     {
-        Dimensions(gl::Vector<T, N> origin, gl::Vector<T, N> extent)
+        dimension_t(gl::Vector<T, N> origin, gl::Vector<T, N> extent)
             : origin{ origin }, extent{ extent } {}
-        Dimensions(gl::Vector<T, N> extent)
+        dimension_t(gl::Vector<T, N> extent)
             : origin{}, extent{ extent } {}
 
         gl::Vector<T, N> origin{};
         gl::Vector<T, N> extent{};
     };
 
-    template<typename T> using line_t   = Dimensions<T, 1>;
-    template<typename T> using area_t   = Dimensions<T, 2>;
-    template<typename T> using volume_t = Dimensions<T, 3>;
+    template<typename T> using line_t   = dimension_t<T, 1>;
+    template<typename T> using area_t   = dimension_t<T, 2>;
+    template<typename T> using volume_t = dimension_t<T, 3>;
 
-    struct range_t
+    struct     range_t
     {
         explicit range_t(gl::count_t count, gl::count_t offset = {})
             : count{ count }, offset{ offset } {}

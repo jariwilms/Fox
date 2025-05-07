@@ -3,19 +3,17 @@
 #include "stdafx.hpp"
 
 #include "Flags.hpp"
+#include "Library.hpp"
 #include "Mapping.hpp"
-#include "Object/Object.hpp"
-#include "Parameters.hpp"
 #include "Types.hpp"
-#include "Concepts.hpp"
 
 namespace fox::gfx::api::gl
 {
     //OpenGL wrapper library
     // 
     //This library has the following goals:
-    //    * Provide a more modern OpenGL interface
-    //    * Wrap around existing OpenGL functions, allowing decoration with custom logic
+    //    * Provide a more modern and accessible interface
+    //    * Wrap around existing OpenGL functions, allowing easy implementation of custom logic
     //    * Compile/Runtime input validation and safety
     // 
     //Functions are ordered according to their appearance in the OpenGL 4.6 core specification
@@ -802,7 +800,7 @@ namespace fox::gfx::api::gl
 
 
 
-    static void texture_parameter(gl::handle_t texture, glf::Texture::Parameter parameter, gl::TextureParameter value) //TODO: implement further
+    static void texture_parameter(gl::handle_t texture, glf::Texture::Parameter parameter, gl::texture_v value) //TODO: implement further
     {
         if (std::holds_alternative<glf::Texture::MinificationFilter>(value))
         {
@@ -968,11 +966,15 @@ namespace fox::gfx::api::gl
 
         return value;
     }
-    static auto get_frame_buffer_attachment_parameter_iv()
+    static auto                           get_frame_buffer_attachment_parameter_iv(gl::framebuffer_v frameBuffer)
     {
-        throw std::logic_error{ "The method or operation has not been implemented!" };
+        if (std::holds_alternative<gl::framebuffer_p>(frameBuffer))
+        {
+            //const auto& f = std::get<gl::framebuffer_p>(frameBuffer);
+            //glGetNamedFramebufferAttachmentParameteriv(gl::to_underlying(f.frameBuffer), gl::to_underlying(f.attachment), );
+        }
     }
-    static auto get_render_buffer_parameter_iv          ()
+    static auto                           get_render_buffer_parameter_iv          ()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
@@ -2264,23 +2266,23 @@ namespace fox::gfx::api::gl
         glClearStencil(static_cast<gl::int32_t>(index));
     }
 
-    static void clear_frame_buffer_iv (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, const gl::int32_t*   value)
+    static void clear_frame_buffer_iv   (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, const gl::int32_t*   value)
     {
         glClearNamedFramebufferiv(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), static_cast<gl::int32_t>(index), value);
     }
-    static void clear_frame_buffer_uiv(gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, const gl::uint32_t*  value)
+    static void clear_frame_buffer_uiv  (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, const gl::uint32_t*  value)
     {
         glClearNamedFramebufferuiv(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), static_cast<gl::int32_t>(index), value);
     }
-    static void clear_frame_buffer_fv (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, const gl::float32_t* value)
+    static void clear_frame_buffer_fv   (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, const gl::float32_t* value)
     {
         glClearNamedFramebufferfv(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), static_cast<gl::int32_t>(index), value);
     }
-    static void clear_frame_buffer_fi (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, gl::float32_t depth, gl::int32_t stencil)
+    static void clear_frame_buffer_fi   (gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::uint32_t index, gl::float32_t depth, gl::int32_t stencil)
     {
         glClearNamedFramebufferfi(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), static_cast<gl::int32_t>(index), depth, stencil);
     }
-    static void clear_frame_buffer_xv (gl::handle_t frameBuffer, gl::clear_v parameter, gl::int32_t index)
+    static void clear_frame_buffer_value(gl::handle_t frameBuffer, gl::clear_v parameter, gl::int32_t index)
     {
         if (std::holds_alternative<gl::color_p>(parameter))
         {
@@ -2375,12 +2377,16 @@ namespace fox::gfx::api::gl
     {
         glNamedFramebufferReadBuffer(gl::to_underlying(frameBuffer), gl::to_underlying(source));
     }
-    static void                           read_pixels(glf::PixelData::Format format, glf::PixelData::Type type, gl::area_t<gl::uint32_t> area)
+    static void                           read_pixels(glf::PixelData::Format format, glf::PixelData::Type type, gl::area_t<gl::uint32_t> area, std::optional<gl::uint32_t> limit)
     {
-        const auto& size = gl::Vector2f{ area.extent.x - area.origin.x, area.extent.y - area.origin.y };
+        //const auto& viewportArea      = gl::get_value<glf::Data::Viewport>();
+        //const auto& frameBuffer       = gl::get_value<glf::Data::DrawFramebufferBinding>();
+        //const auto& frameBufferFormat = gl::get_frame_buffer_attachment_parameter_iv(gl::framebuffer_p{ frameBuffer, glf::FrameBuffer::Attachment{} });
 
-        __debugbreak();
-        //glReadnPixels(area.origin.x, area.origin.y, area.extent.x, area.extent.y, gl::to_underlying(format), gl::to_underlying(type), );
+        //glReadnPixels(
+        //    area.origin.x, area.origin.y, area.extent.x, area.extent.y,
+        //    gl::to_underlying(format), gl::to_underlying(type),
+        //    );
     }
 
     static void clamp_color(gl::bool_t value)
@@ -2398,22 +2404,21 @@ namespace fox::gfx::api::gl
             gl::to_underlying(mask), gl::to_underlying(filter));
     }
 
-    static void                           copy_image_sub_data(gl::handle_t source, glf::Texture::Target sourceTarget, gl::uint32_t sourceLevel, gl::volume_t<gl::uint32_t> sourceVolume, gl::handle_t destination, glf::Texture::Target destinationTarget, gl::uint32_t destinationLevel, gl::volume_t<gl::uint32_t> destinationVolume)
+    static void copy_image_sub_data(gl::handle_t sourceTexture, gl::handle_t destinationTexture, glf::Texture::Target sourceTarget, glf::Texture::Target destinationTarget, const gl::Vector4u& sourceOrigin, const gl::Vector4u& destinationOrigin, const gl::Vector3u& extent)
     {
-        __debugbreak(); //prob wrong
-
         glCopyImageSubData(
-            gl::to_underlying(source),      gl::to_underlying(sourceTarget),      sourceLevel, 
-            sourceVolume.origin.x,          sourceVolume.origin.y,                sourceVolume.origin.z,
-            gl::to_underlying(destination), gl::to_underlying(destinationTarget), destinationLevel,
-            destinationVolume.origin.x,     destinationVolume.origin.y,           destinationVolume.origin.z, 
-            sourceVolume.extent.x,          sourceVolume.extent.y,                sourceVolume.extent.z);
+            gl::to_underlying(sourceTexture),              gl::to_underlying(sourceTarget),               static_cast<gl::int32_t>(sourceOrigin.w),
+            static_cast<gl::int32_t>(sourceOrigin.x),      static_cast<gl::int32_t>(sourceOrigin.y),      static_cast<gl::int32_t>(sourceOrigin.z),
+            gl::to_underlying(destinationTexture),         gl::to_underlying(destinationTarget),          static_cast<gl::int32_t>(destinationOrigin.w),
+            static_cast<gl::int32_t>(destinationOrigin.x), static_cast<gl::int32_t>(destinationOrigin.y), static_cast<gl::int32_t>(destinationOrigin.z),
+            static_cast<gl::sizei_t>(extent.x),            static_cast<gl::sizei_t>(extent.y),            static_cast<gl::sizei_t>(extent.z));
     }
 
 
 
+
     //Chapter 19 - Compute Shaders
-    static void dispatch_compute(gl::dispatch_t dispatch)
+    static void dispatch_compute(gl::dispatch_v dispatch)
     {
         if (std::holds_alternative<gl::Vector3u>(dispatch))
         {

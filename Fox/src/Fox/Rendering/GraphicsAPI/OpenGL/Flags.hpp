@@ -3,7 +3,6 @@
 #include "stdafx.hpp"
 
 #include "Types.hpp"
-#include "Enum.hpp"
 
 namespace fox::gfx::api::glf
 {
@@ -738,7 +737,7 @@ namespace fox::gfx::api::glf
             Depth   = GL_DEPTH, 
             Stencil = GL_STENCIL, 
         };
-        enum       Attachment : gl::enum_t
+        enum class Attachment : gl::enum_t
         {
             ColorIndex   = GL_COLOR_ATTACHMENT0, 
             Depth        = GL_DEPTH_ATTACHMENT, 
@@ -753,6 +752,13 @@ namespace fox::gfx::api::glf
             FrontRight           = GL_FRONT_RIGHT, 
             BackLeft             = GL_BACK_LEFT, 
             BackRight            = GL_BACK_RIGHT, 
+            FrontAndBack         = GL_FRONT_AND_BACK, 
+
+            Front                = FrontLeft, 
+            Back                 = BackLeft, 
+            Left                 = GL_LEFT, 
+            Right                = GL_RIGHT, 
+
             ColorAttachmentIndex = GL_COLOR_ATTACHMENT0, 
         };
         enum class Status : gl::enum_t
@@ -1861,9 +1867,42 @@ namespace fox::gfx::api::glf
             Array = GL_VERTEX_ATTRIB_ARRAY_POINTER, 
         };
     };
-}
-namespace fox::gfx::api::gl
-{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        template<typename T>
+    struct BitmaskTraits { static constexpr bool enable_bitmask_operations = false; };
+
+    template<typename T> concept ValidBitmaskEnumClassConcept = BitmaskTraits<T>::enable_bitmask_operations;
+
+    template<ValidBitmaskEnumClassConcept T>             constexpr T  operator+ (T  first, T second) { return static_cast<T>( gl::to_underlying(first) + gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T, typename U> constexpr T  operator+ (T  first, U second) { return static_cast<T>( gl::to_underlying(first) +                   second ); }
+    template<ValidBitmaskEnumClassConcept T, typename U> constexpr T  operator+ (U  first, T second) { return static_cast<T>(                   first  + gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T  operator- (T  first, T second) { return static_cast<T>( gl::to_underlying(first) - gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T, typename U> constexpr T  operator- (T  first, U second) { return static_cast<T>( gl::to_underlying(first)                   - second ); }
+    template<ValidBitmaskEnumClassConcept T, typename U> constexpr T  operator- (U  first, T second) { return static_cast<T>(                   first  + gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T  operator& (T  first, T second) { return static_cast<T>( gl::to_underlying(first) & gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T  operator| (T  first, T second) { return static_cast<T>( gl::to_underlying(first) | gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T  operator^ (T  first, T second) { return static_cast<T>( gl::to_underlying(first) ^ gl::to_underlying(second)); }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T  operator~ (T  value)           { return static_cast<T>(~gl::to_underlying(value)                            ); }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T& operator+=(T& first, T second) { return first = first + second; }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T& operator-=(T& first, T second) { return first = first - second; }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T& operator&=(T& first, T second) { return first = first & second; }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T& operator|=(T& first, T second) { return first = first | second; }
+    template<ValidBitmaskEnumClassConcept T>             constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
+
     template<> struct BitmaskTraits<glf::Buffer::Mask>            { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Source>     { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::Barrier>         { static constexpr bool enable_bitmask_operations = true; };
