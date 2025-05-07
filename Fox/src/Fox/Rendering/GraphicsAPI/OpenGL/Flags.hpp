@@ -3,6 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Types.hpp"
+#include "Library.hpp"
 
 namespace fox::gfx::api::glf
 {
@@ -315,21 +316,16 @@ namespace fox::gfx::api::glf
     };
     enum class Data : gl::enum_t
     {
-        //ActiveTexture                                    = GL_ACTIVE_TEXTURE, 
         AliasedLineWidthRange                            = GL_ALIASED_LINE_WIDTH_RANGE, 
-        //ArrayBufferBinding                               = GL_ARRAY_BUFFER_BINDING, 
         BlendColor                                       = GL_BLEND_COLOR, 
         BlendDestinationAlpha                            = GL_BLEND_DST_ALPHA, 
         BlendDestinationRGB                              = GL_BLEND_DST_RGB, 
         BlendEquationAlpha                               = GL_BLEND_EQUATION_ALPHA, 
         BlendEquationRGB                                 = GL_BLEND_EQUATION_RGB, 
-        //Blending                                         = GL_BLEND, 
         BlendSourceAlpha                                 = GL_BLEND_SRC_ALPHA, 
         BlendSourceRGB                                   = GL_BLEND_SRC_RGB, 
         ColorClearValue                                  = GL_COLOR_CLEAR_VALUE, 
-        //ColorLogicOperation                              = GL_COLOR_LOGIC_OP, 
         ColorWritemask                                   = GL_COLOR_WRITEMASK, 
-        //CompressedTextureFormats                         = GL_COMPRESSED_TEXTURE_FORMATS, 
         ContextFlags                                     = GL_CONTEXT_FLAGS, 
         CopyReadBufferBinding                            = GL_COPY_READ_BUFFER_BINDING, 
         CopyWriteBufferBinding                           = GL_COPY_WRITE_BUFFER_BINDING, 
@@ -339,21 +335,16 @@ namespace fox::gfx::api::glf
         DepthClearValue                                  = GL_DEPTH_CLEAR_VALUE, 
         DepthFunction                                    = GL_DEPTH_FUNC, 
         DepthRange                                       = GL_DEPTH_RANGE, 
-        //DepthTest                                        = GL_DEPTH_TEST, 
-        //DepthWritemask                                   = GL_DEPTH_WRITEMASK, 
         DispatchIndirectBufferBinding                    = GL_DISPATCH_INDIRECT_BUFFER_BINDING, 
-        //Dithering                                        = GL_DITHER, 
         DoubleBuffer                                     = GL_DOUBLEBUFFER, 
         DrawBuffer                                       = GL_DRAW_BUFFER, 
         DrawFramebufferBinding                           = GL_DRAW_FRAMEBUFFER_BINDING, 
         DrawIndirectBufferBinding                        = GL_DRAW_INDIRECT_BUFFER_BINDING, 
-        //FaceCulling                                      = GL_CULL_FACE, 
         FragmentShaderDerivativeHint                     = GL_FRAGMENT_SHADER_DERIVATIVE_HINT, 
         ImplementationColorReadFormat                    = GL_IMPLEMENTATION_COLOR_READ_FORMAT, 
         ImplementationColorReadType                      = GL_IMPLEMENTATION_COLOR_READ_TYPE, 
         IndexArrayBufferBinding                          = GL_ELEMENT_ARRAY_BUFFER_BINDING, 
         LayerProvokingVertex                             = GL_LAYER_PROVOKING_VERTEX, 
-        //LineSmooth                                       = GL_LINE_SMOOTH, 
         LineSmoothHint                                   = GL_LINE_SMOOTH_HINT, 
         LineWidth                                        = GL_LINE_WIDTH, 
         LogicOperationMode                               = GL_LOGIC_OP_MODE, 
@@ -448,7 +439,6 @@ namespace fox::gfx::api::glf
         NumberShaderBinaryFormats                        = GL_NUM_SHADER_BINARY_FORMATS, 
         PackAlignment                                    = GL_PACK_ALIGNMENT, 
         PackImageHeight                                  = GL_PACK_IMAGE_HEIGHT, 
-        //PackLSBFirst                                     = GL_PACK_LSB_FIRST, 
         PackRowLength                                    = GL_PACK_ROW_LENGTH, 
         PackSkipImages                                   = GL_PACK_SKIP_IMAGES, 
         PackSkipPixels                                   = GL_PACK_SKIP_PIXELS, 
@@ -461,16 +451,11 @@ namespace fox::gfx::api::glf
         PointSizeGranularity                             = GL_POINT_SIZE_GRANULARITY, 
         PointSizeRange                                   = GL_POINT_SIZE_RANGE, 
         PolygonOffsetFactor                              = GL_POLYGON_OFFSET_FACTOR, 
-        //PolygonOffsetFill                                = GL_POLYGON_OFFSET_FILL, 
-        //PolygonOffsetLine                                = GL_POLYGON_OFFSET_LINE, 
-        //PolygonOffsetPoint                               = GL_POLYGON_OFFSET_POINT, 
         PolygonOffsetUnits                               = GL_POLYGON_OFFSET_UNITS, 
-        //PolygonSmooth                                    = GL_POLYGON_SMOOTH, 
         PolygonSmoothHint                                = GL_POLYGON_SMOOTH_HINT, 
         PrimitiveRestartIndex                            = GL_PRIMITIVE_RESTART_INDEX, 
         ProgramBinaryFormats                             = GL_PROGRAM_BINARY_FORMATS, 
         ProgramPipelineBinding                           = GL_PROGRAM_PIPELINE_BINDING, 
-        //ProgramPointSize                                 = GL_PROGRAM_POINT_SIZE, 
         ProvokingVertex                                  = GL_PROVOKING_VERTEX, 
         QueryBufferBinding                               = GL_QUERY_BUFFER_BINDING, 
         ReadBuffer                                       = GL_READ_BUFFER, 
@@ -483,7 +468,6 @@ namespace fox::gfx::api::glf
         SamplerBinding                                   = GL_SAMPLER_BINDING, 
         Samples                                          = GL_SAMPLES, 
         ScissorBox                                       = GL_SCISSOR_BOX, 
-        //ScissorTest                                      = GL_SCISSOR_TEST, 
         ShaderCompiler                                   = GL_SHADER_COMPILER, 
         ShaderStorageBufferBinding                       = GL_SHADER_STORAGE_BUFFER_BINDING, 
         ShaderStorageBufferOffsetAlignment               = GL_SHADER_STORAGE_BUFFER_OFFSET_ALIGNMENT, 
@@ -504,7 +488,6 @@ namespace fox::gfx::api::glf
         StencilPassDepthFail                             = GL_STENCIL_PASS_DEPTH_FAIL, 
         StencilPassDepthPass                             = GL_STENCIL_PASS_DEPTH_PASS, 
         StencilReference                                 = GL_STENCIL_REF, 
-        //StencilTest                                      = GL_STENCIL_TEST, 
         StencilValueMask                                 = GL_STENCIL_VALUE_MASK, 
         StencilWritemask                                 = GL_STENCIL_WRITEMASK, 
         Stereo                                           = GL_STEREO, 
@@ -532,7 +515,6 @@ namespace fox::gfx::api::glf
         UniformBufferStart                               = GL_UNIFORM_BUFFER_START, 
         UnpackAlignment                                  = GL_UNPACK_ALIGNMENT, 
         UnpackImageHeight                                = GL_UNPACK_IMAGE_HEIGHT, 
-        //UnpackLSBFirst                                   = GL_UNPACK_LSB_FIRST, 
         UnpackRowLength                                  = GL_UNPACK_ROW_LENGTH, 
         UnpackSkipImages                                 = GL_UNPACK_SKIP_IMAGES, 
         UnpackSkipPixels                                 = GL_UNPACK_SKIP_PIXELS, 
@@ -549,18 +531,18 @@ namespace fox::gfx::api::glf
 
 
 
-        PatchDefaultOuterLevel = GL_PATCH_DEFAULT_OUTER_LEVEL, 
-        PatchDefaultInnerLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
-        VertexBindingBuffer    = GL_VERTEX_BINDING_BUFFER, 
-        ParameterBufferBinding = GL_PARAMETER_BUFFER_BINDING, 
-        ClipOrigin             = GL_CLIP_ORIGIN, 
-        ClipDepthMode          = GL_CLIP_DEPTH_MODE, 
-        TransformFeedbackBinding = GL_TRANSFORM_FEEDBACK_BINDING, 
+        PatchDefaultOuterLevel                           = GL_PATCH_DEFAULT_OUTER_LEVEL, 
+        PatchDefaultInnerLevel                           = GL_PATCH_DEFAULT_INNER_LEVEL, 
+        VertexBindingBuffer                              = GL_VERTEX_BINDING_BUFFER, 
+        ParameterBufferBinding                           = GL_PARAMETER_BUFFER_BINDING, 
+        ClipOrigin                                       = GL_CLIP_ORIGIN, 
+        ClipDepthMode                                    = GL_CLIP_DEPTH_MODE, 
+        TransformFeedbackBinding                         = GL_TRANSFORM_FEEDBACK_BINDING, 
 
 
 
         //?
-        ResetNotificationStrategy = GL_RESET_NOTIFICATION_STRATEGY, 
+        ResetNotificationStrategy                        = GL_RESET_NOTIFICATION_STRATEGY, 
     };
     enum class DataType : gl::enum_t
     {

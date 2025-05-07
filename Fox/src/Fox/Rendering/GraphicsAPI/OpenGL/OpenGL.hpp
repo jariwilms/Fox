@@ -6,6 +6,8 @@
 #include "Library.hpp"
 #include "Mapping.hpp"
 #include "Types.hpp"
+#include "Parameters.hpp"
+#include "Concepts.hpp"
 
 namespace fox::gfx::api::gl
 {
