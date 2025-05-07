@@ -350,18 +350,19 @@ namespace fox::gfx::api
 
 
 
-            //Resolve multisampled frame buffer
-            const auto& gBufferHandle   = static_cast<gl::uint32_t>(gBuffer->handle());
-            const auto& gBufferMSHandle = static_cast<gl::uint32_t>(gBufferMultisample->handle());
-
             for (auto i{ 0u }; i < 4; ++i)
             {
-                glNamedFramebufferReadBuffer(gBufferMSHandle, GL_COLOR_ATTACHMENT0 + i);
-                glNamedFramebufferDrawBuffer(gBufferHandle,   GL_COLOR_ATTACHMENT0 + i);
-                glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+                glf::FrameBuffer::Source res;
+                res += static_cast<glf::FrameBuffer::Source>(i);
+
+                gl::frame_buffer_read_buffer(gBufferMultisample->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
+                gl::frame_buffer_draw_buffer(gBuffer           ->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
+                
+                gl::blit_framebuffer(gBufferMultisample->handle(), gBuffer->handle(), glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, gl::area_t{ dimensions }, gl::area_t{ dimensions });
             }
-            glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_DEPTH_BUFFER_BIT,   GL_NEAREST);
-            glBlitNamedFramebuffer(gBufferMSHandle, gBufferHandle, 0, 0, dimensions.x, dimensions.y, 0, 0, dimensions.x, dimensions.y, GL_STENCIL_BUFFER_BIT, GL_NEAREST);
+
+            gl::blit_framebuffer(gBufferMultisample->handle(), gBuffer->handle(), glf::Buffer::Mask::Depth  , glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+            gl::blit_framebuffer(gBufferMultisample->handle(), gBuffer->handle(), glf::Buffer::Mask::Stencil, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
 
 
 
