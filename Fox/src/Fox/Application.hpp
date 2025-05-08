@@ -7,7 +7,7 @@ namespace fox
     class Application
     {
     public:
-        Application(int argc, char* argv[]);
+        Application(int argc, char** argv);
         virtual ~Application();
 
         int run();

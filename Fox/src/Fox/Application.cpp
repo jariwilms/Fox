@@ -10,11 +10,9 @@
 #include "Fox/Input/Input.hpp"
 #include "Fox/IO/Import/Model/ModelImporter.hpp"
 #include "Fox/IO/IO.hpp"
-#include "Fox/Rendering/Geometry/Geometry.hpp"
-#include "Fox/Rendering/Model/Model.hpp"
-#include "Fox/Rendering/RenderInfo/RenderInfo.hpp"
+#include "Fox/Rendering/API/Shader/Utility.hpp"
+#include "Fox/Rendering/Renderer/Renderer.hpp"
 #include "Fox/Rendering/Rendering.hpp"
-#include "Fox/Rendering/Utility/Utility.hpp"
 #include "Fox/Scene/Actor.hpp"
 #include "Fox/Scene/Scene.hpp"
 #include "Fox/Window/WindowManager.hpp"
@@ -49,7 +47,7 @@ namespace fox
         return transform_product(scene, rel, trs) * transform;
     }
 
-    Application::Application(int argc, char* argv[])
+    Application::Application(int argc, char** argv)
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
@@ -80,15 +78,15 @@ namespace fox
         //Loading models
         auto& helmetActor           = scene->create_actor();
         auto& helmetTransform       = helmetActor.get_component<cmp::TransformComponent>().get();
-        auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+        auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
 
         model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
         helmetTransform.translate({ 0.0f, 1.0f, 0.0f });
 
-        const auto& defaultAlbedo   = gfx::api::texture_from_file("textures/albedo.png");
-        const auto& defaultNormal   = gfx::api::texture_from_file("textures/normal.png");
-        const auto& defaultARM      = gfx::api::texture_from_file("textures/arm.png");
-        const auto& defaultEmissive = gfx::api::texture_from_file("textures/emissive.png");
+        const auto& defaultAlbedo   = io::load<io::Asset::Texture2D>("textures/albedo.png");
+        const auto& defaultNormal   = io::load<io::Asset::Texture2D>("textures/normal.png");
+        const auto& defaultARM      = io::load<io::Asset::Texture2D>("textures/arm.png");
+        const auto& defaultEmissive = io::load<io::Asset::Texture2D>("textures/emissive.png");
 
         auto defaultMaterial        = std::make_shared<gfx::Material>();
         defaultMaterial->albedo     = defaultAlbedo;
@@ -101,7 +99,7 @@ namespace fox
         auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
         famfc.mesh                  = gfx::Geometry::Plane::mesh();
         famfc.material              = defaultMaterial;
-        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 10.0f } };
+        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 15.0f } };
 
         auto& boxActor = scene->create_actor();
         auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
@@ -112,7 +110,7 @@ namespace fox
 
 
 
-
+        
 
         //Skybox setup
         const fox::Vector2u skyboxDimensions{ 2048u, 2048u };
@@ -125,17 +123,17 @@ namespace fox
             "textures/skybox_space2/front.png",
             "textures/skybox_space2/back.png",
         };
-        gfx::Cubemap::Layout cubemapLayout
+        gfx::Cubemap::Faces cubemapFaces
         {
-            gfx::api::image_from_file(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
-            gfx::api::image_from_file(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
-            gfx::api::image_from_file(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
         };
 
-        auto skybox = std::make_shared<gfx::Cubemap>(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapLayout);
+        auto skybox = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
 
 
 
@@ -145,8 +143,8 @@ namespace fox
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
             std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   0.0f,  3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   0.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   2.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   2.0f,  3.0f }), 
         };
 
 
@@ -185,7 +183,7 @@ namespace fox
             };
         const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
             {
-                for (const auto& i : std::ranges::iota_view(0u, limit.value_or(lights.size())))
+                for (const auto& i : std::ranges::views::iota(0u, limit.value_or(lights.size())))
                 {
                     const auto& [l, p] = lights[i];
 
@@ -199,7 +197,7 @@ namespace fox
 
 
 
-        Time::reset();
+        fox::Time::reset();
         fox::CyclicBuffer<fox::float32_t, 144> frametimes{};
 
         while (!m_window->should_close())

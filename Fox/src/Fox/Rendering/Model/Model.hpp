@@ -2,8 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Core/Library/Camera/Camera.hpp"
-#include "Fox/Core/Library/Lighting/Light.hpp"
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/Rendering/Material/Material.hpp"
 #include "Fox/Rendering/Mesh/Mesh.hpp"
@@ -25,9 +23,9 @@ namespace fox::gfx
 
         Model() = default;
 
-        std::uint32_t                          rootNode{};
-        std::vector<Node>                      nodes{};
-        std::vector<std::shared_ptr<Mesh>>     meshes{};
-        std::vector<std::shared_ptr<Material>> materials{};
+        std::uint32_t                               rootNode{};
+        std::vector<Node>                           nodes{};
+        std::vector<std::shared_ptr<gfx::Mesh>>     meshes{};
+        std::vector<std::shared_ptr<gfx::Material>> materials{};
     };
 }

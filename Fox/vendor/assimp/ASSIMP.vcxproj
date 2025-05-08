@@ -42,13 +42,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\bin\Debug\windows\ASSIMP\</OutDir>
-    <IntDir>..\..\..\bin_obj\Debug\windows\ASSIMP\</IntDir>
+    <IntDir>..\..\..\bin\Debug\windows\ASSIMP\obj\</IntDir>
     <TargetName>ASSIMP</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\bin\Release\windows\ASSIMP\</OutDir>
-    <IntDir>..\..\..\bin_obj\Release\windows\ASSIMP\</IntDir>
+    <IntDir>..\..\..\bin\Release\windows\ASSIMP\obj\</IntDir>
     <TargetName>ASSIMP</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -435,11 +435,8 @@
     <ClCompile Include="contrib\zlib\zutil.c" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="contrib\unzip\MiniZip64_info.txt" />
     <None Include="contrib\zlib\ChangeLog" />
     <None Include="contrib\zlib\LICENSE" />
-    <None Include="contrib\zlib\README" />
-    <None Include="contrib\zlib\zconf.h.included" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

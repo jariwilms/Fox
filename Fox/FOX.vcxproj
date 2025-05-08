@@ -19,13 +19,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v143</PlatformToolset>
@@ -41,60 +41,62 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Debug\windows\FOX\</OutDir>
-    <IntDir>..\bin_obj\Debug\windows\FOX\</IntDir>
+    <IntDir>..\bin\Debug\windows\FOX\obj\</IntDir>
     <TargetName>FOX</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Release\windows\FOX\</OutDir>
-    <IntDir>..\bin_obj\Release\windows\FOX\</IntDir>
+    <IntDir>..\bin\Release\windows\FOX\obj\</IntDir>
     <TargetName>FOX</TargetName>
-    <TargetExt>.exe</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>PROJECT_DIR=R"($(ProjectDir).)";ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\stb\include;vendor\tinygltf\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Fox\Application.hpp" />
@@ -104,6 +106,7 @@
     <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Library.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonMovable.hpp" />
@@ -128,6 +131,8 @@
     <ClInclude Include="src\Fox\IO\IO.hpp" />
     <ClInclude Include="src\Fox\IO\Import\Model\GLTFImporter.hpp" />
     <ClInclude Include="src\Fox\IO\Import\Model\ModelImporter.hpp" />
+    <ClInclude Include="src\Fox\IO\Registry\Registry.hpp" />
+    <ClInclude Include="src\Fox\IO\UUID\UUID.hpp" />
     <ClInclude Include="src\Fox\Input\Code\ButtonCode.hpp" />
     <ClInclude Include="src\Fox\Input\Code\KeyCode.hpp" />
     <ClInclude Include="src\Fox\Input\Code\ModifierCode.hpp" />
@@ -135,65 +140,72 @@
     <ClInclude Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.hpp" />
     <ClInclude Include="src\Fox\Input\Input.hpp" />
     <ClInclude Include="src\Fox\Rendering\AABB\AABB.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\GraphicsAPI.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Context\Context.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Flags.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\FrameBuffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Mapping.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Object\Object.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\OpenGL.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Parameters.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Query\Query.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderBuffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\RenderState\RenderState.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Sampler\Sampler.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Pipeline.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Shader\Shader.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Cubemap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Texture\Texture.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\OpenGL\Types.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Vulkan\VK.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Vulkan\VKMappings.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Vulkan\Vulkan.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Blueprint\TextureBlueprint.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Buffer\DataType.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Concepts\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\FrameBuffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\FrameBuffer\Mapping.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Layout\Layout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Layout\VertexLayout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Query\Query.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\RenderBuffer\RenderBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\RenderState\RenderState.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Sampler\Sampler.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Shader\Pipeline.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Shader\Shader.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Shader\Utility.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Texture\AntiAliasing.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Texture\Cubemap.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Texture\Dimensions.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Texture\MipMap.hpp" />
+    <ClInclude Include="src\Fox\Rendering\API\Texture\Texture.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\DataTypes.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Concepts\Concepts.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Context\Context.hpp" />
+    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\FrameBuffer\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp" />
     <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Plane.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Layout\Layout.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Layout\VertexLayout.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\GraphicsAPI.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\Buffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\VertexArray.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Context\Context.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Flags.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\FrameBuffer\FrameBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\GL.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Library.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Mapping.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\OpenGL.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Parameters.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Query\Query.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\RenderBuffer\RenderBuffer.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\RenderState\RenderState.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Sampler\Sampler.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Shader\Pipeline.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Shader\Shader.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Texture\Cubemap.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Texture\Texture.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Types.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\VK.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\VKMappings.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\Vulkan.hpp" />
     <ClInclude Include="src\Fox\Rendering\Material\Material.hpp" />
     <ClInclude Include="src\Fox\Rendering\Mesh\Mesh.hpp" />
     <ClInclude Include="src\Fox\Rendering\Model\Model.hpp" />
-    <ClInclude Include="src\Fox\Rendering\PostProcessing\AmbientOcclusion.hpp" />
     <ClInclude Include="src\Fox\Rendering\PostProcessing\PostProcessing.hpp" />
     <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Query\Query.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp" />
-    <ClInclude Include="src\Fox\Rendering\RenderState\RenderState.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\OpenGLRenderer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
     <ClInclude Include="src\Fox\Rendering\Renderer\Renderer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Rendering.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Sampler\Sampler.hpp" />
     <ClInclude Include="src\Fox\Rendering\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Fox\Rendering\Shader\Shader.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Texture\AntiAliasing.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\Cubemap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Texture\Dimensions.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Texture\MipMap.hpp" />
     <ClInclude Include="src\Fox\Rendering\Texture\Texture.hpp" />
     <ClInclude Include="src\Fox\Rendering\Uniform\Uniform.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Using.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Utility\Utility.hpp" />
     <ClInclude Include="src\Fox\Scene\Actor.hpp" />
     <ClInclude Include="src\Fox\Scene\Scene.hpp" />
     <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp" />
@@ -208,11 +220,11 @@
     <ClCompile Include="src\Fox\IO\Import\Model\ModelImporter.cpp" />
     <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Fox\Input\Input.cpp" />
+    <ClCompile Include="src\Fox\Rendering\Geometry\Geometry.cpp" />
+    <ClCompile Include="src\Fox\Rendering\Renderer\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Fox\Scene\Scene.cpp" />
     <ClCompile Include="src\Fox\Window\API\GLFW\GLFWWindow.cpp" />
     <ClCompile Include="src\Fox\Window\WindowManager.cpp" />
-    <ClCompile Include="src\Fox\test.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -233,11 +245,11 @@
     <ProjectReference Include="vendor\glm\GLM.vcxproj">
       <Project>{05EB870B-71F4-877C-FA6F-9E7C6678937C}</Project>
     </ProjectReference>
+    <ProjectReference Include="vendor\mimalloc\MIMALLOC.vcxproj">
+      <Project>{73103C37-5FDD-9642-88F6-84EA7422CCD0}</Project>
+    </ProjectReference>
     <ProjectReference Include="vendor\stb\STB_IMAGE.vcxproj">
       <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
-    </ProjectReference>
-    <ProjectReference Include="vendor\tinygltf\TINYGLTF.vcxproj">
-      <Project>{169A0DB1-0267-68BC-2B80-566417AC9D4A}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

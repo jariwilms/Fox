@@ -1,42 +1,74 @@
 #pragma once
 
-namespace fox::gfx::api
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/RenderBuffer/RenderBuffer.hpp"
+#endif
+
+namespace fox::gfx
 {
-	class RenderBuffer
-	{
-	public:
-		enum class Format
-		{
-            R8_UNORM, 
-            RG8_UNORM,
-            RGB8_UNORM,
-            RGBA8_UNORM,
+    namespace impl
+    {
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using RenderBuffer            = api::gl::RenderBuffer<api::AntiAliasing::None>;
+        using RenderBufferMultisample = api::gl::RenderBuffer<api::AntiAliasing::MSAA>;
+#endif
+    }
 
-            RGBA8_SRGB, 
 
-            D16_UNORM,
-            D24_UNORM,
-            D32_FLOAT, 
 
-            D24_UNORM_S8_UINT, 
-            D32_FLOAT_S8_UINT, 
+    class RenderBuffer
+    {
+    public:
+        using Format = api::RenderBuffer::Format;
 
-            S8_UINT, 
-		};
-
-        RenderBuffer(RenderBuffer&&) = default;
-
-        Format format() const
+        static inline auto create(Format format, const fox::Vector2u& dimensions)
         {
-            return m_format;
+            return std::shared_ptr<RenderBuffer>(new RenderBuffer{ format, dimensions });
         }
 
-        RenderBuffer& operator=(RenderBuffer&&) noexcept = default;
+        const fox::Vector2u& dimensions() const
+        {
+            return _->dimensions();
+        }
+              gfx::handle_t  handle()     const
+        {
+            return _->handle();
+        }
 
     protected:
-        RenderBuffer(Format format)
-            : m_format{ format } {}
+        RenderBuffer(Format format, const fox::Vector2u& dimensions)
+            : _{ std::make_shared<impl::RenderBuffer>(format, dimensions) } {}
 
-        Format m_format;
-	};
+        std::shared_ptr<impl::RenderBuffer> _;
+    };
+    class RenderBufferMultisample
+    {
+    public:
+        using Format = api::RenderBuffer::Format;
+
+        static inline auto create(Format format, const fox::Vector2u& dimensions, fox::uint8_t samples)
+        {
+            return std::shared_ptr<RenderBufferMultisample>(new RenderBufferMultisample{ format, dimensions, samples });
+        }
+
+        const fox::Vector2u& dimensions() const
+        {
+            return _->dimensions();
+        }
+        fox::uint8_t         samples()    const
+        {
+            return _->samples();
+        }
+        gfx::handle_t        handle()     const
+        {
+            return _->handle();
+        }
+
+    protected:
+        RenderBufferMultisample(Format format, const fox::Vector2u& dimensions, fox::uint8_t samples)
+            : _{ std::make_shared<impl::RenderBufferMultisample>(format, dimensions, samples) } {}
+
+        std::shared_ptr<impl::RenderBufferMultisample> _;
+    };
 }

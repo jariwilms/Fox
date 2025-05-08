@@ -1099,19 +1099,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="contrib\unzip\MiniZip64_info.txt">
-      <Filter>contrib\unzip</Filter>
-    </None>
     <None Include="contrib\zlib\ChangeLog">
       <Filter>contrib\zlib</Filter>
     </None>
     <None Include="contrib\zlib\LICENSE">
-      <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="contrib\zlib\README">
-      <Filter>contrib\zlib</Filter>
-    </None>
-    <None Include="contrib\zlib\zconf.h.included">
       <Filter>contrib\zlib</Filter>
     </None>
   </ItemGroup>

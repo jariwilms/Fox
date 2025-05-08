@@ -18,7 +18,7 @@ namespace fox::gfx
                 lhs.max.z >= rhs.min.z;
         }
 
-        Vector3f min{};
-        Vector3f max{};
+        fox::Vector3f min{};
+        fox::Vector3f max{};
     };
 }

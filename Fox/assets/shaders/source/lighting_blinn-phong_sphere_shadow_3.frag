@@ -110,7 +110,7 @@ void main()
 	const vec3  lightDirection   = normalize(lightPosition - gPosition);
 	const float diffuseFactor    = max(dot(gNormal, lightDirection), 0.0);
 	const vec3  diffuse          = gAlbedo * lightColor * diffuseFactor;
-		  
+	
 	//Specular
 	const vec3  viewDirection    = normalize(u_Camera.position.xyz - gPosition);
 	const vec3  bisector         = normalize(lightDirection + viewDirection);  

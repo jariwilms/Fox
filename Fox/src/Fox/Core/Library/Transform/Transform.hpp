@@ -28,11 +28,11 @@ namespace fox
         {
             this->position += translation;
         }
-        void rotate(   const fox::Vector3f& rotation)
+        void rotate   (const fox::Vector3f& rotation)
         {
             this->rotation *= fox::Quaternion{ glm::radians(rotation) };
         }
-        void dilate(   const fox::Vector3f& scale)
+        void dilate   (const fox::Vector3f& scale)
         {
             this->scale *= scale;
         }
@@ -47,11 +47,11 @@ namespace fox
         {
             return rotation * fox::Vector3f{ 0.0f, 0.0f, -1.0f };
         }
-        fox::Vector3f right()   const
+        fox::Vector3f right  () const
         {
             return rotation * fox::Vector3f{ 1.0f, 0.0f, 0.0f };
         }
-        fox::Vector3f up()      const
+        fox::Vector3f up     () const
         {
             return rotation * fox::Vector3f{ 0.0f, 1.0f, 0.0f };
         }

@@ -42,13 +42,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\bin\Debug\windows\GLAD\</OutDir>
-    <IntDir>..\..\..\bin_obj\Debug\windows\GLAD\</IntDir>
+    <IntDir>..\..\..\bin\Debug\windows\GLAD\obj\</IntDir>
     <TargetName>GLAD</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\bin\Release\windows\GLAD\</OutDir>
-    <IntDir>..\..\..\bin_obj\Release\windows\GLAD\</IntDir>
+    <IntDir>..\..\..\bin\Release\windows\GLAD\obj\</IntDir>
     <TargetName>GLAD</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

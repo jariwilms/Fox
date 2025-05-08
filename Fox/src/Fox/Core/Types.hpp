@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include <stdfloat>
+#include <bitset>
 
 #include <glm/glm.hpp>
 
@@ -17,7 +17,7 @@ namespace fox
 		False = false, 
 		True  = true, 
 	};
-	
+
 	using int8_t     = std::int8_t;
 	using uint8_t    = std::uint8_t;
 	using int16_t    = std::int16_t;
@@ -26,15 +26,15 @@ namespace fox
 	using uint32_t   = std::uint32_t;
 	using int64_t    = std::int64_t;
 	using uint64_t   = std::uint64_t;
-	using float32_t  = float;         //MSVC please I beg
+	using float32_t  = float;         //Thanks Microsoft...
 	using float64_t  = double;		  //
 
 	using byte_t     = fox::uint8_t;
-	using size_t     = std::size_t;   //Offset in bytes
+	using size_t     = fox::uint64_t; //Number of bytes
+	using offset_t   = fox::uint64_t; //Number of bytes offset
 	using count_t    = fox::uint32_t; //Number of elements
-	using offset_t   = fox::uint32_t; //Number of elements offset
 
-
+	using uuid_t     = std::bitset<128>;
 
 	using Vector1i   = glm::ivec1;
 	using Vector2i   = glm::ivec2;

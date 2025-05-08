@@ -2,24 +2,24 @@
 
 #include "ModelImporter.hpp"
 
-#include "Fox/Rendering/Rendering.hpp"
+#include "Fox/IO/IO.hpp"
 #include "Fox/Core/Library/Image/Image.hpp"
 
 namespace fox::io
 {
     void ModelImporter::init()
     {
-        s_defaultAlbedoTexture = gfx::api::texture_from_file("textures/albedo.png");
-        s_defaultNormalTexture = gfx::api::texture_from_file("textures/normal.png");
-        s_defaultARMTexture    = gfx::api::texture_from_file("textures/arm.png");
+        s_defaultAlbedoTexture = io::load<io::Asset::Texture2D>("textures/albedo.png");
+        s_defaultNormalTexture = io::load<io::Asset::Texture2D>("textures/normal.png");
+        s_defaultARMTexture    = io::load<io::Asset::Texture2D>("textures/arm.png");
     }
 
-    std::shared_ptr<gfx::Model> ModelImporter::import2(const std::filesystem::path& path)
+    std::shared_ptr<gfx::Model> ModelImporter::import(const std::filesystem::path& path)
 	{
 		Assimp::Importer asiImporter{};
 
-        const auto& fullPath      = path.lexically_normal();
-		const auto& baseDirectory = fullPath.parent_path();
+        const auto& absolutePath  = fox::io::root / path;
+		const auto& baseDirectory = absolutePath.parent_path();
 
 		const auto& importerFlags =
             aiProcess_CalcTangentSpace      | //Calculate tangents and bitangents
@@ -37,7 +37,7 @@ namespace fox::io
             aiProcess_TransformUVCoords     | //Applies per-texture UV transformations
             aiProcess_Triangulate           ; //Split up faces with >3 indices into triangles
 
-        const auto* asiScene = asiImporter.ReadFile("assets/" + fullPath.string(), importerFlags);
+        const auto* asiScene = asiImporter.ReadFile(absolutePath.string(), importerFlags);
         if (!asiScene)                                     throw std::runtime_error{ "Failed to read file!" };
         if ( asiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) throw std::invalid_argument{ "Scene data structure is not complete!" };
         if (!asiScene->mRootNode)                          throw std::invalid_argument{ "Scene requires at least one node!" };
@@ -108,12 +108,12 @@ namespace fox::io
             layout2f.specify<fox::float32_t>(2);
             layout3f.specify<fox::float32_t>(3);
 
-            auto vertexArray      = std::make_shared<gfx::VertexArray>();
-            auto positionsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(positionsVector);
-            auto normalsBuffer    = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(normalsVector);
-            auto tangentsBuffer   = std::make_shared<gfx::VertexBuffer<fox::Vector3f>>(tangentsVector);
-            auto texCoordsBuffer  = std::make_shared<gfx::VertexBuffer<fox::Vector2f>>(texCoordsVector);
-            auto indicesBuffer    = std::make_shared<gfx::IndexBuffer>(indicesVector);
+            auto vertexArray      = gfx::VertexArray::create();
+            auto positionsBuffer  = gfx::VertexBuffer<fox::Vector3f>::create(positionsVector);
+            auto normalsBuffer    = gfx::VertexBuffer<fox::Vector3f>::create(normalsVector);
+            auto tangentsBuffer   = gfx::VertexBuffer<fox::Vector3f>::create(tangentsVector);
+            auto texCoordsBuffer  = gfx::VertexBuffer<fox::Vector2f>::create(texCoordsVector);
+            auto indicesBuffer    = gfx::IndexBuffer::create(indicesVector);
 
             vertexArray->tie(positionsBuffer,  layout3f);
             vertexArray->tie(normalsBuffer,    layout3f);
@@ -202,7 +202,7 @@ namespace fox::io
             aiString aiTextureName{};
             const auto& aiReturn = aiMaterial->GetTexture(to_assimp_type(type), 0, &aiTextureName);
 
-            if (aiReturn == AI_SUCCESS) textureOpt.emplace(gfx::api::texture_from_file(path / aiTextureName.C_Str()));
+            if (aiReturn == AI_SUCCESS) textureOpt.emplace(io::load<io::Asset::Texture2D>(path / aiTextureName.C_Str()));
         }
 
         return textureOpt;

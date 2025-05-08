@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-namespace fox::gfx::uni
+namespace fox::gfx::unf
 {
     //Binding 0
     struct Context

@@ -200,7 +200,7 @@
 //        template<typename T>
 //        static std::vector<T> load_vertices(const tinygltf::Model& model, unsigned int meshIndex, const std::string& identifier)
 //        {
-//            const auto find_attribute = [](const tinygltf::Primitive& primitive, const std::string& identifier) -> int
+//            const auto& find_attribute = [](const tinygltf::Primitive& primitive, const std::string& identifier) -> int
 //            {
 //                for (const auto& attribute : primitive.attributes)
 //                {
