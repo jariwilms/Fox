@@ -72,6 +72,7 @@ namespace fox::gfx::api
         const auto& directionalLightingShaders = api::shaders_from_binaries<gfx::Shader>(dir / "lighting_blinn-phong_sphere_shadow_2.vert.spv",                                dir / "lighting_blinn-phong_sphere_shadow_2.frag.spv");
         const auto& ambientLightingShaders     = api::shaders_from_binaries<gfx::Shader>(dir / "ambient.vert.spv",                                                             dir / "ambient.frag.spv");
         const auto& directionalShadowShaders   = api::shaders_from_binaries<gfx::Shader>(dir / "directional_shadow.vert.spv",                                                  dir / "directional_shadow.frag.spv");
+        const auto& lightingStencilShaders     = api::shaders_from_binaries<gfx::Shader>(dir / "lighting_stencil.vert.spv",                                                    dir / "lighting_stencil.frag.spv");
         const auto& pointShadowShaders         = api::shaders_from_binaries<gfx::Shader>(dir / "point_shadow.vert.spv",                         dir / "point_shadow.geom.spv", dir / "point_shadow.frag.spv");
         const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
         const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
@@ -80,6 +81,7 @@ namespace fox::gfx::api
         pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
         pipelines.emplace("PointLighting",       gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointLightingShaders.at(0),                                             .fragment = pointLightingShaders.at(1) }));
         pipelines.emplace("DirectionalLighting", gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalLightingShaders.at(0),                                       .fragment = directionalLightingShaders.at(1) }));
+        pipelines.emplace("LightingStencil",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingStencilShaders.at(0),                                           .fragment = lightingStencilShaders.at(1) }));
         pipelines.emplace("AmbientLighting",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = ambientLightingShaders.at(0),                                           .fragment = ambientLightingShaders.at(1) }));
         pipelines.emplace("DirectionalShadow",   gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalShadowShaders.at(0),                                         .fragment = directionalShadowShaders.at(1) }));
         pipelines.emplace("PointShadow",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0),         .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
@@ -152,8 +154,6 @@ namespace fox::gfx::api
 
 
 
-
-
         //Bind Uniform Buffers to correct indices
         contextBuffer->          bind_index( 0);
         cameraBuffer->           bind_index( 1);
@@ -164,8 +164,6 @@ namespace fox::gfx::api
         shadowProjectionsBuffer->bind_index(13);
 
         contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta(),});
-
-
 
 
 
@@ -277,19 +275,21 @@ namespace fox::gfx::api
         const auto& render_lighting               = [&](gl::float32_t farPlane)
             {
                 pBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
-                pipelines.at("PointLighting")->bind();
+                gl::clear(glf::Buffer::Mask::All);
+
+                
+                gl::blit_framebuffer(gBuffer->handle(), pBuffers.at(0)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+                
+
+
+
                 gBuffer->bind_texture("Position", 0);
                 gBuffer->bind_texture("Albedo",   1);
                 gBuffer->bind_texture("Normal",   2);
                 gBuffer->bind_texture("ARM",      3);
 
                 gl::viewport(dimensions);
-                gl::clear(glf::Buffer::Mask::All);
-                gl::enable(glf::Feature::FaceCulling);
-                gl::cull_face(glf::Culling::Face::Front);
-                gl::disable(glf::Feature::DepthTest);
-                gl::enable(glf::Feature::Blending);
-                gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
+                gl::enable(glf::Feature::StencilTest);
 
                 sva->bind();
 
@@ -302,9 +302,40 @@ namespace fox::gfx::api
                     lightShadowBuffer->copy({ light.position, farPlane });
                     shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
 
+
+
+                    pipelines.at("LightingStencil")->bind();
+
+                    gl::enable(glf::Feature::DepthTest);
+                    gl::disable(glf::Feature::FaceCulling);
+                    gl::clear(glf::Buffer::Mask::Stencil);
+                    gl::depth_mask(gl::False);
+
+                    gl::stencil_function(glf::Stencil::Function::Always, 0u, 0u);
+                    gl::stencil_operation_separate(glf::Stencil::Face::Back , glf::Stencil::Action::Keep, glf::Stencil::Action::IncrementWrap, glf::Stencil::Action::Keep);
+                    gl::stencil_operation_separate(glf::Stencil::Face::Front, glf::Stencil::Action::Keep, glf::Stencil::Action::DecrementWrap, glf::Stencil::Action::Keep);
+
+                    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
+
+
+
+                    pipelines.at("PointLighting")->bind();
+                    gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
+                    gl::disable(glf::Feature::DepthTest);
+                    gl::enable(glf::Feature::Blending);
+                    gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
+                    gl::enable(glf::Feature::FaceCulling);
+                    gl::cull_face(glf::Culling::Face::Front);
+
                     gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
                 }
+
+                gl::depth_mask(gl::True);
+                gl::cull_face(glf::Culling::Face::Back);
+                gl::disable(glf::Feature::StencilTest);
             };
+
+
 
 
 
@@ -314,8 +345,6 @@ namespace fox::gfx::api
         {
             render_shadow_map_point(pointLight.position, sDimensions, nearPlane, farPlane, mmt, shadowCubemaps.at(index++));
         }
-
-
 
 
 
@@ -333,10 +362,7 @@ namespace fox::gfx::api
 
 
 
-
-
         render_lighting(farPlane);
-
 
 
         //Ambient Lighting
@@ -372,8 +398,6 @@ namespace fox::gfx::api
 
 
 
-
-
         //Debug cubes
 #ifdef FOX_DEBUG
         pipelines.at("Debug")->bind();
@@ -384,7 +408,6 @@ namespace fox::gfx::api
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
 #endif
-
 
 
 
