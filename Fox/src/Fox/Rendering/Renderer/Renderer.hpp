@@ -4,12 +4,21 @@
 
 namespace fox::gfx
 {
+    namespace impl
+    {
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using Renderer = api::OpenGLRenderer;
+#endif
+    }
+
     class Renderer
     {
     public:
+        using renderer_t = impl::Renderer;
+
         static void init()
         {
-            _ = std::make_unique<api::OpenGLRenderer>();
+            _ = std::make_unique<renderer_t>();
         }
 
         static void start(const gfx::RenderInfo& renderInfo)
@@ -31,6 +40,6 @@ namespace fox::gfx
         }
 
     protected:
-        static inline std::unique_ptr<api::OpenGLRenderer> _;
+        static inline std::unique_ptr<renderer_t> _;
     };
 }

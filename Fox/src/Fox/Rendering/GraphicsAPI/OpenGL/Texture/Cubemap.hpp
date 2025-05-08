@@ -23,11 +23,11 @@ namespace fox::gfx::api::gl
 
             gl::texture_storage_2d(m_handle, gl::map_cubemap_texture_format(m_format), m_dimensions, static_cast<gl::size_t>(m_mipmapLevels));
 
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::MinificationFilter,  gl::map_texture_min_filter(m_filter));
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::MagnificationFilter, gl::map_texture_mag_filter(m_filter));
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingS, gl::texture_v{ gl::map_texture_wrapping(m_wrapping) });
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingT, gl::texture_v{ gl::map_texture_wrapping(m_wrapping) });
-            gl::texture_parameter(m_handle, glf::Texture::Parameter::WrappingR, gl::texture_v{ gl::map_texture_wrapping(m_wrapping) });
+            gl::texture_parameter(m_handle, gl::map_texture_min_filter(m_filter));
+            gl::texture_parameter(m_handle, gl::map_texture_mag_filter(m_filter));
+            gl::texture_parameter(m_handle, gl::wrapping_s_p{ gl::map_texture_wrapping(m_wrapping) });
+            gl::texture_parameter(m_handle, gl::wrapping_t_p{ gl::map_texture_wrapping(m_wrapping) });
+            gl::texture_parameter(m_handle, gl::wrapping_r_p{ gl::map_texture_wrapping(m_wrapping) });
         }
         Cubemap(Format format, const gl::Vector2u& dimensions, const Faces& face)
             : Cubemap{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions, face } {}

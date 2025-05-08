@@ -3,7 +3,7 @@
 #include "stdafx.hpp"
 
 #include "Fox/Rendering/API/Texture/Texture.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Types.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Core/Types.hpp"
 
 namespace fox::gfx::api
 {

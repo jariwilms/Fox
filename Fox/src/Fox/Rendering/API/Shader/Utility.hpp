@@ -19,7 +19,7 @@ namespace fox::gfx::api
 
         return std::array<std::shared_ptr<Shader>, 2>
         {
-            gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile->read()), 
+            gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile  ->read()), 
             gfx::Shader::create(gfx::Shader::Stage::Fragment, *fragmentFile->read()), 
         };
     }
@@ -32,7 +32,7 @@ namespace fox::gfx::api
 
         return std::array<std::shared_ptr<Shader>, 3>
         {
-            gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile->read()), 
+            gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile  ->read()), 
             gfx::Shader::create(gfx::Shader::Stage::Geometry, *geometryFile->read()),
             gfx::Shader::create(gfx::Shader::Stage::Fragment, *fragmentFile->read()), 
         };

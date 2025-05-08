@@ -15,7 +15,7 @@ void main()
 	
 	
 	const vec3  ambientColor  = vec3(1.0, 1.0, 1.0);
-	const float ambientFactor = 0.05;
+	const float ambientFactor = 0.10;
 	const vec3  ambient       = clamp((albedo * (ambientColor * ambientFactor)) + lighting, 0.0, 1.0);
 	
 	

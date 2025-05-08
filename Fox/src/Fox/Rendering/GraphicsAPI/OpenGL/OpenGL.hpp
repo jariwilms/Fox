@@ -2,12 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Flags.hpp"
-#include "Library.hpp"
-#include "Mapping.hpp"
-#include "Types.hpp"
-#include "Parameters.hpp"
-#include "Concepts.hpp"
+#include "Core/Flags.hpp"
+#include "Core/Library.hpp"
+#include "Core/Mapping.hpp"
+#include "Core/Types.hpp"
+#include "Core/Parameters.hpp"
+#include "Core/Concepts.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -15,10 +15,11 @@ namespace fox::gfx::api::gl
     // 
     //This library has the following goals:
     //    * Provide a more modern and accessible interface
-    //    * Wrap around existing OpenGL functions, allowing easy implementation of custom logic
+    //    * Wrap around existing OpenGL functions, allowing easy addition of custom logic
+    //    * Keep track of state, preventing redundant calls to the graphics driver
     //    * Compile/Runtime input validation and safety
     // 
-    //Functions are ordered according to their appearance in the OpenGL 4.6 core specification
+    //Functions are ordered in accordance with their appearance in the OpenGL 4.6 core specification
     //https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
 
 
@@ -26,17 +27,17 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 22 - Context State Queries
-    static void get_boolean_v            (glf::Data data, std::optional<gl::uint32_t> index, gl::bool_t*    value)
+    static void get_boolean_v            (glf::Data data, std::optional<gl::uint32_t> index, gl::bool_t   * value)
     {
         if   (index.has_value()) glGetBooleani_v(gl::to_underlying(data), index.value(), value);
         else                     glGetBooleanv  (gl::to_underlying(data),                value);
     }
-    static void get_integer32_v          (glf::Data data, std::optional<gl::uint32_t> index, gl::int32_t*   value)
+    static void get_integer32_v          (glf::Data data, std::optional<gl::uint32_t> index, gl::int32_t  * value)
     {
         if   (index.has_value()) glGetIntegeri_v(gl::to_underlying(data), index.value(), value);
         else                     glGetIntegerv  (gl::to_underlying(data),                value);
     }
-    static void get_integer64_v          (glf::Data data, std::optional<gl::uint32_t> index, gl::int64_t*   value)
+    static void get_integer64_v          (glf::Data data, std::optional<gl::uint32_t> index, gl::int64_t  * value)
     {
         if   (index.has_value()) glGetInteger64i_v(gl::to_underlying(data), index.value(), value);
         else                     glGetInteger64v  (gl::to_underlying(data),                value);
@@ -802,31 +803,35 @@ namespace fox::gfx::api::gl
 
 
 
-    static void texture_parameter(gl::handle_t texture, glf::Texture::Parameter parameter, gl::texture_v value) //TODO: implement further
+    static void texture_parameter(gl::handle_t texture, gl::texture_v value) //TODO: implement further
     {
-        if (std::holds_alternative<glf::Texture::MinificationFilter>(value))
+             if (std::holds_alternative<glf::Texture::MinificationFilter>(value))
         {
             const auto& v = std::get<glf::Texture::MinificationFilter>(value);
-            glTextureParameteri(static_cast<gl::uint32_t>(texture), gl::to_underlying(parameter), gl::to_underlying(v));
-
-            return;
+            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_MIN_FILTER, gl::to_underlying(v));
         }
-        if (std::holds_alternative<glf::Texture::MagnificationFilter>(value))
+        else if (std::holds_alternative<glf::Texture::MagnificationFilter>(value))
         {
             const auto& v = std::get<glf::Texture::MagnificationFilter>(value);
-            glTextureParameteri(static_cast<gl::uint32_t>(texture), gl::to_underlying(parameter), gl::to_underlying(v));
-
-            return;
+            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_MAG_FILTER, gl::to_underlying(v));
         }
-        if (std::holds_alternative<glf::Texture::Wrapping>(value))
+        else if (std::holds_alternative<gl::wrapping_s_p>(value))
         {
-            const auto& v = std::get<glf::Texture::Wrapping>(value);
-            glTextureParameteri(static_cast<gl::uint32_t>(texture), gl::to_underlying(parameter), gl::to_underlying(v));
-
-            return;
+            const auto& v = std::get<gl::wrapping_s_p>(value);
+            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_WRAP_S, gl::to_underlying(v.wrapping));
+        }
+        else if (std::holds_alternative<gl::wrapping_t_p>(value))
+        {
+            const auto& v = std::get<gl::wrapping_t_p>(value);
+            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_WRAP_T, gl::to_underlying(v.wrapping));
+        }
+        else if (std::holds_alternative<gl::wrapping_r_p>(value))
+        {
+            const auto& v = std::get<gl::wrapping_r_p>(value);
+            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_WRAP_R, gl::to_underlying(v.wrapping));
         }
 
-        throw std::invalid_argument{ "Invalid Texture Parameter!" };
+
     }
 
 

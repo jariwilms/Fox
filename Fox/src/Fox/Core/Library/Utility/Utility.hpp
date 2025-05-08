@@ -14,15 +14,13 @@ namespace fox::utl
     {
         return sizeof(value);
     }
-    template<typename T, auto MPTR>
+    template<typename T, auto MEMBER_PTR>
     static constexpr auto offset_of()
     {
         return reinterpret_cast<std::size_t>(
             &reinterpret_cast<const volatile char&>(
                 ((static_cast<T*>(
-                    nullptr))->*MPTR)
-                )
-            );
+                    nullptr))->*MEMBER_PTR)));
     }
 
 

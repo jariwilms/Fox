@@ -15,7 +15,7 @@
 #include "Fox/Rendering/API/Texture/Cubemap.hpp"
 #include "Fox/Rendering/API/Texture/Dimensions.hpp"
 #include "Fox/Rendering/API/Texture/Texture.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Types.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Core/Types.hpp"
 
 namespace fox::gfx::api::gl
 {

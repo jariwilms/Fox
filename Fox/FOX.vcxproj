@@ -169,15 +169,15 @@
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\GraphicsAPI.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Context\Context.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Flags.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Flags.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\FrameBuffer\FrameBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\GL.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Library.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Mapping.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Library.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\OpenGL.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Parameters.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Parameters.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Query\Query.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\RenderBuffer\RenderBuffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\RenderState\RenderState.hpp" />
@@ -186,7 +186,7 @@
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Shader\Shader.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Texture\Cubemap.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Texture\Texture.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Types.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Types.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\VK.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\VKMappings.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\Vulkan.hpp" />
@@ -221,6 +221,7 @@
     <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp" />
     <ClCompile Include="src\Fox\Input\Input.cpp" />
     <ClCompile Include="src\Fox\Rendering\Geometry\Geometry.cpp" />
+    <ClCompile Include="src\Fox\Rendering\Renderer\OpenGLRenderer.cpp" />
     <ClCompile Include="src\Fox\Scene\Scene.cpp" />
     <ClCompile Include="src\Fox\Window\API\GLFW\GLFWWindow.cpp" />
     <ClCompile Include="src\Fox\Window\WindowManager.cpp" />
