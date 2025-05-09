@@ -278,8 +278,8 @@ namespace fox::gfx::api
                 gl::clear(glf::Buffer::Mask::All);
 
                 
-                gl::blit_framebuffer(gBuffer->handle(), pBuffers.at(0)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
                 
+                gl::blit_framebuffer(gBuffer->handle(), pBuffers.at(0)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
 
 
 

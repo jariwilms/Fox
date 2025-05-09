@@ -99,7 +99,7 @@ namespace fox
         auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
         famfc.mesh                  = gfx::Geometry::Plane::mesh();
         famfc.material              = defaultMaterial;
-        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 15.0f } };
+        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 25.0f } };
 
         auto& boxActor = scene->create_actor();
         auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
