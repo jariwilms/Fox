@@ -60,8 +60,7 @@ float calculate_shadow_pcf(vec4 shadowPosition, vec3 normal)
 	);
 	
 	const float viewDistance = length(u_Camera.position.xyz - shadowPosition.xyz);
-	const float diskRadius   = 0.01;
-	//const float diskRadius   = (1.0 + (viewDistance / u_LightShadow.farPlane)) / 10.0;  
+	const float diskRadius   = (1.0 + (viewDistance / u_LightShadow.farPlane)) / 100.0;
 	
 	const vec3  lightDirection = vec4(shadowPosition - u_LightShadow.position).xyz;
 	const float bias           = max((1.0 - dot(normal, lightDirection)) * 0.05, 0.005);
@@ -86,12 +85,12 @@ void main()
 {
 	const vec2  resolution       = u_Context.resolution;
 	const vec2  uv               = gl_FragCoord.xy / resolution;
-							     
+	
     const vec3  gPosition        = texture(t_Position, uv).xyz;
 	const vec3  gAlbedo          = texture(t_Albedo,   uv).rgb;
     const vec3  gNormal          = texture(t_Normal,   uv).rgb;
     const float gARM             = texture(t_ARM,      uv).g;
-							     
+	
 	const vec3  lightPosition    = u_Light.position.xyz;
 	const vec3  lightColor       = u_Light.color.rgb;
 	const float lightRadius      = u_Light.radius;
@@ -106,6 +105,10 @@ void main()
 	const float quadraticFactor  = lightQuadratic * pow(fragmentDistance, 2.0);
 	const float attenuation      = 1.0 / (1.0 + linearFactor + quadraticFactor);
 	
+	////Ambient
+	//const float ambientFactor    = 0.05;
+	//const vec3  ambient          = gAlbedo * ambientFactor;
+	
 	//Diffuse
 	const vec3  lightDirection   = normalize(lightPosition - gPosition);
 	const float diffuseFactor    = max(dot(gNormal, lightDirection), 0.0);
@@ -118,7 +121,7 @@ void main()
 	const vec3  specular         = gARM * lightColor * specularFactor;
 	
 	//Lighting
-	const float smoothingFactor  = smoothstep(1.0, 0.6, fragmentDistance / lightRadius);
+	const float smoothingFactor  = smoothstep(1.0, 0.8, fragmentDistance / lightRadius);
 	const float shadow           = calculate_shadow_pcf(vec4(gPosition, 1.0), gNormal);
 	const vec3  lighting         = ((diffuse * attenuation) + (specular * attenuation)) * (1.0 - shadow) * smoothingFactor;
 	
