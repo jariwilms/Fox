@@ -277,8 +277,6 @@ namespace fox::gfx::api
                 pBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
                 gl::clear(glf::Buffer::Mask::All);
 
-                
-                
                 gl::blit_framebuffer(gBuffer->handle(), pBuffers.at(0)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
 
 
@@ -297,6 +295,7 @@ namespace fox::gfx::api
                 {
                     fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
+                    pipelines.at("LightingStencil")->bind();
                     matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
                     lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
                     lightShadowBuffer->copy({ light.position, farPlane });
@@ -304,13 +303,10 @@ namespace fox::gfx::api
 
 
 
-                    pipelines.at("LightingStencil")->bind();
-
                     gl::enable(glf::Feature::DepthTest);
                     gl::disable(glf::Feature::FaceCulling);
                     gl::clear(glf::Buffer::Mask::Stencil);
                     gl::depth_mask(gl::False);
-
                     gl::stencil_function(glf::Stencil::Function::Always, 0u, 0u);
                     gl::stencil_operation_separate(glf::Stencil::Face::Back , glf::Stencil::Action::Keep, glf::Stencil::Action::IncrementWrap, glf::Stencil::Action::Keep);
                     gl::stencil_operation_separate(glf::Stencil::Face::Front, glf::Stencil::Action::Keep, glf::Stencil::Action::DecrementWrap, glf::Stencil::Action::Keep);
@@ -320,7 +316,9 @@ namespace fox::gfx::api
 
 
                     pipelines.at("PointLighting")->bind();
+
                     gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
+                    gl::stencil_operation(glf::Stencil::Action::Keep, glf::Stencil::Action::Keep, glf::Stencil::Action::Keep);
                     gl::disable(glf::Feature::DepthTest);
                     gl::enable(glf::Feature::Blending);
                     gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
