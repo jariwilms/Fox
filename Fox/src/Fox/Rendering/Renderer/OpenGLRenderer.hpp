@@ -23,7 +23,10 @@ namespace fox::gfx::api
 
     private:
         void render_meshes(std::shared_ptr<gfx::FrameBufferMultisample> frameBuffer, std::shared_ptr<gfx::Pipeline> shader);
-        void render_shadow_map(std::shared_ptr<gfx::FrameBuffer> target, const fox::Vector2u& dimensions, const unf::Light& light, fox::float32_t nearPlane, fox::float32_t farPlane);
+        void render_shadow_map(const unf::Light& light, std::shared_ptr<gfx::FrameBuffer> target);
+        void render_lighting_shadow(std::shared_ptr<gfx::FrameBuffer> target);
+        void render_ambient_lighting(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous);
+        void render_skybox(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous);
 
 
 

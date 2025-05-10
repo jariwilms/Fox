@@ -42,6 +42,7 @@ namespace fox::gfx::api::gl
 
 
     enum class handle_t : gl::uint32_t {}; //OpenGL Object handle
+    constexpr gl::handle_t DefaultFrameBuffer{};
     constexpr gl::handle_t NullObject{};
 
 
