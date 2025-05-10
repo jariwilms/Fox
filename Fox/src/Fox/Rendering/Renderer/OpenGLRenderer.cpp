@@ -34,29 +34,29 @@ namespace fox::gfx::api
 
 
 
-        gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,           gBufferManifest );
-        gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions ,  samples, gBufferManifest );
-        sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,           sBufferManifest );
-        pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,           ppBufferManifest);
-        pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,           ppBufferManifest);
-        shadowCubemaps          = {
+        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,           gBufferManifest );
+        m_gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions ,  samples, gBufferManifest );
+        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,           sBufferManifest );
+        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,           ppBufferManifest);
+        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,           ppBufferManifest);
+        m_shadowCubemaps          = {
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
         };
 
-        contextBuffer           = gfx::UniformBuffer<unf::Context>                 ::create();
-        matricesBuffer          = gfx::UniformBuffer<unf::Matrices>                ::create();
-        materialBuffer          = gfx::UniformBuffer<unf::Material>                ::create();
-        cameraBuffer            = gfx::UniformBuffer<unf::Camera>                  ::create();
-        lightBuffer             = gfx::UniformBuffer<unf::Light>                   ::create();
-        lightShadowBuffer       = gfx::UniformBuffer<unf::LightShadow>             ::create();
-        shadowProjectionsBuffer = gfx::UniformArrayBuffer<unf::ShadowProjection, 6>::create();
+        m_contextBuffer           = gfx::UniformBuffer<unf::Context>                 ::create();
+        m_matricesBuffer          = gfx::UniformBuffer<unf::Matrices>                ::create();
+        m_materialBuffer          = gfx::UniformBuffer<unf::Material>                ::create();
+        m_cameraBuffer            = gfx::UniformBuffer<unf::Camera>                  ::create();
+        m_lightBuffer             = gfx::UniformBuffer<unf::Light>                   ::create();
+        m_lightShadowBuffer       = gfx::UniformBuffer<unf::LightShadow>             ::create();
+        m_shadowProjectionsBuffer = gfx::UniformArrayBuffer<unf::ShadowProjection, 6>::create();
             
 
 
-        const auto& depthTexture = sBuffer->find_texture("Depth");
+        const auto& depthTexture = m_sBuffer->find_texture("Depth");
         const std::array<gl::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
         gl::texture_parameter(depthTexture->handle(), glf::Texture::MinificationFilter ::Nearest);
         gl::texture_parameter(depthTexture->handle(), glf::Texture::MagnificationFilter::Nearest);
@@ -77,41 +77,42 @@ namespace fox::gfx::api
         const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
         const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
 
-        pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
-        pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
-        pipelines.emplace("PointLighting",       gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointLightingShaders.at(0),                                             .fragment = pointLightingShaders.at(1) }));
-        pipelines.emplace("DirectionalLighting", gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalLightingShaders.at(0),                                       .fragment = directionalLightingShaders.at(1) }));
-        pipelines.emplace("LightingStencil",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingStencilShaders.at(0),                                           .fragment = lightingStencilShaders.at(1) }));
-        pipelines.emplace("AmbientLighting",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = ambientLightingShaders.at(0),                                           .fragment = ambientLightingShaders.at(1) }));
-        pipelines.emplace("DirectionalShadow",   gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalShadowShaders.at(0),                                         .fragment = directionalShadowShaders.at(1) }));
-        pipelines.emplace("PointShadow",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0),         .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
-        pipelines.emplace("Skybox",              gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                                    .fragment = skyboxShaders.at(1) }));
-        pipelines.emplace("Debug",               gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
+        m_pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
+        m_pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
+        m_pipelines.emplace("PointLighting",       gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointLightingShaders.at(0),                                             .fragment = pointLightingShaders.at(1) }));
+        m_pipelines.emplace("DirectionalLighting", gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalLightingShaders.at(0),                                       .fragment = directionalLightingShaders.at(1) }));
+        m_pipelines.emplace("LightingStencil",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingStencilShaders.at(0),                                           .fragment = lightingStencilShaders.at(1) }));
+        m_pipelines.emplace("AmbientLighting",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = ambientLightingShaders.at(0),                                           .fragment = ambientLightingShaders.at(1) }));
+        m_pipelines.emplace("DirectionalShadow",   gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalShadowShaders.at(0),                                         .fragment = directionalShadowShaders.at(1) }));
+        m_pipelines.emplace("PointShadow",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0),         .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
+        m_pipelines.emplace("Skybox",              gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                                    .fragment = skyboxShaders.at(1) }));
+        m_pipelines.emplace("Debug",               gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
     }
 
-    void OpenGLRenderer::start(const gfx::RenderInfo& renderInfo)
+    void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
     {
-        const auto& [camera, transform] = renderInfo.camera;
+        m_renderInfo = renderInfo;
+
+        const auto& camera              = m_renderInfo.camera;
+        const auto& transform           = m_renderInfo.cameraTransform;
         const auto& viewMatrix          = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
         const auto& projectionMatrix    = camera.projection().matrix();
 
-        matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
-        cameraBuffer  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
+        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
+        m_cameraBuffer  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
 
+        
 
-
-        mmt              .clear();
-        sceneLights      .clear();
-        pointLights      .clear();
-        directionalLights.clear();
-        debugTransforms  .clear();
-
-        skybox = renderInfo.skybox;
+        m_mmt              .clear();
+        m_sceneLights      .clear();
+        m_pointLights      .clear();
+        m_directionalLights.clear();
+        m_debugTransforms  .clear();
 
 
 
         constexpr auto maximumPointLights{ 4 };
-        for (const auto& [light, position] : renderInfo.lights)
+        for (const auto& [light, position] : m_renderInfo.lights)
         {
             unf::Light result
             {
@@ -128,17 +129,17 @@ namespace fox::gfx::api
             {
                 switch (light.type)
                 {
-                    case fox::Light::Type::Point:       if (pointLights.size() < maximumPointLights) pointLights.emplace_back(std::move(result)); break;
+                    case fox::Light::Type::Point:       if (m_pointLights.size() < maximumPointLights) m_pointLights.emplace_back(std::move(result)); break;
                     case fox::Light::Type::Directional:
                     case fox::Light::Type::Spot:
                     case fox::Light::Type::Area:
 
-                    default: sceneLights.emplace_back(std::move(result));
+                    default: m_sceneLights.emplace_back(std::move(result));
                 }
             }
             else
             {
-                sceneLights.emplace_back(std::move(result));
+                m_sceneLights.emplace_back(std::move(result));
             }
         }
     }
@@ -155,50 +156,21 @@ namespace fox::gfx::api
 
 
         //Bind Uniform Buffers to correct indices
-        contextBuffer->          bind_index( 0);
-        cameraBuffer->           bind_index( 1);
-        matricesBuffer->         bind_index( 2);
-        materialBuffer->         bind_index( 3);
-        lightBuffer->            bind_index( 4);
-        lightShadowBuffer->      bind_index( 6);
-        shadowProjectionsBuffer->bind_index(13);
+        m_contextBuffer->          bind_index( 0);
+        m_cameraBuffer->           bind_index( 1);
+        m_matricesBuffer->         bind_index( 2);
+        m_materialBuffer->         bind_index( 3);
+        m_lightBuffer->            bind_index( 4);
+        m_lightShadowBuffer->      bind_index( 6);
+        m_shadowProjectionsBuffer->bind_index(13);
 
-        contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta(),});
+        m_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
 
 
 
         const auto& nearPlane =   0.1f;
         const auto& farPlane  = 100.0f;
 
-        const auto& render_meshes                 = [&]()
-            {
-                gBufferMultisample->bind(gfx::FrameBuffer::Target::Write);
-                pipelines.at("DeferredMesh")->bind();
-
-                gl::viewport(gBufferMultisample->dimensions());
-                gl::clear(glf::Buffer::Mask::All);
-                gl::enable(glf::Feature::FaceCulling);
-                gl::cull_face(glf::Culling::Face::Back);
-                gl::front_face(glf::Orientation::CounterClockwise);
-                gl::enable(glf::Feature::DepthTest);
-                gl::depth_function(glf::DepthFunction::Less);
-                gl::disable(glf::Feature::Blending);
-
-                for (const auto& _ : mmt)
-                {
-                    const auto& [mesh, material, transform] = _;
-
-                    matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-                    materialBuffer->copy    (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
-
-                    mesh    ->vertexArray->bind();
-                    material->albedo     ->bind(0);
-                    material->normal     ->bind(1);
-                    material->arm        ->bind(2);
-
-                    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
-                }
-            };
         const auto& render_shadow_map_directional = [&](const fox::Light& light, const fox::Vector3f& position)
             {
                 //sBuffer->bind(api::FrameBuffer::Target::Write);
@@ -227,79 +199,34 @@ namespace fox::gfx::api
                 //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, vao->index_count());
                 //}
             };
-        const auto& render_shadow_map_point       = [&](
-            const gl::Vector3f& position, 
-            const gl::Vector2u& dimensions, gl::float32_t nearPlane, gl::float32_t farPlane, 
-            const std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>>& mmt, 
-            std::shared_ptr<gfx::FrameBuffer> cubemap)
-            {
-                const auto& aspectRatio = static_cast<gl::float32_t>(dimensions.x) / dimensions.y;
-                const auto& projection  = glm::perspective(glm::radians(90.0f), aspectRatio, nearPlane, farPlane);
-
-                std::array<const unf::ShadowProjection, 6> shadowTransforms {
-                    projection * glm::lookAt(position, position + gl::Vector3f{  1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-                    projection * glm::lookAt(position, position + gl::Vector3f{ -1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-                    projection * glm::lookAt(position, position + gl::Vector3f{  0.0, 1.0, 0.0 }, gl::Vector3f{ 0.0, 0.0, 1.0 }), 
-                    projection * glm::lookAt(position, position + gl::Vector3f{  0.0,-1.0, 0.0 }, gl::Vector3f{ 0.0, 0.0,-1.0 }), 
-                    projection * glm::lookAt(position, position + gl::Vector3f{  0.0, 0.0, 1.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-                    projection * glm::lookAt(position, position + gl::Vector3f{  0.0, 0.0,-1.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-                };
-
-
-
-                cubemap->bind(api::FrameBuffer::Target::Write);
-                pipelines.at("PointShadow")->bind();
-                shadowProjectionsBuffer->copy(shadowTransforms);
-                lightShadowBuffer      ->copy({ fox::Vector4f{ position, 1.0f }, farPlane });
-
-                gl::viewport(dimensions);
-                gl::clear(glf::Buffer::Mask::Depth);
-                gl::enable(glf::Feature::FaceCulling);
-                gl::cull_face (glf::Culling::Face::Back);
-                gl::front_face(glf::Orientation::CounterClockwise);
-                gl::enable(glf::Feature::DepthTest);
-                gl::depth_function(glf::DepthFunction::Less);
-                gl::disable(glf::Feature::Blending);
-
-                for (const auto& _ : mmt)
-                {
-                    const auto& [mesh, material, transform] = _;
-
-                    matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-
-                    mesh->vertexArray->bind();
-
-                    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
-                }
-            };
         const auto& render_lighting               = [&](gl::float32_t farPlane)
             {
-                pBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
+                m_pBuffers.at(0)->bind(api::FrameBuffer::Target::Write);
                 gl::clear(glf::Buffer::Mask::All);
 
-                gl::blit_framebuffer(gBuffer->handle(), pBuffers.at(0)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+                gl::blit_framebuffer(m_gBuffer->handle(), m_pBuffers.at(0)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
 
 
 
-                gBuffer->bind_texture("Position", 0);
-                gBuffer->bind_texture("Albedo",   1);
-                gBuffer->bind_texture("Normal",   2);
-                gBuffer->bind_texture("ARM",      3);
+                m_gBuffer->bind_texture("Position", 0);
+                m_gBuffer->bind_texture("Albedo",   1);
+                m_gBuffer->bind_texture("Normal",   2);
+                m_gBuffer->bind_texture("ARM",      3);
 
                 gl::viewport(dimensions);
                 gl::enable(glf::Feature::StencilTest);
 
                 sva->bind();
 
-                for (fox::size_t index{}; const auto& light : pointLights)
+                for (fox::size_t index{}; const auto& light : m_pointLights)
                 {
                     fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
-                    pipelines.at("LightingStencil")->bind();
-                    matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-                    lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
-                    lightShadowBuffer->copy({ light.position, farPlane });
-                    shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
+                    m_pipelines.at("LightingStencil")->bind();
+                    m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+                    m_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+                    m_lightShadowBuffer->copy({ light.position, farPlane });
+                    m_shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
 
 
 
@@ -315,7 +242,7 @@ namespace fox::gfx::api
 
 
 
-                    pipelines.at("PointLighting")->bind();
+                    m_pipelines.at("PointLighting")->bind();
 
                     gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
                     gl::stencil_operation(glf::Stencil::Action::Keep, glf::Stencil::Action::Keep, glf::Stencil::Action::Keep);
@@ -337,26 +264,27 @@ namespace fox::gfx::api
 
 
 
-        render_meshes();
+        render_meshes(m_gBufferMultisample, m_pipelines.at("DeferredMesh"));
 
-        for (fox::size_t index{}; const auto& pointLight : pointLights)
+        for (const auto& i : std::views::iota(0u, m_pointLights.size()))
         {
-            render_shadow_map_point(pointLight.position, sDimensions, nearPlane, farPlane, mmt, shadowCubemaps.at(index++));
+            render_shadow_map(m_shadowCubemaps.at(i), sDimensions, m_pointLights.at(i), 0.1f, 100.0f);
         }
+        
 
 
 
         constexpr fox::size_t colorAttachments{ 4 };
-        for (const auto& i : std::ranges::views::iota(fox::size_t{ 0 }, colorAttachments))
+        for (const auto& i : std::views::iota(fox::size_t{ 0 }, colorAttachments))
         {
-            gl::frame_buffer_read_buffer(gBufferMultisample->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
-            gl::frame_buffer_draw_buffer(gBuffer           ->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
+            gl::frame_buffer_read_buffer(m_gBufferMultisample->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
+            gl::frame_buffer_draw_buffer(m_gBuffer           ->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
                 
-            gl::blit_framebuffer(gBufferMultisample->handle(), gBuffer->handle(), glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+            gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
         }
 
-        gl::blit_framebuffer(gBufferMultisample->handle(), gBuffer->handle(), glf::Buffer::Mask::Depth  , glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
-        gl::blit_framebuffer(gBufferMultisample->handle(), gBuffer->handle(), glf::Buffer::Mask::Stencil, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Depth  , glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Stencil, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
 
 
 
@@ -364,10 +292,10 @@ namespace fox::gfx::api
 
 
         //Ambient Lighting
-        pBuffers.at(1)->bind(gfx::FrameBuffer::Target::Write);
-        pipelines.at("AmbientLighting")->bind();
-        gBuffer       ->bind_texture("Albedo", 0);
-        pBuffers.at(0)->bind_texture("Color" , 1);
+        m_pBuffers.at(1)->bind(gfx::FrameBuffer::Target::Write);
+        m_pipelines.at("AmbientLighting")->bind();
+        m_gBuffer       ->bind_texture("Albedo", 0);
+        m_pBuffers.at(0)->bind_texture("Color" , 1);
 
         gl::viewport(dimensions);
         gl::clear(glf::Buffer::Mask::All);
@@ -380,10 +308,10 @@ namespace fox::gfx::api
 
 
         //Skybox
-        gl::blit_framebuffer(gBuffer->handle(), pBuffers.at(1)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        gl::blit_framebuffer(m_gBuffer->handle(), m_pBuffers.at(1)->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
 
-        pipelines.at("Skybox")->bind();
-        skybox->bind(0);
+        m_pipelines.at("Skybox")->bind();
+        m_renderInfo.skybox->bind(0);
 
         gl::viewport(dimensions);
         gl::disable(glf::Feature::FaceCulling);
@@ -398,11 +326,11 @@ namespace fox::gfx::api
 
         //Debug cubes
 #ifdef FOX_DEBUG
-        pipelines.at("Debug")->bind();
+        m_pipelines.at("Debug")->bind();
 
-        for (const auto& transform : debugTransforms)
+        for (const auto& transform : m_debugTransforms)
         {
-            matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
 #endif
@@ -410,15 +338,90 @@ namespace fox::gfx::api
 
 
         //Final result of rendering copied to default framebuffer
-        gl::blit_framebuffer(pBuffers.at(1)->handle(), gl::handle_t{ 0 }, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        gl::blit_framebuffer(m_pBuffers.at(1)->handle(), gl::handle_t{ 0 }, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
     {
-        mmt.emplace_back(mesh, material, transform);
+        m_mmt.emplace_back(mesh, material, transform);
     }
     void OpenGLRenderer::render_debug(const fox::Transform& transform)
     {
-        debugTransforms.emplace_back(transform);
+        m_debugTransforms.emplace_back(transform);
+    }
+    
+    void OpenGLRenderer::render_meshes(std::shared_ptr<gfx::FrameBufferMultisample> frameBuffer, std::shared_ptr<gfx::Pipeline> shader)
+    {
+        frameBuffer->bind(gfx::FrameBuffer::Target::Write);
+        shader->bind();
+
+        gl::viewport      (frameBuffer->dimensions());
+        gl::clear         (glf::Buffer::Mask::All);
+        gl::enable        (glf::Feature::FaceCulling);
+        gl::cull_face     (glf::Culling::Face::Back);
+        gl::front_face    (glf::Orientation::CounterClockwise);
+        gl::enable        (glf::Feature::DepthTest);
+        gl::depth_function(glf::DepthFunction::Less);
+        gl::disable       (glf::Feature::Blending);
+
+        for (const auto& _ : m_mmt)
+        {
+            const auto& [mesh, material, transform] = _;
+
+            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+            m_materialBuffer->copy    (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
+
+            mesh    ->vertexArray->bind();
+            material->albedo     ->bind(0);
+            material->normal     ->bind(1);
+            material->arm        ->bind(2);
+
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
+        }
+    }
+    void OpenGLRenderer::render_shadow_map(std::shared_ptr<gfx::FrameBuffer> target, const fox::Vector2u& dimensions, const unf::Light& light, fox::float32_t nearPlane, fox::float32_t farPlane)
+    {
+        const auto& position    = gl::Vector3f{ light.position };
+        const auto& aspectRatio = static_cast<fox::float32_t>(dimensions.x) / dimensions.y;
+        const auto& fov         = 90.0f;
+        const auto& projection  = gfx::Projection{ gfx::Projection::perspective_p{ aspectRatio, fov, nearPlane, farPlane } };
+
+        std::array<const unf::ShadowProjection, 6> shadowTransforms{
+            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
+            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{ -1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
+            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0, 1.0, 0.0 }, gl::Vector3f{ 0.0, 0.0, 1.0 }), 
+            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0,-1.0, 0.0 }, gl::Vector3f{ 0.0, 0.0,-1.0 }), 
+            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0, 0.0, 1.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
+            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0, 0.0,-1.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
+        };
+
+
+
+        target->bind(api::FrameBuffer::Target::Write);
+        m_pipelines.at("PointShadow")->bind();
+        m_shadowProjectionsBuffer->copy(shadowTransforms);
+        m_lightShadowBuffer->copy({ fox::Vector4f{ position, 1.0f }, farPlane });
+
+
+
+        gl::viewport(dimensions);
+        gl::clear(glf::Buffer::Mask::Depth);
+        gl::enable(glf::Feature::FaceCulling);
+        gl::cull_face(glf::Culling::Face::Back);
+        gl::front_face(glf::Orientation::CounterClockwise);
+        gl::enable(glf::Feature::DepthTest);
+        gl::depth_function(glf::DepthFunction::Less);
+        gl::disable(glf::Feature::Blending);
+
+        for (const auto& _ : m_mmt)
+        {
+            const auto& [mesh, material, transform] = _;
+
+            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+
+            mesh->vertexArray->bind();
+
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
+        }
     }
 }

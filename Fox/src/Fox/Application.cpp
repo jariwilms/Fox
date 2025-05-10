@@ -66,7 +66,7 @@ namespace fox
         auto  scene           = std::make_shared<scn::Scene>();
 
         auto& observer        = scene->create_actor();
-        auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f).get();
+        auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f, 82.0f).get();
         auto& cameraTransform = observer.get_component<cmp::TransformComponent>().get();
 
         cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
@@ -216,7 +216,7 @@ namespace fox
 
 
 
-            gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights, skybox };
+            gfx::RenderInfo renderInfo{ camera, cameraTransform, lights, skybox };
             gfx::Renderer::start(renderInfo);
 
             const auto& view = reg::view<cmp::RelationshipComponent, cmp::TransformComponent, cmp::MeshFilterComponent>();

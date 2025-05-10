@@ -21,7 +21,7 @@ namespace fox::gfx
             _ = std::make_unique<renderer_t>();
         }
 
-        static void start(const gfx::RenderInfo& renderInfo)
+        static void start(gfx::RenderInfo renderInfo)
         {
             _->start(renderInfo);
         }

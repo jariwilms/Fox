@@ -20,7 +20,7 @@ namespace fox::cmp
 		Component(const ecs::Entity& owner, const T& value)
 			: m_owner{ owner },  m_value{ value } {}
 
-		ecs::Entity& owner()
+		      ecs::Entity& owner()
 		{
 			return m_owner;
 		}

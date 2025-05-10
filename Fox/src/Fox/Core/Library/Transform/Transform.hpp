@@ -19,7 +19,11 @@ namespace fox
             : position{ position }, rotation{ fox::Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
         Transform(const fox::Vector3f& position, const fox::Quaternion& rotation, const fox::Vector3f& scale)
             : position{ position }, rotation{ fox::Quaternion{ rotation } }, scale{ scale } {}
-        Transform(const fox::Matrix4f& matrix)
+        Transform(const fox::Transform& other)
+        {
+            *this = other;
+        }
+        Transform(const fox::Matrix4f & matrix)
         {
             *this = matrix;
         }
@@ -71,7 +75,18 @@ namespace fox
             return matrix;
         }
 
-        Transform& operator=(const fox::Matrix4f& matrix)
+        Transform& operator=(const fox::Transform& other)
+        {
+            if (this != &other)
+            {
+                std::exchange(position, other.position);
+                std::exchange(rotation, other.rotation);
+                std::exchange(scale   , other.scale);
+            }
+
+            return *this;
+        }
+        Transform& operator=(const fox::Matrix4f & matrix)
         {
             fox::Vector3f skew{};
             fox::Vector4f perspective{};
