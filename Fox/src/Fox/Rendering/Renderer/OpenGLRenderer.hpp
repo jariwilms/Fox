@@ -23,7 +23,7 @@ namespace fox::gfx::api
 
     private:
         void render_meshes(std::shared_ptr<gfx::FrameBufferMultisample> frameBuffer, std::shared_ptr<gfx::Pipeline> shader);
-        void render_shadow_map(const unf::Light& light, std::shared_ptr<gfx::FrameBuffer> target);
+        void render_shadow_map_point(const unf::Light& light, std::shared_ptr<gfx::FrameBuffer> target);
         void render_lighting_shadow(std::shared_ptr<gfx::FrameBuffer> target);
         void render_ambient_lighting(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous);
         void render_skybox(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous);
@@ -31,9 +31,9 @@ namespace fox::gfx::api
 
 
         std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> m_mmt{};
-        std::vector<unf::Light>                                            m_sceneLights{};
-        std::vector<unf::Light>                                            m_pointLights{};
-        std::vector<unf::Light>                                            m_directionalLights{};
+        std::vector<unf::Light>                                            m_lights{};
+        std::vector<unf::Light>                                            m_shadowCastingPointLights{};
+        std::vector<unf::Light>                                            m_shadowCastingDirectionalLights{};
         std::vector<fox::Transform>                                        m_debugTransforms{};
                                                     
         std::shared_ptr<gfx::FrameBuffer>                                  m_gBuffer{};

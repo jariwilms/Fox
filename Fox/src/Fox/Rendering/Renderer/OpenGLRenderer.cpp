@@ -101,17 +101,19 @@ namespace fox::gfx::api
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
         m_cameraBuffer  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
 
-        
-
-        m_mmt              .clear();
-        m_sceneLights      .clear();
-        m_pointLights      .clear();
-        m_directionalLights.clear();
-        m_debugTransforms  .clear();
 
 
+        m_mmt                           .clear();
+        m_lights                        .clear();
+        m_shadowCastingPointLights      .clear();
+        m_shadowCastingDirectionalLights.clear();
+        m_debugTransforms               .clear();
 
-        constexpr auto maximumPointLights{ 4 };
+
+
+        fox::size_t shadowCastingLightCount{ 0u };
+        constexpr auto maximumShadowCastingLights{ 4 };
+
         for (const auto& [light, position] : m_renderInfo.lights)
         {
             unf::Light result
@@ -125,22 +127,20 @@ namespace fox::gfx::api
                 0.01f,
             };
 
-            if (light.isShadowCasting)
+            if (light.isShadowCasting and shadowCastingLightCount < maximumShadowCastingLights)
             {
                 switch (light.type)
                 {
-                    case fox::Light::Type::Point:       if (m_pointLights.size() < maximumPointLights) m_pointLights.emplace_back(std::move(result)); break;
-                    case fox::Light::Type::Directional:
-                    case fox::Light::Type::Spot:
-                    case fox::Light::Type::Area:
-
-                    default: m_sceneLights.emplace_back(std::move(result));
+                    case fox::Light::Type::Area:        throw std::exception{ "" };                            break;
+                    case fox::Light::Type::Directional: m_shadowCastingDirectionalLights.emplace_back(result); break;
+                    case fox::Light::Type::Point:       m_shadowCastingPointLights      .emplace_back(result); break;
+                    case fox::Light::Type::Spot:        throw std::exception{ "" };                            break;
                 }
+
+                ++shadowCastingLightCount;
             }
-            else
-            {
-                m_sceneLights.emplace_back(std::move(result));
-            }
+
+            m_lights.emplace_back(std::move(result));
         }
     }
 
@@ -164,14 +164,14 @@ namespace fox::gfx::api
 
 
 
-        //Main rendering process
-        
         //Render meshes into gBuffer
         render_meshes(m_gBufferMultisample, m_pipelines.at("DeferredMesh"));
 
         //Render shadow map for each shadow-casting point light (up to 4)
-        for (const auto& i : std::views::iota(0u, m_pointLights.size()))
-            render_shadow_map(m_pointLights.at(i), m_shadowCubemaps.at(i));
+        for (fox::size_t index{}; const auto& light : m_shadowCastingPointLights)
+        {
+            render_shadow_map_point(light, m_shadowCubemaps.at(index++));
+        }
 
         //Blit Position, Albedo, Normal, and RoughnessMetallic color buffers into the regular gBuffer
         //It is necessary to resolve the multisampled gBuffer into the regular gBuffer
@@ -256,7 +256,7 @@ namespace fox::gfx::api
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
         }
     }
-    void OpenGLRenderer::render_shadow_map(const unf::Light& light, std::shared_ptr<gfx::FrameBuffer> target)
+    void OpenGLRenderer::render_shadow_map_point(const unf::Light& light, std::shared_ptr<gfx::FrameBuffer> target)
     {
         const auto& position    = gl::Vector3f{ light.position };
         const auto& dimensions  = target->dimensions();
@@ -325,7 +325,7 @@ namespace fox::gfx::api
         const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
         sva->bind();
 
-        for (fox::size_t index{}; const auto & light : m_pointLights)
+        for (fox::size_t index{}; const auto& light : m_shadowCastingPointLights)
         {
             fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
