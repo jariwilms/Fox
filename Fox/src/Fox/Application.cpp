@@ -142,9 +142,13 @@ namespace fox
         //Lights
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   2.0f,  3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   2.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 10.0f }, 20.0f, true }, fox::Vector3f{ 0.0f, 1.0f, 2.0f }),
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 10.0f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 20.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 20.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   2.0f,  3.0f }), 
         };
 
 

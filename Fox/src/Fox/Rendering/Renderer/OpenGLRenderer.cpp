@@ -76,6 +76,7 @@ namespace fox::gfx::api
         const auto& pointShadowShaders         = api::shaders_from_binaries<gfx::Shader>(dir / "point_shadow.vert.spv",                         dir / "point_shadow.geom.spv", dir / "point_shadow.frag.spv");
         const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
         const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
+        const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr.vert.spv",                                                                 dir / "pbr.frag.spv");
 
         m_pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
         m_pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
@@ -87,6 +88,7 @@ namespace fox::gfx::api
         m_pipelines.emplace("PointShadow",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0),         .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
         m_pipelines.emplace("Skybox",              gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                                    .fragment = skyboxShaders.at(1) }));
         m_pipelines.emplace("Debug",               gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
+        m_pipelines.emplace("PBR",                 gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pbrShaders.at(0),                                                       .fragment = pbrShaders.at(1)}));
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -314,12 +316,12 @@ namespace fox::gfx::api
 
 
         m_gBuffer->bind_texture("Position", 0);
-        m_gBuffer->bind_texture("Albedo", 1);
-        m_gBuffer->bind_texture("Normal", 2);
-        m_gBuffer->bind_texture("ARM", 3);
+        m_gBuffer->bind_texture("Albedo"  , 1);
+        m_gBuffer->bind_texture("Normal"  , 2);
+        m_gBuffer->bind_texture("ARM"     , 3);
 
         gl::viewport(target->dimensions());
-        gl::enable(glf::Feature::StencilTest);
+        //gl::enable(glf::Feature::StencilTest);
 
         const auto& farPlane = 100.0f;
         const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
@@ -329,30 +331,30 @@ namespace fox::gfx::api
         {
             fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
-            m_pipelines.at("LightingStencil")->bind();
+            //m_pipelines.at("LightingStencil")->bind();
             m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
             m_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
             m_lightShadowBuffer->copy({ light.position, farPlane });
-            m_shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
+            //m_shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
 
 
 
-            gl::enable(glf::Feature::DepthTest);
-            gl::disable(glf::Feature::FaceCulling);
-            gl::clear(glf::Buffer::Mask::Stencil);
-            gl::depth_mask(gl::False);
-            gl::stencil_function(glf::Stencil::Function::Always, 0u, 0u);
-            gl::stencil_operation_separate(glf::Stencil::Face::Back, glf::Stencil::Action::Keep, glf::Stencil::Action::IncrementWrap, glf::Stencil::Action::Keep);
-            gl::stencil_operation_separate(glf::Stencil::Face::Front, glf::Stencil::Action::Keep, glf::Stencil::Action::DecrementWrap, glf::Stencil::Action::Keep);
+            //gl::enable(glf::Feature::DepthTest);
+            //gl::disable(glf::Feature::FaceCulling);
+            //gl::clear(glf::Buffer::Mask::Stencil);
+            //gl::depth_mask(gl::False);
+            //gl::stencil_function(glf::Stencil::Function::Always, 0u, 0u);
+            //gl::stencil_operation_separate(glf::Stencil::Face::Back, glf::Stencil::Action::Keep, glf::Stencil::Action::IncrementWrap, glf::Stencil::Action::Keep);
+            //gl::stencil_operation_separate(glf::Stencil::Face::Front, glf::Stencil::Action::Keep, glf::Stencil::Action::DecrementWrap, glf::Stencil::Action::Keep);
 
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
+            //gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
 
 
+            m_pipelines.at("PBR")->bind();
+            //m_pipelines.at("PointLighting")->bind();
 
-            m_pipelines.at("PointLighting")->bind();
-
-            gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
-            gl::stencil_operation(glf::Stencil::Action::Keep, glf::Stencil::Action::Keep, glf::Stencil::Action::Keep);
+            //gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
+            //gl::stencil_operation(glf::Stencil::Action::Keep, glf::Stencil::Action::Keep, glf::Stencil::Action::Keep);
             gl::disable(glf::Feature::DepthTest);
             gl::enable(glf::Feature::Blending);
             gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
@@ -362,9 +364,9 @@ namespace fox::gfx::api
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
         }
 
-        gl::depth_mask(gl::True);
+        //gl::depth_mask(gl::True);
         gl::cull_face(glf::Culling::Face::Back);
-        gl::disable(glf::Feature::StencilTest);
+        //gl::disable(glf::Feature::StencilTest);
 
     }
     void OpenGLRenderer::render_ambient_lighting(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous)
