@@ -11,7 +11,7 @@ namespace fox
     public:
         Camera() = default;
         Camera(fox::float32_t aspectRatio, fox::float32_t fov)
-            : m_aspectRatio{ aspectRatio }, m_fov{ fov }, m_projection{ gfx::Projection::perspective_p{ m_aspectRatio, m_fov, 0.1f, 100.0f } } {}
+            : m_aspectRatio{ aspectRatio }, m_fov{ fov }, m_projection{ gfx::Projection::perspective_p{ m_aspectRatio, m_fov, 0.1f, 10000.0f } } {}
 
               fox::float32_t   aspect_ratio () const
         {
