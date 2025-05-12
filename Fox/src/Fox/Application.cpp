@@ -99,7 +99,7 @@ namespace fox
         auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
         famfc.mesh                  = gfx::Geometry::Plane::mesh();
         famfc.material              = defaultMaterial;
-        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 25.0f } };
+        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
 
         auto& boxActor = scene->create_actor();
         auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
@@ -142,8 +142,9 @@ namespace fox
         //Lights
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 50.0f }, 20.0f, true }, fox::Vector3f{ -3.0f, 2.0f, 3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 50.0f }, 20.0f, true }, fox::Vector3f{  3.0f, 2.0f, 3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.2f, 0.2f } * fox::Vector3f{ 500.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 100.0f }, 0.0f }, fox::Vector3f{ -3.0f,  2.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 100.0f }, 0.0f }, fox::Vector3f{  3.0f,  2.0f,  3.0f }), 
         };
 
 
@@ -212,6 +213,11 @@ namespace fox
             rotate_helmet();
 
 
+
+            auto& l = lights.at(0);
+            auto& [_1, _2] = l;
+            _2.x = glm::cos(fox::Time::since_epoch() / 5.0f) * 20.0f;
+            _2.z = glm::sin(fox::Time::since_epoch() / 5.0f) * 20.0f;
 
 
 
