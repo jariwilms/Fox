@@ -73,10 +73,10 @@ void main()
 	const vec2  resolution                  = u_Context.resolution;
 	const vec2  uv                          = gl_FragCoord.xy / resolution;
 
-    const vec3  gPosition                   = texture(t_Position, uv).xyz;
+    const vec3  gPosition                   =     texture(t_Position, uv).xyz;
 	const vec3  gAlbedo                     = pow(texture(t_Albedo,   uv).rgb, vec3(2.2));
-    const vec3  gNormal                     = texture(t_Normal,   uv).rgb;
-    const vec3  gARM                        = texture(t_ARM,      uv).rgb;
+    const vec3  gNormal                     =     texture(t_Normal,   uv).rgb;
+    const vec3  gARM                        =     texture(t_ARM,      uv).rgb;
 	
 	const float gAmbient                    = gARM.r;
 	const float gRoughness                  = gARM.g;
@@ -111,7 +111,7 @@ void main()
 	const vec3  radianceFactor              = lightColor * attenuation;
 	const vec3  radiance                    = ((reflectanceCoefficient * gAlbedo / PI) + specular) * normalDotLightDirection * radianceFactor; 
 
-    const vec3  ambientFactor               = vec3(0.03) * gAlbedo * gAmbient;
+    const vec3  ambientFactor               = vec3(0.0);//vec3(0.005) * gAlbedo * gAmbient;
     
 	
 	
