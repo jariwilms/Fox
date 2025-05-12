@@ -192,7 +192,7 @@ namespace fox::gfx::api
 
 
         //Lighting calculations
-        render_lighting_shadow (m_pBuffers.at(0));
+        render_lighting(m_pBuffers.at(0));
         //render_ambient_lighting(m_pBuffers.at(1), m_pBuffers.at(0));
 
         //Skybox
@@ -305,6 +305,45 @@ namespace fox::gfx::api
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
         }
+    }
+    void OpenGLRenderer::render_lighting(std::shared_ptr<gfx::FrameBuffer> target)
+    {
+        target->bind(api::FrameBuffer::Target::Write);
+        gl::clear(glf::Buffer::Mask::All);
+
+        gl::blit_framebuffer(m_gBuffer->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, m_gBuffer->dimensions(), target->dimensions());
+
+
+
+        m_gBuffer->bind_texture("Position", 0);
+        m_gBuffer->bind_texture("Albedo"  , 1);
+        m_gBuffer->bind_texture("Normal"  , 2);
+        m_gBuffer->bind_texture("ARM"     , 3);
+
+        gl::viewport(target->dimensions());
+
+        const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
+        pva->bind();
+        
+        gl::depth_mask(gl::False);
+        gl::disable(glf::Feature::DepthTest);
+        gl::enable(glf::Feature::Blending);
+        gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
+        gl::disable(glf::Feature::FaceCulling);
+
+        for (fox::size_t index{}; const auto& light : m_lights)
+        {
+            fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
+
+            m_pipelines.at("PBR")->bind();
+            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+            m_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+            m_lightShadowBuffer->copy({ light.position, m_shadowFarPlane });
+
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
+        }
+
+        gl::depth_mask(gl::True);
     }
     void OpenGLRenderer::render_lighting_shadow(std::shared_ptr<gfx::FrameBuffer> target)
     {

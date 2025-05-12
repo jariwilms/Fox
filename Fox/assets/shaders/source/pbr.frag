@@ -23,10 +23,10 @@ layout(set = 0, binding =  4) uniform Light
 	float _padding;
 } u_Light;
 
-layout(binding  = 0) uniform sampler2D   t_Position;
-layout(binding  = 1) uniform sampler2D   t_Albedo;
-layout(binding  = 2) uniform sampler2D   t_Normal;
-layout(binding  = 3) uniform sampler2D   t_ARM;
+layout(binding  = 0) uniform sampler2D t_Position;
+layout(binding  = 1) uniform sampler2D t_Albedo;
+layout(binding  = 2) uniform sampler2D t_Normal;
+layout(binding  = 3) uniform sampler2D t_ARM;
 
 layout(location = 0) out vec4 f_Color;
 
@@ -82,32 +82,34 @@ void main()
 	const float gRoughness                  = gARM.g;
 	const float gMetallic                   = gARM.b;
 
+	const vec3  cameraPosition              = u_Camera.position.xyz;
+	const vec3  lightPosition               = u_Light.position.xyz;
+	const vec3  lightColor                  = u_Light.color.xyz;
 
 
-    const vec3  directionToCamera           = normalize(u_Camera.position.xyz - gPosition);
-	const vec3  directionToLight            = normalize(u_Light .position.xyz - gPosition);
-	
-	const vec3  halfwayVector               = normalize(directionToCamera + directionToLight);
-	const float fragmentDistance            = length(u_Light.position.xyz - gPosition);
-	const float attenuation                 = 1.0 / pow(fragmentDistance, 2.0);
-	const vec3  radianceFactor              = u_Light.color.rgb * attenuation;
+
+    const vec3  directionToCamera           = normalize(cameraPosition - gPosition);
+	const vec3  directionToLight            = normalize(lightPosition  - gPosition);
 	
 	const vec3  dielectricReflectanceFactor = vec3(0.04); 
 	const vec3  metallicReflectanceFactor   = gAlbedo;
     const vec3  reflectanceFactor           = mix(dielectricReflectanceFactor, metallicReflectanceFactor, gMetallic);
 	
-	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gRoughness);
+	const vec3  halfwayVector               = normalize(directionToCamera + directionToLight);
 	const float geometryShadow              = geometry_smith(gNormal, directionToCamera, directionToLight, gRoughness);
 	const vec3  fresnelReflectance          = fresnel_schlick(max(dot(halfwayVector, directionToCamera), 0.0), reflectanceFactor);       
 	
-	const vec3  reflectanceCoefficient      = (vec3(1.0) - fresnelReflectance) * (1.0 - gMetallic);
-	
+	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gRoughness);
 	const vec3  specularNumerator           = normalDistribution * geometryShadow * fresnelReflectance;
 	const float specularDenominator         = 4.0 * max(dot(gNormal, directionToCamera), 0.0) * max(dot(gNormal, directionToLight), 0.0) + 0.0001;
 	const vec3  specular                    = specularNumerator / specularDenominator;
 	
-	const float normalDotLightDirection     = max(dot(gNormal, directionToLight), 0.0);                
-	const vec3  radiance                    = ((reflectanceCoefficient * gAlbedo / PI) + specular) * radiance * normalDotLightDirection ; 
+	const float normalDotLightDirection     = max(dot(gNormal, directionToLight), 0.0);
+	const float fragmentDistance            = length(lightPosition - gPosition);
+	const float attenuation                 = 1.0 / pow(fragmentDistance, 2.0);
+	const vec3  reflectanceCoefficient      = (vec3(1.0) - fresnelReflectance) * (1.0 - gMetallic);
+	const vec3  radianceFactor              = lightColor * attenuation;
+	const vec3  radiance                    = ((reflectanceCoefficient * gAlbedo / PI) + specular) * normalDotLightDirection * radianceFactor; 
 
     const vec3  ambientFactor               = vec3(0.03) * gAlbedo * gAmbient;
     
