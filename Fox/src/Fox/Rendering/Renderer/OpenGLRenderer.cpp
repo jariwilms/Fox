@@ -190,12 +190,13 @@ namespace fox::gfx::api
         gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Depth  , glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
         gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Stencil, glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
 
+
         //Lighting calculations
         render_lighting_shadow (m_pBuffers.at(0));
-        render_ambient_lighting(m_pBuffers.at(1), m_pBuffers.at(0));
+        //render_ambient_lighting(m_pBuffers.at(1), m_pBuffers.at(0));
 
         //Skybox
-        render_skybox(m_pBuffers.at(1), m_gBuffer);
+        render_skybox(m_pBuffers.at(0), m_gBuffer);
 
 
 
@@ -217,7 +218,7 @@ namespace fox::gfx::api
 
 
         //Blit the final result into the default framebuffer
-        gl::blit_framebuffer(m_pBuffers.at(1)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(1)->dimensions(), dimensions);
+        gl::blit_framebuffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(1)->dimensions(), dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
@@ -265,8 +266,7 @@ namespace fox::gfx::api
         const auto& aspectRatio = static_cast<fox::float32_t>(dimensions.x) / dimensions.y;
         const auto& fov         = 90.0f;
         const auto& nearPlane   = 0.1f;
-        const auto& farPlane    = 100.0f;
-        const auto& projection  = gfx::Projection{ gfx::Projection::perspective_p{ aspectRatio, fov, nearPlane, farPlane } };
+        const auto& projection  = gfx::Projection{ gfx::Projection::perspective_p{ aspectRatio, fov, nearPlane, m_shadowFarPlane } };
 
         std::array<const unf::ShadowProjection, 6> shadowTransforms{
             projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
@@ -282,7 +282,7 @@ namespace fox::gfx::api
         target->bind(api::FrameBuffer::Target::Write);
         m_pipelines.at("PointShadow")->bind();
         m_shadowProjectionsBuffer->copy(shadowTransforms);
-        m_lightShadowBuffer->copy({ fox::Vector4f{ position, 1.0f }, farPlane });
+        m_lightShadowBuffer->copy({ fox::Vector4f{ position, 1.0f }, m_shadowFarPlane });
 
 
 
@@ -323,7 +323,6 @@ namespace fox::gfx::api
         gl::viewport(target->dimensions());
         //gl::enable(glf::Feature::StencilTest);
 
-        const auto& farPlane = 100.0f;
         const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
         sva->bind();
 
@@ -334,7 +333,7 @@ namespace fox::gfx::api
             //m_pipelines.at("LightingStencil")->bind();
             m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
             m_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
-            m_lightShadowBuffer->copy({ light.position, farPlane });
+            m_lightShadowBuffer->copy({ light.position, m_shadowFarPlane });
             //m_shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
 
 

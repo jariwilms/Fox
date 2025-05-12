@@ -51,6 +51,8 @@ namespace fox::gfx::api
         std::shared_ptr<gfx::UniformArrayBuffer<unf::ShadowProjection, 6>> m_shadowProjectionsBuffer{};
         std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    m_pipelines{};
 
+        gl::float32_t                                                      m_shadowFarPlane{ 100.0f };
+
         gfx::RenderInfo                                                    m_renderInfo{};
     };
 }
