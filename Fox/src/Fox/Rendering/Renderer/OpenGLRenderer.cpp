@@ -216,13 +216,6 @@ namespace fox::gfx::api
         
 
 
-        //m_matricesBuffer->copy(unf::Matrices{});
-        m_pipelines.at("ConvertEqui")->bind();
-
-        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
-
-
-
 
 
         //Render simple cubes for debugging
