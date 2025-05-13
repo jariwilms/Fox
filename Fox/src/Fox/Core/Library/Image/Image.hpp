@@ -12,6 +12,8 @@ namespace fox
             BMP, 
             JPEG, 
             PNG, 
+
+            HDR, 
         };
         enum class Format : fox::uint32_t
         {
