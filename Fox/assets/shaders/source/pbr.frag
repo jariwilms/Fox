@@ -99,7 +99,7 @@ void main()
 	const float geometryShadow              = geometry_smith(gNormal, directionToCamera, directionToLight, gRoughness);
 	const vec3  fresnelReflectance          = fresnel_schlick(max(dot(halfwayVector, directionToCamera), 0.0), reflectanceFactor);       
 	
-	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gRoughness);
+	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gMetallic); //changed from roughness to metallic
 	const vec3  specularNumerator           = normalDistribution * geometryShadow * fresnelReflectance;
 	const float specularDenominator         = 4.0 * max(dot(gNormal, directionToCamera), 0.0) * max(dot(gNormal, directionToLight), 0.0) + 0.0001;
 	const vec3  specular                    = specularNumerator / specularDenominator;
@@ -109,7 +109,7 @@ void main()
 	const float attenuation                 = 1.0 / pow(fragmentDistance, 2.0);
 	const vec3  reflectanceCoefficient      = (vec3(1.0) - fresnelReflectance) * (1.0 - gMetallic);
 	const vec3  radianceFactor              = lightColor * attenuation;
-	const vec3  radiance                    = ((reflectanceCoefficient * gAlbedo / PI) + specular) * normalDotLightDirection * radianceFactor; 
+	const vec3  radiance                    = (reflectanceCoefficient * gAlbedo / PI + specular) * normalDotLightDirection * radianceFactor; 
 
     const vec3  ambientFactor               = vec3(0.0);//vec3(0.005) * gAlbedo * gAmbient;
     
