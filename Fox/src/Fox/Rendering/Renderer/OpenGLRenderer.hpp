@@ -41,7 +41,6 @@ namespace fox::gfx::api
         std::shared_ptr<gfx::FrameBufferMultisample>                       m_gBufferMultisample{}; 
         std::shared_ptr<gfx::FrameBuffer>                                  m_sBuffer{};
         std::array<std::shared_ptr<gfx::FrameBuffer>, 4>                   m_shadowCubemaps{}; //TODO: change to cube map array
-        std::shared_ptr<gfx::FrameBuffer>                                  m_hdrBuffer{};
         std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   m_pBuffers{};
                                                     
         std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  m_contextBuffer{};

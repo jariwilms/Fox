@@ -1,9 +1,6 @@
 #include "stdafx.hpp"
 #include "OpenGLRenderer.hpp"
 
-#include "stb/stb_image.h" //remove
-
-
 namespace fox::gfx::api
 {
     OpenGLRenderer::OpenGLRenderer()
@@ -31,19 +28,17 @@ namespace fox::gfx::api
             FM{ "ARM",          TF::RGB16_UNORM  },
             FM{ "DepthStencil", RF::D24_UNORM_S8_UINT },
         };
-        std::array<FM, 2> hdrBufferManifest { FM{ "Color", TF::RGBA16_FLOAT }, FM{ "Depth", RF::D24_UNORM_S8_UINT } };
-        std::array<FM, 1> sBufferManifest   { FM{ "Depth", TF::D24_UNORM    }                                       };
-        std::array<FM, 2> pBufferManifest   { FM{ "Color", TF::RGBA16_UNORM }, FM{ "Depth", RF::D24_UNORM_S8_UINT } };
-        std::array<FM, 1> scBufferManifest  { FM{ "Depth", CF::D24_UNORM    }                                       };
+        std::array<FM, 1> sBufferManifest  { FM{ "Depth", TF::D24_UNORM    }                                       };
+        std::array<FM, 2> ppBufferManifest { FM{ "Color", TF::RGBA16_UNORM }, FM{ "Depth", RF::D24_UNORM_S8_UINT } };
+        std::array<FM, 1> scBufferManifest { FM{ "Depth", CF::D24_UNORM    }                                       };
 
 
 
-        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,           gBufferManifest  );
-        m_gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions ,  samples, gBufferManifest  );
-        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,           sBufferManifest  );
-        m_hdrBuffer               = gfx::FrameBuffer           ::create(viewportDimensions ,           hdrBufferManifest);
-        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,           pBufferManifest  );
-        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,           pBufferManifest  );
+        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,           gBufferManifest );
+        m_gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions ,  samples, gBufferManifest );
+        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,           sBufferManifest );
+        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,           ppBufferManifest);
+        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,           ppBufferManifest);
         m_shadowCubemaps          = {
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
@@ -82,7 +77,6 @@ namespace fox::gfx::api
         const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
         const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
         const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr.vert.spv",                                                                 dir / "pbr.frag.spv");
-        const auto& convertShaders             = api::shaders_from_binaries<gfx::Shader>(dir / "convert_equi.vert.spv",                                                        dir / "convert_equi.frag.spv");
 
         m_pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
         m_pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
@@ -95,7 +89,6 @@ namespace fox::gfx::api
         m_pipelines.emplace("Skybox",              gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                                    .fragment = skyboxShaders.at(1) }));
         m_pipelines.emplace("Debug",               gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
         m_pipelines.emplace("PBR",                 gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pbrShaders.at(0),                                                       .fragment = pbrShaders.at(1)}));
-        m_pipelines.emplace("ConvertEqui",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = convertShaders.at(0),                                                   .fragment = convertShaders.at(1)}));
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -200,26 +193,10 @@ namespace fox::gfx::api
 
         //Lighting calculations
         render_lighting(m_pBuffers.at(0));
-
-        //render_lighting(m_hdrBuffer);
-        //gl::blit_framebuffer(m_hdrBuffer->handle(), m_pBuffers.at(0)->handle(), glf::Buffer::Mask::All, glf::FrameBuffer::Filter::Nearest, m_hdrBuffer->dimensions(), m_pBuffers.at(0)->dimensions());
-        
-
-
         //render_ambient_lighting(m_pBuffers.at(1), m_pBuffers.at(0));
-        
-        
+
         //Skybox
         render_skybox(m_pBuffers.at(0), m_gBuffer);
-
-
-        
-
-
-        //m_matricesBuffer->copy(unf::Matrices{});
-        m_pipelines.at("ConvertEqui")->bind();
-
-        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
 
 
 
@@ -241,7 +218,7 @@ namespace fox::gfx::api
 
 
         //Blit the final result into the default framebuffer
-        gl::blit_framebuffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
+        gl::blit_framebuffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(1)->dimensions(), dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
