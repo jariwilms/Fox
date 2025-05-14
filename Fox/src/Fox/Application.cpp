@@ -126,11 +126,11 @@ namespace fox
         gfx::Cubemap::Faces cubemapFaces
         {
             io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
-            io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8), 
         };
 
         auto skybox = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
@@ -142,9 +142,9 @@ namespace fox
         //Lights
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0 } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f,  2.0f,  3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f,  2.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{       1.0f       } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
         };
 
 

@@ -107,6 +107,46 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
+    static constexpr glf::PixelData::Type              map_texture_format_type(api::Texture::Format format)
+    {
+        switch (format)
+        {
+            case api::Texture::Format::R8_UNORM: 
+            case api::Texture::Format::RG8_UNORM: 
+            case api::Texture::Format::RGB8_UNORM: 
+            case api::Texture::Format::RGBA8_UNORM:       return glf::PixelData::Type::UnsignedByte;
+
+            case api::Texture::Format::R16_UNORM: 
+            case api::Texture::Format::RG16_UNORM: 
+            case api::Texture::Format::RGB16_UNORM: 
+            case api::Texture::Format::RGBA16_UNORM:      return glf::PixelData::Type::UnsignedShort;
+
+            case api::Texture::Format::R8_SNORM: 
+            case api::Texture::Format::RG8_SNORM: 
+            case api::Texture::Format::RGB8_SNORM: 
+            case api::Texture::Format::RGBA8_SNORM:       return glf::PixelData::Type::Byte;
+
+            case api::Texture::Format::R16_SNORM: 
+            case api::Texture::Format::RG16_SNORM: 
+            case api::Texture::Format::RGB16_SNORM: 
+            case api::Texture::Format::RGBA16_SNORM:      return glf::PixelData::Type::Short;
+
+            case api::Texture::Format::RGB8_SRGB: 
+            case api::Texture::Format::RGBA8_SRGB:        return glf::PixelData::Type::UnsignedByte;
+            
+            case api::Texture::Format::R16_FLOAT: 
+            case api::Texture::Format::RG16_FLOAT: 
+            case api::Texture::Format::RGB16_FLOAT: 
+            case api::Texture::Format::RGBA16_FLOAT:      return glf::PixelData::Type::HalfFloat;
+            
+            case api::Texture::Format::R32_FLOAT: 
+            case api::Texture::Format::RG32_FLOAT: 
+            case api::Texture::Format::RGB32_FLOAT: 
+            case api::Texture::Format::RGBA32_FLOAT:      return glf::PixelData::Type::Float;
+            
+            default: throw std::invalid_argument{ "Invalid format!" };
+        }
+    }
     static constexpr glf::Texture::MinificationFilter  map_texture_min_filter(api::Texture::Filter filter)
     {
         switch (filter)
@@ -217,6 +257,46 @@ namespace fox::gfx::api::gl
             case api::Cubemap::Format::D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
             case api::Cubemap::Format::S8_UINT:           return glf::Texture::Format::S8_UINT;
 
+            default: throw std::invalid_argument{ "Invalid format!" };
+        }
+    }
+    static constexpr glf::PixelData::Type              map_cubemap_texture_format_type(api::Cubemap::Format format)
+    {
+        switch (format)
+        {
+            case api::Cubemap::Format::R8_UNORM: 
+            case api::Cubemap::Format::RG8_UNORM: 
+            case api::Cubemap::Format::RGB8_UNORM: 
+            case api::Cubemap::Format::RGBA8_UNORM:       return glf::PixelData::Type::UnsignedByte;
+
+            case api::Cubemap::Format::R16_UNORM:
+            case api::Cubemap::Format::RG16_UNORM:
+            case api::Cubemap::Format::RGB16_UNORM:
+            case api::Cubemap::Format::RGBA16_UNORM:      return glf::PixelData::Type::UnsignedShort;
+
+            case api::Cubemap::Format::R8_SNORM:
+            case api::Cubemap::Format::RG8_SNORM:
+            case api::Cubemap::Format::RGB8_SNORM:
+            case api::Cubemap::Format::RGBA8_SNORM:       return glf::PixelData::Type::Byte;
+
+            case api::Cubemap::Format::R16_SNORM:
+            case api::Cubemap::Format::RG16_SNORM:
+            case api::Cubemap::Format::RGB16_SNORM:
+            case api::Cubemap::Format::RGBA16_SNORM:      return glf::PixelData::Type::Short;
+
+            case api::Cubemap::Format::RGB8_SRGB: 
+            case api::Cubemap::Format::RGBA8_SRGB:        return glf::PixelData::Type::UnsignedByte;
+            
+            case api::Cubemap::Format::R16_FLOAT: 
+            case api::Cubemap::Format::RG16_FLOAT: 
+            case api::Cubemap::Format::RGB16_FLOAT: 
+            case api::Cubemap::Format::RGBA16_FLOAT:      return glf::PixelData::Type::HalfFloat;
+            
+            case api::Cubemap::Format::R32_FLOAT:
+            case api::Cubemap::Format::RG32_FLOAT:
+            case api::Cubemap::Format::RGB32_FLOAT:
+            case api::Cubemap::Format::RGBA32_FLOAT:      return glf::PixelData::Type::Float;
+            
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }

@@ -99,7 +99,7 @@ void main()
 	const float geometryShadow              = geometry_smith(gNormal, directionToCamera, directionToLight, gRoughness);
 	const vec3  fresnelReflectance          = fresnel_schlick(max(dot(halfwayVector, directionToCamera), 0.0), reflectanceFactor);       
 	
-	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gMetallic); //changed from roughness to metallic
+	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gRoughness);
 	const vec3  specularNumerator           = normalDistribution * geometryShadow * fresnelReflectance;
 	const float specularDenominator         = 4.0 * max(dot(gNormal, directionToCamera), 0.0) * max(dot(gNormal, directionToLight), 0.0) + 0.0001;
 	const vec3  specular                    = specularNumerator / specularDenominator;

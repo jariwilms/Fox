@@ -1,11 +1,12 @@
 #include "stdafx.hpp"
 #include "OpenGLRenderer.hpp"
 
-#include "stb/stb_image.h" //remove
-
-
 namespace fox::gfx::api
 {
+    std::shared_ptr<gfx::Texture2D>   imgtex;
+    std::shared_ptr<gfx::FrameBuffer> imgfb;
+    std::shared_ptr<gfx::Cubemap>     imgcub;
+
     OpenGLRenderer::OpenGLRenderer()
     {
         gl::enable(glf::Feature::Multisampling);
@@ -13,9 +14,9 @@ namespace fox::gfx::api
 
 
 
-        constexpr gl::uint8_t  samples{ 4u };
+        constexpr gl::uint8_t  samples   {  4u };
         constexpr gl::uint32_t lightCount{ 32u };
-        constexpr gl::Vector2u viewportDimensions{ 1280u, 720u };
+        constexpr gl::Vector2u viewportDimensions { 1280u,  720u };
         constexpr gl::Vector2u shadowMapDimensions{ 2048u, 2048u };
 
         using FM = gfx::FrameBuffer::Manifest;
@@ -38,12 +39,12 @@ namespace fox::gfx::api
 
 
 
-        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,           gBufferManifest  );
-        m_gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions ,  samples, gBufferManifest  );
-        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,           sBufferManifest  );
-        m_hdrBuffer               = gfx::FrameBuffer           ::create(viewportDimensions ,           hdrBufferManifest);
-        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,           pBufferManifest  );
-        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,           pBufferManifest  );
+        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,          gBufferManifest  );
+        m_gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions , samples, gBufferManifest  );
+        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,          sBufferManifest  );
+        m_hdrBuffer               = gfx::FrameBuffer           ::create(viewportDimensions ,          hdrBufferManifest);
+        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,          pBufferManifest  );
+        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,          pBufferManifest  );
         m_shadowCubemaps          = {
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
             gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
@@ -82,7 +83,8 @@ namespace fox::gfx::api
         const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
         const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
         const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr.vert.spv",                                                                 dir / "pbr.frag.spv");
-        const auto& convertShaders             = api::shaders_from_binaries<gfx::Shader>(dir / "convert_equi.vert.spv",                                                        dir / "convert_equi.frag.spv");
+        const auto& convertShaders             = api::shaders_from_binaries<gfx::Shader>(dir / "convert_equirectangular.vert.spv",                                             dir / "convert_equirectangular.frag.spv");
+        const auto& backgroundShaders          = api::shaders_from_binaries<gfx::Shader>(dir / "background.vert.spv",                                                          dir / "background.frag.spv");
 
         m_pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
         m_pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
@@ -96,16 +98,78 @@ namespace fox::gfx::api
         m_pipelines.emplace("Debug",               gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
         m_pipelines.emplace("PBR",                 gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pbrShaders.at(0),                                                       .fragment = pbrShaders.at(1)}));
         m_pipelines.emplace("ConvertEqui",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = convertShaders.at(0),                                                   .fragment = convertShaders.at(1)}));
+        m_pipelines.emplace("Background",          gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = backgroundShaders.at(0),                                                .fragment = backgroundShaders.at(1)}));
+
+
+
+
+
+
+
+
+        //const fox::Vector2u fbDimensions{ 512u, 512u };
+        //std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{ "Surface", RF::D24_UNORM }, };
+        //imgfb = gfx::FrameBuffer::create(fbDimensions, fbm);
+
+        //auto img = io::load<io::Asset::Image>("textures/kloppenheim.hdr", fox::Image::Format::RGB32_FLOAT);
+        //imgtex = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, img.dimensions(), img.data());
+        //imgtex->apply_wrapping(gfx::Texture2D::wrap_t{ gfx::Texture2D::Wrapping::ClampToEdge });
+        //gl::texture_parameter(imgtex->handle(), glf::Texture::MinificationFilter::Linear);
+        //gl::texture_parameter(imgtex->handle(), glf::Texture::MagnificationFilter::Linear);
+
+        //imgcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, fbDimensions);
+
+
+
+
+
+
+
+
+
+        //gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
+        //const std::array<gl::Matrix4f, 6> captureViews =
+        //{
+        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }),
+        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }),
+        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+        //};
+
+        //m_pipelines.at("Background")->bind();
+        //m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+
+        //imgtex->bind(0);
+        //
+        //gl::viewport(gl::Vector2u{ 512u, 512u });
+        //imgfb->bind(gfx::FrameBuffer::Target::Write);
+
+        //for (fox::uint32_t index{}; const auto& view : captureViews)
+        //{
+        //    m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+
+        //    //gl::frame_buffer_texture(imgfb->handle(), imgcub->handle(), glf::FrameBuffer::Attachment::ColorIndex);
+        //    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + index, envCubemap, 0);
+        //    gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+
+        //    const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+        //    cva->bind();
+        //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+
+        //    ++index;
+        //}
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
     {
         m_renderInfo = renderInfo;
 
-        const auto& camera              = m_renderInfo.camera;
-        const auto& transform           = m_renderInfo.cameraTransform;
-        const auto& viewMatrix          = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
-        const auto& projectionMatrix    = camera.projection().matrix();
+        const auto& camera           = m_renderInfo.camera;
+        const auto& transform        = m_renderInfo.cameraTransform;
+        const auto& viewMatrix       = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
+        const auto& projectionMatrix = camera.projection().matrix();
 
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
         m_cameraBuffer  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
@@ -203,17 +267,25 @@ namespace fox::gfx::api
 
         //render_lighting(m_hdrBuffer);
         //gl::blit_framebuffer(m_hdrBuffer->handle(), m_pBuffers.at(0)->handle(), glf::Buffer::Mask::All, glf::FrameBuffer::Filter::Nearest, m_hdrBuffer->dimensions(), m_pBuffers.at(0)->dimensions());
-        
 
 
-        //render_ambient_lighting(m_pBuffers.at(1), m_pBuffers.at(0));
-        
-        
+        //render_hdr();
+
+
         //Skybox
         render_skybox(m_pBuffers.at(0), m_gBuffer);
 
 
-        
+
+
+
+        //gl::disable(glf::Feature::FaceCulling);
+        //m_pipelines.at("ConvertEqui")->bind();
+        //const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+        //cva->bind();
+        //imgtex->bind(0);
+        //gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+
 
 
 
@@ -459,5 +531,56 @@ namespace fox::gfx::api
         cva->bind();
 
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+    }
+    void OpenGLRenderer::render_hdr()
+    {
+        gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
+        const std::array<gl::Matrix4f, 6> captureViews =
+        {
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //imgfb->bind(gfx::FrameBuffer::Target::Write);
+        //m_pipelines.at("ConvertEqui2")->bind();
+        //imgcub->bind(0);
+        //m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+
+        //gl::viewport(gl::Vector2u{ 512u, 512u });
+
+        //for (fox::uint32_t index{}; const auto& view : captureViews)
+        //{
+        //    m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+
+        //    gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+
+        //    const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+        //    cva->bind();
+        //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+
+        //    ++index;
+        //}
     }
 }

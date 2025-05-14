@@ -34,7 +34,9 @@ namespace fox::gfx::api::gl
         Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions, const Faces& face)
             : Cubemap{ format, filter, wrapping, dimensions }
         {
-            attach_images(face);
+            const auto& type = gl::map_cubemap_texture_format_type(format);
+
+            attach_images(face, type);
             gl::generate_texture_mipmap(m_handle);
         }
         Cubemap(Cubemap&&) noexcept = default;
@@ -64,20 +66,20 @@ namespace fox::gfx::api::gl
         Cubemap& operator=(Cubemap&&) noexcept = default;
 
     protected:
-        void attach_image(const fox::Image& image, fox::uint32_t index)
+        void attach_image(const fox::Image& image, glf::PixelData::Type type, fox::uint32_t index)
         {
             if (image.dimensions() != m_dimensions) throw std::invalid_argument{ "Image dimensions must be equal!" };
 
-            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, range_t{ gl::Vector3u{ 0u, 0u, index }, gl::Vector3u{ m_dimensions, 1u } }, 0, image.data());
+            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, type, range_t{ gl::Vector3u{ 0u, 0u, index }, gl::Vector3u{ m_dimensions, 1u } }, 0, image.data());
         }
-        void attach_images(const Faces& face)
+        void attach_images(const Faces& face, glf::PixelData::Type type)
         {
-            attach_image(face.right,  0);
-            attach_image(face.left,   1);
-            attach_image(face.top,    3); //These need to be swapped because OpenGL
-            attach_image(face.bottom, 2); //
-            attach_image(face.front,  4);
-            attach_image(face.back,   5);
+            attach_image(face.right,  type, 0);
+            attach_image(face.left,   type, 1);
+            attach_image(face.top,    type, 3); //These need to be swapped because OpenGL
+            attach_image(face.bottom, type, 2); //
+            attach_image(face.front,  type, 4);
+            attach_image(face.back,   type, 5);
         }
 
         Wrapping      m_wrapping{};

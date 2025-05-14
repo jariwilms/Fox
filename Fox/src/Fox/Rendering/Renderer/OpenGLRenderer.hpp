@@ -28,6 +28,7 @@ namespace fox::gfx::api
         void render_lighting_shadow(std::shared_ptr<gfx::FrameBuffer> target);
         void render_ambient_lighting(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous);
         void render_skybox(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous);
+        void render_hdr();
 
 
 
