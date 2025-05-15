@@ -6,8 +6,6 @@ layout(location = 0) in  vec3 v_Position;
 
 layout(location = 0) out vec4 f_Color;
 
-
-
 const vec2 invAtan = vec2(0.1591, 0.3183);
 
 vec2 sample_spherical_map(vec3 v)
