@@ -763,6 +763,8 @@ namespace fox::gfx::api::glf
         {
             Read        = GL_READ_FRAMEBUFFER, 
             Write       = GL_DRAW_FRAMEBUFFER, 
+
+            ReadWrite   = Read | Write, 
         };
         enum class Filter
         {
