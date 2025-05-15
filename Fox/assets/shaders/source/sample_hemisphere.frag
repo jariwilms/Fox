@@ -8,7 +8,8 @@ layout(location = 0) out vec4 f_Color;
 
 
 
-const float PI = 3.14159265359;
+const float PI  = 3.14159265359;
+const float TAU = PI * 2;
 
 void main()
 {
@@ -20,7 +21,7 @@ void main()
 	const float delta      = 0.025;
           vec3  irradiance = vec3(0.0);
 
-    for(float phi = 0.0; phi < 2.0 * PI; phi += delta)
+    for(float phi = 0.0; phi < TAU; phi += delta)
     {
         for(float theta = 0.0; theta < 0.5 * PI; theta += delta)
         {
