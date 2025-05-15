@@ -1731,16 +1731,16 @@ namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y));
     }
 
-    static void frame_buffer_render_buffer(gl::handle_t frameBuffer, gl::handle_t renderBuffer, glf::FrameBuffer::Source attachment)
+    static void frame_buffer_render_buffer(gl::handle_t frameBuffer, gl::handle_t renderBuffer, glf::FrameBuffer::Attachment attachment)
     {
         glNamedFramebufferRenderbuffer(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), gl::to_underlying(glf::RenderBuffer::Target::RenderBuffer), gl::to_underlying(renderBuffer));
     }
 
-    static void frame_buffer_texture(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Source attachment, gl::uint32_t level)
+    static void frame_buffer_texture(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Attachment attachment, gl::uint32_t level)
     {
         glNamedFramebufferTexture(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), gl::to_underlying(texture), static_cast<gl::int32_t>(level));
     }
-    static void frame_buffer_texture_layer(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Source attachment, gl::uint32_t level, gl::uint32_t layer)
+    static void frame_buffer_texture_layer(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Attachment attachment, gl::uint32_t level, gl::uint32_t layer)
     {
         glNamedFramebufferTextureLayer(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), gl::to_underlying(texture), static_cast<gl::int32_t>(level), static_cast<gl::int32_t>(layer));
     }

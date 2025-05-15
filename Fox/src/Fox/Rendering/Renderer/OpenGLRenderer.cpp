@@ -107,19 +107,17 @@ namespace fox::gfx::api
 
 
 
-        //const fox::Vector2u fbDimensions{ 512u, 512u };
-        //std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{ "Surface", RF::D24_UNORM }, };
-        //imgfb = gfx::FrameBuffer::create(fbDimensions, fbm);
+        const fox::Vector2u fbDimensions{ 512u, 512u };
+        std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{"IDK2", RF::D24_UNORM}, }; //FM{ "IDK", CF::RGB16_FLOAT }, 
+        imgfb = gfx::FrameBuffer::create(fbDimensions, fbm);
 
-        //auto img = io::load<io::Asset::Image>("textures/kloppenheim.hdr", fox::Image::Format::RGB32_FLOAT);
-        //imgtex = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, img.dimensions(), img.data());
-        //imgtex->apply_wrapping(gfx::Texture2D::wrap_t{ gfx::Texture2D::Wrapping::ClampToEdge });
-        //gl::texture_parameter(imgtex->handle(), glf::Texture::MinificationFilter::Linear);
-        //gl::texture_parameter(imgtex->handle(), glf::Texture::MagnificationFilter::Linear);
+        auto img = io::load<io::Asset::Image>("textures/kloppenheim.hdr", fox::Image::Format::RGB32_FLOAT);
+        imgtex = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, img.dimensions(), img.data());
+        imgtex->apply_wrapping(gfx::Texture2D::wrap_t{ gfx::Texture2D::Wrapping::ClampToEdge });
+        gl::texture_parameter(imgtex->handle(), glf::Texture::MinificationFilter ::Linear);
+        gl::texture_parameter(imgtex->handle(), glf::Texture::MagnificationFilter::Linear);
 
-        //imgcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, fbDimensions);
-
-
+        imgcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, fbDimensions);
 
 
 
@@ -127,39 +125,40 @@ namespace fox::gfx::api
 
 
 
-        //gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
-        //const std::array<gl::Matrix4f, 6> captureViews =
-        //{
-        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }),
-        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }),
-        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-        //   glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-        //};
 
-        //m_pipelines.at("Background")->bind();
-        //m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
-        //imgtex->bind(0);
-        //
-        //gl::viewport(gl::Vector2u{ 512u, 512u });
-        //imgfb->bind(gfx::FrameBuffer::Target::Write);
+        gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
+        const std::array<gl::Matrix4f, 6> captureViews =
+        {
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
+        };
 
-        //for (fox::uint32_t index{}; const auto& view : captureViews)
-        //{
-        //    m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+        m_pipelines.at("ConvertEqui")->bind();
+        m_matricesBuffer->bind_index(2);
+        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
-        //    //gl::frame_buffer_texture(imgfb->handle(), imgcub->handle(), glf::FrameBuffer::Attachment::ColorIndex);
-        //    //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + index, envCubemap, 0);
-        //    gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+        imgfb->bind(gfx::FrameBuffer::Target::Write);
+        imgtex->bind(0);
+        
+        gl::viewport(fbDimensions);
 
-        //    const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
-        //    cva->bind();
-        //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+        for (fox::uint32_t index{}; const auto& view : captureViews)
+        {
+            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-        //    ++index;
-        //}
+            gl::frame_buffer_texture_layer(imgfb->handle(), imgcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
+            gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
+            gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+
+            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+            cva->bind();
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+        }
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -251,8 +250,8 @@ namespace fox::gfx::api
         constexpr fox::size_t colorAttachments{ 4 };
         for (const auto& i : std::views::iota(fox::size_t{ 0 }, colorAttachments))
         {
-            gl::frame_buffer_read_buffer(m_gBufferMultisample->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
-            gl::frame_buffer_draw_buffer(m_gBuffer           ->handle(), glf::FrameBuffer::Source::ColorAttachmentIndex + i);
+            gl::frame_buffer_read_buffer(m_gBufferMultisample->handle(), glf::FrameBuffer::Source::ColorIndex + i);
+            gl::frame_buffer_draw_buffer(m_gBuffer           ->handle(), glf::FrameBuffer::Source::ColorIndex + i);
                 
             gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
         }
@@ -272,19 +271,27 @@ namespace fox::gfx::api
         //render_hdr();
 
 
+
+
+
         //Skybox
-        render_skybox(m_pBuffers.at(0), m_gBuffer);
+        //render_skybox(m_pBuffers.at(0), m_gBuffer);
 
 
+        gl::disable(glf::Feature::Blending);
+        gl::disable(glf::Feature::FaceCulling);
+        gl::enable(glf::Feature::DepthTest);
+        gl::depth_function(glf::DepthFunction::LessEqual);
 
+        m_pBuffers.at(0)->bind(gfx::FrameBuffer::Target::Write);
+        m_pipelines.at("Background")->bind();
+        //m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(m_renderInfo.cameraTransform.matrix()));
+        imgcub->bind(0);
 
-
-        //gl::disable(glf::Feature::FaceCulling);
-        //m_pipelines.at("ConvertEqui")->bind();
-        //const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
-        //cva->bind();
-        //imgtex->bind(0);
-        //gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+        const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+        cva->bind();
+        imgtex->bind(0);
+        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
 
 
 

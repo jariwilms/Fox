@@ -8,6 +8,7 @@ layout(set = 0, binding = 2) uniform Matrices
 } u_Matrices;
 
 layout (location = 0) in  vec3 a_Position;
+
 layout (location = 0) out vec3 v_Position;
 
 void main()

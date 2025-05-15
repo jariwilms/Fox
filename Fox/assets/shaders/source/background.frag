@@ -1,6 +1,6 @@
 #version 460 core
 
-layout(binding = 0) uniform samplerCube environment;
+layout(binding  = 0) uniform samplerCube environment;
 
 layout(location = 0) in  vec3 v_Position;
 
