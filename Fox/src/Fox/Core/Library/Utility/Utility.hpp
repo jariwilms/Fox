@@ -17,11 +17,12 @@ namespace fox::utl
     template<typename T, auto MEMBER_PTR>
     static constexpr auto offset_of()
     {
-        return reinterpret_cast<std::size_t>(
+        return reinterpret_cast<std::ptrdiff_t>(
             &reinterpret_cast<const volatile char&>(
-                ((static_cast<T*>(
-                    nullptr))->*MEMBER_PTR)));
+                ((static_cast<T*>(nullptr))->*MEMBER_PTR)));
     }
+
+
 
 
 
@@ -30,8 +31,6 @@ namespace fox::utl
     {
         return std::span{ v };
     }
-
-
 
     //https://stackoverflow.com/questions/70524923
     template<typename T>
