@@ -6,6 +6,8 @@ namespace fox::gfx::api
     std::shared_ptr<gfx::Texture2D>   imgtex;
     std::shared_ptr<gfx::FrameBuffer> imgfb;
     std::shared_ptr<gfx::Cubemap>     imgcub;
+    std::shared_ptr<gfx::Cubemap>     convcub;
+
 
     OpenGLRenderer::OpenGLRenderer()
     {
@@ -82,9 +84,11 @@ namespace fox::gfx::api
         const auto& pointShadowShaders         = api::shaders_from_binaries<gfx::Shader>(dir / "point_shadow.vert.spv",                         dir / "point_shadow.geom.spv", dir / "point_shadow.frag.spv");
         const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
         const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
-        const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr.vert.spv",                                                                 dir / "pbr.frag.spv");
+        //const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr.vert.spv",                                                                 dir / "pbr.frag.spv");
+        const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr_logl.vert.spv",                                                            dir / "pbr_logl.frag.spv");
         const auto& convertShaders             = api::shaders_from_binaries<gfx::Shader>(dir / "convert_equirectangular.vert.spv",                                             dir / "convert_equirectangular.frag.spv");
         const auto& backgroundShaders          = api::shaders_from_binaries<gfx::Shader>(dir / "background.vert.spv",                                                          dir / "background.frag.spv");
+        const auto& irradianceShaders          = api::shaders_from_binaries<gfx::Shader>(dir / "sample_hemisphere.vert.spv",                                                   dir / "sample_hemisphere.frag.spv");
 
         m_pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
         m_pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
@@ -99,6 +103,7 @@ namespace fox::gfx::api
         m_pipelines.emplace("PBR",                 gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pbrShaders.at(0),                                                       .fragment = pbrShaders.at(1)}));
         m_pipelines.emplace("ConvertEqui",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = convertShaders.at(0),                                                   .fragment = convertShaders.at(1)}));
         m_pipelines.emplace("Background",          gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = backgroundShaders.at(0),                                                .fragment = backgroundShaders.at(1)}));
+        m_pipelines.emplace("Irradiance",          gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = irradianceShaders.at(0),                                                .fragment = irradianceShaders.at(1) }));
 
 
 
@@ -108,7 +113,8 @@ namespace fox::gfx::api
 
 
         const fox::Vector2u fbDimensions{ 512u, 512u };
-        std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{"IDK2", RF::D24_UNORM}, }; //FM{ "IDK", CF::RGB16_FLOAT }, 
+        const fox::Vector2u cvDimensions{  32u,  32u };
+        std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{ "Depth", RF::D24_UNORM }, };
         imgfb = gfx::FrameBuffer::create(fbDimensions, fbm);
 
         auto img = io::load<io::Asset::Image>("textures/kloppenheim.hdr", fox::Image::Format::RGB32_FLOAT);
@@ -117,13 +123,7 @@ namespace fox::gfx::api
         gl::texture_parameter(imgtex->handle(), glf::Texture::MinificationFilter ::Linear);
         gl::texture_parameter(imgtex->handle(), glf::Texture::MagnificationFilter::Linear);
 
-        imgcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, fbDimensions);
-
-
-
-
-
-
+        imgcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None,      gfx::Cubemap::Wrapping::ClampToEdge, fbDimensions);
 
 
 
@@ -152,6 +152,42 @@ namespace fox::gfx::api
             m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
             gl::frame_buffer_texture_layer(imgfb->handle(), imgcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
+            gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
+            gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+
+            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
+            cva->bind();
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+        }
+
+
+
+
+
+
+
+
+
+
+
+        convcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
+        const auto& rb = imgfb->find_render_buffer("Depth");
+        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, gl::Vector2u{ 32u, 32u });
+
+
+        m_pipelines.at("Irradiance")->bind();
+        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        imgcub->bind(0);
+
+        gl::viewport(cvDimensions);
+
+        imgfb->bind(gfx::FrameBuffer::Target::Write);
+
+        for (fox::uint32_t index{}; const auto& view : captureViews)
+        {
+            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+
+            gl::frame_buffer_texture_layer(imgfb->handle(), convcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
             gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
@@ -234,8 +270,9 @@ namespace fox::gfx::api
 
 
 
+        gl::viewport(dimensions);
 
-
+        
         //Render meshes into gBuffer
         render_meshes(m_gBufferMultisample, m_pipelines.at("DeferredMesh"));
 
@@ -261,6 +298,7 @@ namespace fox::gfx::api
         gl::blit_framebuffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Stencil, glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
 
 
+
         //Lighting calculations
         render_lighting(m_pBuffers.at(0));
 
@@ -269,10 +307,6 @@ namespace fox::gfx::api
 
 
         //render_hdr();
-
-
-
-
 
         //Skybox
         //render_skybox(m_pBuffers.at(0), m_gBuffer);
@@ -285,7 +319,6 @@ namespace fox::gfx::api
 
         m_pBuffers.at(0)->bind(gfx::FrameBuffer::Target::Write);
         m_pipelines.at("Background")->bind();
-        //m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(m_renderInfo.cameraTransform.matrix()));
         imgcub->bind(0);
 
         const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
@@ -414,6 +447,7 @@ namespace fox::gfx::api
         m_gBuffer->bind_texture("Albedo"  , 1);
         m_gBuffer->bind_texture("Normal"  , 2);
         m_gBuffer->bind_texture("ARM"     , 3);
+        convcub->bind(4);
 
         gl::viewport(target->dimensions());
 

@@ -13,11 +13,11 @@ const float TAU = PI * 2;
 
 void main()
 {
-    const vec3  normal     = normalize(v_Position);
-	const vec3  right      = normalize(cross(vec3(0.0, 1.0, 0.0), normal));
-	const vec3  up         = normalize(cross(normal, right));
+    const vec3  forward    = normalize(v_Position);
+	const vec3  right      = normalize(cross(vec3(0.0, 1.0, 0.0), forward));
+	const vec3  up         = normalize(cross(forward, right));
 	
-	      float samples    = 0.0;
+	      int   samples    = 0;
 	const float delta      = 0.025;
           vec3  irradiance = vec3(0.0);
 
@@ -26,14 +26,14 @@ void main()
         for(float theta = 0.0; theta < 0.5 * PI; theta += delta)
         {
             const vec3 tangent   = vec3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
-            const vec3 direction = tangent.x * right + tangent.y * up + tangent.z * normal;
+            const vec3 direction = tangent.x * right + tangent.y * up + tangent.z * forward;
 
             irradiance += texture(environment, direction).rgb * cos(theta) * sin(theta);
             ++samples;
         }
     }
 	
-    const vec3 average = PI * irradiance * (1.0 / samples);
+    const vec3 average = PI * irradiance / samples;
     
     f_Color = vec4(average, 1.0);
 }
