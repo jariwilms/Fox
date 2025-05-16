@@ -94,19 +94,19 @@ namespace fox
         defaultMaterial->arm        = defaultARM;
         defaultMaterial->emissive   = defaultEmissive;
 
-        auto& floorActor            = scene->create_actor();
-        auto& fatc                  = floorActor.get_component<cmp::TransformComponent>().get();
-        auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
-        famfc.mesh                  = gfx::Geometry::Plane::mesh();
-        famfc.material              = defaultMaterial;
-        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
+        //auto& floorActor            = scene->create_actor();
+        //auto& fatc                  = floorActor.get_component<cmp::TransformComponent>().get();
+        //auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
+        //famfc.mesh                  = gfx::Geometry::Plane::mesh();
+        //famfc.material              = defaultMaterial;
+        //fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
 
-        auto& boxActor = scene->create_actor();
-        auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
-        auto& bamfc    = boxActor.add_component<cmp::MeshFilterComponent>().get();
-        bamfc.mesh     = gfx::Geometry::Cube::mesh();
-        bamfc.material = defaultMaterial;
-        batc           = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
+        //auto& boxActor = scene->create_actor();
+        //auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
+        //auto& bamfc    = boxActor.add_component<cmp::MeshFilterComponent>().get();
+        //bamfc.mesh     = gfx::Geometry::Cube::mesh();
+        //bamfc.material = defaultMaterial;
+        //batc           = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
 
 
 
@@ -143,8 +143,8 @@ namespace fox
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
             std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{       1.0f       } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
         };
 
 

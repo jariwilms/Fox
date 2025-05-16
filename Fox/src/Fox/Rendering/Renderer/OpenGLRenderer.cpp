@@ -3,10 +3,17 @@
 
 namespace fox::gfx::api
 {
-    std::shared_ptr<gfx::Texture2D>   imgtex;
-    std::shared_ptr<gfx::FrameBuffer> imgfb;
-    std::shared_ptr<gfx::Cubemap>     imgcub;
-    std::shared_ptr<gfx::Cubemap>     convcub;
+    struct Roughness
+    {
+        fox::float32_t value{};
+    };
+    std::shared_ptr<gfx::Texture2D>                imgtex;
+    std::shared_ptr<gfx::Texture2D>                brdftex;
+    std::shared_ptr<gfx::FrameBuffer>              imgfb;
+    std::shared_ptr<gfx::Cubemap>                  envcub;
+    std::shared_ptr<gfx::Cubemap>                  irrcub;
+    std::shared_ptr<gfx::Cubemap>                  prefcub;
+    std::shared_ptr<gfx::UniformBuffer<Roughness>> imgctx;
 
 
     OpenGLRenderer::OpenGLRenderer()
@@ -72,60 +79,70 @@ namespace fox::gfx::api
 
 
 
-        const std::filesystem::path dir{ "shaders/compiled" };
-
-        const auto& deferredMeshShaders        = api::shaders_from_binaries<gfx::Shader>(dir / "mesh_deferred.vert.spv",                                                       dir / "mesh_deferred.frag.spv");
-        const auto& lightingShaders            = api::shaders_from_binaries<gfx::Shader>(dir / "lighting_blinn-phong_sphere.vert.spv",                                         dir / "lighting_blinn-phong_sphere.frag.spv");
-        const auto& pointLightingShaders       = api::shaders_from_binaries<gfx::Shader>(dir / "lighting_blinn-phong_sphere_shadow_3.vert.spv",                                dir / "lighting_blinn-phong_sphere_shadow_3.frag.spv");
-        const auto& directionalLightingShaders = api::shaders_from_binaries<gfx::Shader>(dir / "lighting_blinn-phong_sphere_shadow_2.vert.spv",                                dir / "lighting_blinn-phong_sphere_shadow_2.frag.spv");
-        const auto& ambientLightingShaders     = api::shaders_from_binaries<gfx::Shader>(dir / "ambient.vert.spv",                                                             dir / "ambient.frag.spv");
-        const auto& directionalShadowShaders   = api::shaders_from_binaries<gfx::Shader>(dir / "directional_shadow.vert.spv",                                                  dir / "directional_shadow.frag.spv");
-        const auto& lightingStencilShaders     = api::shaders_from_binaries<gfx::Shader>(dir / "lighting_stencil.vert.spv",                                                    dir / "lighting_stencil.frag.spv");
-        const auto& pointShadowShaders         = api::shaders_from_binaries<gfx::Shader>(dir / "point_shadow.vert.spv",                         dir / "point_shadow.geom.spv", dir / "point_shadow.frag.spv");
-        const auto& skyboxShaders              = api::shaders_from_binaries<gfx::Shader>(dir / "skybox.vert.spv",                                                              dir / "skybox.frag.spv");
-        const auto& debugShaders               = api::shaders_from_binaries<gfx::Shader>(dir / "debug.vert.spv",                                                               dir / "debug.frag.spv");
-        //const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr.vert.spv",                                                                 dir / "pbr.frag.spv");
-        const auto& pbrShaders                 = api::shaders_from_binaries<gfx::Shader>(dir / "pbr_logl.vert.spv",                                                            dir / "pbr_logl.frag.spv");
-        const auto& convertShaders             = api::shaders_from_binaries<gfx::Shader>(dir / "convert_equirectangular.vert.spv",                                             dir / "convert_equirectangular.frag.spv");
-        const auto& backgroundShaders          = api::shaders_from_binaries<gfx::Shader>(dir / "background.vert.spv",                                                          dir / "background.frag.spv");
-        const auto& irradianceShaders          = api::shaders_from_binaries<gfx::Shader>(dir / "sample_hemisphere.vert.spv",                                                   dir / "sample_hemisphere.frag.spv");
-
-        m_pipelines.emplace("DeferredMesh",        gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = deferredMeshShaders.at(0),                                              .fragment = deferredMeshShaders.at(1) }));
-        m_pipelines.emplace("Lighting",            gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingShaders.at(0),                                                  .fragment = lightingShaders.at(1) }));
-        m_pipelines.emplace("PointLighting",       gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointLightingShaders.at(0),                                             .fragment = pointLightingShaders.at(1) }));
-        m_pipelines.emplace("DirectionalLighting", gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalLightingShaders.at(0),                                       .fragment = directionalLightingShaders.at(1) }));
-        m_pipelines.emplace("LightingStencil",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = lightingStencilShaders.at(0),                                           .fragment = lightingStencilShaders.at(1) }));
-        m_pipelines.emplace("AmbientLighting",     gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = ambientLightingShaders.at(0),                                           .fragment = ambientLightingShaders.at(1) }));
-        m_pipelines.emplace("DirectionalShadow",   gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = directionalShadowShaders.at(0),                                         .fragment = directionalShadowShaders.at(1) }));
-        m_pipelines.emplace("PointShadow",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pointShadowShaders.at(0),         .geometry = pointShadowShaders.at(1), .fragment = pointShadowShaders.at(2) }));
-        m_pipelines.emplace("Skybox",              gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = skyboxShaders.at(0),                                                    .fragment = skyboxShaders.at(1) }));
-        m_pipelines.emplace("Debug",               gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = debugShaders.at(0),                                                     .fragment = debugShaders.at(1) }));
-        m_pipelines.emplace("PBR",                 gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = pbrShaders.at(0),                                                       .fragment = pbrShaders.at(1)}));
-        m_pipelines.emplace("ConvertEqui",         gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = convertShaders.at(0),                                                   .fragment = convertShaders.at(1)}));
-        m_pipelines.emplace("Background",          gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = backgroundShaders.at(0),                                                .fragment = backgroundShaders.at(1)}));
-        m_pipelines.emplace("Irradiance",          gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = irradianceShaders.at(0),                                                .fragment = irradianceShaders.at(1) }));
 
 
+        const auto& add_to_pipeline = [this](const std::string& identifier, const std::string& vertex, std::optional<std::string> geometry,const std::string& fragment)
+            {
+                const std::filesystem::path dir{ "shaders/compiled" };
 
+                if (geometry.has_value())
+                {
+                    const auto& shaders = api::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / geometry.value(), dir / fragment);
+                    m_pipelines.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = shaders.at(0), .geometry = shaders.at(1), .fragment = shaders.at(2) }));
+                }
+                else
+                {
+                    const auto& shaders = api::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / fragment);
+                    m_pipelines.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = shaders.at(0), .fragment = shaders.at(1) }));
+                }
+            };
 
+        add_to_pipeline("DeferredMesh"       , "mesh_deferred.vert.spv"                         , {}                     , "mesh_deferred.frag.spv");
+        //add_to_pipeline("Lighting"           , "lighting_blinn-phong_sphere.vert.spv"           , {}                     , "lighting_blinn-phong_sphere.frag.spv");
+        //add_to_pipeline("PointLighting"      , "lighting_blinn-phong_sphere_shadow_3.vert.spv"  , {}                     , "lighting_blinn-phong_sphere_shadow_3.frag.spv");
+        //add_to_pipeline("DirectionalLighting", "lighting_blinn - phong_sphere_shadow_2.vert.spv", {}                     , "lighting_blinn-phong_sphere_shadow_2.frag.spv");
+        //add_to_pipeline("LightingStencil"    , "lighting_stencil.vert.spv"                      , {}                     , "lighting_stencil.frag.spv");
+        //add_to_pipeline("AmbientLighting"    , "ambient.vert.spv"                               , {}                     , "ambient.frag.spv");
+        //add_to_pipeline("DirectionalShadow"  , "directional_shadow.vert.spv"                    , {}                     , "directional_shadow.frag.spv");
+        //add_to_pipeline("PointShadow"        , "point_shadow.vert.spv"                          , "point_shadow.geom.spv", "point_shadow.frag.spv");
+        //add_to_pipeline("Skybox"             , "skybox.vert.spv"                                , {}                     , "skybox.frag.spv");
+        add_to_pipeline("Debug"              , "debug.vert.spv"                                 , {}                     , "debug.frag.spv");
+        add_to_pipeline("PBR"                , "pbr.vert.spv"                                   , {}                     , "pbr.frag.spv");
+        add_to_pipeline("ConvertEqui"        , "cubemap.vert.spv"                               , {}                     , "convert_equirectangular.frag.spv");
+        add_to_pipeline("Background"         , "background.vert.spv"                            , {}                     , "background.frag.spv");
+        add_to_pipeline("Irradiance"         , "cubemap.vert.spv"                               , {}                     , "irradiance.frag.spv");
+        add_to_pipeline("PreFilter"          , "cubemap.vert.spv"                               , {}                     , "prefilter.frag.spv");
+        add_to_pipeline("BRDF"               , "brdf.vert.spv"                                  , {}                     , "brdf.frag.spv");
 
 
 
+
+
+
+
+
+
+
+
+
+
+        imgctx = gfx::UniformBuffer<Roughness>::create();
+        imgctx->bind_index(14);
 
         const fox::Vector2u fbDimensions{ 512u, 512u };
         const fox::Vector2u cvDimensions{  32u,  32u };
+        const auto& cva = gfx::Geometry::Cube ::mesh()->vertexArray;
+        const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
         std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{ "Depth", RF::D24_UNORM }, };
         imgfb = gfx::FrameBuffer::create(fbDimensions, fbm);
 
-        auto img = io::load<io::Asset::Image>("textures/kloppenheim.hdr", fox::Image::Format::RGB32_FLOAT);
+        auto img = io::load<io::Asset::Image>("textures/venice_sunset.hdr", fox::Image::Format::RGB32_FLOAT);
         imgtex = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, img.dimensions(), img.data());
         imgtex->apply_wrapping(gfx::Texture2D::wrap_t{ gfx::Texture2D::Wrapping::ClampToEdge });
         gl::texture_parameter(imgtex->handle(), glf::Texture::MinificationFilter ::Linear);
         gl::texture_parameter(imgtex->handle(), glf::Texture::MagnificationFilter::Linear);
 
-        imgcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None,      gfx::Cubemap::Wrapping::ClampToEdge, fbDimensions);
-
-
+        envcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, fbDimensions);
 
         gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
         const std::array<gl::Matrix4f, 6> captureViews =
@@ -138,6 +155,11 @@ namespace fox::gfx::api
            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
         };
 
+
+
+
+
+        //Convert HDR image to cubemap step
         m_pipelines.at("ConvertEqui")->bind();
         m_matricesBuffer->bind_index(2);
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
@@ -146,17 +168,16 @@ namespace fox::gfx::api
         imgtex->bind(0);
         
         gl::viewport(fbDimensions);
+        gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
+        cva->bind();
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
         {
             m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-            gl::frame_buffer_texture_layer(imgfb->handle(), imgcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
-            gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
+            gl::frame_buffer_texture_layer(imgfb->handle(), envcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
-            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
-            cva->bind();
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
 
@@ -164,37 +185,81 @@ namespace fox::gfx::api
 
 
 
-
-
-
-
-
-
-        convcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
+        //Irradiance step
+        irrcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
         const auto& rb = imgfb->find_render_buffer("Depth");
         gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, gl::Vector2u{ 32u, 32u });
 
 
         m_pipelines.at("Irradiance")->bind();
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
-        imgcub->bind(0);
+        envcub->bind(0);
+        imgfb->bind(gfx::FrameBuffer::Target::Write);
 
         gl::viewport(cvDimensions);
-
-        imgfb->bind(gfx::FrameBuffer::Target::Write);
+        gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
+        cva->bind();
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
         {
             m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-            gl::frame_buffer_texture_layer(imgfb->handle(), convcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
-            gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
+            gl::frame_buffer_texture_layer(imgfb->handle(), irrcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
-            const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
-            cva->bind();
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
+
+
+
+
+
+        //PreFilter step
+        fox::Vector2u reflectionDimensions{ 128u, 128u };
+        prefcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
+
+        m_pipelines.at("PreFilter")->bind();
+        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        envcub->bind(0);
+        imgfb->bind(gfx::FrameBuffer::Target::Write);
+        cva->bind();
+
+        constexpr fox::uint32_t maxMipLevels{ 5u };
+        for (const auto& mip : std::views::iota(0u, maxMipLevels))
+        {
+            const fox::Vector2u mipDimensions{ std::pow(0.5, mip) * 128u, std::pow(0.5, mip) * 128u };
+
+            gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
+            gl::viewport(mipDimensions);
+
+            const auto& roughness = static_cast<fox::float32_t>(mip) / (maxMipLevels - 1u);
+            imgctx->copy(Roughness{ roughness });
+
+            for (fox::uint32_t index{}; const auto& view : captureViews)
+            {
+                m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+                gl::frame_buffer_texture_layer(imgfb->handle(), prefcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, mip, index++);
+                gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+
+                gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
+            }
+        }
+
+
+
+
+
+        //BRDF LUT step
+        brdftex = gfx::Texture2D::create(gfx::Texture2D::Format::RG16_FLOAT, gfx::Texture2D::Filter::None, gfx::Texture2D::Wrapping::ClampToEdge, fbDimensions);
+        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, fbDimensions);
+        gl::frame_buffer_texture(imgfb->handle(), brdftex->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0);
+
+        m_pipelines.at("BRDF")->bind();
+        gl::viewport(fbDimensions);
+        gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
+
+        pva->bind();
+        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -279,7 +344,7 @@ namespace fox::gfx::api
         //Render shadow map for each shadow-casting point light (up to 4)
         for (fox::size_t index{}; const auto& light : m_shadowCastingPointLights)
         {
-            render_shadow_map_point(light, m_shadowCubemaps.at(index++));
+            //render_shadow_map_point(light, m_shadowCubemaps.at(index++));
         }
 
         //Blit Position, Albedo, Normal, and RoughnessMetallic color buffers into the regular gBuffer
@@ -304,26 +369,25 @@ namespace fox::gfx::api
 
         //render_lighting(m_hdrBuffer);
         //gl::blit_framebuffer(m_hdrBuffer->handle(), m_pBuffers.at(0)->handle(), glf::Buffer::Mask::All, glf::FrameBuffer::Filter::Nearest, m_hdrBuffer->dimensions(), m_pBuffers.at(0)->dimensions());
-
-
         //render_hdr();
-
         //Skybox
         //render_skybox(m_pBuffers.at(0), m_gBuffer);
 
+
+
+
+        m_pBuffers.at(0)->bind(gfx::FrameBuffer::Target::Write);
+        m_pipelines.at("Background")->bind();
+        envcub->bind(0);
+        //imgtex->bind(0);
 
         gl::disable(glf::Feature::Blending);
         gl::disable(glf::Feature::FaceCulling);
         gl::enable(glf::Feature::DepthTest);
         gl::depth_function(glf::DepthFunction::LessEqual);
 
-        m_pBuffers.at(0)->bind(gfx::FrameBuffer::Target::Write);
-        m_pipelines.at("Background")->bind();
-        imgcub->bind(0);
-
         const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
         cva->bind();
-        imgtex->bind(0);
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
 
 
@@ -443,11 +507,15 @@ namespace fox::gfx::api
 
 
 
+        m_pipelines.at("PBR")->bind();
         m_gBuffer->bind_texture("Position", 0);
         m_gBuffer->bind_texture("Albedo"  , 1);
         m_gBuffer->bind_texture("Normal"  , 2);
         m_gBuffer->bind_texture("ARM"     , 3);
-        convcub->bind(4);
+
+        irrcub ->bind(4);
+        prefcub->bind(5);
+        brdftex->bind(6);
 
         gl::viewport(target->dimensions());
 
@@ -464,10 +532,9 @@ namespace fox::gfx::api
         {
             fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
-            m_pipelines.at("PBR")->bind();
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-            m_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
-            m_lightShadowBuffer->copy({ light.position, m_shadowFarPlane });
+            m_matricesBuffer   ->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+            m_lightBuffer      ->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+            //m_lightShadowBuffer->copy({ light.position, m_shadowFarPlane });
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
         }
