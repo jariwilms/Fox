@@ -98,14 +98,6 @@ namespace fox::gfx::api
             };
 
         add_to_pipeline("DeferredMesh"       , "mesh_deferred.vert.spv"                         , {}                     , "mesh_deferred.frag.spv");
-        //add_to_pipeline("Lighting"           , "lighting_blinn-phong_sphere.vert.spv"           , {}                     , "lighting_blinn-phong_sphere.frag.spv");
-        //add_to_pipeline("PointLighting"      , "lighting_blinn-phong_sphere_shadow_3.vert.spv"  , {}                     , "lighting_blinn-phong_sphere_shadow_3.frag.spv");
-        //add_to_pipeline("DirectionalLighting", "lighting_blinn - phong_sphere_shadow_2.vert.spv", {}                     , "lighting_blinn-phong_sphere_shadow_2.frag.spv");
-        //add_to_pipeline("LightingStencil"    , "lighting_stencil.vert.spv"                      , {}                     , "lighting_stencil.frag.spv");
-        //add_to_pipeline("AmbientLighting"    , "ambient.vert.spv"                               , {}                     , "ambient.frag.spv");
-        //add_to_pipeline("DirectionalShadow"  , "directional_shadow.vert.spv"                    , {}                     , "directional_shadow.frag.spv");
-        //add_to_pipeline("PointShadow"        , "point_shadow.vert.spv"                          , "point_shadow.geom.spv", "point_shadow.frag.spv");
-        //add_to_pipeline("Skybox"             , "skybox.vert.spv"                                , {}                     , "skybox.frag.spv");
         add_to_pipeline("Debug"              , "debug.vert.spv"                                 , {}                     , "debug.frag.spv");
         add_to_pipeline("PBR"                , "pbr.vert.spv"                                   , {}                     , "pbr.frag.spv");
         add_to_pipeline("ConvertEqui"        , "cubemap.vert.spv"                               , {}                     , "convert_equirectangular.frag.spv");
@@ -130,7 +122,6 @@ namespace fox::gfx::api
         imgctx->bind_index(14);
 
         const fox::Vector2u fbDimensions{ 512u, 512u };
-        const fox::Vector2u cvDimensions{  32u,  32u };
         const auto& cva = gfx::Geometry::Cube ::mesh()->vertexArray;
         const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
         std::array<gfx::api::FrameBuffer::Manifest, 1> fbm{ FM{ "Depth", RF::D24_UNORM }, };
@@ -186,9 +177,10 @@ namespace fox::gfx::api
 
 
         //Irradiance step
+        const fox::Vector2u cvDimensions{ 32u, 32u };
         irrcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
         const auto& rb = imgfb->find_render_buffer("Depth");
-        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, gl::Vector2u{ 32u, 32u });
+        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
 
 
         m_pipelines.at("Irradiance")->bind();
@@ -227,7 +219,7 @@ namespace fox::gfx::api
         constexpr fox::uint32_t maxMipLevels{ 5u };
         for (const auto& mip : std::views::iota(0u, maxMipLevels))
         {
-            const fox::Vector2u mipDimensions{ std::pow(0.5, mip) * 128u, std::pow(0.5, mip) * 128u };
+            const fox::Vector2u mipDimensions{ std::pow(0.5, mip) * reflectionDimensions.x, std::pow(0.5, mip) * reflectionDimensions.y };
 
             gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
             gl::viewport(mipDimensions);
@@ -245,7 +237,7 @@ namespace fox::gfx::api
             }
         }
 
-
+        
 
 
 
