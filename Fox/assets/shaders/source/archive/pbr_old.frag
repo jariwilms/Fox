@@ -1,17 +1,17 @@
 #version 460 core
 
-layout(set = 0, binding = 0) uniform Context
+layout(set = 0, binding =  0) uniform Context
 {
 	vec2  resolution;
 	vec2  mousePosition;
 	float time;
 	float deltaTime;
 } u_Context;
-layout(set = 0, binding = 1) uniform Camera
+layout(set = 0, binding =  1) uniform Camera
 {
 	vec4 position;
 } u_Camera;
-layout(set = 0, binding = 4) uniform Light
+layout(set = 0, binding =  4) uniform Light
 {
 	vec4  position;
 	vec4  color;
@@ -123,4 +123,4 @@ void main()
 	
 	
     f_Color = vec4(color, 1.0);
-}  
+}

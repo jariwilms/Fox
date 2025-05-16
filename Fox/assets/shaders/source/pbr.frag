@@ -23,10 +23,14 @@ layout(set = 0, binding =  4) uniform Light
 	float _padding;
 } u_Light;
 
-layout(binding  = 0) uniform sampler2D t_Position;
-layout(binding  = 1) uniform sampler2D t_Albedo;
-layout(binding  = 2) uniform sampler2D t_Normal;
-layout(binding  = 3) uniform sampler2D t_ARM;
+layout(binding  = 0) uniform sampler2D   t_Position;
+layout(binding  = 1) uniform sampler2D   t_Albedo;
+layout(binding  = 2) uniform sampler2D   t_Normal;
+layout(binding  = 3) uniform sampler2D   t_ARM;
+
+layout(binding  = 1) uniform samplerCube t_Irradiance;
+layout(binding  = 2) uniform samplerCube t_PreFilter;
+layout(binding  = 4) uniform sampler2D   t_BRDF;
 
 layout(location = 0) out vec4 f_Color;
 
@@ -34,93 +38,144 @@ layout(location = 0) out vec4 f_Color;
 
 const float PI = 3.14159265359;
   
-float distribution_ggx(vec3 normal, vec3 halfway, float roughness)
+float distribution_ggx(vec3 gNormal, vec3 lightHalfway, float gRoughness)
 {
-    const float cosine      = pow(max(dot(normal, halfway), 0.0), 2.0);
-    const float numerator   = pow(roughness, 4.0);
-    const float denominator = pow((cosine * (numerator - 1.0) + 1.0), 2.0) * PI;
+    float a = gRoughness*gRoughness;
+    float a2 = a*a;
+    float NdotH = max(dot(gNormal, lightHalfway), 0.0);
+    float NdotH2 = NdotH*NdotH;
 
-    return numerator / denominator;
-}
-float geometry_schlick_ggx(float cosine, float roughness)
-{
-    const float remap       = pow(roughness + 1.0, 2.0) / 8.0;
-    const float numerator   = cosine;
-    const float denominator = cosine * remap + (1.0 - remap);
+    float nom   = a2;
+    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
+    denom = PI * denom * denom;
 
-    return numerator / denominator;
+    return nom / denom;
 }
-float geometry_smith(vec3 surfaceNormal, vec3 viewDirection, vec3 lightDirection, float roughness)
+float geometry_schlick_ggx(float NdotV, float gRoughness)
 {
-    const float viewAngleCosine  = max(dot(surfaceNormal, viewDirection ), 0.0);
-    const float lightAngleCosine = max(dot(surfaceNormal, lightDirection), 0.0);
-    const float viewOcclusion    = geometry_schlick_ggx(viewAngleCosine , roughness);
-    const float lightOcclusion   = geometry_schlick_ggx(lightAngleCosine, roughness);
+    float r = (gRoughness + 1.0);
+    float k = (r*r) / 8.0;
 
-    return viewOcclusion * lightOcclusion;
+    float nom   = NdotV;
+    float denom = NdotV * (1.0 - k) + k;
+
+    return nom / denom;
 }
-vec3 fresnel_schlick(float cosine, vec3 reflectance)
+float geometry_smith(vec3 gNormal, vec3 viewDirection, vec3 lightDirection, float gRoughness)
 {
-	const vec3  factor    = 1.0 - reflectance;
-	const float incidence = 1.0 - cosine;
-	const float power     = pow(clamp(incidence, 0.0, 1.0), 5.0);
-	
-    return reflectance + factor * power;
+    float NdotV = max(dot(gNormal, viewDirection), 0.0);
+    float normalDotLight = max(dot(gNormal, lightDirection), 0.0);
+    float ggx2 = geometry_schlick_ggx(NdotV, gRoughness);
+    float ggx1 = geometry_schlick_ggx(normalDotLight, gRoughness);
+
+    return ggx1 * ggx2;
+}
+vec3 fresnel_schlick(float cosTheta, vec3 F0)
+{
+    return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
+}
+vec3 fresnel_schlick_roughness(float cosTheta, vec3 F0, float gRoughness)
+{
+    return F0 + (max(vec3(1.0 - gRoughness), F0) - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
 void main()
 {
-	const vec2  resolution                  = u_Context.resolution;
-	const vec2  uv                          = gl_FragCoord.xy / resolution;
+	//Mapping
+	//N => gNormal
+	//V => viewDirection
+	//R => reflectionDirection
+	//L => lightDirection
+	//H => lightHalfway
+	//F => fresnelFactor
 
-    const vec3  gPosition                   =     texture(t_Position, uv).xyz;
-	const vec3  gAlbedo                     = pow(texture(t_Albedo,   uv).rgb, vec3(2.2));
-    const vec3  gNormal                     =     texture(t_Normal,   uv).rgb;
-    const vec3  gARM                        =     texture(t_ARM,      uv).rgb;
+	const vec2  resolution          = u_Context.resolution;
+	const vec2  uv                  = gl_FragCoord.xy / resolution;
+	const float gamma               = 2.2;
 	
-	const float gAmbient                    = gARM.r;
-	const float gRoughness                  = gARM.g;
-	const float gMetallic                   = gARM.b;
-
-	const vec3  cameraPosition              = u_Camera.position.xyz;
-	const vec3  lightPosition               = u_Light.position.xyz;
-	const vec3  lightColor                  = u_Light.color.xyz;
-
-
-
-    const vec3  directionToCamera           = normalize(cameraPosition - gPosition);
-	const vec3  directionToLight            = normalize(lightPosition  - gPosition);
+	const vec3  gPosition           =     texture(t_Position, uv).xyz;
+	const vec3  gAlbedo             = pow(texture(t_Albedo  , uv).rgb, vec3(gamma));
+	const vec3  gNormal             =     texture(t_Normal  , uv).xyz;
+	const vec3  gARM                =     texture(t_ARM     , uv).rgb;
 	
-	const vec3  dielectricReflectanceFactor = vec3(0.04); 
-	const vec3  metallicReflectanceFactor   = gAlbedo;
-    const vec3  reflectanceFactor           = mix(dielectricReflectanceFactor, metallicReflectanceFactor, gMetallic);
+	const float gAmbient            = gARM.r;
+	const float gRoughness          = gARM.g;
+	const float gMetallic           = gARM.b;
 	
-	const vec3  halfwayVector               = normalize(directionToCamera + directionToLight);
-	const float geometryShadow              = geometry_smith(gNormal, directionToCamera, directionToLight, gRoughness);
-	const vec3  fresnelReflectance          = fresnel_schlick(max(dot(halfwayVector, directionToCamera), 0.0), reflectanceFactor);       
+    const vec3  viewDirection       = normalize(u_Camera.position.xyz - gPosition);
+    const vec3  reflectionDirection = reflect(-viewDirection, gNormal); 
 	
-	const float normalDistribution          = distribution_ggx(gNormal, halfwayVector, gRoughness);
-	const vec3  specularNumerator           = normalDistribution * geometryShadow * fresnelReflectance;
-	const float specularDenominator         = 4.0 * max(dot(gNormal, directionToCamera), 0.0) * max(dot(gNormal, directionToLight), 0.0) + 0.0001;
-	const vec3  specular                    = specularNumerator / specularDenominator;
 	
-	const float normalDotLightDirection     = max(dot(gNormal, directionToLight), 0.0);
-	const float fragmentDistance            = length(lightPosition - gPosition);
-	const float attenuation                 = 1.0 / pow(fragmentDistance, 2.0);
-	const vec3  reflectanceCoefficient      = (vec3(1.0) - fresnelReflectance) * (1.0 - gMetallic);
-	const vec3  radianceFactor              = lightColor * attenuation;
-	const vec3  radiance                    = (reflectanceCoefficient * gAlbedo / PI + specular) * normalDotLightDirection * radianceFactor; 
+	
+    const float baseReflectivity    = 0.04;
+    const vec3  F0                  = mix(vec3(baseReflectivity), gAlbedo, gMetallic);
 
-    const vec3  ambientFactor               = vec3(0.0);//vec3(0.005) * gAlbedo * gAmbient;
+
+
+
+
+
+
+    
+//////////
+	//Every variable here should be self-contained
+	const vec3  lightPosition      = u_Light.position.xyz;
+	const vec3  lightColor         = u_Light.color.rgb;
+	const vec3  lightDirection     = normalize(lightPosition - gPosition);
+	const vec3  lightHalfway       = normalize(viewDirection + lightDirection);
+	const float lightDistance      = length(lightPosition - gPosition);
+	const float lightAttenuation   = 1.0 / pow(lightDistance, 2.0);
+	const vec3  lightRadiance      = lightColor * lightAttenuation;
+
+	const float normalDistribution = distribution_ggx(gNormal, lightHalfway, gRoughness);   
+	const float geometryOcclusion  = geometry_smith(gNormal, viewDirection, lightDirection, gRoughness);    
+	const vec3  fresnelFactor      = fresnel_schlick(max(dot(lightHalfway, viewDirection), 0.0), F0);        
+	
+	const vec3  numerator          = normalDistribution * geometryOcclusion * fresnelFactor;
+	const float denominator        = 4.0 * max(dot(gNormal, viewDirection), 0.0) * max(dot(gNormal, lightDirection), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
+	const vec3  specular           = numerator / denominator;
+	
+	vec3 specularReflectance       = fresnelFactor;
+	vec3 diffuseReflectance        = vec3(1.0) - specularReflectance;
+	     diffuseReflectance       *= 1.0 - gMetallic;
+	
+	const float normalDotLight     = max(dot(gNormal, lightDirection), 0.0);        
+	const vec3  outgoingLuminosity = (diffuseReflectance * gAlbedo / PI + specular) * lightRadiance * normalDotLight;
+//////////
+
+
+
+
+
+
+
+
+
+    vec3 F = fresnel_schlick_roughness(max(dot(gNormal, viewDirection), 0.0), F0, gRoughness);
+    
+    vec3 kS  = F;
+    vec3 kD  = 1.0 - kS;
+    kD      *= 1.0 - gMetallic;	  
+    
+    vec3 irradiance = texture(t_Irradiance, gNormal).rgb;
+    vec3 diffuse    = irradiance * gAlbedo;
+    
+    
+	
+    const float maxReflectionLOD = 4.0;
+    vec3 prefilteredColor = textureLod(t_PreFilter, reflectionDirection, gRoughness * maxReflectionLOD).rgb;
+    vec2 brdf  = texture(t_BRDF, vec2(max(dot(gNormal, viewDirection), 0.0), gRoughness)).rg;
+    vec3 specular2 = prefilteredColor * (F * brdf.x + brdf.y);
+
+    vec3 ambient = (kD * diffuse + specular2) * gAmbient;
     
 	
 	
-	const float gamma                       = 1.0 / 2.2;
-	      vec3  color                       = ambientFactor + radiance;
-		        color                       = color / (color + vec3(1.0));
-				color                       = pow(color, vec3(gamma));
-	
-	
-	
-    f_Color = vec4(color, 1.0);
-}  
+    vec3 color = ambient + outgoingLuminosity;
+    color = color / (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2)); 
+
+
+
+    f_Color = vec4(color , 1.0);
+}

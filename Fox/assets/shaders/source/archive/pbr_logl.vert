@@ -9,11 +9,8 @@ layout(set = 0, binding = 2) uniform Matrices
 
 layout(location = 0) in  vec3 a_Position;
 
-layout(location = 0) out vec3 v_Position;
-
 void main()
 {
-    v_Position = a_Position;
-	
-    gl_Position =  u_Matrices.projection * u_Matrices.view * vec4(a_Position, 1.0);
+	//gl_Position = u_Matrices.projection * u_Matrices.view * u_Matrices.model * vec4(a_Position, 1.0);
+	gl_Position = vec4(a_Position, 1.0);
 }

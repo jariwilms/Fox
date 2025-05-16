@@ -8,8 +8,8 @@ layout(location = 0) out vec4 f_Color;
 
 void main()
 {
-	vec3 texCoord = v_TexCoord;
-	texCoord.xy *= -1.0;
+	vec3 texCoord  = v_TexCoord;
+	texCoord.xy   *= -1.0;
 	
 	f_Color	= texture(t_Skybox, texCoord);
 }

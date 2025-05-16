@@ -1,6 +1,6 @@
 #version 460 core
 
-layout(binding  = 0) uniform samplerCube environment;
+layout(binding  = 0) uniform samplerCube c_Environment;
 
 layout(location = 0) in  vec3 v_Position;
 
@@ -28,7 +28,7 @@ void main()
             const vec3 tangent   = vec3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
             const vec3 direction = tangent.x * right + tangent.y * up + tangent.z * forward;
 
-            irradiance += texture(environment, direction).rgb * cos(theta) * sin(theta);
+            irradiance += texture(c_Environment, direction).rgb * cos(theta) * sin(theta);
             ++samples;
         }
     }
