@@ -99,14 +99,14 @@ namespace fox::gfx::api
                 }
             };
 
-        add_to_pipeline("DeferredMesh"       , "mesh_deferred.vert.spv"                         , {}                     , "mesh_deferred.frag.spv");
-        add_to_pipeline("Debug"              , "debug.vert.spv"                                 , {}                     , "debug.frag.spv");
-        add_to_pipeline("PBR"                , "pbr.vert.spv"                                   , {}                     , "pbr.frag.spv");
-        add_to_pipeline("ConvertEqui"        , "cubemap.vert.spv"                               , {}                     , "convert_equirectangular.frag.spv");
-        add_to_pipeline("Background"         , "background.vert.spv"                            , {}                     , "background.frag.spv");
-        add_to_pipeline("Irradiance"         , "cubemap.vert.spv"                               , {}                     , "irradiance.frag.spv");
-        add_to_pipeline("PreFilter"          , "cubemap.vert.spv"                               , {}                     , "prefilter.frag.spv");
-        add_to_pipeline("BRDF"               , "brdf.vert.spv"                                  , {}                     , "brdf.frag.spv");
+        add_to_pipeline("DeferredMesh"       , "mesh_deferred.vert.spv", {}, "mesh_deferred.frag.spv");
+        add_to_pipeline("Debug"              , "debug.vert.spv"        , {}, "debug.frag.spv");
+        add_to_pipeline("PBR"                , "pbr.vert.spv"          , {}, "pbr.frag.spv");
+        add_to_pipeline("ConvertEqui"        , "cubemap.vert.spv"      , {}, "convert_equirectangular.frag.spv");
+        add_to_pipeline("Background"         , "background.vert.spv"   , {}, "background.frag.spv");
+        add_to_pipeline("Irradiance"         , "cubemap.vert.spv"      , {}, "irradiance.frag.spv");
+        add_to_pipeline("PreFilter"          , "cubemap.vert.spv"      , {}, "prefilter.frag.spv");
+        add_to_pipeline("BRDF"               , "brdf.vert.spv"         , {}, "brdf.frag.spv");
 
 
 
@@ -520,7 +520,7 @@ namespace fox::gfx::api
         m_gBuffer->bind_texture("ARM"     , 3);
 
         irrcub ->bind(4);
-        precub->bind(5);
+        precub ->bind(5);
         brdftex->bind(6);
 
         gl::viewport(target->dimensions());
