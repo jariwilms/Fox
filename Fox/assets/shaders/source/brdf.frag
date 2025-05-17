@@ -60,8 +60,8 @@ float geometry_smith(vec3 normal, vec3 viewDirection, vec3 lightDirection, float
     const float normalDotViewDirection  = max(dot(normal, viewDirection ), 0.0);
     const float normalDotLightDirection = max(dot(normal, lightDirection), 0.0);
 	
-    const float viewGeometryTerm  = geometry_schlick_ggx(normalDotViewDirection , roughness);
-    const float lightGeometryTerm = geometry_schlick_ggx(normalDotLightDirection, roughness);
+    const float viewGeometryTerm        = geometry_schlick_ggx(normalDotViewDirection , roughness);
+    const float lightGeometryTerm       = geometry_schlick_ggx(normalDotLightDirection, roughness);
 
     return viewGeometryTerm * lightGeometryTerm;
 }
@@ -70,8 +70,8 @@ vec2 integrate_brdf(float normalDotViewDirection, float roughness)
 	const vec3  normal        = vec3(0.0, 0.0, 1.0);
     const vec3  viewDirection = vec3(sqrt(1.0 - pow(normalDotViewDirection, 2.0)), 0.0, normalDotViewDirection);
 
-          float A             = 0.0;
-          float B             = 0.0;
+          float F0            = 0.0;
+          float F90           = 0.0;
 	
     for(uint i = 0u; i < SAMPLE_COUNT; ++i)
     {
@@ -85,19 +85,19 @@ vec2 integrate_brdf(float normalDotViewDirection, float roughness)
 
         if(normalDotLightDirection > 0.0)
         {
-            float geometry   = geometry_smith(normal, viewDirection, lightDirection, roughness);
-            float visibility = (geometry * viewDotHalfway) / (normalDotHalfway * normalDotViewDirection);
-            float fresnel    = pow(1.0 - viewDotHalfway, 5.0);
+            float geometry    = geometry_smith(normal, viewDirection, lightDirection, roughness);
+            float visibility  = (geometry * viewDotHalfway) / (normalDotHalfway * normalDotViewDirection);
+            float coefficient = pow(1.0 - viewDotHalfway, 5.0);
 
-            A           += (1.0 - fresnel) * visibility;
-            B           +=        fresnel  * visibility;
+            F0               += (1.0 - coefficient) * visibility;
+            F90              +=        coefficient  * visibility;
         }
     }
 	
-    A /= float(SAMPLE_COUNT);
-    B /= float(SAMPLE_COUNT);
+    F0  /= float(SAMPLE_COUNT);
+    F90 /= float(SAMPLE_COUNT);
 	
-    return vec2(A, B);
+    return vec2(F0, F90);
 }
 
 void main() 
