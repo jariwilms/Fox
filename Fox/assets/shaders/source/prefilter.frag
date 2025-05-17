@@ -1,9 +1,10 @@
 #version 460 core
 
-layout(set = 0, binding = 14) uniform IDK
+layout(set = 0, binding = 14) uniform PreFilter
 {
+	uint  resolution;
 	float roughness;
-} u_IDK;
+} u_PreFilter;
 
 layout(binding  = 0) uniform samplerCube c_Environment;
 
@@ -11,103 +12,100 @@ layout(location = 0) in  vec3 v_Position;
 
 layout(location = 0) out vec4 f_Color;
 
-const float PI = 3.14159265359;
-// ----------------------------------------------------------------------------
-float distribution_ggx(vec3 N, vec3 H, float roughness)
+
+
+const float PI           = 3.14159265359;
+const float TAU          = PI * 2;
+const uint  SAMPLE_COUNT = 65536u;
+
+float distribution_ggx(vec3 normal, vec3 halfway, float roughness)
 {
-    float a = roughness*roughness;
-    float a2 = a*a;
-    float NdotH = max(dot(N, H), 0.0);
-    float NdotH2 = NdotH*NdotH;
-
-    float nom   = a2;
-    float denom = (NdotH2 * (a2 - 1.0) + 1.0);
-    denom = PI * denom * denom;
-
-    return nom / denom;
+    const float halfwayNormalDot        = max(dot(normal, halfway), 0.0);
+    const float halfwayNormalDotSquared = pow(halfwayNormalDot, 2.0);
+	
+	const float alpha                   = pow(roughness, 2.0);
+    const float alphaSquared            = pow(alpha    , 2.0);
+	const float alphaFactor             = halfwayNormalDotSquared * (alphaSquared - 1.0) + 1.0;
+	
+    const float numerator               = alphaSquared;
+    const float denominator             = pow(alphaFactor, 2.0) * PI;
+	
+    return numerator / denominator;
 }
-// ----------------------------------------------------------------------------
-// http://holger.dammertz.org/stuff/notes_HammersleyOnHemisphere.html
-// efficient VanDerCorpus calculation.
-float radical_inverse_vdc(uint bits) 
+float radical_inverse_vdc(uint bits)
 {
 	bits = (bits << 16u) | (bits >> 16u);
+	
     bits = ((bits & 0x55555555u) << 1u) | ((bits & 0xAAAAAAAAu) >> 1u);
     bits = ((bits & 0x33333333u) << 2u) | ((bits & 0xCCCCCCCCu) >> 2u);
     bits = ((bits & 0x0F0F0F0Fu) << 4u) | ((bits & 0xF0F0F0F0u) >> 4u);
     bits = ((bits & 0x00FF00FFu) << 8u) | ((bits & 0xFF00FF00u) >> 8u);
-	 
-    return float(bits) * 2.3283064365386963e-10; // / 0x100000000
+	
+    return float(bits) * 2.3283064365386963e-10; //0x100000000
 }
-// ----------------------------------------------------------------------------
-vec2 Hammersley(uint i, uint N)
+vec2 hammersley(uint i, uint samples)
 {
-	return vec2(float(i)/float(N), radical_inverse_vdc(i));
+	return vec2(float(i)/float(samples), radical_inverse_vdc(i));
 }
-// ----------------------------------------------------------------------------
-vec3 importance_sample_ggx(vec2 Xi, vec3 N, float roughness)
+vec3 importance_sample_ggx(vec2 Xi, vec3 normal, float roughness)
 {
-	float a = roughness*roughness;
+	const float alpha        = pow(roughness, 2.0);
+	const float alphaSquared = pow(alpha    , 2.0);
 	
-	float phi = 2.0 * PI * Xi.x;
-	float cosTheta = sqrt((1.0 - Xi.y) / (1.0 + (a*a - 1.0) * Xi.y));
-	float sinTheta = sqrt(1.0 - cosTheta*cosTheta);
+	const float phi          = TAU * Xi.x;
+	const float cosine       = sqrt((1.0 - Xi.y) / (1.0 + (alphaSquared - 1.0) * Xi.y));
+	const float sine         = sqrt(1.0 - pow(cosine, 2.0));
 	
-	// from spherical coordinates to cartesian coordinates - halfway vector
-	vec3 H;
-	H.x = cos(phi) * sinTheta;
-	H.y = sin(phi) * sinTheta;
-	H.z = cosTheta;
+	const vec3  halfway      = vec3(cos(phi) * sine, sin(phi) * sine, cosine);
 	
-	// from tangent-space H vector to world-space sample vector
-	vec3 up          = abs(N.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
-	vec3 tangent   = normalize(cross(up, N));
-	vec3 bitangent = cross(N, tangent);
+	const vec3  up           = abs(normal.z) < 0.999 ? vec3(0.0, 0.0, 1.0) : vec3(1.0, 0.0, 0.0);
+	const vec3  tangent      = normalize(cross(up, normal));
+	const vec3  bitangent    = cross(normal, tangent);
 	
-	vec3 sampleVec = tangent * H.x + bitangent * H.y + N * H.z;
-	return normalize(sampleVec);
+	const vec3  vector       = tangent   * halfway.x 
+	                         + bitangent * halfway.y 
+							 + normal    * halfway.z;
+	
+	return normalize(vector);
 }
-// ----------------------------------------------------------------------------
+
 void main()
 {		
-    vec3 N = normalize(v_Position);
-    
-    // make the simplifying assumption that V equals R equals the normal 
-    vec3 R = N;
-    vec3 V = R;
-
-    const uint SAMPLE_COUNT = 65536u;
-    vec3 prefilteredColor = vec3(0.0);
-    float totalWeight = 0.0;
+    const vec3  normal              = normalize(v_Position);
+    const vec3  reflectionDirection = normal;
+    const vec3  viewDirection       = reflectionDirection;
+	
+	
+	
+          vec3  prefilteredColor    = vec3(0.0);
+          float totalWeight         = 0.0;
     
     for(uint i = 0u; i < SAMPLE_COUNT; ++i)
     {
-        // generates a sample vector that's biased towards the preferred alignment direction (importance sampling).
-        vec2 Xi = Hammersley(i, SAMPLE_COUNT);
-        vec3 H = importance_sample_ggx(Xi, N, u_IDK.roughness);
-        vec3 L  = normalize(2.0 * dot(V, H) * H - V);
-
-        float NdotL = max(dot(N, L), 0.0);
-        if(NdotL > 0.0)
+        const vec2 Xi = hammersley(i, SAMPLE_COUNT);
+        const vec3 halfway = importance_sample_ggx(Xi, normal, u_PreFilter.roughness);
+        const vec3 L  = normalize(halfway * dot(viewDirection, halfway) * 2.0 - viewDirection);
+		
+        float normalDotLightDirection = max(dot(normal, L), 0.0);
+        if(normalDotLightDirection > 0.0)
         {
-            // sample from the environment's mip level based on roughness/pdf
-            float D   = distribution_ggx(N, H, u_IDK.roughness);
-            float NdotH = max(dot(N, H), 0.0);
-            float HdotV = max(dot(H, V), 0.0);
-            float pdf = D * NdotH / (4.0 * HdotV) + 0.0001; 
-
-            float resolution = 512.0; // resolution of source cubemap (per face)
-            float saTexel  = 4.0 * PI / (6.0 * resolution * resolution);
-            float saSample = 1.0 / (float(SAMPLE_COUNT) * pdf + 0.0001);
-
-            float mipLevel = u_IDK.roughness == 0.0 ? 0.0 : 0.5 * log2(saSample / saTexel); 
+            const float distribution               = distribution_ggx(normal, halfway, u_PreFilter.roughness);
+            const float normalDotHalfwayDirection  = max(dot(normal , halfway      ), 0.0);
+            const float halfwayDotViewDirection    = max(dot(halfway, viewDirection), 0.0);
+            const float probabilityDensity         = distribution * normalDotHalfwayDirection / (4.0 * halfwayDotViewDirection) + 0.0001;
+			
+            const float resolution                 = float(u_PreFilter.resolution);
+            const float texelSolidAngle            = 4.0 * PI / (6.0 * pow(resolution, 2.0));
+            const float sampleSolidAngle           = 1.0 / (float(SAMPLE_COUNT) * probabilityDensity + 0.0001);
+			
+            const float mipLevel                   = u_PreFilter.roughness == 0.0 ? 0.0 : 0.5 * log2(sampleSolidAngle / texelSolidAngle);
             
-            prefilteredColor += textureLod(c_Environment, L, mipLevel).rgb * NdotL;
-            totalWeight      += NdotL;
+            prefilteredColor                      += textureLod(c_Environment, L, mipLevel).rgb * normalDotLightDirection;
+            totalWeight                           += normalDotLightDirection;
         }
     }
-
-    prefilteredColor = prefilteredColor / totalWeight;
-
+	
+    prefilteredColor /= totalWeight;
+	
     f_Color = vec4(prefilteredColor, 1.0);
 }
