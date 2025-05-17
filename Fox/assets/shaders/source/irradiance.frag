@@ -18,7 +18,7 @@ void main()
 	const vec3  up         = normalize(cross(forward, right));
 	
 	      int   samples    = 0;
-	const float delta      = 0.025;
+	const float delta      = 0.006135;
           vec3  irradiance = vec3(0.0);
 
     for(float phi = 0.0; phi < TAU; phi += delta)
