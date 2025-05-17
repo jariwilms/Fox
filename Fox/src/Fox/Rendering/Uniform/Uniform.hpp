@@ -44,6 +44,12 @@ namespace fox::gfx::unf
 
         fox::float32_t _padding{};
     };
+    //Binding 5
+    struct PreFilter
+    {
+        fox::uint32_t  resolution{};
+        fox::float32_t value{};
+    };
     //Binding 6
     struct LightShadow
     {
