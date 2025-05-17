@@ -44,7 +44,15 @@ namespace fox::gfx::api
         std::array<std::shared_ptr<gfx::FrameBuffer>, 4>                   m_shadowCubemaps{}; //TODO: change to cube map array
         std::shared_ptr<gfx::FrameBuffer>                                  m_hdrBuffer{};
         std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   m_pBuffers{};
-                                                    
+
+        std::shared_ptr<gfx::UniformBuffer<unf::PreFilter>>                m_imgctx{};
+        std::shared_ptr<gfx::Texture2D>                                    m_envtex{};
+        std::shared_ptr<gfx::Cubemap>                                      m_envcub{};
+
+        std::shared_ptr<gfx::Cubemap>                                      m_irrcub{};
+        std::shared_ptr<gfx::Cubemap>                                      m_precub{};
+        std::shared_ptr<gfx::Texture2D>                                    m_brdftex{};
+
         std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  m_contextBuffer{};
         std::shared_ptr<gfx::UniformBuffer<unf::Matrices>>                 m_matricesBuffer{};
         std::shared_ptr<gfx::UniformBuffer<unf::Material>>                 m_materialBuffer{};
