@@ -15,31 +15,60 @@ namespace fox::gfx
             Orthographic, 
         };
 
-        explicit Projection(const fox::Matrix4f& matrix)
-            : m_matrix{ matrix } {}
-
-        template<Type T, typename... Args>
-        static inline auto create(Args... args) = delete;
-
-        template<> static inline auto create<Type::Perspective>(fox::float32_t aspectRatio, fox::float32_t fov, fox::float32_t zNear, fox::float32_t zFar)
+        struct perspective_p
         {
-            const auto& matrix = glm::perspective(glm::radians(fov), aspectRatio, zNear, zFar);
+            perspective_p(fox::float32_t aspectRatio, fox::float32_t fov, fox::float32_t near, fox::float32_t far)
+                : aspectRatio{ aspectRatio }, fov{ fov }, near{ near }, far{ far } {}
 
-            return Projection{ matrix };
-        }
-        template<> static inline auto create<Type::Orthographic>(fox::float32_t top, fox::float32_t bottom, fox::float32_t left, fox::float32_t right, fox::float32_t zNear, fox::float32_t zFar)
+            fox::float32_t aspectRatio; 
+            fox::float32_t fov;
+            fox::float32_t near;
+            fox::float32_t far;
+        };
+        struct orthographic_p
         {
-            const auto& matrix = glm::ortho(left, right, bottom, top, zNear, zFar);
+            orthographic_p(fox::float32_t left, fox::float32_t right, fox::float32_t bottom, fox::float32_t top, fox::float32_t near, fox::float32_t far)
+                : left{ left }, right{ right }, bottom{ bottom }, top{ top }, near{ near }, far{ far } {}
 
-            return Projection{ matrix };
+            fox::float32_t left;
+            fox::float32_t right;
+            fox::float32_t bottom;
+            fox::float32_t top;
+            fox::float32_t near;
+            fox::float32_t far;
+        };
+        using projection_v = std::variant<perspective_p, orthographic_p>;
+
+        Projection() = default;
+        Projection(projection_v value)
+        {
+            if (std::holds_alternative<perspective_p> (value))
+            {
+                const auto& v = std::get<perspective_p>(value);
+
+                m_matrix = glm::perspective(glm::radians(v.fov), v.aspectRatio, v.near, v.far);
+                m_type   = Type::Perspective;
+            }
+            if (std::holds_alternative<orthographic_p>(value))
+            {
+                const auto& v = std::get<orthographic_p>(value);
+
+                m_matrix = glm::ortho(v.left, v.right, v.bottom, v.top, v.near, v.far);
+                m_type   = Type::Orthographic;
+            }
         }
 
         const fox::Matrix4f& matrix() const
         {
             return m_matrix;
         }
+              Type           type  () const
+              {
+                  return m_type;
+              }
 
     private:
-        fox::Matrix4f m_matrix{};
+        fox::Matrix4f m_matrix{ 1.0f };
+        Type          m_type  { Type::Perspective };
     };
 }

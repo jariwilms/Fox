@@ -66,7 +66,7 @@ namespace fox
         auto  scene           = std::make_shared<scn::Scene>();
 
         auto& observer        = scene->create_actor();
-        auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f).get();
+        auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f, 82.0f).get();
         auto& cameraTransform = observer.get_component<cmp::TransformComponent>().get();
 
         cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
@@ -94,19 +94,19 @@ namespace fox
         defaultMaterial->arm        = defaultARM;
         defaultMaterial->emissive   = defaultEmissive;
 
-        auto& floorActor            = scene->create_actor();
-        auto& fatc                  = floorActor.get_component<cmp::TransformComponent>().get();
-        auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
-        famfc.mesh                  = gfx::Geometry::Plane::mesh();
-        famfc.material              = defaultMaterial;
-        fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 25.0f } };
+        //auto& floorActor            = scene->create_actor();
+        //auto& fatc                  = floorActor.get_component<cmp::TransformComponent>().get();
+        //auto& famfc                 = floorActor.add_component<cmp::MeshFilterComponent>().get();
+        //famfc.mesh                  = gfx::Geometry::Plane::mesh();
+        //famfc.material              = defaultMaterial;
+        //fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
 
-        auto& boxActor = scene->create_actor();
-        auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
-        auto& bamfc    = boxActor.add_component<cmp::MeshFilterComponent>().get();
-        bamfc.mesh     = gfx::Geometry::Cube::mesh();
-        bamfc.material = defaultMaterial;
-        batc           = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
+        //auto& boxActor = scene->create_actor();
+        //auto& batc     = boxActor.get_component<cmp::TransformComponent>().get();
+        //auto& bamfc    = boxActor.add_component<cmp::MeshFilterComponent>().get();
+        //bamfc.mesh     = gfx::Geometry::Cube::mesh();
+        //bamfc.material = defaultMaterial;
+        //batc           = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
 
 
 
@@ -126,11 +126,11 @@ namespace fox
         gfx::Cubemap::Faces cubemapFaces
         {
             io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
-            io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8),
-            io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8),
+            io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8), 
+            io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8), 
         };
 
         auto skybox = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
@@ -142,9 +142,9 @@ namespace fox
         //Lights
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.4f, 0.4f, 0.4f }, 20.0f, true }, fox::Vector3f{ -4.0f,  12.0f, -2.0f }),
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f }, 20.0f, true }, fox::Vector3f{ -3.0f,   2.0f,  3.0f }), 
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f }, 20.0f, true }, fox::Vector3f{  3.0f,   2.0f,  3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{       1.0f       } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
         };
 
 
@@ -214,9 +214,14 @@ namespace fox
 
 
 
+            auto& l = lights.at(0);
+            auto& [_1, _2] = l;
+            _2.x = glm::cos(fox::Time::since_epoch() / 5.0f) * 20.0f;
+            _2.z = glm::sin(fox::Time::since_epoch() / 5.0f) * 20.0f;
 
 
-            gfx::RenderInfo renderInfo{ {camera, cameraTransform}, lights, skybox };
+
+            gfx::RenderInfo renderInfo{ camera, cameraTransform, lights, skybox };
             gfx::Renderer::start(renderInfo);
 
             const auto& view = reg::view<cmp::RelationshipComponent, cmp::TransformComponent, cmp::MeshFilterComponent>();

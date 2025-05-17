@@ -9,10 +9,10 @@ namespace fox
     public:
         enum class Type
         {
-            Point, 
-            Directional, 
-            Spot, 
             Area, 
+            Directional, 
+            Point, 
+            Spot, 
         };
 
         Light() = default;

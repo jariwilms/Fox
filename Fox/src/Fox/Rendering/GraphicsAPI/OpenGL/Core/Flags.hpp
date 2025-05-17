@@ -721,6 +721,8 @@ namespace fox::gfx::api::glf
         };
         enum class Attachment : gl::enum_t
         {
+            None         = GL_NONE, 
+
             ColorIndex   = GL_COLOR_ATTACHMENT0, 
             Depth        = GL_DEPTH_ATTACHMENT, 
             Stencil      = GL_STENCIL_ATTACHMENT, 
@@ -741,7 +743,7 @@ namespace fox::gfx::api::glf
             Left                 = GL_LEFT, 
             Right                = GL_RIGHT, 
 
-            ColorAttachmentIndex = GL_COLOR_ATTACHMENT0, 
+            ColorIndex           = GL_COLOR_ATTACHMENT0, 
         };
         enum class Status : gl::enum_t
         {
@@ -761,6 +763,8 @@ namespace fox::gfx::api::glf
         {
             Read        = GL_READ_FRAMEBUFFER, 
             Write       = GL_DRAW_FRAMEBUFFER, 
+
+            ReadWrite   = Read | Write, 
         };
         enum class Filter
         {
@@ -1886,6 +1890,7 @@ namespace fox::gfx::api::glf
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
 
     template<> struct BitmaskTraits<glf::Buffer::Mask>            { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::FrameBuffer::Attachment> { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Source>     { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::Barrier>         { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::RegionalBarrier> { static constexpr bool enable_bitmask_operations = true; };

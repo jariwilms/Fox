@@ -1509,31 +1509,31 @@ namespace fox::gfx::api::gl
         glPixelStorei(gl::to_underlying(mode), parameter);
     }
 
-    static void texture_sub_image_1d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::line_t  <gl::uint32_t>& line,   gl::uint32_t level, std::span<const gl::byte_t> data)
+    static void texture_sub_image_1d(gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, const gl::line_t  <gl::uint32_t>& line,   gl::uint32_t level, std::span<const gl::byte_t> data)
     {
         glTextureSubImage1D(
             gl::to_underlying(texture), static_cast<gl::int32_t>(level),
             line.origin.x, 
             line.extent.x,
-            gl::to_underlying(format), gl::to_underlying(glf::PixelData::Type::UnsignedByte),
+            gl::to_underlying(format), gl::to_underlying(type),
             data.data());
     }
-    static void texture_sub_image_2d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::area_t  <gl::uint32_t>& area,   gl::uint32_t level, std::span<const gl::byte_t> data)
+    static void texture_sub_image_2d(gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, const gl::area_t  <gl::uint32_t>& area,   gl::uint32_t level, std::span<const gl::byte_t> data)
     {
         glTextureSubImage2D(
             gl::to_underlying(texture), level,
             area.origin.x, area.origin.y,
             area.extent.x, area.extent.y,
-            gl::to_underlying(format), gl::to_underlying(glf::PixelData::Type::UnsignedByte),
+            gl::to_underlying(format), gl::to_underlying(type),
             data.data());
     }
-    static void texture_sub_image_3d(gl::handle_t texture, glf::Texture::BaseFormat format, const gl::volume_t<gl::uint32_t>& volume, gl::uint32_t level, std::span<const gl::byte_t> data)
+    static void texture_sub_image_3d(gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, const gl::volume_t<gl::uint32_t>& volume, gl::uint32_t level, std::span<const gl::byte_t> data)
     {
         glTextureSubImage3D(
             gl::to_underlying(texture), level,
             volume.origin.x, volume.origin.y, volume.origin.z,
             volume.extent.x, volume.extent.y, volume.extent.z,
-            gl::to_underlying(format), gl::to_underlying(glf::PixelData::Type::UnsignedByte),
+            gl::to_underlying(format), gl::to_underlying(type),
             data.data());
     }
     static void copy_texture_sub_image_1d(gl::handle_t texture, gl::uint32_t level, const gl::Vector2u& offset, const gl::line_t  <gl::uint32_t>& line)
@@ -1731,12 +1731,12 @@ namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y));
     }
 
-    static void frame_buffer_render_buffer(gl::handle_t frameBuffer, gl::handle_t renderBuffer, glf::FrameBuffer::Source attachment)
+    static void frame_buffer_render_buffer(gl::handle_t frameBuffer, gl::handle_t renderBuffer, glf::FrameBuffer::Attachment attachment)
     {
         glNamedFramebufferRenderbuffer(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), gl::to_underlying(glf::RenderBuffer::Target::RenderBuffer), gl::to_underlying(renderBuffer));
     }
 
-    static void frame_buffer_texture(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Source attachment, gl::uint32_t level)
+    static void frame_buffer_texture(gl::handle_t frameBuffer, gl::handle_t texture, glf::FrameBuffer::Attachment attachment, gl::uint32_t level)
     {
         glNamedFramebufferTexture(gl::to_underlying(frameBuffer), gl::to_underlying(attachment), gl::to_underlying(texture), static_cast<gl::int32_t>(level));
     }

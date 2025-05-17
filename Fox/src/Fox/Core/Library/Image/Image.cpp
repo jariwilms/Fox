@@ -1,63 +1,110 @@
 #include "stdafx.hpp"
-
-#include "stb/stb_image.h"
-#include "stb/stb_image_write.h"
-
 #include "Image.hpp"
 
 namespace fox
 {
-    constexpr auto FLIP_IMAGES = true; //TODO: => Config
-
-    struct STBContext
+    void fox::Image::encode(Extension extension, const Image& image)
     {
-        std::vector<fox::byte_t>& data;
-    };
-    static void write_func(void* context, void* data, int size)
-    {
-        const auto* ctx       = reinterpret_cast<STBContext*>(context);
-        const auto* imageData = reinterpret_cast<const fox::byte_t*>(data);
-
-        ctx->data = std::vector<fox::byte_t>{ imageData, imageData + size };
+        throw std::logic_error{ "The method or operation has not been implemented!" };
     }
-
-    std::vector<fox::byte_t> Image::encode(Extension extension, const Image& image)
+    Image fox::Image::decode(Format format, std::span<const fox::byte_t> data)
     {
-        stbi_flip_vertically_on_write(FLIP_IMAGES);
-
-        const auto& dimensions = image.dimensions();
-        const auto& channels   = fox::to_underlying(image.format());
-        const auto* data       = image.data().data();
-
-        std::vector<fox::byte_t> v{};
-        STBContext ctx{ v };
-
-        switch (extension)
+        enum class Type
         {
-            case Extension::BMP:  stbi_write_bmp_to_func(write_func, &ctx, dimensions.x, dimensions.y, channels, data);    break;
-            case Extension::JPEG: stbi_write_jpg_to_func(write_func, &ctx, dimensions.x, dimensions.y, channels, data, 0); break;
-            case Extension::PNG:  stbi_write_png_to_func(write_func, &ctx, dimensions.x, dimensions.y, channels, data, 0); break;
+            Byte,
+            Float,
+        };
 
-            default: throw std::invalid_argument{ "Invalid extension!" };
-        }
+        const auto& get_type     = [](Format format)
+            {
+                switch (format)
+                {
+                    case Format::R8:
+                    case Format::RG8:
+                    case Format::RGB8:
+                    case Format::RGBA8:
 
-        return v;
-    }
-    Image                    Image::decode(Format format, std::span<const fox::byte_t> data)
-    {
+                    case Format::R16:
+                    case Format::RG16:
+                    case Format::RGB16:
+                    case Format::RGBA16:       return Type::Byte;
+
+                    case Format::RGB16_FLOAT:
+                    case Format::RGBA16_FLOAT:
+                    case Format::RGB32_FLOAT:
+                    case Format::RGBA32_FLOAT: return Type::Float;
+                };
+
+                throw std::invalid_argument{ "Invalid format!" };
+
+            };
+        const auto& get_depth    = [](Format format)
+            {
+                switch (format)
+                {
+                    case Format::R8:
+                    case Format::RG8:
+                    case Format::RGB8:
+                    case Format::RGBA8:        return 8u;
+
+                    case Format::R16:
+                    case Format::RG16:
+                    case Format::RGB16:
+                    case Format::RGBA16:
+                    case Format::RGB16_FLOAT:
+                    case Format::RGBA16_FLOAT: return 16u;
+
+                    case Format::RGB32_FLOAT:
+                    case Format::RGBA32_FLOAT: return 32u;
+                };
+
+                throw std::invalid_argument{ "Invalid format!" };
+            };
+        const auto& get_channels = [](Format format)
+            {
+                switch (format)
+                {
+                    case Format::R8:
+                    case Format::R16:          return 1u;
+
+                    case Format::RG8:
+                    case Format::RG16:         return 2u;
+
+                    case Format::RGB8:
+                    case Format::RGB16:
+                    case Format::RGB16_FLOAT:
+                    case Format::RGB32_FLOAT:  return 3u;
+
+                    case Format::RGBA8:
+                    case Format::RGBA16:
+                    case Format::RGBA16_FLOAT:
+                    case Format::RGBA32_FLOAT: return 4u;
+                };
+
+                throw std::invalid_argument{ "Invalid format!" };
+            };
+
         stbi_set_flip_vertically_on_load(FLIP_IMAGES);
 
+        void* dataPtr{};
+        fox::int32_t  iChannels{};
         fox::Vector2i dimensions{};
 
-        const auto&  channels   = fox::to_underlying(format);
-        const auto&  dataLength = static_cast<fox::int32_t>(data.size_bytes());
-              auto*  imageData  = stbi_load_from_memory(data.data(), dataLength, &dimensions.x, &dimensions.y, nullptr, channels);
-        const auto&  totalSize  = dimensions.x * dimensions.y * channels;
+        const auto& type     = get_type    (format);
+        const auto& depth    = get_depth   (format);
+        const auto& channels = get_channels(format);
 
-        std::vector<fox::byte_t> v{ imageData, imageData + totalSize };
+        if (type == Type::Byte and depth == 8u ) dataPtr = stbi_load_from_memory   (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &dimensions.x, &dimensions.y, &iChannels, channels);
+        if (type == Type::Byte and depth == 16u) dataPtr = stbi_load_16_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &dimensions.x, &dimensions.y, &iChannels, channels);
+        if (type == Type::Float                ) dataPtr = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &dimensions.x, &dimensions.y, &iChannels, channels);
 
-        stbi_image_free(imageData);
+              auto* bytePtr       = reinterpret_cast<fox::byte_t*>(dataPtr);
+        const auto& bytesPerPixel = channels * (depth / 8u);
+        const auto& totalSize     = dimensions.x * dimensions.y * bytesPerPixel;
 
-        return Image{ format, dimensions, std::move(v) };
+        std::vector<fox::byte_t> v{ bytePtr, bytePtr + totalSize };
+        stbi_image_free(dataPtr);
+
+        return fox::Image{ format, dimensions, std::move(v) };
     }
 }
