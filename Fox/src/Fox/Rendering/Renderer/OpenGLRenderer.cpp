@@ -175,7 +175,6 @@ namespace fox::gfx::api
 
 
 
-
         //Irradiance step
         const fox::Vector2u cvDimensions{ 32u, 32u };
         irrcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
@@ -207,6 +206,10 @@ namespace fox::gfx::api
 
 
         //PreFilter step
+        gl::texture_parameter(envcub->handle(), glf::Texture::MinificationFilter::LinearMipmapLinear);
+        gl::texture_parameter(envcub->handle(), glf::Texture::MagnificationFilter::Linear);
+        gl::generate_texture_mipmap(envcub->handle());
+
         fox::Vector2u reflectionDimensions{ 128u, 128u };
         prefcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
 
