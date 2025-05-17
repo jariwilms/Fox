@@ -1,0 +1,9 @@
+#include "constants.spl"
+
+vec3 fresnel_schlick_roughness(float cosine, vec3 reflectance, float roughness)
+{
+	const vec3  reflectanceFactor = max(vec3(1.0 - roughness), reflectance) - reflectance;
+	const float viewAngleFactor   = pow(clamp(1.0 - cosine, 0.0, 1.0), 5.0);
+
+	return reflectance + reflectanceFactor * viewAngleFactor;
+}

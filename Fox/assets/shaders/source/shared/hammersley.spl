@@ -1,0 +1,6 @@
+#include "constants.spl"
+
+vec2 hammersley(uint i, uint samples)
+{
+	return vec2(float(i) / float(samples), radical_inverse_vdc(i));
+}

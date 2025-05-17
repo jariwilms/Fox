@@ -1,0 +1,7 @@
+#ifndef CONSTANTS
+
+#define PI       3.14159265359
+#define TAU      PI * 2
+#define ATAN_INV vec2(0.1591, 0.3183)
+
+#endif
