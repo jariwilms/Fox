@@ -28,21 +28,16 @@ layout(binding  = 1) uniform sampler2D   t_Albedo;
 layout(binding  = 2) uniform sampler2D   t_Normal;
 layout(binding  = 3) uniform sampler2D   t_ARM;
 
-layout(binding  = 4) uniform samplerCube t_Irradiance;
-layout(binding  = 5) uniform samplerCube t_PreFilter;
-layout(binding  = 6) uniform sampler2D   t_BRDF;
+layout(binding  = 4) uniform samplerCube irradianceMap;
+layout(binding  = 5) uniform samplerCube prefilterMap;
+layout(binding  = 6) uniform sampler2D   brdfLUT;
 
-layout(location = 0) out vec4 f_Color;
-
+layout(location = 0) out vec4 FragColor;
 
 
 
 const float PI = 3.14159265359;
-// ----------------------------------------------------------------------------
-// Easy trick to get tangent-normals to world-space to keep PBR code simplified.
-// Don't worry if you don't get what's going on; you generally want to do normal 
-// mapping the usual way for performance anyways; I do plan make a note of this 
-// technique somewhere later in the normal mapping tutorial.
+
 // ----------------------------------------------------------------------------
 float DistributionGGX(vec3 N, vec3 H, float roughness)
 {
@@ -91,19 +86,21 @@ vec3 fresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness)
 // ----------------------------------------------------------------------------
 void main()
 {		
-	const vec2  resolution          = u_Context.resolution;
-	const vec2  uv                  = gl_FragCoord.xy / resolution;
+	const vec2  resolution                  = u_Context.resolution;
+	const vec2  uv                          = gl_FragCoord.xy / resolution;
 
     // material properties
-	vec3 WorldPos = texture(t_Position, uv).rgb;
+	vec3 WorldPos = texture(t_Position, uv).xyz;
     vec3 albedo = pow(texture(t_Albedo, uv).rgb, vec3(2.2));
     float metallic = texture(t_ARM, uv).b;
     float roughness = texture(t_ARM, uv).g;
     float ao = texture(t_ARM, uv).r;
-	vec3 camPos = u_Camera.position.xyz;
        
+	  
+	vec3 camPos = u_Camera.position.xyz;
+	   
     // input lighting data
-    vec3 N = texture(t_Normal, uv).rgb;
+    vec3 N = texture(t_Normal, uv).xyz;
     vec3 V = normalize(camPos - WorldPos);
     vec3 R = reflect(-V, N); 
 
@@ -157,13 +154,13 @@ void main()
     vec3 kD = 1.0 - kS;
     kD *= 1.0 - metallic;	  
     
-    vec3 irradiance = texture(t_Irradiance, N).rgb;
+    vec3 irradiance = texture(irradianceMap, N).rgb;
     vec3 diffuse      = irradiance * albedo;
     
     // sample both the pre-filter map and the BRDF lut and combine them together as per the Split-Sum approximation to get the IBL specular part.
     const float MAX_REFLECTION_LOD = 4.0;
-    vec3 prefilteredColor = textureLod(t_PreFilter, R,  roughness * MAX_REFLECTION_LOD).rgb;    
-    vec2 brdf  = texture(t_BRDF, vec2(max(dot(N, V), 0.0), roughness)).rg;
+    vec3 prefilteredColor = textureLod(prefilterMap, R,  roughness * MAX_REFLECTION_LOD).rgb;    
+    vec2 brdf  = texture(brdfLUT, vec2(max(dot(N, V), 0.0), roughness)).rg;
     vec3 specular = prefilteredColor * (F * brdf.x + brdf.y);
 
     vec3 ambient = (kD * diffuse + specular) * ao;
@@ -175,5 +172,5 @@ void main()
     // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
 
-    f_Color = vec4(color , 1.0);
+    FragColor = vec4(color , 1.0);
 }
