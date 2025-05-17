@@ -7,13 +7,15 @@ namespace fox::gfx::api
     {
         fox::float32_t value{};
     };
-    std::shared_ptr<gfx::Texture2D>                imgtex;
-    std::shared_ptr<gfx::Texture2D>                brdftex;
+
+    std::shared_ptr<gfx::UniformBuffer<Roughness>> imgctx;
     std::shared_ptr<gfx::FrameBuffer>              imgfb;
+
+    std::shared_ptr<gfx::Texture2D>                envtex;
     std::shared_ptr<gfx::Cubemap>                  envcub;
     std::shared_ptr<gfx::Cubemap>                  irrcub;
-    std::shared_ptr<gfx::Cubemap>                  prefcub;
-    std::shared_ptr<gfx::UniformBuffer<Roughness>> imgctx;
+    std::shared_ptr<gfx::Cubemap>                  precub;
+    std::shared_ptr<gfx::Texture2D>                brdftex;
 
 
     OpenGLRenderer::OpenGLRenderer()
@@ -128,10 +130,10 @@ namespace fox::gfx::api
         imgfb = gfx::FrameBuffer::create(fbDimensions, fbm);
 
         auto img = io::load<io::Asset::Image>("textures/venice_sunset.hdr", fox::Image::Format::RGB32_FLOAT);
-        imgtex = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, img.dimensions(), img.data());
-        imgtex->apply_wrapping(gfx::Texture2D::wrap_t{ gfx::Texture2D::Wrapping::ClampToEdge });
-        gl::texture_parameter(imgtex->handle(), glf::Texture::MinificationFilter ::Linear);
-        gl::texture_parameter(imgtex->handle(), glf::Texture::MagnificationFilter::Linear);
+        envtex = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, img.dimensions(), img.data());
+        envtex->apply_wrapping(gfx::Texture2D::wrap_t{ gfx::Texture2D::Wrapping::ClampToEdge });
+        gl::texture_parameter(envtex->handle(), glf::Texture::MinificationFilter ::Linear);
+        gl::texture_parameter(envtex->handle(), glf::Texture::MagnificationFilter::Linear);
 
         envcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, fbDimensions);
 
@@ -156,7 +158,7 @@ namespace fox::gfx::api
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
         imgfb->bind(gfx::FrameBuffer::Target::Write);
-        imgtex->bind(0);
+        envtex->bind(0);
         
         gl::viewport(fbDimensions);
         gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
@@ -181,11 +183,10 @@ namespace fox::gfx::api
         const auto& rb = imgfb->find_render_buffer("Depth");
         gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
 
-
         m_pipelines.at("Irradiance")->bind();
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
-        envcub->bind(0);
         imgfb->bind(gfx::FrameBuffer::Target::Write);
+        envcub->bind(0);
 
         gl::viewport(cvDimensions);
         gl::frame_buffer_draw_buffer(imgfb->handle(), glf::FrameBuffer::Source::ColorIndex);
@@ -211,7 +212,7 @@ namespace fox::gfx::api
         gl::generate_texture_mipmap(envcub->handle());
 
         fox::Vector2u reflectionDimensions{ 128u, 128u };
-        prefcub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
+        precub = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
 
         m_pipelines.at("PreFilter")->bind();
         m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
@@ -219,7 +220,7 @@ namespace fox::gfx::api
         imgfb->bind(gfx::FrameBuffer::Target::Write);
         cva->bind();
 
-        constexpr fox::uint32_t maxMipLevels{ 5u };
+        constexpr fox::uint32_t maxMipLevels{ 8u };
         for (const auto& mip : std::views::iota(0u, maxMipLevels))
         {
             const fox::Vector2u mipDimensions{ std::pow(0.5, mip) * reflectionDimensions.x, std::pow(0.5, mip) * reflectionDimensions.y };
@@ -233,7 +234,7 @@ namespace fox::gfx::api
             for (fox::uint32_t index{}; const auto& view : captureViews)
             {
                 m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
-                gl::frame_buffer_texture_layer(imgfb->handle(), prefcub->handle(), glf::FrameBuffer::Attachment::ColorIndex, mip, index++);
+                gl::frame_buffer_texture_layer(imgfb->handle(), precub->handle(), glf::FrameBuffer::Attachment::ColorIndex, mip, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -255,6 +256,16 @@ namespace fox::gfx::api
 
         pva->bind();
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
+
+
+
+
+
+        gl::object_label(envtex->handle(),  glf::Object::Type::Texture, "HDR Environment Texture");
+        gl::object_label(envcub->handle(),  glf::Object::Type::Texture, "HDR Environment Cubemap");
+        gl::object_label(irrcub->handle(),  glf::Object::Type::Texture, "Irradiance Cubemap");
+        gl::object_label(precub->handle(),  glf::Object::Type::Texture, "PreFilter Cubemap");
+        gl::object_label(brdftex->handle(), glf::Object::Type::Texture, "BRDF Texture");
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -509,7 +520,7 @@ namespace fox::gfx::api
         m_gBuffer->bind_texture("ARM"     , 3);
 
         irrcub ->bind(4);
-        prefcub->bind(5);
+        precub->bind(5);
         brdftex->bind(6);
 
         gl::viewport(target->dimensions());
