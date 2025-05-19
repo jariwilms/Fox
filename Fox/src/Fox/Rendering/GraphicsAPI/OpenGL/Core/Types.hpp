@@ -75,6 +75,29 @@ namespace fox::gfx::api::gl
 
 
 
+    struct     range_t
+    {
+        explicit range_t(gl::count_t count, gl::index_t index = {})
+            : count{ count }, index{ index } {}
+
+        auto operator<=>(const range_t&) const = default;
+
+        gl::count_t count{};
+        gl::index_t index{};
+    };
+    struct byterange_t
+    {
+        explicit byterange_t(gl::size_t size, gl::offset_t offset = {})
+            : size{ size }, offset{ offset } {}
+
+        auto operator<=>(const byterange_t&) const = default;
+
+        gl::size_t   size{};
+        gl::offset_t offset{};
+    };
+
+
+
     template<typename T, gl::int32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
     template<typename T, gl::int32_t N> using Matrix     = glm::mat<N, N, T>;
                                         using Quaternion = glm::quat;
@@ -110,26 +133,7 @@ namespace fox::gfx::api::gl
 
 
 
-    struct     range_t
-    {
-        explicit range_t(gl::count_t count, gl::index_t offset = {})
-            : count{ count }, offset{ offset } {}
 
-        auto operator<=>(const range_t&) const = default;
-
-        gl::count_t count{};
-        gl::index_t offset{};
-    };
-    struct byterange_t
-    {
-        explicit byterange_t(gl::size_t size, gl::offset_t offset = {})
-            : size{ size }, offset{ offset } {}
-
-        auto operator<=>(const byterange_t&) const = default;
-
-        gl::size_t   size{};
-        gl::offset_t offset{};
-    };
 
     template<typename T, gl::uint32_t N>
     struct dimension_t

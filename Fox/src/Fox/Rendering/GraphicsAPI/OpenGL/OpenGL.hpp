@@ -1017,7 +1017,7 @@ namespace fox::gfx::api::gl
     }
     static void bind_samplers                           (std::span<const gl::handle_t> samplers, gl::range_t range)
     {
-        glBindSamplers(range.offset, range.count, gl::to_underlying_ptr(samplers.data()));
+        glBindSamplers(range.index, range.count, gl::to_underlying_ptr(samplers.data()));
     }
     static auto sampler_parameter                       (gl::handle_t sampler, gl::sampler_parameter_v value)
     {
@@ -1584,12 +1584,12 @@ namespace fox::gfx::api::gl
 
     static void draw_arrays                             (glf::Draw::Mode mode, gl::range_t range)
     {
-        glDrawArrays(gl::to_underlying(mode), static_cast<gl::int32_t>(range.offset), static_cast<gl::sizei_t>(range.count));
+        glDrawArrays(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count));
     }
     static void draw_arrays_instanced                   (glf::Draw::Mode mode, gl::range_t range, gl::sizei_t instanceCount, std::optional<gl::uint32_t> baseInstance)
     {
-        if   (baseInstance.has_value()) glDrawArraysInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::int32_t>(range.offset), static_cast<gl::sizei_t>(range.count), instanceCount, baseInstance.value());
-        else                            glDrawArraysInstanced            (gl::to_underlying(mode), static_cast<gl::int32_t>(range.offset), static_cast<gl::sizei_t>(range.count), instanceCount);
+        if   (baseInstance.has_value()) glDrawArraysInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), instanceCount, baseInstance.value());
+        else                            glDrawArraysInstanced            (gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), instanceCount);
     }
     static void draw_elements                           (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t count)
     {
