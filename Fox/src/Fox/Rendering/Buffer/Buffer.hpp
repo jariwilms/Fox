@@ -166,16 +166,6 @@ namespace fox::gfx
             _->copy_range(offset, data);
         }
 
-        template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
-        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::count_t> offset = {})
-        {
-            _->map<ACCESS>(elements, offset);
-        }
-        void unmap()
-        {
-            _->unmap();
-        }
-
         fox::size_t   size()      const
         {
             return _->size();
@@ -183,10 +173,6 @@ namespace fox::gfx
         fox::count_t  count()     const
         {
             return _->count();
-        }
-        fox::bool_t   is_mapped() const
-        {
-            return _->is_mapped();
         }
         gfx::handle_t handle()    const
         {

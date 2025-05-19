@@ -69,7 +69,7 @@ namespace fox
         auto& camera          = observer.add_component<cmp::CameraComponent>(16.0f / 9.0f, 82.0f).get();
         auto& cameraTransform = observer.get_component<cmp::TransformComponent>().get();
 
-        cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 8.0f });
+        cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 2.0f });
 
 
 
@@ -142,8 +142,8 @@ namespace fox
         //Lights
         std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
         {
-            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{       1.0f       } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
-            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
+            //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.0f, 0.0f } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
+            std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
             //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
         };
 
@@ -214,10 +214,10 @@ namespace fox
 
 
 
-            auto& l = lights.at(0);
-            auto& [_1, _2] = l;
-            _2.x = glm::cos(fox::Time::since_epoch() / 5.0f) * 20.0f;
-            _2.z = glm::sin(fox::Time::since_epoch() / 5.0f) * 20.0f;
+            //auto& l = lights.at(0);
+            //auto& [_1, _2] = l;
+            //_2.x = glm::cos(fox::Time::since_epoch() / 5.0f) * 20.0f;
+            //_2.z = glm::sin(fox::Time::since_epoch() / 5.0f) * 20.0f;
 
 
 

@@ -100,7 +100,7 @@ namespace fox::gfx::api::gl
         }
         ~DynamicBuffer() override
         {
-            if (m_mappedData) unmap();
+            //if (m_mappedData) unmap();
         }
 
         void copy(std::span<const T> data)
@@ -115,36 +115,35 @@ namespace fox::gfx::api::gl
             gl::buffer_data(m_handle, byteOffset, data);
         }
 
-        template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
-        auto map(std::optional<fox::count_t> elements = {}, std::optional<gl::offset_t> offset = {})
-        {
-            if (is_mapped()) throw std::runtime_error{ "Buffer is already mapped!" };
+        //template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
+        //auto map(std::optional<fox::count_t> elements = {}, std::optional<gl::offset_t> offset = {})
+        //{
+        //    if (is_mapped()) throw std::runtime_error{ "Buffer is already mapped!" };
 
-            const auto& accessFlags = gl::map_buffer_access(ACCESS);
-            const auto& sizeBytes   = elements.value_or(count()) * sizeof(T);
-            const auto& offsetBytes = offset.value_or(0)         * sizeof(T);
+        //    const auto& accessFlags = gl::map_buffer_access(ACCESS);
+        //    const auto& sizeBytes   = elements.value_or(count()) * sizeof(T);
+        //    const auto& offsetBytes = offset.value_or(0)         * sizeof(T);
 
-            auto* data = gl::map_buffer(m_handle, accessFlags, gl::byterange_t{ sizeBytes, offsetBytes });
+        //    auto* data = gl::map_buffer(m_handle, accessFlags, gl::byterange_t{ sizeBytes, offsetBytes });
 
-            m_mappedData = std::make_shared<std::span<T>>(data, count());
+        //    m_mappedData = std::make_shared<std::span<T>>(data, count());
 
-            using ret_t = std::conditional_t<
-                ACCESS == api::Buffer::Access::Read           ||
-                ACCESS == api::Buffer::Access::ReadPersistent ||
-                ACCESS == api::Buffer::Access::ReadCoherent    , const T, T>;
-            return std::weak_ptr<std::span<ret_t>>{ m_mappedData };
-        }
-        void unmap()
-        {
-            m_mappedData.reset();
+        //    using ret_t = std::conditional_t<
+        //        ACCESS == api::Buffer::Access::Read           ||
+        //        ACCESS == api::Buffer::Access::ReadPersistent ||
+        //        ACCESS == api::Buffer::Access::ReadCoherent    , const T, T>;
+        //    return std::weak_ptr<std::span<ret_t>>{ m_mappedData };
+        //}
+        //void unmap()
+        //{
+        //    m_mappedData.reset();
 
-            gl::unmap_buffer(m_handle);
-        }
-
-        fox::bool_t is_mapped() const
-        {
-            return static_cast<fox::bool_t>(m_mappedData);
-        }
+        //    gl::unmap_buffer(m_handle);
+        //}
+        //fox::bool_t is_mapped() const
+        //{
+        //    return static_cast<fox::bool_t>(m_mappedData);
+        //}
 
         DynamicBuffer& operator=(DynamicBuffer&& other) noexcept
         {

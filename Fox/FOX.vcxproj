@@ -171,6 +171,7 @@
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Context\Context.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Concepts.hpp" />
+    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Data.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Flags.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Library.hpp" />
     <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Mapping.hpp" />

@@ -2,12 +2,13 @@
 
 #include "stdafx.hpp"
 
+#include "Core/Concepts.hpp"
+#include "Core/Data.hpp"
 #include "Core/Flags.hpp"
 #include "Core/Library.hpp"
 #include "Core/Mapping.hpp"
-#include "Core/Types.hpp"
 #include "Core/Parameters.hpp"
-#include "Core/Concepts.hpp"
+#include "Core/Types.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -416,10 +417,7 @@ namespace fox::gfx::api::gl
     //Chapter 2 - OpenGL Fundamentals
     static auto get_graphics_reset_status               ()
     {
-        gl::enum_t value{};
-        value = glGetGraphicsResetStatus();
-
-        return glf::Error::GraphicsResetStatus{ value };
+        return static_cast<glf::Error::GraphicsResetStatus>(glGetGraphicsResetStatus());
     }
     static void flush                                   ()
     {
@@ -433,9 +431,9 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 4 - Event Model
-    static void fence_sync                              ()
+    static auto fence_sync                              ()
     {
-        glFenceSync(gl::to_underlying(glf::Synchronization::Object::Condition::GPUCommandsComplete), gl::bitfield_t{ 0 });
+        return static_cast<gl::sync_t>(glFenceSync(gl::to_underlying(glf::Synchronization::Object::Condition::GPUCommandsComplete), static_cast<gl::bitfield_t>(0u)));
     }
     static void delete_sync                             (gl::sync_t sync)
     {
@@ -443,14 +441,11 @@ namespace fox::gfx::api::gl
     }
     static auto client_wait_sync                        (gl::sync_t sync, gl::uint64_t timeout)
     {
-        gl::enum_t value{};
-        value = glClientWaitSync(sync, gl::to_underlying(glf::Synchronization::FlushingBehavior::Commands), timeout);
-
-        return glf::Synchronization::Status{ value };
+        return static_cast<glf::Synchronization::Status>(glClientWaitSync(sync, gl::to_underlying(glf::Synchronization::FlushingBehavior::Commands), timeout));
     }
     static void server_wait_sync                        (gl::sync_t sync)
     {
-        glWaitSync(sync, gl::bitfield_t{ 0 }, gl::to_underlying(glf::Synchronization::Timeout::Ignored));
+        glWaitSync(sync, static_cast<gl::bitfield_t>(0u), gl::to_underlying(glf::Synchronization::Timeout::Ignored));
     }
     template<glf::Synchronization::Property P>
     static auto get_sync_value                          (gl::sync_t sync)
@@ -458,7 +453,7 @@ namespace fox::gfx::api::gl
         const auto& get_sync_iv = [](gl::sync_t sync, glf::Synchronization::Property property)
             {
                 gl::int32_t value{};
-                glGetSynciv(sync, gl::to_underlying(property), static_cast<gl::sizei_t>(sizeof(gl::int32_t)), nullptr, &value);
+                glGetSynciv(sync, gl::to_underlying(property), static_cast<gl::sizei_t>(1), nullptr, &value);
 
                 return value;
             };
@@ -468,7 +463,7 @@ namespace fox::gfx::api::gl
         if constexpr (P == glf::Synchronization::Property::Type)      return static_cast<glf::Synchronization::Object::Type>     (get_sync_iv(sync, P));
         if constexpr (P == glf::Synchronization::Property::Status)    return static_cast<glf::Synchronization::Object::Status>   (get_sync_iv(sync, P));
         if constexpr (P == glf::Synchronization::Property::Condition) return static_cast<glf::Synchronization::Object::Condition>(get_sync_iv(sync, P));
-        if constexpr (P == glf::Synchronization::Property::Flags)     return gl::bitfield_t{ 0u };
+        if constexpr (P == glf::Synchronization::Property::Flags)     return static_cast<gl::bitfield_t>                         (0u);
     }
 
     static auto create_query                            (glf::Query::Target target)
@@ -478,17 +473,28 @@ namespace fox::gfx::api::gl
 
         return handle;
     }
+    static auto create_queries                          (glf::Query::Target target, gl::uint32_t amount)
+    {
+        std::vector<gl::handle_t> handles(amount);
+        glCreateQueries(gl::to_underlying(target), static_cast<gl::sizei_t>(amount), gl::to_underlying_ptr(handles.data()));
+
+        return handles;
+    }
     static void delete_query                            (gl::handle_t query)
     {
-        if (query != gl::NullObject) glDeleteQueries(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&query));
+        glDeleteQueries(static_cast<gl::sizei_t>(1), gl::to_underlying_ptr(&query));
     }
-    static void begin_query                             (gl::handle_t query, glf::Query::Target target, std::optional<gl::uint32_t> index = std::nullopt)
+    static void delete_queries                          (std::span<const gl::handle_t> queries)
     {
-        glBeginQueryIndexed(gl::to_underlying(target), index.value_or(gl::uint32_t{ 0 }), gl::to_underlying(query));
+        glDeleteQueries(static_cast<gl::sizei_t>(queries.size()), gl::to_underlying_ptr(queries.data()));
     }
-    static void end_query                               (glf::Query::Target target, std::optional<gl::uint32_t> index = std::nullopt)
+    static void begin_query                             (gl::handle_t query, glf::Query::Target target, std::optional<gl::uint32_t> index)
     {
-        glEndQueryIndexed(gl::to_underlying(target), index.value_or(gl::uint32_t{ 0 }));
+        glBeginQueryIndexed(gl::to_underlying(target), index.value_or(0u), gl::to_underlying(query));
+    }
+    static void end_query                               (                    glf::Query::Target target, std::optional<gl::uint32_t> index)
+    {
+        glEndQueryIndexed(gl::to_underlying(target), index.value_or(0u));
     }
 
     template<glf::Query::Symbol S>
@@ -497,7 +503,7 @@ namespace fox::gfx::api::gl
         const auto& get_query_iv = [](glf::Query::Target target, glf::Query::Symbol symbol, std::optional<gl::uint32_t> index)
             {
                 gl::int32_t value{};
-                glGetQueryIndexediv(gl::to_underlying(target), index.value_or(gl::uint32_t{ 0 }), gl::to_underlying(symbol), &value);
+                glGetQueryIndexediv(gl::to_underlying(target), index.value_or(0u), gl::to_underlying(symbol), &value);
 
                 return value;
             };
@@ -507,7 +513,7 @@ namespace fox::gfx::api::gl
     template<glf::Query::Parameter P>
     static auto get_query_object_value                  (gl::handle_t query)
     {
-        const auto& get_query_object_iv = [](gl::handle_t query, glf::Query::Parameter parameter)
+        const auto& get_query_object_iv  = [](gl::handle_t query, glf::Query::Parameter parameter)
             {
                 gl::int32_t value{};
                 glGetQueryObjectiv(gl::to_underlying(query), gl::to_underlying(parameter), &value);
@@ -522,31 +528,27 @@ namespace fox::gfx::api::gl
                 return value;
             };
 
-
-
-        if constexpr (P == glf::Query::Parameter::Result)          return                         get_query_object_uiv(query, P);
-        if constexpr (P == glf::Query::Parameter::ResultNoWait)    return                         get_query_object_uiv(query, P);
-        if constexpr (P == glf::Query::Parameter::ResultAvailable) return static_cast<gl::bool_t>(get_query_object_iv (query, P));
-        if constexpr (P == glf::Query::Parameter::Target)          return                         get_query_object_iv (query, P);
+        if constexpr (P == glf::Query::Parameter::Result         ) return                                 get_query_object_uiv(query, P) ;
+        if constexpr (P == glf::Query::Parameter::ResultNoWait   ) return                                 get_query_object_uiv(query, P) ;
+        if constexpr (P == glf::Query::Parameter::ResultAvailable) return static_cast<gl::bool_t>        (get_query_object_iv (query, P));
+        if constexpr (P == glf::Query::Parameter::Target         ) return static_cast<glf::Query::Target>(get_query_object_iv (query, P));
     }
     template<glf::Query::Parameter P>
-    static void get_query_buffer_object_value           (gl::handle_t query, gl::handle_t buffer, gl::offset_t offset)
+    static void get_query_object_value_buffer           (gl::handle_t query, gl::handle_t buffer, gl::offset_t offset)
     {
-        const auto& get_query_buffer_object_iv  = [](gl::handle_t query, gl::handle_t buffer, glf::Query::Parameter parameter, gl::offset_t offset)
+        const auto& get_query_object_iv_buffer  = [](gl::handle_t query, gl::handle_t buffer, glf::Query::Parameter parameter, gl::offset_t offset)
             {
                 glGetQueryBufferObjectiv(gl::to_underlying(query), gl::to_underlying(buffer), gl::to_underlying(parameter), offset);
             };
-        const auto& get_query_buffer_object_uiv = [](gl::handle_t query, gl::handle_t buffer, glf::Query::Parameter parameter, gl::offset_t offset)
+        const auto& get_query_object_uiv_buffer = [](gl::handle_t query, gl::handle_t buffer, glf::Query::Parameter parameter, gl::offset_t offset)
             {
                 glGetQueryBufferObjectuiv(gl::to_underlying(query), gl::to_underlying(buffer), gl::to_underlying(parameter), offset);
             };
 
-
-
-        if constexpr (P == glf::Query::Parameter::Result)          get_query_buffer_object_uiv(query, buffer, P, offset);
-        if constexpr (P == glf::Query::Parameter::ResultNoWait)    get_query_buffer_object_uiv(query, buffer, P, offset);
-        if constexpr (P == glf::Query::Parameter::ResultAvailable) get_query_buffer_object_iv (query, buffer, P, offset);
-        if constexpr (P == glf::Query::Parameter::Target)          get_query_buffer_object_iv (query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::Result         ) get_query_object_uiv_buffer(query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::ResultNoWait   ) get_query_object_uiv_buffer(query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::ResultAvailable) get_query_object_iv_buffer (query, buffer, P, offset);
+        if constexpr (P == glf::Query::Parameter::Target         ) get_query_object_iv_buffer (query, buffer, P, offset);
     }
 
     static void query_counter                           (gl::handle_t query)
@@ -560,21 +562,49 @@ namespace fox::gfx::api::gl
     static auto create_buffer                           ()
     {
         gl::handle_t handle{};
-        glCreateBuffers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle));
+        glCreateBuffers(static_cast<gl::sizei_t>(1), gl::to_underlying_ptr(&handle));
 
         return handle;
     }
+    static auto create_buffers                          (gl::uint32_t amount)
+    {
+        std::vector<gl::handle_t> handles(amount);
+        glCreateBuffers(static_cast<gl::sizei_t>(amount), gl::to_underlying_ptr(handles.data()));
+
+        return handles;
+    }
     static void delete_buffer                           (gl::handle_t buffer)
     {
-        if (buffer != gl::NullObject) glDeleteBuffers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&buffer));
+        glDeleteBuffers(static_cast<gl::sizei_t>(1), gl::to_underlying_ptr(&buffer));
+    }
+    static void delete_buffers                          (std::span<const gl::handle_t> buffers)
+    {
+        glDeleteBuffers(static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
     static void bind_buffer_base                        (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::uint32_t index)
     {
         glBindBufferBase(gl::to_underlying(target), index, gl::to_underlying(buffer));
     }
+    static void bind_buffers_base                       (std::span<const gl::handle_t> buffers, glf::Buffer::BaseTarget target, uint32_t index)
+    {
+        glBindBuffersBase(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
+    }
     static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::uint32_t index, gl::byterange_t range)
     {
         glBindBufferRange(gl::to_underlying(target), index, gl::to_underlying(buffer), range.offset, range.size);
+    }
+    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::uint32_t index)
+    {
+        std::vector<gl::size_t>   sizes  (ranges.size());
+        std::vector<gl::offset_t> offsets(ranges.size());
+
+        for (const auto& range : ranges)
+        {
+            sizes  .emplace_back(range.size);
+            offsets.emplace_back(range.offset);
+        }
+
+        glBindBuffersRange(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()), offsets.data(), sizes.data());
     }
     
     static void buffer_storage                          (gl::handle_t buffer, glf::Buffer::StorageFlags flags, gl::size_t size)
@@ -598,21 +628,6 @@ namespace fox::gfx::api::gl
         else                     glClearNamedBufferData   (gl::to_underlying(buffer), gl::to_underlying(format),                             gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
     }
     
-    template<typename T>
-    static auto map_buffer                              (gl::handle_t buffer, glf::Buffer::Mapping::Access access, std::optional<gl::byterange_t> range)
-    {
-        if   (range.has_value()) return reinterpret_cast<T*>(glMapNamedBufferRange(gl::to_underlying(buffer), range->offset, range->size, gl::to_underlying(access)));
-        else                     return reinterpret_cast<T*>(glMapNamedBuffer     (gl::to_underlying(buffer), gl::to_underlying(access)));
-    }
-    static void flush_mapped_buffer_range               (gl::handle_t buffer, gl::byterange_t range)
-    {
-        glFlushMappedNamedBufferRange(gl::to_underlying(buffer), range.offset, range.size);
-    }
-    static void unmap_buffer                            (gl::handle_t buffer)
-    {
-        const auto& status = glUnmapNamedBuffer(gl::to_underlying(buffer));
-        if (!status) throw std::runtime_error{ "Buffer data store may be undefined!" };
-    }
     static void invalidate_buffer_data                  (gl::handle_t buffer, std::optional<gl::byterange_t> range)
     {
         if   (range.has_value()) glInvalidateBufferSubData(gl::to_underlying(buffer), range->offset, range->size);
