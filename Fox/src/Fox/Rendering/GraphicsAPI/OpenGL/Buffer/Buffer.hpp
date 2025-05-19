@@ -116,7 +116,7 @@ namespace fox::gfx::api::gl
         }
 
         template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
-        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::offset_t> offset = {})
+        auto map(std::optional<fox::count_t> elements = {}, std::optional<gl::offset_t> offset = {})
         {
             if (is_mapped()) throw std::runtime_error{ "Buffer is already mapped!" };
 
@@ -124,7 +124,7 @@ namespace fox::gfx::api::gl
             const auto& sizeBytes   = elements.value_or(count()) * sizeof(T);
             const auto& offsetBytes = offset.value_or(0)         * sizeof(T);
 
-            auto* data = gl::map_buffer_range(m_handle, accessFlags, gl::size_t{ sizeBytes }, gl::offset_t{ offsetBytes });
+            auto* data = gl::map_buffer(m_handle, accessFlags, gl::byterange_t{ sizeBytes, offsetBytes });
 
             m_mappedData = std::make_shared<std::span<T>>(data, count());
 

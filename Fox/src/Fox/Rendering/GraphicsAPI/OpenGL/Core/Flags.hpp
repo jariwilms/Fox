@@ -98,39 +98,50 @@ namespace fox::gfx::api::glf
         };
         enum class Format : gl::enum_t
         {
-            R8           = GL_R8,
-            R16          = GL_R16,
-            R16_FLOAT    = GL_R16F,
-            R32_FLOAT    = GL_R32F,
-            R8_INT       = GL_R8I,
-            R16_INT      = GL_R16I,
-            R32_INT      = GL_R32I,
-            R8U_INT      = GL_R8UI,
-            R16_UINT     = GL_R16UI,
-            R32_UINT     = GL_R32UI,
-            RG8          = GL_RG8,
-            RG16         = GL_RG16,
-            RG16_FLOAT   = GL_RG16F,
-            RG32_FLOAT   = GL_RG32F,
-            RG8_INT      = GL_RG8I,
-            RG16_INT     = GL_RG16I,
-            RG32_INT     = GL_RG32I,
-            RG8U_INT     = GL_RG8UI,
-            RG16_UINT    = GL_RG16UI,
-            RG32_UINT    = GL_RG32UI,
-            RGB32_FLOAT  = GL_RGB32F,
-            RGB32_INT    = GL_RGB32I,
-            RGB32_UINT   = GL_RGB32UI,
-            RGBA8        = GL_RGBA8,
-            RGBA16       = GL_RGBA16,
-            RGBA16_FLOAT = GL_RGBA16F,
-            RGBA32_FLOAT = GL_RGBA32F,
-            RGBA8_INT    = GL_RGBA8I,
-            RGBA16_INT   = GL_RGBA16I,
-            RGBA32_INT   = GL_RGBA32I,
-            RGBA8U_INT   = GL_RGBA8UI,
-            RGBA16_UINT  = GL_RGBA16UI,
-            RGBA32_UINT  = GL_RGBA32UI,
+            R8           = GL_R8, 
+            RG8          = GL_RG8, 
+            RGBA8        = GL_RGBA8, 
+
+            R16          = GL_R16, 
+            RG16         = GL_RG16, 
+            RGBA16       = GL_RGBA16, 
+
+            R8_INT       = GL_R8I, 
+            RG8_INT      = GL_RG8I, 
+            RGBA8_INT    = GL_RGBA8I, 
+
+            R16_INT      = GL_R16I, 
+            RG16_INT     = GL_RG16I, 
+            RGBA16_INT   = GL_RGBA16I, 
+
+            R32_INT      = GL_R32I, 
+            RG32_INT     = GL_RG32I, 
+            RGB32_INT    = GL_RGB32I, 
+            RGBA32_INT   = GL_RGBA32I, 
+
+            R8_UINT      = GL_R8UI, 
+            RG8_UINT     = GL_RG8UI, 
+            RGBA8_UINT   = GL_RGBA8UI, 
+
+            R16_UINT     = GL_R16UI, 
+            RG16_UINT    = GL_RG16UI, 
+            RGBA16_UINT  = GL_RGBA16UI, 
+            RGBA32_UINT  = GL_RGBA32UI, 
+
+            R32_UINT     = GL_R32UI, 
+            RG32_UINT    = GL_RG32UI, 
+            RGB32_UINT   = GL_RGB32UI, 
+
+            R16_FLOAT    = GL_R16F, 
+            R32_FLOAT    = GL_R32F, 
+
+            RG16_FLOAT   = GL_RG16F, 
+            RG32_FLOAT   = GL_RG32F, 
+
+            RGB32_FLOAT  = GL_RGB32F, 
+
+            RGBA16_FLOAT = GL_RGBA16F, 
+            RGBA32_FLOAT = GL_RGBA32F, 
         };
         enum class Mask : gl::bitfield_t
         {
@@ -773,11 +784,17 @@ namespace fox::gfx::api::glf
         };
         enum class Parameter : gl::enum_t
         {
-            DefaultWidth                = GL_FRAMEBUFFER_DEFAULT_WIDTH, 
+            ColorReadFormat             = GL_IMPLEMENTATION_COLOR_READ_FORMAT, 
+            ColorReadType               = GL_IMPLEMENTATION_COLOR_READ_TYPE, 
+            DefaultFixedSampleLocations = GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS, 
             DefaultHeight               = GL_FRAMEBUFFER_DEFAULT_HEIGHT, 
             DefaultLayers               = GL_FRAMEBUFFER_DEFAULT_LAYERS, 
             DefaultSamples              = GL_FRAMEBUFFER_DEFAULT_SAMPLES, 
-            DefaultFixedSampleLocations = GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS, 
+            DefaultWidth                = GL_FRAMEBUFFER_DEFAULT_WIDTH, 
+            DoubleBuffer                = GL_DOUBLEBUFFER, 
+            SampleBuffers               = GL_SAMPLE_BUFFERS, 
+            Samples                     = GL_SAMPLES, 
+            Stereo                      = GL_STEREO, 
         };
     };
     struct     Geometry
@@ -1107,34 +1124,34 @@ namespace fox::gfx::api::glf
         };
         enum class Parameter : gl::enum_t
         {
-            IsSeparable                           = GL_PROGRAM_SEPARABLE, 
-            DeleteStatus                          = GL_DELETE_STATUS, 
-            LinkStatus                            = GL_LINK_STATUS, 
-            ValidateStatus                        = GL_VALIDATE_STATUS, 
-            AttachedShaders                       = GL_ATTACHED_SHADERS, 
-            InfoLogLength                         = GL_INFO_LOG_LENGTH, 
-            BinaryLength                          = GL_PROGRAM_BINARY_LENGTH, 
-            IsBinaryRetrievable                   = GL_PROGRAM_BINARY_RETRIEVABLE_HINT, 
-            ComputeWorkGroupSize                  = GL_COMPUTE_WORK_GROUP_SIZE, 
-            ActiveUniforms                        = GL_ACTIVE_UNIFORMS, 
-            ActiveUniformMaximumLength            = GL_ACTIVE_UNIFORM_MAX_LENGTH,
-            ActiveAttributes                      = GL_ACTIVE_ATTRIBUTES, 
+            ActiveAtomicCounterBuffers            = GL_ACTIVE_ATOMIC_COUNTER_BUFFERS, 
             ActiveAttributeMaximumLength          = GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
-            GeometryVerticesOut                   = GL_GEOMETRY_VERTICES_OUT, 
+            ActiveAttributes                      = GL_ACTIVE_ATTRIBUTES, 
+            ActiveUniformBlockMaximumNameLength   = GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, 
+            ActiveUniformBlocks                   = GL_ACTIVE_UNIFORM_BLOCKS, 
+            ActiveUniformMaximumLength            = GL_ACTIVE_UNIFORM_MAX_LENGTH,
+            ActiveUniforms                        = GL_ACTIVE_UNIFORMS, 
+            AttachedShaders                       = GL_ATTACHED_SHADERS, 
+            BinaryLength                          = GL_PROGRAM_BINARY_LENGTH, 
+            ComputeWorkGroupSize                  = GL_COMPUTE_WORK_GROUP_SIZE, 
+            DeleteStatus                          = GL_DELETE_STATUS, 
             GeometryInputType                     = GL_GEOMETRY_INPUT_TYPE, 
             GeometryOutputType                    = GL_GEOMETRY_OUTPUT_TYPE, 
             GeometryShaderInvocations             = GL_GEOMETRY_SHADER_INVOCATIONS, 
-            TransformFeedbackBufferMode           = GL_TRANSFORM_FEEDBACK_BUFFER_MODE, 
-            TransformFeedbackVaryings             = GL_TRANSFORM_FEEDBACK_VARYINGS, 
-            TransformFeedbackVaryingMaximumLength = GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH, 
-            ActiveUniformBlocks                   = GL_ACTIVE_UNIFORM_BLOCKS, 
-            ActiveUniformBlockMaximumNameLength   = GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH, 
+            GeometryVerticesOut                   = GL_GEOMETRY_VERTICES_OUT, 
+            InfoLogLength                         = GL_INFO_LOG_LENGTH, 
+            IsBinaryRetrievable                   = GL_PROGRAM_BINARY_RETRIEVABLE_HINT, 
+            IsSeparable                           = GL_PROGRAM_SEPARABLE, 
+            LinkStatus                            = GL_LINK_STATUS, 
             TessellationControlOutputVertices     = GL_TESS_CONTROL_OUTPUT_VERTICES, 
             TessellationGenerationMode            = GL_TESS_GEN_MODE, 
+            TessellationGenerationPointMode       = GL_TESS_GEN_POINT_MODE, 
             TessellationGenerationSpacing         = GL_TESS_GEN_SPACING, 
             TessellationGenerationVertexOrder     = GL_TESS_GEN_VERTEX_ORDER, 
-            TessellationGenerationPointMode       = GL_TESS_GEN_POINT_MODE, 
-            ActiveAtomicCounterBuffers            = GL_ACTIVE_ATOMIC_COUNTER_BUFFERS, 
+            TransformFeedbackBufferMode           = GL_TRANSFORM_FEEDBACK_BUFFER_MODE, 
+            TransformFeedbackVaryingMaximumLength = GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH, 
+            TransformFeedbackVaryings             = GL_TRANSFORM_FEEDBACK_VARYINGS, 
+            ValidateStatus                        = GL_VALIDATE_STATUS, 
         };
         enum class Resource : gl::enum_t
         {
@@ -1306,17 +1323,17 @@ namespace fox::gfx::api::glf
         enum class Parameter : gl::enum_t
         {
             BorderColor         = GL_TEXTURE_BORDER_COLOR, 
-            CompareMode         = GL_TEXTURE_COMPARE_MODE, 
             CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
-            MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
-            MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
-            MaximumAnisotropy   = GL_TEXTURE_MAX_ANISOTROPY, 
+            CompareMode         = GL_TEXTURE_COMPARE_MODE, 
             LodBias             = GL_TEXTURE_LOD_BIAS, 
+            MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
+            MaximumAnisotropy   = GL_TEXTURE_MAX_ANISOTROPY, 
             MaximumLod          = GL_TEXTURE_MAX_LOD, 
+            MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
             MinimumLod          = GL_TEXTURE_MIN_LOD, 
+            WrappingR           = GL_TEXTURE_WRAP_R, 
             WrappingS           = GL_TEXTURE_WRAP_S, 
             WrappingT           = GL_TEXTURE_WRAP_T, 
-            WrappingR           = GL_TEXTURE_WRAP_R, 
         };
     };
     struct     Shader
@@ -1809,23 +1826,20 @@ namespace fox::gfx::api::glf
                 UnsignedInteger_10_11_11_11_Float_Rev = GL_UNSIGNED_INT_10F_11F_11F_REV, 
             };
         };
-        enum class IndexedParameter : gl::enum_t
-        {
-            Enabled        = GL_VERTEX_ATTRIB_ARRAY_ENABLED, 
-            Size           = GL_VERTEX_ATTRIB_ARRAY_SIZE, 
-            Stride         = GL_VERTEX_ATTRIB_ARRAY_STRIDE, 
-            Type           = GL_VERTEX_ATTRIB_ARRAY_TYPE, 
-            IsNormalized   = GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, 
-            IsIntegerData  = GL_VERTEX_ATTRIB_ARRAY_INTEGER, 
-            IsLongData     = GL_VERTEX_ATTRIB_ARRAY_LONG, 
-            Divisor        = GL_VERTEX_ATTRIB_ARRAY_DIVISOR, 
-            RelativeOffset = GL_VERTEX_ATTRIB_RELATIVE_OFFSET, 
-
-            BindingOffset  = GL_VERTEX_BINDING_OFFSET,
-        };
         enum class Parameter : gl::enum_t
         {
             ElementArrayBufferBinding = GL_ELEMENT_ARRAY_BUFFER_BINDING, 
+
+            BindingOffset             = GL_VERTEX_BINDING_OFFSET,
+            Divisor                   = GL_VERTEX_ATTRIB_ARRAY_DIVISOR, 
+            Enabled                   = GL_VERTEX_ATTRIB_ARRAY_ENABLED, 
+            IsIntegerData             = GL_VERTEX_ATTRIB_ARRAY_INTEGER, 
+            IsLongData                = GL_VERTEX_ATTRIB_ARRAY_LONG, 
+            IsNormalized              = GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, 
+            RelativeOffset            = GL_VERTEX_ATTRIB_RELATIVE_OFFSET, 
+            Size                      = GL_VERTEX_ATTRIB_ARRAY_SIZE, 
+            Stride                    = GL_VERTEX_ATTRIB_ARRAY_STRIDE, 
+            Type                      = GL_VERTEX_ATTRIB_ARRAY_TYPE, 
         };
     };
     struct     VertexAttribute
@@ -1836,17 +1850,17 @@ namespace fox::gfx::api::glf
         };
         enum class Parameter : gl::enum_t
         {
+            Binding        = GL_VERTEX_ATTRIB_BINDING, 
+            BufferBinding  = GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, 
+            Divisor        = GL_VERTEX_ATTRIB_ARRAY_DIVISOR, 
             Enabled        = GL_VERTEX_ATTRIB_ARRAY_ENABLED, 
+            IsIntegerData  = GL_VERTEX_ATTRIB_ARRAY_INTEGER,
+            IsLongData     = GL_VERTEX_ATTRIB_ARRAY_LONG,
+            IsNormalized   = GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, 
+            RelativeOffset = GL_VERTEX_ATTRIB_RELATIVE_OFFSET, 
             Size           = GL_VERTEX_ATTRIB_ARRAY_SIZE, 
             Stride         = GL_VERTEX_ATTRIB_ARRAY_STRIDE, 
             Type           = GL_VERTEX_ATTRIB_ARRAY_TYPE, 
-            IsNormalized   = GL_VERTEX_ATTRIB_ARRAY_NORMALIZED, 
-            IsIntegerData  = GL_VERTEX_ATTRIB_ARRAY_INTEGER,
-            IsLongData     = GL_VERTEX_ATTRIB_ARRAY_LONG,
-            Divisor        = GL_VERTEX_ATTRIB_ARRAY_DIVISOR, 
-            BufferBinding  = GL_VERTEX_ATTRIB_ARRAY_BUFFER_BINDING, 
-            Binding        = GL_VERTEX_ATTRIB_BINDING, 
-            RelativeOffset = GL_VERTEX_ATTRIB_RELATIVE_OFFSET, 
         };
         enum class Pointer : gl::enum_t
         {

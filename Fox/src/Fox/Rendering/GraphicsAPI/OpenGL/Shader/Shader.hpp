@@ -18,18 +18,18 @@ namespace fox::gfx::api::gl
             const auto& type   = gl::map_shader_type(stage);
             const auto& shader = gl::create_shader(type);
 
-            gl::program_specification(m_handle, glf::Program::Specification::Separable, gl::True);
+            gl::program_parameter(m_handle, glf::Program::Specification::Separable, gl::True);
             gl::shader_binary(shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary);
             gl::specialize_shader(shader, "main");
 
-            const auto& compileStatus = gl::get_shader_iv(shader, glf::Shader::Parameter::CompileStatus);
-            if (compileStatus != gl::True) throw std::runtime_error{ gl::shader_info_log(shader) };
+            const auto& compileStatus = gl::get_shader_value<glf::Shader::Parameter::CompileStatus>(shader);
+            if (compileStatus != gl::True) throw std::runtime_error{ gl::get_shader_info_log(shader) };
             
             gl::attach_shader(m_handle, shader);
             gl::link_program(m_handle);
 
-            const auto& linkStatus = gl::get_program_iv(m_handle, glf::Program::Parameter::LinkStatus);
-            if (linkStatus != gl::True) throw std::runtime_error{ gl::program_info_log(m_handle) };
+            const auto& linkStatus = gl::get_program_value<glf::Program::Parameter::LinkStatus>(m_handle);
+            if (linkStatus != gl::True) throw std::runtime_error{ gl::get_program_info_log(m_handle) };
 
             gl::detach_shader(m_handle, shader);
             gl::delete_shader(shader);
