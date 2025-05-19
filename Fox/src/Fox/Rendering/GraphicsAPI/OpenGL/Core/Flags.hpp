@@ -192,26 +192,17 @@ namespace fox::gfx::api::glf
 
             Usage        = GL_BUFFER_USAGE, 
         };
-        enum       StorageFlags : gl::bitfield_t
+        enum class StorageFlags : gl::bitfield_t
         {
-            None                = gl::bitfield_t{ 0 },
-                                
-            Read                = GL_MAP_READ_BIT,
-            Write               = GL_MAP_WRITE_BIT,
-            ReadWrite           = Read | Write, 
-                                
-            DynamicStorage      = GL_DYNAMIC_STORAGE_BIT,
-            ClientStorage       = GL_CLIENT_STORAGE_BIT,
+            StaticStorage  = gl::bitfield_t{}, 
+            DynamicStorage = GL_DYNAMIC_STORAGE_BIT, 
 
-            ReadPersistent      = GL_MAP_PERSISTENT_BIT | Read,
-            WritePersistent     = GL_MAP_PERSISTENT_BIT | Write,
-            ReadWritePersistent = GL_MAP_PERSISTENT_BIT | ReadWrite,
+            MapRead        = GL_MAP_READ_BIT, 
+            MapWrite       = GL_MAP_WRITE_BIT, 
+            MapPersistent  = GL_MAP_PERSISTENT_BIT, 
+            MapCoherent    = GL_MAP_COHERENT_BIT, 
 
-            ReadCoherent        = GL_MAP_COHERENT_BIT   | ReadPersistent,
-            WriteCoherent       = GL_MAP_COHERENT_BIT   | WritePersistent,
-            ReadWriteCoherent   = GL_MAP_COHERENT_BIT   | ReadWritePersistent, 
-
-            Default             = ReadWrite | DynamicStorage
+            ClientStorage  = GL_CLIENT_STORAGE_BIT, 
         };
         enum class Target : gl::enum_t
         {
@@ -1904,6 +1895,7 @@ namespace fox::gfx::api::glf
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
 
     template<> struct BitmaskTraits<glf::Buffer::Mask>            { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Buffer::StorageFlags>    { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Attachment> { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Source>     { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::Barrier>         { static constexpr bool enable_bitmask_operations = true; };

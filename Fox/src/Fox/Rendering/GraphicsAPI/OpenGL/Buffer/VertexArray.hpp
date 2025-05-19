@@ -40,9 +40,10 @@ namespace fox::gfx::api::gl
             gl::vertex_array_binding_divisor(m_handle, attribute, divisor);
         }
 
-        void tie(gl::handle_t vertexBuffer, VertexLayout layout)
+        template<typename T>
+        void tie(std::shared_ptr<gl::Buffer<T>> vertexBuffer, VertexLayout layout)
         {
-            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer, m_bindingPoint, static_cast<gl::sizei_t>(layout.stride()), gl::offset_t{});
+            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer->handle(), m_bindingPoint, static_cast<gl::sizei_t>(layout.stride()), gl::offset_t{});
 
             gl::uint32_t offset{};
             for (const auto& attribute : layout.attributes())
@@ -55,14 +56,14 @@ namespace fox::gfx::api::gl
 
                 offset += static_cast<gl::uint32_t>(attribute.stride());
 
-                m_attributeIndexToBufferMap.emplace(m_attributeIndex, vertexBuffer);
+                m_attributeIndexToBufferMap.emplace(m_attributeIndex, vertexBuffer->handle());
                 ++m_attributeIndex;
             }
 
-            m_bindingPointToBufferMap.emplace(m_bindingPoint, vertexBuffer);
+            m_bindingPointToBufferMap.emplace(m_bindingPoint, vertexBuffer->handle());
             ++m_bindingPoint;
         }
-        void tie(std::shared_ptr<gl::StaticBuffer<api::Buffer::Type::Index, gl::uint32_t>> indexBuffer)
+        void tie(std::shared_ptr<gl::Buffer<gl::uint32_t>> indexBuffer)
         {
             gl::vertex_array_element_buffer(m_handle, indexBuffer->handle());
 
@@ -92,6 +93,6 @@ namespace fox::gfx::api::gl
         std::unordered_map<gl::uint32_t, gl::handle_t> m_bindingPointToBufferMap{};
         std::unordered_map<gl::uint32_t, gl::handle_t> m_attributeIndexToBufferMap{};
 
-        std::shared_ptr<gl::StaticBuffer<api::Buffer::Type::Index, gl::uint32_t>> m_indexBuffer{};
+        std::shared_ptr<gl::Buffer<gl::uint32_t>> m_indexBuffer{};
     };
 }

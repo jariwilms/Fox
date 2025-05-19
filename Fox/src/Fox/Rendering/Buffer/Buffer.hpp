@@ -11,12 +11,8 @@ namespace fox::gfx
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
         template<typename T>
-        using VertexBuffer        = api::gl::StaticBuffer<api::Buffer::Type::Vertex,  T>;
-        using IndexBuffer         = api::gl::StaticBuffer<api::Buffer::Type::Index,   fox::uint32_t>;
-
-        template<typename T>
-        using DynamicVertexBuffer = api::gl::DynamicBuffer<api::Buffer::Type::Vertex, T>;
-        using DynamicIndexBuffer  = api::gl::DynamicBuffer<api::Buffer::Type::Index,  fox::uint32_t>;
+        using VertexBuffer        = api::gl::Buffer<T>;
+        using IndexBuffer         = api::gl::Buffer<fox::uint32_t>;
 
         template<typename T>
         using UniformBuffer       = api::gl::UniformBuffer<T>;
@@ -35,6 +31,10 @@ namespace fox::gfx
         {
             return std::shared_ptr<const VertexBuffer>(new VertexBuffer{ data });
         }
+        static inline auto create(fox::count_t count)
+        {
+            return std::shared_ptr<const VertexBuffer>(new VertexBuffer{ count });
+        }
 
         fox::size_t   size()   const
         {
@@ -49,12 +49,16 @@ namespace fox::gfx
             return _->handle();
         }
 
-        auto impl() const { return _; } //Temporary solution... maybe
-        auto impl()       { return _; }
+        auto impl() const
+        {
+            return _;
+        }
 
     protected:
-        VertexBuffer(std::span<const T> data)
+        explicit VertexBuffer(std::span<const T> data)
             : _{ std::make_shared<impl::VertexBuffer<T>>(data) } {}
+        explicit VertexBuffer(fox::count_t count)
+            : _{ std::make_shared<impl::VertexBuffer<T>>(count) } {}
 
         std::shared_ptr<impl::VertexBuffer<T>> _;
     };
@@ -65,6 +69,10 @@ namespace fox::gfx
         {
             return std::shared_ptr<const IndexBuffer>(new IndexBuffer{ data });
         }
+        static inline auto create(fox::count_t count)
+        {
+            return std::shared_ptr<const IndexBuffer>(new IndexBuffer{ count });
+        }
 
         fox::size_t   size()   const
         {
@@ -79,114 +87,20 @@ namespace fox::gfx
             return _->handle();
         }
 
-        auto impl() const { return _; }
-        auto impl()       { return _; }
+        auto impl() const
+        {
+            return _;
+        }
 
     protected:
         IndexBuffer(std::span<const fox::uint32_t> data)
             : _{ std::make_shared<impl::IndexBuffer>(data) } {}
+        IndexBuffer(fox::count_t count)
+            : _{ std::make_shared<impl::IndexBuffer>(count) } {}
 
         std::shared_ptr<impl::IndexBuffer> _;
     };
-    template<typename T>
-    class DynamicVertexBuffer
-    {
-    public:
-        static inline auto create(fox::count_t count)
-        {
-            return std::shared_ptr<DynamicVertexBuffer>(new DynamicVertexBuffer{ count });
-        }
-        static inline auto create(std::span<const T> data)
-        {
-            return std::shared_ptr<DynamicVertexBuffer>(new DynamicVertexBuffer{ data });
-        }
 
-        void copy(std::span<const T> data)
-        {
-            _->copy(data);
-        }
-        void copy_range(fox::count_t offset, std::span<const T> data)
-        {
-            _->copy_range(offset, data);
-        }
-
-        template<api::Buffer::Access ACCESS = api::Buffer::Access::ReadWrite>
-        auto map(std::optional<fox::count_t> elements = {}, std::optional<fox::count_t> offset = {})
-        {
-            _->map<ACCESS>(elements, offset);
-        }
-        void unmap()
-        {
-            _->unmap();
-        }
-
-        fox::size_t   size()      const
-        {
-            return _->size();
-        }
-        fox::count_t  count()     const
-        {
-            return _->count();
-        }
-        fox::bool_t   is_mapped() const
-        {
-            return _->is_mapped();
-        }
-        gfx::handle_t handle()    const
-        {
-            return _->handle();
-        }
-
-    protected:
-        DynamicVertexBuffer(fox::count_t count)
-            : _{ std::make_shared<impl::DynamicVertexBuffer<T>>(count) } {}
-        DynamicVertexBuffer(std::span<const T> data)
-            : _{ std::make_shared<impl::DynamicVertexBuffer<T>>(data) } {}
-
-        std::shared_ptr<impl::DynamicVertexBuffer<T>> _;
-    };
-    class DynamicIndexBuffer
-    {
-    public:
-        static inline auto create(fox::count_t count)
-        {
-            return std::shared_ptr<DynamicIndexBuffer>(new DynamicIndexBuffer{ count });
-        }
-        static inline auto create(std::span<const fox::uint32_t> data)
-        {
-            return std::shared_ptr<DynamicIndexBuffer>(new DynamicIndexBuffer{ data });
-        }
-
-        void copy(std::span<const fox::uint32_t> data)
-        {
-            _->copy(data);
-        }
-        void copy_range(fox::count_t offset, std::span<const fox::uint32_t> data)
-        {
-            _->copy_range(offset, data);
-        }
-
-        fox::size_t   size()      const
-        {
-            return _->size();
-        }
-        fox::count_t  count()     const
-        {
-            return _->count();
-        }
-        gfx::handle_t handle()    const
-        {
-            return _->handle();
-        }
-
-    protected:
-        DynamicIndexBuffer(fox::count_t count)
-            : _{ std::make_shared<impl::DynamicIndexBuffer>(count) } {}
-        DynamicIndexBuffer(std::span<const fox::uint32_t> data)
-            : _{ std::make_shared<impl::DynamicIndexBuffer>(data) } {}
-
-        std::shared_ptr<impl::DynamicIndexBuffer> _;
-    };
     template<typename T>
     class UniformBuffer
     {
@@ -201,7 +115,7 @@ namespace fox::gfx
             _->bind_index(index);
         }
 
-        void copy(const T& data)
+        void copy    (const T& data)
         {
             _->copy(data);
         }
@@ -239,7 +153,7 @@ namespace fox::gfx
             return std::shared_ptr<UniformArrayBuffer>(new UniformArrayBuffer{ data });
         }
 
-        void bind_index(fox::uint32_t index) const
+        void bind_index      (fox::uint32_t index) const
         {
             _->bind_index(index);
         }
@@ -248,7 +162,7 @@ namespace fox::gfx
             _->bind_index_range(index, count, offset);
         }
 
-        void copy(std::span<const T, N> data)
+        void copy      (std::span<const T, N> data)
         {
             _->copy(data);
         }

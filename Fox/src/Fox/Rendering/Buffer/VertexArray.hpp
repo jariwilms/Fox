@@ -12,9 +12,8 @@ namespace fox::gfx
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 
-        template<api::Buffer::Type TYPE>
-        using BufferObject = api::gl::BufferObject<TYPE>;
         using VertexArray  = api::gl::VertexArray;
+
 #endif
     }
 
@@ -50,7 +49,7 @@ namespace fox::gfx
         template<typename T>
         void tie(std::shared_ptr<const gfx::VertexBuffer<T>> buffer, gfx::VertexLayout layout)
         {
-            _->tie(buffer->handle(), layout);
+            _->tie(buffer->impl(), layout);
         }
         void tie(std::shared_ptr<const gfx::IndexBuffer> buffer)
         {
