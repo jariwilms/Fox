@@ -12,12 +12,6 @@ namespace fox
 	using uchar_t    = unsigned char;
 	using schar_t    = signed char;
 
-	enum : fox::bool_t
-	{
-		False = false, 
-		True  = true, 
-	};
-
 	using int8_t     = std::int8_t;
 	using uint8_t    = std::uint8_t;
 	using int16_t    = std::int16_t;
@@ -35,7 +29,7 @@ namespace fox
 	using count_t    = fox::uint32_t; //Amount of elements
 	using index_t    = fox::uint32_t; //Amount of elements offset
 
-	using uuid_t     = std::bitset<128>;
+	using uuid_t     = std::bitset<128u>;
 
 	using Vector1i   = glm::ivec1;
 	using Vector2i   = glm::ivec2;
@@ -54,7 +48,11 @@ namespace fox
 	using Matrix4f   = glm::mat4;
 	using Quaternion = glm::quat;
 
-
+	enum : fox::bool_t
+	{
+		False = false, 
+		True  = true, 
+	};
 
 	struct     range_t
 	{

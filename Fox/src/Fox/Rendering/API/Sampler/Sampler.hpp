@@ -9,17 +9,21 @@ namespace fox::gfx::api
 	public:
         enum class Parameter
         {
+            CompareMode, 
+            CompareFunc, 
+
+            MinificationFilter, 
+            MagnificationFilter, 
+            
             WrappingS, 
             WrappingT, 
             WrappingR, 
-            MinificationFilter, 
-            MagnificationFilter, 
+            
             BorderColor, 
-            MinimumLod, 
-            MaximumLod, 
-            LodBias, 
-            CompareMode, 
-            CompareFunc, 
+            
+            MinimumLOD, 
+            MaximumLOD, 
+            LODBias, 
         };
 
 	protected:

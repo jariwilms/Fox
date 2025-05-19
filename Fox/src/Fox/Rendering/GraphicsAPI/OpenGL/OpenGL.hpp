@@ -1021,23 +1021,87 @@ namespace fox::gfx::api::gl
     }
     static auto sampler_parameter                       (gl::handle_t sampler, gl::sampler_parameter_v value)
     {
-        const auto& sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, std::span<const gl::int32_t>   values)
+        const auto& sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::int32_t   value)
             {
-                glSamplerParameterIiv(gl::to_underlying(sampler), gl::to_underlying(parameter), values.data());
+                glSamplerParameterIiv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
-        const auto& sampler_parameter_uiv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, std::span<const gl::uint32_t>  values)
+        const auto& sampler_parameter_uiv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::uint32_t  value)
             {
-                glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(parameter), values.data());
+                glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
-        const auto& sampler_parameter_fv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, std::span<const gl::float32_t> values)
+        const auto& sampler_parameter_fv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::float32_t value)
             {
-                glSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(parameter), values.data());
+                glSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
 
-        throw std::logic_error{ "The method or operation has not been implemented!" };
+        if (std::holds_alternative<gl::compare_mode_p>        (value))
+        {
+            const auto& v = std::get<gl::compare_mode_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareMode, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::compare_function_p>    (value))
+        {
+            const auto& v = std::get<gl::compare_function_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareFunction, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::magnification_filter_p>(value))
+        {
+            const auto& v = std::get<gl::magnification_filter_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MagnificationFilter, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::minification_filter_p> (value))
+        {
+            const auto& v = std::get<gl::minification_filter_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MinificationFilter, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::wrapping_s_p>          (value))
+        {
+            const auto& v = std::get<gl::wrapping_s_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingS, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::wrapping_t_p>          (value))
+        {
+            const auto& v = std::get<gl::wrapping_t_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingT, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::wrapping_r_p>          (value))
+        {
+            const auto& v = std::get<gl::wrapping_r_p>(value);
+            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingR, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<gl::border_color_p>        (value))
+        {
+            const auto& v = std::get<gl::border_color_p>(value);
+            
+            if (std::holds_alternative<std::array<gl::int32_t  , 4>>(v.value))
+            {
+                const auto& w = std::get<std::array<gl::int32_t, 4>>(v.value);
+                glSamplerParameterIiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), w.data());
+            }
+            if (std::holds_alternative<std::array<gl::uint32_t , 4>>(v.value))
+            {
+                const auto& w = std::get<std::array<gl::uint32_t, 4>>(v.value);
+                glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), w.data());
+            }
+            if (std::holds_alternative<std::array<gl::float32_t, 4>>(v.value))
+            {
+                const auto& w = std::get<std::array<gl::float32_t, 4>>(v.value);
+                glSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), w.data());
+            }
+        }
+        if (std::holds_alternative<gl::maximum_lod_p>         (value))
+        {
+            const auto& v = std::get<gl::maximum_lod_p>(value);
+            sampler_parameter_fv(sampler, glf::Sampler::Parameter::MaximumLOD, v.value);
+        }
+        if (std::holds_alternative<gl::minimum_lod_p>         (value))
+        {
+            const auto& v = std::get<gl::minimum_lod_p>(value);
+            sampler_parameter_fv(sampler, glf::Sampler::Parameter::MinimumLOD, v.value);
+        }
     }
     template<glf::Sampler::Parameter P>
-    static auto get_sampler_parameter_value(gl::handle_t sampler)
+    static auto get_sampler_parameter_value             (gl::handle_t sampler)
     {
         const auto& get_sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter)
             {
@@ -1071,18 +1135,18 @@ namespace fox::gfx::api::gl
 
 
 
-        if constexpr (P == glf::Sampler::Parameter::BorderColor        ) return get_border_color(sampler);
-        if constexpr (P == glf::Sampler::Parameter::CompareFunction    ) return static_cast<glf::Texture::ComparisonFunction> (get_sampler_parameter_uiv(sampler, P));
-        if constexpr (P == glf::Sampler::Parameter::CompareMode        ) return static_cast<glf::Texture::ComparisonMode>     (get_sampler_parameter_uiv(sampler, P));
-        if constexpr (P == glf::Sampler::Parameter::LodBias            ) return get_sampler_parameter_fv(sampler, P);
+        if constexpr (P == glf::Sampler::Parameter::BorderColor        ) return                                                get_border_color         (sampler);
+        if constexpr (P == glf::Sampler::Parameter::CompareFunction    ) return static_cast<glf::Texture::CompareFunction>    (get_sampler_parameter_uiv(sampler, P));
+        if constexpr (P == glf::Sampler::Parameter::CompareMode        ) return static_cast<glf::Texture::CompareMode>        (get_sampler_parameter_uiv(sampler, P));
+        if constexpr (P == glf::Sampler::Parameter::LodBias            ) return                                                get_sampler_parameter_fv (sampler, P);
         if constexpr (P == glf::Sampler::Parameter::MagnificationFilter) return static_cast<glf::Texture::MagnificationFilter>(get_sampler_parameter_uiv(sampler, P));
-        if constexpr (P == glf::Sampler::Parameter::MaximumAnisotropy  ) return get_sampler_parameter_fv(sampler, P);
-        if constexpr (P == glf::Sampler::Parameter::MaximumLod         ) return get_sampler_parameter_fv(sampler, P);
+        if constexpr (P == glf::Sampler::Parameter::MaximumAnisotropy  ) return                                                get_sampler_parameter_fv (sampler, P);
+        if constexpr (P == glf::Sampler::Parameter::MaximumLOD         ) return                                                get_sampler_parameter_fv (sampler, P);
         if constexpr (P == glf::Sampler::Parameter::MinificationFilter ) return static_cast<glf::Texture::MinificationFilter> (get_sampler_parameter_uiv(sampler, P));
-        if constexpr (P == glf::Sampler::Parameter::MinimumLod         ) return get_sampler_parameter_fv(sampler, P);
-        if constexpr (P == glf::Sampler::Parameter::WrappingR          ) return static_cast<glf::Texture::Wrapping>(get_sampler_parameter_uiv(sampler, P));
-        if constexpr (P == glf::Sampler::Parameter::WrappingS          ) return static_cast<glf::Texture::Wrapping>(get_sampler_parameter_uiv(sampler, P));
-        if constexpr (P == glf::Sampler::Parameter::WrappingT          ) return static_cast<glf::Texture::Wrapping>(get_sampler_parameter_uiv(sampler, P));
+        if constexpr (P == glf::Sampler::Parameter::MinimumLOD         ) return                                                get_sampler_parameter_fv (sampler, P);
+        if constexpr (P == glf::Sampler::Parameter::WrappingR          ) return static_cast<glf::Texture::Wrapping>           (get_sampler_parameter_uiv(sampler, P));
+        if constexpr (P == glf::Sampler::Parameter::WrappingS          ) return static_cast<glf::Texture::Wrapping>           (get_sampler_parameter_uiv(sampler, P));
+        if constexpr (P == glf::Sampler::Parameter::WrappingT          ) return static_cast<glf::Texture::Wrapping>           (get_sampler_parameter_uiv(sampler, P));
     }
 
     static auto pixel_store                             (glf::PackingMode mode, gl::int32_t parameter)
@@ -1179,32 +1243,32 @@ namespace fox::gfx::api::gl
         else                     glTextureBuffer     (gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer)                            );
     }
     
-    static void texture_parameter                       (gl::handle_t texture, gl::texture_parameter_v value) //TODO: implement further
+    static void texture_parameter                       (gl::handle_t texture, gl::texture_parameter_v value)
     {
-             if (std::holds_alternative<glf::Texture::MinificationFilter>(value))
+             if (std::holds_alternative<gl::magnification_filter_p>(value))
         {
-            const auto& v = std::get<glf::Texture::MinificationFilter>(value);
-            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_MIN_FILTER, gl::to_underlying(v));
+            const auto& v = std::get<gl::magnification_filter_p>(value);
+            glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::MagnificationFilter), gl::to_underlying(v.value));
         }
-        else if (std::holds_alternative<glf::Texture::MagnificationFilter>(value))
+        else if (std::holds_alternative<gl::minification_filter_p> (value))
         {
-            const auto& v = std::get<glf::Texture::MagnificationFilter>(value);
-            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_MAG_FILTER, gl::to_underlying(v));
+            const auto& v = std::get<gl::minification_filter_p>(value);
+            glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::MinificationFilter), gl::to_underlying(v.value));
         }
-        else if (std::holds_alternative<gl::wrapping_s_p>(value))
+        else if (std::holds_alternative<gl::wrapping_s_p>          (value))
         {
             const auto& v = std::get<gl::wrapping_s_p>(value);
-            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_WRAP_S, gl::to_underlying(v.wrapping));
+            glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::WrappingS), gl::to_underlying(v.value));
         }
-        else if (std::holds_alternative<gl::wrapping_t_p>(value))
+        else if (std::holds_alternative<gl::wrapping_t_p>          (value))
         {
             const auto& v = std::get<gl::wrapping_t_p>(value);
-            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_WRAP_T, gl::to_underlying(v.wrapping));
+            glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::WrappingT), gl::to_underlying(v.value));
         }
-        else if (std::holds_alternative<gl::wrapping_r_p>(value))
+        else if (std::holds_alternative<gl::wrapping_r_p>          (value))
         {
             const auto& v = std::get<gl::wrapping_r_p>(value);
-            glTextureParameteri(gl::to_underlying(texture), GL_TEXTURE_WRAP_R, gl::to_underlying(v.wrapping));
+            glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::WrappingR), gl::to_underlying(v.value));
         }
     }
 

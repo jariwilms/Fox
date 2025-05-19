@@ -37,8 +37,8 @@ namespace fox::gfx::api::gl
 
             if (filter != Filter::None)
             {
-                gl::texture_parameter(m_handle, gl::map_texture_min_filter(m_filter));
-                gl::texture_parameter(m_handle, gl::map_texture_mag_filter(m_filter));
+                gl::texture_parameter(m_handle, gl::magnification_filter_p{ gl::map_texture_mag_filter(m_filter) });
+                gl::texture_parameter(m_handle, gl::minification_filter_p { gl::map_texture_min_filter(m_filter) });
 
                 m_mipmapLevels = api::calculate_mipmap_level(m_dimensions);
             }

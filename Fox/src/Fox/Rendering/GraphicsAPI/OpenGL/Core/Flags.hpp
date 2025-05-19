@@ -1310,18 +1310,22 @@ namespace fox::gfx::api::glf
     {
         enum class Parameter : gl::enum_t
         {
-            BorderColor         = GL_TEXTURE_BORDER_COLOR, 
-            CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
-            CompareMode         = GL_TEXTURE_COMPARE_MODE, 
-            LodBias             = GL_TEXTURE_LOD_BIAS, 
+            CompareMode      = GL_TEXTURE_COMPARE_MODE, 
+            CompareFunction  = GL_TEXTURE_COMPARE_FUNC, 
+
             MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
-            MaximumAnisotropy   = GL_TEXTURE_MAX_ANISOTROPY, 
-            MaximumLod          = GL_TEXTURE_MAX_LOD, 
             MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
-            MinimumLod          = GL_TEXTURE_MIN_LOD, 
-            WrappingR           = GL_TEXTURE_WRAP_R, 
+            MaximumAnisotropy   = GL_TEXTURE_MAX_ANISOTROPY, 
+            
             WrappingS           = GL_TEXTURE_WRAP_S, 
             WrappingT           = GL_TEXTURE_WRAP_T, 
+            WrappingR           = GL_TEXTURE_WRAP_R, 
+            
+            BorderColor         = GL_TEXTURE_BORDER_COLOR, 
+            
+            MinimumLOD          = GL_TEXTURE_MIN_LOD, 
+            MaximumLOD          = GL_TEXTURE_MAX_LOD, 
+            LodBias             = GL_TEXTURE_LOD_BIAS, 
         };
     };
     struct     Shader
@@ -1458,7 +1462,7 @@ namespace fox::gfx::api::glf
             D    = GL_DEPTH_COMPONENT, 
             S    = GL_STENCIL_INDEX, 
         };
-        enum class ComparisonFunction : gl::enum_t
+        enum class CompareFunction : gl::enum_t
         {
             Always       = GL_ALWAYS, 
             Never        = GL_NEVER, 
@@ -1472,7 +1476,7 @@ namespace fox::gfx::api::glf
             Greater      = GL_GREATER, 
             GreaterEqual = GL_GEQUAL, 
         };
-        enum class ComparisonMode : gl::enum_t
+        enum class CompareMode : gl::enum_t
         {
             None      = GL_NONE, 
             Reference = GL_COMPARE_REF_TO_TEXTURE, 
