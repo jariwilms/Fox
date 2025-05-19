@@ -24,14 +24,17 @@ namespace fox::gfx::api::gl
     using float32_t  = GLfloat;
     using float64_t  = GLdouble;
 
-    using enum_t     = GLenum;       //Enumerated value of constants
-    using sizei_t    = GLsizei;      //Sizes and dimensions (should not be negative)
+    using enum_t     = GLenum;       //Enumerated constant value
+    using sizei_t    = GLsizei;      //Sizes and dimensions (may not be negative)
     using size_t     = GLsizeiptr;   //Size in bytes
     using offset_t   = GLintptr;     //Offset in bytes
     using sync_t     = GLsync;       //Synchronization primitive
-    using bitfield_t = GLbitfield;   //Value representing a combination of binary flags
+    using bitfield_t = GLbitfield;   //Bitwise combination of flags
     
     using count_t    = gl::uint32_t; //Element count
+    using index_t    = gl::uint32_t; //Element count offset
+
+    using time_t     = gl::uint64_t; //Duration in nanoseconds
 
     enum : gl::bool_t
     {
@@ -45,10 +48,6 @@ namespace fox::gfx::api::gl
     constexpr gl::handle_t DefaultFrameBuffer{};
     constexpr gl::handle_t NullObject{};
 
-
-
-
-
     class Object
     {
     public:
@@ -57,18 +56,14 @@ namespace fox::gfx::api::gl
             m_handle = std::exchange(other.m_handle, gl::NullObject);
         }
 
-        gl::handle_t handle() const
+        auto handle() const
         {
             return m_handle;
         }
 
         Object& operator=(Object&& other) noexcept
         {
-            if (this != &other)
-            {
-                m_handle = std::exchange(other.m_handle, m_handle);
-            }
-
+            if (this != &other) m_handle = std::exchange(other.m_handle, m_handle);
             return *this;
         }
 
@@ -77,29 +72,6 @@ namespace fox::gfx::api::gl
 
         gl::handle_t m_handle{ gl::NullObject };
     };
-
-
-
-
-
-    struct     range_t
-    {
-        explicit range_t(gl::count_t count, gl::count_t offset = {})
-            : count{ count }, offset{ offset } {}
-
-        gl::count_t count{};
-        gl::count_t offset{};
-    };
-    struct byterange_t
-    {
-        explicit byterange_t(gl::size_t size, gl::offset_t offset = {})
-            : size{ size }, offset{ offset } {}
-
-        gl::size_t   size{};
-        gl::offset_t offset{};
-    };
-
-
 
 
 
@@ -131,16 +103,33 @@ namespace fox::gfx::api::gl
     using Vector2d = gl::Vector<gl::float64_t, 2>;
     using Vector3d = gl::Vector<gl::float64_t, 3>;
     using Vector4d = gl::Vector<gl::float64_t, 4>;
-    
-    //using Vector1r = gl::Vector<gl::range_t,   1>;
-    //using Vector2r = gl::Vector<gl::range_t,   2>;
-    //using Vector3r = gl::Vector<gl::range_t,   3>;
 
     using Matrix2f = gl::Matrix<gl::float32_t, 2>;
     using Matrix3f = gl::Matrix<gl::float32_t, 3>;
     using Matrix4f = gl::Matrix<gl::float32_t, 4>;
 
 
+
+    struct     range_t
+    {
+        explicit range_t(gl::count_t count, gl::index_t offset = {})
+            : count{ count }, offset{ offset } {}
+
+        auto operator<=>(const range_t&) const = default;
+
+        gl::count_t count{};
+        gl::index_t offset{};
+    };
+    struct byterange_t
+    {
+        explicit byterange_t(gl::size_t size, gl::offset_t offset = {})
+            : size{ size }, offset{ offset } {}
+
+        auto operator<=>(const byterange_t&) const = default;
+
+        gl::size_t   size{};
+        gl::offset_t offset{};
+    };
 
     template<typename T, gl::uint32_t N>
     struct dimension_t
@@ -157,8 +146,6 @@ namespace fox::gfx::api::gl
     template<typename T> using line_t   = dimension_t<T, 1>;
     template<typename T> using area_t   = dimension_t<T, 2>;
     template<typename T> using volume_t = dimension_t<T, 3>;
-
-
 
 
 

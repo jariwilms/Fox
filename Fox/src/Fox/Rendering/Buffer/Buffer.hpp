@@ -10,6 +10,8 @@ namespace fox::gfx
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using range_t             = api::gl::range_t;
+
         template<typename T>
         using VertexBuffer        = api::gl::Buffer<T>;
         using IndexBuffer         = api::gl::Buffer<fox::uint32_t>;
@@ -36,20 +38,19 @@ namespace fox::gfx
             return std::shared_ptr<const VertexBuffer>(new VertexBuffer{ count });
         }
 
-        fox::size_t   size()   const
+        auto size  () const
         {
             return _->size();
         }
-        fox::count_t  count()  const
+        auto count () const
         {
             return _->count();
         }
-        gfx::handle_t handle() const
+        auto handle() const
         {
             return _->handle();
         }
-
-        auto impl() const
+        auto impl  () const
         {
             return _;
         }
@@ -74,20 +75,19 @@ namespace fox::gfx
             return std::shared_ptr<const IndexBuffer>(new IndexBuffer{ count });
         }
 
-        fox::size_t   size()   const
+        auto size  () const
         {
             return _->size();
         }
-        fox::count_t  count()  const
+        auto count () const
         {
             return _->count();
         }
-        gfx::handle_t handle() const
+        auto handle() const
         {
             return _->handle();
         }
-
-        auto impl() const
+        auto impl  () const
         {
             return _;
         }
@@ -110,7 +110,7 @@ namespace fox::gfx
             return std::shared_ptr<UniformBuffer>(new UniformBuffer{ data });
         }
 
-        void bind_index(fox::uint32_t index) const
+        void bind_index(fox::index_t index) const
         {
             _->bind_index(index);
         }
@@ -120,18 +120,22 @@ namespace fox::gfx
             _->copy(data);
         }
         template<typename... T>
-        void copy_sub(fox::size_t offset, const std::tuple<T...>& data)
+        void copy_sub(fox::offset_t offset, const std::tuple<T...>& data)
         {
             _->copy_sub<T...>(offset, data);
         }
 
-        fox::size_t   size()   const
+        auto size  () const
         {
             return _->size();
         }
-        gfx::handle_t handle() const
+        auto handle() const
         {
             return _->handle();
+        }
+        auto impl()   const
+        {
+            return _;
         }
 
     protected:
@@ -153,35 +157,36 @@ namespace fox::gfx
             return std::shared_ptr<UniformArrayBuffer>(new UniformArrayBuffer{ data });
         }
 
-        void bind_index      (fox::uint32_t index) const
+        void bind_index      (fox::index_t index, std::optional<fox::range_t> range = {}) const
         {
-            _->bind_index(index);
-        }
-        void bind_index_range(fox::uint32_t index, fox::count_t count, fox::count_t offset) const
-        {
-            _->bind_index_range(index, count, offset);
+            if   (range.has_value()) _->bind_index(index, impl::range_t{ range->count, range->index });
+            else                     _->bind_index(index, {});
         }
 
         void copy      (std::span<const T, N> data)
         {
             _->copy(data);
         }
-        void copy_index(fox::count_t offset, const T& data)
+        void copy_index(fox::index_t index, const T& data)
         {
-            _->copy_index(offset, data);
+            _->copy_index(index, data);
         }
-        void copy_range(fox::count_t offset, std::span<const T> data)
+        void copy_range(fox::index_t index, std::span<const T> data)
         {
-            _->copy_range(offset, data);
+            _->copy_range(index, data);
         }
 
-        fox::size_t   size()   const
+        auto size  () const
         {
             return _->size();
         }
-        gfx::handle_t handle() const
+        auto handle() const
         {
             return _->handle();
+        }
+        auto impl  () const
+        {
+            return _;
         }
 
     protected:

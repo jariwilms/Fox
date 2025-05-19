@@ -25,8 +25,9 @@ namespace fox::gfx::api::gl
 
 
 
-    
-    //Chapter 10 - Vertex Specification and Drawing Commands
+
+
+    //Common Dependencies
     static void enable                                  (glf::Feature feature, std::optional<gl::uint32_t> index = {})
     {
         if   (index.has_value()) glEnablei(gl::to_underlying(feature), index.value());
@@ -38,9 +39,6 @@ namespace fox::gfx::api::gl
         else                     glDisable (gl::to_underlying(feature)               );
     }
 
-
-
-    //Chapter 22 - Context State Queries
     template<glf::Data D>
     static auto get_value                               (std::optional<gl::uint32_t> index = {})
     {
@@ -140,7 +138,7 @@ namespace fox::gfx::api::gl
                 gl::Vector4f value{};
 
                 if (index.has_value()) glGetFloati_v(gl::to_underlying(data), index.value(), glm::value_ptr(value));
-                else                     glGetFloatv(gl::to_underlying(data), glm::value_ptr(value));
+                else                   glGetFloatv  (gl::to_underlying(data),                glm::value_ptr(value));
 
                 return value;
             };
@@ -166,17 +164,8 @@ namespace fox::gfx::api::gl
 
         const auto& get_binary_format_v      = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
+                //TODO
                 throw std::logic_error{ "The method or operation has not been implemented!" };
-                return 0;
-
-                //std::vector<gl::enum_t> formats{};
-
-                //const auto& binaryFormatAmount = gl::query_value<glf::Data::NumberProgramBinaryFormats>(index);
-                //formats.resize(binaryFormatAmount);
-
-                //gl::get_integer32_v(data, index, gl::to_underlying_ptr(formats.data()));
-
-                //return formats;
             };
         const auto& get_area_v               = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
@@ -404,7 +393,46 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::ViewportSubPixelBits)                             return get_unsigned_integer32_v(D, index);
     }
 
+    template<glf::Program::Parameter P>
+    static auto get_program_value                       (gl::handle_t program)
+    {
+        const auto& get_program_iv = [](gl::handle_t program, glf::Program::Parameter parameter)
+            {
+                gl::int32_t value{};
+                glGetProgramiv(gl::to_underlying(program), gl::to_underlying(parameter), &value);
 
+                return value;
+            };
+
+        if constexpr (P == glf::Program::Parameter::ActiveAtomicCounterBuffers           ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ActiveAttributeMaximumLength         ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ActiveAttributes                     ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ActiveUniformBlockMaximumNameLength  ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ActiveUniformBlocks                  ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ActiveUniformMaximumLength           ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ActiveUniforms                       ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::AttachedShaders                      ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::BinaryLength                         ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ComputeWorkGroupSize                 ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::DeleteStatus                         ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::GeometryInputType                    ) return static_cast<glf::Draw::Mode>                   (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::GeometryOutputType                   ) return static_cast<glf::Draw::Mode>                   (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::GeometryShaderInvocations            ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::GeometryVerticesOut                  ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::InfoLogLength                        ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::IsBinaryRetrievable                  ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::IsSeparable                          ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::LinkStatus                           ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TessellationControlOutputVertices    ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TessellationGenerationMode           ) return static_cast<glf::Tessellation::GenerationMode> (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TessellationGenerationPointMode      ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TessellationGenerationSpacing        ) return static_cast<glf::Tessellation::Spacing>        (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TessellationGenerationVertexOrder    ) return static_cast<glf::Tessellation::VertexOrder>    (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TransformFeedbackBufferMode          ) return static_cast<glf::TransformFeedback::BufferMode>(get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TransformFeedbackVaryingMaximumLength) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TransformFeedbackVaryings            ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::ValidateStatus                       ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
+    }
 
 
 
@@ -433,19 +461,19 @@ namespace fox::gfx::api::gl
     //Chapter 4 - Event Model
     static auto fence_sync                              ()
     {
-        return static_cast<gl::sync_t>(glFenceSync(gl::to_underlying(glf::Synchronization::Object::Condition::GPUCommandsComplete), static_cast<gl::bitfield_t>(0u)));
+        return static_cast<gl::sync_t>(glFenceSync(gl::to_underlying(glf::Synchronization::Object::Condition::GPUCommandsComplete), gl::bitfield_t{ 0u }));
     }
     static void delete_sync                             (gl::sync_t sync)
     {
         if (sync) glDeleteSync(sync);
     }
-    static auto client_wait_sync                        (gl::sync_t sync, gl::uint64_t timeout)
+    static auto client_wait_sync                        (gl::sync_t sync, glf::Synchronization::FlushCommand command, gl::time_t timeout)
     {
-        return static_cast<glf::Synchronization::Status>(glClientWaitSync(sync, gl::to_underlying(glf::Synchronization::FlushingBehavior::Commands), timeout));
+        return static_cast<glf::Synchronization::Status>(glClientWaitSync(sync, gl::to_underlying(command), timeout));
     }
     static void server_wait_sync                        (gl::sync_t sync)
     {
-        glWaitSync(sync, static_cast<gl::bitfield_t>(0u), gl::to_underlying(glf::Synchronization::Timeout::Ignored));
+        glWaitSync(sync, gl::bitfield_t{ 0u }, gl::to_underlying(glf::Synchronization::Timeout::Ignored));
     }
     template<glf::Synchronization::Property P>
     static auto get_sync_value                          (gl::sync_t sync)
@@ -453,17 +481,15 @@ namespace fox::gfx::api::gl
         const auto& get_sync_iv = [](gl::sync_t sync, glf::Synchronization::Property property)
             {
                 gl::int32_t value{};
-                glGetSynciv(sync, gl::to_underlying(property), static_cast<gl::sizei_t>(1), nullptr, &value);
+                glGetSynciv(sync, gl::to_underlying(property), gl::sizei_t{ 1 }, nullptr, &value);
 
                 return value;
             };
 
-
-
         if constexpr (P == glf::Synchronization::Property::Type)      return static_cast<glf::Synchronization::Object::Type>     (get_sync_iv(sync, P));
         if constexpr (P == glf::Synchronization::Property::Status)    return static_cast<glf::Synchronization::Object::Status>   (get_sync_iv(sync, P));
         if constexpr (P == glf::Synchronization::Property::Condition) return static_cast<glf::Synchronization::Object::Condition>(get_sync_iv(sync, P));
-        if constexpr (P == glf::Synchronization::Property::Flags)     return static_cast<gl::bitfield_t>                         (0u);
+        if constexpr (P == glf::Synchronization::Property::Flags)     return gl::bitfield_t{ 0u };
     }
 
     static auto create_query                            (glf::Query::Target target)
@@ -482,25 +508,25 @@ namespace fox::gfx::api::gl
     }
     static void delete_query                            (gl::handle_t query)
     {
-        glDeleteQueries(static_cast<gl::sizei_t>(1), gl::to_underlying_ptr(&query));
+        glDeleteQueries(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&query));
     }
     static void delete_queries                          (std::span<const gl::handle_t> queries)
     {
         glDeleteQueries(static_cast<gl::sizei_t>(queries.size()), gl::to_underlying_ptr(queries.data()));
     }
-    static void begin_query                             (gl::handle_t query, glf::Query::Target target, std::optional<gl::uint32_t> index)
+    static void begin_query                             (gl::handle_t query, glf::Query::Target target, std::optional<gl::index_t> index)
     {
-        glBeginQueryIndexed(gl::to_underlying(target), index.value_or(0u), gl::to_underlying(query));
+        glBeginQueryIndexed(gl::to_underlying(target), index.value_or(gl::index_t{ 0u }), gl::to_underlying(query));
     }
-    static void end_query                               (                    glf::Query::Target target, std::optional<gl::uint32_t> index)
+    static void end_query                               (                    glf::Query::Target target, std::optional<gl::index_t> index)
     {
-        glEndQueryIndexed(gl::to_underlying(target), index.value_or(0u));
+        glEndQueryIndexed(gl::to_underlying(target), index.value_or(gl::index_t{ 0u }));
     }
 
     template<glf::Query::Symbol S>
-    static auto get_query_value                         (glf::Query::Target target, std::optional<gl::uint32_t> index)
+    static auto get_query_value                         (glf::Query::Target target, std::optional<gl::index_t> index)
     {
-        const auto& get_query_iv = [](glf::Query::Target target, glf::Query::Symbol symbol, std::optional<gl::uint32_t> index)
+        const auto& get_query_iv = [](glf::Query::Target target, glf::Query::Symbol symbol, std::optional<gl::index_t> index)
             {
                 gl::int32_t value{};
                 glGetQueryIndexediv(gl::to_underlying(target), index.value_or(0u), gl::to_underlying(symbol), &value);
@@ -562,38 +588,38 @@ namespace fox::gfx::api::gl
     static auto create_buffer                           ()
     {
         gl::handle_t handle{};
-        glCreateBuffers(static_cast<gl::sizei_t>(1), gl::to_underlying_ptr(&handle));
+        glCreateBuffers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle));
 
         return handle;
     }
-    static auto create_buffers                          (gl::uint32_t amount)
+    static auto create_buffers                          (gl::count_t count)
     {
-        std::vector<gl::handle_t> handles(amount);
-        glCreateBuffers(static_cast<gl::sizei_t>(amount), gl::to_underlying_ptr(handles.data()));
+        std::vector<gl::handle_t> handles(count);
+        glCreateBuffers(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
 
         return handles;
     }
     static void delete_buffer                           (gl::handle_t buffer)
     {
-        glDeleteBuffers(static_cast<gl::sizei_t>(1), gl::to_underlying_ptr(&buffer));
+        glDeleteBuffers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&buffer));
     }
     static void delete_buffers                          (std::span<const gl::handle_t> buffers)
     {
         glDeleteBuffers(static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
-    static void bind_buffer_base                        (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::uint32_t index)
+    static void bind_buffer_base                        (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index)
     {
         glBindBufferBase(gl::to_underlying(target), index, gl::to_underlying(buffer));
     }
-    static void bind_buffers_base                       (std::span<const gl::handle_t> buffers, glf::Buffer::BaseTarget target, uint32_t index)
+    static void bind_buffers_base                       (std::span<const gl::handle_t> buffers, glf::Buffer::BaseTarget target, gl::index_t index)
     {
         glBindBuffersBase(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
-    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::uint32_t index, gl::byterange_t range)
+    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::byterange_t range)
     {
         glBindBufferRange(gl::to_underlying(target), index, gl::to_underlying(buffer), range.offset, range.size);
     }
-    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::uint32_t index)
+    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::index_t index)
     {
         std::vector<gl::size_t>   sizes  (ranges.size());
         std::vector<gl::offset_t> offsets(ranges.size());
@@ -628,6 +654,21 @@ namespace fox::gfx::api::gl
         else                     glClearNamedBufferData   (gl::to_underlying(buffer), gl::to_underlying(format),                             gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
     }
     
+    template<typename T>
+    static auto map_buffer                              (gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access, std::optional<gl::byterange_t> range)
+    {
+        if   (range.has_value()) return reinterpret_cast<T*>(glMapBufferRange(gl::to_underlying(buffer), range->offset, range->size, gl::to_underlying(access)));
+        else                     return reinterpret_cast<T*>(glMapBuffer     (gl::to_underlying(buffer),                             gl::to_underlying(access)));
+    }
+    static void flush_buffer_range                      (gl::handle_t buffer, gl::byterange_t range)
+    {
+        glFlushMappedNamedBufferRange(gl::to_underlying(buffer), range.offset, range.size);
+    }
+    static void unmap_buffer                            (gl::handle_t buffer)
+    {
+        glUnmapNamedBuffer(gl::to_underlying(buffer));
+    }
+
     static void invalidate_buffer_data                  (gl::handle_t buffer, std::optional<gl::byterange_t> range)
     {
         if   (range.has_value()) glInvalidateBufferSubData(gl::to_underlying(buffer), range->offset, range->size);
@@ -656,8 +697,6 @@ namespace fox::gfx::api::gl
                 return value;
             };
 
-
-
         if constexpr (P == glf::Buffer::Parameter::Access)       return static_cast<glf::Buffer::Mapping::Access>     (get_buffer_parameter_iv  (buffer, P));
         if constexpr (P == glf::Buffer::Parameter::AccessFlags)  return static_cast<glf::Buffer::Mapping::AccessFlags>(get_buffer_parameter_iv  (buffer, P));
         if constexpr (P == glf::Buffer::Parameter::Immutable)    return static_cast<gl::bool_t>                       (get_buffer_parameter_iv  (buffer, P));
@@ -673,7 +712,7 @@ namespace fox::gfx::api::gl
     {
         std::vector<T> data{};
 
-        if (range.has_value())
+        if   (range.has_value())
         {
             data.resize(range->size);
 
@@ -695,7 +734,7 @@ namespace fox::gfx::api::gl
     //Chapter 7 - Programs and Shaders
     static auto create_shader                           (glf::Shader::Type type)
     {
-        return gl::handle_t{ glCreateShader(gl::to_underlying(type)) };
+        return static_cast<gl::handle_t>(glCreateShader(gl::to_underlying(type)));
     }
     static void shader_source                           (gl::handle_t shader, const std::string& source)
     {
@@ -712,13 +751,17 @@ namespace fox::gfx::api::gl
     }
     static void delete_shader                           (gl::handle_t shader)
     {
-        if (shader != gl::NullObject) glDeleteShader(gl::to_underlying(shader));
+        glDeleteShader(gl::to_underlying(shader));
     }
     static void shader_binary                           (gl::handle_t shader, gl::enum_t format, std::span<const gl::byte_t> binary)
     {
         glShaderBinary(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&shader), format, binary.data(), static_cast<gl::sizei_t>(binary.size_bytes()));
     }
-    template<gl::uint32_t N = 0>
+    static void shader_binaries                         (std::span<const gl::handle_t> shaders, gl::enum_t format, std::span<const gl::byte_t> binary)
+    {
+        glShaderBinary(static_cast<gl::sizei_t>(shaders.size()), gl::to_underlying_ptr(shaders.data()), format, binary.data(), static_cast<gl::sizei_t>(binary.size_bytes()));
+    }
+    template<gl::count_t N = 0>
     static void specialize_shader                       (gl::handle_t shader, const std::string& entry, std::span<const gl::uint32_t, N> indices = {}, std::span<const gl::uint32_t, N> values = {})
     {
         const auto* cstr = entry.c_str();
@@ -727,7 +770,7 @@ namespace fox::gfx::api::gl
 
     static auto create_program                          ()
     {
-        return gl::handle_t{ glCreateProgram() };
+        return static_cast<gl::handle_t>(glCreateProgram());
     }
     static void attach_shader                           (gl::handle_t program, gl::handle_t shader)
     {
@@ -741,18 +784,19 @@ namespace fox::gfx::api::gl
     {
         glLinkProgram(gl::to_underlying(program));
     }
-    static void program_parameter                       (gl::handle_t program, glf::Program::Specification specification, gl::bool_t value)
+    template<glf::Program::Specification S>
+    static void program_parameter                       (gl::handle_t program, gl::bool_t value)
     {
-        glProgramParameteri(gl::to_underlying(program), gl::to_underlying(specification), value);
+        glProgramParameteri(gl::to_underlying(program), gl::to_underlying(S), value);
     }
     static void delete_program                          (gl::handle_t program)
     {
-        if (program != gl::NullObject) glDeleteProgram(gl::to_underlying(program));
+        glDeleteProgram(gl::to_underlying(program));
     }
     static auto create_shader_program                   (glf::Shader::Type type, const std::string& source)
     {
         const auto* cstr = source.c_str();
-        return gl::handle_t{ glCreateShaderProgramv(gl::to_underlying(type), gl::sizei_t{ 1 }, &cstr) };
+        return static_cast<gl::handle_t>(glCreateShaderProgramv(gl::to_underlying(type), gl::sizei_t{ 1 }, &cstr));
     }
 
     static auto create_program_pipeline                 ()
@@ -762,9 +806,20 @@ namespace fox::gfx::api::gl
 
         return handle;
     }
+    static auto create_program_pipelines                (gl::count_t count)
+    {
+        std::vector<gl::handle_t> handles(count);
+        glCreateProgramPipelines(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
+
+        return handles;
+    }
     static void delete_program_pipeline                 (gl::handle_t pipeline)
     {
-        if (pipeline != gl::NullObject) glDeleteProgramPipelines(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&pipeline));
+        glDeleteProgramPipelines(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&pipeline));
+    }
+    static void delete_program_pipelines                (std::span<const gl::handle_t> pipeline)
+    {
+        glDeleteProgramPipelines(static_cast<gl::sizei_t>(pipeline.size()), gl::to_underlying_ptr(pipeline.data()));
     }
     static void bind_program_pipeline                   (gl::handle_t pipeline)
     {
@@ -775,55 +830,11 @@ namespace fox::gfx::api::gl
         glUseProgramStages(gl::to_underlying(pipeline), gl::to_underlying(stages), gl::to_underlying(program));
     }
 
-    template<glf::Program::Parameter P>
-    static auto get_program_value                       (gl::handle_t program)
-    {
-        const auto& get_program_iv = [](gl::handle_t program, glf::Program::Parameter parameter)
-            {
-                gl::int32_t value{};
-                glGetProgramiv(gl::to_underlying(program), gl::to_underlying(parameter), &value);
-
-                return value;
-            };
-        
-        
-
-        if constexpr (P == glf::Program::Parameter::ActiveAtomicCounterBuffers           ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ActiveAttributeMaximumLength         ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ActiveAttributes                     ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ActiveUniformBlockMaximumNameLength  ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ActiveUniformBlocks                  ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ActiveUniformMaximumLength           ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ActiveUniforms                       ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::AttachedShaders                      ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::BinaryLength                         ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ComputeWorkGroupSize                 ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::DeleteStatus                         ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::GeometryInputType                    ) return static_cast<glf::Draw::Mode>                   (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::GeometryOutputType                   ) return static_cast<glf::Draw::Mode>                   (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::GeometryShaderInvocations            ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::GeometryVerticesOut                  ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::InfoLogLength                        ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::IsBinaryRetrievable                  ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::IsSeparable                          ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::LinkStatus                           ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TessellationControlOutputVertices    ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TessellationGenerationMode           ) return static_cast<glf::Tessellation::GenerationMode> (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TessellationGenerationPointMode      ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TessellationGenerationSpacing        ) return static_cast<glf::Tessellation::Spacing>        (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TessellationGenerationVertexOrder    ) return static_cast<glf::Tessellation::VertexOrder>    (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TransformFeedbackBufferMode          ) return static_cast<glf::TransformFeedback::BufferMode>(get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TransformFeedbackVaryingMaximumLength) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TransformFeedbackVaryings            ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::ValidateStatus                       ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
-    } //This has been moved up
     static auto get_program_binary                      (gl::handle_t program)
     {
-        std::vector<gl::uint8_t> binary{};
-        gl::enum_t               format{};
-
         const auto& binaryLength = gl::get_program_value<glf::Program::Parameter::BinaryLength>(program);
-        binary.resize(static_cast<std::size_t>(binaryLength));
+        std::vector<gl::uint8_t> binary(binaryLength);
+        gl::enum_t               format{};
 
         glGetProgramBinary(gl::to_underlying(program), binaryLength, nullptr, &format, binary.data());
 
@@ -854,8 +865,6 @@ namespace fox::gfx::api::gl
 
                 return value;
             };
-
-
 
         if constexpr (P == glf::Shader::Parameter::Type         ) return static_cast<glf::Shader::Type>(get_shader_iv(shader, P));
         if constexpr (P == glf::Shader::Parameter::DeleteStatus ) return static_cast<gl::bool_t>       (get_shader_iv(shader, P));
@@ -928,16 +937,16 @@ namespace fox::gfx::api::gl
     }
     static auto get_shader_source                       (gl::handle_t shader)
     {
-        std::string source{};
+        std::string shaderSource{};
 
-        if (const auto& sourceLength = get_shader_value<glf::Shader::Parameter::InfoLogLength>(shader); std::cmp_greater(sourceLength, 0u))
+        if (const auto& sourceLength = get_shader_value<glf::Shader::Parameter::SourceLength>(shader); std::cmp_greater(sourceLength, 0u))
         {
-            source.resize(sourceLength);
-            glGetShaderSource(gl::to_underlying(shader), sourceLength, nullptr, source.data());
-            source.pop_back();
+            shaderSource.resize(sourceLength);
+            glGetShaderSource(gl::to_underlying(shader), sourceLength, nullptr, shaderSource.data());
+            shaderSource.pop_back();
         }
 
-        return source;
+        return shaderSource;
     }
     static auto get_shader_precision_format             (glf::Shader::Type type, glf::Shader::PrecisionFormat format)
     {
@@ -960,29 +969,55 @@ namespace fox::gfx::api::gl
 
         return handle;
     }
+    static auto create_textures                         (glf::Texture::Target target, gl::count_t count)
+    {
+        std::vector<gl::handle_t> handles(count);
+        glCreateTextures(gl::to_underlying(target), static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
+
+        return handles;
+    }
     static void delete_texture                          (gl::handle_t texture)
     {
-        if (texture != gl::NullObject) glDeleteTextures(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&texture));
+        glDeleteTextures(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&texture));
     }
-    static void bind_texture_unit                       (gl::handle_t texture, gl::uint32_t unit)
+    static void delete_textures                         (std::span<const gl::handle_t> textures)
     {
-        glBindTextureUnit(unit, gl::to_underlying(texture));
+        glDeleteTextures(static_cast<gl::sizei_t>(textures.size()), gl::to_underlying_ptr(textures.data()));
+    }
+    static void bind_texture_unit                       (gl::handle_t texture, gl::index_t index)
+    {
+        glBindTextureUnit(index, gl::to_underlying(texture));
     }
 
     static auto create_sampler                          ()
     {
         gl::handle_t handle{};
-        glCreateSamplers(1, gl::to_underlying_ptr(&handle));
+        glCreateSamplers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle));
 
         return handle;
     }
+    static auto create_samplers                         (gl::count_t count)
+    {
+        std::vector<gl::handle_t> handles(count);
+        glCreateSamplers(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
+
+        return handles;
+    }
     static void delete_sampler                          (gl::handle_t sampler)
     {
-        if (sampler != gl::NullObject) glDeleteSamplers(1, gl::to_underlying_ptr(&sampler));
+        glDeleteSamplers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&sampler));
     }
-    static void bind_sampler                            (gl::handle_t sampler, gl::uint32_t slot)
+    static void delete_samplers                         (std::span<const gl::handle_t> samplers)
     {
-        glBindSampler(slot, gl::to_underlying(sampler));
+        glDeleteSamplers(static_cast<gl::sizei_t>(samplers.size()), gl::to_underlying_ptr(samplers.data()));
+    }
+    static void bind_sampler                            (gl::handle_t sampler, gl::index_t index)
+    {
+        glBindSampler(index, gl::to_underlying(sampler));
+    }
+    static void bind_samplers                           (std::span<const gl::handle_t> samplers, gl::range_t range)
+    {
+        glBindSamplers(range.offset, range.count, gl::to_underlying_ptr(samplers.data()));
     }
     static auto sampler_parameter                       (gl::handle_t sampler, gl::sampler_parameter_v value)
     {

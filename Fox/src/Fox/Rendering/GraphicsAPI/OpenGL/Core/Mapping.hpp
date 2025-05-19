@@ -26,26 +26,11 @@ namespace fox::gfx::api::gl
             case api::Buffer::Access::Read:                return glf::Buffer::Mapping::AccessFlags::Read;
             case api::Buffer::Access::Write:               return glf::Buffer::Mapping::AccessFlags::Write;
             case api::Buffer::Access::ReadWrite:           return glf::Buffer::Mapping::AccessFlags::ReadWrite;
-
-            case api::Buffer::Access::ReadPersistent:      return glf::Buffer::Mapping::AccessFlags::ReadPersistent;
-            case api::Buffer::Access::WritePersistent:     return glf::Buffer::Mapping::AccessFlags::WritePersistent;
-            case api::Buffer::Access::ReadWritePersistent: return glf::Buffer::Mapping::AccessFlags::ReadWritePersistent;
-
-            case api::Buffer::Access::ReadCoherent:        return glf::Buffer::Mapping::AccessFlags::ReadCoherent;
-            case api::Buffer::Access::WriteCoherent:       return glf::Buffer::Mapping::AccessFlags::WriteCoherent;
-            case api::Buffer::Access::ReadWriteCoherent:   return glf::Buffer::Mapping::AccessFlags::ReadWriteCoherent;
+            
+            case api::Buffer::Access::Persistent:          return glf::Buffer::Mapping::AccessFlags::Persistent;
+            case api::Buffer::Access::Coherent:            return glf::Buffer::Mapping::AccessFlags::Coherent;
 
             default: throw std::invalid_argument{ "Invalid Mapping!" };
-        }
-    }
-    static constexpr glf::Buffer::Target               map_buffer_target(api::Buffer::Type type)
-    {
-        switch (type)
-        {
-            case api::Buffer::Type::Vertex:  return glf::Buffer::Target::ArrayBuffer;
-            case api::Buffer::Type::Index:   return glf::Buffer::Target::ElementArrayBuffer;
-
-            default: throw std::invalid_argument{ "Invalid type!" };
         }
     }
     static constexpr glf::Texture::BaseFormat          map_texture_format_base(api::Texture::Format format)

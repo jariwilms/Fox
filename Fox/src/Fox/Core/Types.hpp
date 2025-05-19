@@ -30,9 +30,10 @@ namespace fox
 	using float64_t  = double;		  //
 
 	using byte_t     = fox::uint8_t;
-	using size_t     = fox::uint64_t; //Number of bytes
-	using offset_t   = fox::uint64_t; //Number of bytes offset
-	using count_t    = fox::uint32_t; //Number of elements
+	using size_t     = fox::uint64_t; //Size in bytes
+	using offset_t   = fox::uint64_t; //Offset in bytes
+	using count_t    = fox::uint32_t; //Amount of elements
+	using index_t    = fox::uint32_t; //Amount of elements offset
 
 	using uuid_t     = std::bitset<128>;
 
@@ -52,4 +53,23 @@ namespace fox
 	using Matrix3f   = glm::mat3;
 	using Matrix4f   = glm::mat4;
 	using Quaternion = glm::quat;
+
+
+
+	struct     range_t
+	{
+		explicit range_t(fox::count_t count, fox::index_t index = {})
+			: count{ count }, index{ index } {}
+
+		fox::count_t count{};
+		fox::index_t index{};
+	};
+	struct byterange_t
+	{
+		explicit byterange_t(fox::size_t size, fox::offset_t offset = {})
+			: size{ size }, offset{ offset } {}
+
+		fox::size_t   size{};
+		fox::offset_t offset{};
+	};
 }

@@ -155,28 +155,23 @@ namespace fox::gfx::api::glf
         {
             enum class Access : gl::enum_t
             {
-                Read      = GL_READ_ONLY,
-                Write     = GL_WRITE_ONLY,
-                ReadWrite = GL_READ_WRITE,
+                Read      = GL_READ_ONLY, 
+                Write     = GL_WRITE_ONLY, 
+                ReadWrite = GL_READ_WRITE, 
             };
-            enum       AccessFlags : gl::bitfield_t
+            enum class AccessFlags : gl::enum_t
             {
-                Read                = GL_MAP_READ_BIT,
-                Write               = GL_MAP_WRITE_BIT, 
-                ReadWrite           = Read | Write, 
-                                
-                ReadPersistent      = GL_MAP_PERSISTENT_BIT, 
-                WritePersistent     = GL_MAP_PERSISTENT_BIT, 
-                ReadWritePersistent = ReadPersistent | WritePersistent, 
+                Read             = GL_MAP_READ_BIT, 
+                Write            = GL_MAP_WRITE_BIT, 
+                ReadWrite        = Read | Write, 
 
-                ReadCoherent        = GL_MAP_COHERENT_BIT | ReadPersistent, 
-                WriteCoherent       = GL_MAP_COHERENT_BIT | WritePersistent, 
-                ReadWriteCoherent   = GL_MAP_COHERENT_BIT | ReadWritePersistent, 
+                Persistent       = GL_MAP_PERSISTENT_BIT, 
+                Coherent         = GL_MAP_COHERENT_BIT, 
 
-                InvalidateRange     = GL_MAP_INVALIDATE_RANGE_BIT, 
-                InvalidateBuffer    = GL_MAP_INVALIDATE_RANGE_BIT, 
-                FlushExplicit       = GL_MAP_FLUSH_EXPLICIT_BIT, 
-                Unsynchronized      = GL_MAP_UNSYNCHRONIZED_BIT, 
+                InvalidateBuffer = GL_MAP_INVALIDATE_BUFFER_BIT, 
+                InvalidateRange  = GL_MAP_INVALIDATE_RANGE_BIT, 
+                FlushExplicit    = GL_MAP_FLUSH_EXPLICIT_BIT, 
+                Unsynchronized   = GL_MAP_UNSYNCHRONIZED_BIT, 
             };
         };
         enum class Parameter : gl::enum_t
@@ -192,15 +187,17 @@ namespace fox::gfx::api::glf
 
             Usage        = GL_BUFFER_USAGE, 
         };
-        enum class StorageFlags : gl::bitfield_t
+        enum class StorageFlags : gl::enum_t
         {
-            StaticStorage  = gl::bitfield_t{}, 
+            StaticStorage  = GL_NONE, 
             DynamicStorage = GL_DYNAMIC_STORAGE_BIT, 
 
-            MapRead        = GL_MAP_READ_BIT, 
-            MapWrite       = GL_MAP_WRITE_BIT, 
-            MapPersistent  = GL_MAP_PERSISTENT_BIT, 
-            MapCoherent    = GL_MAP_COHERENT_BIT, 
+            Read           = GL_MAP_READ_BIT, 
+            Write          = GL_MAP_WRITE_BIT, 
+            ReadWrite      = Read | Write, 
+
+            Persistent  = GL_MAP_PERSISTENT_BIT, 
+            Coherent    = GL_MAP_COHERENT_BIT, 
 
             ClientStorage  = GL_CLIENT_STORAGE_BIT, 
         };
@@ -1405,9 +1402,10 @@ namespace fox::gfx::api::glf
     };
     struct     Synchronization
     {
-        enum class FlushingBehavior : gl::enum_t
+        enum class FlushCommand : gl::bitfield_t
         {
-            Commands = GL_SYNC_FLUSH_COMMANDS_BIT, 
+            None = GL_NONE, 
+            Sync = GL_SYNC_FLUSH_COMMANDS_BIT, 
         };
         struct     Object
         {
@@ -1894,10 +1892,11 @@ namespace fox::gfx::api::glf
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator|=(T& first, T second) { return first = first | second; }
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
 
-    template<> struct BitmaskTraits<glf::Buffer::Mask>            { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Buffer::StorageFlags>    { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::FrameBuffer::Attachment> { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::FrameBuffer::Source>     { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Memory::Barrier>         { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Memory::RegionalBarrier> { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Buffer::Mask>                 { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Buffer::Mapping::AccessFlags> { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Buffer::StorageFlags>         { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::FrameBuffer::Attachment>      { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::FrameBuffer::Source>          { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Memory::Barrier>              { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Memory::RegionalBarrier>      { static constexpr bool enable_bitmask_operations = true; };
 }
