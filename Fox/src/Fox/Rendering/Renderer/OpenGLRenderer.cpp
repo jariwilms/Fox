@@ -60,9 +60,9 @@ namespace fox::gfx::api
 
         const auto& depthTexture = m_sBuffer->find_texture("Depth");
         const std::array<gl::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
-        gl::texture_parameter(depthTexture->handle(), gl::magnification_filter_p{ glf::Texture::MagnificationFilter::Nearest });
-        gl::texture_parameter(depthTexture->handle(), gl::minification_filter_p { glf::Texture::MinificationFilter ::Nearest });
-        gl::texture_parameter(depthTexture->handle(), gl::border_color_p{ borderColor });
+        gl::texture_parameter(depthTexture->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
+        gl::texture_parameter(depthTexture->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
+        gl::texture_parameter(depthTexture->handle(), glp::border_color        { borderColor });
 
 
 
@@ -177,8 +177,8 @@ namespace fox::gfx::api
 
 
 
-        gl::texture_parameter(m_environmentCubemap->handle(), gl::magnification_filter_p{ glf::Texture::MagnificationFilter::Linear             });
-        gl::texture_parameter(m_environmentCubemap->handle(), gl::minification_filter_p { glf::Texture::MinificationFilter ::LinearMipmapLinear });
+        gl::texture_parameter(m_environmentCubemap->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Linear             });
+        gl::texture_parameter(m_environmentCubemap->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::LinearMipmapLinear });
         gl::generate_texture_mipmap(m_environmentCubemap->handle());
 
 

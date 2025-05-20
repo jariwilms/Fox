@@ -31,22 +31,27 @@ namespace fox
 
 	using uuid_t     = std::bitset<128u>;
 
-	using Vector1i   = glm::ivec1;
-	using Vector2i   = glm::ivec2;
-	using Vector3i   = glm::ivec3;
-	using Vector4i   = glm::ivec4;
-	using Vector1u   = glm::uvec1;
-	using Vector2u   = glm::uvec2;
-	using Vector3u   = glm::uvec3;
-	using Vector4u   = glm::uvec4;
-	using Vector1f   = glm::vec1;
-	using Vector2f   = glm::vec2;
-	using Vector3f   = glm::vec3;
-	using Vector4f   = glm::vec4;
-	using Matrix2f   = glm::mat2;
-	using Matrix3f   = glm::mat3;
-	using Matrix4f   = glm::mat4;
-	using Quaternion = glm::quat;
+
+
+	template<typename T, fox::uint32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
+    template<typename T, fox::uint32_t N> using Matrix     = glm::mat<N, N, T>;
+                                          using Quaternion = glm::quat;
+
+	using Vector1i   = fox::Vector<fox::int32_t  , 1>;
+	using Vector2i   = fox::Vector<fox::int32_t  , 2>;
+	using Vector3i   = fox::Vector<fox::int32_t  , 3>;
+	using Vector4i   = fox::Vector<fox::int32_t  , 4>;
+	using Vector1u   = fox::Vector<fox::uint32_t , 1>;
+	using Vector2u   = fox::Vector<fox::uint32_t , 2>;
+	using Vector3u   = fox::Vector<fox::uint32_t , 3>;
+	using Vector4u   = fox::Vector<fox::uint32_t , 4>;
+	using Vector1f   = fox::Vector<fox::float32_t, 1>;
+	using Vector2f   = fox::Vector<fox::float32_t, 2>;
+	using Vector3f   = fox::Vector<fox::float32_t, 3>;
+	using Vector4f   = fox::Vector<fox::float32_t, 4>;
+	using Matrix2f   = fox::Matrix<fox::float32_t, 2>;
+	using Matrix3f   = fox::Matrix<fox::float32_t, 3>;
+	using Matrix4f   = fox::Matrix<fox::float32_t, 4>;
 
 	enum : fox::bool_t
 	{
