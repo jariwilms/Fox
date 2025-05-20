@@ -1000,7 +1000,7 @@ namespace fox::gfx::api::glf
         {
             PatchVertices          = GL_PATCH_VERTICES, 
             PatchDefaultOuterLevel = GL_PATCH_DEFAULT_OUTER_LEVEL, 
-            PatchDefaultInterLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
+            PatchDefaultInnerLevel = GL_PATCH_DEFAULT_INNER_LEVEL, 
         };
     };
     struct     PixelData
@@ -1301,6 +1301,20 @@ namespace fox::gfx::api::glf
 
             S8_UINT           = GL_STENCIL_INDEX8, 
         };
+        enum class Parameter : gl::enum_t
+        {
+            Width, 
+            Height, 
+            InternalFormat, 
+            Samples, 
+
+            RedSize, 
+            GreenSize, 
+            BlueSize, 
+            AlphaSize, 
+            DepthSize, 
+            StencilSize, 
+        };
         enum class Target : gl::enum_t
         {
             RenderBuffer = GL_RENDERBUFFER,
@@ -1556,23 +1570,35 @@ namespace fox::gfx::api::glf
         };
         enum class Parameter : gl::enum_t
         {
-            BaseLevel           = GL_TEXTURE_BASE_LEVEL, 
-            CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
             CompareMode         = GL_TEXTURE_COMPARE_MODE, 
-            DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
-            LODBias             = GL_TEXTURE_LOD_BIAS, 
-            MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
+            CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
+            BaseLevel           = GL_TEXTURE_BASE_LEVEL, 
             MaximumLevel        = GL_TEXTURE_MAX_LEVEL, 
-            MaximumLOD          = GL_TEXTURE_MAX_LOD, 
+            BorderColor         = GL_TEXTURE_BORDER_COLOR, 
+            DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
+            MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
             MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
-            MinimumLOD          = GL_TEXTURE_MIN_LOD, 
-            SwizzleAlpha        = GL_TEXTURE_SWIZZLE_A,
-            SwizzleBlue         = GL_TEXTURE_SWIZZLE_B,
-            SwizzleGreen        = GL_TEXTURE_SWIZZLE_G,
-            SwizzleRed          = GL_TEXTURE_SWIZZLE_R, 
-            WrappingR           = GL_TEXTURE_WRAP_R, 
             WrappingS           = GL_TEXTURE_WRAP_S, 
             WrappingT           = GL_TEXTURE_WRAP_T, 
+            WrappingR           = GL_TEXTURE_WRAP_R, 
+            SwizzleRed          = GL_TEXTURE_SWIZZLE_R, 
+            SwizzleGreen        = GL_TEXTURE_SWIZZLE_G, 
+            SwizzleBlue         = GL_TEXTURE_SWIZZLE_B, 
+            SwizzleAlpha        = GL_TEXTURE_SWIZZLE_A, 
+            SwizzleRGBA         = GL_TEXTURE_SWIZZLE_RGBA, 
+            MaximumLOD          = GL_TEXTURE_MAX_LOD, 
+            MinimumLOD          = GL_TEXTURE_MIN_LOD, 
+            LODBias             = GL_TEXTURE_LOD_BIAS, 
+        };
+        enum class Swizzle : gl::enum_t
+        {
+            Red   = GL_RED  , 
+            Green = GL_GREEN, 
+            Blue  = GL_BLUE , 
+            Alpha = GL_ALPHA, 
+
+            Zero  = GL_ZERO , 
+            One   = GL_ONE  , 
         };
         enum class Target : gl::enum_t
         {

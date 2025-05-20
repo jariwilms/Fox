@@ -160,7 +160,7 @@ namespace fox::gfx::api
 
         gl::viewport(cvDimensions);
         gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
-        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions, {});
+        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
 
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
         cva->bind();
@@ -206,7 +206,7 @@ namespace fox::gfx::api
             preFilterBuffer->copy(unf::PreFilter{ envDimensions.x, roughness });
 
             gl::viewport(mipDimensions);
-            gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions, {});
+            gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
 
             for (fox::uint32_t index{}; const auto& view : captureViews)
             {
@@ -227,7 +227,7 @@ namespace fox::gfx::api
 
         gl::viewport(envDimensions);
         gl::frame_buffer_texture(frameBuffer->handle(), m_brdfTexture->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0);
-        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, envDimensions, {});
+        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, envDimensions);
         gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
         pva->bind();

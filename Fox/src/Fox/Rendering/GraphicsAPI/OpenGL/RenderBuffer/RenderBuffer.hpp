@@ -18,7 +18,7 @@ namespace fox::gfx::api::gl
             m_handle = gl::create_render_buffer();
 
             const auto& renderBufferFormat = gl::map_render_buffer_format(format);
-            gl::render_buffer_storage(m_handle, renderBufferFormat, m_dimensions, {});
+            gl::render_buffer_storage(m_handle, renderBufferFormat, m_dimensions);
         }
         RenderBuffer(RenderBuffer&&) noexcept = default;
         ~RenderBuffer()
@@ -46,7 +46,7 @@ namespace fox::gfx::api::gl
             m_handle = gl::create_render_buffer();
 
             const auto& renderBufferFormat = gl::map_render_buffer_format(format);
-            gl::render_buffer_storage(m_handle, renderBufferFormat, m_dimensions, m_samples);
+            gl::render_buffer_storage_multisample(m_handle, renderBufferFormat, m_dimensions, m_samples);
         }
         RenderBuffer(RenderBuffer&&) noexcept = default;
         ~RenderBuffer()

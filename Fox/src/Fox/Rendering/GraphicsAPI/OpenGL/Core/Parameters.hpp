@@ -63,26 +63,88 @@ namespace fox::gfx::api::glp
                      std::array<gl::uint32_t , 4>, 
                      std::array<gl::float32_t, 4>> value{}; 
     };
-    struct minimum_lod_p
+    struct minimum_lod
     { 
         gl::float32_t value{}; 
     };
-    struct maximum_lod_p
+    struct maximum_lod
     { 
         gl::float32_t value{}; 
+    };
+    struct depth_stencil_mode
+    {
+        glf::Texture::BaseFormat value{};
+    };
+    struct base_level
+    {
+        gl::uint32_t value{};
+    };
+    struct lod_bias
+    {
+        gl::float32_t value{};
+    };
+    struct maximum_anisotropy
+    {
+        gl::float32_t value{};
+    };
+    struct maximum_level
+    {
+        gl::uint32_t value{};
+    };
+    struct swizzle_r
+    {
+        glf::Texture::Swizzle value{};
+    };
+    struct swizzle_g
+    {
+        glf::Texture::Swizzle value{};
+    };
+    struct swizzle_b
+    {
+        glf::Texture::Swizzle value{};
+    };
+    struct swizzle_a
+    {
+        glf::Texture::Swizzle value{};
+    };
+    struct swizzle_rgba
+    {
+        std::array<glf::Texture::Swizzle, 4> value{};
+    };
+
+    struct patch_vertices
+    {
+        gl::uint32_t value{};
+    };
+    struct patch_default_outer_level
+    {
+        std::array<gl::float32_t, 4> value{};
+    };
+    struct patch_default_inner_level
+    {
+        std::array<gl::float32_t, 4> value{};
     };
 
 
 
     using dispatch_t          = std::variant<gl::Vector3u, gl::offset_t>;
-    using texture_parameter_t = std::variant<glp::minification_filter, glp::magnification_filter, glp::wrapping_s, glp::wrapping_t, glp::wrapping_r, glp::border_color>;
+    using texture_parameter_t = std::variant<
+                                    glp::compare_mode        , glp::compare_function, 
+                                    glp::base_level          , glp::maximum_level, 
+                                    glp::border_color        , 
+                                    glp::depth_stencil_mode  , 
+                                    glp::magnification_filter, glp::minification_filter, 
+                                    glp::wrapping_s          , glp::wrapping_t         , glp::wrapping_r, 
+                                    glp::swizzle_r           , glp::swizzle_g          , glp::swizzle_b , glp::swizzle_a, glp::swizzle_rgba, 
+                                    glp::maximum_lod         , glp::minimum_lod        , glp::lod_bias>;
     using clear_t             = std::variant<glp::color_index, glp::depth, glp::stencil, glp::depthstencil>;
-    using framebuffer_t       = std::variant<framebuffer, glf::FrameBuffer::Source>;
+    using framebuffer_t       = std::variant<glp::framebuffer, glf::FrameBuffer::Source>;
     using point_parameter_t   = std::variant<gl::float32_t, glf::Point::Parameter>;
     using sampler_parameter_t = std::variant<
-                                    magnification_filter, minification_filter, 
-                                    maximum_lod_p       , minimum_lod_p      , 
-                                    wrapping_s          , wrapping_t         , wrapping_r, 
-                                    border_color        , 
-                                    compare_mode        , compare_function>;
+                                    glp::magnification_filter, glp::minification_filter, 
+                                    glp::maximum_lod         , glp::minimum_lod        , 
+                                    glp::wrapping_s          , glp::wrapping_t         , glp::wrapping_r, 
+                                    glp::border_color        , 
+                                    glp::compare_mode        , glp::compare_function>;
+    using patch_parameter_t   = std::variant<glp::patch_vertices, glp::patch_default_outer_level, glp::patch_default_inner_level>;
 }
