@@ -37,15 +37,15 @@ namespace fox::gfx::api::gl
 
             if (filter != Filter::None)
             {
-                gl::texture_parameter(m_handle, gl::magnification_filter_p{ gl::map_texture_mag_filter(m_filter) });
-                gl::texture_parameter(m_handle, gl::minification_filter_p { gl::map_texture_min_filter(m_filter) });
+                gl::texture_parameter(m_handle, glp::magnification_filter{ gl::map_texture_mag_filter(m_filter) });
+                gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
 
                 m_mipmapLevels = api::calculate_mipmap_level(m_dimensions);
             }
 
-                                                        gl::texture_parameter(m_handle, gl::wrapping_s_p{ gl::map_texture_wrapping(m_wrapping.s) });
-            if constexpr (DIMS >= api::Dimensions::_2D) gl::texture_parameter(m_handle, gl::wrapping_t_p{ gl::map_texture_wrapping(m_wrapping.t) });
-            if constexpr (DIMS >= api::Dimensions::_3D) gl::texture_parameter(m_handle, gl::wrapping_r_p{ gl::map_texture_wrapping(m_wrapping.r) });
+                                                        gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.s) });
+            if constexpr (DIMS >= api::Dimensions::_2D) gl::texture_parameter(m_handle, glp::wrapping_t{ gl::map_texture_wrapping(m_wrapping.t) });
+            if constexpr (DIMS >= api::Dimensions::_3D) gl::texture_parameter(m_handle, glp::wrapping_r{ gl::map_texture_wrapping(m_wrapping.r) });
 
             if constexpr (DIMS == api::Dimensions::_1D) gl::texture_storage_1d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
             if constexpr (DIMS == api::Dimensions::_2D) gl::texture_storage_2d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
@@ -71,18 +71,18 @@ namespace fox::gfx::api::gl
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
-            if constexpr (DIMS == api::Dimensions::_1D) gl::texture_sub_image_1d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), range_t{ offset, dimensions }, 0, data);
-            if constexpr (DIMS == api::Dimensions::_2D) gl::texture_sub_image_2d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), range_t{ offset, dimensions }, 0, data);
-            if constexpr (DIMS == api::Dimensions::_3D) gl::texture_sub_image_3d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), range_t{ offset, dimensions }, 0, data);
+            if constexpr (DIMS == api::Dimensions::_1D) gl::texture_sub_image_1d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), dimensions, offset, 0, data);
+            if constexpr (DIMS == api::Dimensions::_2D) gl::texture_sub_image_2d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), dimensions, offset, 0, data);
+            if constexpr (DIMS == api::Dimensions::_3D) gl::texture_sub_image_3d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), dimensions, offset, 0, data);
         }
 
         void apply_wrapping(wrap_t wrapping)
         {
             m_wrapping = wrapping;
 
-                                                        gl::texture_parameter(m_handle, gl::wrapping_s_p{ gl::map_texture_wrapping(m_wrapping.s) });
-            if constexpr (DIMS >= api::Dimensions::_2D) gl::texture_parameter(m_handle, gl::wrapping_t_p{ gl::map_texture_wrapping(m_wrapping.t) });
-            if constexpr (DIMS >= api::Dimensions::_3D) gl::texture_parameter(m_handle, gl::wrapping_r_p{ gl::map_texture_wrapping(m_wrapping.r) });
+                                                        gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.s) });
+            if constexpr (DIMS >= api::Dimensions::_2D) gl::texture_parameter(m_handle, glp::wrapping_t{ gl::map_texture_wrapping(m_wrapping.t) });
+            if constexpr (DIMS >= api::Dimensions::_3D) gl::texture_parameter(m_handle, glp::wrapping_r{ gl::map_texture_wrapping(m_wrapping.r) });
         }
         void generate_mipmap()
         {

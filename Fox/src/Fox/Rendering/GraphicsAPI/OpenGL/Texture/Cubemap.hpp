@@ -23,11 +23,11 @@ namespace fox::gfx::api::gl
 
             gl::texture_storage_2d(m_handle, gl::map_cubemap_texture_format(m_format), m_dimensions, static_cast<gl::size_t>(m_mipmapLevels));
 
-            gl::texture_parameter(m_handle, gl::magnification_filter_p{ gl::map_texture_mag_filter(m_filter)   });
-            gl::texture_parameter(m_handle, gl::minification_filter_p { gl::map_texture_min_filter(m_filter)   });
-            gl::texture_parameter(m_handle, gl::wrapping_s_p          { gl::map_texture_wrapping  (m_wrapping) });
-            gl::texture_parameter(m_handle, gl::wrapping_t_p          { gl::map_texture_wrapping  (m_wrapping) });
-            gl::texture_parameter(m_handle, gl::wrapping_r_p          { gl::map_texture_wrapping  (m_wrapping) });
+            gl::texture_parameter(m_handle, glp::magnification_filter{ gl::map_texture_mag_filter(m_filter)   });
+            gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter)   });
+            gl::texture_parameter(m_handle, glp::wrapping_s          { gl::map_texture_wrapping  (m_wrapping) });
+            gl::texture_parameter(m_handle, glp::wrapping_t          { gl::map_texture_wrapping  (m_wrapping) });
+            gl::texture_parameter(m_handle, glp::wrapping_r          { gl::map_texture_wrapping  (m_wrapping) });
         }
         Cubemap(Format format, const gl::Vector2u& dimensions, const Faces& face)
             : Cubemap{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions, face } {}
@@ -70,7 +70,7 @@ namespace fox::gfx::api::gl
         {
             if (image.dimensions() != m_dimensions) throw std::invalid_argument{ "Image dimensions must be equal!" };
 
-            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, type, range_t{ gl::Vector3u{ 0u, 0u, index }, gl::Vector3u{ m_dimensions, 1u } }, 0, image.data());
+            gl::texture_sub_image_3d(m_handle, glf::Texture::BaseFormat::RGB, type, gl::Vector3u{ m_dimensions, 1u }, gl::Vector3u{ 0u, 0u, index }, 0, image.data());
         }
         void attach_images(const Faces& face, glf::PixelData::Type type)
         {

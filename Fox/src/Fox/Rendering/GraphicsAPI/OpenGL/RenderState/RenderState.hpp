@@ -6,7 +6,7 @@
 #include "glfw/glfw3.h"
 
 #include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Mapping.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Core/Mapping.hpp"
 #include "Fox/Rendering/API/RenderState/RenderState.hpp"
 
 namespace fox::gfx::api::gl
