@@ -138,22 +138,6 @@ namespace fox::gfx::api::gl
 
 
 
-    template<typename T, gl::uint32_t N>
-    struct dimension_t
-    {
-        dimension_t(gl::Vector<T, N> origin, gl::Vector<T, N> extent)
-            : origin{ origin }, extent{ extent } {}
-        dimension_t(gl::Vector<T, N> extent)
-            : origin{}, extent{ extent } {}
-
-        gl::Vector<T, N> origin{};
-        gl::Vector<T, N> extent{};
-    };
-
-    template<typename T> using line_t   = dimension_t<T, 1>;
-    template<typename T> using area_t   = dimension_t<T, 2>;
-    template<typename T> using volume_t = dimension_t<T, 3>;
-
 
 
     static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const void*) {}

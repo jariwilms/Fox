@@ -68,9 +68,4 @@ namespace fox::gfx::api
             api::Texture::Wrapping r{};
         };
     };
-
-    template<Dimensions> struct DimensionsToRangeMap;
-    template<> struct DimensionsToRangeMap<Dimensions::_1D> { using type = gl::line_t  <gl::uint32_t>; };
-    template<> struct DimensionsToRangeMap<Dimensions::_2D> { using type = gl::area_t  <gl::uint32_t>; };
-    template<> struct DimensionsToRangeMap<Dimensions::_3D> { using type = gl::volume_t<gl::uint32_t>; };
 }

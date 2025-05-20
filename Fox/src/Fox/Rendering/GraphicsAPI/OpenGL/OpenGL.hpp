@@ -15,8 +15,8 @@ namespace fox::gfx::api::gl
     //OpenGL wrapper library
     // 
     //This library has the following goals:
-    //    * Provide a more modern and accessible interface
-    //    * Wrap around existing OpenGL functions, allowing easy addition of custom logic
+    //    * Provide a more modern, correct, and accessible interface
+    //    * Wrap around existing OpenGL functions, allowing for easy addition of custom logic
     //    * Keep track of state, preventing redundant calls to the graphics driver
     //    * Compile/Runtime input validation and safety
     // 
@@ -169,12 +169,13 @@ namespace fox::gfx::api::gl
             };
         const auto& get_area_v               = [](glf::Data data, std::optional<gl::uint32_t> index)
             {
-                gl::area_t<gl::uint32_t> value{ {} };
+                std::array<gl::uint32_t, 4> value{};
                 
-                if   (index.has_value()) glGetIntegeri_v(gl::to_underlying(data), index.value(), reinterpret_cast<gl::int32_t*>(&value));
-                else                     glGetIntegerv  (gl::to_underlying(data),                reinterpret_cast<gl::int32_t*>(&value));
+                if   (index.has_value()) glGetIntegeri_v(gl::to_underlying(data), index.value(), reinterpret_cast<gl::int32_t*>(value.data()));
+                else                     glGetIntegerv  (gl::to_underlying(data),                reinterpret_cast<gl::int32_t*>(value.data()));
 
-                return value;
+                struct result_t{ gl::Vector2u extent{}; gl::Vector2u offset{}; };
+                return result_t{ {value.at(0), value.at(1)}, {value.at(2), value.at(3)} };
             };
 
 

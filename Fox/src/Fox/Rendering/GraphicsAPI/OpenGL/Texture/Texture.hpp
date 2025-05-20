@@ -19,7 +19,6 @@ namespace fox::gfx::api::gl
     public:
         using wrap_t   = api::DimensionsToWrappingMap<DIMS>::wrap_t;
         using vector_t = api::DimensionsToVectorMap  <DIMS>::type;
-        using range_t  = api::DimensionsToRangeMap   <DIMS>::type;
 
         Texture(Format format, const vector_t& dimensions, std::span<const fox::byte_t> data)
             : Texture{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {}

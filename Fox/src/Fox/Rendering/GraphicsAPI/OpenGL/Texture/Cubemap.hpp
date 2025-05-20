@@ -10,7 +10,6 @@ namespace fox::gfx::api::gl
     {
     public:
         using texture_t = gl::Texture<api::Dimensions::_2D, api::AntiAliasing::None>;
-        using range_t   = gl::Texture<api::Dimensions::_3D, api::AntiAliasing::None>::range_t;
 
         Cubemap(Format format, const gl::Vector2u& dimensions)
             : Cubemap{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions } {}
