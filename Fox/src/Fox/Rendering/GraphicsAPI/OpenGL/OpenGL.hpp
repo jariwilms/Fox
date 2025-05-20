@@ -211,7 +211,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::LayerProvokingVertex)                             return glf::ProvokingVertex::Mode{ get_unsigned_integer32_v(D, index) };
         if constexpr (D == glf::Data::LineSmoothHint)                                   return glf::Hint::Mode{ get_unsigned_integer32_v(D, index) };
         if constexpr (D == glf::Data::LineWidth)                                        return get_floating_point64_v(D, index);
-        if constexpr (D == glf::Data::LogicOperationMode)                               return glf::Logic::Operation{ get_unsigned_integer32_v(D, index) };
+        if constexpr (D == glf::Data::LogicOperationMode)                               return glf::LogicalPixelOperation{ get_unsigned_integer32_v(D, index) };
         if constexpr (D == glf::Data::MajorVersion)                                     return get_unsigned_integer32_v(D, index);
         if constexpr (D == glf::Data::Maximum3DTextureSize)                             return get_unsigned_integer32_v(D, index);
         if constexpr (D == glf::Data::MaximumArrayTextureLayers)                        return get_unsigned_integer32_v(D, index);
@@ -425,7 +425,7 @@ namespace fox::gfx::api::gl
         if constexpr (P == glf::Program::Parameter::IsSeparable                          ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
         if constexpr (P == glf::Program::Parameter::LinkStatus                           ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
         if constexpr (P == glf::Program::Parameter::TessellationControlOutputVertices    ) return static_cast<gl::uint32_t>                      (get_program_iv(program, P));
-        if constexpr (P == glf::Program::Parameter::TessellationGenerationMode           ) return static_cast<glf::Tessellation::GenerationMode> (get_program_iv(program, P));
+        if constexpr (P == glf::Program::Parameter::TessellationGenerationMode           ) return static_cast<glf::Tessellation::Generation> (get_program_iv(program, P));
         if constexpr (P == glf::Program::Parameter::TessellationGenerationPointMode      ) return static_cast<gl::bool_t>                        (get_program_iv(program, P));
         if constexpr (P == glf::Program::Parameter::TessellationGenerationSpacing        ) return static_cast<glf::Tessellation::Spacing>        (get_program_iv(program, P));
         if constexpr (P == glf::Program::Parameter::TessellationGenerationVertexOrder    ) return static_cast<glf::Tessellation::VertexOrder>    (get_program_iv(program, P));
@@ -471,7 +471,7 @@ namespace fox::gfx::api::gl
     {
         if (sync) glDeleteSync(sync);
     }
-    static auto client_wait_sync                        (gl::sync_t sync, glf::Synchronization::FlushCommand command, gl::time_t timeout)
+    static auto client_wait_sync                        (gl::sync_t sync, glf::Synchronization::Command command, gl::time_t timeout)
     {
         return static_cast<glf::Synchronization::Status>(glClientWaitSync(sync, gl::to_underlying(command), timeout));
     }
@@ -1976,15 +1976,15 @@ namespace fox::gfx::api::gl
     }
     static void point_parameter                         (glp::point_parameter_t parameter)
     {
-        if (std::holds_alternative<gl::float32_t>(parameter))
+        if (std::holds_alternative<glp::fade_threshold_size>(parameter))
         {
-            const auto& p = std::get<gl::float32_t>(parameter);
-            glPointParameterf(gl::to_underlying(glf::Point::Parameter::FadeThresholdSize), p);
+            const auto& p = std::get<glp::fade_threshold_size>(parameter);
+            glPointParameterf(gl::to_underlying(glf::Point::Parameter::FadeThresholdSize), p.value);
         }
-        if (std::holds_alternative<glf::Point::Parameter>(parameter))
+        if (std::holds_alternative<glp::sprite_coordinate_origin>(parameter))
         {
-            const auto& p = std::get<glf::Point::Parameter>(parameter);
-            glPointParameteri(gl::to_underlying(glf::Point::Parameter::SpriteCoordinateOrigin), gl::to_underlying(p));
+            const auto& p = std::get<glp::sprite_coordinate_origin>(parameter);
+            glPointParameteri(gl::to_underlying(glf::Point::Parameter::SpriteCoordinateOrigin), gl::to_underlying(p.value));
         }
     }
 
@@ -1997,7 +1997,7 @@ namespace fox::gfx::api::gl
     {
         glFrontFace(gl::to_underlying(orientation));
     }
-    static void cull_face                               (glf::Culling::Face face)
+    static void cull_face                               (glf::Culling::Facet face)
     {
         glCullFace(gl::to_underlying(face));
     }
@@ -2099,7 +2099,7 @@ namespace fox::gfx::api::gl
     {
         glBlendColor(color.r, color.g, color.b, color.a);
     }
-    static void logical_pixel_operation                 (glf::Logic::Operation operation)
+    static void logical_pixel_operation                 (glf::LogicalPixelOperation operation)
     {
         glLogicOp(gl::to_underlying(operation));
     }

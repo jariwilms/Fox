@@ -61,13 +61,6 @@ namespace fox::gfx::api::glf
     };
     struct     Buffer
     {
-        enum class BaseTarget : gl::enum_t
-        {
-            AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
-            ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER,
-            UniformBuffer           = GL_UNIFORM_BUFFER,
-            TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
-        };
         enum class BaseFormat : gl::enum_t
         {
             R        = GL_RED, 
@@ -95,6 +88,13 @@ namespace fox::gfx::api::glf
             S        = GL_STENCIL_INDEX, 
             D        = GL_DEPTH_COMPONENT, 
             DS       = GL_DEPTH_STENCIL, 
+        };
+        enum class BaseTarget : gl::enum_t
+        {
+            AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
+            ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER,
+            UniformBuffer           = GL_UNIFORM_BUFFER,
+            TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
         };
         enum class Format : gl::enum_t
         {
@@ -159,7 +159,7 @@ namespace fox::gfx::api::glf
                 Write     = GL_WRITE_ONLY, 
                 ReadWrite = GL_READ_WRITE, 
             };
-            enum class AccessFlags : gl::enum_t
+            enum class AccessFlags : gl::bitfield_t
             {
                 Read             = GL_MAP_READ_BIT, 
                 Write            = GL_MAP_WRITE_BIT, 
@@ -187,7 +187,7 @@ namespace fox::gfx::api::glf
 
             Usage        = GL_BUFFER_USAGE, 
         };
-        enum class StorageFlags : gl::enum_t
+        enum class StorageFlags : gl::bitfield_t
         {
             StaticStorage  = GL_NONE, 
             DynamicStorage = GL_DYNAMIC_STORAGE_BIT, 
@@ -196,8 +196,8 @@ namespace fox::gfx::api::glf
             Write          = GL_MAP_WRITE_BIT, 
             ReadWrite      = Read | Write, 
 
-            Persistent  = GL_MAP_PERSISTENT_BIT, 
-            Coherent    = GL_MAP_COHERENT_BIT, 
+            Persistent     = GL_MAP_PERSISTENT_BIT, 
+            Coherent       = GL_MAP_COHERENT_BIT, 
 
             ClientStorage  = GL_CLIENT_STORAGE_BIT, 
         };
@@ -218,7 +218,7 @@ namespace fox::gfx::api::glf
             TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
             UniformBuffer           = GL_UNIFORM_BUFFER,
         };
-        enum class Usage
+        enum class Usage : gl::enum_t
         {
             StreamDraw  = GL_STREAM_DRAW, 
             StreamRead  = GL_STREAM_READ, 
@@ -247,27 +247,27 @@ namespace fox::gfx::api::glf
     };
     struct     Clip
     {
-        enum class Origin : gl::enum_t
-        {
-            LowerLeft = GL_LOWER_LEFT, 
-            UpperLeft = GL_UPPER_LEFT, 
-        };
         enum class DepthMode : gl::enum_t
         {
             NegativeOneToOne = GL_NEGATIVE_ONE_TO_ONE, 
             ZeroToOne        = GL_ZERO_TO_ONE, 
         };
+        enum class Origin : gl::enum_t
+        {
+            LowerLeft = GL_LOWER_LEFT, 
+            UpperLeft = GL_UPPER_LEFT, 
+        };
     };
     struct     Context
     {
-        enum       Flag : gl::bitfield_t
+        enum class Flag : gl::bitfield_t
         {
             Debug             = GL_CONTEXT_FLAG_DEBUG_BIT, 
             ForwardCompatible = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
             NoError           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
             RobustAccess      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
         };
-        enum class Profile
+        enum class Profile : gl::bitfield_t
         {
             Core          = GL_CONTEXT_CORE_PROFILE_BIT, 
             Compatibility = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT, 
@@ -289,7 +289,7 @@ namespace fox::gfx::api::glf
     };
     struct     Cubemap
     {
-        enum class Format
+        enum class Format : gl::enum_t
         {
             RGB8_UNORM   = GL_RGB8, 
             RGBA8_UNORM  = GL_RGBA8, 
@@ -306,7 +306,7 @@ namespace fox::gfx::api::glf
     };
     struct     Culling
     {
-        enum class Face : gl::enum_t
+        enum class Facet : gl::enum_t
         {
             Front     = GL_FRONT, 
             Back      = GL_BACK, 
@@ -556,6 +556,15 @@ namespace fox::gfx::api::glf
     };
     struct     Debug
     {
+        enum class Severity : gl::enum_t 
+        {
+            DebugSeverityHigh         = GL_DEBUG_SEVERITY_HIGH,
+            DebugSeverityMedium       = GL_DEBUG_SEVERITY_MEDIUM,
+            DebugSeverityLow          = GL_DEBUG_SEVERITY_LOW,
+            DebugSeverityNotification = GL_DEBUG_SEVERITY_NOTIFICATION, 
+
+            DontCare                  = GL_DONT_CARE, 
+        };
         enum class Source : gl::enum_t 
         {
             API            = GL_DEBUG_SOURCE_API,
@@ -580,15 +589,6 @@ namespace fox::gfx::api::glf
             DebugTypeOther              = GL_DEBUG_TYPE_OTHER, 
 
             DontCare                    = GL_DONT_CARE, 
-        };
-        enum class Severity : gl::enum_t 
-        {
-            DebugSeverityHigh         = GL_DEBUG_SEVERITY_HIGH,
-            DebugSeverityMedium       = GL_DEBUG_SEVERITY_MEDIUM,
-            DebugSeverityLow          = GL_DEBUG_SEVERITY_LOW,
-            DebugSeverityNotification = GL_DEBUG_SEVERITY_NOTIFICATION, 
-
-            DontCare                  = GL_DONT_CARE, 
         };
     };
     enum class DepthFunction : gl::enum_t
@@ -688,6 +688,26 @@ namespace fox::gfx::api::glf
     };
     struct     FrameBuffer
     {
+        enum class Attachment : gl::enum_t
+        {
+            None         = GL_NONE, 
+
+            ColorIndex   = GL_COLOR_ATTACHMENT0, 
+            Depth        = GL_DEPTH_ATTACHMENT, 
+            Stencil      = GL_STENCIL_ATTACHMENT, 
+            DepthStencil = GL_DEPTH_STENCIL_ATTACHMENT, 
+        };
+        enum class Buffer : gl::enum_t
+        {
+            Color   = GL_COLOR, 
+            Depth   = GL_DEPTH, 
+            Stencil = GL_STENCIL, 
+        };
+        enum class Filter : gl::enum_t
+        {
+            Nearest = GL_NEAREST, 
+            Linear  = GL_LINEAR, 
+        };
         enum class Format : gl::enum_t
         {
             Red            = GL_RED, 
@@ -701,31 +721,19 @@ namespace fox::gfx::api::glf
             DepthStencil   = GL_DEPTH_STENCIL, 
             StencilIndex   = GL_STENCIL_INDEX, 
         };
-        enum class Type : gl::enum_t
+        enum class Parameter : gl::enum_t
         {
-            Byte            = GL_BYTE,
-            UnsignedByte    = GL_UNSIGNED_BYTE,
-            Short           = GL_SHORT,
-            UnsignedShort   = GL_UNSIGNED_SHORT,
-            Integer         = GL_INT,
-            UnsignedInteger = GL_UNSIGNED_INT,
-            HalfFloat       = GL_HALF_FLOAT, 
-            Float           = GL_FLOAT, 
-        };
-        enum class Buffer : gl::enum_t
-        {
-            Color   = GL_COLOR, 
-            Depth   = GL_DEPTH, 
-            Stencil = GL_STENCIL, 
-        };
-        enum class Attachment : gl::enum_t
-        {
-            None         = GL_NONE, 
-
-            ColorIndex   = GL_COLOR_ATTACHMENT0, 
-            Depth        = GL_DEPTH_ATTACHMENT, 
-            Stencil      = GL_STENCIL_ATTACHMENT, 
-            DepthStencil = GL_DEPTH_STENCIL_ATTACHMENT, 
+            ColorReadFormat             = GL_IMPLEMENTATION_COLOR_READ_FORMAT, 
+            ColorReadType               = GL_IMPLEMENTATION_COLOR_READ_TYPE, 
+            DefaultFixedSampleLocations = GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS, 
+            DefaultHeight               = GL_FRAMEBUFFER_DEFAULT_HEIGHT, 
+            DefaultLayers               = GL_FRAMEBUFFER_DEFAULT_LAYERS, 
+            DefaultSamples              = GL_FRAMEBUFFER_DEFAULT_SAMPLES, 
+            DefaultWidth                = GL_FRAMEBUFFER_DEFAULT_WIDTH, 
+            DoubleBuffer                = GL_DOUBLEBUFFER, 
+            SampleBuffers               = GL_SAMPLE_BUFFERS, 
+            Samples                     = GL_SAMPLES, 
+            Stereo                      = GL_STEREO, 
         };
         enum class Source : gl::enum_t
         {
@@ -765,24 +773,16 @@ namespace fox::gfx::api::glf
 
             ReadWrite   = Read | Write, 
         };
-        enum class Filter
+        enum class Type : gl::enum_t
         {
-            Nearest = GL_NEAREST, 
-            Linear  = GL_LINEAR, 
-        };
-        enum class Parameter : gl::enum_t
-        {
-            ColorReadFormat             = GL_IMPLEMENTATION_COLOR_READ_FORMAT, 
-            ColorReadType               = GL_IMPLEMENTATION_COLOR_READ_TYPE, 
-            DefaultFixedSampleLocations = GL_FRAMEBUFFER_DEFAULT_FIXED_SAMPLE_LOCATIONS, 
-            DefaultHeight               = GL_FRAMEBUFFER_DEFAULT_HEIGHT, 
-            DefaultLayers               = GL_FRAMEBUFFER_DEFAULT_LAYERS, 
-            DefaultSamples              = GL_FRAMEBUFFER_DEFAULT_SAMPLES, 
-            DefaultWidth                = GL_FRAMEBUFFER_DEFAULT_WIDTH, 
-            DoubleBuffer                = GL_DOUBLEBUFFER, 
-            SampleBuffers               = GL_SAMPLE_BUFFERS, 
-            Samples                     = GL_SAMPLES, 
-            Stereo                      = GL_STEREO, 
+            Byte            = GL_BYTE,
+            UnsignedByte    = GL_UNSIGNED_BYTE,
+            Short           = GL_SHORT,
+            UnsignedShort   = GL_UNSIGNED_SHORT,
+            Integer         = GL_INT,
+            UnsignedInteger = GL_UNSIGNED_INT,
+            HalfFloat       = GL_HALF_FLOAT, 
+            Float           = GL_FLOAT, 
         };
     };
     struct     Geometry
@@ -810,18 +810,18 @@ namespace fox::gfx::api::glf
     };
     struct     Hint
     {
+        enum class Mode : gl::enum_t
+        {
+            Fastest  = GL_FASTEST, 
+            Nicest   = GL_NICEST, 
+            DontCare = GL_DONT_CARE, 
+        };
         enum class Target : gl::enum_t
         {
             LineSmooth               = GL_LINE_SMOOTH_HINT, 
             PolygonSmooth            = GL_POLYGON_SMOOTH_HINT, 
             TextureCompression       = GL_TEXTURE_COMPRESSION_HINT, 
             FragmentShaderDerivative = GL_FRAGMENT_SHADER_DERIVATIVE_HINT, 
-        };
-        enum class Mode : gl::enum_t
-        {
-            Fastest  = GL_FASTEST, 
-            Nicest   = GL_NICEST, 
-            DontCare = GL_DONT_CARE, 
         };
     };
     struct     Image
@@ -879,27 +879,24 @@ namespace fox::gfx::api::glf
             RGB10_A2_UINT     = GL_RGB10_A2UI,
         };
     };
-    struct     Logic
+    enum class LogicalPixelOperation : gl::enum_t
     {
-        enum class Operation : gl::enum_t
-        {
-            Clear        = GL_CLEAR, 
-            Set          = GL_SET, 
-            Copy         = GL_COPY, 
-            CopyInverted = GL_COPY_INVERTED, 
-            NoOp         = GL_NOOP, 
-            Invert       = GL_INVERT, 
-            And          = GL_AND, 
-            Nand         = GL_NAND, 
-            Or           = GL_OR, 
-            Nor          = GL_NOR, 
-            Xor          = GL_XOR, 
-            Equivalent   = GL_EQUIV, 
-            AndReverse   = GL_AND_REVERSE, 
-            AndInverted  = GL_AND_INVERTED, 
-            OrReverse    = GL_OR_REVERSE, 
-            OrInverted   = GL_OR_INVERTED, 
-        };
+        Clear        = GL_CLEAR, 
+        Set          = GL_SET, 
+        Copy         = GL_COPY, 
+        CopyInverted = GL_COPY_INVERTED, 
+        NoOp         = GL_NOOP, 
+        Invert       = GL_INVERT, 
+        And          = GL_AND, 
+        Nand         = GL_NAND, 
+        Or           = GL_OR, 
+        Nor          = GL_NOR, 
+        Xor          = GL_XOR, 
+        Equivalent   = GL_EQUIV, 
+        AndReverse   = GL_AND_REVERSE, 
+        AndInverted  = GL_AND_INVERTED, 
+        OrReverse    = GL_OR_REVERSE, 
+        OrInverted   = GL_OR_INVERTED, 
     };
     struct     Memory
     {
@@ -1064,15 +1061,15 @@ namespace fox::gfx::api::glf
     };
     struct     Point
     {
+        enum class Origin : gl::enum_t
+        {
+            LowerLeft = GL_LOWER_LEFT, 
+            UpperLeft = GL_UPPER_LEFT, 
+        };
         enum class Parameter : gl::enum_t
         {
             FadeThresholdSize      = GL_POINT_FADE_THRESHOLD_SIZE, 
             SpriteCoordinateOrigin = GL_POINT_SPRITE_COORD_ORIGIN, 
-        };
-        enum class CoordinateOrigin : gl::enum_t
-        {
-            LowerLeft = GL_LOWER_LEFT, 
-            UpperLeft = GL_UPPER_LEFT, 
         };
     };
     struct     Program
@@ -1102,13 +1099,6 @@ namespace fox::gfx::api::glf
 
             TransformFeedbackBuffer                 = GL_TRANSFORM_FEEDBACK_BUFFER, 
             TransformFeedbackVarying                = GL_TRANSFORM_FEEDBACK_VARYING, 
-        };
-        enum class Property : gl::enum_t
-        {
-            ActiveResources, 
-            MaximumNameLength, 
-            MaximumNumberActiveVariables, 
-            MaximumNumberCompatibleSubroutines, 
         };
         enum class Parameter : gl::enum_t
         {
@@ -1140,6 +1130,28 @@ namespace fox::gfx::api::glf
             TransformFeedbackVaryingMaximumLength = GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH, 
             TransformFeedbackVaryings             = GL_TRANSFORM_FEEDBACK_VARYINGS, 
             ValidateStatus                        = GL_VALIDATE_STATUS, 
+        };
+        struct     Pipeline
+        {
+            enum class Property : gl::enum_t
+            {
+                ActiveProgram                = GL_ACTIVE_PROGRAM, 
+                VertexShader                 = GL_VERTEX_SHADER, 
+                TessellationControlShader    = GL_TESS_CONTROL_SHADER, 
+                TessellationEvaluationShader = GL_TESS_EVALUATION_SHADER, 
+                GeometryShader               = GL_GEOMETRY_SHADER, 
+                FragmentShader               = GL_FRAGMENT_SHADER, 
+                ComputeShader                = GL_COMPUTE_SHADER, 
+                ValidateStatus               = GL_VALIDATE_STATUS, 
+                InfoLogLength                = GL_INFO_LOG_LENGTH, 
+            };
+        };
+        enum class Property : gl::enum_t
+        {
+            ActiveResources, 
+            MaximumNameLength, 
+            MaximumNumberActiveVariables, 
+            MaximumNumberCompatibleSubroutines, 
         };
         enum class Resource : gl::enum_t
         {
@@ -1179,7 +1191,7 @@ namespace fox::gfx::api::glf
             Separable         = GL_PROGRAM_SEPARABLE, 
             BinaryRetrievable = GL_PROGRAM_BINARY_RETRIEVABLE_HINT, 
         };
-        enum       Stage : gl::bitfield_t
+        enum class Stage : gl::bitfield_t
         {
             Vertex                 = GL_VERTEX_SHADER_BIT, 
             TessellationControl    = GL_TESS_CONTROL_SHADER_BIT, 
@@ -1198,35 +1210,20 @@ namespace fox::gfx::api::glf
             ActiveSubroutineUniformMaximumLength = GL_ACTIVE_SUBROUTINE_UNIFORM_MAX_LENGTH, 
             ActiveSubroutineMaximumLength        = GL_ACTIVE_SUBROUTINE_MAX_LENGTH, 
         };
-        struct     Pipeline
-        {
-            enum class Property : gl::enum_t
-            {
-                ActiveProgram                = GL_ACTIVE_PROGRAM, 
-                VertexShader                 = GL_VERTEX_SHADER, 
-                TessellationControlShader    = GL_TESS_CONTROL_SHADER, 
-                TessellationEvaluationShader = GL_TESS_EVALUATION_SHADER, 
-                GeometryShader               = GL_GEOMETRY_SHADER, 
-                FragmentShader               = GL_FRAGMENT_SHADER, 
-                ComputeShader                = GL_COMPUTE_SHADER, 
-                ValidateStatus               = GL_VALIDATE_STATUS, 
-                InfoLogLength                = GL_INFO_LOG_LENGTH, 
-            };
-        };
     };
     struct     ProvokingVertex
     {
-        enum class Mode : gl::enum_t
-        {
-            FirstVertex = GL_FIRST_VERTEX_CONVENTION,
-            LastVertex = GL_LAST_VERTEX_CONVENTION,
-
-        };
         enum class Convention : gl::enum_t
         {
             ProvokingVertex = GL_PROVOKING_VERTEX,
             FirstVertex     = GL_FIRST_VERTEX_CONVENTION,
             LastVertex      = GL_LAST_VERTEX_CONVENTION,
+        };
+        enum class Mode : gl::enum_t
+        {
+            FirstVertex = GL_FIRST_VERTEX_CONVENTION,
+            LastVertex = GL_LAST_VERTEX_CONVENTION,
+
         };
     };
     struct     Query
@@ -1243,6 +1240,19 @@ namespace fox::gfx::api::glf
             QueryRegionWait     = GL_QUERY_BY_REGION_WAIT, 
             QueryWait           = GL_QUERY_WAIT, 
             QueryWaitInverted   = GL_QUERY_WAIT_INVERTED, 
+        };
+        enum class Parameter : gl::enum_t
+        {
+            Result          = GL_QUERY_RESULT, 
+            ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
+            ResultAvailable = GL_QUERY_RESULT_AVAILABLE, 
+
+            Target          = GL_QUERY_TARGET, 
+        };
+        enum class Symbol : gl::enum_t
+        {
+            Current     = GL_CURRENT_QUERY, 
+            CounterBits = GL_QUERY_COUNTER_BITS, 
         };
         enum class Target : gl::enum_t
         {
@@ -1266,19 +1276,6 @@ namespace fox::gfx::api::glf
             TransformFeedbackStreamOverflow         = GL_TRANSFORM_FEEDBACK_STREAM_OVERFLOW, 
             VertexShaderInvocations                 = GL_VERTEX_SHADER_INVOCATIONS, 
             VerticesSubmitted                       = GL_VERTICES_SUBMITTED, 
-        };
-        enum class Parameter : gl::enum_t
-        {
-            Result          = GL_QUERY_RESULT, 
-            ResultNoWait    = GL_QUERY_RESULT_NO_WAIT, 
-            ResultAvailable = GL_QUERY_RESULT_AVAILABLE, 
-
-            Target          = GL_QUERY_TARGET, 
-        };
-        enum class Symbol : gl::enum_t
-        {
-            Current     = GL_CURRENT_QUERY, 
-            CounterBits = GL_QUERY_COUNTER_BITS, 
         };
     };
     struct     RenderBuffer
@@ -1324,8 +1321,8 @@ namespace fox::gfx::api::glf
     {
         enum class Parameter : gl::enum_t
         {
-            CompareMode      = GL_TEXTURE_COMPARE_MODE, 
-            CompareFunction  = GL_TEXTURE_COMPARE_FUNC, 
+            CompareMode         = GL_TEXTURE_COMPARE_MODE, 
+            CompareFunction     = GL_TEXTURE_COMPARE_FUNC, 
 
             MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
             MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
@@ -1344,13 +1341,6 @@ namespace fox::gfx::api::glf
     };
     struct     Shader
     {
-        struct     Binary
-        {
-            enum class Format : gl::enum_t
-            {
-
-            };
-        };
         enum class Parameter : gl::enum_t
         {
             CompileStatus = GL_COMPILE_STATUS, 
@@ -1379,33 +1369,9 @@ namespace fox::gfx::api::glf
             Fragment               = GL_FRAGMENT_SHADER, 
             Compute                = GL_COMPUTE_SHADER, 
         };
-        enum class SubroutineParameter : gl::enum_t
-        {
-            NumberCompatibleSubroutines, 
-            CompatibleSubroutines, 
-            UniformSize, 
-            UniformNameLength, 
-        };
     };
     struct     Stencil
     {
-        enum class Function : gl::enum_t
-        {
-            Always       = GL_ALWAYS, 
-            Never        = GL_NEVER, 
-            Equal        = GL_EQUAL, 
-            NotEqual     = GL_NOTEQUAL, 
-            Less         = GL_LESS, 
-            LessEqual    = GL_LEQUAL, 
-            Greater      = GL_GREATER, 
-            GreaterEqual = GL_GEQUAL, 
-        };
-        enum class Face : gl::enum_t
-        {
-            Front     = GL_FRONT, 
-            Back      = GL_BACK, 
-            FrontBack = GL_FRONT_AND_BACK, 
-        };
         enum class Action : gl::enum_t
         {
             Keep          = GL_KEEP, 
@@ -1417,13 +1383,30 @@ namespace fox::gfx::api::glf
             DecrementWrap = GL_DECR_WRAP, 
             Invert        = GL_INVERT, 
         };
+        enum class Face : gl::enum_t
+        {
+            Front     = GL_FRONT, 
+            Back      = GL_BACK, 
+            FrontBack = GL_FRONT_AND_BACK, 
+        };
+        enum class Function : gl::enum_t
+        {
+            Always       = GL_ALWAYS, 
+            Never        = GL_NEVER, 
+            Equal        = GL_EQUAL, 
+            NotEqual     = GL_NOTEQUAL, 
+            Less         = GL_LESS, 
+            LessEqual    = GL_LEQUAL, 
+            Greater      = GL_GREATER, 
+            GreaterEqual = GL_GEQUAL, 
+        };
     };
     struct     Synchronization
     {
-        enum class FlushCommand : gl::bitfield_t
+        enum class Command : gl::bitfield_t
         {
-            None = GL_NONE, 
-            Sync = GL_SYNC_FLUSH_COMMANDS_BIT, 
+            None  = GL_NONE, 
+            Flush = GL_SYNC_FLUSH_COMMANDS_BIT, 
         };
         struct     Object
         {
@@ -1476,6 +1459,11 @@ namespace fox::gfx::api::glf
             D    = GL_DEPTH_COMPONENT, 
             S    = GL_STENCIL_INDEX, 
         };
+        enum class CompareMode : gl::enum_t
+        {
+            None      = GL_NONE, 
+            Reference = GL_COMPARE_REF_TO_TEXTURE, 
+        };
         enum class CompareFunction : gl::enum_t
         {
             Always       = GL_ALWAYS, 
@@ -1489,11 +1477,6 @@ namespace fox::gfx::api::glf
 
             Greater      = GL_GREATER, 
             GreaterEqual = GL_GEQUAL, 
-        };
-        enum class CompareMode : gl::enum_t
-        {
-            None      = GL_NONE, 
-            Reference = GL_COMPARE_REF_TO_TEXTURE, 
         };
         enum class CompressedFormat : gl::enum_t
         {
@@ -1552,12 +1535,12 @@ namespace fox::gfx::api::glf
 
             S8_UINT           = GL_STENCIL_INDEX8, 
         };
-        enum class MagnificationFilter
+        enum class MagnificationFilter : gl::enum_t
         {
             Nearest = GL_NEAREST, 
             Linear  = GL_LINEAR, 
         };
-        enum class MinificationFilter
+        enum class MinificationFilter : gl::enum_t
         {
             Nearest              = GL_NEAREST, 
             Linear               = GL_LINEAR, 
@@ -1592,13 +1575,13 @@ namespace fox::gfx::api::glf
         };
         enum class Swizzle : gl::enum_t
         {
-            Red   = GL_RED  , 
+            Red   = GL_RED, 
             Green = GL_GREEN, 
-            Blue  = GL_BLUE , 
+            Blue  = GL_BLUE, 
             Alpha = GL_ALPHA, 
 
-            Zero  = GL_ZERO , 
-            One   = GL_ONE  , 
+            Zero  = GL_ZERO, 
+            One   = GL_ONE, 
         };
         enum class Target : gl::enum_t
         {
@@ -1638,7 +1621,7 @@ namespace fox::gfx::api::glf
     };
     struct     Tessellation
     {
-        enum class GenerationMode : gl::enum_t
+        enum class Generation : gl::enum_t
         {
             Quads     = GL_QUADS, 
             Triangles = GL_TRIANGLES, 
@@ -1663,6 +1646,12 @@ namespace fox::gfx::api::glf
             InterleavedAttributes = GL_INTERLEAVED_ATTRIBS, 
             SeparateAttributes    = GL_SEPARATE_ATTRIBS, 
         };
+        enum class PrimitiveMode : gl::enum_t
+        {
+            Points    = GL_POINTS, 
+            Lines     = GL_LINES, 
+            Triangles = GL_TRIANGLES, 
+        };
         enum class Property : gl::enum_t
         {
             BufferBinding = GL_TRANSFORM_FEEDBACK_BUFFER_BINDING, 
@@ -1670,12 +1659,6 @@ namespace fox::gfx::api::glf
             BufferSize    = GL_TRANSFORM_FEEDBACK_BUFFER_SIZE, 
             Paused        = GL_TRANSFORM_FEEDBACK_PAUSED, 
             Active        = GL_TRANSFORM_FEEDBACK_ACTIVE, 
-        };
-        enum class PrimitiveMode : gl::enum_t
-        {
-            Points    = GL_POINTS, 
-            Lines     = GL_LINES, 
-            Triangles = GL_TRIANGLES, 
         };
     };
     struct     Uniform
@@ -1820,7 +1803,7 @@ namespace fox::gfx::api::glf
     };
     struct     VertexArray
     {
-        struct Attribute
+        struct     Attribute
         {
             enum class Format : gl::enum_t
             {
@@ -1891,17 +1874,7 @@ namespace fox::gfx::api::glf
 
 
 
-
-
-
-
-
-
-
-
-
-
-        template<typename T>
+    template<typename T>
     struct BitmaskTraits { static constexpr bool enable_bitmask_operations = false; };
 
     template<typename T> concept ValidBitmaskEnumClassConcept = BitmaskTraits<T>::enable_bitmask_operations;
@@ -1922,11 +1895,13 @@ namespace fox::gfx::api::glf
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator|=(T& first, T second) { return first = first | second; }
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
 
-    template<> struct BitmaskTraits<glf::Buffer::Mask>                 { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Buffer::Mapping::AccessFlags> { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Buffer::Mask>                 { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Buffer::StorageFlags>         { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Context::Flag>                { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Attachment>      { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Source>          { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::Barrier>              { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Memory::RegionalBarrier>      { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Program::Stage>               { static constexpr bool enable_bitmask_operations = true; };
 }

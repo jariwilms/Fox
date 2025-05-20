@@ -105,7 +105,14 @@ namespace fox::gfx::api::glp
     {
         std::array<glf::Texture::Swizzle, 4> value{};
     };
-
+    struct fade_threshold_size
+    {
+        gl::float32_t value{};
+    };
+    struct sprite_coordinate_origin
+    {
+        glf::Point::Origin value{};
+    };
     struct patch_vertices
     {
         gl::uint32_t value{};
@@ -132,7 +139,7 @@ namespace fox::gfx::api::glp
                                     glp::swizzle_r           , glp::swizzle_g          , glp::swizzle_b , glp::swizzle_a, glp::swizzle_rgba, 
                                     glp::maximum_lod         , glp::minimum_lod        , glp::lod_bias>;
     using clear_t             = std::variant<glp::color_index, glp::depth, glp::stencil, glp::depthstencil>;
-    using point_parameter_t   = std::variant<gl::float32_t, glf::Point::Parameter>;
+    using point_parameter_t   = std::variant<glp::fade_threshold_size, glp::sprite_coordinate_origin>;
     using sampler_parameter_t = std::variant<
                                     glp::magnification_filter, glp::minification_filter, 
                                     glp::maximum_lod         , glp::minimum_lod        , 

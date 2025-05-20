@@ -402,7 +402,7 @@ namespace fox::gfx::api
         gl::viewport      (frameBuffer->dimensions());
         gl::clear         (glf::Buffer::Mask::All);
         gl::enable        (glf::Feature::FaceCulling);
-        gl::cull_face     (glf::Culling::Face::Back);
+        gl::cull_face     (glf::Culling::Facet::Back);
         gl::front_face    (glf::Orientation::CounterClockwise);
         gl::enable        (glf::Feature::DepthTest);
         gl::depth_function(glf::DepthFunction::Less);
@@ -453,7 +453,7 @@ namespace fox::gfx::api
         gl::viewport(dimensions);
         gl::clear(glf::Buffer::Mask::Depth);
         gl::enable(glf::Feature::FaceCulling);
-        gl::cull_face(glf::Culling::Face::Back);
+        gl::cull_face(glf::Culling::Facet::Back);
         gl::front_face(glf::Orientation::CounterClockwise);
         gl::enable(glf::Feature::DepthTest);
         gl::depth_function(glf::DepthFunction::Less);
@@ -564,13 +564,13 @@ namespace fox::gfx::api
             gl::enable(glf::Feature::Blending);
             gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
             gl::enable(glf::Feature::FaceCulling);
-            gl::cull_face(glf::Culling::Face::Front);
+            gl::cull_face(glf::Culling::Facet::Front);
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
         }
 
         //gl::depth_mask(gl::True);
-        gl::cull_face(glf::Culling::Face::Back);
+        gl::cull_face(glf::Culling::Facet::Back);
         //gl::disable(glf::Feature::StencilTest);
 
     }
@@ -584,7 +584,7 @@ namespace fox::gfx::api
         gl::viewport(target->dimensions());
         gl::clear(glf::Buffer::Mask::All);
         gl::enable(glf::Feature::FaceCulling);
-        gl::cull_face(glf::Culling::Face::Back);
+        gl::cull_face(glf::Culling::Facet::Back);
 
         const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
         pva->bind();
