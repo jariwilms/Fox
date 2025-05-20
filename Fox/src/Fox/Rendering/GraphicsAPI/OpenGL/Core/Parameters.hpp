@@ -23,12 +23,6 @@ namespace fox::gfx::api::glp
         gl::float32_t depth{};
         gl::int32_t   stencil{};
     };
-    struct framebuffer
-    {
-        gl::handle_t                 frameBuffer{};
-        glf::FrameBuffer::Attachment attachment{};
-    };
-
     struct compare_mode
     { 
         glf::Texture::CompareMode value{}; 
@@ -138,7 +132,6 @@ namespace fox::gfx::api::glp
                                     glp::swizzle_r           , glp::swizzle_g          , glp::swizzle_b , glp::swizzle_a, glp::swizzle_rgba, 
                                     glp::maximum_lod         , glp::minimum_lod        , glp::lod_bias>;
     using clear_t             = std::variant<glp::color_index, glp::depth, glp::stencil, glp::depthstencil>;
-    using framebuffer_t       = std::variant<glp::framebuffer, glf::FrameBuffer::Source>;
     using point_parameter_t   = std::variant<gl::float32_t, glf::Point::Parameter>;
     using sampler_parameter_t = std::variant<
                                     glp::magnification_filter, glp::minification_filter, 

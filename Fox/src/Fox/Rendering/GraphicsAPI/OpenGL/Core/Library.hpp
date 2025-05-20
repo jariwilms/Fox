@@ -20,7 +20,7 @@ namespace fox::gfx::api::gl
         return reinterpret_cast<const std::underlying_type_t<T>*>(value);
     }
 
-
+    
 
     template<typename T> requires std::is_integral_v<T> and std::is_unsigned_v<T>
     static constexpr auto as_positive_signed_integral(T value)
