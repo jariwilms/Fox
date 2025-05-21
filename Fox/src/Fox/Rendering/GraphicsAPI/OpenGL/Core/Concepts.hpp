@@ -5,7 +5,11 @@
 namespace fox::gfx::api::gl
 {
     template<glf::Feature F>
-    concept indexed_feature_c = (F == glf::Feature::Blending or F == glf::Feature::ScissorTest);
+    concept indexed_feature_c = 
+        (
+               F == glf::Feature::Blending 
+            or F == glf::Feature::ScissorTest
+        );
 
     template<glf::Data D>
     concept indexed_data_c =
@@ -23,7 +27,7 @@ namespace fox::gfx::api::gl
             or D == glf::Data::VertexBindingOffset
             or D == glf::Data::VertexBindingStride
             or D == glf::Data::VertexBindingBuffer
-            );
+        );
 
     template<typename T>
     concept arithmetic_type_c =
