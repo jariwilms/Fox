@@ -998,16 +998,17 @@ namespace fox::gfx::api::glf
     {
         enum class Format : gl::enum_t
         {
-            StencilIndex   = GL_STENCIL_INDEX, 
-            DepthComponent = GL_DEPTH_COMPONENT, 
-            DepthStencil   = GL_DEPTH_STENCIL, 
-            Red            = GL_RED, 
-            Green          = GL_GREEN, 
-            Blue           = GL_BLUE, 
+            R              = GL_RED, 
+            G              = GL_GREEN, 
+            B              = GL_BLUE, 
             RGB            = GL_RGB, 
             RGBA           = GL_RGBA, 
             BGR            = GL_BGR, 
             BGRA           = GL_BGRA, 
+
+            StencilIndex   = GL_STENCIL_INDEX, 
+            DepthComponent = GL_DEPTH_COMPONENT, 
+            DepthStencil   = GL_DEPTH_STENCIL, 
         };
         enum class Type : gl::enum_t
         {

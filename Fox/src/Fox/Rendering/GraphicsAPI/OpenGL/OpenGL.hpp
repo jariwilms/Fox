@@ -2162,9 +2162,9 @@ namespace fox::gfx::api::gl
     {
         glPolygonMode(gl::to_underlying(glf::Polygon::Face::FrontAndBack), gl::to_underlying(mode));
     }
-    static void polygon_offset                          (gl::float32_t factor, gl::float32_t units, std::optional<gl::float32_t> clamp)
+    static void polygon_offset_clamp                    (gl::float32_t factor, gl::float32_t units, gl::float32_t clamp)
     {
-        glPolygonOffsetClamp(factor, units, clamp.value_or(gl::float32_t{ 0.0f }));
+        glPolygonOffsetClamp(factor, units, clamp);
     }
     static void scissor_array                           (gl::index_t index, std::span<const gl::uint32_t, 4> values)
     {
@@ -2198,13 +2198,13 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 17 - Writing Fragments and Samples to the Framebuffer
-    static void stencil_function                        (glf::Stencil::Function function, std::optional<gl::uint32_t> reference, std::optional<gl::uint32_t> mask)
+    static void stencil_function                        (glf::Stencil::Function function, gl::uint32_t reference, gl::uint32_t mask)
     {
-        glStencilFunc(gl::to_underlying(function), reference.value_or(gl::uint32_t{ 0u }), mask.value_or(gl::uint32_t{ 0u }));
+        glStencilFunc(gl::to_underlying(function), static_cast<gl::int32_t>(reference), mask);
     }
-    static void stencil_function_separate               (glf::Stencil::Face face, glf::Stencil::Function function, std::optional<gl::uint32_t> reference, std::optional<gl::uint32_t> mask)
+    static void stencil_function_separate               (glf::Stencil::Face face, glf::Stencil::Function function, gl::uint32_t reference, gl::uint32_t mask)
     {
-        glStencilFuncSeparate(gl::to_underlying(face), gl::to_underlying(function), reference.value_or(gl::uint32_t{ 0u }), mask.value_or(gl::uint32_t{ 0u }));
+        glStencilFuncSeparate(gl::to_underlying(face), gl::to_underlying(function), static_cast<gl::int32_t>(reference), mask);
     }
     static void stencil_operation                       (glf::Stencil::Action stencil, glf::Stencil::Action depth, glf::Stencil::Action depthStencil)
     {
@@ -2266,10 +2266,13 @@ namespace fox::gfx::api::gl
     {
         glNamedFramebufferDrawBuffers(gl::to_underlying(frameBuffer), static_cast<gl::sizei_t>(sources.size()), gl::to_underlying_ptr(sources.data()));
     }
-    static void color_mask                              (std::optional<gl::handle_t> buffer, const gl::Vector4b& mask)
+    static void color_mask                              (const gl::Vector4b& mask)
     {
-        if (buffer.has_value()) glColorMaski(gl::to_underlying(buffer.value()), mask.r, mask.g, mask.b, mask.a);
-        else                    glColorMask (                                   mask.r, mask.g, mask.b, mask.a);
+        glColorMask(mask.r, mask.g, mask.b, mask.a);
+    }
+    static void color_mask_index                        (gl::handle_t buffer, const gl::Vector4b& mask)
+    {
+        glColorMaski(gl::to_underlying(buffer), mask.r, mask.g, mask.b, mask.a);
     }
     static void depth_mask                              (gl::bool_t flag)
     {
@@ -2407,14 +2410,39 @@ namespace fox::gfx::api::gl
     {
         glNamedFramebufferReadBuffer(gl::to_underlying(frameBuffer), gl::to_underlying(source));
     }
-    static void read_pixels                             (glf::PixelData::Format format, glf::PixelData::Type type, const gl::Area& region, std::optional<gl::uint32_t> limit)
+    template<glf::PixelData::Format F, glf::PixelData::Type T>
+    static void read_pixels                             (const gl::Area& region)
     {
-        glReadnPixels(
-            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
-            static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y), 
-            gl::to_underlying       (format)         , gl::to_underlying       (type)           , 
-            static_cast<gl::sizei_t>(limit.value_or(gl::uint32_t{ 0u }))                        , 
-            nullptr);
+        //const auto& map_format_size = []<glf::PixelData::Format F>() constexpr
+        //    {
+        //        if (F == glf::PixelData::Format::R             ) return 0;
+        //        if (F == glf::PixelData::Format::G             ) return 0;
+        //        if (F == glf::PixelData::Format::B             ) return 0;
+        //        if (F == glf::PixelData::Format::RGB           ) return 0;
+        //        if (F == glf::PixelData::Format::RGBA          ) return 0;
+        //        if (F == glf::PixelData::Format::BGR           ) return 0;
+        //        if (F == glf::PixelData::Format::BGRA          ) return 0;
+        //        if (F == glf::PixelData::Format::StencilIndex  ) return 0;
+        //        if (F == glf::PixelData::Format::DepthComponent) return 0;
+        //        if (F == glf::PixelData::Format::DepthStencil  ) return 0;
+        //    };
+
+        //const auto& binding = gl::get_value<glf::Data::PixelPackBufferBinding>();
+
+        //if (binding == gl::NullObject)
+        //{
+        //    const auto& size = region.extent.x * region.extent.y;
+        //    std::vector<T> value(size);
+
+        //    glReadnPixels(
+        //        static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
+        //        static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y), 
+        //        gl::to_underlying       (format)         , gl::to_underlying       (type)           , 
+        //        static_cast<gl::sizei_t>(value.size())   , 
+        //        value.data());
+
+        //    return value;
+        //}
     }
     static void clamp_color                             (gl::bool_t value)
     {
