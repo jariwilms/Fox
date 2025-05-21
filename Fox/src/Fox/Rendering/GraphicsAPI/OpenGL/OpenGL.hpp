@@ -412,7 +412,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::VertexBindingStride           ) return get_unsigned_integer32_v(D, index);
         if constexpr (D == glf::Data::Viewport                      ) return get_area_v              (D, index);
     }
-    template<glf::Feature F> requires(not gl::indexed_feature_c<F>)
+    template<glf::Feature F>
     static void enable                                  ()
     {
         glEnable(gl::to_underlying(F));
@@ -422,7 +422,7 @@ namespace fox::gfx::api::gl
     {
         glEnablei(gl::to_underlying(F), index);
     }
-    template<glf::Feature F> requires(not gl::indexed_feature_c<F>)
+    template<glf::Feature F>
     static void disable                                 ()
     {
         glDisable(gl::to_underlying(F));
@@ -432,7 +432,7 @@ namespace fox::gfx::api::gl
     {
         glDisablei(gl::to_underlying(F), index);
     }
-    template<glf::Feature F> requires(not gl::indexed_feature_c<F>)
+    template<glf::Feature F>
     static auto is_enabled                              ()
     {
         return static_cast<gl::bool_t>(glIsEnabled(gl::to_underlying(F)));
@@ -953,7 +953,7 @@ namespace fox::gfx::api::gl
             gl::int32_t value{};
             glGetVertexArrayiv(gl::to_underlying(vertexArray), gl::to_underlying(P), &value);
 
-            return static_cast<gl::handle_t>(value));
+            return static_cast<gl::handle_t>(value);
         }
     }
     template<glf::VertexArray::Parameter P>
