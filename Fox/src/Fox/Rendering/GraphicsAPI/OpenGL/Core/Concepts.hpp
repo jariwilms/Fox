@@ -5,27 +5,24 @@
 namespace fox::gfx::api::gl
 {
     template<glf::Feature F>
-    concept indexable_feature_c = (F == glf::Feature::Blending or F == glf::Feature::ScissorTest);
+    concept indexed_feature_c = (F == glf::Feature::Blending or F == glf::Feature::ScissorTest);
 
     template<glf::Data D>
-    concept indexable_data_c =
+    concept indexed_data_c =
         (
                D == glf::Data::MaximumComputeWorkGroupCount
             or D == glf::Data::MaximumComputeWorkGroupSize
-            or D == glf::Data::ShaderStorageBufferBinding
-            or D == glf::Data::ShaderStorageBufferStart
+            or D == glf::Data::SampleMaskValue
             or D == glf::Data::ShaderStorageBufferSize
-            or D == glf::Data::TransformFeedbackBufferBinding
-            or D == glf::Data::TransformFeedbackBufferStart
+            or D == glf::Data::ShaderStorageBufferStart
             or D == glf::Data::TransformfeedbackBufferSize
-            or D == glf::Data::UniformBufferBinding
+            or D == glf::Data::TransformFeedbackBufferStart
             or D == glf::Data::UniformBufferSize
             or D == glf::Data::UniformBufferStart
             or D == glf::Data::VertexBindingDivisor
             or D == glf::Data::VertexBindingOffset
             or D == glf::Data::VertexBindingStride
             or D == glf::Data::VertexBindingBuffer
-            or D == glf::Data::Viewport
             );
 
     template<typename T>

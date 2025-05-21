@@ -72,10 +72,10 @@ namespace fox::gfx::api::gl
 			s_majorVersion           = gl::get_value<glf::Data::MajorVersion>();
 			s_minorVersion           = gl::get_value<glf::Data::MinorVersion>();
 
-			s_vendor                 = gl::get_string(glf::Connection::Vendor,                 {});
-			s_renderer               = gl::get_string(glf::Connection::Renderer,               {});
-			s_version                = gl::get_string(glf::Connection::Version,                {});
-			s_shadingLanguageVersion = gl::get_string(glf::Connection::ShadingLanguageVersion, {});
+			s_vendor                 = gl::get_string<glf::Connection::Vendor>();
+			s_renderer               = gl::get_string<glf::Connection::Renderer>();
+			s_version                = gl::get_string<glf::Connection::Version>();
+            s_shadingLanguageVersion = gl::get_string<glf::Connection::ShadingLanguageVersion>();
 		}
 
 	private:
