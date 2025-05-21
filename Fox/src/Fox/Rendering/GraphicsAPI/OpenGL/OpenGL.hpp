@@ -1588,11 +1588,11 @@ namespace fox::gfx::api::gl
     {
         const auto& texture_parameter_iv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::int32_t   value)
             {
-                glTextureParameterIiv(gl::to_underlying(texture), gl::to_underlying(parameter), &value);
+                glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(parameter), value);
             };
         const auto& texture_parameter_uiv = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::uint32_t  value)
             {
-                glTextureParameterIuiv(gl::to_underlying(texture), gl::to_underlying(parameter), &value);
+                glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(parameter), static_cast<gl::int32_t>(value));
             };
         const auto& texture_parameter_fv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::float32_t value)
             {
