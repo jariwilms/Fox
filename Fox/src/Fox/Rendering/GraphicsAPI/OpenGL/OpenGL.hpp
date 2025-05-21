@@ -27,10 +27,8 @@ namespace fox::gfx::api::gl
 
 
 
-    //Generic Context State Queries
-
     //Chapter 22 - Context State Queries
-    template<glf::Data D> requires(not gl::indexed_data_c<D>)
+    template<glf::Data D> requires (not gl::indexed_data_c<D>)
     static auto get_value                               ()
     {
         const auto& get_boolean_v            = [](glf::Data data)
@@ -358,7 +356,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::ViewportIndexProvokingVertex)                     return glf::ProvokingVertex::Convention{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::ViewportSubPixelBits)                             return get_unsigned_integer32_v(D);
     }
-    template<glf::Data D> requires(gl::indexed_data_c<D>)
+    template<glf::Data D> requires gl::indexed_data_c<D>
     static auto get_value_index                         (gl::index_t index)
     {
         const auto& get_unsigned_integer32_v = [](glf::Data data, gl::index_t index)
@@ -417,7 +415,7 @@ namespace fox::gfx::api::gl
     {
         glEnable(gl::to_underlying(F));
     }
-    template<glf::Feature F> requires(gl::indexed_feature_c<F>)
+    template<glf::Feature F> requires gl::indexed_feature_c<F>
     static void enable_index                            (gl::index_t index)
     {
         glEnablei(gl::to_underlying(F), index);
@@ -427,7 +425,7 @@ namespace fox::gfx::api::gl
     {
         glDisable(gl::to_underlying(F));
     }
-    template<glf::Feature F> requires(gl::indexed_feature_c<F>)
+    template<glf::Feature F> requires gl::indexed_feature_c<F>
     static void disable_index                           (gl::index_t index)
     {
         glDisablei(gl::to_underlying(F), index);
@@ -437,7 +435,7 @@ namespace fox::gfx::api::gl
     {
         return static_cast<gl::bool_t>(glIsEnabled(gl::to_underlying(F)));
     }
-    template<glf::Feature F> requires(gl::indexed_feature_c<F>)
+    template<glf::Feature F> requires gl::indexed_feature_c<F>
     static auto is_enabled_index                        (gl::index_t index)
     {
         return static_cast<gl::bool_t>(glIsEnabledi(gl::to_underlying(F)));
@@ -1049,10 +1047,6 @@ namespace fox::gfx::api::gl
     }
 
 
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
