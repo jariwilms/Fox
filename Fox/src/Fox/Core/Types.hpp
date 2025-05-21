@@ -11,7 +11,7 @@ namespace fox
 	using char_t     = char;          //Not equal to signed char apparently...
 	using uchar_t    = unsigned char;
 	using schar_t    = signed char;
-
+	
 	using int8_t     = std::int8_t;
 	using uint8_t    = std::uint8_t;
 	using int16_t    = std::int16_t;
@@ -30,6 +30,12 @@ namespace fox
 	using index_t    = fox::uint32_t; //Number of elements offset
 
 	using uuid_t     = std::bitset<128u>;
+
+	enum : fox::bool_t
+	{
+		False = false,
+		True  = true,
+	};
 
 
 
@@ -58,26 +64,38 @@ namespace fox
 
 
 
-	enum : fox::bool_t
-	{
-		False = false, 
-		True  = true, 
-	};
+	template<typename T, typename U, fox::uint32_t N>
+    struct region_t
+    {
+        region_t(const fox::Vector<T, N>& extent, const fox::Vector<U, N>& origin = {})
+            : extent{ extent }, origin{ origin } {}
 
-	struct     range_t
-	{
-		explicit range_t(fox::count_t count, fox::index_t index = {})
-			: count{ count }, index{ index } {}
+        bool operator==(const region_t&) const = default;
 
-		fox::count_t count{};
-		fox::index_t index{};
-	};
-	struct byterange_t
-	{
-		explicit byterange_t(fox::size_t size, fox::offset_t offset = {})
-			: size{ size }, offset{ offset } {}
+        fox::Vector<T, N> extent{};
+        fox::Vector<U, N> origin{};
+    };
+    struct range_t
+    {
+        range_t(fox::count_t count, fox::index_t index = {})
+            : count{ count }, index{ index } {}
 
-		fox::size_t   size{};
-		fox::offset_t offset{};
-	};
+        bool operator==(const range_t&) const = default;
+
+        fox::count_t count{};
+        fox::index_t index{};
+    };
+    struct byterange_t
+    {
+        byterange_t(fox::size_t size, fox::offset_t offset = {})
+            : size{ size }, offset{ offset } {}
+
+        bool operator==(const byterange_t&) const = default;
+
+        fox::size_t   size{};
+        fox::offset_t offset{};
+    };
+
+	using Range     = fox::range_t;
+	using ByteRange = fox::byterange_t;
 }

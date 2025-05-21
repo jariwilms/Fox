@@ -618,11 +618,11 @@ namespace fox::gfx::api::gl
     {
         glBindBuffersBase(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
-    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::byterange_t range)
+    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::ByteRange range)
     {
         glBindBufferRange(gl::to_underlying(target), index, gl::to_underlying(buffer), range.offset, range.size);
     }
-    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::index_t index)
+    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::ByteRange> ranges, glf::Buffer::BaseTarget target, gl::index_t index)
     {
         std::vector<gl::size_t>   sizes  (ranges.size());
         std::vector<gl::offset_t> offsets(ranges.size());
@@ -651,19 +651,19 @@ namespace fox::gfx::api::gl
         glNamedBufferSubData(gl::to_underlying(buffer), offset, static_cast<gl::size_t>(data.size_bytes()), data.data());
     }
     template<typename T>
-    static void clear_buffer_data                       (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type, std::optional<gl::byterange_t> range)
+    static void clear_buffer_data                       (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type, std::optional<gl::ByteRange> range)
     {
         if   (range.has_value()) glClearNamedBufferSubData(gl::to_underlying(buffer), gl::to_underlying(format), range->offset, range->size, gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
         else                     glClearNamedBufferData   (gl::to_underlying(buffer), gl::to_underlying(format),                             gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
     }
     
     template<typename T>
-    static auto map_buffer                              (gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access, std::optional<gl::byterange_t> range)
+    static auto map_buffer                              (gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access, std::optional<gl::ByteRange> range)
     {
         if   (range.has_value()) return reinterpret_cast<T*>(glMapBufferRange(gl::to_underlying(buffer), range->offset, range->size, gl::to_underlying(access)));
         else                     return reinterpret_cast<T*>(glMapBuffer     (gl::to_underlying(buffer),                             gl::to_underlying(access)));
     }
-    static void flush_buffer_range                      (gl::handle_t buffer, gl::byterange_t range)
+    static void flush_buffer_range                      (gl::handle_t buffer, gl::ByteRange range)
     {
         glFlushMappedNamedBufferRange(gl::to_underlying(buffer), range.offset, range.size);
     }
@@ -672,12 +672,12 @@ namespace fox::gfx::api::gl
         glUnmapNamedBuffer(gl::to_underlying(buffer));
     }
 
-    static void invalidate_buffer_data                  (gl::handle_t buffer, std::optional<gl::byterange_t> range)
+    static void invalidate_buffer_data                  (gl::handle_t buffer, std::optional<gl::ByteRange> range)
     {
         if   (range.has_value()) glInvalidateBufferSubData(gl::to_underlying(buffer), range->offset, range->size);
         else                     glInvalidateBufferData   (gl::to_underlying(buffer)                            );
     }
-    static void copy_buffer_sub_data                    (gl::handle_t source, gl::handle_t destination, gl::byterange_t sourceRange, gl::offset_t destinationOffset)
+    static void copy_buffer_sub_data                    (gl::handle_t source, gl::handle_t destination, gl::ByteRange sourceRange, gl::offset_t destinationOffset)
     {
         glCopyNamedBufferSubData(gl::to_underlying(source), gl::to_underlying(destination), sourceRange.offset, destinationOffset, sourceRange.size);
     }
@@ -711,7 +711,7 @@ namespace fox::gfx::api::gl
         if constexpr (P == glf::Buffer::Parameter::Usage)        return static_cast<glf::Buffer::Usage>               (get_buffer_parameter_iv  (buffer, P));
     }
     template<typename T>
-    static auto get_buffer_data                         (gl::handle_t buffer, std::optional<gl::byterange_t> range)
+    static auto get_buffer_data                         (gl::handle_t buffer, std::optional<gl::ByteRange> range)
     {
         std::vector<T> data{};
 
@@ -1018,7 +1018,7 @@ namespace fox::gfx::api::gl
     {
         glBindSampler(index, gl::to_underlying(sampler));
     }
-    static void bind_samplers                           (std::span<const gl::handle_t> samplers, gl::range_t range)
+    static void bind_samplers                           (std::span<const gl::handle_t> samplers, const gl::Range& range)
     {
         glBindSamplers(range.index, range.count, gl::to_underlying_ptr(samplers.data()));
     }
@@ -1237,7 +1237,7 @@ namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>(data.size())    , data.data());
     }
 
-    static void texture_buffer                          (gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, std::optional<gl::byterange_t> range)
+    static void texture_buffer                          (gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, std::optional<gl::ByteRange> range)
     {
         if   (range.has_value()) glTextureBufferRange(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer), range->offset, range->size);
         else                     glTextureBuffer     (gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer));
@@ -1838,11 +1838,11 @@ namespace fox::gfx::api::gl
         glPrimitiveRestartIndex(index);
     }
 
-    static void draw_arrays                             (glf::Draw::Mode mode, gl::range_t range)
+    static void draw_arrays                             (glf::Draw::Mode mode, const gl::Range& range)
     {
         glDrawArrays(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count));
     }
-    static void draw_arrays_instanced                   (glf::Draw::Mode mode, gl::range_t range, gl::sizei_t instanceCount, std::optional<gl::uint32_t> baseInstance)
+    static void draw_arrays_instanced                   (glf::Draw::Mode mode, const gl::Range& range, gl::sizei_t instanceCount, std::optional<gl::uint32_t> baseInstance)
     {
         if   (baseInstance.has_value()) glDrawArraysInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), instanceCount, baseInstance.value());
         else                            glDrawArraysInstanced            (gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), instanceCount);

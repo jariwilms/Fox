@@ -56,7 +56,7 @@ namespace fox::gfx::api::gl
             gl::buffer_data(m_handle, static_cast<gl::offset_t>(index * sizeof(T)), data);
         }
 
-        auto map  (std::optional<gl::byterange_t> range = {})
+        auto map  (std::optional<gl::ByteRange> range = {})
         {
             if (!is_mapped() && range != m_range)
             {
@@ -76,13 +76,13 @@ namespace fox::gfx::api::gl
                 else
                 {
                     m_span   = std::make_shared<std::span<T>>(ptr, count());
-                    m_range = gl::byterange_t{ static_cast<gl::size_t>(m_span->size_bytes()) };
+                    m_range = gl::ByteRange{ static_cast<gl::size_t>(m_span->size_bytes()) };
                 }
             }
 
             return std::weak_ptr<std::span<T>>(m_span);
         }
-        void flush(              gl::byterange_t  range     )
+        void flush(              gl::ByteRange  range     )
         {
             gl::flush_buffer_range(m_handle, range);
         }
@@ -109,7 +109,7 @@ namespace fox::gfx::api::gl
 
     private:
         std::shared_ptr<std::span<T>> m_span{};
-        gl::byterange_t               m_range{ gl::size_t{} };
+        gl::ByteRange                 m_range{ gl::size_t{} };
         gl::size_t                    m_size{};
     };
     template<typename T>
@@ -197,7 +197,7 @@ namespace fox::gfx::api::gl
 
         void bind_index(gl::index_t index, std::optional<gl::range_t> range = {}) const
         {
-            if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::byterange_t{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
+            if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::ByteRange{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
             else                     gl::bind_buffer_base (m_handle, glf::Buffer::BaseTarget::UniformBuffer, index                                                                                                                          );
         }
 
