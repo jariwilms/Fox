@@ -143,7 +143,7 @@ namespace fox::wnd::api
             };
         const auto& glfw_frame_buffer_resize_callback = [](GLFWwindow* window, fox::int32_t width, fox::int32_t height)
             {
-                gl::viewport({ width, height });
+                gl::viewport( gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
             };
 
         glfwSetErrorCallback(                        glfw_error_callback);

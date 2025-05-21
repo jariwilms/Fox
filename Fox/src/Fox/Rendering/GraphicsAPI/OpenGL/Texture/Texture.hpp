@@ -70,9 +70,9 @@ namespace fox::gfx::api::gl
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(m_dimensions, offset + dimensions))) throw std::invalid_argument{ "The data size exceeds texture bounds!" };
 
-            if constexpr (DIMS == api::Dimensions::_1D) gl::texture_sub_image_1d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), dimensions, offset, 0, data);
-            if constexpr (DIMS == api::Dimensions::_2D) gl::texture_sub_image_2d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), dimensions, offset, 0, data);
-            if constexpr (DIMS == api::Dimensions::_3D) gl::texture_sub_image_3d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), dimensions, offset, 0, data);
+            if constexpr (DIMS == api::Dimensions::_1D) gl::texture_sub_image_1d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), 0, { dimensions, offset }, data);
+            if constexpr (DIMS == api::Dimensions::_2D) gl::texture_sub_image_2d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), 0, { dimensions, offset }, data);
+            if constexpr (DIMS == api::Dimensions::_3D) gl::texture_sub_image_3d(m_handle, gl::map_texture_format_base(format), gl::map_texture_format_type(format), 0, { dimensions, offset }, data);
         }
 
         void apply_wrapping(wrap_t wrapping)
