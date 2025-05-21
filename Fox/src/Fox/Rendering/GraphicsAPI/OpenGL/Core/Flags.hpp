@@ -660,20 +660,14 @@ namespace fox::gfx::api::glf
         Blending                   = GL_BLEND, 
         ClipDistance               = GL_CLIP_DISTANCE0, 
         ColorLogicOperation        = GL_COLOR_LOGIC_OP, 
-        FaceCulling                = GL_CULL_FACE, 
         DebugOutput                = GL_DEBUG_OUTPUT, 
         DebugOutputSynchronous     = GL_DEBUG_OUTPUT_SYNCHRONOUS, 
         DepthClamp                 = GL_DEPTH_CLAMP, 
         DepthTest                  = GL_DEPTH_TEST, 
         Dither                     = GL_DITHER, 
-        FrameBufferSRGB            = GL_FRAMEBUFFER_SRGB, 
+        FaceCulling                = GL_CULL_FACE, 
         Multisampling              = GL_MULTISAMPLE, 
-        PolygonFillOffset          = GL_POLYGON_OFFSET_FILL, 
-        PolygonLineOffset          = GL_POLYGON_OFFSET_LINE, 
-        PolygonPointOffset         = GL_POLYGON_OFFSET_POINT, 
         PolygonSmooth              = GL_POLYGON_SMOOTH, 
-        PrimitiveRestart           = GL_PRIMITIVE_RESTART, 
-        PrimitiveRestartFixedIndex = GL_PRIMITIVE_RESTART_FIXED_INDEX, 
         ProgramPointSize           = GL_PROGRAM_POINT_SIZE, 
         RasterizerDiscard          = GL_RASTERIZER_DISCARD, 
         SampleAlphaToCoverage      = GL_SAMPLE_ALPHA_TO_COVERAGE, 
@@ -1072,6 +1066,21 @@ namespace fox::gfx::api::glf
             SpriteCoordinateOrigin = GL_POINT_SPRITE_COORD_ORIGIN, 
         };
     };
+    struct     Pipeline
+    {
+        enum class Property : gl::enum_t
+        {
+            ActiveProgram                = GL_ACTIVE_PROGRAM, 
+            VertexShader                 = GL_VERTEX_SHADER, 
+            TessellationControlShader    = GL_TESS_CONTROL_SHADER, 
+            TessellationEvaluationShader = GL_TESS_EVALUATION_SHADER, 
+            GeometryShader               = GL_GEOMETRY_SHADER, 
+            FragmentShader               = GL_FRAGMENT_SHADER, 
+            ComputeShader                = GL_COMPUTE_SHADER, 
+            ValidateStatus               = GL_VALIDATE_STATUS, 
+            InfoLogLength                = GL_INFO_LOG_LENGTH, 
+        };
+    };
     struct     Program
     {
         enum class Interface : gl::enum_t
@@ -1130,21 +1139,6 @@ namespace fox::gfx::api::glf
             TransformFeedbackVaryingMaximumLength = GL_TRANSFORM_FEEDBACK_VARYING_MAX_LENGTH, 
             TransformFeedbackVaryings             = GL_TRANSFORM_FEEDBACK_VARYINGS, 
             ValidateStatus                        = GL_VALIDATE_STATUS, 
-        };
-        struct     Pipeline
-        {
-            enum class Property : gl::enum_t
-            {
-                ActiveProgram                = GL_ACTIVE_PROGRAM, 
-                VertexShader                 = GL_VERTEX_SHADER, 
-                TessellationControlShader    = GL_TESS_CONTROL_SHADER, 
-                TessellationEvaluationShader = GL_TESS_EVALUATION_SHADER, 
-                GeometryShader               = GL_GEOMETRY_SHADER, 
-                FragmentShader               = GL_FRAGMENT_SHADER, 
-                ComputeShader                = GL_COMPUTE_SHADER, 
-                ValidateStatus               = GL_VALIDATE_STATUS, 
-                InfoLogLength                = GL_INFO_LOG_LENGTH, 
-            };
         };
         enum class Property : gl::enum_t
         {
@@ -1895,6 +1889,7 @@ namespace fox::gfx::api::glf
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator|=(T& first, T second) { return first = first | second; }
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator^=(T& first, T second) { return first = first ^ second; }
 
+    template<> struct BitmaskTraits<glf::Feature>                      { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Buffer::Mapping::AccessFlags> { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Buffer::Mask>                 { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Buffer::StorageFlags>         { static constexpr bool enable_bitmask_operations = true; };

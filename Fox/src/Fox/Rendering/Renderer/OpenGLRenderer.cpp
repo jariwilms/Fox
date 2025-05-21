@@ -5,8 +5,8 @@ namespace fox::gfx::api
 {
     OpenGLRenderer::OpenGLRenderer()
     {
-        gl::enable(glf::Feature::Multisampling);
-        gl::enable(glf::Feature::SeamlessCubeMapTexture);
+        gl::enable<glf::Feature::Multisampling>();
+        gl::enable<glf::Feature::SeamlessCubeMapTexture>();
 
 
 
@@ -353,9 +353,9 @@ namespace fox::gfx::api
         m_environmentCubemap->bind(0);
         //imgtex->bind(0);
 
-        gl::disable(glf::Feature::Blending);
-        gl::disable(glf::Feature::FaceCulling);
-        gl::enable(glf::Feature::DepthTest);
+        gl::disable<glf::Feature::Blending>();
+        gl::disable<glf::Feature::FaceCulling>();
+        gl::enable <glf::Feature::DepthTest>();
         gl::depth_function(glf::DepthFunction::LessEqual);
 
         const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
@@ -401,12 +401,12 @@ namespace fox::gfx::api
 
         gl::viewport      (frameBuffer->dimensions());
         gl::clear         (glf::Buffer::Mask::All);
-        gl::enable        (glf::Feature::FaceCulling);
+        gl::enable        <glf::Feature::FaceCulling>();
         gl::cull_face     (glf::Culling::Facet::Back);
         gl::front_face    (glf::Orientation::CounterClockwise);
-        gl::enable        (glf::Feature::DepthTest);
+        gl::enable        <glf::Feature::DepthTest>();
         gl::depth_function(glf::DepthFunction::Less);
-        gl::disable       (glf::Feature::Blending);
+        gl::disable       <glf::Feature::Blending>();
 
         for (const auto& _ : m_mmt)
         {
@@ -452,12 +452,12 @@ namespace fox::gfx::api
 
         gl::viewport(dimensions);
         gl::clear(glf::Buffer::Mask::Depth);
-        gl::enable(glf::Feature::FaceCulling);
+        gl::enable<glf::Feature::FaceCulling>();
         gl::cull_face(glf::Culling::Facet::Back);
         gl::front_face(glf::Orientation::CounterClockwise);
-        gl::enable(glf::Feature::DepthTest);
+        gl::enable<glf::Feature::DepthTest>();
         gl::depth_function(glf::DepthFunction::Less);
-        gl::disable(glf::Feature::Blending);
+        gl::disable<glf::Feature::Blending>();
 
         for (const auto& _ : m_mmt)
         {
@@ -495,10 +495,10 @@ namespace fox::gfx::api
         pva->bind();
         
         gl::depth_mask(gl::False);
-        gl::disable(glf::Feature::DepthTest);
-        gl::enable(glf::Feature::Blending);
+        gl::disable<glf::Feature::DepthTest>();
+        gl::enable<glf::Feature::Blending>();
         gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
-        gl::disable(glf::Feature::FaceCulling);
+        gl::disable<glf::Feature::FaceCulling>();
 
         for (fox::size_t index{}; const auto& light : m_lights)
         {
@@ -560,10 +560,10 @@ namespace fox::gfx::api
 
             //gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
             //gl::stencil_operation(glf::Stencil::Action::Keep, glf::Stencil::Action::Keep, glf::Stencil::Action::Keep);
-            gl::disable(glf::Feature::DepthTest);
-            gl::enable(glf::Feature::Blending);
+            gl::disable<glf::Feature::DepthTest>();
+            gl::enable<glf::Feature::Blending>();
             gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
-            gl::enable(glf::Feature::FaceCulling);
+            gl::enable<glf::Feature::FaceCulling>();
             gl::cull_face(glf::Culling::Facet::Front);
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
@@ -583,7 +583,7 @@ namespace fox::gfx::api
 
         gl::viewport(target->dimensions());
         gl::clear(glf::Buffer::Mask::All);
-        gl::enable(glf::Feature::FaceCulling);
+        gl::enable<glf::Feature::FaceCulling>();
         gl::cull_face(glf::Culling::Facet::Back);
 
         const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
@@ -601,10 +601,10 @@ namespace fox::gfx::api
         gl::blit_frame_buffer(previous->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, previous->dimensions(), target->dimensions());
 
         gl::viewport(target->dimensions());
-        gl::disable(glf::Feature::FaceCulling);
-        gl::enable(glf::Feature::DepthTest);
+        gl::disable<glf::Feature::FaceCulling>();
+        gl::enable<glf::Feature::DepthTest>();
         gl::depth_function(glf::DepthFunction::LessEqual);
-        gl::disable(glf::Feature::Blending);
+        gl::disable<glf::Feature::Blending>();
 
         const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
         cva->bind();

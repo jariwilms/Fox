@@ -61,8 +61,8 @@ namespace fox::gfx::api::gl
 			s_contextFlags = gl::get_value<glf::Data::ContextFlags>();
 			if (s_contextFlags & fox::to_underlying(glf::Context::Flag::Debug))
 			{
-				gl::enable(glf::Feature::DebugOutput);
-				gl::enable(glf::Feature::DebugOutputSynchronous);
+                gl::enable<glf::Feature::DebugOutput>();
+				gl::enable<glf::Feature::DebugOutputSynchronous>();
 
 				gl::debug_message_callback(gl::debug_callback_impl);
 				gl::debug_message_control(glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare, gl::True);

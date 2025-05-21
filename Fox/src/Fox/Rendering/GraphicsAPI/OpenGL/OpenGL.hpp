@@ -28,15 +28,25 @@ namespace fox::gfx::api::gl
 
 
     //Common Dependencies
-    static void enable                                  (glf::Feature feature, std::optional<gl::uint32_t> index = {})
+    template<glf::Feature F>
+    static void enable                                  ()
     {
-        if   (index.has_value()) glEnablei(gl::to_underlying(feature), index.value());
-        else                     glEnable (gl::to_underlying(feature)               );
+        glEnable(gl::to_underlying(F));
     }
-    static void disable                                 (glf::Feature feature, std::optional<gl::uint32_t> index = {})
+    template<glf::Feature F> requires gl::indexable_feature<F>
+    static void enable_index(gl::index_t index)
     {
-        if   (index.has_value()) glDisablei(gl::to_underlying(feature), index.value());
-        else                     glDisable (gl::to_underlying(feature)               );
+        glEnablei(gl::to_underlying(F), index);
+    }
+    template<glf::Feature F>
+    static void disable                                 ()
+    {
+        glDisable(gl::to_underlying(F));
+    }
+    template<glf::Feature F> requires gl::indexable_feature<F>
+    static void disable_index(gl::index_t index)
+    {
+        glDisablei(gl::to_underlying(F), index);
     }
 
     template<glf::Data D>
@@ -875,10 +885,10 @@ namespace fox::gfx::api::gl
         if constexpr (P == glf::Shader::Parameter::InfoLogLength) return static_cast<gl::uint32_t>     (get_shader_iv(shader, P));
         if constexpr (P == glf::Shader::Parameter::SourceLength ) return static_cast<gl::uint32_t>     (get_shader_iv(shader, P));
     }
-    template<glf::Program::Pipeline::Property P>
+    template<glf::Pipeline::Property P>
     static auto get_program_pipeline_value              (gl::handle_t pipeline)
     {
-        const auto& get_program_pipeline_iv = [](gl::handle_t pipeline, glf::Program::Pipeline::Property property)
+        const auto& get_program_pipeline_iv = [](gl::handle_t pipeline, glf::Pipeline::Property property)
             {
                 gl::int32_t value{};
                 glGetProgramPipelineiv(gl::to_underlying(pipeline), gl::to_underlying(property), &value);
@@ -886,8 +896,8 @@ namespace fox::gfx::api::gl
                 return value;
             };
 
-        if   constexpr (P == glf::Program::Pipeline::Property::ValidateStatus) return static_cast<gl::bool_t>  (get_program_pipeline_iv(pipeline, P));
-        if   constexpr (P == glf::Program::Pipeline::Property::InfoLogLength ) return static_cast<gl::uint32_t>(get_program_pipeline_iv(pipeline, P));
+        if   constexpr (P == glf::Pipeline::Property::ValidateStatus) return static_cast<gl::bool_t>  (get_program_pipeline_iv(pipeline, P));
+        if   constexpr (P == glf::Pipeline::Property::InfoLogLength ) return static_cast<gl::uint32_t>(get_program_pipeline_iv(pipeline, P));
         else                                                                   return static_cast<gl::handle_t>(get_program_pipeline_iv(pipeline, P));
     }
     static auto get_attached_shaders                    (gl::handle_t program)
@@ -929,7 +939,7 @@ namespace fox::gfx::api::gl
     {
         std::string infoLog{};
 
-        if (const auto& infoLogLength = gl::get_program_pipeline_value<glf::Program::Pipeline::Property::InfoLogLength>(pipeline); std::cmp_greater(infoLogLength, 0u))
+        if (const auto& infoLogLength = gl::get_program_pipeline_value<glf::Pipeline::Property::InfoLogLength>(pipeline); std::cmp_greater(infoLogLength, 0u))
         {
             infoLog.resize(infoLogLength);
             glGetProgramPipelineInfoLog(gl::to_underlying(pipeline), infoLogLength, nullptr, infoLog.data());
