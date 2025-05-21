@@ -71,6 +71,8 @@ namespace fox::gfx::api::gl
 
 
 
+
+
     template<typename T, gl::uint32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
     template<typename T, gl::uint32_t N> using Matrix     = glm::mat<N, N, T>;
                                          using Quaternion = glm::quat;
@@ -106,15 +108,13 @@ namespace fox::gfx::api::gl
 
 
 
-
-
     template<typename T, gl::uint32_t N>
     struct region_t
     {
         region_t(const gl::Vector<T, N>& extent, const gl::Vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
-        auto operator<=>(const region_t&) const = default;
+        bool operator==(const region_t&) const = default;
 
         gl::Vector<T, N> extent{};
         gl::Vector<T, N> origin{};
@@ -124,7 +124,7 @@ namespace fox::gfx::api::gl
         range_t(gl::count_t count, gl::index_t index = {})
             : count{ count }, index{ index } {}
 
-        auto operator<=>(const range_t&) const = default;
+        bool operator==(const range_t&) const = default;
 
         gl::count_t count{};
         gl::index_t index{};
@@ -134,7 +134,7 @@ namespace fox::gfx::api::gl
         byterange_t(gl::size_t size, gl::offset_t offset = {})
             : size{ size }, offset{ offset } {}
 
-        auto operator<=>(const byterange_t&) const = default;
+        bool operator==(const byterange_t&) const = default;
 
         gl::size_t   size{};
         gl::offset_t offset{};
@@ -145,9 +145,6 @@ namespace fox::gfx::api::gl
     using Length = gl::region_t<gl::uint32_t, 1u>;
     using Area   = gl::region_t<gl::uint32_t, 2u>;
     using Volume = gl::region_t<gl::uint32_t, 3u>;
-
-
-
 
 
 
