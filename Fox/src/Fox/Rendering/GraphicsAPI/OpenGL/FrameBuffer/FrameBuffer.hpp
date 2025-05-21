@@ -105,7 +105,7 @@ namespace fox::gfx::api::gl
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
-            const auto& texture = std::make_shared<texture_t>(format, api::Texture::Filter::None, api::Texture::Wrapping::ClampToBorder, m_dimensions);
+            const auto& texture = std::make_shared<texture_t>(format, api::Texture::Filter::None, api::Texture::Wrapping::ClampToEdge, m_dimensions);
             gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, 0);
 
             m_identifierToTexture.emplace(identifier, texture);
@@ -139,7 +139,7 @@ namespace fox::gfx::api::gl
                 colorBufferIndices.emplace_back(attachmentIndex);
             }
 
-            const auto& cubemap = std::make_shared<cubemap_t>(format, api::Texture::Filter::None, api::Texture::Wrapping::ClampToBorder, m_dimensions);
+            const auto& cubemap = std::make_shared<cubemap_t>(format, api::Texture::Filter::None, api::Texture::Wrapping::ClampToEdge, m_dimensions);
             gl::frame_buffer_texture(m_handle, cubemap->handle(), attachmentIndex, 0);
 
             m_identifierToCubemap.emplace(identifier, cubemap);
