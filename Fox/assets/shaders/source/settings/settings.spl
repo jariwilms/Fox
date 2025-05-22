@@ -1,0 +1,11 @@
+#ifndef SETTINGS
+#define SETTINGS
+
+const uint  SSAO_SAMPLES     =    64;
+const uint  SSAO_KERNEL_SIZE =    64;
+const float SSAO_RADIUS      = 0.500;
+const float SSAO_BIAS        = 0.025;
+
+const float BLUR_FACTOR      =   4.0;
+
+#endif

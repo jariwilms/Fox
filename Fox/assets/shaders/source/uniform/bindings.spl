@@ -8,11 +8,7 @@
 #define LIGHT_BINDING              4
 #define PREFILTER_BINDING          5
 #define LIGHTSHADOW_BINDING        6
-
-
-
-
-
+#define SSAO_BINDING               7
 
 #define SHADOW_PROJECTION_BINDING 13
 

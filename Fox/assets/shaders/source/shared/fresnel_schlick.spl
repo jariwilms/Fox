@@ -1,5 +1,8 @@
 #include "constants.spl"
 
+#ifndef FRESNEL_SCHLICK
+#define FRESNEL_SCHLICK
+
 vec3 fresnel_schlick(float cosine, vec3 reflectance)
 {
 	const vec3  reflectanceFactor = 1.0 - reflectance;
@@ -7,3 +10,5 @@ vec3 fresnel_schlick(float cosine, vec3 reflectance)
 	
     return reflectance + reflectanceFactor * viewAngleFactor;
 }
+
+#endif

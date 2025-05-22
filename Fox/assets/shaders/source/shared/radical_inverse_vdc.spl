@@ -1,5 +1,8 @@
 #include "constants.spl"
 
+#ifndef RADICAL_INVERSE_VDC
+#define RADICAL_INVERSE_VDC
+
 float radical_inverse_vdc(uint bits)
 {
 	bits = (bits << 16u) | (bits >> 16u);
@@ -11,3 +14,5 @@ float radical_inverse_vdc(uint bits)
 	
     return float(bits) * 2.3283064365386963e-10; //0x100000000
 }
+
+#endif

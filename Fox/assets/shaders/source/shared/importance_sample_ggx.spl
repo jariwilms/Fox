@@ -1,5 +1,8 @@
 #include "constants.spl"
 
+#ifndef IMPORTANCE_SAMPLE_GGX
+#define IMPORTANCE_SAMPLE_GGX
+
 vec3 importance_sample_ggx(vec2 Xi, vec3 normal, float roughness)
 {
 	const float alpha        = pow(roughness, 2.0);
@@ -21,3 +24,5 @@ vec3 importance_sample_ggx(vec2 Xi, vec3 normal, float roughness)
 	
 	return normalize(vector);
 }
+
+#endif
