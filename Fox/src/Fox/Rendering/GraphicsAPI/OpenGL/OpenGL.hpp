@@ -1027,7 +1027,7 @@ namespace fox::gfx::api::gl
         {
             gl::sizei_t offset{};
 
-            for (const auto& index : std::ranges::views::iota(0u, amount))
+            for (const auto& index : std::views::iota(0u, amount))
             {
                 const auto& length = lengths.at(index);
 
