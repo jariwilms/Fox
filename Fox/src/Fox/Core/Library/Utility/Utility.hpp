@@ -17,8 +17,8 @@ namespace fox::utl
     template<typename T, auto MEMBER_PTR>
     static constexpr auto offset_of()
     {
-        return reinterpret_cast<std::ptrdiff_t>(
-            &reinterpret_cast<const volatile char&>(
+        return reinterpret_cast<fox::size_t>(
+            &reinterpret_cast<const volatile fox::byte_t&>(
                 ((static_cast<T*>(nullptr))->*MEMBER_PTR)));
     }
 
@@ -26,87 +26,46 @@ namespace fox::utl
 
 
 
-    template<typename T, fox::size_t SIZE>
-    auto to_span(const std::array<T, SIZE>& v)
+    template<typename T, fox::size_t EXTENT = std::dynamic_extent>
+    auto as_bytes(std::span<const T, EXTENT> span)
     {
-        return std::span{ v };
-    }
-
-    //https://stackoverflow.com/questions/70524923
-    template<typename T>
-    auto to_span(const std::vector<T>& v)
-    {
-        return std::span{ v };
-    }
-    template<typename T, typename U>
-    std::span<const U> to_span(const std::vector<T>& v)
-    {
-        return std::span<const U>{ reinterpret_cast<const U*>(v.data()), v.size() * sizeof(U) };
+        return std::span{ reinterpret_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
     }
     template<typename T>
-    auto to_span(const std::vector<std::vector<T>>& v)
+    auto as_bytes(const T& container)
     {
-        using value_type = decltype(to_span(v.at(0)));
-
-        std::vector<value_type> r{};
-        for (const auto& _ : v)
-        {
-            r.push_back(to_span(_));
-        }
-
-        return to_span(r);
+        return as_bytes(std::span{ container });
     }
 
 
-
-    template<typename T, fox::size_t EXTENT>
-    auto as_bytes(std::span<T, EXTENT> s)
-    {
-        constexpr auto dynamic_extent = static_cast<fox::size_t>(-1);
-        using return_type = std::span<const fox::byte_t, EXTENT == dynamic_extent ? dynamic_extent : sizeof(T) * EXTENT>; //?
-
-        return return_type{ reinterpret_cast<const fox::byte_t*>(s.data()), s.size_bytes() };
-    }
 
 
 
     //https://stackoverflow.com/a/21028912
-    //There is an instance where we want a vector to take ownership of a large amount of preallocated data without allocation or initialization
-    //This allocator does just that; nothing
-    template <typename T, typename A = std::allocator<T>>
-    class default_init_allocator : public A
+    //This allocator allows you to resize a vector without initializing new memory
+    //It is useful for allowing a third party to overwrite the vectors data
+    template<typename T, typename A = std::allocator<T>>
+    class no_init_allocator : public A
     {
-        using a_t = std::allocator_traits<A>;
     public:
-        template <typename U> 
-        struct rebind
-        {
-            using other = default_init_allocator<U, typename a_t::template rebind_alloc<U>>;
-        };
-
+        using traits_t = std::allocator_traits<A>;
         using A::A;
 
-        template <typename U>
-        void construct(U* ptr) noexcept(std::is_nothrow_default_constructible<U>::value)
+        template<typename U> 
+        struct rebind
         {
-            ::new (static_cast<void*>(ptr)) U;
+            using other = no_init_allocator<U, typename traits_t::template rebind_alloc<U>>;
+        };
+
+        template<typename U>
+        void construct(U* pointer) noexcept(std::is_nothrow_default_constructible<U>::value)
+        {
+            ::new (static_cast<void*>(pointer)) U;
         }
-        template <typename U, typename...Args>
-        void construct(U* ptr, Args&&... args)
+        template<typename U, typename...Args>
+        void construct(U* pointer, Args&&... args)
         {
-            a_t::construct(static_cast<A&>(*this), ptr, std::forward<Args>(args)...);
+            traits_t::construct(static_cast<A&>(*this), pointer, std::forward<Args>(args)...);
         }
     };
-
-
-
-    //https://stackoverflow.com/a/57053750
-    template<typename V>
-    void resize(V& v, size_t newSize)
-    {
-        struct vt { typename V::value_type v; vt() {} };
-        static_assert(sizeof(vt[10]) == sizeof(typename V::value_type[10]), "alignment error");
-        using V2 = std::vector<vt, typename std::allocator_traits<typename V::allocator_type>::template rebind_alloc<vt>>;
-        reinterpret_cast<V2&>(v).resize(newSize);
-    }
 }

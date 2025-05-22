@@ -35,7 +35,7 @@ namespace fox::io
                   auto buffer  = std::make_unique<std::vector<fox::byte_t>>();
             const auto maxSize = std::min(limit.value_or(size()), size());
 
-            using vec_t = std::vector<fox::byte_t, utl::default_init_allocator<fox::byte_t>>;
+            using vec_t = std::vector<fox::byte_t, utl::no_init_allocator<fox::byte_t>>;
 
             reinterpret_cast<vec_t*>(buffer.get())->resize(maxSize);
             read_data(reinterpret_cast<fox::char_t*>(buffer->data()), buffer->size());
