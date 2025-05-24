@@ -3,10 +3,6 @@
 
 namespace fox::gfx::api
 {
-    static inline unsigned int ssaoFBO;// , ssaoBlurFBO;
-    static inline unsigned int ssaoColorBuffer;//, ssaoColorBufferBlur;
-    unsigned int noiseTexture;
-
     OpenGLRenderer::OpenGLRenderer()
     {
         gl::enable<glf::Feature::SeamlessCubeMapTexture>();
@@ -37,16 +33,17 @@ namespace fox::gfx::api
         std::array<FM, 1> scBufferManifest  { FM{ "Depth", CF::D24_UNORM    }                                       };
 
 
+
         m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,               gBufferManifest  );
         m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,               sBufferManifest  );
         m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,               pBufferManifest  );
         m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,               pBufferManifest  );
 
-        m_contextBuffer           = gfx::UniformBuffer<unf::Context>                 ::create();
-        m_matricesBuffer          = gfx::UniformBuffer<unf::Matrices>                ::create();
-        m_materialBuffer          = gfx::UniformBuffer<unf::Material>                ::create();
-        m_cameraBuffer            = gfx::UniformBuffer<unf::Camera>                  ::create();
-        m_lightBuffer             = gfx::UniformBuffer<unf::Light>                   ::create();
+        m_contextUniform           = gfx::UniformBuffer<unf::Context>                 ::create();
+        m_matricesUniform          = gfx::UniformBuffer<unf::Matrices>                ::create();
+        m_materialUniform          = gfx::UniformBuffer<unf::Material>                ::create();
+        m_cameraUniform            = gfx::UniformBuffer<unf::Camera>                  ::create();
+        m_lightUniform             = gfx::UniformBuffer<unf::Light>                   ::create();
 
 
 
@@ -121,8 +118,8 @@ namespace fox::gfx::api
 
         //Convert HDR texture to cubemap
         m_pipelines.at("ConvertEqui")->bind();
-        m_matricesBuffer->bind_index(2);
-        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        m_matricesUniform->bind_index(2);
+        m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
         gl::viewport(envDimensions);
         gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
@@ -133,7 +130,7 @@ namespace fox::gfx::api
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
         {
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+            m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
             gl::frame_buffer_texture_layer(frameBuffer->handle(), m_environmentCubemap->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -149,7 +146,7 @@ namespace fox::gfx::api
         m_irradianceCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
 
         m_pipelines.at("Irradiance")->bind();
-        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
         m_environmentCubemap->bind(0);
 
         gl::viewport(cvDimensions);
@@ -161,7 +158,7 @@ namespace fox::gfx::api
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
         {
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+            m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
             gl::frame_buffer_texture_layer(frameBuffer->handle(), m_irradianceCubemap->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -186,7 +183,7 @@ namespace fox::gfx::api
         m_preFilterCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
 
         m_pipelines.at("PreFilter")->bind();
-        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
         m_environmentCubemap->bind(0);
         
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
@@ -204,7 +201,7 @@ namespace fox::gfx::api
 
             for (fox::uint32_t index{}; const auto& view : captureViews)
             {
-                m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+                m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
                 gl::frame_buffer_texture_layer(frameBuffer->handle(), m_preFilterCubemap->handle(), glf::FrameBuffer::Attachment::ColorIndex, mip, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -235,71 +232,60 @@ namespace fox::gfx::api
 
 
 
-        //SSAO setup
-        glGenFramebuffers(1, &ssaoFBO);
-        glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
-        // SSAO color buffer
-        glGenTextures(1, &ssaoColorBuffer);
-        glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1280, 720, 0, GL_RED, GL_FLOAT, NULL);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            std::cout << "SSAO Framebuffer not complete!" << std::endl;
-        
-        
-        // and blur stage
-        //glGenFramebuffers(1, &ssaoBlurFBO);
-        //glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
-        //glGenTextures(1, &ssaoColorBufferBlur);
-        //glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
-        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1280, 720, 0, GL_RED, GL_FLOAT, NULL);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
-        //if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        //    std::cout << "SSAO Blur Framebuffer not complete!" << std::endl;
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        std::array<FM, 1> ssaoFrameBufferManifest{ FM{ "Occlusion", TF::R32_FLOAT }};
+        m_ssaoBuffer = gfx::FrameBuffer::create(viewportDimensions, ssaoFrameBufferManifest);
+        auto occlusion = m_ssaoBuffer->find_texture("Occlusion");
+        gl::texture_parameter(occlusion->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
+        gl::texture_parameter(occlusion->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
 
 
 
-        // generate sample kernel
-        // ----------------------
-        std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0
-        std::default_random_engine generator;
-        std::vector<unf::SSAOSample> ssaoKernel;
-        for (unsigned int i = 0; i < 64; ++i)
+        constexpr auto                                 ssaoSamples{ 64u };
+        std::vector<unf::SSAOSample>                   ssaoKernel(ssaoSamples);
+        std::uniform_real_distribution<fox::float32_t> distribution(0.0f, 1.0f);
+        std::default_random_engine                     engine;
+        for (const auto& index : std::views::iota(0u, 64u))
         {
-            unf::SSAOSample sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator), 0.0f);
-            sample = glm::normalize(sample);
-            sample *= randomFloats(generator);
-            float scale = float(i) / 64.0f;
+            unf::SSAOSample sample
+            { 
+                distribution(engine) * 2.0f - 1.0f, 
+                distribution(engine) * 2.0f - 1.0f, 
+                distribution(engine), 
+                0.0f 
+            };
 
-            // scale samples s.t. they're more aligned to center of kernel
+            sample  = glm::normalize(sample);
+            sample *= distribution(engine);
+
+            auto scale = static_cast<fox::float32_t>(index) / ssaoSamples;
+
             scale = std::lerp(0.1f, 1.0f, scale * scale);
             sample *= scale;
-            ssaoKernel.emplace_back(sample);
+
+            ssaoKernel.at(index) = sample;
         }
 
-        m_ssaoSampleBuffer = gfx::UniformArrayBuffer<unf::SSAOSample, 64u>::create(ssaoKernel);
-        m_ssaoSampleBuffer->bind_index(7u);
+        m_ssaoSampleUniform = gfx::UniformArrayBuffer<unf::SSAOSample, ssaoSamples>::create(ssaoKernel);
+        m_ssaoSampleUniform->bind_index(7u);
 
 
 
-        std::vector<glm::vec3> ssaoNoise;
-        for (unsigned int i = 0; i < 16; i++)
+        constexpr auto             ssaoNoiseSamples{ 16u };
+        std::vector<fox::Vector3f> ssaoNoise(ssaoNoiseSamples);
+        for (const auto& index : std::views::iota(0u, ssaoNoiseSamples))
         {
-            glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f); // rotate around z-axis (in tangent space)
-            ssaoNoise.push_back(noise);
+            fox::Vector3f noise
+            { 
+                distribution(engine) * 2.0f - 1.0f, 
+                distribution(engine) * 2.0f - 1.0f, 
+                0.0f 
+            };
+
+            ssaoNoise.at(index) = noise;
         }
-        glGenTextures(1, &noiseTexture);
-        glBindTexture(GL_TEXTURE_2D, noiseTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        m_ssaoNoiseTexture = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Nearest, gfx::Texture2D::Wrapping::Repeat, fox::Vector2u{ 4u, 4u }, utl::as_bytes(ssaoNoise));
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -311,8 +297,8 @@ namespace fox::gfx::api
         const auto& viewMatrix       = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
         const auto& projectionMatrix = camera.projection().matrix();
 
-        m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
-        m_cameraBuffer  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
+        m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
+        m_cameraUniform  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
 
 
 
@@ -363,13 +349,13 @@ namespace fox::gfx::api
         constexpr gl::Vector2u sDimensions{ 2048u, 2048u };
 
         //Bind Uniform Buffers to correct indices
-        m_contextBuffer->          bind_index( 0);
-        m_cameraBuffer->           bind_index( 1);
-        m_matricesBuffer->         bind_index( 2);
-        m_materialBuffer->         bind_index( 3);
-        m_lightBuffer->            bind_index( 4);
+        m_contextUniform->          bind_index( 0);
+        m_cameraUniform->           bind_index( 1);
+        m_matricesUniform->         bind_index( 2);
+        m_materialUniform->         bind_index( 3);
+        m_lightUniform->            bind_index( 4);
 
-        m_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
+        m_contextUniform->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
 
 
 
@@ -383,31 +369,24 @@ namespace fox::gfx::api
 
 
 
-        gl::viewport(dimensions);
-        gl::disable<glf::Feature::FaceCulling>();
-        //gl::cull_face(glf::Culling::Facet::Back);
-        //gl::front_face(glf::Orientation::CounterClockwise);
-        gl::disable    <glf::Feature::DepthTest>();
-        //gl::depth_function(glf::DepthFunction::Less);
-        gl::disable       <glf::Feature::Blending>();
 
 
-        glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
-        glClear(GL_COLOR_BUFFER_BIT);
+        m_ssaoBuffer->bind(gfx::FrameBuffer::Target::Write);
+
         m_pipelines.at("SSAO")->bind();
+        m_gBuffer->find_texture("Position")->bind(0u);
+        m_gBuffer->find_texture("Normal")->bind(1u);
+        m_ssaoNoiseTexture->bind(2u);
 
-        m_gBuffer->find_texture("Position")->bind(0);
-        m_gBuffer->find_texture("Normal")->bind(1);
-        glActiveTexture(GL_TEXTURE2);
-        glBindTexture(GL_TEXTURE_2D, noiseTexture);
+        gl::viewport(dimensions);
+        gl::clear(glf::Buffer::Mask::Color);
+        gl::disable<glf::Feature::FaceCulling>();
+        gl::disable<glf::Feature::DepthTest>();
+        gl::disable<glf::Feature::Blending>();
 
         const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
         pva->bind();
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
-
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
 
 
 
@@ -450,7 +429,7 @@ namespace fox::gfx::api
 
         for (const auto& transform : m_debugTransforms)
         {
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+            m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, gfx::Geometry::Cube::mesh()->vertexArray->index_count());
         }
 #endif
@@ -460,8 +439,8 @@ namespace fox::gfx::api
 
 
         //Blit the final result into the default framebuffer
-        gl::blit_frame_buffer(gl::handle_t{ssaoFBO}, gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
-        //gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
+        //gl::blit_frame_buffer(m_ssaoBuffer->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
@@ -491,8 +470,8 @@ namespace fox::gfx::api
         {
             const auto& [mesh, material, transform] = _;
 
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-            m_materialBuffer->copy    (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
+            m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+            m_materialUniform->copy    (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
 
             mesh    ->vertexArray->bind();
             material->albedo     ->bind(0);
@@ -535,8 +514,8 @@ namespace fox::gfx::api
         {
             fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
-            m_matricesBuffer   ->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-            m_lightBuffer      ->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+            m_matricesUniform   ->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+            m_lightUniform      ->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
         }
