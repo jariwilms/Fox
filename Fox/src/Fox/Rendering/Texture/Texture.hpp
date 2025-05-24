@@ -112,7 +112,7 @@ namespace fox::gfx
         using wrap_t     = impl::Texture2D::wrap_t;
         using vector_t   = impl::Texture2D::vector_t;
 
-        static inline auto create(Format format, const vector_t& dimensions, std::span<const fox::byte_t> data)
+        static inline auto create(Format format,                                        const vector_t& dimensions, std::span<const fox::byte_t> data)
         {
             return std::shared_ptr<Texture2D>(new Texture2D{ format, dimensions, data });
         }

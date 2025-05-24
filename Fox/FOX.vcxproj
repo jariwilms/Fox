@@ -108,6 +108,7 @@
     <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Library.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Math\Random.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonMovable.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Template\Concepts.hpp" />

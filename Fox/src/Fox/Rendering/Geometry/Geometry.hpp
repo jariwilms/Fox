@@ -21,7 +21,7 @@ namespace fox::gfx
         public:
             friend Geometry;
 
-            static const std::shared_ptr<gfx::Mesh> mesh()
+            static std::shared_ptr<gfx::Mesh> mesh()
             {
                 return s_mesh;
             }

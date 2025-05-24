@@ -3,14 +3,17 @@
 
 namespace fox::gfx::api
 {
+    static inline unsigned int ssaoFBO;// , ssaoBlurFBO;
+    static inline unsigned int ssaoColorBuffer;//, ssaoColorBufferBlur;
+    unsigned int noiseTexture;
+
     OpenGLRenderer::OpenGLRenderer()
     {
-        gl::enable<glf::Feature::Multisampling>();
         gl::enable<glf::Feature::SeamlessCubeMapTexture>();
 
 
 
-        constexpr gl::uint8_t  samples   {  4u };
+        constexpr gl::uint8_t  multisamples{  4u };
         constexpr gl::uint32_t lightCount{ 32u };
         constexpr gl::Vector2u viewportDimensions { 1280u,  720u };
         constexpr gl::Vector2u shadowMapDimensions{ 2048u, 2048u };
@@ -34,28 +37,17 @@ namespace fox::gfx::api
         std::array<FM, 1> scBufferManifest  { FM{ "Depth", CF::D24_UNORM    }                                       };
 
 
-
-        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,          gBufferManifest  );
-        m_gBufferMultisample      = gfx::FrameBufferMultisample::create(viewportDimensions , samples, gBufferManifest  );
-        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,          sBufferManifest  );
-        m_hdrBuffer               = gfx::FrameBuffer           ::create(viewportDimensions ,          hdrBufferManifest);
-        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,          pBufferManifest  );
-        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,          pBufferManifest  );
-        m_shadowCubemaps          = {
-            gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
-            gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
-            gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
-            gfx::FrameBuffer::create(shadowMapDimensions, scBufferManifest),
-        };
+        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,               gBufferManifest  );
+        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,               sBufferManifest  );
+        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,               pBufferManifest  );
+        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,               pBufferManifest  );
 
         m_contextBuffer           = gfx::UniformBuffer<unf::Context>                 ::create();
         m_matricesBuffer          = gfx::UniformBuffer<unf::Matrices>                ::create();
         m_materialBuffer          = gfx::UniformBuffer<unf::Material>                ::create();
         m_cameraBuffer            = gfx::UniformBuffer<unf::Camera>                  ::create();
         m_lightBuffer             = gfx::UniformBuffer<unf::Light>                   ::create();
-        m_lightShadowBuffer       = gfx::UniformBuffer<unf::LightShadow>             ::create();
-        m_shadowProjectionsBuffer = gfx::UniformArrayBuffer<unf::ShadowProjection, 6>::create();
-            
+
 
 
         const auto& depthTexture = m_sBuffer->find_texture("Depth");
@@ -92,6 +84,8 @@ namespace fox::gfx::api
         add_to_pipeline("Irradiance"  , "cubemap.vert.spv"      , {}, "irradiance.frag.spv");
         add_to_pipeline("PreFilter"   , "cubemap.vert.spv"      , {}, "prefilter.frag.spv");
         add_to_pipeline("BRDF"        , "brdf.vert.spv"         , {}, "brdf.frag.spv");
+        add_to_pipeline("SSAO"        , "ssao.vert.spv"         , {}, "ssao.frag.spv");
+        //add_to_pipeline("SSAODepth"   , "ssao_depth.vert.spv"   , {}, "ssao_depth.frag.spv");
 
 
 
@@ -101,12 +95,12 @@ namespace fox::gfx::api
         gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
         const std::array<gl::Matrix4f, 6> captureViews =
         {
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }),
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }),
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }),
+            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }),
+            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
         };
 
         const auto& cva = gfx::Geometry::Cube::mesh() ->vertexArray;
@@ -119,7 +113,7 @@ namespace fox::gfx::api
         const std::array<gfx::api::FrameBuffer::Manifest, 1> manifest{ FM{ "Depth", RF::D24_UNORM }, };
         auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
         const auto& rb       = frameBuffer->find_render_buffer("Depth");
-        auto hdrImage        = io::load<io::Asset::Image>("textures/venice_sunset.hdr", fox::Image::Format::RGB32_FLOAT);
+        auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
         auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Trilinear, gfx::Texture2D::Wrapping::ClampToEdge, hdrImage.dimensions(), hdrImage.data());
         m_environmentCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
 
@@ -232,6 +226,80 @@ namespace fox::gfx::api
 
         pva->bind();
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
+
+
+
+
+
+
+
+
+
+        //SSAO setup
+        glGenFramebuffers(1, &ssaoFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+        // SSAO color buffer
+        glGenTextures(1, &ssaoColorBuffer);
+        glBindTexture(GL_TEXTURE_2D, ssaoColorBuffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1280, 720, 0, GL_RED, GL_FLOAT, NULL);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBuffer, 0);
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            std::cout << "SSAO Framebuffer not complete!" << std::endl;
+        
+        
+        // and blur stage
+        //glGenFramebuffers(1, &ssaoBlurFBO);
+        //glBindFramebuffer(GL_FRAMEBUFFER, ssaoBlurFBO);
+        //glGenTextures(1, &ssaoColorBufferBlur);
+        //glBindTexture(GL_TEXTURE_2D, ssaoColorBufferBlur);
+        //glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, 1280, 720, 0, GL_RED, GL_FLOAT, NULL);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        //glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, ssaoColorBufferBlur, 0);
+        //if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        //    std::cout << "SSAO Blur Framebuffer not complete!" << std::endl;
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+        // generate sample kernel
+        // ----------------------
+        std::uniform_real_distribution<GLfloat> randomFloats(0.0, 1.0); // generates random floats between 0.0 and 1.0
+        std::default_random_engine generator;
+        std::vector<unf::SSAOSample> ssaoKernel;
+        for (unsigned int i = 0; i < 64; ++i)
+        {
+            unf::SSAOSample sample(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, randomFloats(generator), 0.0f);
+            sample = glm::normalize(sample);
+            sample *= randomFloats(generator);
+            float scale = float(i) / 64.0f;
+
+            // scale samples s.t. they're more aligned to center of kernel
+            scale = std::lerp(0.1f, 1.0f, scale * scale);
+            sample *= scale;
+            ssaoKernel.emplace_back(sample);
+        }
+
+        m_ssaoSampleBuffer = gfx::UniformArrayBuffer<unf::SSAOSample, 64u>::create(ssaoKernel);
+        m_ssaoSampleBuffer->bind_index(7u);
+
+
+
+        std::vector<glm::vec3> ssaoNoise;
+        for (unsigned int i = 0; i < 16; i++)
+        {
+            glm::vec3 noise(randomFloats(generator) * 2.0 - 1.0, randomFloats(generator) * 2.0 - 1.0, 0.0f); // rotate around z-axis (in tangent space)
+            ssaoNoise.push_back(noise);
+        }
+        glGenTextures(1, &noiseTexture);
+        glBindTexture(GL_TEXTURE_2D, noiseTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, 4, 4, 0, GL_RGB, GL_FLOAT, &ssaoNoise[0]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -300,58 +368,68 @@ namespace fox::gfx::api
         m_matricesBuffer->         bind_index( 2);
         m_materialBuffer->         bind_index( 3);
         m_lightBuffer->            bind_index( 4);
-        m_lightShadowBuffer->      bind_index( 6);
-        m_shadowProjectionsBuffer->bind_index(13);
 
         m_contextBuffer->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
 
 
 
         gl::viewport(dimensions);
-
         
         //Render meshes into gBuffer
-        render_meshes(m_gBufferMultisample, m_pipelines.at("DeferredMesh"));
+        render_meshes(m_gBuffer, m_pipelines.at("DeferredMesh"));
 
-        //Render shadow map for each shadow-casting point light (up to 4)
-        for (fox::size_t index{}; const auto& light : m_shadowCastingPointLights)
-        {
-            //render_shadow_map_point(light, m_shadowCubemaps.at(index++));
-        }
 
-        //Blit Position, Albedo, Normal, and RoughnessMetallic color buffers into the regular gBuffer
-        //It is necessary to resolve the multisampled gBuffer into the regular gBuffer
-        constexpr fox::size_t colorAttachments{ 4 };
-        for (const auto& i : std::views::iota(fox::size_t{ 0 }, colorAttachments))
-        {
-            gl::frame_buffer_read_buffer(m_gBufferMultisample->handle(), glf::FrameBuffer::Source::ColorIndex + i);
-            gl::frame_buffer_draw_buffer(m_gBuffer           ->handle(), glf::FrameBuffer::Source::ColorIndex + i);
-                
-            gl::blit_frame_buffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
-        }
 
-        //Blit depth and stencil information into the regular gBuffer
-        gl::blit_frame_buffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Depth  , glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
-        gl::blit_frame_buffer(m_gBufferMultisample->handle(), m_gBuffer->handle(), glf::Buffer::Mask::Stencil, glf::FrameBuffer::Filter::Nearest, m_gBufferMultisample->dimensions(), m_gBuffer->dimensions());
+
+
+
+        gl::viewport(dimensions);
+        gl::disable<glf::Feature::FaceCulling>();
+        //gl::cull_face(glf::Culling::Facet::Back);
+        //gl::front_face(glf::Orientation::CounterClockwise);
+        gl::disable    <glf::Feature::DepthTest>();
+        //gl::depth_function(glf::DepthFunction::Less);
+        gl::disable       <glf::Feature::Blending>();
+
+
+        glBindFramebuffer(GL_FRAMEBUFFER, ssaoFBO);
+        glClear(GL_COLOR_BUFFER_BIT);
+        m_pipelines.at("SSAO")->bind();
+
+        m_gBuffer->find_texture("Position")->bind(0);
+        m_gBuffer->find_texture("Normal")->bind(1);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_2D, noiseTexture);
+
+        const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
+        pva->bind();
+        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+
+
+
+
+
+
+        
+
+
+
+
+
 
 
 
         //Lighting calculations
         render_lighting(m_pBuffers.at(0));
 
-        //render_lighting(m_hdrBuffer);
-        //gl::blit_framebuffer(m_hdrBuffer->handle(), m_pBuffers.at(0)->handle(), glf::Buffer::Mask::All, glf::FrameBuffer::Filter::Nearest, m_hdrBuffer->dimensions(), m_pBuffers.at(0)->dimensions());
-        //render_hdr();
-        //Skybox
-        //render_skybox(m_pBuffers.at(0), m_gBuffer);
-
-
 
 
         m_pBuffers.at(0)->bind(gfx::FrameBuffer::Target::Write);
         m_pipelines.at("Background")->bind();
         m_environmentCubemap->bind(0);
-        //imgtex->bind(0);
 
         gl::disable<glf::Feature::Blending>();
         gl::disable<glf::Feature::FaceCulling>();
@@ -382,7 +460,8 @@ namespace fox::gfx::api
 
 
         //Blit the final result into the default framebuffer
-        gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
+        gl::blit_frame_buffer(gl::handle_t{ssaoFBO}, gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        //gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
@@ -394,7 +473,7 @@ namespace fox::gfx::api
         m_debugTransforms.emplace_back(transform);
     }
     
-    void OpenGLRenderer::render_meshes(std::shared_ptr<gfx::FrameBufferMultisample> frameBuffer, std::shared_ptr<gfx::Pipeline> shader)
+    void OpenGLRenderer::render_meshes(std::shared_ptr<gfx::FrameBuffer> frameBuffer, std::shared_ptr<gfx::Pipeline> shader)
     {
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
         shader->bind();
@@ -423,53 +502,6 @@ namespace fox::gfx::api
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
         }
     }
-    void OpenGLRenderer::render_shadow_map_point(const unf::Light& light, std::shared_ptr<gfx::FrameBuffer> target)
-    {
-        const auto& position    = gl::Vector3f{ light.position };
-        const auto& dimensions  = target->dimensions();
-        const auto& aspectRatio = static_cast<fox::float32_t>(dimensions.x) / dimensions.y;
-        const auto& fov         = 90.0f;
-        const auto& nearPlane   = 0.1f;
-        const auto& projection  = gfx::Projection{ gfx::Projection::perspective_p{ aspectRatio, fov, nearPlane, m_shadowFarPlane } };
-
-        std::array<const unf::ShadowProjection, 6> shadowTransforms{
-            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{ -1.0, 0.0, 0.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0, 1.0, 0.0 }, gl::Vector3f{ 0.0, 0.0, 1.0 }), 
-            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0,-1.0, 0.0 }, gl::Vector3f{ 0.0, 0.0,-1.0 }), 
-            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0, 0.0, 1.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-            projection.matrix() * glm::lookAt(position, position + gl::Vector3f{  0.0, 0.0,-1.0 }, gl::Vector3f{ 0.0,-1.0, 0.0 }), 
-        };
-
-
-
-        target->bind(api::FrameBuffer::Target::Write);
-        m_pipelines.at("PointShadow")->bind();
-        m_shadowProjectionsBuffer->copy(shadowTransforms);
-        m_lightShadowBuffer->copy({ fox::Vector4f{ position, 1.0f }, m_shadowFarPlane });
-
-
-
-        gl::viewport(dimensions);
-        gl::clear(glf::Buffer::Mask::Depth);
-        gl::enable<glf::Feature::FaceCulling>();
-        gl::cull_face(glf::Culling::Facet::Back);
-        gl::front_face(glf::Orientation::CounterClockwise);
-        gl::enable<glf::Feature::DepthTest>();
-        gl::depth_function(glf::DepthFunction::Less);
-        gl::disable<glf::Feature::Blending>();
-
-        for (const auto& _ : m_mmt)
-        {
-            const auto& [mesh, material, transform] = _;
-
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-
-            mesh->vertexArray->bind();
-
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
-        }
-    }
     void OpenGLRenderer::render_lighting(std::shared_ptr<gfx::FrameBuffer> target)
     {
         target->bind(api::FrameBuffer::Target::Write);
@@ -490,15 +522,14 @@ namespace fox::gfx::api
         m_brdfTexture->bind(6);
 
         gl::viewport(target->dimensions());
-
-        const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
-        pva->bind();
-        
         gl::depth_mask(gl::False);
         gl::disable<glf::Feature::DepthTest>();
         gl::enable<glf::Feature::Blending>();
         gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
         gl::disable<glf::Feature::FaceCulling>();
+
+        const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
+        pva->bind();
 
         for (fox::size_t index{}; const auto& light : m_lights)
         {
@@ -511,85 +542,6 @@ namespace fox::gfx::api
         }
 
         gl::depth_mask(gl::True);
-    }
-    void OpenGLRenderer::render_lighting_shadow(std::shared_ptr<gfx::FrameBuffer> target)
-    {
-        target->bind(api::FrameBuffer::Target::Write);
-        gl::clear(glf::Buffer::Mask::All);
-
-        gl::blit_frame_buffer(m_gBuffer->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, m_gBuffer->dimensions(), target->dimensions());
-
-
-
-        m_gBuffer->bind_texture("Position", 0);
-        m_gBuffer->bind_texture("Albedo"  , 1);
-        m_gBuffer->bind_texture("Normal"  , 2);
-        m_gBuffer->bind_texture("ARM"     , 3);
-
-        gl::viewport(target->dimensions());
-        //gl::enable(glf::Feature::StencilTest);
-
-        const auto& sva = gfx::Geometry::Sphere::mesh()->vertexArray;
-        sva->bind();
-
-        for (fox::size_t index{}; const auto& light : m_shadowCastingPointLights)
-        {
-            fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
-
-            //m_pipelines.at("LightingStencil")->bind();
-            m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-            m_lightBuffer->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
-            m_lightShadowBuffer->copy({ light.position, m_shadowFarPlane });
-            //m_shadowCubemaps.at(index++)->bind_cubemap("Depth", 4);
-
-
-
-            //gl::enable(glf::Feature::DepthTest);
-            //gl::disable(glf::Feature::FaceCulling);
-            //gl::clear(glf::Buffer::Mask::Stencil);
-            //gl::depth_mask(gl::False);
-            //gl::stencil_function(glf::Stencil::Function::Always, 0u, 0u);
-            //gl::stencil_operation_separate(glf::Stencil::Face::Back, glf::Stencil::Action::Keep, glf::Stencil::Action::IncrementWrap, glf::Stencil::Action::Keep);
-            //gl::stencil_operation_separate(glf::Stencil::Face::Front, glf::Stencil::Action::Keep, glf::Stencil::Action::DecrementWrap, glf::Stencil::Action::Keep);
-
-            //gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
-
-
-            m_pipelines.at("PBR")->bind();
-            //m_pipelines.at("PointLighting")->bind();
-
-            //gl::stencil_function(glf::Stencil::Function::NotEqual, 0u, 0xFFFF);
-            //gl::stencil_operation(glf::Stencil::Action::Keep, glf::Stencil::Action::Keep, glf::Stencil::Action::Keep);
-            gl::disable<glf::Feature::DepthTest>();
-            gl::enable<glf::Feature::Blending>();
-            gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
-            gl::enable<glf::Feature::FaceCulling>();
-            gl::cull_face(glf::Culling::Facet::Front);
-
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, sva->index_count());
-        }
-
-        //gl::depth_mask(gl::True);
-        gl::cull_face(glf::Culling::Facet::Back);
-        //gl::disable(glf::Feature::StencilTest);
-
-    }
-    void OpenGLRenderer::render_ambient_lighting(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous)
-    {
-        target->bind(gfx::FrameBuffer::Target::Write);
-        m_pipelines.at("AmbientLighting")->bind();
-        m_gBuffer->bind_texture("Albedo", 0);
-        previous ->bind_texture("Color" , 1);
-
-        gl::viewport(target->dimensions());
-        gl::clear(glf::Buffer::Mask::All);
-        gl::enable<glf::Feature::FaceCulling>();
-        gl::cull_face(glf::Culling::Facet::Back);
-
-        const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
-        pva->bind();
-
-        gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
     }
     void OpenGLRenderer::render_skybox(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous)
     {
@@ -610,56 +562,5 @@ namespace fox::gfx::api
         cva->bind();
 
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
-    }
-    void OpenGLRenderer::render_hdr()
-    {
-        gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
-        const std::array<gl::Matrix4f, 6> captureViews =
-        {
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }), 
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }), 
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
-           glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }), 
-        };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //imgfb->bind(gfx::FrameBuffer::Target::Write);
-        //m_pipelines.at("ConvertEqui2")->bind();
-        //imgcub->bind(0);
-        //m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
-
-        //gl::viewport(gl::Vector2u{ 512u, 512u });
-
-        //for (fox::uint32_t index{}; const auto& view : captureViews)
-        //{
-        //    m_matricesBuffer->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
-
-        //    gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
-
-        //    const auto& cva = gfx::Geometry::Cube::mesh()->vertexArray;
-        //    cva->bind();
-        //    gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
-
-        //    ++index;
-        //}
     }
 }

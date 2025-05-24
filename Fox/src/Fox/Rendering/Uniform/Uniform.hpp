@@ -61,4 +61,6 @@ namespace fox::gfx::unf
     {
         fox::Matrix4f projection{ 1.0f };
     };
+
+    using SSAOSample = fox::Vector4f;
 }
