@@ -37,18 +37,20 @@ namespace fox::gfx::api
         std::shared_ptr<gfx::FrameBuffer>                                  m_gBuffer{};
         std::shared_ptr<gfx::FrameBuffer>                                  m_sBuffer{};
         std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   m_pBuffers{};
+        std::shared_ptr<gfx::FrameBuffer>                                  m_ssaoBuffer{};
+        std::shared_ptr<gfx::Texture2D>                                    m_ssaoNoiseTexture{};
 
         std::shared_ptr<gfx::Cubemap>                                      m_environmentCubemap{};
         std::shared_ptr<gfx::Cubemap>                                      m_irradianceCubemap{};
         std::shared_ptr<gfx::Cubemap>                                      m_preFilterCubemap{};
         std::shared_ptr<gfx::Texture2D>                                    m_brdfTexture{};
 
-        std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  m_contextBuffer{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Matrices>>                 m_matricesBuffer{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Material>>                 m_materialBuffer{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Camera>>                   m_cameraBuffer{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Light>>                    m_lightBuffer{};
-        std::shared_ptr<gfx::UniformArrayBuffer<unf::SSAOSample, 64u>>     m_ssaoSampleBuffer{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  m_contextUniform{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Matrices>>                 m_matricesUniform{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Material>>                 m_materialUniform{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Camera>>                   m_cameraUniform{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Light>>                    m_lightUniform{};
+        std::shared_ptr<gfx::UniformArrayBuffer<unf::SSAOSample, 64u>>     m_ssaoSampleUniform{};
 
         std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    m_pipelines{};
 
