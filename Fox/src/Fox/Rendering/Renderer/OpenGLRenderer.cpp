@@ -34,10 +34,10 @@ namespace fox::gfx::api
 
 
 
-        m_gBuffer                 = gfx::FrameBuffer           ::create(viewportDimensions ,               gBufferManifest  );
-        m_sBuffer                 = gfx::FrameBuffer           ::create(shadowMapDimensions,               sBufferManifest  );
-        m_pBuffers.at(0)          = gfx::FrameBuffer           ::create(viewportDimensions ,               pBufferManifest  );
-        m_pBuffers.at(1)          = gfx::FrameBuffer           ::create(viewportDimensions ,               pBufferManifest  );
+        m_gBuffer                 = gfx::FrameBuffer::create(viewportDimensions , gBufferManifest  );
+        m_sBuffer                 = gfx::FrameBuffer::create(shadowMapDimensions, sBufferManifest  );
+        m_pBuffers.at(0)          = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
+        m_pBuffers.at(1)          = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
 
         m_contextUniform           = gfx::UniformBuffer<unf::Context>                 ::create();
         m_matricesUniform          = gfx::UniformBuffer<unf::Matrices>                ::create();
