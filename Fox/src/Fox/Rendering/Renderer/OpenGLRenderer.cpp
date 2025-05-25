@@ -82,7 +82,6 @@ namespace fox::gfx::api
         add_to_pipeline("PreFilter"   , "cubemap.vert.spv"      , {}, "prefilter.frag.spv");
         add_to_pipeline("BRDF"        , "brdf.vert.spv"         , {}, "brdf.frag.spv");
         add_to_pipeline("SSAO"        , "ssao.vert.spv"         , {}, "ssao.frag.spv");
-        //add_to_pipeline("SSAODepth"   , "ssao_depth.vert.spv"   , {}, "ssao_depth.frag.spv");
 
 
 
