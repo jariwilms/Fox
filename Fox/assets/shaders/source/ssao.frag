@@ -28,15 +28,13 @@ void main()
 
 vec3 fragPos = vec3(u_Matrices.view * vec4(texture(gPosition, TexCoords).xyz, 1.0));
 vec3 normal = mat3(u_Matrices.view) * texture(gNormal, TexCoords).rgb;
-    // get input for SSAO algorithm
-    //vec3 fragPos = texture(gPosition, TexCoords).xyz;
-    //vec3 normal = normalize(texture(gNormal, TexCoords).rgb);
-    vec3 randomVec = normalize(texture(texNoise, TexCoords * noiseScale).xyz);
-    // create TBN change-of-basis matrix: from tangent-space to view-space
+
+    vec3 randomVec = vec3(0.0, 0.0, 1.0);// normalize(texture(texNoise, TexCoords * noiseScale).xyz);
+
     vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));
     vec3 bitangent = cross(normal, tangent);
     mat3 TBN = mat3(tangent, bitangent, normal);
-    // iterate over the sample kernel and calculate occlusion factor
+
     float occlusion = 0.0;
     for(int i = 0; i < kernelSize; ++i)
     {
