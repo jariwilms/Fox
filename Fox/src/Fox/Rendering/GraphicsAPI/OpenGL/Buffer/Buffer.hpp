@@ -137,7 +137,7 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind_index(gl::index_t index) const
+        void bind(gl::index_t index) const
         {
             gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
         }
@@ -199,7 +199,7 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind_index(gl::index_t index, std::optional<gl::range_t> range = {}) const
+        void bind(gl::index_t index, std::optional<gl::range_t> range = {}) const
         {
             if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::byterange_t{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
             else                     gl::bind_buffer_base (m_handle, glf::Buffer::BaseTarget::UniformBuffer, index                                                                                                                          );
