@@ -41,13 +41,13 @@ namespace fox::scn
 
         if (rel.parent)
         {
-            const auto& parent = rel.parent.value();
-                  auto& prel    = reg::get_component<cmp::RelationshipComponent>(parent).get();
+            const auto& parent   = *rel.parent;
+                  auto& relative = reg::get_component<cmp::RelationshipComponent>(parent).get();
 
-            const auto& it = std::find(prel.children.begin(), prel.children.end(), child.id());
-            if (it != prel.children.end())
+            const auto& it = std::find(relative.children.begin(), relative.children.end(), child.id());
+            if (it != relative.children.end())
             {
-                prel.children.erase(it);
+                relative.children.erase(it);
             }
 
             rel.parent = std::nullopt;
