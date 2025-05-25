@@ -9,7 +9,7 @@ namespace fox::gfx::api
 
 
 
-        constexpr gl::uint8_t  multisamples{  4u };
+        constexpr gl::uint8_t  multisamples{ 4u };
         constexpr gl::uint32_t lightCount{ 32u };
         constexpr gl::Vector2u viewportDimensions { 1280u,  720u };
         constexpr gl::Vector2u shadowMapDimensions{ 2048u, 2048u };
@@ -63,7 +63,7 @@ namespace fox::gfx::api
 
                 if (geometry.has_value())
                 {
-                    const auto& shaders = api::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / geometry.value(), dir / fragment);
+                    const auto& shaders = api::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / *geometry, dir / fragment);
                     m_pipelines.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = shaders.at(0), .geometry = shaders.at(1), .fragment = shaders.at(2) }));
                 }
                 else
@@ -367,7 +367,7 @@ namespace fox::gfx::api
 
 
 
-
+        
 
 
 
@@ -392,17 +392,11 @@ namespace fox::gfx::api
 
 
 
-        
-
-
-
-
-
-
-
-
         //Lighting calculations
         render_lighting(m_pBuffers.at(0));
+
+
+
 
 
 
@@ -439,8 +433,8 @@ namespace fox::gfx::api
 
 
         //Blit the final result into the default framebuffer
-        //gl::blit_frame_buffer(m_ssaoBuffer->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
-        gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
+        gl::blit_frame_buffer(m_ssaoBuffer->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        //gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)

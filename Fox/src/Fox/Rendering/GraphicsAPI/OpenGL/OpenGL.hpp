@@ -147,8 +147,8 @@ namespace fox::gfx::api::gl
                 std::array<gl::uint32_t, 4> value{};
                 glGetIntegerv(gl::to_underlying(data), reinterpret_cast<gl::int32_t*>(value.data()));
 
-                struct result_t{ gl::Area area{ {} }; };
-                return result_t{ gl::Area{ gl::Vector2u{ value.at(2), value.at(3) }, gl::Vector2u{ value.at(0), value.at(1) } } };
+                struct result_t{ gl::area_t area{}; };
+                return result_t{ gl::area_t{ gl::Vector2u{ value.at(2), value.at(3) }, gl::Vector2u{ value.at(0), value.at(1) } } };
             };
 
 
@@ -387,8 +387,8 @@ namespace fox::gfx::api::gl
                 std::array<gl::uint32_t, 4> value{};
                 glGetIntegeri_v(gl::to_underlying(data), index, reinterpret_cast<gl::int32_t*>(value.data()));
 
-                struct result_t{ gl::Area area{ {} }; };
-                return result_t{ gl::Area{ gl::Vector2u{ value.at(2), value.at(3) }, gl::Vector2u{ value.at(0), value.at(1) } } };
+                struct result_t{ gl::area_t area{ {} }; };
+                return result_t{ gl::area_t{ gl::Vector2u{ value.at(2), value.at(3) }, gl::Vector2u{ value.at(0), value.at(1) } } };
             };
 
 
@@ -593,7 +593,7 @@ namespace fox::gfx::api::gl
         return data;
     }
     template<typename T>
-    static auto get_buffer_sub_data(gl::handle_t buffer, const gl::ByteRange& range)
+    static auto get_buffer_sub_data(gl::handle_t buffer, gl::byterange_t range)
     {
         std::vector<T> data(range.size);
         
@@ -821,7 +821,7 @@ namespace fox::gfx::api::gl
         }
     }
     template<glf::Texture::Format F>
-    static auto get_texture_sub_image                   (gl::handle_t texture, gl::uint32_t level, const gl::Volume& region, gl::sizei_t size)
+    static auto get_texture_sub_image                   (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, gl::sizei_t size)
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM)
         {
@@ -854,7 +854,7 @@ namespace fox::gfx::api::gl
         }
     }
     template<glf::Texture::Format F>
-    static auto get_compressed_texture_sub_image        (gl::handle_t texture, gl::uint32_t level, const gl::Volume& region, gl::size_t size)
+    static auto get_compressed_texture_sub_image        (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, gl::size_t size)
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM)
         {
@@ -916,6 +916,7 @@ namespace fox::gfx::api::gl
             };
 
         //i cant
+        //TODO
     }
     template<glf::RenderBuffer::Parameter P>
     static auto get_render_buffer_parameter_value       (gl::handle_t renderBuffer)
@@ -1161,11 +1162,11 @@ namespace fox::gfx::api::gl
     {
         glBindBuffersBase(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
-    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::ByteRange range)
+    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::byterange_t range)
     {
         glBindBufferRange(gl::to_underlying(target), index, gl::to_underlying(buffer), range.offset, range.size);
     }
-    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::ByteRange> ranges, glf::Buffer::BaseTarget target, gl::index_t index)
+    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::index_t index)
     {
         std::vector<gl::size_t>   sizes  (ranges.size());
         std::vector<gl::offset_t> offsets(ranges.size());
@@ -1197,21 +1198,21 @@ namespace fox::gfx::api::gl
     {
         glClearNamedBufferData(gl::to_underlying(buffer), gl::to_underlying(format), gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
     }
-    static void clear_buffer_sub_data                   (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type, const gl::ByteRange& range)
+    static void clear_buffer_sub_data                   (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type, gl::byterange_t range)
     {
         glClearNamedBufferSubData(gl::to_underlying(buffer), gl::to_underlying(format), range.offset, range.size, gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
     }
     template<typename T>
     static auto map_buffer                              (gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access)
     {
-        return reinterpret_cast<T*>(glMapBuffer(gl::to_underlying(buffer), gl::to_underlying(access)));
+        return reinterpret_cast<T*>(glMapNamedBuffer(gl::to_underlying(buffer), gl::to_underlying(access)));
     }
     template<typename T>
-    static auto map_buffer_range                        (gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access, const gl::ByteRange& range)
+    static auto map_buffer_range                        (gl::handle_t buffer, glf::Buffer::Mapping::RangeAccessFlags access, gl::byterange_t range)
     {
-        return reinterpret_cast<T*>(glMapBufferRange(gl::to_underlying(buffer), range.offset, range.size, gl::to_underlying(access)));
+        return reinterpret_cast<T*>(glMapNamedBufferRange(gl::to_underlying(buffer), range.offset, range.size, gl::to_underlying(access)));
     }
-    static void flush_buffer_range                      (gl::handle_t buffer, gl::ByteRange range)
+    static void flush_buffer_range                      (gl::handle_t buffer, gl::byterange_t range)
     {
         glFlushMappedNamedBufferRange(gl::to_underlying(buffer), range.offset, range.size);
     }
@@ -1223,11 +1224,11 @@ namespace fox::gfx::api::gl
     {
         glInvalidateBufferData(gl::to_underlying(buffer));
     }
-    static void invalidate_buffer_sub_data              (gl::handle_t buffer, const gl::ByteRange& range)
+    static void invalidate_buffer_sub_data              (gl::handle_t buffer, gl::byterange_t range)
     {
         glInvalidateBufferSubData(gl::to_underlying(buffer), range.offset, range.size);
     }
-    static void copy_buffer_sub_data                    (gl::handle_t source, gl::handle_t destination, const gl::ByteRange& sourceRange, gl::offset_t destinationOffset)
+    static void copy_buffer_sub_data                    (gl::handle_t source, gl::handle_t destination, gl::byterange_t sourceRange, gl::offset_t destinationOffset)
     {
         glCopyNamedBufferSubData(gl::to_underlying(source), gl::to_underlying(destination), sourceRange.offset, destinationOffset, sourceRange.size);
     }
@@ -1409,7 +1410,7 @@ namespace fox::gfx::api::gl
     {
         glBindSampler(index, gl::to_underlying(sampler));
     }
-    static void bind_samplers                           (std::span<const gl::handle_t> samplers, const gl::Range& range)
+    static void bind_samplers                           (std::span<const gl::handle_t> samplers, gl::range_t range)
     {
         glBindSamplers(range.index, range.count, gl::to_underlying_ptr(samplers.data()));
     }
@@ -1498,7 +1499,7 @@ namespace fox::gfx::api::gl
     {
         glPixelStorei(gl::to_underlying(mode), parameter);
     }
-    static void texture_sub_image_1d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, const gl::Length& region, std::span<const gl::byte_t> data)
+    static void texture_sub_image_1d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, gl::length_t region, std::span<const gl::byte_t> data)
     {
         glTextureSubImage1D(
             gl::to_underlying(texture), static_cast<gl::int32_t>(level),
@@ -1507,7 +1508,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying(format), gl::to_underlying(type),
             data.data());
     }
-    static void texture_sub_image_2d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, const gl::Area&   region, std::span<const gl::byte_t> data)
+    static void texture_sub_image_2d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, gl::area_t   region, std::span<const gl::byte_t> data)
     {
         glTextureSubImage2D(
             gl::to_underlying(texture), level,
@@ -1516,7 +1517,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying(format), gl::to_underlying(type),
             data.data());
     }
-    static void texture_sub_image_3d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, const gl::Volume& region, std::span<const gl::byte_t> data)
+    static void texture_sub_image_3d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, gl::volume_t region, std::span<const gl::byte_t> data)
     {
         glTextureSubImage3D(
             gl::to_underlying(texture), level,
@@ -1525,7 +1526,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying(format), gl::to_underlying(type),
             data.data());
     }
-    static void copy_texture_sub_image_1d               (gl::handle_t texture, gl::uint32_t level, const gl::Length& region, const gl::Vector2u& coordinates)
+    static void copy_texture_sub_image_1d               (gl::handle_t texture, gl::uint32_t level, gl::length_t region, const gl::Vector2u& coordinates)
     {
         glCopyTextureSubImage1D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)        ,
@@ -1533,7 +1534,7 @@ namespace fox::gfx::api::gl
             static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates.y),
             static_cast<gl::sizei_t>(region.extent.x));
     }
-    static void copy_texture_sub_image_2d               (gl::handle_t texture, gl::uint32_t level, const gl::Area&   region, const gl::Vector2u& coordinates)
+    static void copy_texture_sub_image_2d               (gl::handle_t texture, gl::uint32_t level, gl::area_t   region, const gl::Vector2u& coordinates)
     {
         glCopyTextureSubImage2D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level), 
@@ -1541,7 +1542,7 @@ namespace fox::gfx::api::gl
             static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y),
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
-    static void copy_texture_sub_image_3d               (gl::handle_t texture, gl::uint32_t level, const gl::Volume& region, const gl::Vector2u& coordinates)
+    static void copy_texture_sub_image_3d               (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, const gl::Vector2u& coordinates)
     {
         glCopyTextureSubImage3D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          ,
@@ -1549,7 +1550,7 @@ namespace fox::gfx::api::gl
             static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y),
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
-    static void compressed_texture_sub_image_1d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, const gl::Length& region, std::span<const gl::byte_t> data)
+    static void compressed_texture_sub_image_1d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, gl::length_t region, std::span<const gl::byte_t> data)
     {
         glCompressedTextureSubImage1D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level), 
@@ -1558,7 +1559,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying       (format)         , 
             static_cast<gl::sizei_t>(data.size())    , data.data());
     }
-    static void compressed_texture_sub_image_2d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, const gl::Area&   region, std::span<const gl::byte_t> data)
+    static void compressed_texture_sub_image_2d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, gl::area_t   region, std::span<const gl::byte_t> data)
     {
         glCompressedTextureSubImage2D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
@@ -1567,7 +1568,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying       (format)         , 
             static_cast<gl::sizei_t>(data.size())    , data.data());
     }
-    static void compressed_texture_sub_image_3d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, const gl::Volume& region, std::span<const gl::byte_t> data)
+    static void compressed_texture_sub_image_3d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, gl::volume_t region, std::span<const gl::byte_t> data)
     {
         glCompressedTextureSubImage3D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
@@ -1580,7 +1581,7 @@ namespace fox::gfx::api::gl
     {
         glTextureBuffer(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer));
     }
-    static void texture_buffer_range                    (gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, const gl::ByteRange& range)
+    static void texture_buffer_range                    (gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, gl::byterange_t range)
     {
         glTextureBufferRange(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer), range.offset, range.size);
     }
@@ -1750,7 +1751,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying       (texture), 
             static_cast<gl::int32_t>(level));
     }
-    static void invalidate_texture_sub_image            (gl::handle_t texture, gl::uint32_t level, const gl::Volume& region)
+    static void invalidate_texture_sub_image            (gl::handle_t texture, gl::uint32_t level, gl::volume_t region)
     {
         glInvalidateTexSubImage(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
@@ -1763,7 +1764,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying(texture), static_cast<gl::int32_t>(level), 
             gl::to_underlying(format) , gl::to_underlying       (type) , data.data());
     }
-    static void clear_texture_sub_image(gl::handle_t texture, glf::Texture::BaseFormat format, glf::Texture::Type type, gl::uint32_t level, const gl::Volume& region, std::span<const gl::byte_t> data)
+    static void clear_texture_sub_image(gl::handle_t texture, glf::Texture::BaseFormat format, glf::Texture::Type type, gl::uint32_t level, gl::volume_t region, std::span<const gl::byte_t> data)
     {
         glClearTexSubImage(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
@@ -2032,15 +2033,15 @@ namespace fox::gfx::api::gl
     {
         glPrimitiveRestartIndex(index);
     }
-    static void draw_arrays                             (glf::Draw::Mode mode, const gl::Range& range)
+    static void draw_arrays                             (glf::Draw::Mode mode, gl::range_t range)
     {
         glDrawArrays(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count));
     }
-    static void draw_arrays_instanced                   (glf::Draw::Mode mode, const gl::Range& range, gl::count_t instances)
+    static void draw_arrays_instanced                   (glf::Draw::Mode mode, gl::range_t range, gl::count_t instances)
     {
         glDrawArraysInstanced(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), static_cast<gl::sizei_t>(instances));
     }
-    static void draw_arrays_instanced_base_instance     (glf::Draw::Mode mode, const gl::Range& range, gl::count_t instances, gl::index_t base)
+    static void draw_arrays_instanced_base_instance     (glf::Draw::Mode mode, gl::range_t range, gl::count_t instances, gl::index_t base)
     {
         glDrawArraysInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), static_cast<gl::sizei_t>(instances), base);
     }
@@ -2104,11 +2105,11 @@ namespace fox::gfx::api::gl
     {
         glViewportArrayv(index, static_cast<gl::sizei_t>(ranges.size()), glm::value_ptr(*ranges.data()));
     }
-    static void viewport_indexed                        (gl::index_t index, const gl::Region<gl::float32_t, 2> region)
+    static void viewport_indexed                        (gl::index_t index, const gl::region_t<gl::float32_t, 2> region)
     {
         glViewportIndexedf(index, region.origin.x, region.origin.y, region.extent.x, region.extent.y);
     }
-    static void viewport                                (const gl::Area& region)
+    static void viewport                                (gl::area_t region)
     {
         glViewport(
             static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
@@ -2173,14 +2174,14 @@ namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>            (values.size()), 
             reinterpret_cast<const gl::int32_t*>(values.data()));
     }
-    static void scissor_indexed                         (gl::index_t index, const gl::Area& region)
+    static void scissor_indexed                         (gl::index_t index, gl::area_t region)
     {
         glScissorIndexed(
             index, 
             static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
-    static void scissor                                 (const gl::Area& region)
+    static void scissor                                 (gl::area_t region)
     {
         glScissor(
             static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
@@ -2394,7 +2395,7 @@ namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>(attachments.size()) , 
             gl::to_underlying_ptr   (attachments.data()));
     }
-    static void invalidate_frame_buffer_sub_data        (gl::handle_t frameBuffer, std::span<const glf::FrameBuffer::Attachment> attachments, const gl::Area& region)
+    static void invalidate_frame_buffer_sub_data        (gl::handle_t frameBuffer, std::span<const glf::FrameBuffer::Attachment> attachments, gl::area_t region)
     {
         glInvalidateNamedFramebufferSubData(
             gl::to_underlying       (frameBuffer)       , 
@@ -2411,7 +2412,7 @@ namespace fox::gfx::api::gl
         glNamedFramebufferReadBuffer(gl::to_underlying(frameBuffer), gl::to_underlying(source));
     }
     template<glf::PixelData::Format F, glf::PixelData::Type T>
-    static void read_pixels                             (const gl::Area& region)
+    static void read_pixels                             (gl::area_t region)
     {
         //const auto& map_format_size = []<glf::PixelData::Format F>() constexpr
         //    {
@@ -2448,7 +2449,7 @@ namespace fox::gfx::api::gl
     {
         glClampColor(gl::to_underlying(glf::ClampColor::Read), static_cast<gl::enum_t>(value));
     }
-    static void blit_frame_buffer                       (gl::handle_t source, gl::handle_t destination, glf::Buffer::Mask mask, glf::FrameBuffer::Filter filter, const gl::Area& sourceRegion, const gl::Area& destinationRegion)
+    static void blit_frame_buffer                       (gl::handle_t source, gl::handle_t destination, glf::Buffer::Mask mask, glf::FrameBuffer::Filter filter, gl::area_t sourceRegion, gl::area_t destinationRegion)
     {
         glBlitNamedFramebuffer(
             gl::to_underlying       (source)                    ,

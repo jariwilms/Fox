@@ -11,8 +11,6 @@ namespace fox::gfx::api::gl
     class Buffer : public gl::Object
     {
     public:
-        using Access = api::Buffer::Access;
-
         explicit Buffer(std::span<const T> data)
             : m_size{ static_cast<gl::size_t>(data.size_bytes()) }
         {
@@ -21,8 +19,7 @@ namespace fox::gfx::api::gl
             gl::buffer_storage(
                 m_handle, 
                 glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::Read           | 
-                glf::Buffer::StorageFlags::Write          | 
+                glf::Buffer::StorageFlags::ReadWrite      | 
                 glf::Buffer::StorageFlags::Persistent     | 
                 glf::Buffer::StorageFlags::Coherent       , 
                 data);
@@ -43,48 +40,59 @@ namespace fox::gfx::api::gl
                  Buffer(Buffer&&) noexcept = default;
                 ~Buffer()
         {
-            if (m_span) unmap();
+            if (is_mapped()) unmap();
             gl::delete_buffer(m_handle);
         }
 
         void copy      (                   std::span<const T> data)
         {
+            if (data.size_bytes() > size()) throw std::invalid_argument{ "Data exceeds buffer size!" };
             gl::buffer_data(m_handle, gl::offset_t{ 0u }, data);
         }
         void copy_range(gl::index_t index, std::span<const T> data)
         {
+            if (index + 1u > count()) throw std::invalid_argument{ "Index out of range!" };
             gl::buffer_data(m_handle, static_cast<gl::offset_t>(index * sizeof(T)), data);
         }
 
-        auto map  (std::optional<gl::ByteRange> range = {})
+        auto map  (std::optional<gl::range_t> range = {})
         {
-            if (!is_mapped() && range != m_range)
-            {
-                auto* ptr = gl::map_buffer<T>(
-                                m_handle, 
-                                glf::Buffer::Mapping::AccessFlags::ReadWrite     |
-                                glf::Buffer::Mapping::AccessFlags::Persistent    |
-                                glf::Buffer::Mapping::AccessFlags::Coherent      |
-                                glf::Buffer::Mapping::AccessFlags::FlushExplicit ,
-                                range);
+            if (is_mapped()) unmap();
 
-                if   (range.has_value())
-                {
-                    m_span   = std::make_shared<std::span<T>>(ptr, range->size - range->offset);
-                    m_range = range.value();
-                }
-                else
-                {
-                    m_span   = std::make_shared<std::span<T>>(ptr, count());
-                    m_range = gl::ByteRange{ static_cast<gl::size_t>(m_span->size_bytes()) };
-                }
+            if (range)
+            {
+                m_range.count = std::min(range->count, count()               );
+                m_range.index = std::min(range->index, count() - range->count);
+
+                auto* ptr = gl::map_buffer_range<T>(
+                    m_handle,
+                    glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
+                    glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
+                    glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
+                    glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
+                    gl::byterange_t{ static_cast<gl::size_t>(m_range.count * sizeof(T)), static_cast<gl::offset_t>(m_range.index * sizeof(T)) });
+
+                m_span = std::make_shared<std::span<T>>(ptr, m_range.count);
+            }
+            else
+            {
+                auto* ptr = gl::map_buffer_range<T>(
+                    m_handle, 
+                    glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
+                    glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
+                    glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
+                    glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit, 
+                    gl::byterange_t{ size() });
+
+                m_span  = std::make_shared<std::span<T>>(ptr, count());
+                m_range = count();
             }
 
             return std::weak_ptr<std::span<T>>(m_span);
         }
-        void flush(              gl::ByteRange  range     )
+        void flush(gl::range_t range)
         {
-            gl::flush_buffer_range(m_handle, range);
+            gl::flush_buffer_range(m_handle, gl::byterange_t{ range.count * sizeof(T), range.index * sizeof(T) });
         }
         void unmap()
         {
@@ -109,15 +117,13 @@ namespace fox::gfx::api::gl
 
     private:
         std::shared_ptr<std::span<T>> m_span{};
-        gl::ByteRange                 m_range{ gl::size_t{} };
+        gl::range_t                   m_range{};
         gl::size_t                    m_size{};
     };
     template<typename T>
     class UniformBuffer : public gl::Object
     {
     public:
-        using Access = api::Buffer::Access;
-
         explicit UniformBuffer(const T& data = {})
             : m_size{ static_cast<gl::size_t>(sizeof(T)) }
         {
@@ -173,8 +179,6 @@ namespace fox::gfx::api::gl
     class UniformArrayBuffer : public gl::Object
     {
     public:
-        using Access = api::Buffer::Access;
-
         explicit UniformArrayBuffer()
             : m_size{ static_cast<gl::size_t>(N * sizeof(T)) }
         {
@@ -197,7 +201,7 @@ namespace fox::gfx::api::gl
 
         void bind_index(gl::index_t index, std::optional<gl::range_t> range = {}) const
         {
-            if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::ByteRange{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
+            if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::byterange_t{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
             else                     gl::bind_buffer_base (m_handle, glf::Buffer::BaseTarget::UniformBuffer, index                                                                                                                          );
         }
 

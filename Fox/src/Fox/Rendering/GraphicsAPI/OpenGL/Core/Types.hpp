@@ -106,22 +106,22 @@ namespace fox::gfx::api::gl
     using Matrix3f = gl::Matrix<gl::float32_t, 3u>;
     using Matrix4f = gl::Matrix<gl::float32_t, 4u>;
 
+    
 
-
-    template<typename T, typename U, gl::uint32_t N>
+    template<typename T, gl::uint32_t N>
     struct region_t
     {
-        region_t(const gl::Vector<T, N>& extent, const gl::Vector<U, N>& origin = {})
+        region_t(const gl::Vector<T, N>& extent = {}, const gl::Vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
         bool operator==(const region_t&) const = default;
 
         gl::Vector<T, N> extent{};
-        gl::Vector<U, N> origin{};
+        gl::Vector<T, N> origin{};
     };
     struct range_t
     {
-        range_t(gl::count_t count, gl::index_t index = {})
+        range_t(gl::count_t count = {}, gl::index_t index = {})
             : count{ count }, index{ index } {}
 
         bool operator==(const range_t&) const = default;
@@ -131,7 +131,7 @@ namespace fox::gfx::api::gl
     };
     struct byterange_t
     {
-        byterange_t(gl::size_t size, gl::offset_t offset = {})
+        byterange_t(gl::size_t size = {}, gl::offset_t offset = {})
             : size{ size }, offset{ offset } {}
 
         bool operator==(const byterange_t&) const = default;
@@ -141,13 +141,10 @@ namespace fox::gfx::api::gl
     };
 
     template<typename T, gl::uint32_t N>
-    using Region    = gl::region_t<T, T, N>;
-    using Length    = gl::region_t<gl::uint32_t, gl::uint32_t, 1u>;
-    using Area      = gl::region_t<gl::uint32_t, gl::uint32_t, 2u>;
-    using Volume    = gl::region_t<gl::uint32_t, gl::uint32_t, 3u>;
-    using Range     = gl::range_t;
-    using ByteRange = gl::byterange_t;
-
+    using Region   = gl::region_t<T, N>;
+    using length_t = gl::region_t<gl::uint32_t, 1u>;
+    using area_t   = gl::region_t<gl::uint32_t, 2u>;
+    using volume_t = gl::region_t<gl::uint32_t, 3u>;
 
 
 

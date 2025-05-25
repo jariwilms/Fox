@@ -10,7 +10,7 @@ namespace fox::gfx
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using Range             = api::gl::Range;
+        using range_t             = api::gl::range_t;
 
         template<typename T>
         using VertexBuffer        = api::gl::Buffer<T>;
@@ -159,7 +159,7 @@ namespace fox::gfx
 
         void bind_index      (fox::index_t index, std::optional<fox::Range> range = {}) const
         {
-            if   (range.has_value()) _->bind_index(index, impl::Range{ range->count, range->index });
+            if   (range.has_value()) _->bind_index(index, impl::range_t{ range->count, range->index });
             else                     _->bind_index(index, {});
         }
 

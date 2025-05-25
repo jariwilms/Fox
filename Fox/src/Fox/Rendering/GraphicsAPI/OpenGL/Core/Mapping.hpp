@@ -19,20 +19,6 @@
 
 namespace fox::gfx::api::gl
 {
-    static constexpr glf::Buffer::Mapping::AccessFlags map_buffer_access(api::Buffer::Access mapping)
-    {
-        switch (mapping)
-        {
-            case api::Buffer::Access::Read:                return glf::Buffer::Mapping::AccessFlags::Read;
-            case api::Buffer::Access::Write:               return glf::Buffer::Mapping::AccessFlags::Write;
-            case api::Buffer::Access::ReadWrite:           return glf::Buffer::Mapping::AccessFlags::ReadWrite;
-            
-            case api::Buffer::Access::Persistent:          return glf::Buffer::Mapping::AccessFlags::Persistent;
-            case api::Buffer::Access::Coherent:            return glf::Buffer::Mapping::AccessFlags::Coherent;
-
-            default: throw std::invalid_argument{ "Invalid Mapping!" };
-        }
-    }
     static constexpr glf::Texture::BaseFormat          map_texture_format_base(api::Texture::Format format)
     {
         const auto& flags = (static_cast<gl::int32_t>(format) & 0xFF00) >> 8;
