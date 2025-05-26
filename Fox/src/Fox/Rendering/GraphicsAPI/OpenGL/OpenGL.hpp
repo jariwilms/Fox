@@ -2006,9 +2006,9 @@ namespace fox::gfx::api::gl
             }
         }
     }
-    static void vertex_array_vertex_buffer              (gl::handle_t vertexArray, gl::handle_t buffer, gl::index_t binding, gl::size_t stride, gl::offset_t offset)
+    static void vertex_array_vertex_buffer              (gl::handle_t vertexArray, gl::handle_t buffer, gl::index_t binding, gl::size_t stride, gl::index_t index)
     {
-        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), binding, gl::to_underlying(buffer), offset, static_cast<gl::sizei_t>(stride));
+        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), binding, gl::to_underlying(buffer), static_cast<gl::offset_t>(index), static_cast<gl::sizei_t>(stride));
     }
     static void vertex_array_vertex_buffers             (gl::handle_t vertexArray)
     {

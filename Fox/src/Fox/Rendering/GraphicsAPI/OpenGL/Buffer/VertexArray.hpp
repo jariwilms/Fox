@@ -42,18 +42,18 @@ namespace fox::gfx::api::gl
         template<typename T>
         void tie(std::shared_ptr<gl::Buffer<T>> vertexBuffer, VertexLayout layout)
         {
-            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer->handle(), m_bindingPoint, static_cast<gl::sizei_t>(layout.stride()), gl::offset_t{});
+            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer->handle(), m_bindingPoint, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
 
-            gl::uint32_t offset{};
+            gl::offset_t offset{};
             for (const auto& attribute : layout.attributes())
             {
                 enable_attribute(m_attributeIndex);
 
-                gl::vertex_array_attribute_format(m_handle,  m_attributeIndex, offset, gl::map_data_type(attribute.dataType), attribute.count, attribute.isNormalized);
+                gl::vertex_array_attribute_format (m_handle, m_attributeIndex, offset, gl::map_data_type(attribute.dataType), attribute.count, attribute.isNormalized);
                 gl::vertex_array_attribute_binding(m_handle, m_attributeIndex, m_bindingPoint);
                 if (attribute.isStatic) set_attribute_divisor(m_attributeIndex, attribute.divisionRate);
 
-                offset += static_cast<gl::uint32_t>(attribute.stride());
+                offset += static_cast<gl::offset_t>(attribute.stride());
 
                 m_attributeIndexToBufferMap.emplace(m_attributeIndex, vertexBuffer->handle());
                 ++m_attributeIndex;
@@ -86,8 +86,8 @@ namespace fox::gfx::api::gl
         VertexArray& operator=(VertexArray&&) noexcept = default;
 
     private:
-        gl::uint32_t m_attributeIndex{};
-        gl::uint32_t m_bindingPoint{};
+        gl::index_t m_attributeIndex{};
+        gl::index_t m_bindingPoint{};
 
         std::unordered_map<gl::uint32_t, gl::handle_t> m_bindingPointToBufferMap{};
         std::unordered_map<gl::uint32_t, gl::handle_t> m_attributeIndexToBufferMap{};
