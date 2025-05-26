@@ -34,64 +34,46 @@ namespace fox::gfx::api::gl
             gl::disable_vertex_array_attribute(m_handle, index);
         }
 
-        void set_attribute_divisor(gl::index_t index, gl::uint32_t divisor)
+        void tie(gl::handle_t vertexBuffer, const gfx::VertexLayout& layout)
         {
-            gl::vertex_array_binding_divisor(m_handle, index, divisor);
-        }
-        
-        template<typename T>
-        void tie(std::shared_ptr<gl::Buffer<T>> vertexBuffer, VertexLayout layout)
-        {
-            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer->handle(), m_bindingPoint, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
+            gl::vertex_array_vertex_buffer(m_handle, vertexBuffer, m_bindingPoint, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
 
             gl::offset_t offset{};
             for (const auto& attribute : layout.attributes())
             {
                 enable_attribute(m_attributeIndex);
 
-                gl::vertex_array_attribute_format (m_handle, m_attributeIndex, offset, gl::map_data_type(attribute.dataType), attribute.count, attribute.isNormalized);
+                gl::vertex_array_attribute_format (m_handle, m_attributeIndex, offset, gl::map_type(attribute.type), attribute.count, attribute.isNormalized);
                 gl::vertex_array_attribute_binding(m_handle, m_attributeIndex, m_bindingPoint);
-                if (attribute.isStatic) set_attribute_divisor(m_attributeIndex, attribute.divisionRate);
+                if (attribute.isStatic) set_attribute_divisor(static_cast<gl::binding_t>(m_attributeIndex), attribute.divisionRate);
 
-                offset += static_cast<gl::offset_t>(attribute.stride());
-
-                m_attributeIndexToBufferMap.emplace(m_attributeIndex, vertexBuffer->handle());
+                offset += static_cast<gl::offset_t>(attribute.count * attribute.size);
                 ++m_attributeIndex;
             }
 
-            m_bindingPointToBufferMap.emplace(m_bindingPoint, vertexBuffer->handle());
-            ++m_bindingPoint;
+            m_bindingPoint = gl::binding_t{ gl::to_underlying(m_bindingPoint) + 1u };
         }
-        void tie(std::shared_ptr<gl::Buffer<gl::uint32_t>> indexBuffer)
+        void tie(gl::handle_t indexBuffer , gl::count_t indices)
         {
-            gl::vertex_array_element_buffer(m_handle, indexBuffer->handle());
-
-            m_indexBuffer = indexBuffer;
+            gl::vertex_array_element_buffer(m_handle, indexBuffer);
+            m_indexCount = indices;
         }
 
-        gl::count_t index_count() const
+        void set_attribute_divisor(gl::binding_t binding, gl::uint32_t divisor)
         {
-            return m_indexBuffer->count();
+            gl::vertex_array_binding_divisor(m_handle, binding, divisor);
         }
 
-        const std::unordered_map<gl::uint32_t, gl::handle_t>& binding_points() const
+        auto index_count() const
         {
-            return m_bindingPointToBufferMap;
-        }
-        const std::unordered_map<gl::uint32_t, gl::handle_t>& attributes()     const
-        {
-            return m_attributeIndexToBufferMap;
+            return m_indexCount;
         }
 
         VertexArray& operator=(VertexArray&&) noexcept = default;
 
     private:
-        gl::index_t m_attributeIndex{};
-        gl::index_t m_bindingPoint{};
-
-        std::unordered_map<gl::uint32_t, gl::handle_t> m_bindingPointToBufferMap{};
-        std::unordered_map<gl::uint32_t, gl::handle_t> m_attributeIndexToBufferMap{};
-
-        std::shared_ptr<gl::Buffer<gl::uint32_t>> m_indexBuffer{};
+        gl::index_t   m_attributeIndex{};
+        gl::binding_t m_bindingPoint{};
+        gl::count_t   m_indexCount{};
     };
 }

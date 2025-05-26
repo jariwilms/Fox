@@ -12,6 +12,8 @@ namespace fox::gfx
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 
+        using binding_t    = api::gl::binding_t;
+
         using VertexArray  = api::gl::VertexArray;
 
 #endif
@@ -32,7 +34,7 @@ namespace fox::gfx
             _->bind();
         }
 
-        void enable_attribute(fox::uint32_t index)
+        void enable_attribute (fox::uint32_t index)
         {
             _->enable_attribute(index);
         }
@@ -41,35 +43,26 @@ namespace fox::gfx
             _->disable_attribute(index);
         }
 
-        void set_attribute_divisor(fox::uint32_t attribute, fox::uint32_t divisor)
+        void set_attribute_divisor(fox::binding_t binding, fox::uint32_t divisor)
         {
-            _->set_attribute_divisor(attribute, divisor);
+            _->set_attribute_divisor(static_cast<impl::binding_t>(binding), divisor);
         }
 
         template<typename T>
-        void tie(std::shared_ptr<const gfx::VertexBuffer<T>> buffer, gfx::VertexLayout layout)
+        void tie(std::shared_ptr<const gfx::VertexBuffer<T>> buffer, const gfx::VertexLayout& layout)
         {
-            _->tie(buffer->impl(), layout);
+            _->tie(buffer->handle(), layout);
         }
-        void tie(std::shared_ptr<const gfx::IndexBuffer> buffer)
+        void tie(std::shared_ptr<const gfx::IndexBuffer>     buffer)
         {
-            _->tie(buffer->impl());
-        }
-
-        const std::unordered_map<fox::uint32_t, gfx::handle_t>& binding_points() const
-        {
-            return _->binding_points();
-        }
-        const std::unordered_map<fox::uint32_t, gfx::handle_t>& attributes()     const
-        {
-            return _->attributes();
+            _->tie(buffer->handle(), buffer->count());
         }
 
-        fox::count_t  index_count() const
+        auto index_count() const
         {
             return _->index_count();
         }
-        gfx::handle_t handle()      const
+        auto handle     () const
         {
             return _->handle();
         }

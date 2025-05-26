@@ -31,7 +31,7 @@ namespace fox::gfx::api::gl
         Texture(Format format, Filter filter, const wrap_t& wrapping, const vector_t& dimensions)
             : api::Texture{ format, filter }, m_mipmapLevels{ 1u }, m_wrapping{ wrapping }, m_dimensions{ dimensions }
         {
-            constexpr auto target = gl::map_texture_target<DIMS, api::AntiAliasing::None>();
+            const auto& target = gl::map_texture_target(DIMS, api::AntiAliasing::None);
             m_handle = gl::create_texture(target);
 
             if (filter != Filter::None)
@@ -117,7 +117,7 @@ namespace fox::gfx::api::gl
         Texture(Format format, const vector_t& dimensions, fox::uint8_t samples)
             : api::Texture{ format, Filter::None }, m_dimensions{ dimensions }, m_samples{ samples }
         {
-            constexpr auto target = gl::map_texture_target<DIMS, api::AntiAliasing::MSAA>();
+            const auto& target = gl::map_texture_target(DIMS, api::AntiAliasing::None);
             m_handle = gl::create_texture(target);
 
             if constexpr (DIMS == api::Dimensions::_2D) gl::texture_storage_2d_multisample(m_handle, gl::map_texture_format(m_format), m_dimensions, m_samples);

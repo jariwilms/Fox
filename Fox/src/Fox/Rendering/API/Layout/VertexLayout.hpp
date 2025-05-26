@@ -13,39 +13,30 @@ namespace fox::gfx
     public:
         struct Attribute
         {
-        public:
-            fox::size_t stride() const
-            {
-                return (count * typeSize);
-            }
-
-            fox::uint32_t count{};
-            api::DataType dataType{};
-            fox::size_t   typeSize{};
+            api::Type     type{};
+            fox::count_t  count{};
+            fox::size_t   size{};
             fox::bool_t   isNormalized{};
             fox::bool_t   isStatic{};
             fox::uint32_t divisionRate{};
         };
 
-        VertexLayout() = default;
-
         template<typename T>
-        void specify(fox::uint32_t count, fox::bool_t isNormalized = false, fox::bool_t isStatic = false, fox::uint32_t divisionRate = 0u)
+        void specify(fox::count_t count, fox::bool_t isNormalized = fox::False, fox::bool_t isStatic = fox::False, fox::uint32_t divisionRate = {})
         {
-            m_attributes.emplace_back(count, api::map_data_type<T>(), sizeof(T), isNormalized, isStatic, divisionRate);
+            m_attributes.emplace_back(api::map_type<T>(), count, sizeof(T), isNormalized, isStatic, divisionRate);
         }
 
-        fox::size_t stride() const
+        auto attributes() const
         {
-            return std::accumulate(m_attributes.begin(), m_attributes.end(), fox::size_t{ 0 }, [](fox::size_t acc, const Attribute& _)
+            return std::span<const Attribute>{ m_attributes };
+        }
+        auto stride    () const
+        {
+            return std::accumulate(m_attributes.begin(), m_attributes.end(), fox::size_t{ 0 }, [](fox::size_t accumulator, const auto& attribute)
                 {
-                    return acc + _.stride();
+                    return accumulator + (attribute.count * attribute.size);
                 });
-        }
-
-        std::span<const Attribute> attributes() const
-        {
-            return m_attributes;
         }
 
     private:

@@ -2006,17 +2006,17 @@ namespace fox::gfx::api::gl
             }
         }
     }
-    static void vertex_array_vertex_buffer              (gl::handle_t vertexArray, gl::handle_t buffer, gl::index_t binding, gl::size_t stride, gl::index_t index)
+    static void vertex_array_vertex_buffer              (gl::handle_t vertexArray, gl::handle_t buffer, gl::binding_t binding, gl::size_t stride, gl::index_t index)
     {
-        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), binding, gl::to_underlying(buffer), static_cast<gl::offset_t>(index), static_cast<gl::sizei_t>(stride));
+        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), gl::to_underlying(binding), gl::to_underlying(buffer), static_cast<gl::offset_t>(index), static_cast<gl::sizei_t>(stride));
     }
     static void vertex_array_vertex_buffers             (gl::handle_t vertexArray)
     {
         //glVertexArrayVertexBuffers(gl::to_underlying(vertexArray));
     }
-    static void vertex_array_attribute_binding          (gl::handle_t vertexArray, gl::index_t attribute, gl::index_t binding)
+    static void vertex_array_attribute_binding          (gl::handle_t vertexArray, gl::index_t attribute, gl::binding_t binding)
     {
-        glVertexArrayAttribBinding(gl::to_underlying(vertexArray), attribute, binding);
+        glVertexArrayAttribBinding(gl::to_underlying(vertexArray), attribute, gl::to_underlying(binding));
     }
     static void enable_vertex_array_attribute           (gl::handle_t vertexArray, gl::index_t index)
     {
@@ -2026,9 +2026,9 @@ namespace fox::gfx::api::gl
     {
         glDisableVertexArrayAttrib(gl::to_underlying(vertexArray), index);
     }
-    static void vertex_array_binding_divisor            (gl::handle_t vertexArray, gl::uint32_t binding, gl::uint32_t divisor)
+    static void vertex_array_binding_divisor            (gl::handle_t vertexArray, gl::binding_t binding, gl::uint32_t divisor)
     {
-        glVertexArrayBindingDivisor(gl::to_underlying(vertexArray), binding, divisor);
+        glVertexArrayBindingDivisor(gl::to_underlying(vertexArray), gl::to_underlying(binding), divisor);
     }
     static void primitive_restart_index                 (gl::index_t index)
     {

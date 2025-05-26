@@ -19,66 +19,105 @@
 
 namespace fox::gfx::api::gl
 {
-    static constexpr glf::Texture::BaseFormat          map_texture_format_base(api::Texture::Format format)
+    static auto map_type                       (api::Type type)
     {
-        const auto& flags = (static_cast<gl::int32_t>(format) & 0xFF00) >> 8;
+        if (type == api::Type::Byte           ) return glf::VertexArray::Attribute::Type::Byte;
+        if (type == api::Type::UnsignedByte   ) return glf::VertexArray::Attribute::Type::UnsignedByte;
+        if (type == api::Type::Short          ) return glf::VertexArray::Attribute::Type::Short;
+        if (type == api::Type::UnsignedShort  ) return glf::VertexArray::Attribute::Type::UnsignedShort;
+        if (type == api::Type::Integer        ) return glf::VertexArray::Attribute::Type::Integer;
+        if (type == api::Type::UnsignedInteger) return glf::VertexArray::Attribute::Type::UnsignedInteger;
+        if (type == api::Type::Float          ) return glf::VertexArray::Attribute::Type::Float;
+        if (type == api::Type::Double         ) return glf::VertexArray::Attribute::Type::Double;
 
-        switch (flags)
+        throw std::invalid_argument{ "Invalid Data Type!" };
+    }
+
+    static auto map_texture_format_base        (api::Texture::Format format)
+    {
+        switch (format)
         {
-            case 0x01: return glf::Texture::BaseFormat::R;
-            case 0x02: return glf::Texture::BaseFormat::RG;
-            case 0x03: return glf::Texture::BaseFormat::RGB;
-            case 0x04: return glf::Texture::BaseFormat::RGBA;
-
-            case 0x10: return glf::Texture::BaseFormat::D;
-            case 0x20: return glf::Texture::BaseFormat::S;
-
-            case 0x30: throw std::invalid_argument{ "Invalid texture format!" };
+            case api::Texture::Format::R8_UNORM    :
+            case api::Texture::Format::R16_UNORM   :
+            case api::Texture::Format::R8_SNORM    :
+            case api::Texture::Format::R16_SNORM   :
+            case api::Texture::Format::R16_FLOAT   :
+            case api::Texture::Format::R32_FLOAT   : return glf::Texture::BaseFormat::R;
+            
+            case api::Texture::Format::RG8_UNORM   :
+            case api::Texture::Format::RG16_UNORM  :
+            case api::Texture::Format::RG8_SNORM   :
+            case api::Texture::Format::RG16_SNORM  :
+            case api::Texture::Format::RG16_FLOAT  :
+            case api::Texture::Format::RG32_FLOAT  : return glf::Texture::BaseFormat::RG;
+            
+            case api::Texture::Format::RGB8_UNORM  :
+            case api::Texture::Format::RGB16_UNORM :
+            case api::Texture::Format::RGB8_SNORM  :
+            case api::Texture::Format::RGB16_SNORM :
+            case api::Texture::Format::RGB8_SRGB   :
+            case api::Texture::Format::RGB16_FLOAT :
+            case api::Texture::Format::RGB32_FLOAT : return glf::Texture::BaseFormat::RGB;
+            
+            case api::Texture::Format::RGBA8_UNORM :
+            case api::Texture::Format::RGBA16_UNORM:
+            case api::Texture::Format::RGBA8_SNORM :
+            case api::Texture::Format::RGBA16_SNORM:
+            case api::Texture::Format::RGBA8_SRGB  :
+            case api::Texture::Format::RGBA16_FLOAT:
+            case api::Texture::Format::RGBA32_FLOAT: return glf::Texture::BaseFormat::RGBA;
+            
+            case api::Texture::Format::D16_UNORM   :
+            case api::Texture::Format::D24_UNORM   :
+            
+            case api::Texture::Format::D32_FLOAT   : return glf::Texture::BaseFormat::D;
+            
+            case api::Texture::Format::S8_UINT     : return glf::Texture::BaseFormat::S;
 
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    static constexpr glf::Texture::Format              map_texture_format(api::Texture::Format format)
+    static auto map_texture_format             (api::Texture::Format format)
     {
         switch (format)
         {
-            case api::Texture::Format::R8_UNORM:          return glf::Texture::Format::R8_UNORM;
-            case api::Texture::Format::RG8_UNORM:         return glf::Texture::Format::RG8_UNORM;
-            case api::Texture::Format::RGB8_UNORM:        return glf::Texture::Format::RGB8_UNORM;
-            case api::Texture::Format::RGBA8_UNORM:       return glf::Texture::Format::RGBA8_UNORM;
-            case api::Texture::Format::R16_UNORM:         return glf::Texture::Format::R16_UNORM;
-            case api::Texture::Format::RG16_UNORM:        return glf::Texture::Format::RG16_UNORM;
-            case api::Texture::Format::RGB16_UNORM:       return glf::Texture::Format::RGB16_UNORM;
-            case api::Texture::Format::RGBA16_UNORM:      return glf::Texture::Format::RGBA16_UNORM;
-            case api::Texture::Format::R8_SNORM:          return glf::Texture::Format::R8_SNORM;
-            case api::Texture::Format::RG8_SNORM:         return glf::Texture::Format::RG8_SNORM;
-            case api::Texture::Format::RGB8_SNORM:        return glf::Texture::Format::RGB8_SNORM;
-            case api::Texture::Format::RGBA8_SNORM:       return glf::Texture::Format::RGBA8_SNORM;
-            case api::Texture::Format::R16_SNORM:         return glf::Texture::Format::R16_SNORM;
-            case api::Texture::Format::RG16_SNORM:        return glf::Texture::Format::RG16_SNORM;
-            case api::Texture::Format::RGB16_SNORM:       return glf::Texture::Format::RGB16_SNORM;
-            case api::Texture::Format::RGBA16_SNORM:      return glf::Texture::Format::RGBA16_SNORM;
-            case api::Texture::Format::RGB8_SRGB:         return glf::Texture::Format::RGB8_SRGB;
-            case api::Texture::Format::RGBA8_SRGB:        return glf::Texture::Format::RGBA8_SRGB;
-            case api::Texture::Format::R16_FLOAT:         return glf::Texture::Format::R16_FLOAT;
-            case api::Texture::Format::RG16_FLOAT:        return glf::Texture::Format::RG16_FLOAT;
-            case api::Texture::Format::RGB16_FLOAT:       return glf::Texture::Format::RGB16_FLOAT;
-            case api::Texture::Format::RGBA16_FLOAT:      return glf::Texture::Format::RGBA16_FLOAT;
-            case api::Texture::Format::R32_FLOAT:         return glf::Texture::Format::R32_FLOAT;
-            case api::Texture::Format::RG32_FLOAT:        return glf::Texture::Format::RG32_FLOAT;
-            case api::Texture::Format::RGB32_FLOAT:       return glf::Texture::Format::RGB32_FLOAT;
-            case api::Texture::Format::RGBA32_FLOAT:      return glf::Texture::Format::RGBA32_FLOAT;
-            case api::Texture::Format::D16_UNORM:         return glf::Texture::Format::D16_UNORM;
-            case api::Texture::Format::D24_UNORM:         return glf::Texture::Format::D24_UNORM;
-            case api::Texture::Format::D32_FLOAT:         return glf::Texture::Format::D32_FLOAT;
+            case api::Texture::Format::R8_UNORM         : return glf::Texture::Format::R8_UNORM;
+            case api::Texture::Format::RG8_UNORM        : return glf::Texture::Format::RG8_UNORM;
+            case api::Texture::Format::RGB8_UNORM       : return glf::Texture::Format::RGB8_UNORM;
+            case api::Texture::Format::RGBA8_UNORM      : return glf::Texture::Format::RGBA8_UNORM;
+            case api::Texture::Format::R16_UNORM        : return glf::Texture::Format::R16_UNORM;
+            case api::Texture::Format::RG16_UNORM       : return glf::Texture::Format::RG16_UNORM;
+            case api::Texture::Format::RGB16_UNORM      : return glf::Texture::Format::RGB16_UNORM;
+            case api::Texture::Format::RGBA16_UNORM     : return glf::Texture::Format::RGBA16_UNORM;
+            case api::Texture::Format::R8_SNORM         : return glf::Texture::Format::R8_SNORM;
+            case api::Texture::Format::RG8_SNORM        : return glf::Texture::Format::RG8_SNORM;
+            case api::Texture::Format::RGB8_SNORM       : return glf::Texture::Format::RGB8_SNORM;
+            case api::Texture::Format::RGBA8_SNORM      : return glf::Texture::Format::RGBA8_SNORM;
+            case api::Texture::Format::R16_SNORM        : return glf::Texture::Format::R16_SNORM;
+            case api::Texture::Format::RG16_SNORM       : return glf::Texture::Format::RG16_SNORM;
+            case api::Texture::Format::RGB16_SNORM      : return glf::Texture::Format::RGB16_SNORM;
+            case api::Texture::Format::RGBA16_SNORM     : return glf::Texture::Format::RGBA16_SNORM;
+            case api::Texture::Format::RGB8_SRGB        : return glf::Texture::Format::RGB8_SRGB;
+            case api::Texture::Format::RGBA8_SRGB       : return glf::Texture::Format::RGBA8_SRGB;
+            case api::Texture::Format::R16_FLOAT        : return glf::Texture::Format::R16_FLOAT;
+            case api::Texture::Format::RG16_FLOAT       : return glf::Texture::Format::RG16_FLOAT;
+            case api::Texture::Format::RGB16_FLOAT      : return glf::Texture::Format::RGB16_FLOAT;
+            case api::Texture::Format::RGBA16_FLOAT     : return glf::Texture::Format::RGBA16_FLOAT;
+            case api::Texture::Format::R32_FLOAT        : return glf::Texture::Format::R32_FLOAT;
+            case api::Texture::Format::RG32_FLOAT       : return glf::Texture::Format::RG32_FLOAT;
+            case api::Texture::Format::RGB32_FLOAT      : return glf::Texture::Format::RGB32_FLOAT;
+            case api::Texture::Format::RGBA32_FLOAT     : return glf::Texture::Format::RGBA32_FLOAT;
+            case api::Texture::Format::D16_UNORM        : return glf::Texture::Format::D16_UNORM;
+            case api::Texture::Format::D24_UNORM        : return glf::Texture::Format::D24_UNORM;
+            case api::Texture::Format::D32_FLOAT        : return glf::Texture::Format::D32_FLOAT;
             case api::Texture::Format::D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
             case api::Texture::Format::D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
-            case api::Texture::Format::S8_UINT:           return glf::Texture::Format::S8_UINT;
+            case api::Texture::Format::S8_UINT          : return glf::Texture::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr glf::PixelData::Type              map_texture_format_type(api::Texture::Format format)
+    static auto map_texture_format_type        (api::Texture::Format format)
     {
         switch (format)
         {
@@ -118,7 +157,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr glf::Texture::MinificationFilter  map_texture_min_filter(api::Texture::Filter filter)
+    static auto map_texture_min_filter         (api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -130,7 +169,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static constexpr glf::Texture::MagnificationFilter map_texture_mag_filter(api::Texture::Filter filter)
+    static auto map_texture_mag_filter         (api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -142,24 +181,36 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    template<api::Dimensions DIMS, api::AntiAliasing AA>
-    static constexpr glf::Texture::Target              map_texture_target()
+    static auto map_texture_target             (api::Dimensions dimensions, api::AntiAliasing antialiasing)
     {
-        if constexpr (AA == api::AntiAliasing::None)
+        switch (antialiasing)
         {
-            if constexpr (DIMS == api::Dimensions::_1D) return glf::Texture::Target::_1D;
-            if constexpr (DIMS == api::Dimensions::_2D) return glf::Texture::Target::_2D;
-            if constexpr (DIMS == api::Dimensions::_3D) return glf::Texture::Target::_3D;
-        }
-        if constexpr (AA == api::AntiAliasing::MSAA)
-        {
-            if constexpr (DIMS == api::Dimensions::_2D) return glf::Texture::Target::_2DMultisample;
-            if constexpr (DIMS == api::Dimensions::_3D) return glf::Texture::Target::_2DMultisampleArray;
-        }
+            case api::AntiAliasing::None:
+            {
+                switch (dimensions)
+                {
+                    case api::Dimensions::_1D: return glf::Texture::Target::_1D; 
+                    case api::Dimensions::_2D: return glf::Texture::Target::_2D; 
+                    case api::Dimensions::_3D: return glf::Texture::Target::_3D; 
 
-        throw std::invalid_argument{ "The given input can not be mapped to a texture type!" };
+                    default: throw std::invalid_argument{ "Invalid Dimensions!" };
+                }
+            }
+            case api::AntiAliasing::MSAA:
+            {
+                switch (dimensions)
+                {
+                    case api::Dimensions::_2D: return glf::Texture::Target::_2DMultisample;
+                    case api::Dimensions::_3D: return glf::Texture::Target::_2DMultisampleArray;
+
+                    default: throw std::invalid_argument{ "Invalid Dimensions!" };
+                }
+            }
+
+            default: throw std::invalid_argument{ "Invalid Anti-Aliasing!" };
+        }
     }
-    static constexpr glf::Texture::Wrapping            map_texture_wrapping(api::Texture::Wrapping wrapping)
+    static auto map_texture_wrapping           (api::Texture::Wrapping wrapping)
     {
         switch (wrapping)
         {
@@ -172,7 +223,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    static constexpr glf::RenderBuffer::Format         map_render_buffer_format(api::RenderBuffer::Format format)
+    static auto map_render_buffer_format       (api::RenderBuffer::Format format)
     {
         switch (format)
         {
@@ -191,7 +242,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr glf::Texture::Format              map_cubemap_texture_format(api::Cubemap::Format format)
+    static auto map_cubemap_texture_format     (api::Cubemap::Format format)
     {
         switch (format)
         {
@@ -231,7 +282,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr glf::PixelData::Type              map_cubemap_texture_format_type(api::Cubemap::Format format)
+    static auto map_cubemap_texture_format_type(api::Cubemap::Format format)
     {
         switch (format)
         {
@@ -271,7 +322,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static constexpr glf::FrameBuffer::Attachment      map_frame_buffer_attachment(api::FrameBuffer::Attachment attachment)
+    static auto map_frame_buffer_attachment    (api::FrameBuffer::Attachment attachment)
     {
         switch (attachment)
         {
@@ -283,7 +334,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    static constexpr glf::FrameBuffer::Target          map_frame_buffer_target(api::FrameBuffer::Target target)
+    static auto map_frame_buffer_target        (api::FrameBuffer::Target target)
     {
         switch (target)
         {
@@ -293,7 +344,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    static constexpr glf::Program::Stage               map_program_stage(api::Shader::Stage stage)
+    static auto map_program_stage              (api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -307,7 +358,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }                                                                      
-    static constexpr glf::Shader::Type                 map_shader_type(api::Shader::Stage stage)
+    static auto map_shader_type                (api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -321,7 +372,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    static constexpr glf::DepthFunction                map_depth_function(api::RenderState::DepthFunction depthFunction)
+    static auto map_depth_function             (api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
         {
@@ -337,7 +388,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    static constexpr glf::Culling::Facet                map_culling_face(api::RenderState::FaceCulling cullingFace)
+    static auto map_culling_face               (api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {
@@ -347,31 +398,5 @@ namespace fox::gfx::api::gl
 
             default: throw std::invalid_argument{ "Invalid culling face!" };
         }
-    }
-                                                             
-    template<typename T>                                     
-    static constexpr glf::DataType                     map_type() requires (std::is_fundamental_v<T>)
-    {
-        if constexpr (std::is_same_v<T, gl::int8_t>)    return glf::DataType::Byte;
-        if constexpr (std::is_same_v<T, gl::uint8_t>)   return glf::DataType::UnsignedByte;
-        if constexpr (std::is_same_v<T, gl::int16_t>)   return glf::DataType::Short;
-        if constexpr (std::is_same_v<T, gl::uint16_t>)  return glf::DataType::UnsignedShort;
-        if constexpr (std::is_same_v<T, gl::int32_t>)   return glf::DataType::Integer;
-        if constexpr (std::is_same_v<T, gl::uint32_t>)  return glf::DataType::UnsignedInteger;
-        if constexpr (std::is_same_v<T, gl::float32_t>) return glf::DataType::Float;
-        if constexpr (std::is_same_v<T, gl::float64_t>) return glf::DataType::Double;
-    }
-    static constexpr glf::VertexArray::Attribute::Type map_data_type(api::DataType dataType)
-    {
-        if (dataType == api::DataType::Byte)            return glf::VertexArray::Attribute::Type::Byte;
-        if (dataType == api::DataType::UnsignedByte)    return glf::VertexArray::Attribute::Type::UnsignedByte;
-        if (dataType == api::DataType::Short)           return glf::VertexArray::Attribute::Type::Short;
-        if (dataType == api::DataType::UnsignedShort)   return glf::VertexArray::Attribute::Type::UnsignedShort;
-        if (dataType == api::DataType::Integer)         return glf::VertexArray::Attribute::Type::Integer;
-        if (dataType == api::DataType::UnsignedInteger) return glf::VertexArray::Attribute::Type::UnsignedInteger;
-        if (dataType == api::DataType::Float)           return glf::VertexArray::Attribute::Type::Float;
-        if (dataType == api::DataType::Double)          return glf::VertexArray::Attribute::Type::Double;
-
-        throw std::invalid_argument{ "Invalid Data Type!" };
     }
 }
