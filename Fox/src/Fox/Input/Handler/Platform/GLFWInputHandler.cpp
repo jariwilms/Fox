@@ -13,14 +13,13 @@ namespace fox::input
     }
     void          GLFWInputHandler::reset()
     {
-        m_activeKeys.reset();
-        m_lastActiveKeys.reset();
-
-        m_activeButtons.reset();
+        m_activeKeys       .reset();
+        m_lastActiveKeys   .reset();
+        m_activeButtons    .reset();
         m_lastActiveButtons.reset();
 
-        m_cursorPosition     = fox::Vector2f{};
-        m_lastCursorPosition = fox::Vector2f{};
+        m_cursorPosition     = {};
+        m_lastCursorPosition = {};
     }
                   
     fox::bool_t   GLFWInputHandler::any_pressed()                   const
@@ -29,11 +28,11 @@ namespace fox::input
     }
     fox::bool_t   GLFWInputHandler::any_down()                      const
     {
-        return false;
+        return fox::False;
     }
     fox::bool_t   GLFWInputHandler::any_up()                        const
     {
-        return false;
+        return fox::False;
     }
                   
     fox::bool_t   GLFWInputHandler::key_pressed(key::key_t code)    const
@@ -64,20 +63,20 @@ namespace fox::input
                   
     fox::bool_t   GLFWInputHandler::scrolling()                     const
     {
-        return false;
+        return fox::False;
     }
     fox::bool_t   GLFWInputHandler::scrolling_vertical()            const
     {
-        return false;
+        return fox::False;
     }
     fox::bool_t   GLFWInputHandler::scrolling_horizontal()          const
     {
-        return false;
+        return fox::False;
     }
                   
     fox::bool_t   GLFWInputHandler::modifier(mod::mod_t code)       const
     {
-        return false;
+        return fox::False;
     }
     
     fox::Vector2f GLFWInputHandler::cursor_position()               const
@@ -91,7 +90,7 @@ namespace fox::input
 
     void          GLFWInputHandler::glfw_input_key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        if (key < key::min || key > key::max) return;
+        if (std::cmp_less(key, key::min) or std::cmp_greater(key, key::max)) return;
         
         switch (action)
         {
@@ -104,7 +103,7 @@ namespace fox::input
     }
     void          GLFWInputHandler::glfw_input_button_callback(GLFWwindow* window, int button, int action, int mods)
     {
-        if (button < btn::min || button > btn::max) return;
+        if (std::cmp_less(button, btn::min) or std::cmp_greater(button, btn::max)) return;
 
         switch (action)
         {
