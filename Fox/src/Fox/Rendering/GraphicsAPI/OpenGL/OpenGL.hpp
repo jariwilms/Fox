@@ -2046,17 +2046,17 @@ namespace fox::gfx::api::gl
     {
         glDrawArraysInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::int32_t>(range.index), static_cast<gl::sizei_t>(range.count), static_cast<gl::sizei_t>(instances), base);
     }
-    static void draw_elements                           (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t elements)
+    static void draw_elements                           (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t count)
     {
-        glDrawElements(gl::to_underlying(mode), static_cast<gl::sizei_t>(elements), gl::to_underlying(type), nullptr);
+        glDrawElements(gl::to_underlying(mode), static_cast<gl::sizei_t>(count), gl::to_underlying(type), nullptr);
     }
-    static void draw_elements_instanced                 (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t elements, gl::count_t instances)
+    static void draw_elements_instanced                 (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t count, gl::count_t instances)
     {
-        glDrawElementsInstanced(gl::to_underlying(mode), static_cast<gl::sizei_t>(elements), gl::to_underlying(type), nullptr, static_cast<gl::sizei_t>(instances));
+        glDrawElementsInstanced(gl::to_underlying(mode), static_cast<gl::sizei_t>(count), gl::to_underlying(type), nullptr, static_cast<gl::sizei_t>(instances));
     }
-    static void draw_elements_instanced_base_instance   (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t elements, gl::count_t instances, gl::index_t base)
+    static void draw_elements_instanced_base_instance   (glf::Draw::Mode mode, glf::Draw::Type type, gl::count_t count, gl::count_t instances, gl::index_t base)
     {
-        glDrawElementsInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::sizei_t>(elements), gl::to_underlying(type), nullptr, static_cast<gl::sizei_t>(instances), base);
+        glDrawElementsInstancedBaseInstance(gl::to_underlying(mode), static_cast<gl::sizei_t>(count), gl::to_underlying(type), nullptr, static_cast<gl::sizei_t>(instances), base);
     }
     static void begin_conditional_render                (gl::handle_t query, glf::Query::Mode mode)
     {
