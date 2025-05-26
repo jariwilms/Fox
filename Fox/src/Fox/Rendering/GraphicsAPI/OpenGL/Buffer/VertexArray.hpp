@@ -2,13 +2,12 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/API/Buffer/VertexArray.hpp"
 #include "Fox/Rendering/API/Layout/VertexLayout.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/Buffer.hpp"
 
 namespace fox::gfx::api::gl
 {
-    class VertexArray : public api::VertexArray, public gl::Object
+    class VertexArray : public gl::Object
     {
     public:
         VertexArray()
@@ -26,20 +25,20 @@ namespace fox::gfx::api::gl
             gl::bind_vertex_array(m_handle);
         }
 
-        void enable_attribute(gl::uint32_t index)
+        void enable_attribute (gl::index_t index)
         {
             gl::enable_vertex_array_attribute(m_handle, index);
         }
-        void disable_attribute(gl::uint32_t index)
+        void disable_attribute(gl::index_t index)
         {
             gl::disable_vertex_array_attribute(m_handle, index);
         }
 
-        void set_attribute_divisor(gl::uint32_t attribute, gl::uint32_t divisor)
+        void set_attribute_divisor(gl::index_t index, gl::uint32_t divisor)
         {
-            gl::vertex_array_binding_divisor(m_handle, attribute, divisor);
+            gl::vertex_array_binding_divisor(m_handle, index, divisor);
         }
-
+        
         template<typename T>
         void tie(std::shared_ptr<gl::Buffer<T>> vertexBuffer, VertexLayout layout)
         {
@@ -70,7 +69,7 @@ namespace fox::gfx::api::gl
             m_indexBuffer = indexBuffer;
         }
 
-        fox::count_t index_count() const
+        gl::count_t index_count() const
         {
             return m_indexBuffer->count();
         }
