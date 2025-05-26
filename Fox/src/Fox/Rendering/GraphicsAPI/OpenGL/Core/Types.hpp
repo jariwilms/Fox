@@ -40,7 +40,9 @@ namespace fox::gfx::api::gl
         True  = GL_TRUE,
     };
     
-    enum class handle_t : gl::uint32_t {};
+    enum class handle_t  : gl::uint32_t {};
+    enum class binding_t : gl::index_t  {};
+
     constexpr gl::handle_t NullObject        { 0u };
     constexpr gl::handle_t DefaultFrameBuffer{ 0u };
 
@@ -148,6 +150,16 @@ namespace fox::gfx::api::gl
 
 
 
+
+
+    struct indirect_command_t
+    {
+        gl::count_t  count;
+        gl::count_t  instances;
+        gl::index_t  offset;
+        gl::int32_t  baseVertex;
+        gl::uint32_t baseInstance;
+    };
 
     static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const void*) {}
     using debug_callback_t = decltype(_debug_callback);

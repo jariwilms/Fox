@@ -1154,30 +1154,30 @@ namespace fox::gfx::api::gl
     {
         glDeleteBuffers(static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
-    static void bind_buffer_base                        (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index)
+    static void bind_buffer_base                        (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::binding_t binding)
     {
-        glBindBufferBase(gl::to_underlying(target), index, gl::to_underlying(buffer));
+        glBindBufferBase(gl::to_underlying(target), gl::to_underlying(binding), gl::to_underlying(buffer));
     }
-    static void bind_buffers_base                       (std::span<const gl::handle_t> buffers, glf::Buffer::BaseTarget target, gl::index_t index)
+    static void bind_buffers_base                       (std::span<const gl::handle_t> buffers, glf::Buffer::BaseTarget target, gl::binding_t binding)
     {
-        glBindBuffersBase(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
+        glBindBuffersBase(gl::to_underlying(target), gl::to_underlying(binding), static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()));
     }
-    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::index_t index, gl::byterange_t range)
+    static void bind_buffer_range                       (gl::handle_t buffer, glf::Buffer::BaseTarget target, gl::binding_t binding, gl::byterange_t range)
     {
-        glBindBufferRange(gl::to_underlying(target), index, gl::to_underlying(buffer), range.offset, range.size);
+        glBindBufferRange(gl::to_underlying(target), gl::to_underlying(binding), gl::to_underlying(buffer), range.offset, range.size);
     }
-    static void bind_buffers_range                      (std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::index_t index)
+    static void bind_buffers_range(std::span<const gl::handle_t> buffers, std::span<const gl::byterange_t> ranges, glf::Buffer::BaseTarget target, gl::binding_t binding)
     {
-        std::vector<gl::size_t>   sizes  (ranges.size());
+        std::vector<gl::size_t>   sizes(ranges.size());
         std::vector<gl::offset_t> offsets(ranges.size());
 
         for (const auto& range : ranges)
         {
-            sizes  .emplace_back(range.size);
+            sizes.emplace_back(range.size);
             offsets.emplace_back(range.offset);
         }
 
-        glBindBuffersRange(gl::to_underlying(target), index, static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()), offsets.data(), sizes.data());
+        glBindBuffersRange(gl::to_underlying(target), gl::to_underlying(binding), static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()), offsets.data(), sizes.data());
     }
     static void buffer_storage                          (gl::handle_t buffer, glf::Buffer::StorageFlags flags, gl::size_t size)
     {

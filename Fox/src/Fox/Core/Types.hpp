@@ -95,7 +95,4 @@ namespace fox
         fox::size_t   size{};
         fox::offset_t offset{};
     };
-
-	using Range     = fox::range_t;
-	using ByteRange = fox::byterange_t;
 }

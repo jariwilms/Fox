@@ -10,11 +10,12 @@ namespace fox::gfx
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using binding_t           = api::gl::binding_t;
         using range_t             = api::gl::range_t;
 
         template<typename T>
         using VertexBuffer        = api::gl::Buffer<T>;
-        using IndexBuffer         = api::gl::Buffer<fox::uint32_t>;
+        using IndexBuffer         = api::gl::Buffer<fox::index_t>;
 
         template<typename T>
         using UniformBuffer       = api::gl::UniformBuffer<T>;
@@ -93,7 +94,7 @@ namespace fox::gfx
         }
 
     protected:
-        IndexBuffer(std::span<const fox::uint32_t> data)
+        IndexBuffer(std::span<const fox::index_t> data)
             : _{ std::make_shared<impl::IndexBuffer>(data) } {}
         IndexBuffer(fox::count_t count)
             : _{ std::make_shared<impl::IndexBuffer>(count) } {}
@@ -112,7 +113,7 @@ namespace fox::gfx
 
         void bind(fox::index_t index) const
         {
-            _->bind(index);
+            _->bind(static_cast<impl::binding_t>(index));
         }
 
         void copy    (const T& data)
@@ -157,10 +158,10 @@ namespace fox::gfx
             return std::shared_ptr<UniformArrayBuffer>(new UniformArrayBuffer{ data });
         }
 
-        void bind      (fox::index_t index, std::optional<fox::Range> range = {}) const
+        void bind      (fox::index_t index, std::optional<fox::range_t> range = {}) const
         {
-            if   (range.has_value()) _->bind(index, impl::range_t{ range->count, range->index });
-            else                     _->bind(index, {});
+            if   (range.has_value()) _->bind(static_cast<impl::binding_t>(index), impl::range_t{ range->count, range->index });
+            else                     _->bind(static_cast<impl::binding_t>(index), {});
         }
 
         void copy      (std::span<const T, N> data)

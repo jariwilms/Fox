@@ -11,19 +11,8 @@ namespace fox::gfx::api::gl
     class Buffer : public gl::Object
     {
     public:
-        explicit Buffer(std::span<const T> data)
-            : m_size{ static_cast<gl::size_t>(data.size_bytes()) }
-        {
-            m_handle = gl::create_buffer();
+        using lock_t = std::tuple<gl::range_t, gl::sync_t>;
 
-            gl::buffer_storage(
-                m_handle, 
-                glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::ReadWrite      | 
-                glf::Buffer::StorageFlags::Persistent     | 
-                glf::Buffer::StorageFlags::Coherent       , 
-                data);
-        }
         explicit Buffer(gl::count_t count)
             : m_size{ static_cast<gl::size_t>(count * sizeof(T)) }
         {
@@ -36,6 +25,19 @@ namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Persistent     |
                 glf::Buffer::StorageFlags::Coherent       ,
                 m_size);
+        }
+        explicit Buffer(std::span<const T> data)
+            : m_size{ static_cast<gl::size_t>(data.size_bytes()) }
+        {
+            m_handle = gl::create_buffer();
+
+            gl::buffer_storage(
+                m_handle, 
+                glf::Buffer::StorageFlags::DynamicStorage | 
+                glf::Buffer::StorageFlags::ReadWrite      | 
+                glf::Buffer::StorageFlags::Persistent     | 
+                glf::Buffer::StorageFlags::Coherent       , 
+                data);
         }
                  Buffer(Buffer&&) noexcept = default;
                 ~Buffer()
@@ -51,74 +53,124 @@ namespace fox::gfx::api::gl
         }
         void copy_range(gl::index_t index, std::span<const T> data)
         {
-            if (index + 1u > count()) throw std::invalid_argument{ "Index out of range!" };
+            if (index >= count()) throw std::invalid_argument{ "Index out of range!" };
             gl::buffer_data(m_handle, static_cast<gl::offset_t>(index * sizeof(T)), data);
         }
 
-        auto map  (std::optional<gl::range_t> range = {})
+        auto map      ()
         {
             if (is_mapped()) unmap();
 
-            if (range)
-            {
-                m_range.count = std::min(range->count, count()               );
-                m_range.index = std::min(range->index, count() - range->count);
+            auto* ptr = gl::map_buffer_range<T>(
+                m_handle, 
+                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
+                glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
+                glf::Buffer::Mapping::RangeAccessFlags::Coherent     ,
+                gl::byterange_t{ size() });
 
-                auto* ptr = gl::map_buffer_range<T>(
-                    m_handle,
-                    glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
-                    glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
-                    glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
-                    glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
-                    gl::byterange_t{ static_cast<gl::size_t>(m_range.count * sizeof(T)), static_cast<gl::offset_t>(m_range.index * sizeof(T)) });
+            m_data  = std::make_shared<std::span<T>>(ptr, count());
+            m_range = count();
 
-                m_span = std::make_shared<std::span<T>>(ptr, m_range.count);
-            }
-            else
-            {
-                auto* ptr = gl::map_buffer_range<T>(
-                    m_handle, 
-                    glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
-                    glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
-                    glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
-                    glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit, 
-                    gl::byterange_t{ size() });
-
-                m_span  = std::make_shared<std::span<T>>(ptr, count());
-                m_range = count();
-            }
-
-            return std::weak_ptr<std::span<T>>(m_span);
+            return std::weak_ptr<std::span<T>>(m_data);
         }
-        void flush(gl::range_t range)
+        auto map_range(gl::range_t range)
         {
-            gl::flush_buffer_range(m_handle, gl::byterange_t{ range.count * sizeof(T), range.index * sizeof(T) });
-        }
-        void unmap()
-        {
-            m_span.reset();
-            gl::unmap_buffer(m_handle);
-        }
+            if (is_mapped()) unmap();
 
-        auto size     () const
-        {
-            return m_size;
-        }
-        auto count    () const
-        {
-            return static_cast<gl::count_t>(size() / sizeof(T));
+            m_range.count = std::min(range->count, count()               );
+            m_range.index = std::min(range->index, count() - range->count);
+
+            auto* ptr = gl::map_buffer_range<T>(
+                m_handle,
+                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
+                glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
+                glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
+                glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
+                gl::byterange_t{ static_cast<gl::size_t>(m_range.count * sizeof(T)), static_cast<gl::offset_t>(m_range.index * sizeof(T)) });
+
+            m_data = std::make_shared<std::span<T>>(ptr, m_range.count);
+            
+            return std::weak_ptr<std::span<T>>(m_data);
         }
         auto is_mapped() const
         {
-            return m_span.operator bool();
+            return m_data.operator bool();
+        }
+        void unmap    ()
+        {
+            m_data.reset();
+            m_locks.clear();
+            gl::unmap_buffer(m_handle);
+        }
+
+        void lock (gl::range_t range)
+        {
+            range.count = std::min(range->count, count()               );
+            range.index = std::min(range->index, count() - range->count);
+
+            m_locks.emplace_back(range, gl::fence_sync());
+        }
+        void await(gl::range_t range)
+        {
+            const auto& range_overlaps = [](gl::range_t first, gl::range_t second)
+                {
+                    return (first.index < second.index + second.count) and (second.index < first.index + first.count);
+                };
+
+
+
+            std::vector<lock_t> locks{};
+
+            for (const auto& [lock, sync] : m_locks)
+            {
+                if (range_overlaps(range, lock))
+                {
+                    auto command = glf::Synchronization::Command::None;
+                    auto time    = gl::time_t{};
+
+                    while (gl::True)
+                    {
+                        const auto& status = gl::client_wait_sync(sync, command, time);
+
+                        if (status == glf::Synchronization::Status::AlreadySignaled   ) break;
+                        if (status == glf::Synchronization::Status::ConditionSatisfied) break;
+                        if (status == glf::Synchronization::Status::WaitFailed        ) throw std::runtime_error{ "An error occurred!" };
+
+                        command = glf::Synchronization::Command::Flush;
+                        time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
+                    }
+
+                    gl::delete_sync(sync);
+                }
+                else
+                {
+                    locks.emplace_back(lock, sync);
+                }
+            }
+
+            m_locks = std::move(locks);
+        }
+
+        auto size () const
+        {
+            return m_size;
+        }
+        auto count() const
+        {
+            return static_cast<gl::count_t>(size() / sizeof(T));
+        }
+        auto data ()
+        {
+            return std::weak_ptr<std::span<T>>{ m_data };
         }
 
         Buffer& operator=(Buffer&&) noexcept = default;
 
     private:
-        std::shared_ptr<std::span<T>> m_span{};
-        gl::range_t                   m_range{};
         gl::size_t                    m_size{};
+        gl::range_t                   m_range{};
+        std::vector<lock_t>           m_locks{};
+        std::shared_ptr<std::span<T>> m_data{};
     };
     template<typename T>
     class UniformBuffer : public gl::Object
@@ -137,9 +189,9 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind(gl::index_t index) const
+        void bind(gl::binding_t binding) const
         {
-            gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index);
+            gl::bind_buffer_base(m_handle, glf::Buffer::BaseTarget::UniformBuffer, binding);
         }
 
         void copy    (const T& data)
@@ -199,10 +251,10 @@ namespace fox::gfx::api::gl
             gl::delete_buffer(m_handle);
         }
 
-        void bind(gl::index_t index, std::optional<gl::range_t> range = {}) const
+        void bind(gl::binding_t binding, std::optional<gl::range_t> range = {}) const
         {
-            if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, index, gl::byterange_t{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
-            else                     gl::bind_buffer_base (m_handle, glf::Buffer::BaseTarget::UniformBuffer, index                                                                                                                          );
+            if   (range.has_value()) gl::bind_buffer_range(m_handle, glf::Buffer::BaseTarget::UniformBuffer, binding, gl::byterange_t{ static_cast<gl::size_t>(range->count * sizeof(T)), static_cast<gl::offset_t>(range->index * sizeof(T)) });
+            else                     gl::bind_buffer_base (m_handle, glf::Buffer::BaseTarget::UniformBuffer, binding                                                                                                                           );
         }
 
         void copy      (std::span<const T, N> data)
