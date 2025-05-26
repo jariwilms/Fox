@@ -821,7 +821,7 @@ namespace fox::gfx::api::gl
         }
     }
     template<glf::Texture::Format F>
-    static auto get_texture_sub_image                   (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, gl::sizei_t size)
+    static auto get_texture_sub_image                   (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, gl::size_t size)
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM)
         {
@@ -1026,7 +1026,7 @@ namespace fox::gfx::api::gl
 
         if (std::cmp_greater(amount, 0u))
         {
-            gl::sizei_t offset{};
+            gl::offset_t offset{};
 
             for (const auto& index : std::views::iota(0u, amount))
             {
@@ -2006,9 +2006,9 @@ namespace fox::gfx::api::gl
             }
         }
     }
-    static void vertex_array_vertex_buffer              (gl::handle_t vertexArray, gl::handle_t buffer, gl::index_t binding, gl::sizei_t stride, gl::offset_t offset)
+    static void vertex_array_vertex_buffer              (gl::handle_t vertexArray, gl::handle_t buffer, gl::index_t binding, gl::size_t stride, gl::offset_t offset)
     {
-        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), binding, gl::to_underlying(buffer), offset, stride);
+        glVertexArrayVertexBuffer(gl::to_underlying(vertexArray), binding, gl::to_underlying(buffer), offset, static_cast<gl::sizei_t>(stride));
     }
     static void vertex_array_vertex_buffers             (gl::handle_t vertexArray)
     {
