@@ -7,6 +7,4 @@ namespace fox
     {
         return static_cast<std::underlying_type_t<T>>(value);
     }
-
-
 }

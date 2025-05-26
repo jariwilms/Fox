@@ -1194,9 +1194,10 @@ namespace fox::gfx::api::gl
         glNamedBufferSubData(gl::to_underlying(buffer), offset, static_cast<gl::size_t>(data.size_bytes()), data.data());
     }
     template<typename T>
-    static void clear_buffer_data                       (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type)
+    static void clear_buffer_data                       (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type, std::span<const T> data)
     {
-        glClearNamedBufferData(gl::to_underlying(buffer), gl::to_underlying(format), gl::to_underlying(baseFormat), gl::to_underlying(type), nullptr);
+        //TODO
+        glClearNamedBufferData(gl::to_underlying(buffer), gl::to_underlying(format), gl::to_underlying(baseFormat), gl::to_underlying(type), data.data());
     }
     static void clear_buffer_sub_data                   (gl::handle_t buffer, glf::Buffer::BaseFormat baseFormat, glf::Buffer::Format format, glf::DataType type, gl::byterange_t range)
     {
@@ -1216,9 +1217,9 @@ namespace fox::gfx::api::gl
     {
         glFlushMappedNamedBufferRange(gl::to_underlying(buffer), range.offset, range.size);
     }
-    static void unmap_buffer                            (gl::handle_t buffer)
+    static auto unmap_buffer                            (gl::handle_t buffer)
     {
-        glUnmapNamedBuffer(gl::to_underlying(buffer));
+        return static_cast<gl::bool_t>(glUnmapNamedBuffer(gl::to_underlying(buffer)));
     }
     static void invalidate_buffer_data                  (gl::handle_t buffer)
     {

@@ -37,6 +37,8 @@ namespace fox
 		True  = true,
 	};
 
+	enum class binding_t : fox::index_t {};
+
 
 
 	template<typename T, fox::uint32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;

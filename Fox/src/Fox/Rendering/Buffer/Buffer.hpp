@@ -111,9 +111,9 @@ namespace fox::gfx
             return std::shared_ptr<UniformBuffer>(new UniformBuffer{ data });
         }
 
-        void bind(fox::index_t index) const
+        void bind(fox::binding_t binding) const
         {
-            _->bind(static_cast<impl::binding_t>(index));
+            _->bind(static_cast<impl::binding_t>(binding));
         }
 
         void copy    (const T& data)
@@ -158,10 +158,13 @@ namespace fox::gfx
             return std::shared_ptr<UniformArrayBuffer>(new UniformArrayBuffer{ data });
         }
 
-        void bind      (fox::index_t index, std::optional<fox::range_t> range = {}) const
+        void bind      (fox::binding_t binding) const
         {
-            if   (range.has_value()) _->bind(static_cast<impl::binding_t>(index), impl::range_t{ range->count, range->index });
-            else                     _->bind(static_cast<impl::binding_t>(index), {});
+            _->bind(static_cast<impl::binding_t>(binding));
+        }
+        void bind_range(fox::binding_t binding, fox::range_t range) const
+        {
+            _->bind(static_cast<impl::binding_t>(binding), impl::range_t{ range.count, range.index });
         }
 
         void copy      (std::span<const T, N> data)

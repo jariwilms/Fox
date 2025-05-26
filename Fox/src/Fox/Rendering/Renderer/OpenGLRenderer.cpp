@@ -117,7 +117,7 @@ namespace fox::gfx::api
 
         //Convert HDR texture to cubemap
         m_pipelines.at("ConvertEqui")->bind();
-        m_matricesUniform->bind_index(2);
+        m_matricesUniform->bind(fox::binding_t{ 2u });
         m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
         gl::viewport(envDimensions);
@@ -177,7 +177,7 @@ namespace fox::gfx::api
         const fox::Vector2u reflectionDimensions{ 128u, 128u };
 
         auto preFilterBuffer = gfx::UniformBuffer<unf::PreFilter>::create();
-        preFilterBuffer->bind_index(5);
+        preFilterBuffer->bind(fox::binding_t{ 5u });
 
         m_preFilterCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
 
@@ -266,7 +266,7 @@ namespace fox::gfx::api
         }
 
         m_ssaoSampleUniform = gfx::UniformArrayBuffer<unf::SSAOSample, ssaoSamples>::create(ssaoKernel);
-        m_ssaoSampleUniform->bind_index(7u);
+        m_ssaoSampleUniform->bind(fox::binding_t{ 7u });
 
 
 
@@ -325,7 +325,7 @@ namespace fox::gfx::api
                 0.01f,
             };
 
-            if (light.isShadowCasting and shadowCastingLightCount < maximumShadowCastingLights)
+            if (light.isShadowCasting and std::cmp_less(shadowCastingLightCount, maximumShadowCastingLights))
             {
                 switch (light.type)
                 {
@@ -348,11 +348,11 @@ namespace fox::gfx::api
         constexpr gl::Vector2u sDimensions{ 2048u, 2048u };
 
         //Bind Uniform Buffers to correct indices
-        m_contextUniform->          bind_index( 0);
-        m_cameraUniform->           bind_index( 1);
-        m_matricesUniform->         bind_index( 2);
-        m_materialUniform->         bind_index( 3);
-        m_lightUniform->            bind_index( 4);
+        m_contextUniform->          bind(fox::binding_t{ 0u });
+        m_cameraUniform->           bind(fox::binding_t{ 1u });
+        m_matricesUniform->         bind(fox::binding_t{ 2u });
+        m_materialUniform->         bind(fox::binding_t{ 3u });
+        m_lightUniform->            bind(fox::binding_t{ 4u });
 
         m_contextUniform->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
 
@@ -361,6 +361,7 @@ namespace fox::gfx::api
         gl::viewport(dimensions);
         
         //Render meshes into gBuffer
+
         render_meshes(m_gBuffer, m_pipelines.at("DeferredMesh"));
 
 
@@ -432,8 +433,8 @@ namespace fox::gfx::api
 
 
         //Blit the final result into the default framebuffer
-        gl::blit_frame_buffer(m_ssaoBuffer->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
-        //gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
+        //gl::blit_frame_buffer(m_ssaoBuffer->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
+        gl::blit_frame_buffer(m_pBuffers.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, m_pBuffers.at(0)->dimensions(), dimensions);
     }
 
     void OpenGLRenderer::render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
@@ -458,6 +459,11 @@ namespace fox::gfx::api
         gl::enable        <glf::Feature::DepthTest>();
         gl::depth_function(glf::DepthFunction::Less);
         gl::disable       <glf::Feature::Blending>();
+
+        auto positionTexture = m_gBuffer->find_texture("Position");
+        std::array<gl::float32_t, 4> data{ 0.0f, 0.0f, -1000.0f };
+        gl::clear_texture_image(positionTexture->handle(), glf::Texture::BaseFormat::RGB, glf::Texture::Type::Float, 0, utl::as_bytes(data));
+
 
         for (const auto& _ : m_mmt)
         {
