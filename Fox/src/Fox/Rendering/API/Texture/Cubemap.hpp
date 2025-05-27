@@ -73,6 +73,15 @@ namespace fox::gfx::api
 			fox::Image front;
 			fox::Image back;
 		};
+        enum class Face
+        {
+            Right, 
+            Left, 
+            Top, 
+            Bottom, 
+            Front, 
+            Back, 
+        };
 
         Format format() const
         {
