@@ -269,10 +269,10 @@ namespace fox::gfx::api::glf
     {
         enum class Flag : gl::bitfield_t
         {
-            Debug             = GL_CONTEXT_FLAG_DEBUG_BIT, 
             ForwardCompatible = GL_CONTEXT_FLAG_FORWARD_COMPATIBLE_BIT, 
-            NoError           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
+            Debug             = GL_CONTEXT_FLAG_DEBUG_BIT, 
             RobustAccess      = GL_CONTEXT_FLAG_ROBUST_ACCESS_BIT,
+            NoError           = GL_CONTEXT_FLAG_NO_ERROR_BIT,
         };
         enum class Profile : gl::bitfield_t
         {
@@ -331,8 +331,9 @@ namespace fox::gfx::api::glf
         BlendSourceAlpha                                 = GL_BLEND_SRC_ALPHA, 
         BlendSourceRGB                                   = GL_BLEND_SRC_RGB, 
         ColorClearValue                                  = GL_COLOR_CLEAR_VALUE, 
-        ColorWritemask                                   = GL_COLOR_WRITEMASK, 
+        ColorWriteMask                                   = GL_COLOR_WRITEMASK, 
         ContextFlags                                     = GL_CONTEXT_FLAGS, 
+        ContextProfileMask                               = GL_CONTEXT_PROFILE_MASK, 
         CopyReadBufferBinding                            = GL_COPY_READ_BUFFER_BINDING, 
         CopyWriteBufferBinding                           = GL_COPY_WRITE_BUFFER_BINDING, 
         CurrentProgram                                   = GL_CURRENT_PROGRAM, 
@@ -485,9 +486,9 @@ namespace fox::gfx::api::glf
         StencilBackFunction                              = GL_STENCIL_BACK_FUNC, 
         StencilBackPassDepthFail                         = GL_STENCIL_BACK_PASS_DEPTH_FAIL, 
         StencilBackPassDepthPass                         = GL_STENCIL_BACK_PASS_DEPTH_PASS, 
-        StencilBackReference                                   = GL_STENCIL_BACK_REF, 
+        StencilBackReference                             = GL_STENCIL_BACK_REF, 
         StencilBackValueMask                             = GL_STENCIL_BACK_VALUE_MASK, 
-        StencilBackWritemask                             = GL_STENCIL_BACK_WRITEMASK, 
+        StencilBackWriteMask                             = GL_STENCIL_BACK_WRITEMASK, 
         StencilClearValue                                = GL_STENCIL_CLEAR_VALUE, 
         StencilFail                                      = GL_STENCIL_FAIL, 
         StencilFunction                                  = GL_STENCIL_FUNC, 
@@ -495,7 +496,7 @@ namespace fox::gfx::api::glf
         StencilPassDepthPass                             = GL_STENCIL_PASS_DEPTH_PASS, 
         StencilReference                                 = GL_STENCIL_REF, 
         StencilValueMask                                 = GL_STENCIL_VALUE_MASK, 
-        StencilWritemask                                 = GL_STENCIL_WRITEMASK, 
+        StencilWriteMask                                 = GL_STENCIL_WRITEMASK, 
         Stereo                                           = GL_STEREO, 
         SubpixelBits                                     = GL_SUBPIXEL_BITS, 
         TextureBinding1D                                 = GL_TEXTURE_BINDING_1D, 
@@ -565,12 +566,13 @@ namespace fox::gfx::api::glf
     {
         enum class Severity : gl::enum_t 
         {
-            DebugSeverityHigh         = GL_DEBUG_SEVERITY_HIGH,
-            DebugSeverityMedium       = GL_DEBUG_SEVERITY_MEDIUM,
-            DebugSeverityLow          = GL_DEBUG_SEVERITY_LOW,
-            DebugSeverityNotification = GL_DEBUG_SEVERITY_NOTIFICATION, 
+            High         = GL_DEBUG_SEVERITY_HIGH,
+            Medium       = GL_DEBUG_SEVERITY_MEDIUM,
+            Low          = GL_DEBUG_SEVERITY_LOW,
 
-            DontCare                  = GL_DONT_CARE, 
+            Notification = GL_DEBUG_SEVERITY_NOTIFICATION, 
+
+            DontCare     = GL_DONT_CARE, 
         };
         enum class Source : gl::enum_t 
         {
@@ -585,17 +587,17 @@ namespace fox::gfx::api::glf
         };
         enum class Type : gl::enum_t 
         {
-            DebugTypeError              = GL_DEBUG_TYPE_ERROR,
-            DebugTypeDeprecatedBehavior = GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR,
-            DebugTypeUndefinedBehavior  = GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR,
-            DebugTypePortability        = GL_DEBUG_TYPE_PORTABILITY,
-            DebugTypePerformance        = GL_DEBUG_TYPE_PERFORMANCE,
-            DebugTypeMarker             = GL_DEBUG_TYPE_MARKER,
-            DebugTypePushGroup          = GL_DEBUG_TYPE_PUSH_GROUP,
-            DebugTypePopGroup           = GL_DEBUG_TYPE_POP_GROUP,
-            DebugTypeOther              = GL_DEBUG_TYPE_OTHER, 
+            Error              = GL_DEBUG_TYPE_ERROR,
+            DeprecatedBehavior = GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR,
+            UndefinedBehavior  = GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR,
+            Portability        = GL_DEBUG_TYPE_PORTABILITY,
+            Performance        = GL_DEBUG_TYPE_PERFORMANCE,
+            Marker             = GL_DEBUG_TYPE_MARKER,
+            PushGroup          = GL_DEBUG_TYPE_PUSH_GROUP,
+            PopGroup           = GL_DEBUG_TYPE_POP_GROUP,
+            Other              = GL_DEBUG_TYPE_OTHER, 
 
-            DontCare                    = GL_DONT_CARE, 
+            DontCare           = GL_DONT_CARE, 
         };
     };
     enum class DepthFunction : gl::enum_t
@@ -1899,6 +1901,7 @@ namespace fox::gfx::api::glf
     template<> struct BitmaskTraits<glf::Buffer::Mask>                      { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Buffer::StorageFlags>              { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Context::Flag>                     { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Context::Profile>                  { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::Feature>                           { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Attachment>           { static constexpr bool enable_bitmask_operations = true; };
     template<> struct BitmaskTraits<glf::FrameBuffer::Source>               { static constexpr bool enable_bitmask_operations = true; };

@@ -162,8 +162,9 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::BlendSourceAlpha)                                 return glf::Blending::Factor{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::BlendSourceRGB)                                   return glf::Blending::Factor{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::ColorClearValue)                                  return get_vector4f_v(D);
-        if constexpr (D == glf::Data::ColorWritemask)                                   return get_vector4b_v(D);
-        if constexpr (D == glf::Data::ContextFlags)                                     return get_unsigned_integer32_v(D);
+        if constexpr (D == glf::Data::ColorWriteMask)                                   return get_vector4b_v(D);
+        if constexpr (D == glf::Data::ContextFlags)                                     return glf::Context::Flag{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::ContextProfileMask)                               return glf::Context::Profile{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::CopyReadBufferBinding)                            return get_handle_v(D);
         if constexpr (D == glf::Data::CopyWriteBufferBinding)                           return get_handle_v(D);
         if constexpr (D == glf::Data::CurrentProgram)                                   return get_handle_v(D);
@@ -315,7 +316,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::StencilBackPassDepthPass)                         return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::StencilBackReference)                             return get_integer32_v(D);
         if constexpr (D == glf::Data::StencilBackValueMask)                             return get_unsigned_integer32_v(D);
-        if constexpr (D == glf::Data::StencilBackWritemask)                             return get_unsigned_integer32_v(D);
+        if constexpr (D == glf::Data::StencilBackWriteMask)                             return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::StencilClearValue)                                return get_index_v(D);
         if constexpr (D == glf::Data::StencilFail)                                      return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::StencilFunction)                                  return glf::Stencil::Function{ get_unsigned_integer32_v(D) };
@@ -323,7 +324,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::StencilPassDepthPass)                             return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
         if constexpr (D == glf::Data::StencilReference)                                 return get_integer32_v(D);
         if constexpr (D == glf::Data::StencilValueMask)                                 return get_unsigned_integer32_v(D);
-        if constexpr (D == glf::Data::StencilWritemask)                                 return get_unsigned_integer32_v(D);
+        if constexpr (D == glf::Data::StencilWriteMask)                                 return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::Stereo)                                           return get_boolean_v(D);
         if constexpr (D == glf::Data::SubpixelBits)                                     return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::TextureBinding1D)                                 return get_handle_v(D);
@@ -373,7 +374,6 @@ namespace fox::gfx::api::gl
 
                 return static_cast<gl::uint64_t>(value);
             };
-                                    
         const auto& get_handle_v             = [](glf::Data data, gl::index_t index)
             {
                 gl::int32_t value{};
@@ -381,7 +381,6 @@ namespace fox::gfx::api::gl
 
                 return static_cast<gl::handle_t>(value);
             };
-
         const auto& get_area_v               = [](glf::Data data, gl::index_t index)
             {
                 std::array<gl::uint32_t, 4> value{};
