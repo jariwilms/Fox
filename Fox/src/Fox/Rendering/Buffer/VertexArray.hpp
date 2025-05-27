@@ -11,11 +11,9 @@ namespace fox::gfx
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-
         using binding_t    = api::gl::binding_t;
 
         using VertexArray  = api::gl::VertexArray;
-
 #endif
     }
 
