@@ -15,14 +15,8 @@ namespace fox::gfx::api::gl
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-         Texture1D(Format format, const gl::Vector2u& dimensions)
+         Texture1D(Format format,                                   const gl::Vector2u& dimensions)
             : Texture1D{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions } {}
-         Texture1D(Format format, Filter filter, Wrapping wrapping, const gl::Vector1u& dimensions, std::span<const gl::byte_t> data)
-            : Texture1D{ format, filter, wrapping, dimensions }
-        {
-            copy(format, data);
-            generate_mipmap();
-        }
          Texture1D(Format format, Filter filter, Wrapping wrapping, const gl::Vector1u& dimensions)
             : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping }, m_dimensions{ dimensions }
         {
@@ -42,6 +36,12 @@ namespace fox::gfx::api::gl
 
             gl::texture_storage_1d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
         }
+         Texture1D(Format format, Filter filter, Wrapping wrapping, const gl::Vector1u& dimensions, std::span<const gl::byte_t> data)
+            : Texture1D{ format, filter, wrapping, dimensions }
+        {
+            copy(format, data);
+            generate_mipmap();
+        }
         ~Texture1D()
         {
             gl::delete_texture(m_handle);
@@ -52,7 +52,7 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(m_handle, binding);
         }
 
-        void copy      (Format format, std::span<const gl::byte_t> data)
+        void copy      (Format format,                      std::span<const gl::byte_t> data)
         {
             copy_range(format, m_dimensions, data);
         }
@@ -106,14 +106,8 @@ namespace fox::gfx::api::gl
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-         Texture2D(Format format, const gl::Vector2u& dimensions)
+         Texture2D(Format format,                                   const gl::Vector2u& dimensions)
             : Texture2D{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions } {}
-         Texture2D(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions, std::span<const gl::byte_t> data)
-            : Texture2D{ format, filter, wrapping, dimensions }
-        {
-            copy(format, data);
-            generate_mipmap();
-        }
          Texture2D(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions)
              : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping, wrapping }, m_dimensions{ dimensions }, m_mipmapLevels{ 1u }
         {
@@ -133,6 +127,12 @@ namespace fox::gfx::api::gl
 
             gl::texture_storage_2d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
         }
+         Texture2D(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions, std::span<const gl::byte_t> data)
+            : Texture2D{ format, filter, wrapping, dimensions }
+        {
+            copy(format, data);
+            generate_mipmap();
+        }
         ~Texture2D()
         {
             gl::delete_texture(m_handle);
@@ -143,7 +143,7 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(m_handle, binding);
         }
 
-        void copy      (Format format, std::span<const gl::byte_t> data)
+        void copy      (Format format,                    std::span<const gl::byte_t> data)
         {
             copy_range(format, m_dimensions, data);
         }
@@ -198,14 +198,8 @@ namespace fox::gfx::api::gl
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-         Texture3D(Format format, const gl::Vector3u& dimensions)
+         Texture3D(Format format,                                   const gl::Vector3u& dimensions)
             : Texture3D{ format, Filter::Trilinear, Wrapping::ClampToEdge, dimensions } {}
-         Texture3D(Format format, Filter filter, Wrapping wrapping, const gl::Vector3u& dimensions, std::span<const gl::byte_t> data)
-            : Texture3D{ format, filter, wrapping, dimensions }
-        {
-            copy(format, data);
-            generate_mipmap();
-        }
          Texture3D(Format format, Filter filter, Wrapping wrapping, const gl::Vector3u& dimensions)
             : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping, wrapping }, m_dimensions{ dimensions }
         {
@@ -226,6 +220,12 @@ namespace fox::gfx::api::gl
 
             gl::texture_storage_3d(m_handle, gl::map_texture_format(m_format), m_dimensions, m_mipmapLevels);
         }
+         Texture3D(Format format, Filter filter, Wrapping wrapping, const gl::Vector3u& dimensions, std::span<const gl::byte_t> data)
+            : Texture3D{ format, filter, wrapping, dimensions }
+        {
+            copy(format, data);
+            generate_mipmap();
+        }
         ~Texture3D()
         {
             gl::delete_texture(m_handle);
@@ -236,7 +236,7 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(m_handle, binding);
         }
 
-        void copy      (Format format, std::span<const gl::byte_t> data)
+        void copy      (Format format,                      std::span<const gl::byte_t> data)
         {
             copy_range(format, m_dimensions, data);
         }
