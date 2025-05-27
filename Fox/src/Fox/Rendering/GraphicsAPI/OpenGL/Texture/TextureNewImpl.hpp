@@ -115,7 +115,7 @@ namespace fox::gfx::api::gl
             generate_mipmap();
         }
          Texture2D(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions)
-            : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping, wrapping }, m_dimensions{ dimensions }
+             : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping, wrapping }, m_dimensions{ dimensions }, m_mipmapLevels{ 1u }
         {
             m_handle = gl::create_texture(glf::Texture::Target::_2D);
 
