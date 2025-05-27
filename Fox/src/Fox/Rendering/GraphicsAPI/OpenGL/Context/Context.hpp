@@ -40,11 +40,11 @@ namespace fox::gfx::api::gl
                     switch (source)
                     {
                         case glf::Debug::Source::API           : return "API";
-                        case glf::Debug::Source::WindowSystem  : return "WINDOW_SYSTEM";
-                        case glf::Debug::Source::ShaderCompiler: return "SHADER_COMPILER";
-                        case glf::Debug::Source::ThirdParty    : return "THIRD_PARTY";
-                        case glf::Debug::Source::Application   : return "APPLICATION";
-                        case glf::Debug::Source::Other         : return "OTHER";
+                        case glf::Debug::Source::WindowSystem  : return "Window System";
+                        case glf::Debug::Source::ShaderCompiler: return "Shader Compiler";
+                        case glf::Debug::Source::ThirdParty    : return "Third Party";
+                        case glf::Debug::Source::Application   : return "Application";
+                        case glf::Debug::Source::Other         : return "Other";
 
                         default: throw std::invalid_argument{ "Invalid source!" };
                     }
@@ -53,10 +53,10 @@ namespace fox::gfx::api::gl
                 {
                     switch (severity)
                     {
-                        case glf::Debug::Severity::High        : return "HIGH";
-                        case glf::Debug::Severity::Medium      : return "MEDIUM";
-                        case glf::Debug::Severity::Low         : return "LOW";
-                        case glf::Debug::Severity::Notification: return "NOTIFICATION";
+                        case glf::Debug::Severity::High        : return "High";
+                        case glf::Debug::Severity::Medium      : return "Medium";
+                        case glf::Debug::Severity::Low         : return "Low";
+                        case glf::Debug::Severity::Notification: return "Notification";
 
                         default: throw std::invalid_argument{ "Invalid severity!" };
                     }
@@ -65,29 +65,30 @@ namespace fox::gfx::api::gl
                 {
                     switch (type)
                     {
-                        case glf::Debug::Type::Error             : return "ERROR";
-                        case glf::Debug::Type::DeprecatedBehavior: return "DEPRECATED_BEHAVIOR";
-                        case glf::Debug::Type::UndefinedBehavior : return "UNDEFINED_BEHAVIOR";
-                        case glf::Debug::Type::Portability       : return "PORTABILITY";
-                        case glf::Debug::Type::Performance       : return "PERFORMANCE";
-                        case glf::Debug::Type::Marker            : return "MARKER";
-                        case glf::Debug::Type::PushGroup         : return "PUSH_GROUP";
-                        case glf::Debug::Type::PopGroup          : return "POP_GROUP";
-                        case glf::Debug::Type::Other             : return "OTHER";
+                        case glf::Debug::Type::Error             : return "Error";
+                        case glf::Debug::Type::DeprecatedBehavior: return "Deprecated Behavior";
+                        case glf::Debug::Type::UndefinedBehavior : return "Undefine Behavior";
+                        case glf::Debug::Type::Portability       : return "Portability";
+                        case glf::Debug::Type::Performance       : return "Performance";
+                        case glf::Debug::Type::Marker            : return "Marker";
+                        case glf::Debug::Type::PushGroup         : return "Push Group";
+                        case glf::Debug::Type::PopGroup          : return "Pop Group";
+                        case glf::Debug::Type::Other             : return "Other";
 
                         default: throw std::invalid_argument{ "Invalid type!" };
                     }
                 };
 
+            const auto& mSource              = map_source_message  (static_cast<glf::Debug::Source>  (source  ));
+            const auto& mSeverity            = map_severity_message(static_cast<glf::Debug::Severity>(severity));
+            const auto& mType                = map_type_message    (static_cast<glf::Debug::Type>    (type    ));
 
 
-            const auto& sourceMessage   = map_source_message  (static_cast<glf::Debug::Source>  (source  ));
-            const auto& severityMessage = map_severity_message(static_cast<glf::Debug::Severity>(severity));
-            const auto& typeMessage     = map_type_message    (static_cast<glf::Debug::Type>    (type    ));
 
-            if (severityMessage == map_severity_message(glf::Debug::Severity::Notification)) return;
+            if (mSeverity == map_severity_message(glf::Debug::Severity::Notification)) return;
+            if (mSeverity == map_severity_message(glf::Debug::Severity::Low         )) return;
 
-            std::cout << std::format("|GL_DEBUG| ID::{0}; TYPE::{1}; SOURCE::{2}; SEVERITY::{3}; MESSAGE::{4}", id, typeMessage, sourceMessage, severityMessage, message) << std::endl;
+            std::cout << std::format("@GL_DEBUG [{0}] Type::{1}; Source::{2}; Severity::{3}; Message::{4}", id, mType, mSource, mSeverity, message) << std::endl;
         }
 
 		static inline glf::Context::Flag    s_contextFlags{};
