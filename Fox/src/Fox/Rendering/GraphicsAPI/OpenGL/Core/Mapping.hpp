@@ -69,7 +69,6 @@ namespace fox::gfx::api::gl
             
             case api::Texture::Format::D16_UNORM   :
             case api::Texture::Format::D24_UNORM   :
-            
             case api::Texture::Format::D32_FLOAT   : return glf::Texture::BaseFormat::D;
             
             case api::Texture::Format::S8_UINT     : return glf::Texture::BaseFormat::S;
@@ -242,6 +241,50 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
+    static auto map_cubemap_texture_format_base(api::Cubemap::Format format)
+    {
+        switch (format)
+        {
+            case api::Cubemap::Format::R8_UNORM    :
+            case api::Cubemap::Format::R16_UNORM   :
+            case api::Cubemap::Format::R8_SNORM    :
+            case api::Cubemap::Format::R16_SNORM   :
+            case api::Cubemap::Format::R16_FLOAT   :
+            case api::Cubemap::Format::R32_FLOAT   : return glf::Texture::BaseFormat::R;
+            
+            case api::Cubemap::Format::RG8_UNORM   :
+            case api::Cubemap::Format::RG16_UNORM  :
+            case api::Cubemap::Format::RG8_SNORM   :
+            case api::Cubemap::Format::RG16_SNORM  :
+            case api::Cubemap::Format::RG16_FLOAT  :
+            case api::Cubemap::Format::RG32_FLOAT  : return glf::Texture::BaseFormat::RG;
+            
+            case api::Cubemap::Format::RGB8_UNORM  :
+            case api::Cubemap::Format::RGB16_UNORM :
+            case api::Cubemap::Format::RGB8_SNORM  :
+            case api::Cubemap::Format::RGB16_SNORM :
+            case api::Cubemap::Format::RGB8_SRGB   :
+            case api::Cubemap::Format::RGB16_FLOAT :
+            case api::Cubemap::Format::RGB32_FLOAT : return glf::Texture::BaseFormat::RGB;
+            
+            case api::Cubemap::Format::RGBA8_UNORM :
+            case api::Cubemap::Format::RGBA16_UNORM:
+            case api::Cubemap::Format::RGBA8_SNORM :
+            case api::Cubemap::Format::RGBA16_SNORM:
+            case api::Cubemap::Format::RGBA8_SRGB  :
+            case api::Cubemap::Format::RGBA16_FLOAT:
+            case api::Cubemap::Format::RGBA32_FLOAT: return glf::Texture::BaseFormat::RGBA;
+            
+            case api::Cubemap::Format::D16_UNORM   :
+            case api::Cubemap::Format::D24_UNORM   :
+            case api::Cubemap::Format::D32_FLOAT   : return glf::Texture::BaseFormat::D;
+            
+            case api::Cubemap::Format::S8_UINT     : return glf::Texture::BaseFormat::S;
+
+            default: throw std::invalid_argument{ "Invalid cubemap format!" };
+        }
+    }
+
     static auto map_cubemap_texture_format     (api::Cubemap::Format format)
     {
         switch (format)
