@@ -79,14 +79,18 @@ namespace fox::gfx::api::gl
                     }
                 };
 
-            const auto& mSource              = map_source_message  (static_cast<glf::Debug::Source>  (source  ));
-            const auto& mSeverity            = map_severity_message(static_cast<glf::Debug::Severity>(severity));
-            const auto& mType                = map_type_message    (static_cast<glf::Debug::Type>    (type    ));
+            const auto& eSource              = static_cast<glf::Debug::Source>  (source);
+            const auto& eSeverity            = static_cast<glf::Debug::Severity>(severity);
+            const auto& eType                = static_cast<glf::Debug::Type>    (type);
+
+            const auto& mSource              = map_source_message  (eSource);
+            const auto& mSeverity            = map_severity_message(eSeverity);
+            const auto& mType                = map_type_message    (eType);
 
 
 
-            if (mSeverity == map_severity_message(glf::Debug::Severity::Notification)) return;
-            if (mSeverity == map_severity_message(glf::Debug::Severity::Low         )) return;
+            if (eSeverity == glf::Debug::Severity::Notification) return;
+            if (eSeverity == glf::Debug::Severity::Low         ) return;
 
             std::cout << std::format("@GL_DEBUG [{0}] Type::{1}; Source::{2}; Severity::{3}; Message::{4}", id, mType, mSource, mSeverity, message) << std::endl;
         }
