@@ -1565,6 +1565,7 @@ namespace fox::gfx::api::glf
             DepthStencilMode    = GL_DEPTH_STENCIL_TEXTURE_MODE, 
             MagnificationFilter = GL_TEXTURE_MAG_FILTER, 
             MinificationFilter  = GL_TEXTURE_MIN_FILTER, 
+            MaximumAnisotropy   = GL_TEXTURE_MAX_ANISOTROPY, 
             WrappingS           = GL_TEXTURE_WRAP_S, 
             WrappingT           = GL_TEXTURE_WRAP_T, 
             WrappingR           = GL_TEXTURE_WRAP_R, 

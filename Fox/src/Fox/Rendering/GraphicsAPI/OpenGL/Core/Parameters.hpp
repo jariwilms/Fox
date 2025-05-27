@@ -134,7 +134,7 @@ namespace fox::gfx::api::glp
                                     glp::base_level          , glp::maximum_level, 
                                     glp::border_color        , 
                                     glp::depth_stencil_mode  , 
-                                    glp::magnification_filter, glp::minification_filter, 
+                                    glp::magnification_filter, glp::minification_filter, glp::maximum_anisotropy, 
                                     glp::wrapping_s          , glp::wrapping_t         , glp::wrapping_r, 
                                     glp::swizzle_r           , glp::swizzle_g          , glp::swizzle_b , glp::swizzle_a, glp::swizzle_rgba, 
                                     glp::maximum_lod         , glp::minimum_lod        , glp::lod_bias>;
