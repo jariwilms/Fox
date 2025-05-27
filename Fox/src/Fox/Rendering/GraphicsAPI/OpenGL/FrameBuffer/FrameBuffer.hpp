@@ -207,7 +207,7 @@ namespace fox::gfx::api::gl
             const auto& it = m_identifierToTexture.find(identifier);
             if (it == m_identifierToTexture.end()) throw std::invalid_argument{ "Invalid texture identifier!" };
 
-            gl::bind_texture_unit(it->second->handle(), slot);
+            gl::bind_texture_unit(it->second->handle(), static_cast<gl::binding_t>(slot));
         }
 
         auto find_texture(const std::string& identifier)

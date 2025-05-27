@@ -46,7 +46,7 @@ namespace fox::gfx::api::gl
 
         void bind(gl::uint32_t index) const
         {
-            gl::bind_texture_unit(m_handle, index);
+            gl::bind_texture_unit(m_handle, static_cast<gl::binding_t>(index));
         }
 
               Wrapping      wrapping()      const

@@ -58,7 +58,7 @@ namespace fox::gfx::api::gl
 
         void bind(gl::uint32_t index) const
         {
-            gl::bind_texture_unit(m_handle, index);
+            gl::bind_texture_unit(m_handle, static_cast<gl::binding_t>(index));
         }
 
         void copy(Format format, std::span<const fox::byte_t> data)
@@ -131,7 +131,7 @@ namespace fox::gfx::api::gl
 
         void bind(fox::uint32_t slot) const
         {
-            gl::bind_texture_unit(m_handle, slot);
+            gl::bind_texture_unit(m_handle, static_cast<gl::binding_t>(slot));
         }
 
         fox::uint8_t    samples()    const

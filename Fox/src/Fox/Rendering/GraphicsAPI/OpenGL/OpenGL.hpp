@@ -1380,9 +1380,9 @@ namespace fox::gfx::api::gl
     {
         glDeleteTextures(static_cast<gl::sizei_t>(textures.size()), gl::to_underlying_ptr(textures.data()));
     }
-    static void bind_texture_unit                       (gl::handle_t texture, gl::index_t index)
+    static void bind_texture_unit                       (gl::handle_t texture, gl::binding_t binding)
     {
-        glBindTextureUnit(index, gl::to_underlying(texture));
+        glBindTextureUnit(gl::to_underlying(binding), gl::to_underlying(texture));
     }
     static auto create_sampler                          ()
     {
@@ -1406,9 +1406,9 @@ namespace fox::gfx::api::gl
     {
         glDeleteSamplers(static_cast<gl::sizei_t>(samplers.size()), gl::to_underlying_ptr(samplers.data()));
     }
-    static void bind_sampler                            (gl::handle_t sampler, gl::index_t index)
+    static void bind_sampler                            (gl::handle_t sampler, gl::binding_t binding)
     {
-        glBindSampler(index, gl::to_underlying(sampler));
+        glBindSampler(gl::to_underlying(binding), gl::to_underlying(sampler));
     }
     static void bind_samplers                           (std::span<const gl::handle_t> samplers, gl::range_t range)
     {
@@ -1654,6 +1654,11 @@ namespace fox::gfx::api::gl
         {
             const auto& v = std::get<glp::minification_filter>(value);
             texture_parameter_uiv(texture, glf::Texture::Parameter::MinificationFilter, gl::to_underlying(v.value));
+        }
+        if (std::holds_alternative<glp::maximum_anisotropy>  (value))
+        {
+            const auto& v = std::get<glp::maximum_anisotropy>(value);
+            texture_parameter_fv(texture, glf::Texture::Parameter::MaximumAnisotropy, v.value);
         }
         if (std::holds_alternative<glp::wrapping_s>          (value))
         {
