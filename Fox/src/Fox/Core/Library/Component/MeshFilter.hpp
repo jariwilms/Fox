@@ -9,7 +9,6 @@ namespace fox
 {
 	struct MeshFilter
 	{
-	public:
 		std::shared_ptr<gfx::Mesh>     mesh{};
 		std::shared_ptr<gfx::Material> material{};
 	};
