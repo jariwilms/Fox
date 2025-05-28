@@ -25,13 +25,13 @@ namespace fox::gfx::api
         };
         struct     Specification
         {
-            using format_t = std::variant<api::Texture::Format, api::Cubemap::Format, api::RenderBuffer::Format>;
+            using format_v = std::variant<api::Texture::Format, api::Cubemap::Format, api::RenderBuffer::Format>;
 
-            Specification(const std::string& identifier, format_t format)
+            Specification(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}
 
             std::string identifier{};
-            format_t    format;
+            format_v    format;
         };
     };
 };
