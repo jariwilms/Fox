@@ -81,9 +81,9 @@ namespace fox::gfx
         using Attachment    = impl::FrameBuffer::Attachment;
         using Specification = impl::FrameBuffer::Specification;
 
-        static inline auto create(const fox::Vector2u& dimensions, fox::uint32_t samples, std::span<const Specification> specifications)
+        static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
         {
-            return std::shared_ptr<FrameBufferMultisample>(new FrameBufferMultisample{ dimensions, samples, specifications });
+            return std::shared_ptr<FrameBufferMultisample>(new FrameBufferMultisample{ dimensions, specifications, samples });
         }
 
         void bind(Target target)
@@ -122,8 +122,8 @@ namespace fox::gfx
         }
 
     protected:
-        FrameBufferMultisample(const fox::Vector2u& dimensions, fox::uint32_t samples, std::span<const Specification> specifications)
-            : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, samples, specifications) } {}
+        FrameBufferMultisample(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
+            : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, specifications, samples) } {}
 
         std::shared_ptr<impl::FrameBufferMultisample> _;
     };

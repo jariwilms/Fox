@@ -174,7 +174,7 @@ namespace fox::gfx::api::gl
         using Attachment    = api::FrameBuffer::Attachment;
         using Specification = api::FrameBuffer::Specification;
 
-        FrameBufferMultisample(const gl::Vector2u& dimensions, fox::uint32_t samples, std::span<const Specification> specifications)
+        FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
             : m_dimensions{ dimensions }, m_samples{ samples }
         {
             m_handle = gl::create_frame_buffer();
@@ -274,6 +274,10 @@ namespace fox::gfx::api::gl
 
             m_identifierToTexture.emplace(identifier, texture);
         }
+        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<glf::FrameBuffer::Attachment>& colorBufferIndices)
+        {
+            throw std::logic_error{ "The method or operation has not been implemented!" };
+        }
         void attach(std::string_view identifier, api::RenderBuffer::Format format, std::vector<glf::FrameBuffer::Attachment>& colorBufferIndices)
         {
             const auto& renderBufferAttachment = api::map_frame_buffer_render_buffer_attachment(format);
@@ -290,10 +294,6 @@ namespace fox::gfx::api::gl
             gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
 
             m_identifierToRenderBuffer.emplace(identifier, renderBuffer);
-        }
-        void attach(std::string_view identifier, api::Cubemap::Format      format, std::vector<glf::FrameBuffer::Attachment>& colorBufferIndices)
-        {
-            throw std::logic_error{ "The method or operation has not been implemented!" };
         }
 
         gl::Vector2u                                                                  m_dimensions{};
