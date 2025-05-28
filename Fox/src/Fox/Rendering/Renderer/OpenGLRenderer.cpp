@@ -9,28 +9,28 @@ namespace fox::gfx::api
 
 
 
-        constexpr gl::uint8_t  multisamples{ 4u };
-        constexpr gl::uint32_t lightCount{ 32u };
-        constexpr gl::Vector2u viewportDimensions { 1280u,  720u };
-        constexpr gl::Vector2u shadowMapDimensions{ 2048u, 2048u };
+        constexpr fox::uint32_t multisamples{ 4u };
+        constexpr fox::uint32_t lightCount{ 32u };
+        constexpr fox::Vector2u viewportDimensions { 1280u,  720u };
+        constexpr fox::Vector2u shadowMapDimensions{ 2048u, 2048u };
 
-        using FM = gfx::FrameBuffer::Specification;
+        using FS = gfx::FrameBuffer::Specification;
         using FA = gfx::FrameBuffer::Attachment;
         using TF = gfx::Texture2D::Format;
         using RF = gfx::RenderBuffer::Format;
         using CF = gfx::Cubemap::Format;
 
-        std::array<FM, 5> gBufferManifest {
-            FM{ "Position",     TF::RGB16_FLOAT },
-            FM{ "Albedo",       TF::RGBA8_UNORM  },
-            FM{ "Normal",       TF::RGB16_FLOAT },
-            FM{ "ARM",          TF::RGB16_UNORM  },
-            FM{ "DepthStencil", RF::D24_UNORM_S8_UINT },
+        std::array<FS, 5> gBufferManifest {
+            FS{ "Position",     TF::RGB16_FLOAT },
+            FS{ "Albedo",       TF::RGBA8_UNORM  },
+            FS{ "Normal",       TF::RGB16_FLOAT },
+            FS{ "ARM",          TF::RGB16_UNORM  },
+            FS{ "DepthStencil", RF::D24_UNORM_S8_UINT },
         };
-        std::array<FM, 2> hdrBufferManifest { FM{ "Color", TF::RGBA16_FLOAT }, FM{ "Depth", RF::D24_UNORM_S8_UINT } };
-        std::array<FM, 1> sBufferManifest   { FM{ "Depth", TF::D24_UNORM    }                                       };
-        std::array<FM, 2> pBufferManifest   { FM{ "Color", TF::RGBA16_UNORM }, FM{ "Depth", RF::D24_UNORM_S8_UINT } };
-        std::array<FM, 1> scBufferManifest  { FM{ "Depth", CF::D24_UNORM    }                                       };
+        std::array<FS, 2> hdrBufferManifest { FS{ "Color", TF::RGBA16_FLOAT }, FS{ "Depth", RF::D24_UNORM_S8_UINT } };
+        std::array<FS, 1> sBufferManifest   { FS{ "Depth", TF::D24_UNORM    }                                       };
+        std::array<FS, 2> pBufferManifest   { FS{ "Color", TF::RGBA16_UNORM }, FS{ "Depth", RF::D24_UNORM_S8_UINT } };
+        std::array<FS, 1> scBufferManifest  { FS{ "Depth", CF::D24_UNORM    }                                       };
 
 
 
@@ -47,8 +47,8 @@ namespace fox::gfx::api
 
 
 
-        const auto& depthTexture = m_sBuffer->find_texture("Depth");
-        const std::array<gl::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
+        const auto& depthTexture = m_sBuffer->get_texture("Depth");
+        const std::array<fox::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
         gl::texture_parameter(depthTexture->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
         gl::texture_parameter(depthTexture->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
         gl::texture_parameter(depthTexture->handle(), glp::border_color        { borderColor });
@@ -88,15 +88,15 @@ namespace fox::gfx::api
 
 
         //PBR setup
-        gl::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
-        const std::array<gl::Matrix4f, 6> captureViews =
+        fox::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
+        const std::array<fox::Matrix4f, 6> captureViews =
         {
-            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{ -1.0f,  0.0f,  0.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f,  1.0f }),
-            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f, -1.0f,  0.0f }, gl::Vector3f{ 0.0f,  0.0f, -1.0f }),
-            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f,  1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
-            glm::lookAt(gl::Vector3f{ 0.0f, 0.0f, 0.0f }, gl::Vector3f{  0.0f,  0.0f, -1.0f }, gl::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  1.0f,  0.0f,  0.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{ -1.0f,  0.0f,  0.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  1.0f,  0.0f }, fox::Vector3f{ 0.0f,  0.0f,  1.0f }),
+            glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f, -1.0f,  0.0f }, fox::Vector3f{ 0.0f,  0.0f, -1.0f }),
+            glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  0.0f,  1.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
+            glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  0.0f, -1.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
         };
 
         const auto& cva = gfx::Geometry::Cube::mesh() ->vertexArray;
@@ -106,9 +106,9 @@ namespace fox::gfx::api
 
         //Load HDR environment texture
         const fox::Vector2u envDimensions{ 512u, 512u };
-        const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FM{ "Depth", RF::D24_UNORM }, };
+        const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
         auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
-        const auto& rb       = frameBuffer->find_render_buffer("Depth");
+        const auto& rb       = frameBuffer->get_render_buffer("Depth");
         auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
         auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
         m_environmentCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
@@ -232,9 +232,9 @@ namespace fox::gfx::api
 
 
 
-        std::array<FM, 1> ssaoFrameBufferManifest{ FM{ "Occlusion", TF::R32_FLOAT }};
+        std::array<FS, 1> ssaoFrameBufferManifest{ FS{ "Occlusion", TF::R32_FLOAT }};
         m_ssaoBuffer = gfx::FrameBuffer::create(viewportDimensions, ssaoFrameBufferManifest);
-        auto occlusion = m_ssaoBuffer->find_texture("Occlusion");
+        auto occlusion = m_ssaoBuffer->get_texture("Occlusion");
         gl::texture_parameter(occlusion->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
         gl::texture_parameter(occlusion->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
 
@@ -344,8 +344,8 @@ namespace fox::gfx::api
 
     void OpenGLRenderer::finish()
     {
-        constexpr gl::Vector2u  dimensions{ 1280u,  720u };
-        constexpr gl::Vector2u sDimensions{ 2048u, 2048u };
+        constexpr fox::Vector2u  dimensions{ 1280u,  720u };
+        constexpr fox::Vector2u sDimensions{ 2048u, 2048u };
 
         //Bind Uniform Buffers to correct indices
         m_contextUniform->          bind(fox::binding_t{ 0u });
@@ -374,8 +374,8 @@ namespace fox::gfx::api
         m_ssaoBuffer->bind(gfx::FrameBuffer::Target::Write);
 
         m_pipelines.at("SSAO")->bind();
-        m_gBuffer->find_texture("Position")->bind(gl::binding_t{ 0u });
-        m_gBuffer->find_texture("Normal")->bind(gl::binding_t{ 1u });
+        m_gBuffer->bind_texture("Position", fox::binding_t{ 0u });
+        m_gBuffer->bind_texture("Normal"  , fox::binding_t{ 1u });
         m_ssaoNoiseTexture->bind(fox::binding_t{ 2u });
 
         gl::viewport(dimensions);
@@ -460,8 +460,8 @@ namespace fox::gfx::api
         gl::depth_function(glf::DepthFunction::Less);
         gl::disable       <glf::Feature::Blending>();
 
-        auto positionTexture = m_gBuffer->find_texture("Position");
-        std::array<gl::float32_t, 4> data{ 0.0f, 0.0f, -1000.0f };
+        auto positionTexture = m_gBuffer->get_texture("Position");
+        std::array<fox::float32_t, 4> data{ 0.0f, 0.0f, -1000.0f };
         gl::clear_texture_image(positionTexture->handle(), glf::Texture::BaseFormat::RGB, glf::Texture::Type::Float, 0, utl::as_bytes(data));
 
 

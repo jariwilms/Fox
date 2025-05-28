@@ -1,7 +1,9 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
+
+#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
 #endif
 
@@ -33,6 +35,7 @@ namespace fox::gfx
         {
             _->bind(target);
         }
+
         void bind_texture(const std::string& identifier, fox::binding_t binding)
         {
             _->bind_texture(identifier, static_cast<impl::binding_t>(binding));
@@ -42,17 +45,20 @@ namespace fox::gfx
             _->bind_cubemap(identifier, static_cast<impl::binding_t>(binding));
         }
 
-        auto find_texture      (const std::string& identifier)
+        auto get_texture      (const std::string& identifier)
         {
-            return _->find_texture(identifier);
+            const auto& texture            = _->get_texture(identifier);
+            const auto& [iterator, result] = m_proxies.insert_or_assign(identifier, std::make_shared<gfx::Texture2D>(texture));
+
+            return iterator->second;
         }
-        auto find_render_buffer(const std::string& identifier)
+        auto get_render_buffer(const std::string& identifier)
         {
-            return _->find_render_buffer(identifier);
+            return _->get_render_buffer(identifier);
         }
-        auto find_cubemap      (const std::string& identifier)
+        auto get_cubemap      (const std::string& identifier)
         {
-            return _->find_cubemap(identifier);
+            return _->get_cubemap(identifier);
         }
 
         auto dimensions() const
@@ -72,7 +78,8 @@ namespace fox::gfx
         FrameBuffer(const fox::Vector2u& dimensions, std::span<const Specification> specifications)
             : _{ std::make_shared<impl::FrameBuffer>(dimensions, specifications) } {}
 
-        std::shared_ptr<impl::FrameBuffer> _;
+        std::shared_ptr<impl::FrameBuffer>                               _;
+        std::unordered_map<std::string, std::shared_ptr<gfx::Texture2D>> m_proxies{};
     };
     class FrameBufferMultisample
     {
@@ -90,18 +97,19 @@ namespace fox::gfx
         {
             _->bind(target);
         }
+        
         void bind_texture(const std::string& identifier, fox::binding_t binding)
         {
             _->bind_texture(identifier, static_cast<impl::binding_t>(binding));
         }
 
-        auto find_texture      (const std::string& identifier)
+        auto get_texture      (const std::string& identifier)
         {
-            _->find_texture(identifier);
+            _->get_texture(identifier);
         }
-        auto find_render_buffer(const std::string& identifier)
+        auto get_render_buffer(const std::string& identifier)
         {
-            _->find_render_buffer(identifier);
+            _->get_render_buffer(identifier);
         }
 
         auto dimensions() const

@@ -19,7 +19,7 @@ namespace fox::gfx::api::gl
         using Attachment    = api::FrameBuffer::Attachment;
         using Specification = api::FrameBuffer::Specification;
 
-        FrameBuffer(const gl::Vector2u& dimensions, std::span<const Specification> specifications)
+         FrameBuffer(const gl::Vector2u& dimensions, std::span<const Specification> specifications)
             : m_dimensions{ dimensions }
         {
             m_handle = gl::create_frame_buffer();
@@ -90,17 +90,17 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(it->second->handle(), binding);
         }
 
-        auto find_texture      (const std::string& identifier)
+        auto get_texture      (const std::string& identifier)
         {
-            return m_identifierToTextureMap.find(identifier)->second;
+            return m_identifierToTextureMap.at(identifier);
         }
-        auto find_cubemap      (const std::string& identifier)
+        auto get_cubemap      (const std::string& identifier)
         {
-            return m_identifierToCubemapMap.find(identifier)->second;
+            return m_identifierToCubemapMap.at(identifier);
         }
-        auto find_render_buffer(const std::string& identifier)
+        auto get_render_buffer(const std::string& identifier)
         {
-            return m_identifierToRenderBufferMap.find(identifier)->second;
+            return m_identifierToRenderBufferMap.at(identifier);
         }
 
         auto dimensions() const
@@ -233,11 +233,11 @@ namespace fox::gfx::api::gl
             gl::bind_texture_unit(it->second->handle(), binding);
         }
 
-        auto find_texture      (const std::string& identifier)
+        auto get_texture      (const std::string& identifier)
         {
             return m_identifierToTexture.find(identifier)->second;
         }
-        auto find_render_buffer(const std::string& identifier)
+        auto get_render_buffer(const std::string& identifier)
         {
             return m_identifierToRenderBuffer.find(identifier)->second;
         }
