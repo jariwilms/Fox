@@ -32,11 +32,11 @@ namespace fox::gfx
             _->bind();
         }
 
-        void enable_attribute (fox::uint32_t index)
+        void enable_attribute (fox::index_t index)
         {
             _->enable_attribute(index);
         }
-        void disable_attribute(fox::uint32_t index)
+        void disable_attribute(fox::index_t index)
         {
             _->disable_attribute(index);
         }
@@ -63,6 +63,10 @@ namespace fox::gfx
         auto handle     () const
         {
             return _->handle();
+        }
+        auto impl       () const
+        {
+            return _;
         }
 
     protected:

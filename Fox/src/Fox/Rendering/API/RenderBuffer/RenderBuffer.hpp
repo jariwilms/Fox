@@ -25,20 +25,5 @@ namespace fox::gfx::api
 
             S8_UINT, 
 		};
-
-        RenderBuffer(RenderBuffer&&) = default;
-
-        Format format() const
-        {
-            return m_format;
-        }
-
-        RenderBuffer& operator=(RenderBuffer&&) noexcept = default;
-
-    protected:
-        RenderBuffer(Format format)
-            : m_format{ format } {}
-
-        Format m_format;
 	};
 }

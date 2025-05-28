@@ -14,7 +14,7 @@ namespace fox::gfx::api
         constexpr gl::Vector2u viewportDimensions { 1280u,  720u };
         constexpr gl::Vector2u shadowMapDimensions{ 2048u, 2048u };
 
-        using FM = gfx::FrameBuffer::Manifest;
+        using FM = gfx::FrameBuffer::Specification;
         using FA = gfx::FrameBuffer::Attachment;
         using TF = gfx::Texture2D::Format;
         using RF = gfx::RenderBuffer::Format;
@@ -106,11 +106,11 @@ namespace fox::gfx::api
 
         //Load HDR environment texture
         const fox::Vector2u envDimensions{ 512u, 512u };
-        const std::array<gfx::api::FrameBuffer::Manifest, 1> manifest{ FM{ "Depth", RF::D24_UNORM }, };
+        const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FM{ "Depth", RF::D24_UNORM }, };
         auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
         const auto& rb       = frameBuffer->find_render_buffer("Depth");
         auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
-        auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Trilinear, gfx::Texture2D::Wrapping::ClampToEdge, hdrImage.dimensions(), hdrImage.data());
+        auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
         m_environmentCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
 
 
@@ -124,7 +124,7 @@ namespace fox::gfx::api
         gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
 
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
-        hdrTex->bind(0);
+        hdrTex->bind(fox::binding_t{ 0u });
         cva->bind();
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
@@ -146,7 +146,7 @@ namespace fox::gfx::api
 
         m_pipelines.at("Irradiance")->bind();
         m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
-        m_environmentCubemap->bind(0);
+        m_environmentCubemap->bind(fox::binding_t{ 0u });
 
         gl::viewport(cvDimensions);
         gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
@@ -183,7 +183,7 @@ namespace fox::gfx::api
 
         m_pipelines.at("PreFilter")->bind();
         m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
-        m_environmentCubemap->bind(0);
+        m_environmentCubemap->bind(fox::binding_t{ 0u });
         
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
         cva->bind();
@@ -374,9 +374,9 @@ namespace fox::gfx::api
         m_ssaoBuffer->bind(gfx::FrameBuffer::Target::Write);
 
         m_pipelines.at("SSAO")->bind();
-        m_gBuffer->find_texture("Position")->bind(0u);
-        m_gBuffer->find_texture("Normal")->bind(1u);
-        m_ssaoNoiseTexture->bind(2u);
+        m_gBuffer->find_texture("Position")->bind(gl::binding_t{ 0u });
+        m_gBuffer->find_texture("Normal")->bind(gl::binding_t{ 1u });
+        m_ssaoNoiseTexture->bind(fox::binding_t{ 2u });
 
         gl::viewport(dimensions);
         gl::clear(glf::Buffer::Mask::Color);
@@ -402,7 +402,7 @@ namespace fox::gfx::api
 
         m_pBuffers.at(0)->bind(gfx::FrameBuffer::Target::Write);
         m_pipelines.at("Background")->bind();
-        m_environmentCubemap->bind(0);
+        m_environmentCubemap->bind(fox::binding_t{ 0u });
 
         gl::disable<glf::Feature::Blending>();
         gl::disable<glf::Feature::FaceCulling>();
@@ -473,9 +473,9 @@ namespace fox::gfx::api
             m_materialUniform->copy    (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
 
             mesh    ->vertexArray->bind();
-            material->albedo     ->bind(0);
-            material->normal     ->bind(1);
-            material->arm        ->bind(2);
+            material->albedo     ->bind(fox::binding_t{ 0u });
+            material->normal     ->bind(fox::binding_t{ 1u });
+            material->arm        ->bind(fox::binding_t{ 2u });
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
         }
@@ -490,14 +490,14 @@ namespace fox::gfx::api
 
 
         m_pipelines.at("PBR")->bind();
-        m_gBuffer->bind_texture("Position", 0);
-        m_gBuffer->bind_texture("Albedo"  , 1);
-        m_gBuffer->bind_texture("Normal"  , 2);
-        m_gBuffer->bind_texture("ARM"     , 3);
+        m_gBuffer->bind_texture("Position", fox::binding_t{ 0u });
+        m_gBuffer->bind_texture("Albedo"  , fox::binding_t{ 1u });
+        m_gBuffer->bind_texture("Normal"  , fox::binding_t{ 2u });
+        m_gBuffer->bind_texture("ARM"     , fox::binding_t{ 3u });
 
-        m_irradianceCubemap ->bind(4);
-        m_preFilterCubemap ->bind(5);
-        m_brdfTexture->bind(6);
+        m_irradianceCubemap->bind(fox::binding_t{ 4u });
+        m_preFilterCubemap ->bind(fox::binding_t{ 5u });
+        m_brdfTexture      ->bind(fox::binding_t{ 6u });
 
         gl::viewport(target->dimensions());
         gl::depth_mask(gl::False);
@@ -526,7 +526,7 @@ namespace fox::gfx::api
         if (!m_renderInfo.skybox) return;
 
         m_pipelines.at("Skybox")->bind();
-        m_renderInfo.skybox->bind(0);
+        m_renderInfo.skybox->bind(fox::binding_t{ 0u });
 
         gl::blit_frame_buffer(previous->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, previous->dimensions(), target->dimensions());
 

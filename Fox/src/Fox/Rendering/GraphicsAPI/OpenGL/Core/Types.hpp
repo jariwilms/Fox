@@ -144,8 +144,6 @@ namespace fox::gfx::api::gl
         gl::offset_t offset{};
     };
 
-    template<typename T, gl::uint32_t N>
-    using Region   = gl::region_t<T, N>;
     using length_t = gl::region_t<gl::uint32_t, 1u>;
     using area_t   = gl::region_t<gl::uint32_t, 2u>;
     using volume_t = gl::region_t<gl::uint32_t, 3u>;

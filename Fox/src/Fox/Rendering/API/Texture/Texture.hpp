@@ -68,10 +68,10 @@ namespace fox::gfx::api
         };
         enum class Wrapping
         {
+            Repeat,
+
             ClampToEdge,
             ClampToBorder,
-
-            Repeat,
 
             MirroredRepeat,
             MirroredClampToEdge,
@@ -86,21 +86,5 @@ namespace fox::gfx::api
             T = V, 
             R = W, 
         };
-
-        auto format() const
-        {
-            return m_format;
-        }
-        auto filter() const
-        {
-            return m_filter;
-        }
-
-    protected:
-        Texture(Format format, Filter filter)
-            : m_format{ format }, m_filter{ filter } {}
-
-        Format m_format{};
-        Filter m_filter{};
     };
 }

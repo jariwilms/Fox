@@ -10,8 +10,8 @@ namespace fox::gfx
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using RenderBuffer            = api::gl::RenderBuffer<api::AntiAliasing::None>;
-        using RenderBufferMultisample = api::gl::RenderBuffer<api::AntiAliasing::MSAA>;
+        using RenderBuffer            = api::gl::RenderBuffer;
+        using RenderBufferMultisample = api::gl::RenderBufferMultisample;
 #endif
     }
 
@@ -27,13 +27,17 @@ namespace fox::gfx
             return std::shared_ptr<RenderBuffer>(new RenderBuffer{ format, dimensions });
         }
 
-        const fox::Vector2u& dimensions() const
+        auto dimensions() const
         {
             return _->dimensions();
         }
-              gfx::handle_t  handle()     const
+        auto handle    () const
         {
             return _->handle();
+        }
+        auto impl      () const
+        {
+            return _;
         }
 
     protected:
@@ -47,26 +51,30 @@ namespace fox::gfx
     public:
         using Format = api::RenderBuffer::Format;
 
-        static inline auto create(Format format, const fox::Vector2u& dimensions, fox::uint8_t samples)
+        static inline auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples)
         {
             return std::shared_ptr<RenderBufferMultisample>(new RenderBufferMultisample{ format, dimensions, samples });
         }
 
-        const fox::Vector2u& dimensions() const
+        auto dimensions() const
         {
             return _->dimensions();
         }
-        fox::uint8_t         samples()    const
+        auto samples   () const
         {
             return _->samples();
         }
-        gfx::handle_t        handle()     const
+        auto handle    () const
         {
             return _->handle();
         }
+        auto impl      () const
+        {
+            return _;
+        }
 
     protected:
-        RenderBufferMultisample(Format format, const fox::Vector2u& dimensions, fox::uint8_t samples)
+        RenderBufferMultisample(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::RenderBufferMultisample>(format, dimensions, samples) } {}
 
         std::shared_ptr<impl::RenderBufferMultisample> _;
