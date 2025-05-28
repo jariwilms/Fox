@@ -193,11 +193,11 @@ namespace fox::gfx::api::gl
         }
 
     private:
-        Format                  m_format{};
-        Filter                  m_filter{};
-        std::array<Wrapping, 2> m_wrapping{};
-        gl::Vector2u            m_dimensions{};
-        gl::uint32_t            m_mipmapLevels{};
+        Format                   m_format{};
+        Filter                   m_filter{};
+        std::array<Wrapping, 2u> m_wrapping{};
+        gl::Vector2u             m_dimensions{};
+        gl::uint32_t             m_mipmapLevels{};
     };
     class Texture3D : public gl::Object
     {

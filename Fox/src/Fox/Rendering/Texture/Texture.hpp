@@ -47,6 +47,9 @@ namespace fox::gfx
             return std::shared_ptr<Texture1D>(new Texture1D{ format, dimensions, data });
         }
 
+        Texture1D(std::shared_ptr<impl::Texture1D> texture)
+            : _{ texture } {}
+
         void bind(fox::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
@@ -112,9 +115,9 @@ namespace fox::gfx
     class Texture2D
     {
     public:
-        using Format   = impl::Texture2D::Format;
-        using Filter   = impl::Texture2D::Filter;
-        using Wrapping = impl::Texture2D::Wrapping;
+        using Format   = api::Texture::Format;
+        using Filter   = api::Texture::Filter;
+        using Wrapping = api::Texture::Wrapping;
 
         static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions)
         {
@@ -128,6 +131,9 @@ namespace fox::gfx
         {
             return std::shared_ptr<Texture2D>(new Texture2D{ format, dimensions, data });
         }
+
+        Texture2D(std::shared_ptr<impl::Texture2D> texture)
+            : _{ texture } {}
 
         void bind(fox::binding_t binding) const
         {
@@ -194,9 +200,9 @@ namespace fox::gfx
     class Texture3D
     {
     public:
-        using Format   = impl::Texture3D::Format;
-        using Filter   = impl::Texture3D::Filter;
-        using Wrapping = impl::Texture3D::Wrapping;
+        using Format   = api::Texture::Format;
+        using Filter   = api::Texture::Filter;
+        using Wrapping = api::Texture::Wrapping;
 
         static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector3u& dimensions)
         {
@@ -210,6 +216,9 @@ namespace fox::gfx
         {
             return std::shared_ptr<Texture3D>(new Texture3D{ format, dimensions, data });
         }
+
+        Texture3D(std::shared_ptr<impl::Texture3D> texture)
+            : _{ texture } {}
 
         void bind(fox::binding_t binding) const
         {
@@ -319,7 +328,7 @@ namespace fox::gfx
     class Texture3DMultisample
     {
     public:
-        using Format = impl::Texture3DMultisample::Format;
+        using Format = api::Texture::Format;
 
         static inline auto create(Format format, const fox::Vector3u& dimensions, fox::uint32_t samples)
         {
