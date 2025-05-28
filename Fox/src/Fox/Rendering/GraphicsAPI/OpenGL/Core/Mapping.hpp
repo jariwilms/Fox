@@ -284,7 +284,6 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid cubemap format!" };
         }
     }
-
     static auto map_cubemap_texture_format     (api::Cubemap::Format format)
     {
         switch (format)

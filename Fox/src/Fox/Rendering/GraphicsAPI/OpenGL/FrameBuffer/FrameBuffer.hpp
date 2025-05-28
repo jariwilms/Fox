@@ -26,26 +26,26 @@ namespace fox::gfx::api::gl
 
             std::vector<glf::FrameBuffer::Attachment> colorBufferIndices{};
 
-            std::ranges::for_each(specifications, [&, this](const auto& specification)
-                {
-                    const auto& [identifier, format] = specification;
+            for (const auto& specification : specifications)
+            {
+                const auto& [identifier, format] = specification;
 
-                    if (std::holds_alternative<api::Texture::Format>     (format))
-                    {
-                        const auto& v = std::get<api::Texture::Format>(format);
-                        attach(identifier, v, colorBufferIndices);
-                    }
-                    if (std::holds_alternative<api::Cubemap::Format>     (format))
-                    {
-                        const auto& v = std::get<api::Cubemap::Format>(format);
-                        attach(identifier, v, colorBufferIndices);
-                    }
-                    if (std::holds_alternative<api::RenderBuffer::Format>(format))
-                    {
-                        const auto& v = std::get<api::RenderBuffer::Format>(format);
-                        attach(identifier, v, colorBufferIndices);
-                    }
-                });
+                if (std::holds_alternative<api::Texture::Format>     (format))
+                {
+                    const auto& v = std::get<api::Texture::Format>(format);
+                    attach(identifier, v, colorBufferIndices);
+                }
+                if (std::holds_alternative<api::Cubemap::Format>     (format))
+                {
+                    const auto& v = std::get<api::Cubemap::Format>(format);
+                    attach(identifier, v, colorBufferIndices);
+                }
+                if (std::holds_alternative<api::RenderBuffer::Format>(format))
+                {
+                    const auto& v = std::get<api::RenderBuffer::Format>(format);
+                    attach(identifier, v, colorBufferIndices);
+                }
+            }
 
             if (colorBufferIndices.empty())
             {
@@ -63,8 +63,7 @@ namespace fox::gfx::api::gl
                 gl::frame_buffer_draw_buffers(m_handle, colorBufferSources);
             }
 
-            const auto& status = gl::check_frame_buffer_status(m_handle);
-            if (status != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(m_handle) != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         ~FrameBuffer()
         {
@@ -112,52 +111,49 @@ namespace fox::gfx::api::gl
     private:
         void attach(const std::string& identifier, api::Texture::Format      format, std::vector<glf::FrameBuffer::Attachment>& colorBufferIndices)
         {
-            const auto& textureAttachment     = api::map_frame_buffer_texture_attachment(format);
-            const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(textureAttachment);
-                  auto  attachmentIndex       = frameBufferAttachment;
+            auto textureAttachment     = api::map_frame_buffer_texture_attachment(format);
+            auto frameBufferAttachment = gl ::map_frame_buffer_attachment        (textureAttachment);
 
             if (textureAttachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<glf::FrameBuffer::Attachment>(colorBufferIndices.size());
-                colorBufferIndices.emplace_back(attachmentIndex);
+                frameBufferAttachment += static_cast<glf::FrameBuffer::Attachment>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(frameBufferAttachment);
             }
 
             const auto& texture = std::make_shared<gl::Texture2D>(format, api::Texture::Filter::None, api::Texture::Wrapping::Repeat, m_dimensions);
-            gl::frame_buffer_texture(m_handle, texture->handle(), attachmentIndex, gl::uint32_t{ 0u });
+            gl::frame_buffer_texture(m_handle, texture->handle(), frameBufferAttachment, gl::uint32_t{ 0u });
 
             m_identifierToTextureMap.emplace(identifier, texture);
         }
         void attach(const std::string& identifier, api::Cubemap::Format      format, std::vector<glf::FrameBuffer::Attachment>& colorBufferIndices)
         {
-            const auto& cubemapAttachment     = api::map_frame_buffer_cubemap_attachment(format);
-            const auto& frameBufferAttachment = gl::map_frame_buffer_attachment(cubemapAttachment);
-                  auto  attachmentIndex       = frameBufferAttachment;
+            auto cubemapAttachment     = api::map_frame_buffer_cubemap_attachment(format);
+            auto frameBufferAttachment = gl::map_frame_buffer_attachment(cubemapAttachment);
 
             if (cubemapAttachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<glf::FrameBuffer::Attachment>(colorBufferIndices.size());
-                colorBufferIndices.emplace_back(attachmentIndex);
+                frameBufferAttachment += static_cast<glf::FrameBuffer::Attachment>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(frameBufferAttachment);
             }
 
             const auto& cubemap = std::make_shared<gl::Cubemap>(format, api::Texture::Filter::None, api::Texture::Wrapping::Repeat, m_dimensions);
-            gl::frame_buffer_texture(m_handle, cubemap->handle(), attachmentIndex, gl::uint32_t{ 0u });
+            gl::frame_buffer_texture(m_handle, cubemap->handle(), frameBufferAttachment, gl::uint32_t{ 0u });
 
             m_identifierToCubemapMap.emplace(identifier, cubemap);
         }
         void attach(const std::string& identifier, api::RenderBuffer::Format format, std::vector<glf::FrameBuffer::Attachment>& colorBufferIndices)
         {
-            const auto& renderBufferAttachment = api::map_frame_buffer_render_buffer_attachment(format);
-            const auto& frameBufferAttachment  = gl::map_frame_buffer_attachment(renderBufferAttachment);
-                  auto  attachmentIndex        = frameBufferAttachment;
+            auto renderBufferAttachment = api::map_frame_buffer_render_buffer_attachment(format);
+            auto frameBufferAttachment  = gl::map_frame_buffer_attachment(renderBufferAttachment);
 
             if (renderBufferAttachment == Attachment::Color)
             {
-                attachmentIndex += static_cast<glf::FrameBuffer::Attachment>(colorBufferIndices.size());
-                colorBufferIndices.emplace_back(attachmentIndex);
+                frameBufferAttachment += static_cast<glf::FrameBuffer::Attachment>(colorBufferIndices.size());
+                colorBufferIndices.emplace_back(frameBufferAttachment);
             }
 
             const auto& renderBuffer = std::make_shared<gl::RenderBuffer>(format, m_dimensions);
-            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), attachmentIndex);
+            gl::frame_buffer_render_buffer(m_handle, renderBuffer->handle(), frameBufferAttachment);
 
             m_identifierToRenderBufferMap.emplace(identifier, renderBuffer);
         }
@@ -217,8 +213,7 @@ namespace fox::gfx::api::gl
                 gl::frame_buffer_draw_buffers(m_handle, colorBufferSources);
             }
 
-            const auto& status = gl::check_frame_buffer_status(m_handle);
-            if (status != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(m_handle) != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
         ~FrameBufferMultisample()
         {
