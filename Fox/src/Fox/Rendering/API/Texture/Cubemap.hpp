@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Core/Library/Image/Image.hpp"
 #include "Fox/Rendering/API/Texture/Texture.hpp"
 
 namespace fox::gfx::api
@@ -64,15 +63,6 @@ namespace fox::gfx::api
         };
         using      Filter   = api::Texture::Filter;
         using      Wrapping = api::Texture::Wrapping;
-		struct     Faces
-		{
-			fox::Image right;
-			fox::Image left;
-			fox::Image top;
-			fox::Image bottom;
-			fox::Image front;
-			fox::Image back;
-		};
         enum class Face
         {
             Right, 
@@ -82,21 +72,5 @@ namespace fox::gfx::api
             Front, 
             Back, 
         };
-
-        Format format() const
-        {
-            return m_format;
-        }
-        Filter filter() const
-        {
-            return m_filter;
-        }
-
-	protected:
-		Cubemap(Format format, Filter filter = Filter::None)
-            : m_format{ format }, m_filter{ filter } {}
-
-		Format m_format{};
-        Filter m_filter{};
 	};
 }

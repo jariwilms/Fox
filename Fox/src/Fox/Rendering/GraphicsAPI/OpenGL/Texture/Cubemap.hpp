@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Fox/Core/Library/Image/Image.hpp"
 #include "Fox/Rendering/API/Texture/Cubemap.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Texture.hpp"
@@ -14,8 +15,6 @@ namespace fox::gfx::api::gl
         using Wrapping = api::Cubemap::Wrapping;
         using Face     = api::Cubemap::Face;
 
-         Cubemap(Format format,                                   const gl::Vector2u& dimensions)
-            : Cubemap{ format, Filter::Trilinear, Wrapping::Repeat, dimensions } {}
          Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions)
             : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping, wrapping }, m_dimensions{ dimensions }, m_mipmapLevels{ 1u }
         {
@@ -35,14 +34,14 @@ namespace fox::gfx::api::gl
             
             gl::texture_storage_2d(m_handle, gl::map_cubemap_texture_format(m_format), m_dimensions, m_mipmapLevels);
         }
-         Cubemap(Format format,                                   const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
-            : Cubemap{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, faces } {}
          Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
             : Cubemap{ format, filter, wrapping, dimensions }
         {
             attach_faces(faces, m_format);
             generate_mipmap();
         }
+         Cubemap(Format format,                                   const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
+            : Cubemap{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, faces } {}
         ~Cubemap()
         {
             gl::delete_texture(m_handle);
