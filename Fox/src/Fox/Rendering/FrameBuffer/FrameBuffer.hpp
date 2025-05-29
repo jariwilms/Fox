@@ -2,6 +2,8 @@
 
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
 #include "Fox/Rendering/Texture/Texture.hpp"
+#include "Fox/Rendering/Texture/Cubemap.hpp"
+#include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
 
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
@@ -59,6 +61,33 @@ namespace fox::gfx
         auto get_cubemap      (const std::string& identifier)
         {
             return _->get_cubemap(identifier);
+        }
+
+        auto state() const
+        {
+            struct state_t
+            {
+                std::unordered_map<std::string, std::shared_ptr<gfx::Texture2D>>    textures{};
+                std::unordered_map<std::string, std::shared_ptr<gfx::Cubemap>>      cubemaps{};
+                std::unordered_map<std::string, std::shared_ptr<gfx::RenderBuffer>> renderBuffers{};
+            } result;
+
+            auto state = _->state();
+
+            for (const auto& [identifier, texture]      : state.textures)
+            {
+                result.textures.emplace(identifier, std::make_shared<gfx::Texture2D>(texture));
+            }
+            //for (const auto& [identifier, cubemap]      : state.cubemaps)
+            //{
+            //    result.cubemaps.emplace(identifier, gfx::Cubemap{ cubemap });
+            //}
+            //for (const auto& [identifier, renderBuffer] : state.renderBuffers)
+            //{
+            //    result.renderBuffers.emplace(identifier, gfx::RenderBuffer{ renderBuffer });
+            //}
+
+            return result;
         }
 
         auto dimensions() const

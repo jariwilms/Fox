@@ -27,6 +27,9 @@ namespace fox::gfx
             return std::shared_ptr<RenderBuffer>(new RenderBuffer{ format, dimensions });
         }
 
+        RenderBuffer(std::shared_ptr<impl::RenderBuffer> renderBuffer)
+            : _{ renderBuffer } {}
+
         auto dimensions() const
         {
             return _->dimensions();

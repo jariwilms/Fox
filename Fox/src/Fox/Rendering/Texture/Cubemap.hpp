@@ -37,6 +37,9 @@ namespace fox::gfx
             return std::shared_ptr<Cubemap>(new Cubemap{ format, dimensions, faces });
         }
 
+        Cubemap(std::shared_ptr<impl::Cubemap> cubemap)
+            : _{ cubemap } {}
+
         void bind(fox::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
