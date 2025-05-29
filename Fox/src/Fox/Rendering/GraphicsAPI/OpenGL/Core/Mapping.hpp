@@ -11,9 +11,7 @@
 #include "Fox/Rendering/API/RenderState/RenderState.hpp"
 #include "Fox/Rendering/API/Shader/Pipeline.hpp"
 #include "Fox/Rendering/API/Shader/Shader.hpp"
-#include "Fox/Rendering/API/Texture/AntiAliasing.hpp"
 #include "Fox/Rendering/API/Texture/Cubemap.hpp"
-#include "Fox/Rendering/API/Texture/Dimensions.hpp"
 #include "Fox/Rendering/API/Texture/Texture.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Core/Types.hpp"
 
@@ -178,35 +176,6 @@ namespace fox::gfx::api::gl
             case api::Texture::Filter::Trilinear: return glf::Texture::MagnificationFilter::Linear;
 
             default: throw std::invalid_argument{ "Invalid filter!" };
-        }
-    }
-    static auto map_texture_target             (api::Dimensions dimensions, api::AntiAliasing antialiasing)
-    {
-        switch (antialiasing)
-        {
-            case api::AntiAliasing::None:
-            {
-                switch (dimensions)
-                {
-                    case api::Dimensions::_1D: return glf::Texture::Target::_1D; 
-                    case api::Dimensions::_2D: return glf::Texture::Target::_2D; 
-                    case api::Dimensions::_3D: return glf::Texture::Target::_3D; 
-
-                    default: throw std::invalid_argument{ "Invalid Dimensions!" };
-                }
-            }
-            case api::AntiAliasing::MSAA:
-            {
-                switch (dimensions)
-                {
-                    case api::Dimensions::_2D: return glf::Texture::Target::_2DMultisample;
-                    case api::Dimensions::_3D: return glf::Texture::Target::_2DMultisampleArray;
-
-                    default: throw std::invalid_argument{ "Invalid Dimensions!" };
-                }
-            }
-
-            default: throw std::invalid_argument{ "Invalid Anti-Aliasing!" };
         }
     }
     static auto map_texture_wrapping           (api::Texture::Wrapping wrapping)
