@@ -2,7 +2,6 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Rendering/API/Texture/MipMap.hpp"
 #include "Fox/Rendering/API/Texture/Texture.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
 
@@ -26,7 +25,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = api::calculate_mipmap_level(m_dimensions);
+                m_mipmapLevels = api::Texture::calculate_mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0u)) });
@@ -75,6 +74,22 @@ namespace fox::gfx::api::gl
             if (m_filter != Filter::None) gl::generate_texture_mipmap(m_handle);
         }
 
+        void resize(const gl::Vector1u& dimensions)
+        {
+            auto handle       = gl::create_texture(glf::Texture::Target::_1D);
+            auto mipmapLevels = api::Texture::calculate_mipmap_levels(dimensions);
+
+            gl::texture_storage_1d (handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
+            gl::copy_image_sub_data(m_handle, handle, glf::Texture::Target::_1D, glf::Texture::Target::_1D, gl::Vector4u{ m_dimensions, 0u, 0u, 0u }, gl::Vector4u{ dimensions, 0u, 0u, 0u });
+            gl::delete_texture     (m_handle);
+
+            m_handle       = handle;
+            m_dimensions   = dimensions;
+            m_mipmapLevels = mipmapLevels;
+
+            generate_mipmap();
+        }
+
         auto format       () const
         {
             return m_format;
@@ -121,7 +136,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = api::calculate_mipmap_level(m_dimensions);
+                m_mipmapLevels = api::Texture::calculate_mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0u)) });
@@ -171,6 +186,22 @@ namespace fox::gfx::api::gl
             if (m_filter != Filter::None) gl::generate_texture_mipmap(m_handle);
         }
 
+        void resize(const gl::Vector2u& dimensions)
+        {
+            auto handle       = gl::create_texture(glf::Texture::Target::_2D);
+            auto mipmapLevels = api::Texture::calculate_mipmap_levels(dimensions);
+
+            gl::texture_storage_2d (handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
+            gl::copy_image_sub_data(m_handle, handle, glf::Texture::Target::_2D, glf::Texture::Target::_2D, gl::Vector4u{ m_dimensions, 0u, 0u }, gl::Vector4u{ dimensions, 0u, 0u });
+            gl::delete_texture     (m_handle);
+
+            m_handle       = handle;
+            m_dimensions   = dimensions;
+            m_mipmapLevels = mipmapLevels;
+
+            generate_mipmap();
+        }
+
         auto format       () const
         {
             return m_format;
@@ -217,7 +248,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = api::calculate_mipmap_level(m_dimensions);
+                m_mipmapLevels = api::Texture::calculate_mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0u)) });
@@ -267,6 +298,22 @@ namespace fox::gfx::api::gl
         void generate_mipmap()
         {
             if (m_filter != Filter::None) gl::generate_texture_mipmap(m_handle);
+        }
+
+        void resize(const gl::Vector3u& dimensions)
+        {
+            auto handle       = gl::create_texture(glf::Texture::Target::_3D);
+            auto mipmapLevels = api::Texture::calculate_mipmap_levels(dimensions);
+
+            gl::texture_storage_3d (handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
+            gl::copy_image_sub_data(m_handle, handle, glf::Texture::Target::_3D, glf::Texture::Target::_3D, gl::Vector4u{ m_dimensions, 0u }, gl::Vector4u{ dimensions, 0u });
+            gl::delete_texture     (m_handle);
+
+            m_handle       = handle;
+            m_dimensions   = dimensions;
+            m_mipmapLevels = mipmapLevels;
+
+            generate_mipmap();
         }
 
         auto format       () const
@@ -319,6 +366,17 @@ namespace fox::gfx::api::gl
         {
             gl::bind_texture_unit(m_handle, binding);
         }
+        
+        void resize(const gl::Vector2u& dimensions)
+        {
+            auto handle = gl::create_texture(glf::Texture::Target::_2DMultisample);
+
+            gl::texture_storage_2d_multisample(handle, gl::map_texture_format(m_format), dimensions, m_samples);
+            gl::delete_texture                (m_handle);
+
+            m_handle     = handle;
+            m_dimensions = dimensions;
+        }
 
         auto format    () const
         {
@@ -358,6 +416,17 @@ namespace fox::gfx::api::gl
         void bind(gl::binding_t binding) const
         {
             gl::bind_texture_unit(m_handle, binding);
+        }
+
+        void resize(const gl::Vector3u& dimensions)
+        {
+            auto handle = gl::create_texture(glf::Texture::Target::_2DMultisampleArray);
+
+            gl::texture_storage_3d_multisample(handle, gl::map_texture_format(m_format), dimensions, m_samples);
+            gl::delete_texture                (m_handle);
+
+            m_handle     = handle;
+            m_dimensions = dimensions;
         }
 
         auto format    () const

@@ -145,10 +145,12 @@ namespace fox::gfx::api::gl
         gl::offset_t offset{};
     };
 
-    using length_t = gl::region_t<gl::uint32_t, 1u>;
-    using area_t   = gl::region_t<gl::uint32_t, 2u>;
-    using volume_t = gl::region_t<gl::uint32_t, 3u>;
-    using lock_t   = std::tuple<gl::range_t, gl::sync_t>;
+    using length_t      = gl::region_t<gl::uint32_t, 1u>;
+    using area_t        = gl::region_t<gl::uint32_t, 2u>;
+    using volume_t      = gl::region_t<gl::uint32_t, 3u>;
+    using hypervolume_t = gl::region_t<gl::uint32_t, 4u>; //Apparently this exists
+
+    using lock_t        = std::tuple<gl::range_t, gl::sync_t>;
 
 
 

@@ -22,6 +22,17 @@ namespace fox::gfx::api::gl
             gl::delete_render_buffer(m_handle);
         }
 
+        void resize(const gl::Vector2u& dimensions)
+        {
+            auto handle = gl::create_render_buffer();
+
+            gl::render_buffer_storage(handle, gl::map_render_buffer_format(m_format), m_dimensions);
+            gl::delete_texture       (m_handle);
+
+            m_handle     = handle;
+            m_dimensions = dimensions;
+        }
+
         auto format    () const
         {
             return m_format;
@@ -50,6 +61,17 @@ namespace fox::gfx::api::gl
         ~RenderBufferMultisample()
         {
             gl::delete_render_buffer(m_handle);
+        }
+
+        void resize(const gl::Vector2u& dimensions)
+        {
+            auto handle = gl::create_render_buffer();
+
+            gl::render_buffer_storage_multisample(handle, gl::map_render_buffer_format(m_format), m_dimensions, m_samples);
+            gl::delete_texture                   (m_handle);
+
+            m_handle     = handle;
+            m_dimensions = dimensions;
         }
 
         auto format    () const

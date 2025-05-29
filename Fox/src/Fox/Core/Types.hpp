@@ -4,6 +4,7 @@
 #include <bitset>
 
 #include <glm/glm.hpp>
+#include "glm/gtx/texture.hpp"
 
 namespace fox
 {

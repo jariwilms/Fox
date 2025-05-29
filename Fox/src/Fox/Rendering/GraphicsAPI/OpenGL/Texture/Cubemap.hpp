@@ -26,7 +26,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = api::calculate_mipmap_level(m_dimensions);
+                m_mipmapLevels = api::Texture::calculate_mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0)) });

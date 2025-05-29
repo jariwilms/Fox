@@ -33,5 +33,11 @@ namespace fox::gfx::api
             std::string identifier{};
             format_v    format;
         };
+        enum class Surface
+        {
+            Texture, 
+            Cubemap, 
+            RenderBuffer, 
+        };
     };
 };

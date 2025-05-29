@@ -103,6 +103,18 @@ namespace fox::gfx::api::gl
             return m_identifierToRenderBufferMap.at(identifier);
         }
 
+        void resize(const gl::Vector2u& dimensions)
+        {
+            for (const auto& [identifier, texture]      : m_identifierToTextureMap)
+            {
+                texture->resize(dimensions);
+            }
+            for (const auto& [identifier, renderBuffer] : m_identifierToRenderBufferMap)
+            {
+                renderBuffer->resize(dimensions);
+            }
+        }
+
         auto dimensions() const
         {
             return m_dimensions;

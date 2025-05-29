@@ -2463,14 +2463,14 @@ namespace fox::gfx::api::gl
             static_cast<gl::int32_t>(destinationRegion.origin.x), static_cast<gl::int32_t>(destinationRegion.origin.y), static_cast<gl::int32_t>(destinationRegion.extent.x), static_cast<gl::int32_t>(destinationRegion.extent.y),
             gl::to_underlying       (mask)                      , gl::to_underlying       (filter));
     }
-    static void copy_image_sub_data                     (gl::handle_t source, gl::handle_t destination, glf::Texture::Target sourceTarget, glf::Texture::Target destinationTarget, const gl::Vector4u& sourceOrigin, const gl::Vector4u& destinationOrigin, const gl::Vector3u& extent)
+    static void copy_image_sub_data                     (gl::handle_t source, gl::handle_t destination, glf::Texture::Target sourceTarget, glf::Texture::Target destinationTarget, gl::hypervolume_t sourceRegion, gl::hypervolume_t destinationRegion)
     {
         glCopyImageSubData(
-            gl::to_underlying       (source),              gl::to_underlying       (sourceTarget),        static_cast<gl::int32_t>(sourceOrigin.w),
-            static_cast<gl::int32_t>(sourceOrigin.x),      static_cast<gl::int32_t>(sourceOrigin.y),      static_cast<gl::int32_t>(sourceOrigin.z),
-            gl::to_underlying       (destination),         gl::to_underlying       (destinationTarget),   static_cast<gl::int32_t>(destinationOrigin.w),
-            static_cast<gl::int32_t>(destinationOrigin.x), static_cast<gl::int32_t>(destinationOrigin.y), static_cast<gl::int32_t>(destinationOrigin.z),
-            static_cast<gl::sizei_t>(extent.x),            static_cast<gl::sizei_t>(extent.y),            static_cast<gl::sizei_t>(extent.z));
+            gl::to_underlying       (source                    ), gl::to_underlying       (sourceTarget              ), static_cast<gl::int32_t>(sourceRegion     .extent.w), 
+            static_cast<gl::int32_t>(sourceRegion     .origin.x), static_cast<gl::int32_t>(sourceRegion     .origin.y), static_cast<gl::int32_t>(sourceRegion     .origin.z), 
+            gl::to_underlying       (destination               ), gl::to_underlying       (destinationTarget         ), static_cast<gl::int32_t>(destinationRegion.extent.w), 
+            static_cast<gl::int32_t>(destinationRegion.origin.x), static_cast<gl::int32_t>(destinationRegion.origin.y), static_cast<gl::int32_t>(destinationRegion.origin.z), 
+            static_cast<gl::sizei_t>(sourceRegion     .extent.x), static_cast<gl::sizei_t>(sourceRegion     .extent.y), static_cast<gl::sizei_t>(sourceRegion     .extent.z));
     }
 
 

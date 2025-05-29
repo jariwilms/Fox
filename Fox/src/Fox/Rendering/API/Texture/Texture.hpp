@@ -86,5 +86,10 @@ namespace fox::gfx::api
             T = V, 
             R = W, 
         };
+
+        static auto calculate_mipmap_levels(const auto& vector)
+        {
+            return static_cast<fox::uint32_t>(glm::levels(vector));
+        }
     };
 }
