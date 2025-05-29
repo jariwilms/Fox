@@ -1,6 +1,6 @@
 project "GLM"
 	language      "C++"
-	cppdialect    "C++17"
+	cppdialect    "C++11"
 	kind          "StaticLib"
 	staticruntime "On"
 	
@@ -19,6 +19,11 @@ project "GLM"
 	{
 		"include", 
 	}	
+
+	disablewarnings
+	{
+		26498, 
+	}
 
 	filter "system:windows"
 		systemversion "latest"
