@@ -17,7 +17,7 @@
 
 namespace fox::gfx::api::gl
 {
-    static auto map_type                       (api::Type type)
+    static auto map_type                                 (api::Type type)
     {
         if (type == api::Type::Byte           ) return glf::VertexArray::Attribute::Type::Byte;
         if (type == api::Type::UnsignedByte   ) return glf::VertexArray::Attribute::Type::UnsignedByte;
@@ -31,7 +31,7 @@ namespace fox::gfx::api::gl
         throw std::invalid_argument{ "Invalid Data Type!" };
     }
 
-    static auto map_texture_format_base        (api::Texture::Format format)
+    static auto map_texture_format_base                  (api::Texture::Format format)
     {
         switch (format)
         {
@@ -74,7 +74,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    static auto map_texture_format             (api::Texture::Format format)
+    static auto map_texture_format                       (api::Texture::Format format)
     {
         switch (format)
         {
@@ -114,7 +114,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_texture_format_type        (api::Texture::Format format)
+    static auto map_texture_format_type                  (api::Texture::Format format)
     {
         switch (format)
         {
@@ -154,7 +154,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_texture_min_filter         (api::Texture::Filter filter)
+    static auto map_texture_min_filter                   (api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -166,7 +166,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static auto map_texture_mag_filter         (api::Texture::Filter filter)
+    static auto map_texture_mag_filter                   (api::Texture::Filter filter)
     {
         switch (filter)
         {
@@ -178,7 +178,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static auto map_texture_wrapping           (api::Texture::Wrapping wrapping)
+    static auto map_texture_wrapping                     (api::Texture::Wrapping wrapping)
     {
         switch (wrapping)
         {
@@ -191,7 +191,8 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    static auto map_render_buffer_format       (api::RenderBuffer::Format format)
+    
+    static auto map_render_buffer_format                 (api::RenderBuffer::Format format)
     {
         switch (format)
         {
@@ -210,7 +211,8 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_cubemap_texture_format_base(api::Cubemap::Format format)
+    
+    static auto map_cubemap_texture_format_base          (api::Cubemap::Format format)
     {
         switch (format)
         {
@@ -253,7 +255,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid cubemap format!" };
         }
     }
-    static auto map_cubemap_texture_format     (api::Cubemap::Format format)
+    static auto map_cubemap_texture_format               (api::Cubemap::Format format)
     {
         switch (format)
         {
@@ -293,7 +295,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_cubemap_texture_format_type(api::Cubemap::Format format)
+    static auto map_cubemap_texture_format_type          (api::Cubemap::Format format)
     {
         switch (format)
         {
@@ -333,19 +335,8 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_frame_buffer_attachment    (api::FrameBuffer::Attachment attachment)
-    {
-        switch (attachment)
-        {
-            case api::FrameBuffer::Attachment::Color:        return glf::FrameBuffer::Attachment::ColorIndex;
-            case api::FrameBuffer::Attachment::Depth:        return glf::FrameBuffer::Attachment::Depth;
-            case api::FrameBuffer::Attachment::Stencil:      return glf::FrameBuffer::Attachment::Stencil;
-            case api::FrameBuffer::Attachment::DepthStencil: return glf::FrameBuffer::Attachment::DepthStencil;
-
-            default: throw std::invalid_argument{ "Invalid attachment!" };
-        }
-    }
-    static auto map_frame_buffer_target        (api::FrameBuffer::Target target)
+    
+    static auto map_frame_buffer_target                  (api::FrameBuffer::Target  target)
     {
         switch (target)
         {
@@ -355,7 +346,62 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    static auto map_program_stage              (api::Shader::Stage stage)
+    static auto map_frame_buffer_texture_attachment      (api::Texture::Format      format)
+	{
+		switch (format)
+		{
+			case api::Texture::Format::D16_UNORM:
+			case api::Texture::Format::D24_UNORM:
+			case api::Texture::Format::D32_FLOAT:         return glf::FrameBuffer::Attachment::Depth;
+
+			case api::Texture::Format::D24_UNORM_S8_UINT:
+			case api::Texture::Format::D32_FLOAT_S8_UINT: return glf::FrameBuffer::Attachment::DepthStencil;
+
+			case api::Texture::Format::S8_UINT:           return glf::FrameBuffer::Attachment::Stencil;
+
+			default:                                      return glf::FrameBuffer::Attachment::ColorIndex;
+		}
+
+		throw std::invalid_argument{ "Invalid format!" };
+	}
+	static auto map_frame_buffer_cubemap_attachment      (api::Cubemap::Format      format)
+	{
+		switch (format)
+		{
+			case api::Cubemap::Format::D16_UNORM:
+			case api::Cubemap::Format::D24_UNORM:
+			case api::Cubemap::Format::D32_FLOAT:         return glf::FrameBuffer::Attachment::Depth;
+
+			case api::Cubemap::Format::D24_UNORM_S8_UINT:
+			case api::Cubemap::Format::D32_FLOAT_S8_UINT: return glf::FrameBuffer::Attachment::DepthStencil;
+
+			case api::Cubemap::Format::S8_UINT:           return glf::FrameBuffer::Attachment::Stencil;
+
+			default:                                      return glf::FrameBuffer::Attachment::ColorIndex;
+		}
+
+		throw std::invalid_argument{ "Invalid format!" };
+	}
+	static auto map_frame_buffer_render_buffer_attachment(api::RenderBuffer::Format format)
+	{
+		switch (format)
+		{
+			case api::RenderBuffer::Format::D16_UNORM:
+			case api::RenderBuffer::Format::D24_UNORM:
+			case api::RenderBuffer::Format::D32_FLOAT:         return glf::FrameBuffer::Attachment::Depth;
+
+			case api::RenderBuffer::Format::D24_UNORM_S8_UINT:
+			case api::RenderBuffer::Format::D32_FLOAT_S8_UINT: return glf::FrameBuffer::Attachment::DepthStencil;
+
+			case api::RenderBuffer::Format::S8_UINT:           return glf::FrameBuffer::Attachment::Stencil;
+
+			default:                                           return glf::FrameBuffer::Attachment::ColorIndex;
+		}
+
+		throw std::invalid_argument{ "Invalid format!" };
+	}
+
+    static auto map_program_stage                        (api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -369,7 +415,8 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }                                                                      
-    static auto map_shader_type                (api::Shader::Stage stage)
+    
+    static auto map_shader_type                          (api::Shader::Stage stage)
     {
         switch (stage)
         {
@@ -383,7 +430,8 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    static auto map_depth_function             (api::RenderState::DepthFunction depthFunction)
+    
+    static auto map_depth_function                       (api::RenderState::DepthFunction depthFunction)
     {
         switch (depthFunction)
         {
@@ -399,7 +447,8 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    static auto map_culling_face               (api::RenderState::FaceCulling cullingFace)
+    
+    static auto map_culling_face                         (api::RenderState::FaceCulling cullingFace)
     {
         switch (cullingFace)
         {

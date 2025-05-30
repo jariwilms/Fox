@@ -14,6 +14,8 @@ namespace fox::gfx
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+        using index_t                = api::gl::index_t;
+        
         using FrameBuffer            = api::gl::FrameBuffer;
         using FrameBufferMultisample = api::gl::FrameBufferMultisample;
 #endif
@@ -38,56 +40,36 @@ namespace fox::gfx
             _->bind(target);
         }
 
-        void bind_texture(const std::string& identifier, fox::binding_t binding)
+        template<Attachment A = Attachment::Texture>
+        auto attachment(const std::string& identifier)
         {
-            _->bind_texture(identifier, static_cast<impl::binding_t>(binding));
-        }
-        void bind_cubemap(const std::string& identifier, fox::binding_t binding)
-        {
-            _->bind_cubemap(identifier, static_cast<impl::binding_t>(binding));
-        }
-
-        auto get_texture      (const std::string& identifier)
-        {
-            const auto& texture            = _->get_texture(identifier);
-            const auto& [iterator, result] = m_proxies.insert_or_assign(identifier, std::make_shared<gfx::Texture2D>(texture));
-
-            return iterator->second;
-        }
-        auto get_render_buffer(const std::string& identifier)
-        {
-            return _->get_render_buffer(identifier);
-        }
-        auto get_cubemap      (const std::string& identifier)
-        {
-            return _->get_cubemap(identifier);
-        }
-
-        auto state() const
-        {
-            struct state_t
+            if constexpr (A == Attachment::Texture)
             {
-                std::unordered_map<std::string, std::shared_ptr<gfx::Texture2D>>    textures{};
-                std::unordered_map<std::string, std::shared_ptr<gfx::Cubemap>>      cubemaps{};
-                std::unordered_map<std::string, std::shared_ptr<gfx::RenderBuffer>> renderBuffers{};
-            } result;
-
-            auto state = _->state();
-
-            for (const auto& [identifier, texture]      : state.textures)
-            {
-                result.textures.emplace(identifier, std::make_shared<gfx::Texture2D>(texture));
+                return std::make_shared<gfx::Texture2D>(_->attachment<A>(identifier));
             }
-            //for (const auto& [identifier, cubemap]      : state.cubemaps)
-            //{
-            //    result.cubemaps.emplace(identifier, gfx::Cubemap{ cubemap });
-            //}
-            //for (const auto& [identifier, renderBuffer] : state.renderBuffers)
-            //{
-            //    result.renderBuffers.emplace(identifier, gfx::RenderBuffer{ renderBuffer });
-            //}
+            if constexpr (A == Attachment::Cubemap)
+            {
+                return std::make_shared<gfx::Cubemap>(_->attachment<A>(identifier));
+            }
+            if constexpr (A == Attachment::RenderBuffer)
+            {
+                return std::make_shared<gfx::RenderBuffer>(_->attachment<A>(identifier));
+            }
+        }
 
-            return result;
+        template<Attachment A = Attachment::Texture>
+        void bind_attachment(const std::string& identifier, fox::binding_t binding)
+        {
+            _->bind_attachment<A>(identifier, static_cast<impl::binding_t>(binding));
+        }
+
+        void read_from(const std::string& identifier, fox::index_t index, fox::uint32_t level = 0u)
+        {
+            _->read_from(identifier, static_cast<impl::index_t>(index), level);
+        }
+        void write_to (const std::string& identifier, fox::index_t index, fox::uint32_t level = 0u)
+        {
+            _->write_to(identifier, static_cast<impl::index_t>(index), level);
         }
 
         auto dimensions() const
@@ -130,15 +112,6 @@ namespace fox::gfx
         void bind_texture(const std::string& identifier, fox::binding_t binding)
         {
             _->bind_texture(identifier, static_cast<impl::binding_t>(binding));
-        }
-
-        auto get_texture      (const std::string& identifier)
-        {
-            _->get_texture(identifier);
-        }
-        auto get_render_buffer(const std::string& identifier)
-        {
-            _->get_render_buffer(identifier);
         }
 
         auto dimensions() const

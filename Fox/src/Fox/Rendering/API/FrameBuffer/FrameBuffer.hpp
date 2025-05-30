@@ -18,10 +18,9 @@ namespace fox::gfx::api
         };
         enum class Attachment
         {
-            Color, 
-            Depth, 
-            Stencil, 
-            DepthStencil, 
+            Texture,
+            Cubemap,
+            RenderBuffer,
         };
         struct     Specification
         {
@@ -32,12 +31,6 @@ namespace fox::gfx::api
 
             std::string identifier{};
             format_v    format;
-        };
-        enum class Surface
-        {
-            Texture, 
-            Cubemap, 
-            RenderBuffer, 
         };
     };
 };

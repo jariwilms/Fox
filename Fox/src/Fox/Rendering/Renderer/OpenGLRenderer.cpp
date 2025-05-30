@@ -15,7 +15,6 @@ namespace fox::gfx::api
         constexpr fox::Vector2u shadowMapDimensions{ 2048u, 2048u };
 
         using FS = gfx::FrameBuffer::Specification;
-        using FA = gfx::FrameBuffer::Attachment;
         using TF = gfx::Texture2D::Format;
         using RF = gfx::RenderBuffer::Format;
         using CF = gfx::Cubemap::Format;
@@ -39,15 +38,17 @@ namespace fox::gfx::api
         m_pBuffers.at(0)          = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
         m_pBuffers.at(1)          = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
 
-        m_contextUniform           = gfx::UniformBuffer<unf::Context>                 ::create();
-        m_matricesUniform          = gfx::UniformBuffer<unf::Matrices>                ::create();
-        m_materialUniform          = gfx::UniformBuffer<unf::Material>                ::create();
-        m_cameraUniform            = gfx::UniformBuffer<unf::Camera>                  ::create();
-        m_lightUniform             = gfx::UniformBuffer<unf::Light>                   ::create();
+        m_contextUniform           = gfx::UniformBuffer<unf::Context> ::create();
+        m_matricesUniform          = gfx::UniformBuffer<unf::Matrices>::create();
+        m_materialUniform          = gfx::UniformBuffer<unf::Material>::create();
+        m_cameraUniform            = gfx::UniformBuffer<unf::Camera>  ::create();
+        m_lightUniform             = gfx::UniformBuffer<unf::Light>   ::create();
 
 
 
-        const auto& depthTexture = m_sBuffer->get_texture("Depth");
+
+
+        auto depthTexture = m_sBuffer->attachment<gfx::FrameBuffer::Attachment::Texture>("Depth");
         const std::array<fox::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
         gl::texture_parameter(depthTexture->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
         gl::texture_parameter(depthTexture->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
@@ -108,7 +109,7 @@ namespace fox::gfx::api
         const fox::Vector2u envDimensions{ 512u, 512u };
         const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
         auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
-        const auto& rb       = frameBuffer->get_render_buffer("Depth");
+        auto renderBuffer    = frameBuffer->attachment<gfx::FrameBuffer::Attachment::RenderBuffer>("Depth");
         auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
         auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
         m_environmentCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
@@ -140,7 +141,7 @@ namespace fox::gfx::api
 
 
         //Irradiance step
-        const fox::Vector2u cvDimensions{ 32u, 32u };
+        constexpr fox::Vector2u cvDimensions{ 32u, 32u };
 
         m_irradianceCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
 
@@ -150,7 +151,7 @@ namespace fox::gfx::api
 
         gl::viewport(cvDimensions);
         gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
-        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
+        gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
 
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
         cva->bind();
@@ -196,7 +197,7 @@ namespace fox::gfx::api
             preFilterBuffer->copy(unf::PreFilter{ envDimensions.x, roughness });
 
             gl::viewport(mipDimensions);
-            gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
+            gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
 
             for (fox::uint32_t index{}; const auto& view : captureViews)
             {
@@ -217,7 +218,7 @@ namespace fox::gfx::api
 
         gl::viewport(envDimensions);
         gl::frame_buffer_texture(frameBuffer->handle(), m_brdfTexture->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0);
-        gl::render_buffer_storage(rb->handle(), glf::RenderBuffer::Format::D24_UNORM, envDimensions);
+        gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, envDimensions);
         gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
         pva->bind();
@@ -234,7 +235,7 @@ namespace fox::gfx::api
 
         std::array<FS, 1> ssaoFrameBufferManifest{ FS{ "Occlusion", TF::R32_FLOAT }};
         m_ssaoBuffer = gfx::FrameBuffer::create(viewportDimensions, ssaoFrameBufferManifest);
-        auto occlusion = m_ssaoBuffer->get_texture("Occlusion");
+        auto occlusion = m_ssaoBuffer->attachment<gfx::FrameBuffer::Attachment::Texture>("Occlusion");
         gl::texture_parameter(occlusion->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
         gl::texture_parameter(occlusion->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
 
@@ -348,11 +349,11 @@ namespace fox::gfx::api
         constexpr fox::Vector2u sDimensions{ 2048u, 2048u };
 
         //Bind Uniform Buffers to correct indices
-        m_contextUniform->          bind(fox::binding_t{ 0u });
-        m_cameraUniform->           bind(fox::binding_t{ 1u });
-        m_matricesUniform->         bind(fox::binding_t{ 2u });
-        m_materialUniform->         bind(fox::binding_t{ 3u });
-        m_lightUniform->            bind(fox::binding_t{ 4u });
+        m_contextUniform-> bind(fox::binding_t{ 0u });
+        m_cameraUniform->  bind(fox::binding_t{ 1u });
+        m_matricesUniform->bind(fox::binding_t{ 2u });
+        m_materialUniform->bind(fox::binding_t{ 3u });
+        m_lightUniform->   bind(fox::binding_t{ 4u });
 
         m_contextUniform->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
 
@@ -361,7 +362,6 @@ namespace fox::gfx::api
         gl::viewport(dimensions);
         
         //Render meshes into gBuffer
-
         render_meshes(m_gBuffer, m_pipelines.at("DeferredMesh"));
 
 
@@ -374,8 +374,9 @@ namespace fox::gfx::api
         m_ssaoBuffer->bind(gfx::FrameBuffer::Target::Write);
 
         m_pipelines.at("SSAO")->bind();
-        m_gBuffer->bind_texture("Position", fox::binding_t{ 0u });
-        m_gBuffer->bind_texture("Normal"  , fox::binding_t{ 1u });
+        m_gBuffer->bind_attachment("Position", fox::binding_t{ 0u });
+        m_gBuffer->bind_attachment("Normal"  , fox::binding_t{ 1u });
+
         m_ssaoNoiseTexture->bind(fox::binding_t{ 2u });
 
         gl::viewport(dimensions);
@@ -460,7 +461,7 @@ namespace fox::gfx::api
         gl::depth_function(glf::DepthFunction::Less);
         gl::disable       <glf::Feature::Blending>();
 
-        auto positionTexture = m_gBuffer->get_texture("Position");
+        auto positionTexture = m_gBuffer->attachment("Position");
         std::array<fox::float32_t, 4> data{ 0.0f, 0.0f, -1000.0f };
         gl::clear_texture_image(positionTexture->handle(), glf::Texture::BaseFormat::RGB, glf::Texture::Type::Float, 0, utl::as_bytes(data));
 
@@ -490,10 +491,10 @@ namespace fox::gfx::api
 
 
         m_pipelines.at("PBR")->bind();
-        m_gBuffer->bind_texture("Position", fox::binding_t{ 0u });
-        m_gBuffer->bind_texture("Albedo"  , fox::binding_t{ 1u });
-        m_gBuffer->bind_texture("Normal"  , fox::binding_t{ 2u });
-        m_gBuffer->bind_texture("ARM"     , fox::binding_t{ 3u });
+        m_gBuffer->bind_attachment("Position", fox::binding_t{ 0u });
+        m_gBuffer->bind_attachment("Albedo"  , fox::binding_t{ 1u });
+        m_gBuffer->bind_attachment("Normal"  , fox::binding_t{ 2u });
+        m_gBuffer->bind_attachment("ARM"     , fox::binding_t{ 3u });
 
         m_irradianceCubemap->bind(fox::binding_t{ 4u });
         m_preFilterCubemap ->bind(fox::binding_t{ 5u });
