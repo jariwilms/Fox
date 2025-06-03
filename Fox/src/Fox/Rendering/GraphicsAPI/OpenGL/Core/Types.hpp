@@ -109,7 +109,7 @@ namespace fox::gfx::api::gl
     using Matrix3f = gl::Matrix<gl::float32_t, 3u>;
     using Matrix4f = gl::Matrix<gl::float32_t, 4u>;
 
-    
+
 
 
 

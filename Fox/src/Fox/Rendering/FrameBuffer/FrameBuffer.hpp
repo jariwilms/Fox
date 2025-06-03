@@ -26,9 +26,9 @@ namespace fox::gfx
     class FrameBuffer
     {
     public:
-        using Target        = impl::FrameBuffer::Target;
-        using Attachment    = impl::FrameBuffer::Attachment;
         using Specification = impl::FrameBuffer::Specification;
+        using Surface       = impl::FrameBuffer::Surface;
+        using Target        = impl::FrameBuffer::Target;
 
         static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications)
         {
@@ -40,27 +40,27 @@ namespace fox::gfx
             _->bind(target);
         }
 
-        template<Attachment A = Attachment::Texture>
-        auto attachment(const std::string& identifier)
+        template<Surface A = Surface::Texture>
+        auto surface(const std::string& identifier)
         {
-            if constexpr (A == Attachment::Texture)
+            if constexpr (A == Surface::Texture)
             {
-                return std::make_shared<gfx::Texture2D>(_->attachment<A>(identifier));
+                return std::make_shared<gfx::Texture2D>(_->surface<A>(identifier));
             }
-            if constexpr (A == Attachment::Cubemap)
+            if constexpr (A == Surface::Cubemap)
             {
-                return std::make_shared<gfx::Cubemap>(_->attachment<A>(identifier));
+                return std::make_shared<gfx::Cubemap>(_->surface<A>(identifier));
             }
-            if constexpr (A == Attachment::RenderBuffer)
+            if constexpr (A == Surface::RenderBuffer)
             {
-                return std::make_shared<gfx::RenderBuffer>(_->attachment<A>(identifier));
+                return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
             }
         }
 
-        template<Attachment A = Attachment::Texture>
-        void bind_attachment(const std::string& identifier, fox::binding_t binding)
+        template<Surface A = Surface::Texture>
+        void bind_surface(const std::string& identifier, fox::binding_t binding)
         {
-            _->bind_attachment<A>(identifier, static_cast<impl::binding_t>(binding));
+            _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
         }
 
         void read_from(const std::string& identifier, fox::index_t index, fox::uint32_t level = 0u)
@@ -96,7 +96,7 @@ namespace fox::gfx
     {
     public:
         using Target        = impl::FrameBuffer::Target;
-        using Attachment    = impl::FrameBuffer::Attachment;
+        using Attachment    = impl::FrameBuffer::Surface;
         using Specification = impl::FrameBuffer::Specification;
 
         static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)

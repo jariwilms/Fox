@@ -13,9 +13,10 @@ namespace fox::gfx::api::gl
     class FrameBuffer : public gl::Object
     {
     public:
-        using Target        = api::FrameBuffer::Target;
         using Attachment    = api::FrameBuffer::Attachment;
         using Specification = api::FrameBuffer::Specification;
+        using Surface       = api::FrameBuffer::Surface;
+        using Target        = api::FrameBuffer::Target;
 
          FrameBuffer() = default;
          FrameBuffer(const gl::Vector2u& dimensions, std::span<const Specification> specifications)
@@ -72,31 +73,31 @@ namespace fox::gfx::api::gl
             gl::bind_frame_buffer(m_handle, gl::map_frame_buffer_target(target));
         }
 
-        template<Attachment A = Attachment::Texture>
-        auto attachment(const std::string& identifier)
+        template<Surface A = Surface::Texture>
+        auto surface(const std::string& identifier)
         {
-            if constexpr (A == Attachment::Texture)
+                 if constexpr (A == Surface::Texture)
             {
                 return m_textureMap.at(identifier);
             }
-            else if constexpr (A == Attachment::Cubemap)
+            else if constexpr (A == Surface::Cubemap)
             {
                 return m_cubemapMap.at(identifier);
             }
-            else if constexpr (A == Attachment::RenderBuffer)
+            else if constexpr (A == Surface::RenderBuffer)
             {
                 return m_renderBufferMap.at(identifier);
             }
         }
 
-        template<Attachment A = Attachment::Texture>
-        void bind_attachment(const std::string& identifier, gl::binding_t binding)
+        template<Surface A = Surface::Texture>
+        void bind_surface(const std::string& identifier, gl::binding_t binding)
         {
-            if constexpr (A == Attachment::Texture)
+            if constexpr (A == Surface::Texture)
             {
                 m_textureMap.at(identifier)->bind(binding);
             }
-            if constexpr (A == Attachment::Cubemap)
+            if constexpr (A == Surface::Cubemap)
             {
                 m_cubemapMap.at(identifier)->bind(binding);
             }
@@ -142,16 +143,51 @@ namespace fox::gfx::api::gl
             m_renderBufferMap.emplace(identifier, renderBuffer);
         }
 
+
+
+        void attach_test2(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Texture2D> texture, gl::uint32_t level = 0u)
+        {
+            gl::frame_buffer_texture(m_handle, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
+
+            m_attachments.at(gl::to_underlying(attachment)) = identifier;
+            m_textureMap.emplace(identifier, texture);
+        }
+
+        template<Surface A = Surface::Texture>
+        void detach(const std::string& identifier, glf::FrameBuffer::Attachment attachment)
+        {
+            auto isColor = (attachment == std::clamp(attachment, glf::FrameBuffer::Attachment::ColorIndex, glf::FrameBuffer::Attachment::ColorIndex + 31u));
+            if (isColor) attachment -= glf::FrameBuffer::Attachment::ColorIndex;
+
+                 if constexpr (A == Surface::Texture)
+            {
+                gl::frame_buffer_texture(m_handle, gl::NullObject, attachment, gl::uint32_t{ 0u });
+                m_textureMap.erase(identifier);
+            }
+            else if constexpr (A == Surface::Cubemap)
+            {
+                gl::frame_buffer_texture(m_handle, gl::NullObject, attachment, gl::uint32_t{ 0u });
+                m_cubemapMap.erase(identifier);
+            }
+            else if constexpr (A == Surface::RenderBuffer)
+            {
+                gl::frame_buffer_render_buffer(m_handle, gl::NullObject, attachment, gl::uint32_t{ 0u });
+                m_renderBufferMap.erase(identifier);
+            }
+        }
+
+
+
         void read_from(const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
-            auto texture = attachment<Attachment::Texture>(identifier);
+            auto texture = surface<Surface::Texture>(identifier);
 
             gl::frame_buffer_texture    (m_handle, texture->handle(), glf::FrameBuffer::Attachment::ColorIndex + index, level);
             gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::ColorIndex + index);
         }
         void write_to (const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
-            auto texture = attachment<Attachment::Texture>(identifier);
+            auto texture = surface<Surface::Texture>(identifier);
 
             gl::frame_buffer_texture    (m_handle, texture->handle(), glf::FrameBuffer::Attachment::ColorIndex + index, level);
             gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::ColorIndex + index);
@@ -177,12 +213,14 @@ namespace fox::gfx::api::gl
         }
 
     private:
-        gl::Vector2u                                                       m_dimensions{};
 
-        std::vector<glf::FrameBuffer::Attachment>                          m_colorBufferIndices{};
-        std::unordered_map<std::string, std::shared_ptr<gl::Texture2D>>    m_textureMap{};
-        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>      m_cubemapMap{};
-        std::unordered_map<std::string, std::shared_ptr<gl::RenderBuffer>> m_renderBufferMap{};
+        gl::Vector2u                                                                          m_dimensions{};
+
+        std::vector<glf::FrameBuffer::Attachment>                                             m_colorBufferIndices{};
+        std::array<std::string, 11u>                                                          m_attachments{};
+        std::unordered_map<std::string, std::shared_ptr<gl::Texture2D>>                       m_textureMap{};
+        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>                         m_cubemapMap{};
+        std::unordered_map<std::string, std::shared_ptr<gl::RenderBuffer>>                    m_renderBufferMap{};
     };
     class FrameBufferMultisample : public gl::Object
     {

@@ -346,6 +346,24 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
+    static auto map_frame_buffer_attachment              (api::FrameBuffer::Attachment attachment)
+    {
+        switch (attachment)
+        {
+            case api::FrameBuffer::Attachment::Color0:       return glf::FrameBuffer::Attachment::ColorIndex + 0u; 
+            case api::FrameBuffer::Attachment::Color1:       return glf::FrameBuffer::Attachment::ColorIndex + 1u; 
+            case api::FrameBuffer::Attachment::Color2:       return glf::FrameBuffer::Attachment::ColorIndex + 2u; 
+            case api::FrameBuffer::Attachment::Color3:       return glf::FrameBuffer::Attachment::ColorIndex + 3u; 
+            case api::FrameBuffer::Attachment::Color4:       return glf::FrameBuffer::Attachment::ColorIndex + 4u; 
+            case api::FrameBuffer::Attachment::Color5:       return glf::FrameBuffer::Attachment::ColorIndex + 5u; 
+            case api::FrameBuffer::Attachment::Color6:       return glf::FrameBuffer::Attachment::ColorIndex + 6u; 
+            case api::FrameBuffer::Attachment::Color7:       return glf::FrameBuffer::Attachment::ColorIndex + 7u; 
+            
+            case api::FrameBuffer::Attachment::Depth:        return glf::FrameBuffer::Attachment::Depth;
+            case api::FrameBuffer::Attachment::Stencil:      return glf::FrameBuffer::Attachment::Stencil;
+            case api::FrameBuffer::Attachment::DepthStencil: return glf::FrameBuffer::Attachment::DepthStencil;
+        }
+    }
     static auto map_frame_buffer_texture_attachment      (api::Texture::Format      format)
 	{
 		switch (format)

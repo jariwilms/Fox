@@ -48,7 +48,7 @@ namespace fox::gfx::api
 
 
 
-        auto depthTexture = m_sBuffer->attachment<gfx::FrameBuffer::Attachment::Texture>("Depth");
+        auto depthTexture = m_sBuffer->surface<gfx::FrameBuffer::Surface::Texture>("Depth");
         const std::array<fox::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
         gl::texture_parameter(depthTexture->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
         gl::texture_parameter(depthTexture->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
@@ -109,7 +109,7 @@ namespace fox::gfx::api
         const fox::Vector2u envDimensions{ 512u, 512u };
         const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
         auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
-        auto renderBuffer    = frameBuffer->attachment<gfx::FrameBuffer::Attachment::RenderBuffer>("Depth");
+        auto renderBuffer    = frameBuffer->surface<gfx::FrameBuffer::Surface::RenderBuffer>("Depth");
         auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
         auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
         m_environmentCubemap = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
@@ -235,7 +235,7 @@ namespace fox::gfx::api
 
         std::array<FS, 1> ssaoFrameBufferManifest{ FS{ "Occlusion", TF::R32_FLOAT }};
         m_ssaoBuffer = gfx::FrameBuffer::create(viewportDimensions, ssaoFrameBufferManifest);
-        auto occlusion = m_ssaoBuffer->attachment<gfx::FrameBuffer::Attachment::Texture>("Occlusion");
+        auto occlusion = m_ssaoBuffer->surface<gfx::FrameBuffer::Surface::Texture>("Occlusion");
         gl::texture_parameter(occlusion->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
         gl::texture_parameter(occlusion->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
 
@@ -374,8 +374,8 @@ namespace fox::gfx::api
         m_ssaoBuffer->bind(gfx::FrameBuffer::Target::Write);
 
         m_pipelines.at("SSAO")->bind();
-        m_gBuffer->bind_attachment("Position", fox::binding_t{ 0u });
-        m_gBuffer->bind_attachment("Normal"  , fox::binding_t{ 1u });
+        m_gBuffer->bind_surface("Position", fox::binding_t{ 0u });
+        m_gBuffer->bind_surface("Normal"  , fox::binding_t{ 1u });
 
         m_ssaoNoiseTexture->bind(fox::binding_t{ 2u });
 
@@ -461,8 +461,8 @@ namespace fox::gfx::api
         gl::depth_function(glf::DepthFunction::Less);
         gl::disable       <glf::Feature::Blending>();
 
-        auto positionTexture = m_gBuffer->attachment("Position");
-        std::array<fox::float32_t, 4> data{ 0.0f, 0.0f, -1000.0f };
+        auto positionTexture = m_gBuffer->surface("Position");
+        std::array<fox::float32_t, 4u> data{ 0.0f, 0.0f, -1000.0f };
         gl::clear_texture_image(positionTexture->handle(), glf::Texture::BaseFormat::RGB, glf::Texture::Type::Float, 0, utl::as_bytes(data));
 
 
@@ -491,10 +491,10 @@ namespace fox::gfx::api
 
 
         m_pipelines.at("PBR")->bind();
-        m_gBuffer->bind_attachment("Position", fox::binding_t{ 0u });
-        m_gBuffer->bind_attachment("Albedo"  , fox::binding_t{ 1u });
-        m_gBuffer->bind_attachment("Normal"  , fox::binding_t{ 2u });
-        m_gBuffer->bind_attachment("ARM"     , fox::binding_t{ 3u });
+        m_gBuffer->bind_surface("Position", fox::binding_t{ 0u });
+        m_gBuffer->bind_surface("Albedo"  , fox::binding_t{ 1u });
+        m_gBuffer->bind_surface("Normal"  , fox::binding_t{ 2u });
+        m_gBuffer->bind_surface("ARM"     , fox::binding_t{ 3u });
 
         m_irradianceCubemap->bind(fox::binding_t{ 4u });
         m_preFilterCubemap ->bind(fox::binding_t{ 5u });

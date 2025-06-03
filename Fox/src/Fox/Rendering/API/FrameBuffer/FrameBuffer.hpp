@@ -11,17 +11,21 @@ namespace fox::gfx::api
     class FrameBuffer
     {
     public:
-        enum class Target
-        {
-            Read, 
-            Write, 
-        };
         enum class Attachment
         {
-            Texture,
-            Cubemap,
-            RenderBuffer,
-        };
+            Color0, 
+            Color1, 
+            Color2, 
+            Color3, 
+            Color4, 
+            Color5, 
+            Color6, 
+            Color7, 
+
+            Depth, 
+            Stencil, 
+            DepthStencil, 
+		};
         struct     Specification
         {
             using format_v = std::variant<api::Texture::Format, api::Cubemap::Format, api::RenderBuffer::Format>;
@@ -31,6 +35,17 @@ namespace fox::gfx::api
 
             std::string identifier{};
             format_v    format;
+        };
+        enum class Surface
+        {
+            Texture,
+            Cubemap,
+            RenderBuffer,
+        };
+        enum class Target
+        {
+            Read, 
+            Write, 
         };
     };
 };

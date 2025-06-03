@@ -191,11 +191,11 @@ namespace fox::gfx::api::gl
         {
             auto handle       = gl::create_texture(glf::Texture::Target::_2D);
             auto mipmapLevels = api::Texture::calculate_mipmap_levels(dimensions);
-
-            gl::texture_storage_2d (handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
+            
+            gl::texture_storage_2d(handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
             __debugbreak();
             //gl::copy_image_sub_data(m_handle, handle, glf::Texture::Target::_2D, glf::Texture::Target::_2D, gl::Vector4u{ m_dimensions, 0u, 0u }, gl::Vector4u{ dimensions, 0u, 0u });
-            gl::delete_texture     (m_handle);
+            gl::delete_texture(m_handle);
 
             m_handle       = handle;
             m_dimensions   = dimensions;
