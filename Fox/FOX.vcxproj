@@ -62,7 +62,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -86,7 +86,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -105,10 +105,10 @@
     <ClInclude Include="src\Fox\Core\Library\Component\MeshFilter.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\Enumeration\Enumeration.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Library.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Math\Random.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonMovable.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Template\Concepts.hpp" />
@@ -146,7 +146,6 @@
     <ClInclude Include="src\Fox\Rendering\API\Buffer\VertexArray.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Concepts\Concepts.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\FrameBuffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\FrameBuffer\Mapping.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Layout\Layout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Layout\VertexLayout.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Query\Query.hpp" />
@@ -156,10 +155,7 @@
     <ClInclude Include="src\Fox\Rendering\API\Shader\Pipeline.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Shader\Shader.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Shader\Utility.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\AntiAliasing.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Texture\Cubemap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\Dimensions.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\MipMap.hpp" />
     <ClInclude Include="src\Fox\Rendering\API\Texture\Texture.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
     <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
