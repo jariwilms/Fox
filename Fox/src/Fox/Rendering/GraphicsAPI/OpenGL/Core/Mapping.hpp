@@ -350,14 +350,14 @@ namespace fox::gfx::api::gl
     {
         switch (attachment)
         {
-            case api::FrameBuffer::Attachment::Color0:       return glf::FrameBuffer::Attachment::ColorIndex + 0u; 
-            case api::FrameBuffer::Attachment::Color1:       return glf::FrameBuffer::Attachment::ColorIndex + 1u; 
-            case api::FrameBuffer::Attachment::Color2:       return glf::FrameBuffer::Attachment::ColorIndex + 2u; 
-            case api::FrameBuffer::Attachment::Color3:       return glf::FrameBuffer::Attachment::ColorIndex + 3u; 
-            case api::FrameBuffer::Attachment::Color4:       return glf::FrameBuffer::Attachment::ColorIndex + 4u; 
-            case api::FrameBuffer::Attachment::Color5:       return glf::FrameBuffer::Attachment::ColorIndex + 5u; 
-            case api::FrameBuffer::Attachment::Color6:       return glf::FrameBuffer::Attachment::ColorIndex + 6u; 
-            case api::FrameBuffer::Attachment::Color7:       return glf::FrameBuffer::Attachment::ColorIndex + 7u; 
+            case api::FrameBuffer::Attachment::Color0:       return glf::FrameBuffer::Attachment::Color0; 
+            case api::FrameBuffer::Attachment::Color1:       return glf::FrameBuffer::Attachment::Color1; 
+            case api::FrameBuffer::Attachment::Color2:       return glf::FrameBuffer::Attachment::Color2; 
+            case api::FrameBuffer::Attachment::Color3:       return glf::FrameBuffer::Attachment::Color3; 
+            case api::FrameBuffer::Attachment::Color4:       return glf::FrameBuffer::Attachment::Color4; 
+            case api::FrameBuffer::Attachment::Color5:       return glf::FrameBuffer::Attachment::Color5; 
+            case api::FrameBuffer::Attachment::Color6:       return glf::FrameBuffer::Attachment::Color6; 
+            case api::FrameBuffer::Attachment::Color7:       return glf::FrameBuffer::Attachment::Color7; 
             
             case api::FrameBuffer::Attachment::Depth:        return glf::FrameBuffer::Attachment::Depth;
             case api::FrameBuffer::Attachment::Stencil:      return glf::FrameBuffer::Attachment::Stencil;
@@ -366,60 +366,6 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer attachment!" };
         }
     }
-    static auto map_frame_buffer_texture_attachment      (api::Texture::Format      format)
-	{
-		switch (format)
-		{
-			case api::Texture::Format::D16_UNORM:
-			case api::Texture::Format::D24_UNORM:
-			case api::Texture::Format::D32_FLOAT:         return glf::FrameBuffer::Attachment::Depth;
-
-			case api::Texture::Format::D24_UNORM_S8_UINT:
-			case api::Texture::Format::D32_FLOAT_S8_UINT: return glf::FrameBuffer::Attachment::DepthStencil;
-
-			case api::Texture::Format::S8_UINT:           return glf::FrameBuffer::Attachment::Stencil;
-
-			default:                                      return glf::FrameBuffer::Attachment::ColorIndex;
-		}
-
-		throw std::invalid_argument{ "Invalid texture format!" };
-	}
-	static auto map_frame_buffer_cubemap_attachment      (api::Cubemap::Format      format)
-	{
-		switch (format)
-		{
-			case api::Cubemap::Format::D16_UNORM:
-			case api::Cubemap::Format::D24_UNORM:
-			case api::Cubemap::Format::D32_FLOAT:         return glf::FrameBuffer::Attachment::Depth;
-
-			case api::Cubemap::Format::D24_UNORM_S8_UINT:
-			case api::Cubemap::Format::D32_FLOAT_S8_UINT: return glf::FrameBuffer::Attachment::DepthStencil;
-
-			case api::Cubemap::Format::S8_UINT:           return glf::FrameBuffer::Attachment::Stencil;
-
-			default:                                      return glf::FrameBuffer::Attachment::ColorIndex;
-		}
-
-		throw std::invalid_argument{ "Invalid format!" };
-	}
-	static auto map_frame_buffer_render_buffer_attachment(api::RenderBuffer::Format format)
-	{
-		switch (format)
-		{
-			case api::RenderBuffer::Format::D16_UNORM:
-			case api::RenderBuffer::Format::D24_UNORM:
-			case api::RenderBuffer::Format::D32_FLOAT:         return glf::FrameBuffer::Attachment::Depth;
-
-			case api::RenderBuffer::Format::D24_UNORM_S8_UINT:
-			case api::RenderBuffer::Format::D32_FLOAT_S8_UINT: return glf::FrameBuffer::Attachment::DepthStencil;
-
-			case api::RenderBuffer::Format::S8_UINT:           return glf::FrameBuffer::Attachment::Stencil;
-
-			default:                                           return glf::FrameBuffer::Attachment::ColorIndex;
-		}
-
-		throw std::invalid_argument{ "Invalid format!" };
-	}
 
     static auto map_program_stage                        (api::Shader::Stage stage)
     {

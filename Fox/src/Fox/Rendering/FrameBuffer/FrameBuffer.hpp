@@ -65,14 +65,6 @@ namespace fox::gfx
             _->detach<A>(identifier, attachment);
         }
         
-        template<Surface A = Surface::Texture>
-        auto surface(const std::string& identifier)
-        {
-            if constexpr (A == Surface::Texture)      return std::make_shared<gfx::Texture2D>   (_->surface<A>(identifier));
-            if constexpr (A == Surface::Cubemap)      return std::make_shared<gfx::Cubemap>     (_->surface<A>(identifier));
-            if constexpr (A == Surface::RenderBuffer) return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
-        }
-
         void read_from(const std::string& identifier, fox::index_t index, fox::uint32_t level = 0u)
         {
             _->read_from(identifier, static_cast<impl::index_t>(index), level);
@@ -87,6 +79,18 @@ namespace fox::gfx
             _->resize(dimensions);
         }
 
+        template<Surface A = Surface::Texture>
+        auto surface   (const std::string& identifier)
+        {
+            if constexpr (A == Surface::Texture)      return std::make_shared<gfx::Texture2D>   (_->surface<A>(identifier));
+            if constexpr (A == Surface::Cubemap)      return std::make_shared<gfx::Cubemap>     (_->surface<A>(identifier));
+            if constexpr (A == Surface::RenderBuffer) return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
+        }
+        auto attachment(Attachment attachment)
+        {
+            return _->attachment(attachment);
+        }
+        
         auto dimensions() const
         {
             return static_cast<fox::Vector2u>(_->dimensions());

@@ -5,6 +5,7 @@
 #include "Fox/Rendering/API/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/API/Texture/Cubemap.hpp"
 #include "Fox/Rendering/API/Texture/Texture.hpp"
+#include "Fox/Core/Library/Enumeration/Enumeration.hpp"
 
 namespace fox::gfx::api
 {
@@ -48,4 +49,6 @@ namespace fox::gfx::api
             Write, 
         };
     };
+
+    template<> struct api::enumeration_operator<FrameBuffer::Attachment> { static constexpr fox::bool_t enable = fox::True; };
 };

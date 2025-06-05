@@ -696,7 +696,15 @@ namespace fox::gfx::api::glf
         {
             None         = GL_NONE, 
 
-            ColorIndex   = GL_COLOR_ATTACHMENT0, 
+            Color0       = GL_COLOR_ATTACHMENT0, 
+            Color1       = GL_COLOR_ATTACHMENT1, 
+            Color2       = GL_COLOR_ATTACHMENT2, 
+            Color3       = GL_COLOR_ATTACHMENT3, 
+            Color4       = GL_COLOR_ATTACHMENT4, 
+            Color5       = GL_COLOR_ATTACHMENT5, 
+            Color6       = GL_COLOR_ATTACHMENT6, 
+            Color7       = GL_COLOR_ATTACHMENT7, 
+
             Depth        = GL_DEPTH_ATTACHMENT, 
             Stencil      = GL_STENCIL_ATTACHMENT, 
             DepthStencil = GL_DEPTH_STENCIL_ATTACHMENT, 
@@ -741,20 +749,27 @@ namespace fox::gfx::api::glf
         };
         enum class Source : gl::enum_t
         {
-            None                 = GL_NONE, 
+            None         = GL_NONE, 
 
-            FrontLeft            = GL_FRONT_LEFT, 
-            FrontRight           = GL_FRONT_RIGHT, 
-            BackLeft             = GL_BACK_LEFT, 
-            BackRight            = GL_BACK_RIGHT, 
-            FrontAndBack         = GL_FRONT_AND_BACK, 
+            FrontLeft    = GL_FRONT_LEFT, 
+            FrontRight   = GL_FRONT_RIGHT, 
+            BackLeft     = GL_BACK_LEFT, 
+            BackRight    = GL_BACK_RIGHT, 
+            FrontAndBack = GL_FRONT_AND_BACK, 
 
-            Front                = FrontLeft, 
-            Back                 = BackLeft, 
-            Left                 = GL_LEFT, 
-            Right                = GL_RIGHT, 
+            Front        = FrontLeft, 
+            Back         = BackLeft, 
+            Left         = GL_LEFT, 
+            Right        = GL_RIGHT, 
 
-            ColorIndex           = GL_COLOR_ATTACHMENT0, 
+            Color0       = GL_COLOR_ATTACHMENT0, 
+            Color1       = GL_COLOR_ATTACHMENT1, 
+            Color2       = GL_COLOR_ATTACHMENT2, 
+            Color3       = GL_COLOR_ATTACHMENT3, 
+            Color4       = GL_COLOR_ATTACHMENT4, 
+            Color5       = GL_COLOR_ATTACHMENT5, 
+            Color6       = GL_COLOR_ATTACHMENT6, 
+            Color7       = GL_COLOR_ATTACHMENT7, 
         };
         enum class Status : gl::enum_t
         {

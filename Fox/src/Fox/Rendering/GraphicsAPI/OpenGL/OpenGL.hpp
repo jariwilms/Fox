@@ -2335,17 +2335,17 @@ namespace fox::gfx::api::gl
             if (std::holds_alternative<gl::Vector4i>(p.color))
             {
                 const auto& c = std::get<gl::Vector4i>(p.color);
-                clear_frame_buffer_iv(frameBuffer, glf::FrameBuffer::Attachment::ColorIndex, p.index, glm::value_ptr(c));
+                clear_frame_buffer_iv(frameBuffer, glf::FrameBuffer::Attachment::Color0, p.index, glm::value_ptr(c));
             }
             if (std::holds_alternative<gl::Vector4u>(p.color))
             {
                 const auto& c = std::get<gl::Vector4u>(p.color);
-                clear_frame_buffer_uiv(frameBuffer, glf::FrameBuffer::Attachment::ColorIndex, p.index, glm::value_ptr(c));
+                clear_frame_buffer_uiv(frameBuffer, glf::FrameBuffer::Attachment::Color0, p.index, glm::value_ptr(c));
             }
             if (std::holds_alternative<gl::Vector4f>(p.color))
             {
                 const auto& c = std::get<gl::Vector4f>(p.color);
-                clear_frame_buffer_fv(frameBuffer, glf::FrameBuffer::Attachment::ColorIndex, p.index, glm::value_ptr(c));
+                clear_frame_buffer_fv(frameBuffer, glf::FrameBuffer::Attachment::Color0, p.index, glm::value_ptr(c));
             }
         }
         if (std::holds_alternative<glp::depth>       (parameter))

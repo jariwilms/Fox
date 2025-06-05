@@ -25,7 +25,7 @@ namespace fox::gfx::api::gl
             m_handle = gl::create_frame_buffer();
 			auto colorIndex = gl::uint32_t{ 0u };
 
-            const auto& map_texture_attachment       = [](api::Texture::Format      format)
+            const auto& map_texture_attachment       = [&colorIndex](api::Texture::Format      format)
                 {
                     switch (format)
                     {
@@ -38,10 +38,10 @@ namespace fox::gfx::api::gl
 
 			            case api::Texture::Format::S8_UINT:           return api::FrameBuffer::Attachment::Stencil;
 
-			            default:                                      return api::FrameBuffer::Attachment::Color0;
+			            default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
                     }
                 };
-            const auto& map_cubemap_attachment       = [](api::Cubemap::Format      format)
+            const auto& map_cubemap_attachment       = [&colorIndex](api::Cubemap::Format      format)
             {
                 switch (format)
                 {
@@ -54,10 +54,10 @@ namespace fox::gfx::api::gl
 
                     case api::Cubemap::Format::S8_UINT:           return api::FrameBuffer::Attachment::Stencil;
 
-                    default:                                      return api::FrameBuffer::Attachment::Color0;
+                    default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
                 }
             };
-            const auto& map_render_buffer_attachment = [](api::RenderBuffer::Format format)
+            const auto& map_render_buffer_attachment = [&colorIndex](api::RenderBuffer::Format format)
             {
                 switch (format)
                 {
@@ -70,7 +70,7 @@ namespace fox::gfx::api::gl
 
                     case api::RenderBuffer::Format::S8_UINT:           return api::FrameBuffer::Attachment::Stencil;
 
-                    default:                                           return api::FrameBuffer::Attachment::Color0;
+                    default:                                           return api::FrameBuffer::Attachment::Color0 + colorIndex++;
                 }
             };
 
@@ -83,8 +83,6 @@ namespace fox::gfx::api::gl
                     auto texture    = std::make_shared<gl::Texture2D>(std::get<api::Texture::Format>(format), api::Texture::Filter::None, api::Texture::Wrapping::Repeat, m_dimensions);
                     auto attachment = map_texture_attachment(texture->format());
                     
-                    if (attachment == Attachment::Color0) attachment = static_cast<Attachment>(colorIndex++);
-                    
                     attach(identifier, attachment, texture);
                 }
                 if (std::holds_alternative<api::Cubemap::Format>     (format))
@@ -92,16 +90,12 @@ namespace fox::gfx::api::gl
                     auto cubemap    = std::make_shared<gl::Cubemap>(std::get<api::Cubemap::Format>(format), api::Texture::Filter::None, api::Texture::Wrapping::Repeat, m_dimensions);
                     auto attachment = map_cubemap_attachment(cubemap->format());
 
-                    if (attachment == Attachment::Color0) attachment = static_cast<Attachment>(colorIndex++);
-
                     attach(identifier, attachment, cubemap);
                 }
                 if (std::holds_alternative<api::RenderBuffer::Format>(format))
                 {
                     auto renderBuffer = std::make_shared<gl::RenderBuffer>(std::get<api::RenderBuffer::Format>(format), m_dimensions);
                     auto attachment   = map_render_buffer_attachment(renderBuffer->format());
-
-                    if (attachment == Attachment::Color0) attachment = static_cast<Attachment>(colorIndex++);
 
                     attach(identifier, attachment, renderBuffer);
                 }
@@ -117,7 +111,7 @@ namespace fox::gfx::api::gl
                 std::vector<glf::FrameBuffer::Source> colorBufferSources(colorIndex);
                 for (auto i : std::views::iota(0u, colorIndex))
                 {
-					colorBufferSources.at(i) = glf::FrameBuffer::Source::ColorIndex + i;
+					colorBufferSources.at(i) = glf::FrameBuffer::Source::Color0 + i;
 				}
 
                 gl::frame_buffer_draw_buffers(m_handle, colorBufferSources);
@@ -189,36 +183,19 @@ namespace fox::gfx::api::gl
             }
         }
         
-        template<Surface A = Surface::Texture>
-        auto surface(const std::string& identifier)
-        {
-                 if constexpr (A == Surface::Texture)
-            {
-                return m_textureMap.at(identifier);
-            }
-            else if constexpr (A == Surface::Cubemap)
-            {
-                return m_cubemapMap.at(identifier);
-            }
-            else if constexpr (A == Surface::RenderBuffer)
-            {
-                return m_renderBufferMap.at(identifier);
-            }
-        }
-
         void read_from(const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
-            auto texture = surface<Surface::Texture>(identifier);
+            auto& texture = m_textureMap.at(identifier);
 
-            gl::frame_buffer_texture    (m_handle, texture->handle(), glf::FrameBuffer::Attachment::ColorIndex + index, level);
-            gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::ColorIndex + index);
+            gl::frame_buffer_texture    (m_handle, texture->handle(), glf::FrameBuffer::Attachment::Color0 + index, level);
+            gl::frame_buffer_read_buffer(m_handle, glf::FrameBuffer::Source::Color0 + index);
         }
         void write_to (const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
-            auto texture = surface<Surface::Texture>(identifier);
+            auto& texture = m_textureMap.at(identifier);
 
-            gl::frame_buffer_texture    (m_handle, texture->handle(), glf::FrameBuffer::Attachment::ColorIndex + index, level);
-            gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::ColorIndex + index);
+            gl::frame_buffer_texture    (m_handle, texture->handle(), glf::FrameBuffer::Attachment::Color0 + index, level);
+            gl::frame_buffer_draw_buffer(m_handle, glf::FrameBuffer::Source::Color0 + index);
         }
 
         void resize(const gl::Vector2u& dimensions)
@@ -235,13 +212,33 @@ namespace fox::gfx::api::gl
             m_dimensions = dimensions;
         }
 
+        template<Surface A = Surface::Texture>
+        auto surface   (const std::string& identifier)
+        {
+                 if constexpr (A == Surface::Texture)
+            {
+                return m_textureMap.at(identifier);
+            }
+            else if constexpr (A == Surface::Cubemap)
+            {
+                return m_cubemapMap.at(identifier);
+            }
+            else if constexpr (A == Surface::RenderBuffer)
+            {
+                return m_renderBufferMap.at(identifier);
+            }
+        }
+        auto attachment(Attachment attachment)
+        {
+            return m_attachments.at(gl::to_underlying(attachment));
+        }
+
         auto dimensions() const
         {
             return m_dimensions;
         }
 
     private:
-
         gl::Vector2u                                                                          m_dimensions{};
 
         std::array<std::string, 11u>                                                          m_attachments{};

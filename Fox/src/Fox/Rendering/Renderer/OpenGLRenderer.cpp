@@ -129,7 +129,7 @@ namespace fox::gfx::api
         m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
         gl::viewport(envDimensions);
-        gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
+        gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
 
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
         hdrTex->bind(fox::binding_t{ 0u });
@@ -139,7 +139,7 @@ namespace fox::gfx::api
         {
             m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-            gl::frame_buffer_texture_layer(frameBuffer->handle(), m_environmentCubemap->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
+            gl::frame_buffer_texture_layer(frameBuffer->handle(), m_environmentCubemap->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -157,7 +157,7 @@ namespace fox::gfx::api
         m_environmentCubemap->bind(fox::binding_t{ 0u });
 
         gl::viewport(cvDimensions);
-        gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::ColorIndex);
+        gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
         gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
 
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
@@ -167,7 +167,7 @@ namespace fox::gfx::api
         {
             m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-            gl::frame_buffer_texture_layer(frameBuffer->handle(), m_irradianceCubemap->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0, index++);
+            gl::frame_buffer_texture_layer(frameBuffer->handle(), m_irradianceCubemap->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -210,7 +210,7 @@ namespace fox::gfx::api
             {
                 m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-                gl::frame_buffer_texture_layer(frameBuffer->handle(), m_preFilterCubemap->handle(), glf::FrameBuffer::Attachment::ColorIndex, mip, index++);
+                gl::frame_buffer_texture_layer(frameBuffer->handle(), m_preFilterCubemap->handle(), glf::FrameBuffer::Attachment::Color0, mip, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -224,7 +224,7 @@ namespace fox::gfx::api
         m_pipelines.at("BRDF")->bind();
 
         gl::viewport(envDimensions);
-        gl::frame_buffer_texture(frameBuffer->handle(), m_brdfTexture->handle(), glf::FrameBuffer::Attachment::ColorIndex, 0);
+        gl::frame_buffer_texture(frameBuffer->handle(), m_brdfTexture->handle(), glf::FrameBuffer::Attachment::Color0, 0);
         gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, envDimensions);
         gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
