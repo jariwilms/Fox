@@ -19,14 +19,19 @@
 
 namespace fox
 {
+    static void test()
+    {
+
+    }
+
     static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
         auto& tc = actor.get_component<cmp::TransformComponent>().get();
         tc = node.localTransform;
 
         auto& mf = actor.add_component<cmp::MeshFilterComponent>().get();
-        if (node.meshIndex)     mf.mesh     = model.meshes.at(node.meshIndex.value());
-        if (node.materialIndex) mf.material = model.materials.at(node.materialIndex.value());
+        if (node.meshIndex)     mf.mesh     = model.meshes.at(*node.meshIndex);
+        if (node.materialIndex) mf.material = model.materials.at(*node.materialIndex);
 
         for (auto& childIndex : node.children)
         {
@@ -40,7 +45,7 @@ namespace fox
     {
         if (!relation.parent) return transform;
 
-        const auto& parent = scene.find_actor(relation.parent.value());
+        const auto& parent = scene.find_actor(*relation.parent);
         const auto& rel    = parent.get_component<cmp::RelationshipComponent>().get();
         const auto& trs    = parent.get_component<cmp::TransformComponent>().get();
 
@@ -51,6 +56,8 @@ namespace fox
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
+        //test();
+
         gfx::Geometry::init();
         io::ModelImporter::init();
         gfx::Renderer::init();
@@ -123,7 +130,7 @@ namespace fox
             "textures/skybox_space2/front.png",
             "textures/skybox_space2/back.png",
         };
-        gfx::Cubemap::Faces cubemapFaces
+        std::array<fox::Image, 6u> cubemapFaces
         {
             io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
             io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8), 
