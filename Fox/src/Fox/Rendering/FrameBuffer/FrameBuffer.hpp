@@ -26,9 +26,10 @@ namespace fox::gfx
     class FrameBuffer
     {
     public:
-        using Specification = impl::FrameBuffer::Specification;
-        using Surface       = impl::FrameBuffer::Surface;
-        using Target        = impl::FrameBuffer::Target;
+        using Attachment    = api::FrameBuffer::Attachment;
+        using Specification = api::FrameBuffer::Specification;
+        using Surface       = api::FrameBuffer::Surface;
+        using Target        = api::FrameBuffer::Target;
 
         static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications)
         {
@@ -39,28 +40,37 @@ namespace fox::gfx
         {
             _->bind(target);
         }
-
-        template<Surface A = Surface::Texture>
-        auto surface(const std::string& identifier)
-        {
-            if constexpr (A == Surface::Texture)
-            {
-                return std::make_shared<gfx::Texture2D>(_->surface<A>(identifier));
-            }
-            if constexpr (A == Surface::Cubemap)
-            {
-                return std::make_shared<gfx::Cubemap>(_->surface<A>(identifier));
-            }
-            if constexpr (A == Surface::RenderBuffer)
-            {
-                return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
-            }
-        }
-
         template<Surface A = Surface::Texture>
         void bind_surface(const std::string& identifier, fox::binding_t binding)
         {
             _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
+        }
+
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<impl::Texture2D>    texture, fox::uint32_t level = 0u)
+        {
+            _->attach(identifier, attachment, texture, level);
+        }
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<impl::Cubemap>      cubemap, fox::uint32_t level = 0u)
+        {
+            _->attach(identifier, attachment, cubemap, level);
+        }
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<impl::RenderBuffer> renderBuffer)
+        {
+            _->attach(identifier, attachment, renderBuffer);
+        }
+
+        template<Surface A = Surface::Texture>
+        void detach(const std::string& identifier, Attachment attachment)
+        {
+            _->detach<A>(identifier, attachment);
+        }
+        
+        template<Surface A = Surface::Texture>
+        auto surface(const std::string& identifier)
+        {
+            if constexpr (A == Surface::Texture)      return std::make_shared<gfx::Texture2D>   (_->surface<A>(identifier));
+            if constexpr (A == Surface::Cubemap)      return std::make_shared<gfx::Cubemap>     (_->surface<A>(identifier));
+            if constexpr (A == Surface::RenderBuffer) return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
         }
 
         void read_from(const std::string& identifier, fox::index_t index, fox::uint32_t level = 0u)
@@ -72,9 +82,14 @@ namespace fox::gfx
             _->write_to(identifier, static_cast<impl::index_t>(index), level);
         }
 
+        void resize(const fox::Vector2u& dimensions)
+        {
+            _->resize(dimensions);
+        }
+
         auto dimensions() const
         {
-            return _->dimensions();
+            return static_cast<fox::Vector2u>(_->dimensions());
         }
         auto handle    () const
         {
@@ -95,9 +110,9 @@ namespace fox::gfx
     class FrameBufferMultisample
     {
     public:
-        using Target        = impl::FrameBuffer::Target;
-        using Attachment    = impl::FrameBuffer::Surface;
-        using Specification = impl::FrameBuffer::Specification;
+        using Target        = api::FrameBuffer::Target;
+        using Attachment    = api::FrameBuffer::Surface;
+        using Specification = api::FrameBuffer::Specification;
 
         static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
         {

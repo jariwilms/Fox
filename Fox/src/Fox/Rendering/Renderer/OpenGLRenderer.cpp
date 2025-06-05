@@ -18,7 +18,14 @@ namespace fox::gfx::api
         using TF = gfx::Texture2D::Format;
         using RF = gfx::RenderBuffer::Format;
         using CF = gfx::Cubemap::Format;
-
+        using FA = gfx::FrameBuffer::Attachment;
+        {
+            "Position",     FA::Color0      , TF::RGB16_FLOAT,
+            "Albedo",       FA::Color1      , TF::RGBA8_UNORM,
+            "Normal",       FA::Color2      , TF::RGB16_FLOAT,
+            "ARM",          FA::Color3      , TF::RGB16_UNORM,
+            "DepthStencil", FA::DepthStencil, RF::D24_UNORM_S8_UINT;
+        }
         std::array<FS, 5> gBufferManifest {
             FS{ "Position",     TF::RGB16_FLOAT },
             FS{ "Albedo",       TF::RGBA8_UNORM  },

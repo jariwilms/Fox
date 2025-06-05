@@ -359,6 +359,7 @@ namespace fox::gfx::api::glf
         Maximum3DTextureSize                             = GL_MAX_3D_TEXTURE_SIZE, 
         MaximumArrayTextureLayers                        = GL_MAX_ARRAY_TEXTURE_LAYERS, 
         MaximumClipDistances                             = GL_MAX_CLIP_DISTANCES, 
+        MaximumColorAttachments                          = GL_MAX_COLOR_ATTACHMENTS, 
         MaximumColorTextureSamples                       = GL_MAX_COLOR_TEXTURE_SAMPLES, 
         MaximumCombinedAtomicCounters                    = GL_MAX_COMBINED_ATOMIC_COUNTERS, 
         MaximumCombinedComputeUniformComponents          = GL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS, 

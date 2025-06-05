@@ -362,6 +362,8 @@ namespace fox::gfx::api::gl
             case api::FrameBuffer::Attachment::Depth:        return glf::FrameBuffer::Attachment::Depth;
             case api::FrameBuffer::Attachment::Stencil:      return glf::FrameBuffer::Attachment::Stencil;
             case api::FrameBuffer::Attachment::DepthStencil: return glf::FrameBuffer::Attachment::DepthStencil;
+
+            default: throw std::invalid_argument{ "Invalid framebuffer attachment!" };
         }
     }
     static auto map_frame_buffer_texture_attachment      (api::Texture::Format      format)
@@ -380,7 +382,7 @@ namespace fox::gfx::api::gl
 			default:                                      return glf::FrameBuffer::Attachment::ColorIndex;
 		}
 
-		throw std::invalid_argument{ "Invalid format!" };
+		throw std::invalid_argument{ "Invalid texture format!" };
 	}
 	static auto map_frame_buffer_cubemap_attachment      (api::Cubemap::Format      format)
 	{

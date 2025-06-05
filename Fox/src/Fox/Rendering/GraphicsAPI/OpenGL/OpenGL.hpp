@@ -190,6 +190,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::Maximum3DTextureSize)                             return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::MaximumArrayTextureLayers)                        return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::MaximumClipDistances)                             return get_unsigned_integer32_v(D);
+		if constexpr (D == glf::Data::MaximumColorAttachments)                          return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::MaximumColorTextureSamples)                       return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::MaximumCombinedAtomicCounters)                    return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::MaximumCombinedComputeUniformComponents)          return get_unsigned_integer32_v(D);
