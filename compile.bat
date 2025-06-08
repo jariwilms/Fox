@@ -47,6 +47,32 @@ IF EXIST %source_path%%shader%%geometry_ext% (
 )
 echo:
 
+IF EXIST %source_path%%shader%%tess_ctrl_ext% (
+    echo Compiling %shader%%tess_ctrl_ext%
+    %command% %source_path%%shader%%tess_ctrl_ext% -o %compiled_path%%shader%%tess_ctrl_ext%.spv
+    IF ERRORLEVEL 1 (
+        echo Error compiling vertex shader: %shader%%tess_ctrl_ext%
+    ) ELSE (
+        echo Compiled successfully
+    )
+) ELSE (
+    echo Shader not found: %shader%%tess_ctrl_ext%
+)
+echo:
+
+IF EXIST %source_path%%shader%%tess_eval_ext% (
+    echo Compiling %shader%%tess_eval_ext%
+    %command% %source_path%%shader%%tess_eval_ext% -o %compiled_path%%shader%%tess_eval_ext%.spv
+    IF ERRORLEVEL 1 (
+        echo Error compiling vertex shader: %shader%%tess_eval_ext%
+    ) ELSE (
+        echo Compiled successfully
+    )
+) ELSE (
+    echo Shader not found: %shader%%tess_eval_ext%
+)
+echo:
+
 IF EXIST %source_path%%shader%%fragment_ext% (
     echo Compiling %shader%%fragment_ext%
     %command% %source_path%%shader%%fragment_ext% -o %compiled_path%%shader%%fragment_ext%.spv
