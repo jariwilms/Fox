@@ -49,6 +49,8 @@ namespace fox::gfx::api
             Write, 
         };
     };
-
-    template<> struct api::enumeration_operator<FrameBuffer::Attachment> { static constexpr fox::bool_t enable = fox::True; };
 };
+namespace fox
+{
+    template<> struct fox::enumeration_operator<gfx::api::FrameBuffer::Attachment> { static constexpr fox::bool_t enable = fox::True; };
+}
