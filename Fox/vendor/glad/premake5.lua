@@ -9,7 +9,6 @@ project "GLAD"
 	files
 	{
 		"include/glad/gl.h", 
-		
 		"src/gl.c", 
 	}
 	
