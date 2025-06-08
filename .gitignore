@@ -1,6 +1,4 @@
 bin/
-bin_obj/
-Fox/assets/shaders/compiled
 /doc/temp
 
 **/*.vcxproj.filters
