@@ -9,8 +9,6 @@
 
 namespace fox
 {
-    //Represents spatial transformations as a position, rotation, and scale
-    //Rotation is stored in radians, arguments must be passed in degrees
     class Transform
     {
     public:
