@@ -4,6 +4,7 @@
 
 #include "Fox/Core/Library/Container/CyclicBuffer.hpp"
 #include "Fox/Core/Library/Image/Image.hpp"
+#include "Fox/Core/Library/JSON/json.hpp"
 #include "Fox/Core/Library/Time/Time.hpp"
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/ECS/Components/Components.hpp"
@@ -56,6 +57,7 @@ namespace fox
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
         
+        json::test();
         //test();
 
         gfx::Geometry::init();

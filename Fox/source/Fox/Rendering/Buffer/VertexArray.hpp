@@ -33,11 +33,11 @@ namespace fox::gfx
         }
 
         template<typename T>
-        void tie(std::shared_ptr<const gfx::VertexBuffer<T>>& buffer, const gfx::VertexLayout& layout)
+        void tie(std::shared_ptr<const gfx::VertexBuffer<T>> buffer, const gfx::VertexLayout& layout)
         {
             _->tie(buffer->handle(), layout);
         }
-        void tie(std::shared_ptr<const gfx::IndexBuffer>&     buffer)
+        void tie(std::shared_ptr<const gfx::IndexBuffer>     buffer)
         {
             _->tie(buffer->handle(), buffer->count());
         }

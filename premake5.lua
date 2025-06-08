@@ -45,7 +45,7 @@ project "FOX"
 	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 	
 	pchheader "stdafx.hpp"
-	pchsource "Fox/src/stdafx.cpp"
+	pchsource "Fox/source/stdafx.cpp"
 	
 	defines
 	{
@@ -60,15 +60,13 @@ project "FOX"
 	
 	files
 	{
-		"Fox/src/**.hpp", 
-		"Fox/src/**.cpp", 
-		
-		"Fox/src/**.json", 
+		"Fox/source/**.hpp", 
+		"Fox/source/**.cpp", 
 	}
 	
 	includedirs
 	{
-		"%{prj.name}/src", 
+		"%{prj.name}/source", 
 		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.ENTT}", 
@@ -134,13 +132,13 @@ project "RUN"
 	
 	files
 	{
-		"Run/src/**.hpp", 
-		"Run/src/**.cpp", 
+		"Run/source/**.hpp", 
+		"Run/source/**.cpp", 
 	}
 	
 	includedirs
 	{
-		"Fox/src", 
+		"Fox/source", 
 		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.ENTT}", 
