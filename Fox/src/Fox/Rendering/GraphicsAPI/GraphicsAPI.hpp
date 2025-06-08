@@ -9,15 +9,15 @@
 #endif
 
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-#include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/Buffer.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/VertexArray.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/RenderBuffer/RenderBuffer.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Texture.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Cubemap.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Shader.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Pipeline.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Shader.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Cubemap.hpp"
+#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Texture.hpp"
 #endif
 
 namespace fox::gfx
