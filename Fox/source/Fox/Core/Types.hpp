@@ -11,7 +11,7 @@ namespace fox
 	using bool_t     = bool;
 	using char_t     = char;          //Not equal to signed char apparently...
 	using uchar_t    = unsigned char;
-	using schar_t    = signed char;
+	using schar_t    =   signed char;
 	
 	using int8_t     = std::int8_t;
 	using uint8_t    = std::uint8_t;
@@ -32,13 +32,15 @@ namespace fox
 
 	using uuid_t     = std::bitset<128u>;
 
+	enum class id_t      : fox::uint32_t {};
+	enum class binding_t : fox::index_t {};
+
 	enum : fox::bool_t
 	{
 		False = false,
 		True  = true,
 	};
 
-	enum class binding_t : fox::index_t {};
 
 
 

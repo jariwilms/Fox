@@ -6,10 +6,10 @@
 #include "Fox/Core/Library/Transform/Transform.hpp"
 #include "Fox/ECS/Components/Component.hpp"
 
-namespace fox::cmp
+namespace fox::ecs
 {
-	using CameraComponent       = cmp::Component<fox::Camera>;
-	using MeshFilterComponent   = cmp::Component<fox::MeshFilter>;
-	using RelationshipComponent = cmp::Component<fox::Relationship>;
-	using TransformComponent    = cmp::Component<fox::Transform>;
+	using CameraComponent       = ecs::Component<fox::Camera>;
+	using MeshFilterComponent   = ecs::Component<fox::MeshFilter>;
+	using RelationshipComponent = ecs::Component<fox::Relationship>;
+	using TransformComponent    = ecs::Component<fox::Transform>;
 }
