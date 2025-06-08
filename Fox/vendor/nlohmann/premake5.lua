@@ -1,6 +1,6 @@
 project "NLOHMANN"
 	language      "C++"
-	cppdialect    "C++17"
+	cppdialect    "C++11"
 	kind          "StaticLib"
 	staticruntime "On"
 	
@@ -10,6 +10,7 @@ project "NLOHMANN"
 	files
 	{
 		"include/nlohmann/json.hpp", 
+		"source/json.hpp", 
 	}
 	
 	includedirs
