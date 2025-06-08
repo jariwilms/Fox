@@ -1,32 +1,9 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Texture.hpp"
-#endif
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using binding_t            = api::gl::binding_t;
-
-        using length_t             = api::gl::length_t;
-        using area_t               = api::gl::area_t;
-        using volume_t             = api::gl::volume_t;
-
-        using Texture1D            = api::gl::Texture1D;
-        using Texture2D            = api::gl::Texture2D;
-        using Texture3D            = api::gl::Texture3D;
-
-        using Texture2DMultisample = api::gl::Texture2DMultisample;
-        using Texture3DMultisample = api::gl::Texture3DMultisample;
-#endif
-    }
-
-
-
     class Texture1D
     {
     public:

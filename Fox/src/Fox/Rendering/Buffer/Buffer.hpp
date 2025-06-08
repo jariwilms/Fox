@@ -1,31 +1,9 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/Buffer.hpp"
-#endif
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using binding_t           = api::gl::binding_t;
-        using range_t             = api::gl::range_t;
-
-        template<typename T>
-        using VertexBuffer        = api::gl::Buffer<T>;
-        using IndexBuffer         = api::gl::Buffer<fox::index_t>;
-
-        template<typename T>
-        using UniformBuffer       = api::gl::UniformBuffer<T>;
-        template<typename T, fox::uint64_t N>
-        using UniformArrayBuffer  = api::gl::UniformArrayBuffer<T, N>;
-#endif
-    }
-
-
-
     template<typename T>
     class VertexBuffer
     {

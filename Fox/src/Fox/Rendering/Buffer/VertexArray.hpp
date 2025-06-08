@@ -1,24 +1,10 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/Buffer/Buffer.hpp"
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/VertexArray.hpp"
-#endif
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using binding_t    = api::gl::binding_t;
-
-        using VertexArray  = api::gl::VertexArray;
-#endif
-    }
-
-
-
     class VertexArray
     {
     public:

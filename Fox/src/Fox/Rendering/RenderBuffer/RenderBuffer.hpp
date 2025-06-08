@@ -1,22 +1,9 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/RenderBuffer/RenderBuffer.hpp"
-#endif
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using RenderBuffer            = api::gl::RenderBuffer;
-        using RenderBufferMultisample = api::gl::RenderBufferMultisample;
-#endif
-    }
-
-
-
     class RenderBuffer
     {
     public:

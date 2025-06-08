@@ -1,23 +1,10 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-#include "Fox/Rendering/Shader/Shader.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Pipeline.hpp"
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#endif
+#include "Fox/Rendering/Shader/Shader.hpp"
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        template<typename T>
-        using Pipeline = api::gl::Pipeline<T>;
-#endif
-    }
-
-
-
     class Pipeline
     {
     public:
@@ -33,7 +20,7 @@ namespace fox::gfx
             _->bind();
         }
 
-        gfx::handle_t handle() const
+        auto handle() const
         {
             return _->handle();
         }

@@ -1,21 +1,9 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Cubemap.hpp"
-#endif
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using Cubemap = api::gl::Cubemap;
-#endif
-    }
-
-
-
     class Cubemap
     {
     public:

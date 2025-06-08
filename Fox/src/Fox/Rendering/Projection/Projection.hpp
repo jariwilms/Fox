@@ -37,7 +37,7 @@ namespace fox::gfx
             fox::float32_t near;
             fox::float32_t far;
         };
-        using projection_v = std::variant<perspective_p, orthographic_p>;
+        using  projection_v = std::variant<perspective_p, orthographic_p>;
 
         Projection() = default;
         Projection(projection_v value)
@@ -58,17 +58,17 @@ namespace fox::gfx
             }
         }
 
-        const fox::Matrix4f& matrix() const
+        auto matrix() const
         {
             return m_matrix;
         }
-              Type           type  () const
-              {
-                  return m_type;
-              }
+        auto type  () const
+        {
+            return m_type;
+        }
 
     private:
-        fox::Matrix4f m_matrix{ 1.0f };
         Type          m_type  { Type::Perspective };
+        fox::Matrix4f m_matrix{ 1.0f };
     };
 }

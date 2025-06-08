@@ -160,7 +160,7 @@ namespace fox::gfx::api::gl
     {
         gl::count_t  count;
         gl::count_t  instances;
-        gl::index_t  offset;
+        gl::index_t  index;
         gl::int32_t  baseVertex;
         gl::uint32_t baseInstance;
     };

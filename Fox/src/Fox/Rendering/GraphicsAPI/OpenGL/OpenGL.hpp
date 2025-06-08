@@ -28,7 +28,7 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 22 - Context State Queries
-    template<glf::Data D> requires (not gl::indexed_data_c<D>)
+    template<glf::Data D>    requires (not gl::indexed_data_c<D>)
     static auto get_value                               ()
     {
         const auto& get_boolean_v            = [](glf::Data data)
@@ -155,37 +155,37 @@ namespace fox::gfx::api::gl
 
         if constexpr (D == glf::Data::AliasedLineWidthRange)                            return get_vector2f_v(D);
         if constexpr (D == glf::Data::BlendColor)                                       return get_vector4f_v(D);
-        if constexpr (D == glf::Data::BlendDestinationAlpha)                            return glf::Blending::Factor{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::BlendDestinationRGB)                              return glf::Blending::Factor{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::BlendEquationAlpha)                               return glf::Blending::Equation{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::BlendEquationRGB)                                 return glf::Blending::Equation{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::BlendSourceAlpha)                                 return glf::Blending::Factor{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::BlendSourceRGB)                                   return glf::Blending::Factor{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::BlendDestinationAlpha)                            return static_cast<glf::Blending::Factor>           (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::BlendDestinationRGB)                              return static_cast<glf::Blending::Factor>           (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::BlendEquationAlpha)                               return static_cast<glf::Blending::Equation>         (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::BlendEquationRGB)                                 return static_cast<glf::Blending::Equation>         (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::BlendSourceAlpha)                                 return static_cast<glf::Blending::Factor>           (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::BlendSourceRGB)                                   return static_cast<glf::Blending::Factor>           (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::ColorClearValue)                                  return get_vector4f_v(D);
         if constexpr (D == glf::Data::ColorWriteMask)                                   return get_vector4b_v(D);
-        if constexpr (D == glf::Data::ContextFlags)                                     return glf::Context::Flag{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::ContextProfileMask)                               return glf::Context::Profile{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::ContextFlags)                                     return static_cast<glf::Context::Flag>              (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::ContextProfileMask)                               return static_cast<glf::Context::Profile>           (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::CopyReadBufferBinding)                            return get_handle_v(D);
         if constexpr (D == glf::Data::CopyWriteBufferBinding)                           return get_handle_v(D);
         if constexpr (D == glf::Data::CurrentProgram)                                   return get_handle_v(D);
         if constexpr (D == glf::Data::DebugGroupStackDepth)                             return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::DebugLoggedMessages)                              return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::DepthClearValue)                                  return get_floating_point64_v(D);
-        if constexpr (D == glf::Data::DepthFunction)                                    return glf::DepthFunction{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::DepthFunction)                                    return static_cast<glf::DepthFunction>              (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::DepthRange)                                       return get_vector2f_v(D);
         if constexpr (D == glf::Data::DispatchIndirectBufferBinding)                    return get_handle_v(D);
         if constexpr (D == glf::Data::DoubleBuffer)                                     return get_boolean_v  (D);
-        if constexpr (D == glf::Data::DrawBuffer)                                       return glf::FrameBuffer::Source{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::DrawBuffer)                                       return static_cast<glf::FrameBuffer::Source>        (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::DrawFramebufferBinding)                           return get_handle_v(D);
         if constexpr (D == glf::Data::DrawIndirectBufferBinding)                        return get_handle_v(D);
-        if constexpr (D == glf::Data::FragmentShaderDerivativeHint)                     return glf::Hint::Mode{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::ImplementationColorReadFormat)                    return glf::PixelData::Format{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::ImplementationColorReadType)                      return glf::PixelData::Type{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::FragmentShaderDerivativeHint)                     return static_cast<glf::Hint::Mode>                 (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::ImplementationColorReadFormat)                    return static_cast<glf::PixelData::Format>          (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::ImplementationColorReadType)                      return static_cast<glf::PixelData::Type>            (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::IndexArrayBufferBinding)                          return get_handle_v(D);
-        if constexpr (D == glf::Data::LayerProvokingVertex)                             return glf::ProvokingVertex::Mode{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::LineSmoothHint)                                   return glf::Hint::Mode{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::LayerProvokingVertex)                             return static_cast<glf::ProvokingVertex::Mode>      (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::LineSmoothHint)                                   return static_cast<glf::Hint::Mode>                 (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::LineWidth)                                        return get_floating_point64_v(D);
-        if constexpr (D == glf::Data::LogicOperationMode)                               return glf::LogicalPixelOperation{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::LogicOperationMode)                               return static_cast<glf::LogicalPixelOperation>      (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::MajorVersion)                                     return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::Maximum3DTextureSize)                             return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::MaximumArrayTextureLayers)                        return get_unsigned_integer32_v(D);
@@ -291,13 +291,13 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::PointSizeRange)                                   return get_vector2f_v(D);
         if constexpr (D == glf::Data::PolygonOffsetFactor)                              return get_floating_point32_v(D);
         if constexpr (D == glf::Data::PolygonOffsetUnits)                               return get_floating_point32_v(D);
-        if constexpr (D == glf::Data::PolygonSmoothHint)                                return glf::Hint::Mode{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::PolygonSmoothHint)                                return static_cast<glf::Hint::Mode>                 (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::PrimitiveRestartIndex)                            return get_index_v(D);
         if constexpr (D == glf::Data::ProgramBinaryFormats)                             return get_binary_formats_v(D);
         if constexpr (D == glf::Data::ProgramPipelineBinding)                           return get_handle_v(D);
-        if constexpr (D == glf::Data::ProvokingVertex)                                  return glf::ProvokingVertex::Mode{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::ProvokingVertex)                                  return static_cast<glf::ProvokingVertex::Mode>      (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::QueryBufferBinding)                               return get_handle_v(D);
-        if constexpr (D == glf::Data::ReadBuffer)                                       return glf::FrameBuffer::Source{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::ReadBuffer)                                       return static_cast<glf::FrameBuffer::Source>        (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::ReadFrameBufferBinding)                           return get_handle_v(D);
         if constexpr (D == glf::Data::RenderbufferBinding)                              return get_handle_v(D);
         if constexpr (D == glf::Data::SampleBuffers)                                    return get_unsigned_integer32_v(D);
@@ -310,19 +310,19 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::ShaderStorageBufferBinding)                       return get_handle_v(D);
         if constexpr (D == glf::Data::ShaderStorageBufferOffsetAlignment)               return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::SmoothLineWidthGranularity)                       return get_floating_point32_v(D);
-        if constexpr (D == glf::Data::SmoothLineWidthRange)                             return get_vector2f_v (D);
-        if constexpr (D == glf::Data::StencilBackFail)                                  return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::StencilBackFunction)                              return glf::Stencil::Function{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::StencilBackPassDepthFail)                         return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::StencilBackPassDepthPass)                         return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::SmoothLineWidthRange)                             return get_vector2f_v(D);
+        if constexpr (D == glf::Data::StencilBackFail)                                  return static_cast<glf::Stencil::Action>            (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::StencilBackFunction)                              return static_cast<glf::Stencil::Function>          (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::StencilBackPassDepthFail)                         return static_cast<glf::Stencil::Action>            (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::StencilBackPassDepthPass)                         return static_cast<glf::Stencil::Action>            (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::StencilBackReference)                             return get_integer32_v(D);
         if constexpr (D == glf::Data::StencilBackValueMask)                             return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::StencilBackWriteMask)                             return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::StencilClearValue)                                return get_index_v(D);
-        if constexpr (D == glf::Data::StencilFail)                                      return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::StencilFunction)                                  return glf::Stencil::Function{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::StencilPassDepthFail)                             return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
-        if constexpr (D == glf::Data::StencilPassDepthPass)                             return glf::Stencil::Action{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::StencilFail)                                      return static_cast<glf::Stencil::Action>            (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::StencilFunction)                                  return static_cast<glf::Stencil::Function>          (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::StencilPassDepthFail)                             return static_cast<glf::Stencil::Action>            (get_unsigned_integer32_v(D));
+        if constexpr (D == glf::Data::StencilPassDepthPass)                             return static_cast<glf::Stencil::Action>            (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::StencilReference)                                 return get_integer32_v(D);
         if constexpr (D == glf::Data::StencilValueMask)                                 return get_unsigned_integer32_v(D);
         if constexpr (D == glf::Data::StencilWriteMask)                                 return get_unsigned_integer32_v(D);
@@ -340,7 +340,7 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::TextureBindingRectangle)                          return get_handle_v(D);
         if constexpr (D == glf::Data::TextureBufferBinding)                             return get_handle_v(D);
         if constexpr (D == glf::Data::TextureBufferOffsetAlignment)                     return get_unsigned_integer32_v(D);
-        if constexpr (D == glf::Data::TextureCompressionHint)                           return glf::Hint::Mode{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::TextureCompressionHint)                           return static_cast<glf::Hint::Mode>                 (get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::Timestamp)                                        return get_integer64_v(D);
         if constexpr (D == glf::Data::TransformFeedbackBufferBinding)                   return get_handle_v(D);
         if constexpr (D == glf::Data::UniformBufferBinding)                             return get_handle_v(D);
@@ -355,10 +355,10 @@ namespace fox::gfx::api::gl
         if constexpr (D == glf::Data::VertexArrayBinding)                               return get_handle_v(D);
         if constexpr (D == glf::Data::Viewport)                                         return get_area_v(D);
         if constexpr (D == glf::Data::ViewportBoundsRange)                              return get_vector2i_v(D);
-        if constexpr (D == glf::Data::ViewportIndexProvokingVertex)                     return glf::ProvokingVertex::Convention{ get_unsigned_integer32_v(D) };
+        if constexpr (D == glf::Data::ViewportIndexProvokingVertex)                     return static_cast<glf::ProvokingVertex::Convention>(get_unsigned_integer32_v(D));
         if constexpr (D == glf::Data::ViewportSubPixelBits)                             return get_unsigned_integer32_v(D);
     }
-    template<glf::Data D> requires gl::indexed_data_c<D>
+    template<glf::Data D>    requires gl::indexed_data_c<D>
     static auto get_value_index                         (gl::index_t index)
     {
         const auto& get_unsigned_integer32_v = [](glf::Data data, gl::index_t index)

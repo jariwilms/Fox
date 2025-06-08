@@ -1,28 +1,12 @@
 #pragma once
 
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/Texture/Texture.hpp"
-#include "Fox/Rendering/Texture/Cubemap.hpp"
 #include "Fox/Rendering/RenderBuffer/RenderBuffer.hpp"
-
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-#include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
-#endif
+#include "Fox/Rendering/Texture/Cubemap.hpp"
+#include "Fox/Rendering/Texture/Texture.hpp"
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using index_t                = api::gl::index_t;
-        
-        using FrameBuffer            = api::gl::FrameBuffer;
-        using FrameBufferMultisample = api::gl::FrameBufferMultisample;
-#endif
-    }
-
-
-
     class FrameBuffer
     {
     public:
@@ -46,17 +30,17 @@ namespace fox::gfx
             _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<impl::Texture2D>    texture, fox::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::Texture2D>    texture, fox::uint32_t level = 0u)
         {
-            _->attach(identifier, attachment, texture, level);
+            _->attach(identifier, attachment, texture->impl(), level);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<impl::Cubemap>      cubemap, fox::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::Cubemap>      cubemap, fox::uint32_t level = 0u)
         {
-            _->attach(identifier, attachment, cubemap, level);
+            _->attach(identifier, attachment, cubemap->impl(), level);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<impl::RenderBuffer> renderBuffer)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::RenderBuffer> renderBuffer)
         {
-            _->attach(identifier, attachment, renderBuffer);
+            _->attach(identifier, attachment, renderBuffer->impl());
         }
 
         template<Surface A = Surface::Texture>
@@ -93,7 +77,7 @@ namespace fox::gfx
         
         auto dimensions() const
         {
-            return static_cast<fox::Vector2u>(_->dimensions());
+            return _->dimensions();
         }
         auto handle    () const
         {
@@ -108,8 +92,7 @@ namespace fox::gfx
         FrameBuffer(const fox::Vector2u& dimensions, std::span<const Specification> specifications)
             : _{ std::make_shared<impl::FrameBuffer>(dimensions, specifications) } {}
 
-        std::shared_ptr<impl::FrameBuffer>                               _;
-        std::unordered_map<std::string, std::shared_ptr<gfx::Texture2D>> m_proxies{};
+        std::shared_ptr<impl::FrameBuffer> _;
     };
     class FrameBufferMultisample
     {

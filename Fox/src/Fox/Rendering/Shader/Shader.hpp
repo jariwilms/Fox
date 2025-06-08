@@ -1,21 +1,9 @@
 #pragma once
 
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Shader.hpp"
-#endif
 
 namespace fox::gfx
 {
-    namespace impl
-    {
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using Shader = api::gl::Shader;
-#endif
-    }
-
-
-
     class Shader
     {
     public:
@@ -26,11 +14,11 @@ namespace fox::gfx
             return std::shared_ptr<Shader>(new Shader{ stage, binary });
         }
 
-        Stage         stage()  const
+        auto stage()  const
         {
             return _->stage();
         }
-        gfx::handle_t handle() const
+        auto handle() const
         {
             return _->handle();
         }
