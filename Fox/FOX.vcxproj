@@ -107,6 +107,7 @@
     <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Enumeration\Enumeration.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
+    <ClInclude Include="src\Fox\Core\Library\JSON\json.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Library.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
     <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp" />
@@ -252,6 +253,9 @@
     <ProjectReference Include="vendor\stb\STB_IMAGE.vcxproj">
       <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Fox\Config\config.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

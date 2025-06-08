@@ -62,6 +62,8 @@ project "FOX"
 	{
 		"Fox/src/**.hpp", 
 		"Fox/src/**.cpp", 
+		
+		"Fox/src/**.json", 
 	}
 	
 	includedirs

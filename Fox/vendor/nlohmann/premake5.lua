@@ -17,6 +17,11 @@ project "NLOHMANN"
 		"include", 
 	}
 
+	disablewarnings
+	{
+		26819, 
+	}
+
 	filter "system:windows"
 		systemversion "latest"
 
