@@ -8,14 +8,17 @@ workspace "Fox"
 		"Release", 
 	}
 	
-	includedir = {}
-	includedir["ASSIMP"]   = "Fox/vendor/assimp/include"
-	includedir["ENTT"]     = "Fox/vendor/entt/include"
-	includedir["GLAD"]     = "Fox/vendor/glad/include"
-	includedir["GLFW"]     = "Fox/vendor/glfw/include"
-	includedir["GLM"]      = "Fox/vendor/glm/include"
-	includedir["MIMALLOC"] = "Fox/vendor/mimalloc/include"
-	includedir["STB"]      = "Fox/vendor/stb/include"
+	includedir = 
+	{
+		["ASSIMP"]   = "Fox/vendor/assimp/include", 
+		["ENTT"]     = "Fox/vendor/entt/include", 
+		["GLAD"]     = "Fox/vendor/glad/include", 
+		["GLFW"]     = "Fox/vendor/glfw/include", 
+		["GLM"]      = "Fox/vendor/glm/include", 
+		["NLOHMANN"] = "Fox/vendor/nlohmann/include", 
+		["MIMALLOC"] = "Fox/vendor/mimalloc/include", 
+		["STB"]      = "Fox/vendor/stb/include", 
+	}
 	
 	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
 	
@@ -25,6 +28,7 @@ group "Dependencies"
 	include "Fox/vendor/glad"
 	include "Fox/vendor/glfw"
 	include "Fox/vendor/glm"
+	include "Fox/vendor/nlohmann"
 	include "Fox/vendor/mimalloc"
 	include "Fox/vendor/stb"
 group ""
@@ -45,6 +49,7 @@ project "FOX"
 	
 	defines
 	{
+		'FOX_ENGINE', 
 		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
 		'FOX_ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 		"FOX_MALLOC", 
@@ -68,6 +73,7 @@ project "FOX"
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
+		"%{includedir.NLOHMANN}", 
 		"%{includedir.MIMALLOC}", 
 		"%{includedir.STB}", 
 	}
@@ -79,6 +85,7 @@ project "FOX"
 		"GLAD", 
 		"GLFW", 
 		"GLM", 
+		"NLOHMANN", 
 		"MIMALLOC", 
 		"STB_IMAGE", 
 		
@@ -138,6 +145,7 @@ project "RUN"
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
+		"%{includedir.NLOHMANN}", 
 		"%{includedir.STB}", 
 	}
 	

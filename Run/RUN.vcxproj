@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\nlohmann\include;..\Fox\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -75,7 +75,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Fox\src;..\Fox\vendor\assimp\include;..\Fox\vendor\entt\include;..\Fox\vendor\glad\include;..\Fox\vendor\glfw\include;..\Fox\vendor\glm\include;..\Fox\vendor\nlohmann\include;..\Fox\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

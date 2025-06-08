@@ -57,8 +57,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\nlohmann\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -78,8 +78,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\nlohmann\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -242,6 +242,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\glm\GLM.vcxproj">
       <Project>{05EB870B-71F4-877C-FA6F-9E7C6678937C}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\nlohmann\NLOHMANN.vcxproj">
+      <Project>{E0F5950F-CCC2-F01A-F5DB-DEC2E10726A9}</Project>
     </ProjectReference>
     <ProjectReference Include="vendor\mimalloc\MIMALLOC.vcxproj">
       <Project>{73103C37-5FDD-9642-88F6-84EA7422CCD0}</Project>
