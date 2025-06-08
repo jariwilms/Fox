@@ -1,21 +1,21 @@
 {
   "engine": {
-    "name": "MyGameEngine",
-    "version": "1.0.0",
-    "author": "Developer Name",
-    "description": "A custom C++ game engine",
-    "build_date": "2025-06-08",
+    "name": "Fox",
+    "version": "0.0.0",
+    "author": "Jari Wilms",
+    "description": "A C++ game engine",
+    "build_date": "2025-XX-XX",
     "debug_mode": true
   },
   "window": {
-    "title": "Game Window",
+    "title": "Fox Engine",
     "width": 1920,
     "height": 1080,
     "fullscreen": false,
-    "vsync": true,
+    "vsync": false,
     "resizable": true,
     "antialiasing": {
-      "enabled": true,
+      "enabled": false,
       "samples": 4
     }
   },
@@ -23,7 +23,7 @@
     "api": "OpenGL",
     "version": "4.6",
     "backend": "GLFW",
-    "max_fps": 60,
+    "max_fps": 0,
     "shadow_quality": "high",
     "texture_filtering": "anisotropic",
     "anisotropy_level": 16,
@@ -34,9 +34,9 @@
     },
     "lighting": {
       "max_lights": 32,
+      "max_shadow_casting_lights": 4,
       "shadow_mapping": true,
       "shadow_resolution": 2048,
-      "ambient_light": [ 0.2, 0.2, 0.2, 1.0 ]
     }
   },
   "audio": {
@@ -70,17 +70,17 @@
       "vibration": true
     }
   },
-  "physics": {
-    "enabled": true,
-    "engine": "Bullet",
-    "gravity": [ 0.0, -9.81, 0.0 ],
-    "timestep": 0.016667,
-    "max_substeps": 10,
-    "solver_iterations": 10,
-    "collision_margin": 0.01,
-    "sleep_threshold": 0.8,
-    "deactivation_time": 2.0
-  },
+  //"physics": {
+  //  "engine": "",
+  //  "enabled": false,
+  //  "gravity": [ 0.0, -9.81, 0.0 ],
+  //  "timestep": 0.016667,
+  //  "max_substeps": 10,
+  //  "solver_iterations": 10,
+  //  "collision_margin": 0.01,
+  //  "sleep_threshold": 0.8,
+  //  "deactivation_time": 2.0
+  //},
   "assets": {
     "base_path": "./assets/",
     "textures_path": "textures/",
@@ -92,134 +92,101 @@
     "cache_enabled": true,
     "max_cache_size": 512,
     "supported_formats": {
-      "textures": [ "png", "jpg", "tga", "dds", "hdr" ],
-      "models": [ "obj", "fbx", "gltf", "dae" ],
+      "textures": [ "png", "jpg", "hdr" ],
+      "models": [ "obj", "fbx", "gltf" ],
       "audio": [ "wav", "mp3", "ogg", "flac" ]
     }
-  },
-  "memory": {
-    "heap_size": 268435456,
-    "stack_size": 8388608,
-    "texture_pool_size": 134217728,
-    "audio_pool_size": 67108864,
-    "geometry_pool_size": 67108864,
-    "enable_memory_tracking": true,
-    "garbage_collection": {
-      "enabled": true,
-      "interval": 5.0,
-      "threshold": 0.8
-    }
-  },
-  "threading": {
-    "worker_threads": 4,
-    "render_thread": true,
-    "audio_thread": true,
-    "physics_thread": false,
-    "job_queue_size": 1024,
-    "thread_affinity": true
-  },
-  "logging": {
-    "enabled": true,
-    "level": "INFO",
-    "console_output": true,
-    "file_output": true,
-    "log_file": "engine.log",
-    "max_file_size": 10485760,
-    "max_backup_files": 5,
-    "timestamp_format": "%Y-%m-%d %H:%M:%S",
-    "categories": {
-      "RENDERER": true,
-      "AUDIO": true,
-      "PHYSICS": true,
-      "INPUT": true,
-      "ASSETS": true,
-      "MEMORY": true,
-      "NETWORK": false
-    }
-  },
-  "performance": {
-    "profiling": {
-      "enabled": true,
-      "cpu_profiling": true,
-      "gpu_profiling": false,
-      "memory_profiling": true,
-      "frame_timing": true
-    },
-    "optimization": {
-      "level": "O2",
-      "fast_math": true,
-      "vectorization": true,
-      "loop_unrolling": true
-    }
-  },
-  "networking": {
-    "enabled": false,
-    "max_connections": 32,
-    "port": 7777,
-    "protocol": "UDP",
-    "timeout": 5000,
-    "packet_size": 1024,
-    "compression": false,
-    "encryption": false
-  },
-  "scripting": {
-    "enabled": true,
-    "language": "Lua",
-    "auto_reload": true,
-    "sandbox": true,
-    "max_execution_time": 1000,
-    "memory_limit": 16777216
-  },
-  "scenes": {
-    "default_scene": "main_menu",
-    "scene_transition": {
-      "fade_duration": 1.0,
-      "loading_screen": true,
-      "preload_adjacent": false
-    },
-    "entity_component_system": {
-      "max_entities": 10000,
-      "component_pools": true,
-      "system_priority": [
-        "InputSystem",
-        "PhysicsSystem",
-        "AnimationSystem",
-        "RenderSystem",
-        "AudioSystem"
-      ]
-    }
-  },
-  "build": {
-    "compiler": "GCC",
-    "standard": "C++17",
-    "architecture": "x64",
-    "configuration": "Debug",
-    "output_directory": "./bin/",
-    "intermediate_directory": "./obj/",
-    "dependencies": [
-      "OpenGL",
-      "GLFW",
-      "GLEW",
-      "GLM",
-      "Assimp",
-      "Bullet",
-      "OpenAL",
-      "Lua"
-    ],
-    "preprocessor_definitions": [
-      "ENGINE_DEBUG",
-      "OPENGL_ENABLED",
-      "PHYSICS_ENABLED"
-    ]
-  },
-  "platform": {
-    "target": "Windows",
-    "supported_platforms": [ "Windows", "Linux", "macOS" ],
-    "minimum_requirements": {
-      "cpu": "Intel Core i5 / AMD FX-6300",
-      "ram": "8 GB",
-      "gpu": "DirectX 11 compatible",
-      "storage": "2 GB"
-    }
   }
+  //"memory": {
+  //  "heap_size": 268435456,
+  //  "stack_size": 8388608,
+  //  "texture_pool_size": 134217728,
+  //  "audio_pool_size": 67108864,
+  //  "geometry_pool_size": 67108864,
+  //  "enable_memory_tracking": true,
+  //  "garbage_collection": {
+  //    "enabled": true,
+  //    "interval": 5.0,
+  //    "threshold": 0.8
+  //  }
+  //},
+  //"threading": {
+  //  "worker_threads": 4,
+  //  "render_thread": true,
+  //  "audio_thread": true,
+  //  "physics_thread": false,
+  //  "job_queue_size": 1024,
+  //  "thread_affinity": true
+  //},
+  //"logging": {
+  //  "enabled": true,
+  //  "level": "INFO",
+  //  "console_output": true,
+  //  "file_output": true,
+  //  "log_file": "engine.log",
+  //  "max_file_size": 10485760,
+  //  "max_backup_files": 5,
+  //  "timestamp_format": "%Y-%m-%d %H:%M:%S",
+  //  "categories": {
+  //    "RENDERER": true,
+  //    "AUDIO": true,
+  //    "PHYSICS": true,
+  //    "INPUT": true,
+  //    "ASSETS": true,
+  //    "MEMORY": true,
+  //    "NETWORK": false
+  //  }
+  //},
+  //"performance": {
+  //  "profiling": {
+  //    "enabled": true,
+  //    "cpu_profiling": true,
+  //    "gpu_profiling": false,
+  //    "memory_profiling": true,
+  //    "frame_timing": true
+  //  },
+  //  "optimization": {
+  //    "level": "O2",
+  //    "fast_math": true,
+  //    "vectorization": true,
+  //    "loop_unrolling": true
+  //  }
+  //},
+  //"networking": {
+  //  "enabled": false,
+  //  "max_connections": 32,
+  //  "port": 7777,
+  //  "protocol": "UDP",
+  //  "timeout": 5000,
+  //  "packet_size": 1024,
+  //  "compression": false,
+  //  "encryption": false
+  //},
+  //"scripting": {
+  //  "enabled": true,
+  //  "language": "Lua",
+  //  "auto_reload": true,
+  //  "sandbox": true,
+  //  "max_execution_time": 1000,
+  //  "memory_limit": 16777216
+  //},
+  //"scenes": {
+  //  "default_scene": "main_menu",
+  //  "scene_transition": {
+  //    "fade_duration": 1.0,
+  //    "loading_screen": true,
+  //    "preload_adjacent": false
+  //  },
+  //  "entity_component_system": {
+  //    "max_entities": 10000,
+  //    "component_pools": true,
+  //    "system_priority": [
+  //      "InputSystem",
+  //      "PhysicsSystem",
+  //      "AnimationSystem",
+  //      "RenderSystem",
+  //      "AudioSystem"
+  //    ]
+  //  }
+  //}
 }
