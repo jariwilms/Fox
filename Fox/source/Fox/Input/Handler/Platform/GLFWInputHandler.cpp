@@ -48,15 +48,15 @@ namespace fox::input
         return !m_activeKeys.test(code) && m_lastActiveKeys.test(code);
     }
                   
-    fox::bool_t   GLFWInputHandler::button_pressed(btn::btn_t code) const
+    fox::bool_t   GLFWInputHandler::button_pressed(btn::button_t code) const
     {
         return m_activeButtons.test(code);
     }
-    fox::bool_t   GLFWInputHandler::button_down(btn::btn_t code)    const
+    fox::bool_t   GLFWInputHandler::button_down(btn::button_t code)    const
     {
         return m_activeButtons.test(code) && !m_lastActiveButtons.test(code);
     }
-    fox::bool_t   GLFWInputHandler::button_up(btn::btn_t code)      const
+    fox::bool_t   GLFWInputHandler::button_up(btn::button_t code)      const
     {
         return !m_activeButtons.test(code) && m_lastActiveButtons.test(code);
     }
@@ -74,7 +74,7 @@ namespace fox::input
         return fox::False;
     }
                   
-    fox::bool_t   GLFWInputHandler::modifier(mod::mod_t code)       const
+    fox::bool_t   GLFWInputHandler::modifier(mod::modifier_t code)       const
     {
         return fox::False;
     }

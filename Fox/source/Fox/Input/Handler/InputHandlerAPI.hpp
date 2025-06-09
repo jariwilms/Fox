@@ -24,15 +24,15 @@ namespace fox::input
         virtual fox::bool_t   key_down(key::key_t code)       const = 0;
         virtual fox::bool_t   key_up(key::key_t code)         const = 0;
                               
-        virtual fox::bool_t   button_pressed(btn::btn_t code) const = 0;
-        virtual fox::bool_t   button_down(btn::btn_t code)    const = 0;
-        virtual fox::bool_t   button_up(btn::btn_t code)      const = 0;
+        virtual fox::bool_t   button_pressed(btn::button_t code) const = 0;
+        virtual fox::bool_t   button_down(btn::button_t code)    const = 0;
+        virtual fox::bool_t   button_up(btn::button_t code)      const = 0;
                               
         virtual fox::bool_t   scrolling()                     const = 0;
         virtual fox::bool_t   scrolling_vertical()            const = 0;
         virtual fox::bool_t   scrolling_horizontal()          const = 0;
                               
-        virtual fox::bool_t   modifier(mod::mod_t code)       const = 0;
+        virtual fox::bool_t   modifier(mod::modifier_t code)       const = 0;
 
         virtual fox::Vector2f cursor_position()               const = 0;
         virtual fox::Vector2f cursor_position_relative()      const = 0;

@@ -24,9 +24,9 @@ namespace fox::input
     fox::bool_t   key_down(key::key_t code);
     fox::bool_t   key_up(key::key_t code);
               
-    fox::bool_t   button_pressed(btn::btn_t code);
-    fox::bool_t   button_down(btn::btn_t code);
-    fox::bool_t   button_up(btn::btn_t code);
+    fox::bool_t   button_pressed(btn::button_t code);
+    fox::bool_t   button_down(btn::button_t code);
+    fox::bool_t   button_up(btn::button_t code);
               
     fox::bool_t   scrolling();
     fox::bool_t   scrolling_vertical();

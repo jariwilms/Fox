@@ -37,15 +37,15 @@ namespace fox::input
         return api::inputHandler->key_up(code);
     }
                   
-    fox::bool_t   button_pressed(btn::btn_t code)
+    fox::bool_t   button_pressed(btn::button_t code)
     {
         return api::inputHandler->button_pressed(code);
     }
-    fox::bool_t   button_down(btn::btn_t code)
+    fox::bool_t   button_down(btn::button_t code)
     {
         return api::inputHandler->button_down(code);
     }
-    fox::bool_t   button_up(btn::btn_t code)
+    fox::bool_t   button_up(btn::button_t code)
     {
         return api::inputHandler->button_up(code);
     }

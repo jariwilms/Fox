@@ -4,18 +4,18 @@
 
 namespace fox::input::mod
 {
-    using mod_t = fox::int32_t;
+    using modifier_t = fox::int32_t;
 
-    enum : mod_t
+    enum : modifier_t
     {
-        Shift    =  1,
-        Ctrl     =  2, 
-        Alt      =  4, 
-        Super    =  8, 
-        CapsLock = 16, 
-        NumLock  = 32, 
+        Shift    = 0x1 << 0,
+        Ctrl     = 0x1 << 1,
+        Alt      = 0x1 << 2,
+        Super    = 0x1 << 3,
+        CapsLock = 0x1 << 4,
+        NumLock  = 0x1 << 5,
     };
-
-    static constexpr mod_t min{ Shift };
-    static constexpr mod_t max{ NumLock };
+    
+    static constexpr modifier_t min{ Shift };
+    static constexpr modifier_t max{ NumLock };
 }

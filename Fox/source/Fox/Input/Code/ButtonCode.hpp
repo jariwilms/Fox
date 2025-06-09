@@ -4,9 +4,9 @@
 
 namespace fox::input::btn
 {
-    using btn_t = fox::int32_t;
+    using button_t = fox::int32_t;
 
-    enum : btn_t
+    enum : button_t
     {
         Button1 = 0, 
         Button2 = 1, 
@@ -24,6 +24,6 @@ namespace fox::input::btn
         Forward     = Button5, 
     };
 
-    static constexpr btn_t min{ Button1 };
-    static constexpr btn_t max{ Button8 };
+    static constexpr button_t min{ Button1 };
+    static constexpr button_t max{ Button8 };
 }
