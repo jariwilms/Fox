@@ -164,22 +164,22 @@ namespace fox
         {
             auto speed{ 5.0f * Time::delta() };
 
-            if (input::key_pressed(input::key::Escape     )) m_window->close();
-            if (input::key_pressed(input::key::LeftShift  )) speed *= 10.0f;
-            if (input::key_pressed(input::key::LeftControl)) speed /=  5.0f;
-            if (input::key_pressed(input::key::W          )) cameraTransform.position += cameraTransform.forward() * speed;
-            if (input::key_pressed(input::key::A          )) cameraTransform.position -= cameraTransform.right  () * speed;
-            if (input::key_pressed(input::key::S          )) cameraTransform.position -= cameraTransform.forward() * speed;
-            if (input::key_pressed(input::key::D          )) cameraTransform.position += cameraTransform.right  () * speed;
-            if (input::key_pressed(input::key::E          )) cameraTransform.position += cameraTransform.up     () * speed;
-            if (input::key_pressed(input::key::Q          )) cameraTransform.position -= cameraTransform.up     () * speed;
+            if (input::key_active(input::key::Escape     )) m_window->close();
+            if (input::key_active(input::key::LeftShift  )) speed *= 10.0f;
+            if (input::key_active(input::key::LeftControl)) speed /=  5.0f;
+            if (input::key_active(input::key::W          )) cameraTransform.position += cameraTransform.forward() * speed;
+            if (input::key_active(input::key::A          )) cameraTransform.position -= cameraTransform.right  () * speed;
+            if (input::key_active(input::key::S          )) cameraTransform.position -= cameraTransform.forward() * speed;
+            if (input::key_active(input::key::D          )) cameraTransform.position += cameraTransform.right  () * speed;
+            if (input::key_active(input::key::E          )) cameraTransform.position += cameraTransform.up     () * speed;
+            if (input::key_active(input::key::Q          )) cameraTransform.position -= cameraTransform.up     () * speed;
 
-            if (input::button_pressed(input::button::RightMouse))
+            if (input::button_active(input::button::RightMouse))
             {
                 static fox::Vector3f rotation{};
 
                 auto       & ct  = observer.get_component<ecs::TransformComponent>().get();
-                auto  const& cpr = input::cursor_position_relative() / 10.0f;
+                auto  const& cpr = input::cursor_position_delta() / 10.0f;
 
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
@@ -216,7 +216,7 @@ namespace fox
 
 
 
-            auto test = input::key_pressed(input::key::A);
+
 
             move_camera();
             rotate_helmet();

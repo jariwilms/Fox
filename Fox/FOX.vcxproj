@@ -126,6 +126,7 @@
     <ClInclude Include="source\Fox\Experimental\Experimental.hpp" />
     <ClInclude Include="source\Fox\Input\API\GLFWInputHandler.hpp" />
     <ClInclude Include="source\Fox\Input\Code\Button.hpp" />
+    <ClInclude Include="source\Fox\Input\Code\Controller.hpp" />
     <ClInclude Include="source\Fox\Input\Code\Key.hpp" />
     <ClInclude Include="source\Fox\Input\Code\Modifier.hpp" />
     <ClInclude Include="source\Fox\Input\Input.hpp" />

@@ -19,6 +19,7 @@ namespace fox::input::api
             m_lastActiveKeys     = m_activeKeys;
             m_lastActiveButtons  = m_activeButtons;
             m_lastCursorPosition = m_cursorPosition;
+            m_lastScrollWheel    = m_scrollWheel;
         }
         void reset                     ()
         {
@@ -32,68 +33,60 @@ namespace fox::input::api
             m_lastCursorPosition = {};
         }
 
-        auto any_pressed               ()                       const -> fox::bool_t
+        auto any_key_active            ()                     const -> fox::bool_t
         {
-            return m_activeKeys.any() or m_activeButtons.any();
+            return m_activeKeys.any();
         }
-        auto any_down                  ()                       const -> fox::bool_t
+        auto any_button_active         ()                     const -> fox::bool_t
         {
-            return fox::False;
-        }
-        auto any_up                    ()                       const -> fox::bool_t
-        {
-            return fox::False;
+            return m_activeButtons.any();
         }
 
-        auto key_pressed               (input::key_t    code)   const -> fox::bool_t
+        auto key_active                (input::key_t    code) const -> fox::bool_t
         {
             return m_activeKeys.test(code);
         }
-        auto key_down                  (input::key_t    code)   const -> fox::bool_t
+        auto key_pressed               (input::key_t    code) const -> fox::bool_t
         {
             return m_activeKeys.test(code) and !m_lastActiveKeys.test(code);
         }
-        auto key_up                    (input::key_t    code)   const -> fox::bool_t
+        auto key_released              (input::key_t    code) const -> fox::bool_t
         {
             return !m_activeKeys.test(code) and m_lastActiveKeys.test(code);
         }
 
-        auto button_pressed            (input::button_t code)   const -> fox::bool_t
+        auto button_active             (input::button_t code) const -> fox::bool_t
         {
             return m_activeButtons.test(code);
         }
-        auto button_down               (input::button_t code)   const -> fox::bool_t
+        auto button_pressed            (input::button_t code) const -> fox::bool_t
         {
             return m_activeButtons.test(code) and !m_lastActiveButtons.test(code);
         }
-        auto button_up                 (input::button_t code)   const -> fox::bool_t
+        auto button_released           (input::button_t code) const -> fox::bool_t
         {
             return !m_activeButtons.test(code) and m_lastActiveButtons.test(code);
         }
 
-        auto is_scrolling              ()                       const -> fox::bool_t
-        {
-            return fox::False;
-        }
-        auto is_scrolling_vertical     ()                       const -> fox::bool_t
-        {
-            return fox::False;
-        }
-        auto is_scrolling_horizontal   ()                       const -> fox::bool_t
-        {
-            return fox::False;
-        }
-
-        auto cursor_position           ()                       const -> fox::Vector2f
+        auto cursor_position           ()                     const -> fox::Vector2f
         {
             return m_cursorPosition;
         }
-        auto cursor_position_relative  ()                       const -> fox::Vector2f
+        auto cursor_position_delta     ()                     const -> fox::Vector2f
         {
             return m_cursorPosition - m_lastCursorPosition;
         }
 
-        void glfw_input_key_callback   (GLFWwindow* window, fox::int32_t key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t mods)
+        auto scroll_wheel              ()                     const -> fox::Vector2f
+        {
+            return m_scrollWheel;
+        }
+        auto scroll_wheel_delta        ()                     const -> fox::Vector2f
+        {
+            return m_lastScrollWheel - m_scrollWheel;
+        }
+
+        void glfw_input_key_callback   (GLFWwindow* window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t mods)
         {
             if (std::cmp_less(key, key::min) or std::cmp_greater(key, key::max)) return;
 
@@ -104,7 +97,7 @@ namespace fox::input::api
                 case GLFW_REPEAT :                                    break;
             }
         }
-        void glfw_input_button_callback(GLFWwindow* window, fox::int32_t button,                          fox::int32_t action, fox::int32_t mods)
+        void glfw_input_button_callback(GLFWwindow* window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t mods)
         {
             if (std::cmp_less(button, button::min) or std::cmp_greater(button, button::max)) return;
 
@@ -115,13 +108,13 @@ namespace fox::input::api
                 case GLFW_REPEAT :                                          break;
             }
         }
-        void glfw_input_cursor_callback(GLFWwindow* window, fox::float64_t x   , fox::float64_t y                                               )
+        void glfw_input_cursor_callback(GLFWwindow* window, fox::float64_t x     , fox::float64_t y                                               )
         {
             m_cursorPosition = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
-        void glfw_input_scroll_callback(GLFWwindow* window, fox::float64_t x   , fox::float64_t y                                               )
+        void glfw_input_scroll_callback(GLFWwindow* window, fox::float64_t x     , fox::float64_t y                                               )
         {
-            
+            m_scrollWheel = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
     
     protected:
@@ -133,5 +126,7 @@ namespace fox::input::api
 
         fox::Vector2f              m_cursorPosition{};
         fox::Vector2f              m_lastCursorPosition{};
+        fox::Vector2f              m_scrollWheel{};
+        fox::Vector2f              m_lastScrollWheel{};
     };
 }

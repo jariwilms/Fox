@@ -12,6 +12,7 @@
 #include "Fox/Input/Code/Button.hpp"
 #include "Fox/Input/Code/Key.hpp"
 #include "Fox/Input/Code/Modifier.hpp"
+#include "Fox/Input/Code/Controller.hpp"
 
 namespace fox::input::api
 {
@@ -23,64 +24,57 @@ namespace fox::input::api
 }
 namespace fox::input
 {
-    static auto any_pressed             () -> fox::bool_t
+    static auto any_key_active       () -> fox::bool_t
     {
-        return api::handler->any_pressed();
+        return api::handler->any_key_active();
     }
-    static auto any_down                () -> fox::bool_t
+    static auto any_button_active    () -> fox::bool_t
     {
-        return api::handler->any_down();
-    }
-    static auto any_up                  () -> fox::bool_t
-    {
-        return api::handler->any_up();
+        return api::handler->any_button_active();
     }
 
-    static auto key_pressed             (input::key_t    code) -> fox::bool_t
+    static auto key_active           (input::key_t    code) -> fox::bool_t
+    {
+        return api::handler->key_active(code);
+    }
+    static auto key_pressed          (input::key_t    code) -> fox::bool_t
     {
         return api::handler->key_pressed(code);
     }
-    static auto key_down                (input::key_t    code) -> fox::bool_t
+    static auto key_released         (input::key_t    code) -> fox::bool_t
     {
-        return api::handler->key_down(code);
-    }
-    static auto key_up                  (input::key_t    code) -> fox::bool_t
-    {
-        return api::handler->key_up(code);
+        return api::handler->key_released(code);
     }
 
-    static auto button_pressed          (input::button_t code) -> fox::bool_t
+    static auto button_active        (input::button_t code) -> fox::bool_t
+    {
+        return api::handler->button_active(code);
+    }
+    static auto button_pressed       (input::button_t code) -> fox::bool_t
     {
         return api::handler->button_pressed(code);
     }
-    static auto button_down             (input::button_t code) -> fox::bool_t
+    static auto button_released      (input::button_t code) -> fox::bool_t
     {
-        return api::handler->button_down(code);
-    }
-    static auto button_up               (input::button_t code) -> fox::bool_t
-    {
-        return api::handler->button_up(code);
+        return api::handler->button_released(code);
     }
 
-    static auto is_scrolling            () -> fox::bool_t
-    {
-        return api::handler->is_scrolling();
-    }
-    static auto is_scrolling_vertical   () -> fox::bool_t
-    {
-        return api::handler->is_scrolling_vertical();
-    }
-    static auto is_scrolling_horizontal () -> fox::bool_t
-    {
-        return api::handler->is_scrolling_horizontal();
-    }
-
-    static auto cursor_position         () -> fox::Vector2f
+    static auto cursor_position      () -> fox::Vector2f
     {
         return api::handler->cursor_position();
     }
-    static auto cursor_position_relative() -> fox::Vector2f
+    static auto cursor_position_delta() -> fox::Vector2f
     {
-        return api::handler->cursor_position_relative();
+        return api::handler->cursor_position_delta();
+    }
+
+    static auto scroll_wheel         ()
+    {
+        return api::handler->scroll_wheel();
+    }
+    static auto scroll_wheel_delta   ()
+    {
+        return api::handler->scroll_wheel_delta();
     }
 }
+
