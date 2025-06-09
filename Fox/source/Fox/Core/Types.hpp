@@ -33,7 +33,7 @@ namespace fox
 	using uuid_t     = std::bitset<128u>;
 
 	enum class id_t      : fox::uint32_t {};
-	enum class binding_t : fox::index_t {};
+	enum class binding_t : fox::index_t  {};
 
 	enum : fox::bool_t
 	{
