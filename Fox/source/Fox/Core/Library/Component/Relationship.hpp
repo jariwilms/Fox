@@ -2,13 +2,11 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/ECS/Types.hpp"
-
 namespace fox
 {
 	struct Relationship
 	{
-		std::optional<ecs::id_t> parent{};
-		std::vector<ecs::id_t>   children{};
+		std::optional<fox::id_t> parent{};
+		std::vector  <fox::id_t> children{};
 	};
 }
