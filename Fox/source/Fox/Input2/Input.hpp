@@ -23,63 +23,68 @@ namespace fox::input::api
 }
 namespace fox::input
 {
-    static auto any_pressed             ()
+    static auto any_pressed             () -> fox::bool_t
     {
         return api::handler->any_pressed();
     }
-    static auto any_down                ()
+    static auto any_down                () -> fox::bool_t
     {
         return api::handler->any_down();
     }
-    static auto any_up                  ()
+    static auto any_up                  () -> fox::bool_t
     {
         return api::handler->any_up();
     }
 
-    static auto key_pressed             (input::key_t    code)
+    static auto key_pressed             (input::key_t    code) -> fox::bool_t
     {
         return api::handler->key_pressed(code);
     }
-    static auto key_down                (input::key_t    code)
+    static auto key_down                (input::key_t    code) -> fox::bool_t
     {
         return api::handler->key_down(code);
     }
-    static auto key_up                  (input::key_t    code)
+    static auto key_up                  (input::key_t    code) -> fox::bool_t
     {
         return api::handler->key_up(code);
     }
 
-    static auto button_pressed          (input::button_t code)
+    static auto button_pressed          (input::button_t code) -> fox::bool_t
     {
         return api::handler->button_pressed(code);
     }
-    static auto button_down             (input::button_t code)
+    static auto button_down             (input::button_t code) -> fox::bool_t
     {
         return api::handler->button_down(code);
     }
-    static auto button_up               (input::button_t code)
+    static auto button_up               (input::button_t code) -> fox::bool_t
     {
         return api::handler->button_up(code);
     }
 
-    static auto is_scrolling            ()
+    static auto is_scrolling            () -> fox::bool_t
     {
         return api::handler->is_scrolling();
     }
-    static auto is_scrolling_vertical   ()
+    static auto is_scrolling_vertical   () -> fox::bool_t
     {
         return api::handler->is_scrolling_vertical();
     }
-    static auto is_scrolling_horizontal ()
+    static auto is_scrolling_horizontal () -> fox::bool_t
     {
         return api::handler->is_scrolling_horizontal();
     }
 
-    static auto cursor_position         ()
+    static auto modifier                (input::modifier_t code) -> fox::bool_t
+    {
+        return api::handler->modifier(code);
+    }
+
+    static auto cursor_position         () -> fox::Vector2u
     {
         return api::handler->cursor_position();
     }
-    static auto cursor_position_relative()
+    static auto cursor_position_relative() -> fox::Vector2u
     {
         return api::handler->cursor_position_relative();
     }

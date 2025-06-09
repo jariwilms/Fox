@@ -124,6 +124,11 @@
     <ClInclude Include="source\Fox\ECS\System\RenderSystem.hpp" />
     <ClInclude Include="source\Fox\ECS\System\System.hpp" />
     <ClInclude Include="source\Fox\Experimental\Experimental.hpp" />
+    <ClInclude Include="source\Fox\Input2\API\GLFWInputHandler.hpp" />
+    <ClInclude Include="source\Fox\Input2\Code\Button.hpp" />
+    <ClInclude Include="source\Fox\Input2\Code\Key.hpp" />
+    <ClInclude Include="source\Fox\Input2\Code\Modifier.hpp" />
+    <ClInclude Include="source\Fox\Input2\Input.hpp" />
     <ClInclude Include="source\Fox\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="source\Fox\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="source\Fox\IO\Filesystem\File.hpp" />
