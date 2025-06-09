@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Input/Handler/InputHandlerAPI.hpp"
+#include "Fox/Input/Input.hpp"
 
 namespace fox::wnd::api
 {

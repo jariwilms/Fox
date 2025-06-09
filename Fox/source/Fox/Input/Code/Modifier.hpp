@@ -10,8 +10,10 @@ namespace fox::input
     {
         enum : modifier_t
         {
+            None     = 0x0, 
+
             Shift    = 0x1 << 0u, 
-            Ctrl     = 0x1 << 1u, 
+            Control  = 0x1 << 1u, 
             Alt      = 0x1 << 2u, 
             Super    = 0x1 << 3u, 
             CapsLock = 0x1 << 4u, 

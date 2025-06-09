@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Input/Handler/Platform/GLFWInputHandler.hpp"
+#include "Fox/Input/API/GLFWInputHandler.hpp"
 #include "Fox/Input/Input.hpp"
 #include "Fox/Window/Window.hpp"
 
@@ -14,8 +14,8 @@ namespace fox::wnd::api
         struct UserPointer
         {
 		public:
-			std::shared_ptr<GLFWWindow>            glfwWindow{};
-			std::shared_ptr<input::GLFWInputHandler> inputHandler{};
+			std::shared_ptr<GLFWWindow>                   glfwWindow{};
+			std::shared_ptr<input::api::GLFWInputHandler> inputHandler{};
         };
 
 		GLFWWindow(const std::string& name, const fox::Vector2u& dimensions);
