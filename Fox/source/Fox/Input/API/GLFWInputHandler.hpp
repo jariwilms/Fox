@@ -5,9 +5,9 @@
 #include "glad/gl.h"
 #include "glfw/glfw3.h"
 
-#include "Fox/Input2/Code/Button.hpp"
-#include "Fox/Input2/Code/Key.hpp"
-#include "Fox/Input2/Code/Modifier.hpp"
+#include "Fox/Input/Code/Button.hpp"
+#include "Fox/Input/Code/Key.hpp"
+#include "Fox/Input/Code/Modifier.hpp"
 
 namespace fox::input::api
 {
@@ -84,18 +84,13 @@ namespace fox::input::api
             return fox::False;
         }
 
-        auto modifier                  (input::modifier_t code) const -> fox::bool_t
+        auto cursor_position           ()                       const -> fox::Vector2f
         {
-            return fox::False;
+            return m_cursorPosition;
         }
-
-        auto cursor_position           ()                       const -> fox::Vector2u
+        auto cursor_position_relative  ()                       const -> fox::Vector2f
         {
-            return static_cast<fox::Vector2u>(m_cursorPosition);
-        }
-        auto cursor_position_relative  ()                       const -> fox::Vector2u
-        {
-            return static_cast<fox::Vector2u>(m_cursorPosition - m_lastCursorPosition);
+            return m_cursorPosition - m_lastCursorPosition;
         }
 
         void glfw_input_key_callback   (GLFWwindow* window, fox::int32_t key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t mods)
@@ -104,8 +99,8 @@ namespace fox::input::api
 
             switch (action)
             {
-                case GLFW_PRESS  : m_activeKeys.set(key, fox::True ); break;
                 case GLFW_RELEASE: m_activeKeys.set(key, fox::False); break;
+                case GLFW_PRESS  : m_activeKeys.set(key, fox::True ); break;
                 case GLFW_REPEAT :                                    break;
             }
         }
@@ -115,14 +110,14 @@ namespace fox::input::api
 
             switch (action)
             {
-                case GLFW_PRESS  : m_activeButtons.set(button, fox::True ); break;
                 case GLFW_RELEASE: m_activeButtons.set(button, fox::False); break;
+                case GLFW_PRESS  : m_activeButtons.set(button, fox::True ); break;
                 case GLFW_REPEAT :                                          break;
             }
         }
         void glfw_input_cursor_callback(GLFWwindow* window, fox::float64_t x   , fox::float64_t y                                               )
         {
-            m_cursorPosition = fox::Vector2f{ x, y };
+            m_cursorPosition = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
         void glfw_input_scroll_callback(GLFWwindow* window, fox::float64_t x   , fox::float64_t y                                               )
         {

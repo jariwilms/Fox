@@ -59,11 +59,11 @@ namespace fox::wnd::api
 
 
 
-	GLFWWindow::GLFWWindow(const std::string& name, const fox::Vector2u& dimensions)
+    GLFWWindow::GLFWWindow(const std::string& name, const fox::Vector2u& dimensions)
         : Window{ name, dimensions }
-	{
-		const auto& isInitialized = glfwInit();
-		if (isInitialized != GLFW_TRUE) throw std::runtime_error{ "Failed to initialize GLFW!" };
+    {
+        const auto& isInitialized = glfwInit();
+        if (isInitialized != GLFW_TRUE) throw std::runtime_error{ "Failed to initialize GLFW!" };
 
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -75,9 +75,9 @@ namespace fox::wnd::api
 #endif
 
         m_glfwWindow = glfwCreateWindow(static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y), m_name.c_str(), nullptr, nullptr);
-		if (!m_glfwWindow) throw std::runtime_error{ "Failed to create GLFW window!" };
+        if (!m_glfwWindow) throw std::runtime_error{ "Failed to create GLFW window!" };
 
-		glfwMakeContextCurrent(m_glfwWindow);
+        glfwMakeContextCurrent(m_glfwWindow);
         glfwSwapInterval(0);
 
 
@@ -87,7 +87,10 @@ namespace fox::wnd::api
 
         m_userPointer                = std::make_shared<UserPointer>();
         m_userPointer->glfwWindow    = std::shared_ptr<GLFWWindow>(this, [](const GLFWWindow* window) {}); //?
-        m_userPointer->inputHandler  = std::make_shared<input::GLFWInputHandler>();
+
+        input::api::handler = std::make_shared<input::api::GLFWInputHandler>();
+        m_userPointer->inputHandler  = input::api::handler;
+
         glfwSetWindowUserPointer(m_glfwWindow, m_userPointer.get());
 
         m_nativeWindow = m_glfwWindow;
@@ -146,20 +149,18 @@ namespace fox::wnd::api
                 gl::viewport( gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
             };
 
-        glfwSetErrorCallback(                        glfw_error_callback);
-        glfwSetKeyCallback(            m_glfwWindow, glfw_input_key_callback);
-        glfwSetMouseButtonCallback(    m_glfwWindow, glfw_button_callback);
-        glfwSetCursorPosCallback(      m_glfwWindow, glfw_input_cursor_callback);
-        glfwSetScrollCallback(         m_glfwWindow, glfw_input_scroll_callback);
+        glfwSetErrorCallback          (              glfw_error_callback              );
+        glfwSetKeyCallback            (m_glfwWindow, glfw_input_key_callback          );
+        glfwSetMouseButtonCallback    (m_glfwWindow, glfw_button_callback             );
+        glfwSetCursorPosCallback      (m_glfwWindow, glfw_input_cursor_callback       );
+        glfwSetScrollCallback         (m_glfwWindow, glfw_input_scroll_callback       );
         glfwSetFramebufferSizeCallback(m_glfwWindow, glfw_frame_buffer_resize_callback);
-
-		input::api::init(m_userPointer->inputHandler);
-	}
-	GLFWWindow::~GLFWWindow()
-	{
+    }
+    GLFWWindow::~GLFWWindow()
+    {
         glfwDestroyWindow(m_glfwWindow);
-		glfwTerminate();
-	}
+        glfwTerminate();
+    }
 
     void GLFWWindow::poll_events()
     {
@@ -167,20 +168,20 @@ namespace fox::wnd::api
         glfwPollEvents();
     }
     void GLFWWindow::swap_buffers()
-	{
-		glfwSwapBuffers(m_glfwWindow);
-	}
+    {
+        glfwSwapBuffers(m_glfwWindow);
+    }
 
-	void GLFWWindow::rename(const std::string& title)
-	{
-		glfwSetWindowTitle(m_glfwWindow, title.c_str());
-	}
-	void GLFWWindow::resize(const fox::Vector2f& dimensions)
-	{
+    void GLFWWindow::rename(const std::string& title)
+    {
+        glfwSetWindowTitle(m_glfwWindow, title.c_str());
+    }
+    void GLFWWindow::resize(const fox::Vector2f& dimensions)
+    {
         glfwSetWindowSize(m_glfwWindow, static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y));
 
-		m_dimensions = dimensions;
-	}
+        m_dimensions = dimensions;
+    }
 
     void GLFWWindow::close() const
     {
