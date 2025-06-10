@@ -28,12 +28,10 @@ namespace fox::io
         static std::shared_ptr<gfx::Model> import(const std::filesystem::path& path);
 
     private:
-        static void                                           create_nodes(gfx::Model& model, fox::uint32_t nodeIndex, const aiScene& asiScene, const aiNode& asiNode);
-        static auto                                           to_assimp_type(TextureType type);
-        static std::optional<std::shared_ptr<gfx::Texture2D>> get_assimp_texture(const aiMaterial* aiMaterial, TextureType type, const std::filesystem::path& path);
+        static void create_nodes(gfx::Model& model, fox::uint32_t nodeIndex, const aiScene& asiScene, const aiNode& asiNode);
 
-        static inline std::shared_ptr<gfx::Texture2D> s_defaultAlbedoTexture{};
-        static inline std::shared_ptr<gfx::Texture2D> s_defaultNormalTexture{};
-        static inline std::shared_ptr<gfx::Texture2D> s_defaultARMTexture{};
+        static inline auto s_defaultAlbedoTexture = std::shared_ptr<gfx::Texture2D>{};
+        static inline auto s_defaultNormalTexture = std::shared_ptr<gfx::Texture2D>{};
+        static inline auto s_defaultARMTexture    = std::shared_ptr<gfx::Texture2D>{};
     };
 }
