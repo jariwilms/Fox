@@ -2,29 +2,29 @@
 
 #include "Fox/Scene/Actor.hpp"
 
-namespace fox::scn
+namespace fox::scene
 {
     class Scene
     {
     public:
         Scene() = default;
 
-        Actor& create_actor();
-        void   destroy_actor(Actor& actor);
+        auto create_actor () -> scene::Actor&;
+        void destroy_actor(scene::Actor& actor);
 
-        void set_parent(Actor& parent, Actor& child);
-        void unset_parent(Actor& child);
+        void set_parent  (scene::Actor& parent, scene::Actor& child);
+        void unset_parent(scene::Actor& child);
 
-              Actor& find_actor(fox::id_t id)
+        auto find_actor(fox::id_t id) -> scene::Actor&
         {
             return *m_actors.at(id);
         }
-        const Actor& find_actor(fox::id_t id) const
+        auto find_actor(fox::id_t id) const -> const scene::Actor&
         {
             return *m_actors.at(id);
         }
 
     private:
-        std::unordered_map<fox::id_t, std::shared_ptr<scn::Actor>> m_actors{};
+        std::unordered_map<fox::id_t, std::shared_ptr<scene::Actor>> m_actors{};
     };
 }

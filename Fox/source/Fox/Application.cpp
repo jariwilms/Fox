@@ -20,12 +20,7 @@
 
 namespace fox
 {
-    static void test()
-    {
-
-    }
-
-    static void           model_to_scene_graph(scn::Scene& scene, scn::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
+    static void           model_to_scene_graph(scene::Scene& scene, scene::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
         auto& tc = actor.get_component<ecs::TransformComponent>().get();
         tc = node.localTransform;
@@ -42,7 +37,7 @@ namespace fox
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    static fox::Transform transform_product(const scn::Scene& scene, const Relationship& relation, const fox::Transform& transform)
+    static fox::Transform transform_product(const scene::Scene& scene, const Relationship& relation, const fox::Transform& transform)
     {
         if (!relation.parent) return transform;
 
@@ -56,13 +51,10 @@ namespace fox
     Application::Application(int argc, char** argv)
     {
         m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
-        
-        json::test();
-        //test();
 
-        gfx::Geometry::init();
-        io::ModelImporter::init();
-        gfx::Renderer::init();
+        gfx::Geometry     ::init();
+        io ::ModelImporter::init();
+        gfx::Renderer     ::init();
     }
     Application::~Application()
     {
@@ -72,7 +64,7 @@ namespace fox
     int Application::run()
     {
         //Scene creation and camera setup
-        auto  scene           = std::make_shared<scn::Scene>();
+        auto  scene           = std::make_shared<scene::Scene>();
 
         auto& observer        = scene->create_actor();
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).get();

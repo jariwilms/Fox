@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Fox/ECS/Components/Components.hpp"
 #include "Fox/ECS/Entity/Entity.hpp"
 #include "Fox/ECS/Registry.hpp"
-#include "Fox/ECS/Components/Components.hpp"
 
-namespace fox::scn
+namespace fox::scene
 {
     class Actor : public ecs::Entity
     {
@@ -21,22 +21,22 @@ namespace fox::scn
         }
 
         template<typename... T>
-        bool     has_component() const
+        auto has_component() const -> fox::bool_t
         {
             return reg::has_component<T...>(m_id);
         }
         template<typename T, typename... Args>
-        T&       add_component(Args&&... args)
+        auto add_component(Args&&... args) -> T&
         {
             return reg::add_component<T>(m_id, *this, std::forward<Args>(args)...);
         }
         template<typename T>
-        T&       get_component()
+        auto get_component() -> T&
         {
             return reg::get_component<T>(m_id);
         }
         template<typename T>
-        const T& get_component() const
+        auto get_component() const -> const T&
         {
             return reg::get_component<T>(m_id);
         }
@@ -47,6 +47,6 @@ namespace fox::scn
             reg::remove_component<T>(m_id);
         }
         template<> void remove_component<ecs::RelationshipComponent>() = delete;
-        template<> void remove_component<ecs::TransformComponent>()    = delete;
+        template<> void remove_component<ecs::TransformComponent   >() = delete;
     };
 }

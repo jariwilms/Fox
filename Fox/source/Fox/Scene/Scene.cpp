@@ -2,16 +2,16 @@
 
 #include "Scene.hpp"
 
-namespace fox::scn
+namespace fox::scene
 {
-    Actor& Scene::create_actor()
+    auto Scene::create_actor() -> Actor&
     {
-        auto actor = std::make_shared<scn::Actor>();
+        auto actor = std::make_shared<scene::Actor>();
         const auto& it = m_actors.emplace(std::make_pair(actor->id(), std::move(actor)));
         
         return *it.first->second;
     }
-    void   Scene::destroy_actor(Actor& actor)
+    void Scene::destroy_actor(Actor& actor)
     {
         unset_parent(actor);
 
