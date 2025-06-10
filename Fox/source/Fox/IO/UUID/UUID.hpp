@@ -2,21 +2,25 @@
 
 #include "stdafx.hpp"
 
+#include "Fox/Random/Random.hpp"
+
 namespace fox::io::uuid
 {
-    static inline fox::uuid_t generate()
+    static inline auto generate() -> fox::uuid_t
     {
-        fox::uuid_t uuid{};
-
-        uuid  |= distribution(generator);;
-        uuid <<= 64;
-        uuid  |= distribution(generator);
+        auto uuid  = fox::uuid_t{};
+        auto upper = random::next<fox::uint64_t>();
+        auto lower = random::next<fox::uint64_t>();
+        
+        uuid  |= upper;
+        uuid <<= 64u;
+        uuid  |= lower;
 
         //Version Signature (0b0100)
-        uuid.set(51, false);
-        uuid.set(50, true);
-        uuid.set(49, false);
-        uuid.set(48, false);
+        uuid.set(51u, fox::False);
+        uuid.set(50u, fox::True );
+        uuid.set(49u, fox::False);
+        uuid.set(48u, fox::False);
 
         //Variant Signature (0b10xx)
         uuid.set(65, true);
@@ -25,7 +29,4 @@ namespace fox::io::uuid
         return uuid;
     }
 
-    static inline std::random_device                           device{};
-    static inline std::mt19937                                 generator{ device() };
-    static inline std::uniform_int_distribution<std::uint64_t> distribution{ 0, std::numeric_limits<std::uint64_t>::max() };
 }
