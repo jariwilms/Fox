@@ -41,6 +41,7 @@ namespace fox
 		True  = true,
 	};
 
+	
 
 
 
@@ -69,6 +70,15 @@ namespace fox
 
 
 
+	template<typename T>
+	struct interval_t
+	{
+		interval_t(T min, T max)
+			: min{ std::min(min, max) }, max{ std::max(min, max) } {}
+
+		T min{};
+		T max{};
+	};
 	template<typename T, fox::uint32_t N>
     struct region_t
     {
