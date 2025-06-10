@@ -1,8 +1,8 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Random/Random.hpp"
+#include <fox/random/random.hpp>
 
 namespace fox::io::uuid
 {

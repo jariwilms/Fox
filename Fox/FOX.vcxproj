@@ -62,7 +62,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpplatest</LanguageStandard>
+      <LanguageStandard>stdcpp23</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -133,12 +133,15 @@
     <ClInclude Include="source\Fox\IO\Filesystem\Directory.hpp" />
     <ClInclude Include="source\Fox\IO\Filesystem\Entry.hpp" />
     <ClInclude Include="source\Fox\IO\Filesystem\File.hpp" />
-    <ClInclude Include="source\Fox\IO\Filesystem\Handle.hpp" />
+    <ClInclude Include="source\Fox\IO\Import\Model\Header.hpp" />
     <ClInclude Include="source\Fox\IO\IO.hpp" />
-    <ClInclude Include="source\Fox\IO\Import\Model\GLTFImporter.hpp" />
     <ClInclude Include="source\Fox\IO\Import\Model\ModelImporter.hpp" />
-    <ClInclude Include="source\Fox\IO\Registry\Registry.hpp" />
+    <ClInclude Include="source\Fox\IO\Loading.hpp" />
     <ClInclude Include="source\Fox\IO\UUID\UUID.hpp" />
+    <ClInclude Include="source\Fox\Math\Constants\Constants.hpp" />
+    <ClInclude Include="source\Fox\Math\Trigonometry\Trigonometry.hpp" />
+    <ClInclude Include="source\Fox\Math\Math.hpp" />
+    <ClInclude Include="source\Fox\Random\Random.hpp" />
     <ClInclude Include="source\Fox\Rendering\AABB\AABB.hpp" />
     <ClInclude Include="source\Fox\Rendering\API\Buffer\Buffer.hpp" />
     <ClInclude Include="source\Fox\Rendering\API\Buffer\DataType.hpp" />
