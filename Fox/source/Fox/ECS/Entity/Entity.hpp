@@ -1,5 +1,7 @@
 #pragma once
 
+#include "stdafx.hpp"
+
 namespace fox::ecs
 {
     class Entity
