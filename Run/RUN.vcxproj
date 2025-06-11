@@ -92,7 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\Source.cpp" />
+    <ClCompile Include="source\source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FOX\FOX.vcxproj">
