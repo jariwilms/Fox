@@ -1,10 +1,8 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Fox/IO/Loading.hpp"
-#include "Fox/IO/Filesystem/Directory.hpp"
-#include "Fox/IO/Filesystem/File.hpp"
+#include <fox/io/filesystem/directory.hpp>
+#include <fox/io/filesystem/file.hpp>
+#include <fox/io/loading.hpp>
 
 namespace fox::io
 {

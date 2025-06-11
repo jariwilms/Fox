@@ -42,7 +42,7 @@ namespace fox::scene
         if (rel.parent)
         {
             const auto& parent   = *rel.parent;
-                  auto& relative = reg::get_component<ecs::RelationshipComponent>(parent).get();
+                  auto& relative = registry::get_component<ecs::RelationshipComponent>(parent).get();
 
             const auto& it = std::find(relative.children.begin(), relative.children.end(), child.id());
             if (it != relative.children.end())

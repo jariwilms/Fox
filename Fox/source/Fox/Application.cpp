@@ -1,22 +1,21 @@
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Application.hpp"
-
-#include "Fox/Core/Library/Container/CyclicBuffer.hpp"
-#include "Fox/Core/Library/Image/Image.hpp"
-#include "Fox/Core/Library/JSON/json.hpp"
-#include "Fox/Core/Library/Time/Time.hpp"
-#include "Fox/Core/Library/Transform/Transform.hpp"
-#include "Fox/ECS/Components/Components.hpp"
-#include "Fox/Input/Input.hpp"
-#include "Fox/IO/Import/Model/ModelImporter.hpp"
-#include "Fox/IO/IO.hpp"
-#include "Fox/Rendering/API/Shader/Utility.hpp"
-#include "Fox/Rendering/Renderer/Renderer.hpp"
-#include "Fox/Rendering/Rendering.hpp"
-#include "Fox/Scene/Actor.hpp"
-#include "Fox/Scene/Scene.hpp"
-#include "Fox/Window/WindowManager.hpp"
+#include <fox/application.hpp>
+#include <fox/core/container/circular_buffer.hpp>
+#include <fox/core/image/image.hpp>
+#include <fox/core/json/json.hpp>
+#include <fox/core/time/time.hpp>
+#include <fox/core/types/transform/transform.hpp>
+#include <fox/ecs/components/components.hpp>
+#include <fox/input/input.hpp>
+#include <fox/io/import/model/model_importer.hpp>
+#include <fox/io/io.hpp>
+#include <fox/rendering/api/shader/utility.hpp>
+#include <fox/rendering/renderer/renderer.hpp>
+#include <fox/rendering/rendering.hpp>
+#include <fox/scene/actor.hpp>
+#include <fox/scene/scene.hpp>
+#include <fox/window/windowmanager.hpp>
 
 namespace fox
 {
@@ -115,7 +114,7 @@ namespace fox
 
         //Skybox setup
         const fox::Vector2u skyboxDimensions{ 2048u, 2048u };
-        std::array<std::filesystem::path, 6> skyboxImageFiles
+        std::array<std::filesystem::path, 6u> skyboxImageFiles
         {
             "textures/skybox_space2/right.png", 
             "textures/skybox_space2/left.png",
@@ -154,7 +153,7 @@ namespace fox
 
         const auto& move_camera         = [&]
         {
-            auto speed{ 5.0f * Time::delta() };
+            auto speed{ 5.0f * fox::time::delta() };
 
             if (input::key_active(input::key::Escape     )) m_window->close();
             if (input::key_active(input::key::LeftShift  )) speed *= 10.0f;
@@ -180,7 +179,7 @@ namespace fox
         };
         const auto& rotate_helmet       = [&]
             {
-                helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * Time::delta(), 0.0f });
+                helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * fox::time::delta(), 0.0f });
             };
         const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
             {
@@ -198,12 +197,12 @@ namespace fox
 
 
 
-        fox::Time::reset();
-        fox::CyclicBuffer<fox::float32_t, 144> frametimes{};
+        fox::time::reset();
+        fox::CircularBuffer<fox::float32_t, 144u> frametimes{};
 
         while (!m_window->should_close())
         {
-            fox::Time::update();
+            fox::time::update();
             m_window->poll_events();
 
 
@@ -225,7 +224,7 @@ namespace fox
             gfx::RenderInfo renderInfo{ camera, cameraTransform, lights, skybox };
             gfx::Renderer::start(renderInfo);
 
-            const auto& view = reg::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
+            const auto& view = registry::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
             view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mfc)
                 {
                     const auto& relation   = rlc.get();
@@ -249,7 +248,7 @@ namespace fox
 
 
             m_window->swap_buffers();
-            frametimes.push_back(Time::delta());
+            frametimes.emplace_back(fox::time::delta());
         }
 
 

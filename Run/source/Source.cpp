@@ -1,7 +1,7 @@
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Application.hpp"
-#include "Fox/Rendering/Rendering.hpp"
+#include <fox/application.hpp>
+#include <fox/rendering/rendering.hpp>
 
 int main(int argc, char** argv)
 {

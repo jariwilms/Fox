@@ -2,11 +2,13 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Core/Library/Time/Time.hpp"
-#include "Fox/Core/Library/Utility/Utility.hpp"
+#include "Fox/Core/Time/Time.hpp"
+#include "Fox/Core/Utility/Utility.hpp"
 #include "Fox/Input/Input.hpp"
 #include "Fox/Rendering/Rendering.hpp"
 #include "Fox/Rendering/API/Shader/Utility.hpp"
+#include <fox/math/linear_algebra/projection.hpp>
+#include <fox/math/trigonometry/trigonometry.hpp>
 
 namespace fox::gfx::api
 {

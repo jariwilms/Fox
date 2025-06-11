@@ -1,10 +1,11 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <memory>
 
-#include "Fox/Input/API/GLFWInputHandler.hpp"
-#include "Fox/Input/Input.hpp"
-#include "Fox/Window/Window.hpp"
+#include <fox/core/types/linear_algebra/vector.hpp>
+#include <fox/input/api/glfwinputhandler.hpp>
+#include <fox/input/input.hpp>
+#include <fox/window/api/window.hpp>
 
 namespace fox::wnd::api
 {
@@ -13,7 +14,6 @@ namespace fox::wnd::api
 	public:
         struct UserPointer
         {
-		public:
 			std::shared_ptr<GLFWWindow>                   glfwWindow{};
 			std::shared_ptr<input::api::GLFWInputHandler> inputHandler{};
         };

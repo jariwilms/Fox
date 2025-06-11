@@ -2,7 +2,7 @@
 
 #include "stdafx.hpp"
 
-#include "Fox/Core/Library/Utility/Utility.hpp"
+#include "Fox/Core/Utility/Utility.hpp"
 #include "Fox/IO/Filesystem/Entry.hpp"
 
 namespace fox::io

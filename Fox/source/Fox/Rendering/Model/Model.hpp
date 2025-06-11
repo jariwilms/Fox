@@ -1,10 +1,8 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Fox/Core/Library/Transform/Transform.hpp"
-#include "Fox/Rendering/Material/Material.hpp"
-#include "Fox/Rendering/Mesh/Mesh.hpp"
+#include <fox/core/types/transform/transform.hpp>
+#include <fox/rendering/material/material.hpp>
+#include <fox/rendering/mesh/mesh.hpp>
 
 namespace fox::gfx
 {

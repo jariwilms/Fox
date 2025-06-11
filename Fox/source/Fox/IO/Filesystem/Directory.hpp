@@ -1,13 +1,13 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <variant>
 
-#include "Fox/IO/Filesystem/Entry.hpp"
-#include "Fox/IO/Filesystem/File.hpp"
+#include <fox/io/filesystem/entry.hpp>
+#include <fox/io/filesystem/file.hpp>
 
 namespace fox::io
 {
-    class Directory : public Entry
+    class Directory : public io::Entry
     {
     public:
         using entry_t = std::variant<io::Directory, io::File>;

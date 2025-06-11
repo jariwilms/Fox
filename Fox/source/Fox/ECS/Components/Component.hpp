@@ -1,8 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Fox/ECS/Entity/Entity.hpp"
+#include <fox/ecs/entity/entity.hpp>
 
 namespace fox::ecs
 {

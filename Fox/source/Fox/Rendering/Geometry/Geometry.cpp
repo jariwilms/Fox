@@ -1,7 +1,7 @@
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Geometry.hpp"
-#include "Fox/IO/Import/Model/ModelImporter.hpp"
+#include <fox/rendering/geometry/geometry.hpp>
+#include <fox/io/import/model/model_importer.hpp>
 
 namespace fox::gfx
 {

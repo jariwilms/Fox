@@ -1,8 +1,8 @@
 #pragma once
 
 //FOX
-#include "Fox/Core/Types.hpp"
-#include "Fox/Core/Library/Library.hpp"
+#include <fox/core/types/types.hpp>
+#include <fox/core/utility/utility.hpp>
 
 //STL
 #include <algorithm>

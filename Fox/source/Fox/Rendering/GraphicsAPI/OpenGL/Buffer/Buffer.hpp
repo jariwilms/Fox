@@ -4,7 +4,7 @@
 
 #include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/API/Buffer/Buffer.hpp"
-#include "Fox/Core/Library/Utility/Utility.hpp"
+#include "Fox/Core/Utility/Utility.hpp"
 
 namespace fox::gfx::api::gl
 {
@@ -213,7 +213,7 @@ namespace fox::gfx::api::gl
                     ((std::memcpy(buffer.data() + offset, &args, sizeof(args)), offset += sizeof(args)), ...);
                 }, data);
 
-            gl::buffer_data(m_handle, offset, utl::as_bytes(buffer));
+            gl::buffer_data(m_handle, offset, fox::as_bytes(buffer));
         }
 
         auto size() const

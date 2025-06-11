@@ -5,7 +5,7 @@
 #include "Fox/Rendering/API/RenderBuffer/RenderBuffer.hpp"
 #include "Fox/Rendering/API/Texture/Cubemap.hpp"
 #include "Fox/Rendering/API/Texture/Texture.hpp"
-#include "Fox/Core/Library/Enumeration/Enumeration.hpp"
+#include "Fox/Core/Enumeration/Enumeration.hpp"
 
 namespace fox::gfx::api
 {

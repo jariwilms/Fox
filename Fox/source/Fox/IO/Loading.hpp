@@ -1,11 +1,11 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <memory>
 
-#include "Fox/Core/Library/Image/Image.hpp"
-#include "Fox/IO/Filesystem/Directory.hpp"
-#include "Fox/IO/Filesystem/File.hpp"
-#include "Fox/Rendering/Texture/Texture.hpp"
+#include <fox/core/image/image.hpp>
+#include <fox/io/filesystem/directory.hpp>
+#include <fox/io/filesystem/file.hpp>
+#include <fox/rendering/texture/texture.hpp>
 
 namespace fox::io
 {

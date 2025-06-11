@@ -1,6 +1,10 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <random>
+#include <span>
+
+#include <fox/core/types/common/common.hpp>
+#include <fox/core/types/fundamental/fundamental.hpp>
 
 namespace fox::random::api
 {

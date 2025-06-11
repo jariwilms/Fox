@@ -1,14 +1,14 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Core/Concepts.hpp"
-#include "Core/Data.hpp"
-#include "Core/Flags.hpp"
-#include "Core/Library.hpp"
-#include "Core/Mapping.hpp"
-#include "Core/Parameters.hpp"
-#include "Core/Types.hpp"
+#include <fox/rendering/graphicsapi/opengl/core/concepts.hpp>
+#include <fox/rendering/graphicsapi/opengl/core/data.hpp>
+#include <fox/rendering/graphicsapi/opengl/core/flags.hpp>
+#include <fox/rendering/graphicsapi/opengl/core/library.hpp>
+#include <fox/rendering/graphicsapi/opengl/core/mapping.hpp>
+#include <fox/rendering/graphicsapi/opengl/core/parameters.hpp>
+#include <fox/rendering/graphicsapi/opengl/core/types.hpp>
 
 namespace fox::gfx::api::gl
 {

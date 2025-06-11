@@ -1,18 +1,18 @@
 #pragma once
 
-#include "stdafx.hpp"
-
 #include <entt/entt.hpp>
 
-#include "Fox/ECS/Components/Component.hpp"
+#include <fox/ecs/components/component.hpp>
 
 namespace fox
 {
-    namespace reg::api
+    namespace registry::api
     {
-        inline entt::basic_registry<fox::id_t> registry{};
+        using registry_t = entt::basic_registry<fox::id_t>;
+
+        inline registry_t registry{};
     }
-    namespace reg
+    namespace registry
     {
         static auto create() -> fox::id_t
         {
@@ -24,17 +24,17 @@ namespace fox
         }
 
         template<typename... T>
-        static auto has_component(fox::id_t id) -> fox::bool_t
+        static auto has_component   (fox::id_t id) -> fox::bool_t
         {
             return api::registry.all_of<T...>(id);
         }
         template<typename T, typename... Args>
-        static auto add_component(fox::id_t id, Args&&... args) -> T&
+        static auto add_component   (fox::id_t id, Args&&... args) -> T&
         {
             return api::registry.emplace<T>(id, std::forward<Args>(args)...);
         }
         template<typename T>
-        static auto get_component(fox::id_t id) -> T&
+        static auto get_component   (fox::id_t id) -> T&
         {
             return api::registry.get<T>(id);
         }

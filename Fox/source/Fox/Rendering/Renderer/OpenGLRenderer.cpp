@@ -96,7 +96,7 @@ namespace fox::gfx::api
 
 
         //PBR setup
-        fox::Matrix4f captureProjection = gfx::Projection{ gfx::Projection::perspective_p{ 1.0f, 90.0f, 0.1f, 10.0f } }.matrix();
+        auto captureProjection = math::perspective(1.0f, math::to_radians(90.0f), 0.1f, 10.0f);
         const std::array<fox::Matrix4f, 6> captureViews =
         {
             glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  1.0f,  0.0f,  0.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
@@ -302,7 +302,7 @@ namespace fox::gfx::api
         const auto& camera           = m_renderInfo.camera;
         const auto& transform        = m_renderInfo.cameraTransform;
         const auto& viewMatrix       = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
-        const auto& projectionMatrix = camera.projection().matrix();
+        const auto& projectionMatrix = camera.projection();
 
         m_matricesUniform->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
         m_cameraUniform  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
@@ -362,7 +362,7 @@ namespace fox::gfx::api
         m_materialUniform->bind(fox::binding_t{ 3u });
         m_lightUniform->   bind(fox::binding_t{ 4u });
 
-        m_contextUniform->copy(unf::Context{ dimensions, input::cursor_position(), fox::Time::since_epoch(), fox::Time::delta() });
+        m_contextUniform->copy(unf::Context{ dimensions, input::cursor_position(), fox::time::since_epoch(), fox::time::delta() });
 
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdafx.hpp>
+#include <numbers>
 
 namespace fox::math::constant
 {

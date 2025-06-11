@@ -1,8 +1,7 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Fox/Core/Library/Template/Concepts.hpp"
+#include <fox/core/meta/concepts.hpp>
+#include <fox/core/types/fundamental/fundamental.hpp>
 
 namespace fox::gfx::api
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <fox/core/types/fundamental/fundamental.hpp>
 
 namespace fox::ecs
 {
