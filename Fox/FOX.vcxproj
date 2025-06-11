@@ -138,9 +138,12 @@
     <ClInclude Include="source\Fox\IO\Import\Model\ModelImporter.hpp" />
     <ClInclude Include="source\Fox\IO\Loading.hpp" />
     <ClInclude Include="source\Fox\IO\UUID\UUID.hpp" />
-    <ClInclude Include="source\Fox\Math\Constants\Constants.hpp" />
-    <ClInclude Include="source\Fox\Math\Trigonometry\Trigonometry.hpp" />
-    <ClInclude Include="source\Fox\Math\Math.hpp" />
+    <ClInclude Include="source\Fox\math\constants\constants.hpp" />
+    <ClInclude Include="source\Fox\math\matrix\matrix.hpp" />
+    <ClInclude Include="source\Fox\math\quaternion\quaternion.hpp" />
+    <ClInclude Include="source\Fox\math\trigonometry\trigonometry.hpp" />
+    <ClInclude Include="source\Fox\math\math.hpp" />
+    <ClInclude Include="source\Fox\math\vector\vector.hpp" />
     <ClInclude Include="source\Fox\Random\Random.hpp" />
     <ClInclude Include="source\Fox\Rendering\AABB\AABB.hpp" />
     <ClInclude Include="source\Fox\Rendering\API\Buffer\Buffer.hpp" />
@@ -208,6 +211,10 @@
     <ClInclude Include="source\Fox\Rendering\Uniform\Uniform.hpp" />
     <ClInclude Include="source\Fox\Scene\Actor.hpp" />
     <ClInclude Include="source\Fox\Scene\Scene.hpp" />
+    <ClInclude Include="source\Fox\types\common.hpp" />
+    <ClInclude Include="source\Fox\types\fundamental.hpp" />
+    <ClInclude Include="source\Fox\types\types.hpp" />
+    <ClInclude Include="source\Fox\types\uuid.hpp" />
     <ClInclude Include="source\Fox\Window\API\GLFW\GLFWWindow.hpp" />
     <ClInclude Include="source\Fox\Window\Using.hpp" />
     <ClInclude Include="source\Fox\Window\Window.hpp" />
