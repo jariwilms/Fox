@@ -5,7 +5,7 @@
 
 namespace fox
 {
-    template<typename T, T N> concept NonZero         = std::is_arithmetic_v<T> && std::cmp_not_equal(N, T{ 0u });
-    template<typename T, T N> concept LessThanZero    = std::is_arithmetic_v<T> && std::cmp_less     (N, T{ 0u });
-    template<typename T, T N> concept GreaterThanZero = std::is_arithmetic_v<T> && std::cmp_less     (N, T{ 0u });
+    template<typename T, T N> concept non_zero_c = std::is_arithmetic_v<T> && (N != 0);
+    template<typename T, T N> concept lt_zero_c  = std::is_arithmetic_v<T> && (N  < 0);
+    template<typename T, T N> concept gt_zero_c  = std::is_arithmetic_v<T> && (N  > 0);
 }

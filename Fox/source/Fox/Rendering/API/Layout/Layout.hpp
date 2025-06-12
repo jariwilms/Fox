@@ -9,7 +9,7 @@ namespace fox::gfx::api
     concept LayoutRequirements = requires
     {
         std::is_fundamental_v<T>;
-        fox::GreaterThanZero<decltype(COUNT), COUNT>;
+        fox::gt_zero_c<decltype(COUNT), COUNT>;
     };
 
     template<typename T, fox::uint32_t COUNT, fox::bool_t NORM = false> requires LayoutRequirements<T, COUNT>

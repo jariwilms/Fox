@@ -8,16 +8,18 @@
 #define FOX_GRAPHICS_API FOX_GRAPHICS_API_OPENGL
 #endif
 
+#include <fox/core/types/rendering/rendering.hpp>
+
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/Buffer.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Buffer/VertexArray.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/FrameBuffer/FrameBuffer.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/RenderBuffer/RenderBuffer.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Pipeline.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Shader/Shader.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Cubemap.hpp"
-#include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Texture.hpp"
+#include <fox/rendering/graphicsapi/opengl/buffer/buffer.hpp>
+#include <fox/rendering/graphicsapi/opengl/buffer/vertexarray.hpp>
+#include <fox/rendering/graphicsapi/opengl/framebuffer/framebuffer.hpp>
+#include <fox/rendering/graphicsapi/opengl/opengl.hpp>
+#include <fox/rendering/graphicsapi/opengl/renderbuffer/renderbuffer.hpp>
+#include <fox/rendering/graphicsapi/opengl/shader/pipeline.hpp>
+#include <fox/rendering/graphicsapi/opengl/shader/shader.hpp>
+#include <fox/rendering/graphicsapi/opengl/texture/cubemap.hpp>
+#include <fox/rendering/graphicsapi/opengl/texture/texture.hpp>
 #endif
 
 namespace fox::gfx
@@ -29,7 +31,6 @@ namespace fox::gfx
         namespace vk {}
     }
 
-    enum class handle_t : fox::uint32_t {};
 
     namespace impl
     {

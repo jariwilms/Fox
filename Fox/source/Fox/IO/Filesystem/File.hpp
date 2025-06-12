@@ -1,9 +1,10 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Core/Utility/Utility.hpp"
-#include "Fox/IO/Filesystem/Entry.hpp"
+#include <fox/core/memory/allocator/no_init.hpp>
+#include <fox/core/utility/utility.hpp>
+#include <fox/io/filesystem/entry.hpp>
 
 namespace fox::io
 {
@@ -34,7 +35,7 @@ namespace fox::io
             auto       buffer     = std::make_shared<std::vector<fox::byte_t>>();
             auto const bufferSize = std::min(limit.value_or(size()), size());
 
-            reinterpret_cast<std::vector<fox::byte_t, utl::no_init_allocator<fox::byte_t>>*>(buffer.get())->resize(bufferSize);
+            reinterpret_cast<std::vector<fox::byte_t, memory::no_init_allocator<fox::byte_t>>*>(buffer.get())->resize(bufferSize);
             read_data(buffer->data(), buffer->size());
 
             return buffer;

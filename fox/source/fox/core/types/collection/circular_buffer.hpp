@@ -4,6 +4,7 @@
 #include <array>
 
 #include <fox/core/types/fundamental/fundamental.hpp>
+#include <fox/core/types/common/common.hpp>
 
 namespace fox
 {
@@ -13,7 +14,7 @@ namespace fox
     public:
         CircularBuffer() = default;
 
-        constexpr auto emplace_back(T&& value) -> T&
+        constexpr auto push_back(T&& value) -> T&
         {
             auto previous = index_;
 
@@ -24,37 +25,37 @@ namespace fox
             return array_.at(previous);
         }
 
-        constexpr auto at      (fox::size_t index)
+        constexpr auto at       (fox::size_t index)
         {
             return array_.at(index);
         }
-        constexpr auto at      (fox::size_t index) const
+        constexpr auto at       (fox::size_t index) const
         {
             return array_.at(index);
         }
         
-        constexpr auto begin   () noexcept
+        constexpr auto begin    () noexcept
         {
             return array_.begin();
         }
-        constexpr auto begin   () const noexcept
+        constexpr auto begin    () const noexcept
         {
             return array_.begin();
         }
-        constexpr auto end     () noexcept
+        constexpr auto end      () noexcept
         {
             return array_.end();
         }
-        constexpr auto end     () const noexcept
+        constexpr auto end      () const noexcept
         {
             return array_.end();
         }
         
-        constexpr auto size    () const noexcept
+        constexpr auto size     () const noexcept
         {
             return capacity_;
         }
-        constexpr auto capacity() const noexcept
+        constexpr auto capacity () const noexcept
         {
             return array_.size();
         }

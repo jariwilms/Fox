@@ -1,8 +1,8 @@
 #include <stdafx.hpp>
 
 #include <fox/application.hpp>
-#include <fox/core/container/circular_buffer.hpp>
-#include <fox/core/image/image.hpp>
+#include <fox/core/types/collection/circular_buffer.hpp>
+#include <fox/core/types/image/image.hpp>
 #include <fox/core/json/json.hpp>
 #include <fox/core/time/time.hpp>
 #include <fox/core/types/transform/transform.hpp>
@@ -248,7 +248,7 @@ namespace fox
 
 
             m_window->swap_buffers();
-            frametimes.emplace_back(fox::time::delta());
+            frametimes.push_back(fox::time::delta());
         }
 
 

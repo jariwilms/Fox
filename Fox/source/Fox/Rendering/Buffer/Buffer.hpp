@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include <fox/rendering/graphicsapi/graphicsapi.hpp>
 
 namespace fox::gfx
 {

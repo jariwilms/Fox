@@ -5,16 +5,11 @@
 
 namespace fox
 {
-	using byte_t     = fox::uint8_t;
-	using size_t     = fox::uint64_t; //Number of bytes
-	using offset_t   = fox::uint64_t; //Number of bytes offset
-	using count_t    = fox::uint32_t; //Number of elements
-	using index_t    = fox::uint32_t; //Number of elements offset
-
-
-
-	enum class id_t      : fox::uint32_t{};
-	enum class binding_t : fox::index_t {};
+	using byte_t   = fox::uint8_t;
+	using size_t   = fox::uint64_t; //Number of bytes
+	using offset_t = fox::uint64_t; //Number of bytes offset
+	using count_t  = fox::uint32_t; //Number of elements
+	using index_t  = fox::uint32_t; //Number of elements offset
 
 
 
@@ -24,8 +19,10 @@ namespace fox
 		interval_t(T min = {}, T max = {})
 			: min{ min }, max{ max } {}
 
-		T min{};
-		T max{};
+		auto operator==(const interval_t&) const -> fox::bool_t = default;
+
+		T min;
+		T max;
 	};
 	
 	struct     range_t
@@ -33,35 +30,38 @@ namespace fox
 		range_t(fox::count_t count = {}, fox::index_t index = {})
 			: count{ count }, index{ index } {}
 
-		bool operator==(const range_t&) const = default;
+		auto operator==(const range_t&) const -> fox::bool_t = default;
 
-		fox::count_t count{};
-		fox::index_t index{};
+		fox::count_t count;
+		fox::index_t index;
 	};
 	struct byterange_t
 	{
 		byterange_t(fox::size_t size = {}, fox::offset_t offset = {})
 			: size{ size }, offset{ offset } {}
 
-		bool operator==(const byterange_t&) const = default;
+		auto operator==(const byterange_t&) const -> fox::bool_t = default;
 
-		fox::size_t   size{};
-		fox::offset_t offset{};
+		fox::size_t   size;
+		fox::offset_t offset;
 	};
-
+	
 	template<typename T, fox::uint32_t N>
 	struct region_t
 	{
 		region_t(const fox::Vector<T, N>& extent = {}, const fox::Vector<T, N>& origin = {})
 			: extent{ extent }, origin{ origin } {}
 
-		bool operator==(const region_t&) const = default;
+		auto operator==(const region_t&) const -> fox::bool_t = default;
 
-		fox::Vector<T, N> extent{};
-		fox::Vector<T, N> origin{};
+		fox::Vector<T, N> extent;
+		fox::Vector<T, N> origin;
 	};
 
-	using length_t = fox::region_t<fox::uint32_t, 1u>;
-	using area_t   = fox::region_t<fox::uint32_t, 2u>;
-	using volume_t = fox::region_t<fox::uint32_t, 3u>;
+
+
+	using length_t      = fox::region_t<fox::uint32_t, 1u>;
+	using area_t        = fox::region_t<fox::uint32_t, 2u>;
+	using volume_t      = fox::region_t<fox::uint32_t, 3u>;
+	using hypervolume_t = fox::region_t<fox::uint32_t, 4u>;
 }

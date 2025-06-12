@@ -4,7 +4,7 @@
 
 namespace fox::math
 {
-    static auto perspective(fox::float32_t ratio, fox::radians_t fov, fox::float32_t near, fox::float32_t far) -> fox::Matrix4f
+    static auto perspective (fox::float32_t ratio, fox::radians_t fov, fox::float32_t near, fox::float32_t far) -> fox::Matrix4f
     {
         return glm::perspective(fov, ratio, near, far);
     }

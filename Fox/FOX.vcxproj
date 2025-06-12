@@ -100,13 +100,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\fox\application.hpp" />
+    <ClInclude Include="source\fox\config\config.hpp" />
+    <ClInclude Include="source\fox\core\memory\allocator\no_init.hpp" />
+    <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
     <ClInclude Include="source\fox\core\types\math\math.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\camera\camera.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
     <ClInclude Include="source\fox\ecs\components\custom\mesh_filter.hpp" />
     <ClInclude Include="source\fox\ecs\components\custom\relationship.hpp" />
-    <ClInclude Include="source\fox\core\container\circular_buffer.hpp" />
+    <ClInclude Include="source\fox\core\types\collection\circular_buffer.hpp" />
     <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
-    <ClInclude Include="source\fox\core\image\image.hpp" />
+    <ClInclude Include="source\fox\core\types\image\image.hpp" />
     <ClInclude Include="source\fox\core\json\json.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />
     <ClInclude Include="source\fox\core\meta\concepts.hpp" />
@@ -123,12 +127,14 @@
     <ClInclude Include="source\fox\ecs\entity\entity.hpp" />
     <ClInclude Include="source\fox\ecs\system\render_system.hpp" />
     <ClInclude Include="source\fox\ecs\system\system.hpp" />
+    <ClInclude Include="source\fox\input\context\context.hpp" />
     <ClInclude Include="source\fox\input\Input.hpp" />
     <ClInclude Include="source\fox\input\api\GLFWInputHandler.hpp" />
     <ClInclude Include="source\fox\input\code\Button.hpp" />
     <ClInclude Include="source\fox\input\code\Controller.hpp" />
     <ClInclude Include="source\fox\input\code\Key.hpp" />
     <ClInclude Include="source\fox\input\code\Modifier.hpp" />
+    <ClInclude Include="source\fox\input\mapping\mapping.hpp" />
     <ClInclude Include="source\fox\io\io.hpp" />
     <ClInclude Include="source\fox\io\loading.hpp" />
     <ClInclude Include="source\fox\io\filesystem\directory.hpp" />
@@ -222,7 +228,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\fox\application.cpp" />
-    <ClCompile Include="source\fox\core\image\image.cpp" />
     <ClCompile Include="source\fox\io\import\model\model_importer.cpp" />
     <ClCompile Include="source\fox\rendering\geometry\Geometry.cpp" />
     <ClCompile Include="source\fox\rendering\renderer\OpenGLRenderer.cpp" />

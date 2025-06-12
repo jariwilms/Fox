@@ -1,6 +1,6 @@
 #include "stdafx.hpp"
 
-#include "fox/core/image/image.hpp"
+#include <fox/core/types/image/image.hpp>
 #include "fox/io/io.hpp"
 #include <fox/io/import/model/model_importer.hpp>
 

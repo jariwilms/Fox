@@ -22,4 +22,9 @@ namespace fox
 	using Vector2f = fox::Vector<fox::float32_t, 2u>;
 	using Vector3f = fox::Vector<fox::float32_t, 3u>;
 	using Vector4f = fox::Vector<fox::float32_t, 4u>;
+
+	using Vector1d = fox::Vector<fox::float64_t, 1u>;
+	using Vector2d = fox::Vector<fox::float64_t, 2u>;
+	using Vector3d = fox::Vector<fox::float64_t, 3u>;
+	using Vector4d = fox::Vector<fox::float64_t, 4u>;
 }
