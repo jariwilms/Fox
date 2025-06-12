@@ -3,10 +3,7 @@ project "MIMALLOC"
 	cppdialect    "C++17"
 	kind          "StaticLib"
 	staticruntime "On"
-
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
-
+	
 	defines 
 	{
 		"WIN32", 
@@ -14,7 +11,13 @@ project "MIMALLOC"
 		
 		"MI_STATIC_LIB", 
 	}
-
+	
+	includedirs 
+	{
+		"include", 
+		"include/mimalloc", 
+	}
+	
 	files 
 	{
 		"src/alloc.c", 
@@ -34,25 +37,25 @@ project "MIMALLOC"
 		"src/segment-map.c", 
 		"src/stats.c", 
 	}
-
-	includedirs 
-	{
-		"include", 
-		"include/mimalloc", 
-	}
-
+	
 	disablewarnings
 	{
 		28251, 
 	}
-
+	
 	filter "system:windows"
 		systemversion "latest"
-
-	filter  "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
-
-	filter  "configurations:Release"
-		runtime "Release"
-		optimize "On"
+	
+	filter "configurations:Debug"
+		runtime   "Debug"
+		symbols   "On"
+		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
+	filter "configurations:Release"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"

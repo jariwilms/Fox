@@ -1,4 +1,4 @@
-workspace "Fox"
+workspace "fox"
 	architecture "x64"
 	startproject "RUN"
 	
@@ -10,27 +10,25 @@ workspace "Fox"
 	
 	includedir = 
 	{
-		["ASSIMP"]   = "Fox/vendor/assimp/include", 
-		["ENTT"]     = "Fox/vendor/entt/include", 
-		["GLAD"]     = "Fox/vendor/glad/include", 
-		["GLFW"]     = "Fox/vendor/glfw/include", 
-		["GLM"]      = "Fox/vendor/glm/include", 
-		["NLOHMANN"] = "Fox/vendor/nlohmann/include", 
-		["MIMALLOC"] = "Fox/vendor/mimalloc/include", 
-		["STB"]      = "Fox/vendor/stb/include", 
+		["ASSIMP"]   = "vendor/assimp/include", 
+		["ENTT"]     = "vendor/entt/include", 
+		["GLAD"]     = "vendor/glad/include", 
+		["GLFW"]     = "vendor/glfw/include", 
+		["GLM"]      = "vendor/glm/include", 
+		["NLOHMANN"] = "vendor/nlohmann/include", 
+		["MIMALLOC"] = "vendor/mimalloc/include", 
+		["STB"]      = "vendor/stb/include", 
 	}
-	
-	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
-	
+
 group "Dependencies"
-	include "Fox/vendor/assimp"
-	include "Fox/vendor/entt"
-	include "Fox/vendor/glad"
-	include "Fox/vendor/glfw"
-	include "Fox/vendor/glm"
-	include "Fox/vendor/nlohmann"
-	include "Fox/vendor/mimalloc"
-	include "Fox/vendor/stb"
+	include "vendor/assimp"
+	include "vendor/entt"
+	include "vendor/glad"
+	include "vendor/glfw"
+	include "vendor/glm"
+	include "vendor/nlohmann"
+	include "vendor/mimalloc"
+	include "vendor/stb"
 group ""
 
 group "Application"
@@ -41,11 +39,9 @@ project "FOX"
 	kind          "StaticLib"
 	staticruntime "On"
 	
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 	
 	pchheader "stdafx.hpp"
-	pchsource "Fox/source/stdafx.cpp"
+	pchsource "fox/source/stdafx.cpp"
 	
 	defines
 	{
@@ -56,12 +52,6 @@ project "FOX"
 		
 		"GLFW_INCLUDE_NONE", 
 		"GLM_ENABLE_EXPERIMENTAL", 
-	}
-	
-	files
-	{
-		"Fox/source/**.hpp", 
-		"Fox/source/**.cpp", 
 	}
 	
 	includedirs
@@ -76,6 +66,12 @@ project "FOX"
 		"%{includedir.NLOHMANN}", 
 		"%{includedir.MIMALLOC}", 
 		"%{includedir.STB}", 
+	}
+	
+	files
+	{
+		"fox/source/**.hpp", 
+		"fox/source/**.cpp", 
 	}
 	
 	links
@@ -94,25 +90,29 @@ project "FOX"
 	
 	filter "system:windows"
 		systemversion "latest"
-
+		
 		defines
 		{
 			"NOMINMAX", 
 			
 			"FOX_PLATFORM_WINDOWS", 
 		}
-		
+	
 	filter "configurations:Debug"
-		defines "FOX_DEBUG"
-		runtime "Debug"
-		symbols "On"
+		defines   "FOX_DEBUG"
+		runtime   "Debug"
+		symbols   "On"
 		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
 	filter "configurations:Release"
-		defines  "FOX_RELEASE"
-		runtime  "Release"
-		optimize "On"
-
-
+		defines   "FOX_RELEASE"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 
 project "RUN"
 	location      "RUN"
@@ -121,24 +121,15 @@ project "RUN"
 	kind          "ConsoleApp"
 	staticruntime "On"
 	
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
-	
 	defines
 	{
 		"GLFW_INCLUDE_NONE", 
 		"GLM_ENABLE_EXPERIMENTAL", 
 	}
 	
-	files
-	{
-		"Run/source/**.hpp", 
-		"Run/source/**.cpp", 
-	}
-	
 	includedirs
 	{
-		"Fox/source", 
+		"fox/source", 
 		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.ENTT}", 
@@ -149,16 +140,28 @@ project "RUN"
 		"%{includedir.STB}", 
 	}
 	
+	files
+	{
+		"Run/source/**.hpp", 
+		"Run/source/**.cpp", 
+	}
+	
 	links
 	{
 		"FOX", 
 	}
 	
 	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
+		runtime   "Debug"
+		symbols   "On"
 		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
 	filter "configurations:Release"
-		runtime  "Release"
-		optimize "On"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 group ""

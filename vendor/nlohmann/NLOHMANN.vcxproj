@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5D4A857C-4981-860D-F26D-6C10DE83020F}</ProjectGuid>
+    <ProjectGuid>{E0F5950F-CCC2-F01A-F5DB-DEC2E10726A9}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>GLAD</RootNamespace>
+    <RootNamespace>NLOHMANN</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -41,21 +41,22 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\..\bin\Debug\windows\GLAD\</OutDir>
-    <IntDir>..\..\..\bin\Debug\windows\GLAD\obj\</IntDir>
-    <TargetName>GLAD</TargetName>
+    <OutDir>..\..\bin\debug\windows\NLOHMANN\</OutDir>
+    <IntDir>..\..\build\debug\windows\NLOHMANN\</IntDir>
+    <TargetName>NLOHMANN</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\..\bin\Release\windows\GLAD\</OutDir>
-    <IntDir>..\..\..\bin\Release\windows\GLAD\obj\</IntDir>
-    <TargetName>GLAD</TargetName>
+    <OutDir>..\..\bin\release\windows\NLOHMANN\</OutDir>
+    <IntDir>..\..\build\release\windows\NLOHMANN\</IntDir>
+    <TargetName>NLOHMANN</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -71,6 +72,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -87,10 +89,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\glad\gl.h" />
+    <ClInclude Include="include\nlohmann\json.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\gl.c" />
+    <ClCompile Include="source\json.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

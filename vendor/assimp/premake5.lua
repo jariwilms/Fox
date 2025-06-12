@@ -3,15 +3,12 @@ project "ASSIMP"
 	cppdialect    "C++17"
 	kind          "StaticLib"
 	staticruntime "On"
-
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
-
-	defines 
+	
+	defines
 	{
 		"_SCL_SECURE_NO_WARNINGS", 
 		"_CRT_SECURE_NO_WARNINGS", 
-	
+		
 		"WIN32", 
 		"_WINDOWS", 
 		"WIN32_LEAN_AND_MEAN", 
@@ -26,7 +23,7 @@ project "ASSIMP"
 		"RAPIDJSON_NOMEMBERITERATORCLASS", 
 		
 		"ASSIMP_IMPORTER_GLTF_USE_OPEN3DGC=1", 
-
+		
 		"ASSIMP_BUILD_NO_3DS_EXPORTER", 
 		"ASSIMP_BUILD_NO_3DS_IMPORTER", 
 		"ASSIMP_BUILD_NO_3D_IMPORTER", 
@@ -95,29 +92,7 @@ project "ASSIMP"
 		"ASSIMP_BUILD_NO_X_EXPORTER", 
 		"ASSIMP_BUILD_NO_X_IMPORTER", 
 	}
-
-	files 
-	{
-		"include/**",
-		
-		"code/AssetLib/FBX/**", 
-		"code/AssetLib/Obj/**", 
-		"code/AssetLib/glTF/**", 
-		"code/AssetLib/glTF2/**", 
-		
-		"code/CApi/*", 
-		"code/Common/*", 
-		"code/Geometry/*", 
-		"code/Material/*", 
-		"code/PostProcessing/*", 
-
-		"contrib/Open3DGC/*", 
-		"contrib/pugixml/src/*", 
-		"contrib/unzip/*", 
-		"contrib/zip/src/*", 
-		"contrib/zlib/*", 
-	}
-
+	
 	includedirs 
 	{
 		"./", 
@@ -135,14 +110,42 @@ project "ASSIMP"
 		"contrib/utf8cpp/source", 
 		"contrib/zlib", 
 	}
-
+	
+	files 
+	{
+		"include/**",
+		
+		"code/AssetLib/FBX/**", 
+		"code/AssetLib/Obj/**", 
+		"code/AssetLib/glTF/**", 
+		"code/AssetLib/glTF2/**", 
+		
+		"code/CApi/*", 
+		"code/Common/*", 
+		"code/Geometry/*", 
+		"code/Material/*", 
+		"code/PostProcessing/*", 
+		
+		"contrib/Open3DGC/*", 
+		"contrib/pugixml/src/*", 
+		"contrib/unzip/*", 
+		"contrib/zip/src/*", 
+		"contrib/zlib/*", 
+	}
+	
 	filter "system:windows"
 		systemversion "latest"
-
-	filter  "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
-
-	filter  "configurations:Release"
-		runtime "Release"
-		optimize "On"
+	
+	filter "configurations:Debug"
+		runtime   "Debug"
+		symbols   "On"
+		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
+	filter "configurations:Release"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"

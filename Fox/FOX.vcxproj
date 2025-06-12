@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\Debug\windows\FOX\</OutDir>
-    <IntDir>..\bin\Debug\windows\FOX\obj\</IntDir>
+    <OutDir>..\bin\debug\windows\FOX\</OutDir>
+    <IntDir>..\build\debug\windows\FOX\</IntDir>
     <TargetName>FOX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\Release\windows\FOX\</OutDir>
-    <IntDir>..\bin\Release\windows\FOX\obj\</IntDir>
+    <OutDir>..\bin\release\windows\FOX\</OutDir>
+    <IntDir>..\build\release\windows\FOX\</IntDir>
     <TargetName>FOX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>source;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\nlohmann\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\nlohmann\include;..\vendor\mimalloc\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -79,7 +79,7 @@
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>source;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\nlohmann\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\nlohmann\include;..\vendor\mimalloc\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -101,55 +101,59 @@
   <ItemGroup>
     <ClInclude Include="source\fox\application.hpp" />
     <ClInclude Include="source\fox\config\config.hpp" />
-    <ClInclude Include="source\fox\core\memory\allocator\no_init.hpp" />
-    <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
-    <ClInclude Include="source\fox\core\types\math\math.hpp" />
-    <ClInclude Include="source\fox\core\types\rendering\camera\camera.hpp" />
-    <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
-    <ClInclude Include="source\fox\ecs\components\custom\mesh_filter.hpp" />
-    <ClInclude Include="source\fox\ecs\components\custom\relationship.hpp" />
-    <ClInclude Include="source\fox\core\types\collection\circular_buffer.hpp" />
     <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
-    <ClInclude Include="source\fox\core\types\image\image.hpp" />
     <ClInclude Include="source\fox\core\json\json.hpp" />
-    <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />
+    <ClInclude Include="source\fox\core\memory\allocator\no_init.hpp" />
     <ClInclude Include="source\fox\core\meta\concepts.hpp" />
     <ClInclude Include="source\fox\core\time\time.hpp" />
-    <ClInclude Include="source\fox\core\types\time\time.hpp" />
-    <ClInclude Include="source\fox\core\types\transform\transform.hpp" />
-    <ClInclude Include="source\fox\core\utility\utility.hpp" />
+    <ClInclude Include="source\fox\core\types\collection\circular_buffer.hpp" />
+    <ClInclude Include="source\fox\core\types\common\common.hpp" />
+    <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
+    <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
+    <ClInclude Include="source\fox\core\types\image\image.hpp" />
     <ClInclude Include="source\fox\core\types\linear_algebra\matrix.hpp" />
     <ClInclude Include="source\fox\core\types\linear_algebra\quaternion.hpp" />
     <ClInclude Include="source\fox\core\types\linear_algebra\vector.hpp" />
-    <ClInclude Include="source\fox\ecs\registry.hpp" />
+    <ClInclude Include="source\fox\core\types\math\math.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\camera\camera.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
+    <ClInclude Include="source\fox\core\types\time\time.hpp" />
+    <ClInclude Include="source\fox\core\types\transform\transform.hpp" />
+    <ClInclude Include="source\fox\core\types\types.hpp" />
+    <ClInclude Include="source\fox\core\types\uuid\uuid.hpp" />
+    <ClInclude Include="source\fox\core\utility\utility.hpp" />
     <ClInclude Include="source\fox\ecs\components\component.hpp" />
     <ClInclude Include="source\fox\ecs\components\components.hpp" />
+    <ClInclude Include="source\fox\ecs\components\custom\mesh_filter.hpp" />
+    <ClInclude Include="source\fox\ecs\components\custom\relationship.hpp" />
     <ClInclude Include="source\fox\ecs\entity\entity.hpp" />
+    <ClInclude Include="source\fox\ecs\registry.hpp" />
     <ClInclude Include="source\fox\ecs\system\render_system.hpp" />
     <ClInclude Include="source\fox\ecs\system\system.hpp" />
-    <ClInclude Include="source\fox\input\context\context.hpp" />
     <ClInclude Include="source\fox\input\Input.hpp" />
     <ClInclude Include="source\fox\input\api\GLFWInputHandler.hpp" />
     <ClInclude Include="source\fox\input\code\Button.hpp" />
     <ClInclude Include="source\fox\input\code\Controller.hpp" />
     <ClInclude Include="source\fox\input\code\Key.hpp" />
     <ClInclude Include="source\fox\input\code\Modifier.hpp" />
+    <ClInclude Include="source\fox\input\context\context.hpp" />
     <ClInclude Include="source\fox\input\mapping\mapping.hpp" />
-    <ClInclude Include="source\fox\io\io.hpp" />
-    <ClInclude Include="source\fox\io\loading.hpp" />
     <ClInclude Include="source\fox\io\filesystem\directory.hpp" />
     <ClInclude Include="source\fox\io\filesystem\entry.hpp" />
     <ClInclude Include="source\fox\io\filesystem\file.hpp" />
     <ClInclude Include="source\fox\io\import\model\header.hpp" />
     <ClInclude Include="source\fox\io\import\model\model_importer.hpp" />
+    <ClInclude Include="source\fox\io\io.hpp" />
+    <ClInclude Include="source\fox\io\loading.hpp" />
     <ClInclude Include="source\fox\math\constants\constants.hpp" />
-    <ClInclude Include="source\fox\math\linear_algebra\projection.hpp" />
-    <ClInclude Include="source\fox\math\math.hpp" />
     <ClInclude Include="source\fox\math\linear_algebra\matrix.hpp" />
+    <ClInclude Include="source\fox\math\linear_algebra\projection.hpp" />
     <ClInclude Include="source\fox\math\linear_algebra\quaternion.hpp" />
+    <ClInclude Include="source\fox\math\linear_algebra\vector.hpp" />
+    <ClInclude Include="source\fox\math\math.hpp" />
     <ClInclude Include="source\fox\math\texture\texture.hpp" />
     <ClInclude Include="source\fox\math\trigonometry\trigonometry.hpp" />
-    <ClInclude Include="source\fox\math\linear_algebra\vector.hpp" />
     <ClInclude Include="source\fox\random\random.hpp" />
     <ClInclude Include="source\fox\rendering\Rendering.hpp" />
     <ClInclude Include="source\fox\rendering\aabb\AABB.hpp" />
@@ -216,13 +220,9 @@
     <ClInclude Include="source\fox\rendering\uniform\Uniform.hpp" />
     <ClInclude Include="source\fox\scene\actor.hpp" />
     <ClInclude Include="source\fox\scene\scene.hpp" />
-    <ClInclude Include="source\fox\core\types\common\common.hpp" />
-    <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
-    <ClInclude Include="source\fox\core\types\types.hpp" />
-    <ClInclude Include="source\fox\core\types\uuid\uuid.hpp" />
     <ClInclude Include="source\fox\window\API\GLFW\GLFWWindow.hpp" />
-    <ClInclude Include="source\fox\window\Using.hpp" />
     <ClInclude Include="source\fox\window\API\Window.hpp" />
+    <ClInclude Include="source\fox\window\Using.hpp" />
     <ClInclude Include="source\fox\window\WindowManager.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
   </ItemGroup>
@@ -239,28 +239,28 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="vendor\assimp\ASSIMP.vcxproj">
+    <ProjectReference Include="..\vendor\assimp\ASSIMP.vcxproj">
       <Project>{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\entt\ENTT.vcxproj">
+    <ProjectReference Include="..\vendor\entt\ENTT.vcxproj">
       <Project>{A03C847C-8C73-850D-3560-6B102176010F}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\glad\GLAD.vcxproj">
+    <ProjectReference Include="..\vendor\glad\GLAD.vcxproj">
       <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
+    <ProjectReference Include="..\vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\glm\GLM.vcxproj">
+    <ProjectReference Include="..\vendor\glm\GLM.vcxproj">
       <Project>{05EB870B-71F4-877C-FA6F-9E7C6678937C}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\nlohmann\NLOHMANN.vcxproj">
+    <ProjectReference Include="..\vendor\nlohmann\NLOHMANN.vcxproj">
       <Project>{E0F5950F-CCC2-F01A-F5DB-DEC2E10726A9}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\mimalloc\MIMALLOC.vcxproj">
+    <ProjectReference Include="..\vendor\mimalloc\MIMALLOC.vcxproj">
       <Project>{73103C37-5FDD-9642-88F6-84EA7422CCD0}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\stb\STB_IMAGE.vcxproj">
+    <ProjectReference Include="..\vendor\stb\STB_IMAGE.vcxproj">
       <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
     </ProjectReference>
   </ItemGroup>

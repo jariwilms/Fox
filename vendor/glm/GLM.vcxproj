@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\..\bin\Debug\windows\GLM\</OutDir>
-    <IntDir>..\..\..\bin\Debug\windows\GLM\obj\</IntDir>
+    <OutDir>..\..\bin\debug\windows\GLM\</OutDir>
+    <IntDir>..\..\build\debug\windows\GLM\</IntDir>
     <TargetName>GLM</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\..\bin\Release\windows\GLM\</OutDir>
-    <IntDir>..\..\..\bin\Release\windows\GLM\obj\</IntDir>
+    <OutDir>..\..\bin\release\windows\GLM\</OutDir>
+    <IntDir>..\..\build\release\windows\GLM\</IntDir>
     <TargetName>GLM</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

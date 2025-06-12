@@ -1,5 +1,6 @@
 bin/
-/doc/temp
+build/
+doc/temp
 
 **/*.vcxproj.filters
 **/*.vcxproj.user

@@ -11,10 +11,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{301981F7-9C83-356E-E5C1-E613516B13C3}</ProjectGuid>
+    <ProjectGuid>{73103C37-5FDD-9642-88F6-84EA7422CCD0}</ProjectGuid>
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>STB_IMAGE</RootNamespace>
+    <RootNamespace>MIMALLOC</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -41,26 +41,28 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\..\bin\Debug\windows\STB_IMAGE\</OutDir>
-    <IntDir>..\..\..\bin\Debug\windows\STB_IMAGE\obj\</IntDir>
-    <TargetName>STB_IMAGE</TargetName>
+    <OutDir>..\..\bin\debug\windows\MIMALLOC\</OutDir>
+    <IntDir>..\..\build\debug\windows\MIMALLOC\</IntDir>
+    <TargetName>MIMALLOC</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\..\bin\Release\windows\STB_IMAGE\</OutDir>
-    <IntDir>..\..\..\bin\Release\windows\STB_IMAGE\obj\</IntDir>
-    <TargetName>STB_IMAGE</TargetName>
+    <OutDir>..\..\bin\release\windows\MIMALLOC\</OutDir>
+    <IntDir>..\..\build\release\windows\MIMALLOC\</IntDir>
+    <TargetName>MIMALLOC</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>include\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>28251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;MI_STATIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;include\mimalloc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -72,14 +74,16 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;STB_IMAGE_IMPLEMENTATION;STB_IMAGE_WRITE_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>include\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>28251;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;MI_STATIC_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>include;include\mimalloc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -89,11 +93,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\stb\stb_image.h" />
-    <ClInclude Include="include\stb\stb_image_write.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\stb_image.c" />
+    <ClCompile Include="src\alloc-aligned.c" />
+    <ClCompile Include="src\alloc-posix.c" />
+    <ClCompile Include="src\alloc.c" />
+    <ClCompile Include="src\arena.c" />
+    <ClCompile Include="src\bitmap.c" />
+    <ClCompile Include="src\heap.c" />
+    <ClCompile Include="src\init.c" />
+    <ClCompile Include="src\libc.c" />
+    <ClCompile Include="src\options.c" />
+    <ClCompile Include="src\os.c" />
+    <ClCompile Include="src\page.c" />
+    <ClCompile Include="src\prim\prim.c" />
+    <ClCompile Include="src\random.c" />
+    <ClCompile Include="src\segment-map.c" />
+    <ClCompile Include="src\segment.c" />
+    <ClCompile Include="src\stats.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

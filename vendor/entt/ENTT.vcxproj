@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\..\bin\Debug\windows\ENTT\</OutDir>
-    <IntDir>..\..\..\bin\Debug\windows\ENTT\obj\</IntDir>
+    <OutDir>..\..\bin\debug\windows\ENTT\</OutDir>
+    <IntDir>..\..\build\debug\windows\ENTT\</IntDir>
     <TargetName>ENTT</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\..\bin\Release\windows\ENTT\</OutDir>
-    <IntDir>..\..\..\bin\Release\windows\ENTT\obj\</IntDir>
+    <OutDir>..\..\bin\release\windows\ENTT\</OutDir>
+    <IntDir>..\..\build\release\windows\ENTT\</IntDir>
     <TargetName>ENTT</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
