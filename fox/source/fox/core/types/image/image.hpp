@@ -61,11 +61,25 @@ namespace fox
 
             auto const& write_bmp  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
-                    return {};
+                          auto  vector     = std::vector<fox::byte_t>{};
+                    const auto& dimensions = image.dimensions();
+
+                    stbi_write_bmp_to_func(
+                        vendor::stb::write_function, 
+                        &vector, dimensions.x, dimensions.y, 
+                        fox::to_underlying(image.channels()), 
+                        image.data().data());
                 };
             auto const& write_jpeg = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
-                    return {};
+                          auto  vector     = std::vector<fox::byte_t>{};
+                    const auto& dimensions = image.dimensions();
+
+                    stbi_write_jpg_to_func(
+                        vendor::stb::write_function, 
+                        &vector, dimensions.x, dimensions.y, 
+                        fox::to_underlying(image.channels()), 
+                        image.data().data(), fox::int32_t{ 100u });
                 };
             auto const& write_png  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
@@ -83,6 +97,15 @@ namespace fox
                 };
             auto const& write_hdr  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
+                    //      auto  vector     = std::vector<fox::float32_t>{};
+                    //const auto& dimensions = image.dimensions();
+
+                    //stbi_write_hdr_to_func(
+                    //    vendor::stb::write_function, 
+                    //    &vector, dimensions.x, dimensions.y, 
+                    //    fox::to_underlying(image.channels()), 
+                    //    reinterpret_cast<const fox::float32_t*>(image.data().data()));
+
                     return {};
                 };
 
