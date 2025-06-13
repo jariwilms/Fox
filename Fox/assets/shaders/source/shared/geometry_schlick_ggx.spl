@@ -1,0 +1,16 @@
+#include "constants.spl"
+
+#ifndef GEOMETRY_SCHLICK_GGX
+#define GEOMETRY_SCHLICK_GGX
+
+float geometry_schlick_ggx(float normalDotViewDirection, float roughness)
+{
+    const float geometryFactor = pow(roughness + 1.0, 2.0) / 8.0;
+
+    const float numerator      = normalDotViewDirection;
+    const float denominator    = normalDotViewDirection * (1.0 - geometryFactor) + geometryFactor;
+
+    return numerator / denominator;
+}
+
+#endif

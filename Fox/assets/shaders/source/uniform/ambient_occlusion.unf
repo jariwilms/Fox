@@ -1,0 +1,6 @@
+#include "bindings.spl"
+
+layout(binding = SSAO_BINDING) uniform AmbientOcclusion
+{
+	vec4 samples[64];
+} u_AmbientOcclusion;

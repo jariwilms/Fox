@@ -1,0 +1,15 @@
+#include "constants.spl"
+
+#ifndef SAMPLE_SPHERICAL_MAP
+#define SAMPLE_SPHERICAL_MAP
+
+vec2 sample_spherical_map(vec3 v)
+{
+    vec2 uv  = vec2(atan(v.z, v.x), asin(v.y));
+         uv *= ATAN_INV;
+         uv += 0.5;
+	
+    return uv;
+}
+
+#endif

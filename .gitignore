@@ -1,7 +1,6 @@
 bin/
-bin_obj/
-Fox/assets/shaders/compiled
-/doc/temp
+build/
+doc/temp
 
 **/*.vcxproj.filters
 **/*.vcxproj.user

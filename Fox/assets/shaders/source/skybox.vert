@@ -1,11 +1,6 @@
 #version 460 core
 
-layout(set = 0, binding = 2) uniform UMatrices
-{
-	mat4 model;
-	mat4 view;
-	mat4 projection;
-} u_Matrices;
+#include "uniform/matrices.unf"
 
 layout(location = 0) in  vec3 a_Position;
 

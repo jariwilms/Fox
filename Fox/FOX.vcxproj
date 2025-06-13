@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\Debug\windows\FOX\</OutDir>
-    <IntDir>..\bin\Debug\windows\FOX\obj\</IntDir>
+    <OutDir>..\bin\debug\windows\FOX\</OutDir>
+    <IntDir>..\build\debug\windows\FOX\</IntDir>
     <TargetName>FOX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\Release\windows\FOX\</OutDir>
-    <IntDir>..\bin\Release\windows\FOX\obj\</IntDir>
+    <OutDir>..\bin\release\windows\FOX\</OutDir>
+    <IntDir>..\build\release\windows\FOX\</IntDir>
     <TargetName>FOX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -57,12 +57,12 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\nlohmann\include;..\vendor\mimalloc\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -78,15 +78,15 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\assimp\include;vendor\entt\include;vendor\glad\include;vendor\glfw\include;vendor\glm\include;vendor\mimalloc\include;vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\nlohmann\include;..\vendor\mimalloc\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
     <Link>
@@ -99,156 +99,169 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Fox\Application.hpp" />
-    <ClInclude Include="src\Fox\Config.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Camera\Camera.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Component\MeshFilter.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Component\Relationship.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Container\CyclicBuffer.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Image\Image.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Library.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Lighting\Light.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Semantics\NonCopyable.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Semantics\NonMovable.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Template\Concepts.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Time\Time.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Transform\Transform.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Utility\Bitwise.hpp" />
-    <ClInclude Include="src\Fox\Core\Library\Utility\Utility.hpp" />
-    <ClInclude Include="src\Fox\Core\Types.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\Component.hpp" />
-    <ClInclude Include="src\Fox\ECS\Components\Components.hpp" />
-    <ClInclude Include="src\Fox\ECS\Entity\Entity.hpp" />
-    <ClInclude Include="src\Fox\ECS\Registry.hpp" />
-    <ClInclude Include="src\Fox\ECS\System\RenderSystem.hpp" />
-    <ClInclude Include="src\Fox\ECS\System\System.hpp" />
-    <ClInclude Include="src\Fox\ECS\Types.hpp" />
-    <ClInclude Include="src\Fox\Experimental\Experimental.hpp" />
-    <ClInclude Include="src\Fox\IO\Filesystem\Directory.hpp" />
-    <ClInclude Include="src\Fox\IO\Filesystem\Entry.hpp" />
-    <ClInclude Include="src\Fox\IO\Filesystem\File.hpp" />
-    <ClInclude Include="src\Fox\IO\Filesystem\Handle.hpp" />
-    <ClInclude Include="src\Fox\IO\IO.hpp" />
-    <ClInclude Include="src\Fox\IO\Import\Model\GLTFImporter.hpp" />
-    <ClInclude Include="src\Fox\IO\Import\Model\ModelImporter.hpp" />
-    <ClInclude Include="src\Fox\IO\Registry\Registry.hpp" />
-    <ClInclude Include="src\Fox\IO\UUID\UUID.hpp" />
-    <ClInclude Include="src\Fox\Input\Code\ButtonCode.hpp" />
-    <ClInclude Include="src\Fox\Input\Code\KeyCode.hpp" />
-    <ClInclude Include="src\Fox\Input\Code\ModifierCode.hpp" />
-    <ClInclude Include="src\Fox\Input\Handler\InputHandlerAPI.hpp" />
-    <ClInclude Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.hpp" />
-    <ClInclude Include="src\Fox\Input\Input.hpp" />
-    <ClInclude Include="src\Fox\Rendering\AABB\AABB.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Buffer\DataType.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Concepts\Concepts.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\FrameBuffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\FrameBuffer\Mapping.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Layout\Layout.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Layout\VertexLayout.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Query\Query.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\RenderBuffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\RenderState\RenderState.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Sampler\Sampler.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Shader\Pipeline.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Shader\Shader.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Shader\Utility.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\AntiAliasing.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\Cubemap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\Dimensions.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\MipMap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\API\Texture\Texture.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\FrameBuffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Geometry\Geometry.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Cube.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Geometry\Primitives\Plane.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\GraphicsAPI.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\Buffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Buffer\VertexArray.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Context\Context.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Concepts.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Flags.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Library.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Mapping.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Parameters.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Core\Types.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\FrameBuffer\FrameBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\GL.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\OpenGL.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Query\Query.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\RenderBuffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\RenderState\RenderState.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Sampler\Sampler.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Shader\Pipeline.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Shader\Shader.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Texture\Cubemap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\OpenGL\Texture\Texture.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\VK.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\VKMappings.hpp" />
-    <ClInclude Include="src\Fox\Rendering\GraphicsAPI\Vulkan\Vulkan.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Material\Material.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Mesh\Mesh.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Model\Model.hpp" />
-    <ClInclude Include="src\Fox\Rendering\PostProcessing\PostProcessing.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Projection\Projection.hpp" />
-    <ClInclude Include="src\Fox\Rendering\RenderBuffer\RenderBuffer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\RenderInfo\RenderInfo.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Renderer\OpenGLRenderer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Renderer\RenderMode.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Renderer\Renderer.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Rendering.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Shader\Pipeline.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Shader\Shader.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Texture\Cubemap.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Texture\Texture.hpp" />
-    <ClInclude Include="src\Fox\Rendering\Uniform\Uniform.hpp" />
-    <ClInclude Include="src\Fox\Scene\Actor.hpp" />
-    <ClInclude Include="src\Fox\Scene\Scene.hpp" />
-    <ClInclude Include="src\Fox\Window\API\GLFW\GLFWWindow.hpp" />
-    <ClInclude Include="src\Fox\Window\Using.hpp" />
-    <ClInclude Include="src\Fox\Window\Window.hpp" />
-    <ClInclude Include="src\Fox\Window\WindowManager.hpp" />
-    <ClInclude Include="src\stdafx.hpp" />
+    <ClInclude Include="source\fox\application.hpp" />
+    <ClInclude Include="source\fox\config\config.hpp" />
+    <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
+    <ClInclude Include="source\fox\core\json\json.hpp" />
+    <ClInclude Include="source\fox\core\memory\allocator\no_init.hpp" />
+    <ClInclude Include="source\fox\core\meta\concepts.hpp" />
+    <ClInclude Include="source\fox\core\time\time.hpp" />
+    <ClInclude Include="source\fox\core\types\collection\circular_buffer.hpp" />
+    <ClInclude Include="source\fox\core\types\common\common.hpp" />
+    <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
+    <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
+    <ClInclude Include="source\fox\core\types\image\image.hpp" />
+    <ClInclude Include="source\fox\core\types\linear_algebra\matrix.hpp" />
+    <ClInclude Include="source\fox\core\types\linear_algebra\quaternion.hpp" />
+    <ClInclude Include="source\fox\core\types\linear_algebra\vector.hpp" />
+    <ClInclude Include="source\fox\core\types\math\math.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\camera\camera.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />
+    <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
+    <ClInclude Include="source\fox\core\types\time\time.hpp" />
+    <ClInclude Include="source\fox\core\types\transform\transform.hpp" />
+    <ClInclude Include="source\fox\core\types\types.hpp" />
+    <ClInclude Include="source\fox\core\types\uuid\uuid.hpp" />
+    <ClInclude Include="source\fox\core\utility\utility.hpp" />
+    <ClInclude Include="source\fox\ecs\components\component.hpp" />
+    <ClInclude Include="source\fox\ecs\components\components.hpp" />
+    <ClInclude Include="source\fox\ecs\components\custom\mesh_filter.hpp" />
+    <ClInclude Include="source\fox\ecs\components\custom\relationship.hpp" />
+    <ClInclude Include="source\fox\ecs\entity\entity.hpp" />
+    <ClInclude Include="source\fox\ecs\registry.hpp" />
+    <ClInclude Include="source\fox\ecs\system\render_system.hpp" />
+    <ClInclude Include="source\fox\ecs\system\system.hpp" />
+    <ClInclude Include="source\fox\input\Input.hpp" />
+    <ClInclude Include="source\fox\input\api\GLFWInputHandler.hpp" />
+    <ClInclude Include="source\fox\input\code\Button.hpp" />
+    <ClInclude Include="source\fox\input\code\Controller.hpp" />
+    <ClInclude Include="source\fox\input\code\Key.hpp" />
+    <ClInclude Include="source\fox\input\code\Modifier.hpp" />
+    <ClInclude Include="source\fox\input\context\context.hpp" />
+    <ClInclude Include="source\fox\input\mapping\mapping.hpp" />
+    <ClInclude Include="source\fox\io\filesystem\directory.hpp" />
+    <ClInclude Include="source\fox\io\filesystem\entry.hpp" />
+    <ClInclude Include="source\fox\io\filesystem\file.hpp" />
+    <ClInclude Include="source\fox\io\import\model\header.hpp" />
+    <ClInclude Include="source\fox\io\import\model\model_importer.hpp" />
+    <ClInclude Include="source\fox\io\io.hpp" />
+    <ClInclude Include="source\fox\io\loading.hpp" />
+    <ClInclude Include="source\fox\math\constants\constants.hpp" />
+    <ClInclude Include="source\fox\math\linear_algebra\matrix.hpp" />
+    <ClInclude Include="source\fox\math\linear_algebra\projection.hpp" />
+    <ClInclude Include="source\fox\math\linear_algebra\quaternion.hpp" />
+    <ClInclude Include="source\fox\math\linear_algebra\vector.hpp" />
+    <ClInclude Include="source\fox\math\math.hpp" />
+    <ClInclude Include="source\fox\math\texture\texture.hpp" />
+    <ClInclude Include="source\fox\math\trigonometry\trigonometry.hpp" />
+    <ClInclude Include="source\fox\random\random.hpp" />
+    <ClInclude Include="source\fox\rendering\Rendering.hpp" />
+    <ClInclude Include="source\fox\rendering\aabb\AABB.hpp" />
+    <ClInclude Include="source\fox\rendering\api\buffer\Buffer.hpp" />
+    <ClInclude Include="source\fox\rendering\api\buffer\DataType.hpp" />
+    <ClInclude Include="source\fox\rendering\api\buffer\VertexArray.hpp" />
+    <ClInclude Include="source\fox\rendering\api\concepts\Concepts.hpp" />
+    <ClInclude Include="source\fox\rendering\api\framebuffer\FrameBuffer.hpp" />
+    <ClInclude Include="source\fox\rendering\api\layout\Layout.hpp" />
+    <ClInclude Include="source\fox\rendering\api\layout\VertexLayout.hpp" />
+    <ClInclude Include="source\fox\rendering\api\query\Query.hpp" />
+    <ClInclude Include="source\fox\rendering\api\renderbuffer\RenderBuffer.hpp" />
+    <ClInclude Include="source\fox\rendering\api\renderstate\RenderState.hpp" />
+    <ClInclude Include="source\fox\rendering\api\sampler\Sampler.hpp" />
+    <ClInclude Include="source\fox\rendering\api\shader\Pipeline.hpp" />
+    <ClInclude Include="source\fox\rendering\api\shader\Shader.hpp" />
+    <ClInclude Include="source\fox\rendering\api\shader\Utility.hpp" />
+    <ClInclude Include="source\fox\rendering\api\texture\Cubemap.hpp" />
+    <ClInclude Include="source\fox\rendering\api\texture\Texture.hpp" />
+    <ClInclude Include="source\fox\rendering\buffer\Buffer.hpp" />
+    <ClInclude Include="source\fox\rendering\buffer\VertexArray.hpp" />
+    <ClInclude Include="source\fox\rendering\framebuffer\FrameBuffer.hpp" />
+    <ClInclude Include="source\fox\rendering\geometry\Geometry.hpp" />
+    <ClInclude Include="source\fox\rendering\geometry\primitives\Cube.hpp" />
+    <ClInclude Include="source\fox\rendering\geometry\primitives\Plane.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\GraphicsAPI.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\GL.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\OpenGL.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\buffer\Buffer.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\buffer\VertexArray.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\context\Context.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Concepts.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Data.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Flags.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Library.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Mapping.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Parameters.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\core\Types.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\framebuffer\FrameBuffer.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\query\Query.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\renderbuffer\RenderBuffer.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\renderstate\RenderState.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\sampler\Sampler.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\shader\Pipeline.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\shader\Shader.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\texture\Cubemap.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\opengl\texture\Texture.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\vulkan\VK.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\vulkan\VKMappings.hpp" />
+    <ClInclude Include="source\fox\rendering\graphicsapi\vulkan\Vulkan.hpp" />
+    <ClInclude Include="source\fox\rendering\material\Material.hpp" />
+    <ClInclude Include="source\fox\rendering\mesh\Mesh.hpp" />
+    <ClInclude Include="source\fox\rendering\model\Model.hpp" />
+    <ClInclude Include="source\fox\rendering\postprocessing\PostProcessing.hpp" />
+    <ClInclude Include="source\fox\rendering\renderbuffer\RenderBuffer.hpp" />
+    <ClInclude Include="source\fox\rendering\renderer\OpenGLRenderer.hpp" />
+    <ClInclude Include="source\fox\rendering\renderer\RenderMode.hpp" />
+    <ClInclude Include="source\fox\rendering\renderer\Renderer.hpp" />
+    <ClInclude Include="source\fox\rendering\renderinfo\RenderInfo.hpp" />
+    <ClInclude Include="source\fox\rendering\shader\Pipeline.hpp" />
+    <ClInclude Include="source\fox\rendering\shader\Shader.hpp" />
+    <ClInclude Include="source\fox\rendering\texture\Cubemap.hpp" />
+    <ClInclude Include="source\fox\rendering\texture\Texture.hpp" />
+    <ClInclude Include="source\fox\rendering\uniform\Uniform.hpp" />
+    <ClInclude Include="source\fox\scene\actor.hpp" />
+    <ClInclude Include="source\fox\scene\scene.hpp" />
+    <ClInclude Include="source\fox\window\API\GLFW\GLFWWindow.hpp" />
+    <ClInclude Include="source\fox\window\API\Window.hpp" />
+    <ClInclude Include="source\fox\window\Using.hpp" />
+    <ClInclude Include="source\fox\window\WindowManager.hpp" />
+    <ClInclude Include="source\stdafx.hpp" />
+    <ClInclude Include="source\vendor\stb\stb.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Fox\Application.cpp" />
-    <ClCompile Include="src\Fox\Core\Library\Image\Image.cpp" />
-    <ClCompile Include="src\Fox\IO\Import\Model\ModelImporter.cpp" />
-    <ClCompile Include="src\Fox\Input\Handler\Platform\GLFWInputHandler.cpp" />
-    <ClCompile Include="src\Fox\Input\Input.cpp" />
-    <ClCompile Include="src\Fox\Rendering\Geometry\Geometry.cpp" />
-    <ClCompile Include="src\Fox\Rendering\Renderer\OpenGLRenderer.cpp" />
-    <ClCompile Include="src\Fox\Scene\Scene.cpp" />
-    <ClCompile Include="src\Fox\Window\API\GLFW\GLFWWindow.cpp" />
-    <ClCompile Include="src\Fox\Window\WindowManager.cpp" />
-    <ClCompile Include="src\stdafx.cpp">
+    <ClCompile Include="source\fox\application.cpp" />
+    <ClCompile Include="source\fox\io\import\model\model_importer.cpp" />
+    <ClCompile Include="source\fox\rendering\geometry\Geometry.cpp" />
+    <ClCompile Include="source\fox\rendering\renderer\OpenGLRenderer.cpp" />
+    <ClCompile Include="source\fox\scene\scene.cpp" />
+    <ClCompile Include="source\fox\window\API\GLFW\GLFWWindow.cpp" />
+    <ClCompile Include="source\fox\window\WindowManager.cpp" />
+    <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="vendor\assimp\ASSIMP.vcxproj">
+    <ProjectReference Include="..\vendor\assimp\ASSIMP.vcxproj">
       <Project>{B20B8BA5-9EAD-B57B-8768-C9CF73A93CCC}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\entt\ENTT.vcxproj">
+    <ProjectReference Include="..\vendor\entt\ENTT.vcxproj">
       <Project>{A03C847C-8C73-850D-3560-6B102176010F}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\glad\GLAD.vcxproj">
+    <ProjectReference Include="..\vendor\glad\GLAD.vcxproj">
       <Project>{5D4A857C-4981-860D-F26D-6C10DE83020F}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\glfw\GLFW.vcxproj">
+    <ProjectReference Include="..\vendor\glfw\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\glm\GLM.vcxproj">
+    <ProjectReference Include="..\vendor\glm\GLM.vcxproj">
       <Project>{05EB870B-71F4-877C-FA6F-9E7C6678937C}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\mimalloc\MIMALLOC.vcxproj">
+    <ProjectReference Include="..\vendor\nlohmann\NLOHMANN.vcxproj">
+      <Project>{E0F5950F-CCC2-F01A-F5DB-DEC2E10726A9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\vendor\mimalloc\MIMALLOC.vcxproj">
       <Project>{73103C37-5FDD-9642-88F6-84EA7422CCD0}</Project>
     </ProjectReference>
-    <ProjectReference Include="vendor\stb\STB_IMAGE.vcxproj">
+    <ProjectReference Include="..\vendor\stb\STB_IMAGE.vcxproj">
       <Project>{301981F7-9C83-356E-E5C1-E613516B13C3}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -1,4 +1,4 @@
-workspace "Fox"
+workspace "fox"
 	architecture "x64"
 	startproject "RUN"
 	
@@ -8,43 +8,44 @@ workspace "Fox"
 		"Release", 
 	}
 	
-	includedir = {}
-	includedir["ASSIMP"]   = "Fox/vendor/assimp/include"
-	includedir["ENTT"]     = "Fox/vendor/entt/include"
-	includedir["GLAD"]     = "Fox/vendor/glad/include"
-	includedir["GLFW"]     = "Fox/vendor/glfw/include"
-	includedir["GLM"]      = "Fox/vendor/glm/include"
-	includedir["MIMALLOC"] = "Fox/vendor/mimalloc/include"
-	includedir["STB"]      = "Fox/vendor/stb/include"
-	
-	outputdir = "%{cfg.buildcfg}/%{cfg.system}"
-	
+	includedir = 
+	{
+		["ASSIMP"]   = "vendor/assimp/include", 
+		["ENTT"]     = "vendor/entt/include", 
+		["GLAD"]     = "vendor/glad/include", 
+		["GLFW"]     = "vendor/glfw/include", 
+		["GLM"]      = "vendor/glm/include", 
+		["NLOHMANN"] = "vendor/nlohmann/include", 
+		["MIMALLOC"] = "vendor/mimalloc/include", 
+		["STB"]      = "vendor/stb/include", 
+	}
+
 group "Dependencies"
-	include "Fox/vendor/assimp"
-	include "Fox/vendor/entt"
-	include "Fox/vendor/glad"
-	include "Fox/vendor/glfw"
-	include "Fox/vendor/glm"
-	include "Fox/vendor/mimalloc"
-	include "Fox/vendor/stb"
+	include "vendor/assimp"
+	include "vendor/entt"
+	include "vendor/glad"
+	include "vendor/glfw"
+	include "vendor/glm"
+	include "vendor/nlohmann"
+	include "vendor/mimalloc"
+	include "vendor/stb"
 group ""
 
 group "Application"
 project "FOX"
 	location      "FOX"
 	language      "C++"
-	cppdialect    "C++20"
+	cppdialect    "C++23"
 	kind          "StaticLib"
 	staticruntime "On"
 	
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 	
 	pchheader "stdafx.hpp"
-	pchsource "Fox/src/stdafx.cpp"
+	pchsource "fox/source/stdafx.cpp"
 	
 	defines
 	{
+		'FOX_ENGINE', 
 		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
 		'FOX_ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 		"FOX_MALLOC", 
@@ -53,23 +54,24 @@ project "FOX"
 		"GLM_ENABLE_EXPERIMENTAL", 
 	}
 	
-	files
-	{
-		"Fox/src/**.hpp", 
-		"Fox/src/**.cpp", 
-	}
-	
 	includedirs
 	{
-		"%{prj.name}/src", 
+		"%{prj.name}/source", 
 		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.ENTT}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
+		"%{includedir.NLOHMANN}", 
 		"%{includedir.MIMALLOC}", 
 		"%{includedir.STB}", 
+	}
+	
+	files
+	{
+		"fox/source/**.hpp", 
+		"fox/source/**.cpp", 
 	}
 	
 	links
@@ -79,6 +81,7 @@ project "FOX"
 		"GLAD", 
 		"GLFW", 
 		"GLM", 
+		"NLOHMANN", 
 		"MIMALLOC", 
 		"STB_IMAGE", 
 		
@@ -87,35 +90,36 @@ project "FOX"
 	
 	filter "system:windows"
 		systemversion "latest"
-
+		
 		defines
 		{
 			"NOMINMAX", 
 			
 			"FOX_PLATFORM_WINDOWS", 
 		}
-		
+	
 	filter "configurations:Debug"
-		defines "FOX_DEBUG"
-		runtime "Debug"
-		symbols "On"
+		defines   "FOX_DEBUG"
+		runtime   "Debug"
+		symbols   "On"
 		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
 	filter "configurations:Release"
-		defines  "FOX_RELEASE"
-		runtime  "Release"
-		optimize "On"
-
-
+		defines   "FOX_RELEASE"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 
 project "RUN"
 	location      "RUN"
 	language      "C++"
-	cppdialect    "C++20"
+	cppdialect    "C++23"
 	kind          "ConsoleApp"
 	staticruntime "On"
-	
-	targetdir ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}")
-	objdir    ("%{wks.location}/bin/" .. outputdir .. "/%{prj.name}/obj")
 	
 	defines
 	{
@@ -123,22 +127,23 @@ project "RUN"
 		"GLM_ENABLE_EXPERIMENTAL", 
 	}
 	
-	files
-	{
-		"Run/src/**.hpp", 
-		"Run/src/**.cpp", 
-	}
-	
 	includedirs
 	{
-		"Fox/src", 
+		"fox/source", 
 		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.ENTT}", 
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
+		"%{includedir.NLOHMANN}", 
 		"%{includedir.STB}", 
+	}
+	
+	files
+	{
+		"Run/source/**.hpp", 
+		"Run/source/**.cpp", 
 	}
 	
 	links
@@ -147,10 +152,16 @@ project "RUN"
 	}
 	
 	filter "configurations:Debug"
-		runtime "Debug"
-		symbols "On"
+		runtime   "Debug"
+		symbols   "On"
 		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
 	filter "configurations:Release"
-		runtime  "Release"
-		optimize "On"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 group ""
