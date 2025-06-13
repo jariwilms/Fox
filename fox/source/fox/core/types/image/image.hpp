@@ -4,8 +4,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include <stb/stb_image.h>
-#include <stb/stb_image_write.h>
+#include <vendor/stb/stb.hpp>
 
 #include <fox/config/config.hpp>
 #include <fox/core/types/common/common.hpp>
@@ -15,15 +14,6 @@
 
 namespace fox
 {
-    static auto __write_func(fox::void_t* context, fox::void_t* data, fox::int32_t size)
-    {
-        auto* vector  = reinterpret_cast<std::vector<fox::byte_t>*>(context);
-        auto* pointer = reinterpret_cast<const fox::byte_t*>(data);
-        auto  span    = std::span<const fox::byte_t>{ pointer, pointer + size };
-
-        vector->append_range(span);
-    }
-
     class Image
     {
     public:
@@ -83,7 +73,7 @@ namespace fox
                     const auto& dimensions = image.dimensions();
 
                     stbi_write_png_to_func(
-                        __write_func, 
+                        vendor::stb::write_function, 
                         &vector, dimensions.x, dimensions.y, 
                         fox::to_underlying(image.channels()), 
                         image.data().data(), 

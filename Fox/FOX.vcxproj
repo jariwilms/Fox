@@ -225,6 +225,7 @@
     <ClInclude Include="source\fox\window\Using.hpp" />
     <ClInclude Include="source\fox\window\WindowManager.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
+    <ClInclude Include="source\vendor\stb\stb.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\fox\application.cpp" />

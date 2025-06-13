@@ -11,13 +11,5 @@ namespace fox::math
     {
         return glm::dot(first, second);
     }
-
-    static void test()
-    {
-        fox::Vector2f a{};
-        fox::Vector2f b{};
-
-        auto res = math::dot(a, b);
-    }
 }
 
