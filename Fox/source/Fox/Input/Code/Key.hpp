@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
 namespace fox::input
 {
@@ -140,7 +140,7 @@ namespace fox::input
             Menu         = 348, 
         };
 
-        static constexpr key_t min{ key::Space };
-        static constexpr key_t max{ key::Menu };
+        static constexpr input::key_t min{ key::Space };
+        static constexpr input::key_t max{ key::Menu };
     }
 }

@@ -1,13 +1,13 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "glad/gl.h"
-#include "glfw/glfw3.h"
+#include <glad/gl.h>
+#include <glfw/glfw3.h>
 
-#include "Fox/Input/Code/Button.hpp"
-#include "Fox/Input/Code/Key.hpp"
-#include "Fox/Input/Code/Modifier.hpp"
+#include <fox/input/code/button.hpp>
+#include <fox/input/code/key.hpp>
+#include <fox/input/code/modifier.hpp>
 
 namespace fox::input::api
 {

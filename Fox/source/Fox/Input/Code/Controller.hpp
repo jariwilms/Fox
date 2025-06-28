@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
 namespace fox::input
 {
@@ -22,7 +22,7 @@ namespace fox::input
             HatLeftDown  = HatLeft  | HatDown,  
         };
 
-        static constexpr controller_t min{ HatCentered };
-        static constexpr controller_t max{ HatLeft     };
+        static constexpr input::controller_t min{ HatCentered };
+        static constexpr input::controller_t max{ HatLeft     };
     }
 }

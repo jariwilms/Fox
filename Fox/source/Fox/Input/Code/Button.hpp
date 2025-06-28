@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
 namespace fox::input
 {
@@ -26,7 +26,7 @@ namespace fox::input
             Forward     = Button5, 
         };
 
-        static constexpr button_t min{ Button1 };
-        static constexpr button_t max{ Button8 };
+        static constexpr input::button_t min{ Button1 };
+        static constexpr input::button_t max{ Button8 };
     }
 }

@@ -1,18 +1,19 @@
 #pragma once
 
 #define FOX_INPUT_GLFW 1
+#define FOX_INPUT_SDL  2
 
 #ifndef FOX_INPUT
 #define FOX_INPUT FOX_INPUT_GLFW
 #endif
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Input/API/GLFWInputHandler.hpp"
-#include "Fox/Input/Code/Button.hpp"
-#include "Fox/Input/Code/Key.hpp"
-#include "Fox/Input/Code/Modifier.hpp"
-#include "Fox/Input/Code/Controller.hpp"
+#include <fox/input/api/glfw_input_handler.hpp>
+#include <fox/input/code/button.hpp>
+#include <fox/input/code/controller.hpp>
+#include <fox/input/code/key.hpp>
+#include <fox/input/code/modifier.hpp>
 
 namespace fox::input::api
 {
@@ -20,7 +21,7 @@ namespace fox::input::api
     using handler_t = api::GLFWInputHandler;
 #endif
 
-    inline std::shared_ptr<handler_t> handler;
+    inline std::shared_ptr<api::handler_t> handler;
 }
 namespace fox::input
 {
@@ -68,11 +69,11 @@ namespace fox::input
         return api::handler->cursor_position_delta();
     }
 
-    static auto scroll_wheel         ()
+    static auto scroll_wheel         () -> fox::Vector2f
     {
         return api::handler->scroll_wheel();
     }
-    static auto scroll_wheel_delta   ()
+    static auto scroll_wheel_delta   () -> fox::Vector2f
     {
         return api::handler->scroll_wheel_delta();
     }

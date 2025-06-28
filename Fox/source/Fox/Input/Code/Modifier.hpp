@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
 namespace fox::input
 {
@@ -20,7 +20,7 @@ namespace fox::input
             NumLock  = 0x1 << 5u, 
         };
     
-        static constexpr modifier_t min{ Shift };
-        static constexpr modifier_t max{ NumLock };
+        static constexpr input::modifier_t min{ Shift };
+        static constexpr input::modifier_t max{ NumLock };
     }
 }
