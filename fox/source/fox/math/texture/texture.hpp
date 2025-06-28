@@ -3,7 +3,7 @@
 #include <glm/gtx/texture.hpp>
 
 #include <fox/core/types/fundamental/fundamental.hpp>
-#include <fox/core/types/linear_algebra/vector.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 
 namespace fox::math
 {

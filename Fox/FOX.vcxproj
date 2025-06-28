@@ -111,9 +111,9 @@
     <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
     <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
     <ClInclude Include="source\fox\core\types\image\image.hpp" />
-    <ClInclude Include="source\fox\core\types\linear_algebra\matrix.hpp" />
-    <ClInclude Include="source\fox\core\types\linear_algebra\quaternion.hpp" />
-    <ClInclude Include="source\fox\core\types\linear_algebra\vector.hpp" />
+    <ClInclude Include="source\fox\core\types\math\linear_algebra\matrix.hpp" />
+    <ClInclude Include="source\fox\core\types\math\linear_algebra\quaternion.hpp" />
+    <ClInclude Include="source\fox\core\types\math\linear_algebra\vector.hpp" />
     <ClInclude Include="source\fox\core\types\math\math.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\camera\camera.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />

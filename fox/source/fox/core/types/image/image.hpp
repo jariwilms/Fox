@@ -8,7 +8,7 @@
 
 #include <fox/config/config.hpp>
 #include <fox/core/types/common/common.hpp>
-#include <fox/core/types/linear_algebra/vector.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/math/constants/constants.hpp>
 #include <fox/core/utility/utility.hpp>
 

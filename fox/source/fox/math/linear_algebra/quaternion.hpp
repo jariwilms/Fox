@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/core/types/linear_algebra/quaternion.hpp>
+#include <fox/core/types/math/linear_algebra/quaternion.hpp>
 
 namespace fox::math
 {

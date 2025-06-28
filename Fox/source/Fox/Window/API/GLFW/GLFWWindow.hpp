@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <fox/core/types/linear_algebra/vector.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/input/api/glfwinputhandler.hpp>
 #include <fox/input/input.hpp>
 #include <fox/window/api/window.hpp>

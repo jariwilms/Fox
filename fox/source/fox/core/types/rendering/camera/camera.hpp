@@ -1,9 +1,9 @@
 #pragma once
 
-#include <fox/core/types/fundamental/fundamental.hpp>
-#include <fox/core/types/linear_algebra/matrix.hpp>
-#include <fox/math/linear_algebra/projection.hpp>
 #include <fox/math/trigonometry/trigonometry.hpp>
+#include <fox/math/linear_algebra/projection.hpp>
+#include <fox/core/types/math/linear_algebra/matrix.hpp>
+#include <fox/core/types/fundamental/fundamental.hpp>
 
 namespace fox
 {
