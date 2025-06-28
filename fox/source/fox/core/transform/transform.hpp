@@ -1,106 +1,88 @@
 #pragma once
 
-#include <utility>
-
 #include <fox/core/types/math/linear_algebra/matrix.hpp>
 #include <fox/core/types/math/linear_algebra/quaternion.hpp>
 #include <fox/core/types/math/linear_algebra/vector.hpp>
+
+#include <fox/math/linear_algebra/matrix.hpp>
+#include <fox/math/linear_algebra/vector.hpp>
+#include <fox/math/trigonometry/trigonometry.hpp>
 
 namespace fox
 {
     class Transform
     {
     public:
-        Transform() = default;
-        Transform(const fox::Vector3f& position, const fox::Vector3f&   rotation, const fox::Vector3f& scale)
-            : position{ position }, rotation{ fox::Quaternion{ glm::radians(rotation) } }, scale{ scale } {}
-        Transform(const fox::Vector3f& position, const fox::Quaternion& rotation, const fox::Vector3f& scale)
-            : position{ position }, rotation{ fox::Quaternion{ rotation } }, scale{ scale } {}
-        Transform(const fox::Transform& other)
+        constexpr Transform()
+            : position{ 0.0f }, rotation{ 1.0f, 0.0f, 0.0f, 0.0f }, scale{ 1.0f } {}
+        template<typename T, typename U, typename V>
+        constexpr Transform(T&& position, U&& rotation, V&& scale)
+            : position{ std::forward<T>(position) }, rotation{ std::forward<U>(math::to_radians(rotation)) }, scale{ std::forward<V>(scale) } {}
+
+        static auto from_matrix(const fox::Matrix4f matrix)
         {
-            *this = other;
-        }
-        Transform(const fox::Matrix4f & matrix)
-        {
-            *this = matrix;
+            auto transform = fox::Transform{};
+            std::tie(transform.position, transform.rotation, transform.scale, std::ignore, std::ignore) = math::decompose(matrix);
+
+            return transform;
         }
 
-        void translate(const fox::Vector3f& translation)
+        void translate   (const fox::Vector3f& translation)
         {
             this->position += translation;
         }
-        void rotate   (const fox::Vector3f& rotation)
+        void rotate      (const fox::Vector3f& rotation   )
         {
             this->rotation *= fox::Quaternion{ glm::radians(rotation) };
         }
-        void dilate   (const fox::Vector3f& scale)
+        void dilate      (const fox::Vector3f& scale      )
         {
             this->scale *= scale;
         }
 
-        void look_at(const fox::Vector3f& target)
+        void look_at     (const fox::Vector3f& target)
         {
-            const auto& direction = glm::normalize(target - position);
-                        rotation  = glm::quatLookAt(direction, up());
+            rotation = math::look_at(math::normalize(target - position), up());
         }
 
-        fox::Vector3f forward() const
+        auto forward     () const -> fox::Vector3f 
         {
             return rotation * fox::Vector3f{ 0.0f, 0.0f, -1.0f };
         }
-        fox::Vector3f right  () const
+        auto right       () const -> fox::Vector3f 
         {
             return rotation * fox::Vector3f{ 1.0f, 0.0f, 0.0f };
         }
-        fox::Vector3f up     () const
+        auto up          () const -> fox::Vector3f 
         {
             return rotation * fox::Vector3f{ 0.0f, 1.0f, 0.0f };
         }
 
-        fox::Vector3f euler_angles() const
+        auto euler_angles() const -> fox::Vector3f 
         {
-            return glm::degrees(glm::eulerAngles(rotation));
+            return math::to_degrees(math::euler_angles(rotation));
         }
-        fox::Matrix4f matrix()       const
+        auto matrix      () const -> fox::Matrix4f 
         {
             fox::Matrix4f matrix{ 1.0f };
 
-            matrix  = glm::translate(matrix, position);
-            matrix *= glm::mat4_cast(rotation);
-            matrix  = glm::scale(    matrix, scale);
+            matrix  = math::translate(matrix, position);
+            matrix *= math::to_matrix(        rotation);
+            matrix  = math::scale    (matrix, scale   );
 
             return matrix;
         }
 
-        Transform& operator=(const fox::Transform& other)
-        {
-            if (this != &other)
-            {
-                std::exchange(position, other.position);
-                std::exchange(rotation, other.rotation);
-                std::exchange(scale   , other.scale);
-            }
-
-            return *this;
-        }
-        Transform& operator=(const fox::Matrix4f & matrix)
-        {
-            fox::Vector3f skew;
-            fox::Vector4f perspective;
-
-            glm::decompose(matrix, scale, rotation, position, skew, perspective);
-            rotation = glm::conjugate(rotation);
-
-            return *this;
-        }
-
-        friend Transform operator*(const Transform& first, const Transform& second)
-        {
-            return Transform{ first.matrix() * second.matrix() };
-        }
-
-        fox::Vector3f   position{ 0.0f };
-        fox::Quaternion rotation{ 1.0f, 0.0f, 0.0f, 0.0f };
-        fox::Vector3f   scale   { 1.0f };
+        fox::Vector3f   position;
+        fox::Quaternion rotation;
+        fox::Vector3f   scale   ;
     };
+
+    static auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
+    {
+        auto transform = fox::Transform{};
+        std::tie(transform.position, transform.rotation, transform.scale, std::ignore, std::ignore) = math::decompose(left.matrix() * right.matrix());
+
+        return transform;
+    }
 }

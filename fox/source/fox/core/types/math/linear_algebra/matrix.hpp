@@ -1,8 +1,13 @@
 #pragma once
 
+#include <tuple>
+
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+
+#include <fox/core/types/math/linear_algebra/quaternion.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 
 namespace fox
 {
@@ -11,4 +16,6 @@ namespace fox
     using Matrix2f = fox::Matrix<fox::float32_t, 2u>;
     using Matrix3f = fox::Matrix<fox::float32_t, 3u>;
     using Matrix4f = fox::Matrix<fox::float32_t, 4u>;
+
+    using composition_t = std::tuple<fox::Vector3f, fox::Quaternion, fox::Vector3f, fox::Vector3f, fox::Vector4f>;
 }

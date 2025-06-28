@@ -139,7 +139,7 @@ namespace fox::io
     void ModelImporter::create_nodes(gfx::Model& model, fox::uint32_t nodeIndex , const aiScene& asiScene, const aiNode& asiNode)
     {
         const auto& matrix = glm::transpose(*reinterpret_cast<const fox::Matrix4f*>(&asiNode.mTransformation));
-        model.nodes.at(nodeIndex).localTransform = matrix;
+        model.nodes.at(nodeIndex).localTransform = fox::Transform::from_matrix(matrix);
 
         std::span<fox::uint32_t> asiNodeMeshIndices{ asiNode.mMeshes, asiNode.mNumMeshes };
         for (const auto& asiNodeMeshIndex : asiNodeMeshIndices)
