@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/core/types/transform/transform.hpp>
+#include <fox/core/transform/transform.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 

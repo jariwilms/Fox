@@ -24,7 +24,7 @@ namespace fox
 		T min;
 		T max;
 	};
-	
+
 	struct     range_t
 	{
 		range_t(fox::count_t count = {}, fox::index_t index = {})
@@ -57,8 +57,6 @@ namespace fox
 		fox::Vector<T, N> extent;
 		fox::Vector<T, N> origin;
 	};
-
-
 
 	using length_t      = fox::region_t<fox::uint32_t, 1u>;
 	using area_t        = fox::region_t<fox::uint32_t, 2u>;

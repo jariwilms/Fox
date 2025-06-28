@@ -110,7 +110,7 @@
     <ClInclude Include="source\fox\core\types\common\common.hpp" />
     <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
     <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
-    <ClInclude Include="source\fox\core\types\image\image.hpp" />
+    <ClInclude Include="source\fox\core\image\image.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\matrix.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\quaternion.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\vector.hpp" />
@@ -119,7 +119,7 @@
     <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
     <ClInclude Include="source\fox\core\types\time\time.hpp" />
-    <ClInclude Include="source\fox\core\types\transform\transform.hpp" />
+    <ClInclude Include="source\fox\core\transform\transform.hpp" />
     <ClInclude Include="source\fox\core\types\types.hpp" />
     <ClInclude Include="source\fox\core\types\uuid\uuid.hpp" />
     <ClInclude Include="source\fox\core\utility\utility.hpp" />

@@ -3,19 +3,19 @@
 #include <chrono>
 #include <utility>
 
-#include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/core/types/common/common.hpp>
 #include <fox/core/types/time/time.hpp>
 
-namespace fox::time::api
-{
-    inline fox::time_point_t epoch {};
-    inline fox::time_point_t now   {};
-    inline fox::time_point_t before{};
-    inline fox::delta_t      delta {};
-}
 namespace fox::time
 {
+    namespace api
+    {
+        inline fox::time_point_t epoch {};
+        inline fox::time_point_t now   {};
+        inline fox::time_point_t before{};
+        inline fox::delta_t      delta {};
+    }
+
     static void update()
     {
         api::before = std::exchange(api::now, fox::clock_t::now());

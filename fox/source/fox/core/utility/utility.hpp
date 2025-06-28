@@ -30,8 +30,6 @@ namespace fox
 
 
 
-
-
         template<typename T, fox::size_t EXTENT = std::dynamic_extent>
         auto as_bytes(std::span<const T, EXTENT> span)
         {
@@ -45,18 +43,10 @@ namespace fox
 
 
 
-
-
         template <typename T>
         static constexpr auto to_underlying(T value) noexcept
         {
             return static_cast<std::underlying_type_t<T>>(value);
         }
-
-
-
-
-
-
     }
 }

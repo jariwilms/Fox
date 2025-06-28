@@ -85,8 +85,8 @@ namespace fox
         }
         Transform& operator=(const fox::Matrix4f & matrix)
         {
-            fox::Vector3f skew{};
-            fox::Vector4f perspective{};
+            fox::Vector3f skew;
+            fox::Vector4f perspective;
 
             glm::decompose(matrix, scale, rotation, position, skew, perspective);
             rotation = glm::conjugate(rotation);

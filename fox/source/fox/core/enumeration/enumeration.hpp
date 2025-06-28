@@ -2,6 +2,7 @@
 
 #include <stdafx.hpp>
 
+#include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/core/utility/utility.hpp>
 
 namespace fox

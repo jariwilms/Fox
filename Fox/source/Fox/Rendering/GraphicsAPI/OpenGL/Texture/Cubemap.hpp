@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/core/types/image/image.hpp>
+#include <fox/core/image/image.hpp>
 #include "Fox/Rendering/API/Texture/Cubemap.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/OpenGL.hpp"
 #include "Fox/Rendering/GraphicsAPI/OpenGL/Texture/Texture.hpp"

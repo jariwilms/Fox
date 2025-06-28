@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include <fox/core/types/image/image.hpp>
+#include <fox/core/image/image.hpp>
 #include <fox/io/filesystem/directory.hpp>
 #include <fox/io/filesystem/file.hpp>
 #include <fox/rendering/texture/texture.hpp>
