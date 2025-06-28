@@ -153,6 +153,7 @@
     <ClInclude Include="source\fox\math\math.hpp" />
     <ClInclude Include="source\fox\math\texture\texture.hpp" />
     <ClInclude Include="source\fox\math\trigonometry\Trigonometry.hpp" />
+    <ClInclude Include="source\fox\physics\bounding_volume\aabb.hpp" />
     <ClInclude Include="source\fox\random\random.hpp" />
     <ClInclude Include="source\fox\rendering\Rendering.hpp" />
     <ClInclude Include="source\fox\rendering\api\buffer\Buffer.hpp" />
@@ -171,7 +172,6 @@
     <ClInclude Include="source\fox\rendering\api\shader\Utility.hpp" />
     <ClInclude Include="source\fox\rendering\api\texture\Cubemap.hpp" />
     <ClInclude Include="source\fox\rendering\api\texture\Texture.hpp" />
-    <ClInclude Include="source\fox\rendering\bounding_volume\aabb.hpp" />
     <ClInclude Include="source\fox\rendering\buffer\Buffer.hpp" />
     <ClInclude Include="source\fox\rendering\buffer\VertexArray.hpp" />
     <ClInclude Include="source\fox\rendering\framebuffer\FrameBuffer.hpp" />
