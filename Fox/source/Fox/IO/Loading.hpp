@@ -31,10 +31,10 @@ namespace fox::io
     }
     template<> static auto _load<io::Asset::Image>    (const std::filesystem::path& path, fox::Image::Format format)
     {
-        const auto& file = io::_load(path);
-        const auto& data = file->read();
+        const auto& file  = io::_load(path);
+        const auto& data  = file->read();
         const auto& image = fox::Image::decode(format, *data);
-
+        
         return image;
     }
     template<> static auto _load<io::Asset::Texture2D>(const std::filesystem::path& path)
