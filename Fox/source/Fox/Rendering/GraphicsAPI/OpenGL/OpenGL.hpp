@@ -12,16 +12,19 @@
 
 namespace fox::gfx::api::gl
 {
-    //OpenGL wrapper library
-    // 
-    //This library has the following goals:
-    //    * Provide a more modern, correct, and accessible interface
-    //    * Wrap around existing OpenGL functions, allowing for easy addition of custom logic
-    //    * Keep track of state, preventing redundant calls to the graphics driver
-    //    * Compile/Runtime input validation and safety
-    // 
-    //Functions are ordered in accordance with their appearance in the OpenGL 4.6 core specification
+    //OpenGL C++ Wrapper Library
+    //
+    //This library provides a more modern, robust, and user-friendly interface for OpenGL.
+    //Its primary goals are to:
+    //    * Offer a more intuitive and correct interface for development.
+    //    * Encapsulate existing OpenGL functions, simplifying the integration of custom logic.
+    //    * Implement state caching to eliminate redundant driver calls.
+    //    * Ensure compile-time and runtime safety through comprehensive input validation.
+    //
+    //For consistency, functions are organized based on their order in the official OpenGL 4.6 Core Profile Specification.
     //https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
+
+
 
 
 
