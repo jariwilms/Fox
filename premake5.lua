@@ -15,8 +15,8 @@ workspace "fox"
 		["GLAD"]     = "vendor/glad/include", 
 		["GLFW"]     = "vendor/glfw/include", 
 		["GLM"]      = "vendor/glm/include", 
-		["NLOHMANN"] = "vendor/nlohmann/include", 
 		["MIMALLOC"] = "vendor/mimalloc/include", 
+		["NLOHMANN"] = "vendor/nlohmann/include", 
 		["STB"]      = "vendor/stb/include", 
 	}
 
@@ -26,8 +26,8 @@ group "Dependencies"
 	include "vendor/glad"
 	include "vendor/glfw"
 	include "vendor/glm"
-	include "vendor/nlohmann"
 	include "vendor/mimalloc"
+	include "vendor/nlohmann"
 	include "vendor/stb"
 group ""
 
@@ -63,8 +63,8 @@ project "FOX"
 		"%{includedir.GLAD}", 
 		"%{includedir.GLFW}", 
 		"%{includedir.GLM}", 
-		"%{includedir.NLOHMANN}", 
 		"%{includedir.MIMALLOC}", 
+		"%{includedir.NLOHMANN}", 
 		"%{includedir.STB}", 
 	}
 	
@@ -81,8 +81,8 @@ project "FOX"
 		"GLAD", 
 		"GLFW", 
 		"GLM", 
-		"NLOHMANN", 
 		"MIMALLOC", 
+		"NLOHMANN", 
 		"STB_IMAGE", 
 		
 		"opengl32.lib", 
