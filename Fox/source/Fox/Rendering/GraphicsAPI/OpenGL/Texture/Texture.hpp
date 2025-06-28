@@ -25,7 +25,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = math::calculate_mipmap_levels(m_dimensions);
+                m_mipmapLevels = math::mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0u)) });
@@ -77,7 +77,7 @@ namespace fox::gfx::api::gl
         void resize(const gl::Vector1u& dimensions)
         {
             auto handle       = gl::create_texture(glf::Texture::Target::_1D);
-            auto mipmapLevels = math::calculate_mipmap_levels(dimensions);
+            auto mipmapLevels = math::mipmap_levels(dimensions);
 
             gl::texture_storage_1d (handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
             __debugbreak();
@@ -137,7 +137,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = math::calculate_mipmap_levels(m_dimensions);
+                m_mipmapLevels = math::mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0u)) });
@@ -190,7 +190,7 @@ namespace fox::gfx::api::gl
         void resize(const gl::Vector2u& dimensions)
         {
             auto handle       = gl::create_texture(glf::Texture::Target::_2D);
-            auto mipmapLevels = math::calculate_mipmap_levels(dimensions);
+            auto mipmapLevels = math::mipmap_levels(dimensions);
             
             gl::texture_storage_2d(handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
             __debugbreak();
@@ -250,7 +250,7 @@ namespace fox::gfx::api::gl
                 gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
                 gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = math::calculate_mipmap_levels(m_dimensions);
+                m_mipmapLevels = math::mipmap_levels(m_dimensions);
             }
 
             gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0u)) });
@@ -305,7 +305,7 @@ namespace fox::gfx::api::gl
         void resize(const gl::Vector3u& dimensions)
         {
             auto handle       = gl::create_texture(glf::Texture::Target::_3D);
-            auto mipmapLevels = math::calculate_mipmap_levels(dimensions);
+            auto mipmapLevels = math::mipmap_levels(dimensions);
 
             gl::texture_storage_3d (handle, gl::map_texture_format(m_format), dimensions, mipmapLevels);
             __debugbreak();

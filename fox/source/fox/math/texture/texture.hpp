@@ -7,7 +7,7 @@
 
 namespace fox::math
 {
-    static constexpr auto calculate_mipmap_levels(auto const& vector)
+    static constexpr auto mipmap_levels(const auto& vector)
     {
         return static_cast<fox::uint32_t>(glm::levels(vector));
     }
