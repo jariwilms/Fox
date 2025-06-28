@@ -6,8 +6,8 @@
 
 namespace fox::math
 {
-    template<typename T>
-    static constexpr auto dot(const T& first, const T& second) -> fox::fundamental_t<decltype(first.x)>
+    template<typename T, fox::uint32_t N>
+    static constexpr auto dot(const fox::Vector<T, N>& first, const fox::Vector<T, N>& second) -> fox::fundamental_t<T>
     {
         return glm::dot(first, second);
     }
@@ -17,4 +17,3 @@ namespace fox::math
         return glm::normalize(value);
     }
 }
-
