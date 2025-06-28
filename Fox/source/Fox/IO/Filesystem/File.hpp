@@ -2,7 +2,7 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/memory/allocator/no_init.hpp>
+#include <fox/core/memory/adapter/no_init_adapter.hpp>
 #include <fox/core/utility/utility.hpp>
 #include <fox/io/filesystem/entry.hpp>
 
@@ -27,18 +27,14 @@ namespace fox::io
             return std::make_shared<io::File>(path);
         }
 
-        auto read (std::optional<fox::size_t> limit = {}) -> std::shared_ptr<const std::vector<fox::byte_t>>
+        auto read (std::optional<fox::size_t> limit = {}) -> std::shared_ptr<std::vector<fox::byte_t>>
         {
-            //The default vector allocator initializes all data when resizing.
-            //This is redundant because we want the vector to take ownership of existing data.
-
-            auto       buffer     = std::make_shared<std::vector<fox::byte_t>>();
-            auto const bufferSize = std::min(limit.value_or(size()), size());
-
-            reinterpret_cast<std::vector<fox::byte_t, memory::no_init_allocator<fox::byte_t>>*>(buffer.get())->resize(bufferSize);
-            read_data(buffer->data(), buffer->size());
-
-            return buffer;
+            const auto bufferSize = std::min(limit.value_or(size()), size());
+                  auto buffer     = std::vector<fox::byte_t, memory::no_init_adapter<std::allocator<fox::byte_t>>>(bufferSize);
+                  
+            read_data(buffer.data(), buffer.size());
+            
+            return std::make_shared<std::vector<fox::byte_t>>(std::from_range, std::move(buffer));
         }
         void write(std::span<const fox::byte_t> data)
         {
