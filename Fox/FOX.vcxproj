@@ -142,7 +142,6 @@
     <ClInclude Include="source\fox\io\filesystem\directory.hpp" />
     <ClInclude Include="source\fox\io\filesystem\entry.hpp" />
     <ClInclude Include="source\fox\io\filesystem\file.hpp" />
-    <ClInclude Include="source\fox\io\import\model\header.hpp" />
     <ClInclude Include="source\fox\io\import\model\model_importer.hpp" />
     <ClInclude Include="source\fox\io\io.hpp" />
     <ClInclude Include="source\fox\io\loading.hpp" />
