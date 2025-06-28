@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include <fox/core/types/math/math.hpp>
+
 namespace fox::math
 {
     inline namespace trigonometry
