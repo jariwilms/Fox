@@ -1,6 +1,5 @@
 #pragma once
 
-#include <fox/rendering/bounding_volume/aabb.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
 #include <fox/rendering/buffer/vertexarray.hpp>
 #include <fox/rendering/framebuffer/framebuffer.hpp>
