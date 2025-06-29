@@ -1,7 +1,7 @@
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "WindowManager.hpp"
-#include "Fox/Window/Using.hpp"
+#include <fox/window/using.hpp>
+#include <fox/window/window_manager.hpp>
 
 namespace fox::wnd
 {

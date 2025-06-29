@@ -1,9 +1,9 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Rendering/API/Query/Query.hpp"
-#include "Fox/Rendering/graphics_api/OpenGL/OpenGL.hpp"
+#include <fox/rendering/api/query/query.hpp>
+#include <fox/rendering/graphics_api/opengl/opengl.hpp>
 
 namespace fox::gfx::api::gl
 {

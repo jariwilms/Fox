@@ -15,7 +15,7 @@
 #include <fox/rendering/rendering.hpp>
 #include <fox/scene/actor.hpp>
 #include <fox/scene/scene.hpp>
-#include <fox/window/windowmanager.hpp>
+#include <fox/window/window_manager.hpp>
 
 namespace fox
 {

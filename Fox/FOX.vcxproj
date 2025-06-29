@@ -220,10 +220,10 @@
     <ClInclude Include="source\fox\rendering\uniform\Uniform.hpp" />
     <ClInclude Include="source\fox\scene\actor.hpp" />
     <ClInclude Include="source\fox\scene\scene.hpp" />
-    <ClInclude Include="source\fox\window\API\GLFW\GLFWWindow.hpp" />
-    <ClInclude Include="source\fox\window\API\Window.hpp" />
-    <ClInclude Include="source\fox\window\Using.hpp" />
-    <ClInclude Include="source\fox\window\WindowManager.hpp" />
+    <ClInclude Include="source\fox\window\api\glfw\glfw_window.hpp" />
+    <ClInclude Include="source\fox\window\api\window.hpp" />
+    <ClInclude Include="source\fox\window\using.hpp" />
+    <ClInclude Include="source\fox\window\window_manager.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
     <ClInclude Include="source\vendor\stb\stb.hpp" />
   </ItemGroup>
@@ -233,8 +233,8 @@
     <ClCompile Include="source\fox\rendering\geometry\geometry.cpp" />
     <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.cpp" />
     <ClCompile Include="source\fox\scene\scene.cpp" />
-    <ClCompile Include="source\fox\window\API\GLFW\GLFWWindow.cpp" />
-    <ClCompile Include="source\fox\window\WindowManager.cpp" />
+    <ClCompile Include="source\fox\window\api\glfw\glfw_window.cpp" />
+    <ClCompile Include="source\fox\window\window_manager.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

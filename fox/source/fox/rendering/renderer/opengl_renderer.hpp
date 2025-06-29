@@ -1,14 +1,14 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Core/Time/Time.hpp"
-#include "Fox/Core/Utility/Utility.hpp"
-#include "Fox/Input/Input.hpp"
-#include "Fox/Rendering/Rendering.hpp"
-#include "Fox/Rendering/API/Shader/Utility.hpp"
+#include <fox/core/time/time.hpp>
+#include <fox/core/utility/utility.hpp>
+#include <fox/input/input.hpp>
 #include <fox/math/linear_algebra/projection.hpp>
 #include <fox/math/trigonometry/trigonometry.hpp>
+#include <fox/rendering/api/shader/utility.hpp>
+#include <fox/rendering/rendering.hpp>
 
 namespace fox::gfx::api
 {

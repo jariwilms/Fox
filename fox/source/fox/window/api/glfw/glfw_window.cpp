@@ -1,10 +1,9 @@
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "GLFWWindow.hpp"
-
-#include "Fox/Window/WindowManager.hpp"
-#include "Fox/Rendering/graphics_api/OpenGL/OpenGL.hpp"
-#include "Fox/Rendering/graphics_api/OpenGL/Context/Context.hpp"
+#include <fox/rendering/graphics_api/opengl/context/context.hpp>
+#include <fox/rendering/graphics_api/opengl/opengl.hpp>
+#include <fox/window/api/glfw/glfw_window.hpp>
+#include <fox/window/window_manager.hpp>
 
 namespace fox::wnd::api
 {

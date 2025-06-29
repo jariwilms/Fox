@@ -1,8 +1,8 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Input/Input.hpp"
+#include <fox/input/input.hpp>
 
 namespace fox::wnd::api
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Flags.hpp"
+#include <fox/rendering/graphics_api/opengl/core/flags.hpp>
 
 namespace fox::gfx::api::gl
 {

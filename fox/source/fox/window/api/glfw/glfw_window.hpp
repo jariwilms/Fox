@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <stdafx.hpp>
 
 #include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/input/api/glfw_input_handler.hpp>

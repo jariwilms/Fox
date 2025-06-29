@@ -1,8 +1,8 @@
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
 #include <fox/core/image/image.hpp>
-#include "fox/io/io.hpp"
 #include <fox/io/import/model/model_importer.hpp>
+#include <fox/io/io.hpp>
 
 namespace fox::io
 {

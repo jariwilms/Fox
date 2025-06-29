@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Window/API/GLFW/GLFWWindow.hpp"
+#include <fox/window/api/glfw/glfw_window.hpp>
 
 namespace fox::wnd
 {
