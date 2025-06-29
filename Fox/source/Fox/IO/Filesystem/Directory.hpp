@@ -19,7 +19,7 @@ namespace fox::io
         {
             m_children.clear();
 
-            for (std::filesystem::directory_iterator iterator{ m_path }; auto const& entry : iterator)
+            for (std::filesystem::directory_iterator iterator{ m_path }; const auto& entry : iterator)
             {
                      if (entry.is_directory   ()) m_children.emplace_back(std::make_shared<entry_t>(io::Directory{ entry.path() }));
                 else if (entry.is_regular_file()) m_children.emplace_back(std::make_shared<entry_t>(io::File     { entry.path() }));

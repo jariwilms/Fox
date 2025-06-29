@@ -29,8 +29,8 @@ namespace fox::time
 
     static auto since_epoch() -> fox::delta_t
     {
-        auto const& now   = fox::clock_t::now();
-        auto const& delta = std::chrono::duration_cast<fox::duration_t>(now - api::epoch).count();
+        const auto& now   = fox::clock_t::now();
+        const auto& delta = std::chrono::duration_cast<fox::duration_t>(now - api::epoch).count();
 
         return delta;
     }

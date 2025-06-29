@@ -57,7 +57,7 @@ namespace fox
         {
             stbi_flip_vertically_on_write(cfg::FLIP_IMAGES);
 
-            auto const& write_bmp  = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            const auto& write_bmp  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                           auto  vector     = std::vector<fox::byte_t>{};
                     const auto& dimensions = image.dimensions();
@@ -68,7 +68,7 @@ namespace fox
                         fox::to_underlying(image.channels()), 
                         image.data().data());
                 };
-            auto const& write_jpeg = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            const auto& write_jpeg = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                           auto  vector     = std::vector<fox::byte_t>{};
                     const auto& dimensions = image.dimensions();
@@ -79,7 +79,7 @@ namespace fox
                         fox::to_underlying(image.channels()), 
                         image.data().data(), fox::int32_t{ 100u });
                 };
-            auto const& write_png  = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            const auto& write_png  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                           auto  vector     = std::vector<fox::byte_t>{};
                     const auto& dimensions = image.dimensions();
@@ -93,7 +93,7 @@ namespace fox
 
                     return vector;
                 };
-            auto const& write_hdr  = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            const auto& write_hdr  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                     //      auto  vector     = std::vector<fox::float32_t>{};
                     //const auto& dimensions = image.dimensions();

@@ -7,7 +7,7 @@ namespace fox::scene
     auto Scene::create_actor() -> scene::Actor&
     {
         auto        actor = std::make_shared<scene::Actor>();
-        auto const& it    = m_actors.emplace(std::make_pair(actor->id(), std::move(actor)));
+        const auto& it    = m_actors.emplace(std::make_pair(actor->id(), std::move(actor)));
         
         return *it.first->second;
     }
