@@ -1,8 +1,6 @@
 #pragma once
 
-#include <span>
-#include <vector>
-#include <stdexcept>
+#include <stdafx.hpp>
 
 #include <vendor/stb/stb.hpp>
 

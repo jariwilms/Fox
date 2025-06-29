@@ -1,7 +1,6 @@
 #pragma once
 
-#include <span>
-#include <vector>
+#include <stdafx.hpp>
 
 #include <stb/stb_image.h>
 #include <stb/stb_image_write.h>
