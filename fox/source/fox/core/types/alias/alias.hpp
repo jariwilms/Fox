@@ -1,6 +1,7 @@
 #pragma once
 
-#include <type_traits>
+#include <stdafx.hpp>
+
 #include <fox/core/utility/utility.hpp>
 
 namespace fox
