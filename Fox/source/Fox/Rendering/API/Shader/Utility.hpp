@@ -1,9 +1,9 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/IO/IO.hpp"
-#include "Fox/Rendering/Shader/Shader.hpp"
+#include <fox/io/io.hpp>
+#include <fox/rendering/shader/shader.hpp>
 
 namespace fox::gfx::api
 {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "stdafx.hpp"
-
 namespace fox::gfx::api
 {
     class Shader
@@ -18,15 +16,15 @@ namespace fox::gfx::api
             Compute, 
         };
 
-        Stage stage() const
+        auto stage() const -> Stage
         {
-            return m_stage;
+            return stage_;
         }
 
     protected:
         Shader(Stage stage)
-            : m_stage{ stage } {}
+            : stage_{ stage } {}
 
-        Stage m_stage{};
+        Stage stage_{};
     };
 }

@@ -1,15 +1,15 @@
 #pragma once
 
 #include <fox/rendering/buffer/buffer.hpp>
-#include <fox/rendering/buffer/vertexarray.hpp>
-#include <fox/rendering/framebuffer/framebuffer.hpp>
+#include <fox/rendering/buffer/vertex_array.hpp>
+#include <fox/rendering/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/rendering/graphicsapi/graphicsapi.hpp>
+#include <fox/rendering/graphics_api/graphics_api.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 #include <fox/rendering/model/model.hpp>
-#include <fox/rendering/renderbuffer/renderbuffer.hpp>
-#include <fox/rendering/renderinfo/renderinfo.hpp>
+#include <fox/rendering/render_buffer/render_buffer.hpp>
+#include <fox/rendering/render_info/render_info.hpp>
 #include <fox/rendering/shader/pipeline.hpp>
 #include <fox/rendering/shader/shader.hpp>
 #include <fox/rendering/texture/cubemap.hpp>

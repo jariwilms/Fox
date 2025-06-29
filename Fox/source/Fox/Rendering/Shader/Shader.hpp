@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include "Fox/Rendering/graphics_api/graphics_api.hpp"
 
 namespace fox::gfx
 {
@@ -14,13 +14,17 @@ namespace fox::gfx
             return std::shared_ptr<Shader>(new Shader{ stage, binary });
         }
 
-        auto stage()  const
+        auto stage () const -> Stage
         {
             return _->stage();
         }
-        auto handle() const
+        auto handle() const -> gfx::handle_t
         {
             return _->handle();
+        }
+        auto impl  () const -> std::shared_ptr<impl::Shader>
+        {
+            return _;
         }
 
     protected:

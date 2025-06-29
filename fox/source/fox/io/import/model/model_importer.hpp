@@ -10,7 +10,7 @@
 
 #include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
-#include <fox/rendering/buffer/vertexarray.hpp>
+#include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/model/model.hpp>
 #include <fox/rendering/texture/texture.hpp>
 

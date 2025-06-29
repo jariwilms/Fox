@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Rendering/Renderer/OpenGLRenderer.hpp"
+#include <fox/rendering/renderer/opengl_renderer.hpp>
 
 namespace fox::gfx
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
+#include <fox/rendering/graphics_api/graphics_api.hpp>
 
 namespace fox::gfx
 {
@@ -27,7 +27,7 @@ namespace fox::gfx
         Texture1D(std::shared_ptr<impl::Texture1D> texture)
             : _{ texture } {}
 
-        void bind(fox::binding_t binding) const
+        void bind(gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
@@ -50,31 +50,31 @@ namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const
+        auto format       () const -> Format
         {
             return _->format();
         }
-        auto filter       () const
+        auto filter       () const -> Filter
         {
             return _->filter();
         }
-        auto wrapping     () const
+        auto wrapping     () const -> std::span<const Wrapping, 1u>
         {
             return _->wrapping();
         }
-        auto dimensions   () const
+        auto dimensions   () const -> fox::Vector1u
         {
             return _->dimensions();
         }
-        auto mipmap_levels() const
+        auto mipmap_levels() const -> fox::uint32_t
         {
             return _->mipmap_levels();
         }
-        auto handle       () const
+        auto handle       () const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl         () const
+        auto impl         () const -> std::shared_ptr<impl::Texture1D>
         {
             return _;
         }
@@ -112,7 +112,7 @@ namespace fox::gfx
         Texture2D(std::shared_ptr<impl::Texture2D> texture)
             : _{ texture } {}
 
-        void bind(fox::binding_t binding) const
+        void bind(gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
@@ -135,31 +135,31 @@ namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const
+        auto format       () const -> Format
         {
             return _->format();
         }
-        auto filter       () const
+        auto filter       () const -> Filter
         {
             return _->filter();
         }
-        auto wrapping     () const
+        auto wrapping     () const -> std::span<const Wrapping, 2u>
         {
             return _->wrapping();
         }
-        auto dimensions   () const
+        auto dimensions   () const -> fox::Vector2u
         {
             return _->dimensions();
         }
-        auto mipmap_levels() const
+        auto mipmap_levels() const -> fox::uint32_t
         {
             return _->mipmap_levels();
         }
-        auto handle       () const
+        auto handle       () const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl         () const
+        auto impl         () const -> std::shared_ptr<impl::Texture2D>
         {
             return _;
         }
@@ -197,7 +197,7 @@ namespace fox::gfx
         Texture3D(std::shared_ptr<impl::Texture3D> texture)
             : _{ texture } {}
 
-        void bind(fox::binding_t binding) const
+        void bind(gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
@@ -220,31 +220,31 @@ namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const
+        auto format       () const -> Format
         {
             return _->format();
         }
-        auto filter       () const
+        auto filter       () const -> Filter
         {
             return _->filter();
         }
-        auto wrapping     () const
+        auto wrapping     () const -> std::span<const Wrapping, 3u>
         {
             return _->wrapping();
         }
-        auto dimensions   () const
+        auto dimensions   () const -> fox::Vector3u
         {
             return _->dimensions();
         }
-        auto mipmap_levels() const
+        auto mipmap_levels() const -> fox::uint32_t
         {
             return _->mipmap_levels();
         }
-        auto handle       () const
+        auto handle       () const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl         () const
+        auto impl         () const -> std::shared_ptr<impl::Texture3D>
         {
             return _;
         }
@@ -270,28 +270,28 @@ namespace fox::gfx
             return std::shared_ptr<Texture2DMultisample>(new Texture2DMultisample{ format, dimensions, samples });
         }
 
-        void bind(fox::binding_t binding) const
+        void bind(gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
 
-        auto format    () const
+        auto format    () const -> Format
         {
             return _->format();
         }
-        auto samples   () const
+        auto samples   () const -> fox::uint32_t
         {
             return _->samples();
         }
-        auto dimensions() const
+        auto dimensions() const -> fox::Vector2u
         {
             return _->dimensions();
         }
-        auto handle    () const
+        auto handle    () const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl      () const
+        auto impl      () const -> std::shared_ptr<impl::Texture2DMultisample>
         {
             return _;
         }
@@ -312,28 +312,28 @@ namespace fox::gfx
             return std::shared_ptr<Texture3DMultisample>(new Texture3DMultisample{ format, dimensions, samples });
         }
 
-        void bind(fox::binding_t binding) const
+        void bind(gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
 
-        auto format    () const
+        auto format    () const -> Format
         {
             return _->format();
         }
-        auto dimensions() const
+        auto dimensions() const -> fox::Vector2u
         {
             return _->dimensions();
         }
-        auto samples   () const
+        auto samples   () const -> fox::uint32_t
         {
             return _->samples();
         }
-        auto handle    () const
+        auto handle    () const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl      () const
+        auto impl      () const -> std::shared_ptr<impl::Texture3DMultisample>
         {
             return _;
         }

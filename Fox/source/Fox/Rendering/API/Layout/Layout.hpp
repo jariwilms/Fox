@@ -6,13 +6,13 @@
 namespace fox::gfx::api
 {
     template<typename T, fox::uint32_t COUNT>
-    concept LayoutRequirements = requires
+    concept layout_requirements_c = requires
     {
         std::is_fundamental_v<T>;
         fox::gt_zero_c<decltype(COUNT), COUNT>;
     };
 
-    template<typename T, fox::uint32_t COUNT, fox::bool_t NORM = false> requires LayoutRequirements<T, COUNT>
+    template<typename T, fox::uint32_t COUNT, fox::bool_t NORM = false> requires layout_requirements_c<T, COUNT>
     class Layout
     {
     public:

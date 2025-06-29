@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Fox/Rendering/GraphicsAPI/GraphicsAPI.hpp"
-#include "Fox/Rendering/Shader/Shader.hpp"
+#include <fox/rendering/graphics_api/graphics_api.hpp>
+#include <fox/rendering/shader/shader.hpp>
 
 namespace fox::gfx
 {
@@ -20,9 +20,13 @@ namespace fox::gfx
             _->bind();
         }
 
-        auto handle() const
+        auto handle() const -> gfx::handle_t
         {
             return _->handle();
+        }
+        auto impl  () const -> std::shared_ptr<impl::Pipeline<gfx::Shader>>
+        {
+            return _;
         }
 
     protected:

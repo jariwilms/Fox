@@ -1,7 +1,5 @@
 #pragma once
 
-#include "stdafx.hpp"
-
 namespace fox::gfx::api
 {
 	class Sampler
@@ -25,8 +23,5 @@ namespace fox::gfx::api
             MaximumLOD, 
             LODBias, 
         };
-
-	protected:
-		Sampler() = default;
 	};
 }

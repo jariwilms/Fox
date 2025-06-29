@@ -1,15 +1,13 @@
 #pragma once
 
-#include "stdafx.hpp"
-
-#include "Fox/Rendering/API/Texture/Texture.hpp"
+#include <fox/rendering/api/texture/texture.hpp>
 
 namespace fox::gfx::api
 {
 	class Cubemap
 	{
 	public:
-        enum class Format //TODO: replace with using Texture::Format?
+        enum class Format
         {
             //UNORM => stored as unsigned integer, sampled             as floating point   in range [        0,         1]
             //SNORM => stored as   signed integer, sampled             as floating point   in range [       -1,         1]

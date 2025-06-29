@@ -1,8 +1,8 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Rendering/Texture/Texture.hpp"
+#include <fox/rendering/texture/texture.hpp>
 
 namespace fox::gfx
 {

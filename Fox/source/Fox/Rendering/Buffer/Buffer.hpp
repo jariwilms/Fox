@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/rendering/graphicsapi/graphicsapi.hpp>
+#include <fox/rendering/graphics_api/graphics_api.hpp>
 
 namespace fox::gfx
 {
@@ -17,19 +17,19 @@ namespace fox::gfx
             return std::shared_ptr<const VertexBuffer>(new VertexBuffer{ count });
         }
 
-        auto size  () const
+        auto size  () const -> fox::size_t
         {
             return _->size();
         }
-        auto count () const
+        auto count () const -> fox::count_t
         {
             return _->count();
         }
-        auto handle() const
+        auto handle() const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl  () const
+        auto impl  () const -> std::shared_ptr<impl::VertexBuffer<T>>
         {
             return _;
         }
@@ -54,19 +54,19 @@ namespace fox::gfx
             return std::shared_ptr<const IndexBuffer>(new IndexBuffer{ count });
         }
 
-        auto size  () const
+        auto size  () const -> fox::size_t
         {
             return _->size();
         }
-        auto count () const
+        auto count () const -> fox::count_t
         {
             return _->count();
         }
-        auto handle() const
+        auto handle() const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl  () const
+        auto impl  () const -> std::shared_ptr<impl::IndexBuffer>
         {
             return _;
         }
@@ -89,7 +89,7 @@ namespace fox::gfx
             return std::shared_ptr<UniformBuffer>(new UniformBuffer{ data });
         }
 
-        void bind(fox::binding_t binding) const
+        void bind(gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
@@ -104,15 +104,15 @@ namespace fox::gfx
             _->copy_sub<T...>(offset, data);
         }
 
-        auto size  () const
+        auto size  () const -> fox::size_t
         {
             return _->size();
         }
-        auto handle() const
+        auto handle() const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl()   const
+        auto impl()   const -> std::shared_ptr<impl::UniformBuffer<T>>
         {
             return _;
         }
@@ -136,11 +136,11 @@ namespace fox::gfx
             return std::shared_ptr<UniformArrayBuffer>(new UniformArrayBuffer{ data });
         }
 
-        void bind      (fox::binding_t binding) const
+        void bind      (gfx::binding_t binding) const
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
-        void bind_range(fox::binding_t binding, fox::range_t range) const
+        void bind_range(gfx::binding_t binding, fox::range_t range) const
         {
             _->bind(static_cast<impl::binding_t>(binding), impl::range_t{ range.count, range.index });
         }
@@ -158,15 +158,15 @@ namespace fox::gfx
             _->copy_range(index, data);
         }
 
-        auto size  () const
+        auto size  () const -> fox::size_t
         {
             return _->size();
         }
-        auto handle() const
+        auto handle() const -> gfx::handle_t
         {
             return _->handle();
         }
-        auto impl  () const
+        auto impl  () const -> std::shared_ptr<impl::UniformArrayBuffer<T, N>>
         {
             return _;
         }

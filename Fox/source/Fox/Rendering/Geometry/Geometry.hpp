@@ -1,8 +1,8 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
-#include "Fox/Rendering/Mesh/Mesh.hpp"
+#include <fox/rendering/mesh/mesh.hpp>
 
 namespace fox::gfx
 {

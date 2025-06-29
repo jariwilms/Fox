@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.hpp"
+#include <stdafx.hpp>
 
 namespace fox::gfx::api
 {
@@ -16,8 +16,5 @@ namespace fox::gfx::api
             std::shared_ptr<T> geometry{};
             std::shared_ptr<T> fragment{};
         };
-
-    protected:
-        Pipeline() = default;
     };
 }

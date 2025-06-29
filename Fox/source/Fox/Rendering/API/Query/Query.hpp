@@ -1,7 +1,5 @@
 #pragma once
 
-#include "stdafx.hpp"
-
 namespace fox::gfx::api
 {
 	class Query
@@ -16,8 +14,8 @@ namespace fox::gfx::api
 
 	protected:
 		Query(Target target)
-			: m_target{ target } {}
+			: target_{ target } {}
 
-		Target m_target{};
+		Target target_{};
 	};
 }

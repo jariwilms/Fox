@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Fox/Rendering/Buffer/VertexArray.hpp"
+#include <fox/rendering/buffer/vertex_array.hpp>
 
 namespace fox::gfx
 {
