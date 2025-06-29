@@ -1,14 +1,11 @@
 #pragma once
 
-//FOX
-#include <fox/core/types/types.hpp>
-#include <fox/core/utility/utility.hpp>
-
 //STL
 #include <algorithm>
 #include <array>
 #include <bitset>
 #include <chrono>
+#include <concepts>
 #include <cstdlib>
 #include <deque>
 #include <filesystem>

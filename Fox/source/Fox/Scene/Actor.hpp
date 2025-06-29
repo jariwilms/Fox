@@ -1,6 +1,6 @@
 #pragma once
 
-#include <utility>
+#include <stdafx.hpp>
 
 #include <fox/ecs/components/components.hpp>
 #include <fox/ecs/entity/entity.hpp>

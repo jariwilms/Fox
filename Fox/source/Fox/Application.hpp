@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/window/using.hpp>
+#include <fox/window/window.hpp>
 
 namespace fox
 {

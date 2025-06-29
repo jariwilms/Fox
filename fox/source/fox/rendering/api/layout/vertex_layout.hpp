@@ -2,6 +2,8 @@
 
 #include <stdafx.hpp>
 
+#include <fox/core/types/common/common.hpp>
+#include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/rendering/api/layout/layout.hpp>
 #include <fox/rendering/api/concepts/concepts.hpp>
 #include <fox/rendering/api/buffer/type.hpp>

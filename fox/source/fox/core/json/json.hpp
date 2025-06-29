@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fstream>
+#include <stdafx.hpp>
 
 #include <nlohmann/json.hpp>
 

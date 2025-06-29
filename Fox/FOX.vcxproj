@@ -112,14 +112,15 @@
     <ClInclude Include="source\fox\core\types\alias\bridge.hpp" />
     <ClInclude Include="source\fox\core\types\collection\circular_buffer.hpp" />
     <ClInclude Include="source\fox\core\types\common\common.hpp" />
+    <ClInclude Include="source\fox\core\types\domain\domain.hpp" />
     <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
     <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\matrix.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\quaternion.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\vector.hpp" />
     <ClInclude Include="source\fox\core\types\math\math.hpp" />
-    <ClInclude Include="source\fox\core\types\rendering\camera\camera.hpp" />
-    <ClInclude Include="source\fox\core\types\rendering\light\light.hpp" />
+    <ClInclude Include="source\fox\rendering\camera\camera.hpp" />
+    <ClInclude Include="source\fox\rendering\light\light.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
     <ClInclude Include="source\fox\core\types\time\time.hpp" />
     <ClInclude Include="source\fox\core\types\types.hpp" />
@@ -133,7 +134,7 @@
     <ClInclude Include="source\fox\ecs\registry.hpp" />
     <ClInclude Include="source\fox\ecs\system\render_system.hpp" />
     <ClInclude Include="source\fox\ecs\system\system.hpp" />
-    <ClInclude Include="source\fox\input\api\glfw_input_handler.hpp" />
+    <ClInclude Include="source\fox\input\api\glfw\input_handler.hpp" />
     <ClInclude Include="source\fox\input\code\button.hpp" />
     <ClInclude Include="source\fox\input\code\controller.hpp" />
     <ClInclude Include="source\fox\input\code\key.hpp" />
@@ -154,7 +155,7 @@
     <ClInclude Include="source\fox\math\linear_algebra\vector.hpp" />
     <ClInclude Include="source\fox\math\math.hpp" />
     <ClInclude Include="source\fox\math\texture\texture.hpp" />
-    <ClInclude Include="source\fox\math\trigonometry\Trigonometry.hpp" />
+    <ClInclude Include="source\fox\math\trigonometry\trigonometry.hpp" />
     <ClInclude Include="source\fox\physics\bounding_volume\aabb.hpp" />
     <ClInclude Include="source\fox\random\random.hpp" />
     <ClInclude Include="source\fox\rendering\graphics_api\directx\dx.hpp" />
@@ -220,9 +221,9 @@
     <ClInclude Include="source\fox\rendering\uniform\Uniform.hpp" />
     <ClInclude Include="source\fox\scene\actor.hpp" />
     <ClInclude Include="source\fox\scene\scene.hpp" />
-    <ClInclude Include="source\fox\window\api\glfw\glfw_window.hpp" />
+    <ClInclude Include="source\fox\window\api\glfw\window.hpp" />
     <ClInclude Include="source\fox\window\api\window.hpp" />
-    <ClInclude Include="source\fox\window\using.hpp" />
+    <ClInclude Include="source\fox\window\window.hpp" />
     <ClInclude Include="source\fox\window\window_manager.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
     <ClInclude Include="source\vendor\stb\stb.hpp" />
@@ -233,7 +234,7 @@
     <ClCompile Include="source\fox\rendering\geometry\geometry.cpp" />
     <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.cpp" />
     <ClCompile Include="source\fox\scene\scene.cpp" />
-    <ClCompile Include="source\fox\window\api\glfw\glfw_window.cpp" />
+    <ClCompile Include="source\fox\window\api\glfw\window.cpp" />
     <ClCompile Include="source\fox\window\window_manager.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

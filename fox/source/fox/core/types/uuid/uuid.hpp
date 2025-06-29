@@ -1,6 +1,6 @@
 #pragma once
 
-#include <bitset>
+#include <stdafx.hpp>
 
 #include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/random/random.hpp>
@@ -28,8 +28,8 @@ namespace fox::uuid
         uuid.set(48u, fox::False);
 
         //Variant Signature: 0b10xx
-        uuid.set(65, fox::True);
-        uuid.set(64, fox::False);
+        uuid.set(65u, fox::True );
+        uuid.set(64u, fox::False);
 
         return uuid;
     }

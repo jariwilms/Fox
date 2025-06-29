@@ -1,12 +1,10 @@
 #pragma once
 
-#include <memory>
+#include <stdafx.hpp>
 
 #include <assimp/importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
-
-#include <glm/matrix.hpp>
 
 #include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/rendering/buffer/buffer.hpp>

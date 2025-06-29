@@ -2,7 +2,7 @@
 
 #include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/core/types/math/linear_algebra/matrix.hpp>
-#include <fox/core/types/math/linear_algebra/quaternion.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/math/linear_algebra/quaternion.hpp>
 
 namespace fox::math

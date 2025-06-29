@@ -1,10 +1,9 @@
 #pragma once
 
-#include <algorithm>
-#include <array>
+#include <stdafx.hpp>
 
-#include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/core/types/common/common.hpp>
+#include <fox/core/types/fundamental/fundamental.hpp>
 
 namespace fox
 {

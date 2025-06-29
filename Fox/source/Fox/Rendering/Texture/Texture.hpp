@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fox/core/types/domain/domain.hpp>
 #include <fox/rendering/graphics_api/graphics_api.hpp>
 
 namespace fox::gfx

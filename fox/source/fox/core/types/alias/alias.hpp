@@ -2,8 +2,6 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/utility/utility.hpp>
-
 namespace fox
 {
     template<typename T, typename U>

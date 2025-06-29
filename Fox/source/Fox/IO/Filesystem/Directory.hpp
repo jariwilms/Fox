@@ -1,6 +1,6 @@
 #pragma once
 
-#include <variant>
+#include <stdafx.hpp>
 
 #include <fox/io/filesystem/entry.hpp>
 #include <fox/io/filesystem/file.hpp>

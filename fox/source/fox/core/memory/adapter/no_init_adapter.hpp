@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <stdafx.hpp>
 
 #include <fox/core/types/fundamental/fundamental.hpp>
 

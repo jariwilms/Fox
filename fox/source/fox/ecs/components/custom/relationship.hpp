@@ -1,9 +1,8 @@
 #pragma once
 
-#include <optional>
-#include <vector>
+#include <stdafx.hpp>
 
-#include <fox/core/types/common/common.hpp>
+#include <fox/core/types/ecs/ecs.hpp>
 
 namespace fox
 {

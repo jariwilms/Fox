@@ -1,9 +1,8 @@
 #pragma once
 
-#include <span>
-#include <type_traits>
-#include <memory>
+#include <stdafx.hpp>
 
+#include <fox/core/types/common/common.hpp>
 #include <fox/core/types/fundamental/fundamental.hpp>
 
 namespace fox

@@ -2,10 +2,10 @@
 
 #include <fox/rendering/graphics_api/opengl/context/context.hpp>
 #include <fox/rendering/graphics_api/opengl/opengl.hpp>
-#include <fox/window/api/glfw/glfw_window.hpp>
+#include <fox/window/api/glfw/window.hpp>
 #include <fox/window/window_manager.hpp>
 
-namespace fox::wnd::api
+namespace fox::wnd::api::glfw
 {
     static void debug_callback(gfx::api::gl::enum_t source, gfx::api::gl::enum_t type, gfx::api::gl::uint32_t id, gfx::api::gl::enum_t severity, gfx::api::gl::sizei_t length, const gfx::api::gl::char_t* message, const void* parameter)
     {
@@ -58,8 +58,8 @@ namespace fox::wnd::api
 
 
 
-    GLFWWindow::GLFWWindow(const std::string& name, const fox::Vector2u& dimensions)
-        : Window{ name, dimensions }
+    Window::Window(const std::string& name, const fox::Vector2u& dimensions)
+        : api::Window{ name, dimensions }
     {
         const auto& isInitialized = glfwInit();
         if (isInitialized != GLFW_TRUE) throw std::runtime_error{ "Failed to initialize GLFW!" };
@@ -85,9 +85,9 @@ namespace fox::wnd::api
         if (version == 0) throw std::runtime_error{ "Failed to initialize GLAD!" };
 
         m_userPointer                = std::make_shared<UserPointer>();
-        m_userPointer->glfwWindow    = std::shared_ptr<GLFWWindow>(this, [](const GLFWWindow* window) {}); //?
+        m_userPointer->glfwWindow    = std::shared_ptr<Window>(this, [](const Window* window) {}); //?
 
-        input::api::handler = std::make_shared<input::api::GLFWInputHandler>();
+        input::api::handler = std::make_shared<input::api::glfw::InputHandler>();
         m_userPointer->inputHandler  = input::api::handler;
 
         glfwSetWindowUserPointer(m_glfwWindow, m_userPointer.get());
@@ -102,10 +102,10 @@ namespace fox::wnd::api
 
 
         //Set up event callbacks
-        static const auto& user_pointer = [this]() -> GLFWWindow::UserPointer*
+        static const auto& user_pointer = [this]() -> Window::UserPointer*
         {
             const auto& glfwWindow  = reinterpret_cast<GLFWwindow*>(WindowManager::find(this)->native_handle());
-            const auto& userPointer = static_cast<GLFWWindow::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
+            const auto& userPointer = static_cast<Window::UserPointer*>(glfwGetWindowUserPointer(glfwWindow));
             
             return userPointer;
         };
@@ -155,43 +155,43 @@ namespace fox::wnd::api
         glfwSetScrollCallback         (m_glfwWindow, glfw_input_scroll_callback       );
         glfwSetFramebufferSizeCallback(m_glfwWindow, glfw_frame_buffer_resize_callback);
     }
-    GLFWWindow::~GLFWWindow()
+    Window::~Window()
     {
         glfwDestroyWindow(m_glfwWindow);
         glfwTerminate();
     }
 
-    void GLFWWindow::poll_events()
+    void Window::poll_events()
     {
         m_userPointer->inputHandler->update();
         glfwPollEvents();
     }
-    void GLFWWindow::swap_buffers()
+    void Window::swap_buffers()
     {
         glfwSwapBuffers(m_glfwWindow);
     }
 
-    void GLFWWindow::rename(const std::string& title)
+    void Window::rename(const std::string& title)
     {
         glfwSetWindowTitle(m_glfwWindow, title.c_str());
     }
-    void GLFWWindow::resize(const fox::Vector2f& dimensions)
+    void Window::resize(const fox::Vector2f& dimensions)
     {
         glfwSetWindowSize(m_glfwWindow, static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y));
 
         m_dimensions = dimensions;
     }
 
-    void GLFWWindow::close() const
+    void Window::close() const
     {
         glfwSetWindowShouldClose(m_glfwWindow, true);
     }
-    fox::bool_t GLFWWindow::should_close() const
+    fox::bool_t Window::should_close() const
     {
         return glfwWindowShouldClose(m_glfwWindow);
     }
 
-    void GLFWWindow::glfw_error_callback(fox::int32_t error, const fox::char_t* description)
+    void Window::glfw_error_callback(fox::int32_t error, const fox::char_t* description)
     {
         std::cout << std::format("[GLFW_ERROR] {0}: {1}\n", error, description);
     }

@@ -3,23 +3,23 @@
 #include <stdafx.hpp>
 
 #include <fox/core/types/math/linear_algebra/vector.hpp>
-#include <fox/input/api/glfw_input_handler.hpp>
+#include <fox/input/api/glfw/input_handler.hpp>
 #include <fox/input/input.hpp>
 #include <fox/window/api/window.hpp>
 
-namespace fox::wnd::api
+namespace fox::wnd::api::glfw
 {
-	class GLFWWindow : public Window
+	class Window : public api::Window
 	{
 	public:
         struct UserPointer
         {
-			std::shared_ptr<GLFWWindow>                   glfwWindow{};
-			std::shared_ptr<input::api::GLFWInputHandler> inputHandler{};
+			std::shared_ptr<Window>                     glfwWindow  {};
+			std::shared_ptr<input::api::glfw::InputHandler> inputHandler{};
         };
 
-		GLFWWindow(const std::string& name, const fox::Vector2u& dimensions);
-		~GLFWWindow();
+		Window(const std::string& name, const fox::Vector2u& dimensions);
+		~Window();
 
 		void poll_events();
 		void swap_buffers();

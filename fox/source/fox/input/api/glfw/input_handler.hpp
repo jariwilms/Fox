@@ -9,9 +9,9 @@
 #include <fox/input/code/key.hpp>
 #include <fox/input/code/modifier.hpp>
 
-namespace fox::input::api
+namespace fox::input::api::glfw
 {
-    class GLFWInputHandler
+    class InputHandler
     {
     public:
         void update                    ()

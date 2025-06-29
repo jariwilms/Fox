@@ -1,9 +1,7 @@
 #pragma once
 
-#include <chrono>
-#include <utility>
+#include <stdafx.hpp>
 
-#include <fox/core/types/common/common.hpp>
 #include <fox/core/types/time/time.hpp>
 
 namespace fox::time

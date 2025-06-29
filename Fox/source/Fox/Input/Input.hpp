@@ -9,7 +9,8 @@
 
 #include <stdafx.hpp>
 
-#include <fox/input/api/glfw_input_handler.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
+#include <fox/input/api/glfw/input_handler.hpp>
 #include <fox/input/code/button.hpp>
 #include <fox/input/code/controller.hpp>
 #include <fox/input/code/key.hpp>
@@ -18,7 +19,7 @@
 namespace fox::input::api
 {
 #if FOX_INPUT == FOX_INPUT_GLFW
-    using handler_t = api::GLFWInputHandler;
+    using handler_t = glfw::InputHandler;
 #endif
 
     inline std::shared_ptr<api::handler_t> handler;

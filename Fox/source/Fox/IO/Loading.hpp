@@ -1,6 +1,6 @@
 #pragma once
 
-#include <memory>
+#include <stdafx.hpp>
 
 #include <fox/core/image/image.hpp>
 #include <fox/io/filesystem/directory.hpp>

@@ -1,9 +1,9 @@
 #pragma once
 
-#include <memory>
+#include <stdafx.hpp>
 
-#include <fox/rendering/mesh/mesh.hpp>
 #include <fox/rendering/material/material.hpp>
+#include <fox/rendering/mesh/mesh.hpp>
 
 namespace fox
 {

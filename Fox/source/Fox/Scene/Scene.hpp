@@ -1,7 +1,6 @@
 #pragma once
 
-#include <memory>
-#include <unordered_map>
+#include <stdafx.hpp>
 
 #include <fox/scene/actor.hpp>
 

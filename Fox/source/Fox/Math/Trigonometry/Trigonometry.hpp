@@ -2,6 +2,9 @@
 
 #include <glm/glm.hpp>
 
+#include <fox/core/types/math/linear_algebra/matrix.hpp>
+#include <fox/core/types/math/linear_algebra/quaternion.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/core/types/math/math.hpp>
 
 namespace fox::math
@@ -84,7 +87,7 @@ namespace fox::math
         }
 
         template<typename T>
-        static constexpr auto euler_angles(T value)
+        static constexpr auto euler_angles(T value) -> fox::Vector3f
         {
             return glm::eulerAngles(value);
         }

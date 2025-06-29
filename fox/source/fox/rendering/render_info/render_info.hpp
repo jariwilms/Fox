@@ -1,12 +1,10 @@
 #pragma once
 
-#include <memory>
-#include <span>
-#include <tuple>
+#include <stdafx.hpp>
 
 #include <fox/core/transform/transform.hpp>
-#include <fox/core/types/rendering/camera/camera.hpp>
-#include <fox/core/types/rendering/light/light.hpp>
+#include <fox/rendering/camera/camera.hpp>
+#include <fox/rendering/light/light.hpp>
 #include <fox/rendering/texture/cubemap.hpp>
 
 namespace fox::gfx
