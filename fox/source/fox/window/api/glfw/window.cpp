@@ -23,55 +23,52 @@ namespace fox::interface::api::glfw
 
 
 
-        instance_ = glfwCreateWindow(static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y), name_.c_str(), nullptr, nullptr);
-        if (!instance_) throw std::runtime_error{ "Failed to create GLFW window!" };
+        handle_ = glfwCreateWindow(static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y), name_.c_str(), nullptr, nullptr);
+        if (!handle_) throw std::runtime_error{ "Failed to create GLFW window!" };
         
-        glfwMakeContextCurrent(instance_);
+        glfwMakeContextCurrent(handle_);
         glfwSwapInterval(0);
 
         auto version = gladLoadGL(glfwGetProcAddress);
         if (!version) throw std::runtime_error{ "Failed to initialize GLAD!" };
-
-        input::api::handler = std::make_shared<input::api::glfw::InputHandler>();
-        context_            = std::make_shared<Context>(std::shared_ptr<Window>(this, [](const auto* context) {  }), input::api::handler);
 
 
 
 
 
         using namespace gfx::api;
-
         gl::Context::init();
-        static const auto& context = context_;
-            
-        glfwSetErrorCallback          (           [](fox::int32_t error , const fox::char_t* description)
+
+        input::api::handler = std::make_shared<input::api::glfw::InputHandler>();
+        
+        glfwSetErrorCallback          (         [](fox::int32_t error , const fox::char_t* description)
             {
                 std::print("[GLFW_ERROR] {0}: {1}\n", error, description);
             });
-        glfwSetKeyCallback            (instance_, [](GLFWwindow*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action  , fox::int32_t mods  ) 
+        glfwSetKeyCallback            (handle_, [](GLFWwindow*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action  , fox::int32_t mods  ) 
             { 
-                context->input->glfw_input_key_callback(window, key, scancode, action, mods); 
+                input::api::handler->glfw_input_key_callback(window, key, scancode, action, mods); 
             });
-        glfwSetMouseButtonCallback    (instance_, [](GLFWwindow*  window, fox::int32_t   button, fox::int32_t   action  , fox::int32_t mods    )
+        glfwSetMouseButtonCallback    (handle_, [](GLFWwindow*  window, fox::int32_t   button, fox::int32_t   action  , fox::int32_t mods    )
             {
-                context->input->glfw_input_button_callback(window, button, action, mods);
+                input::api::handler->glfw_input_button_callback(window, button, action, mods);
             });
-        glfwSetCursorPosCallback      (instance_, [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
+        glfwSetCursorPosCallback      (handle_, [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
             {
-                context->input->glfw_input_cursor_callback(window, x, y);
+                input::api::handler->glfw_input_cursor_callback(window, x, y);
             });
-        glfwSetScrollCallback         (instance_, [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
+        glfwSetScrollCallback         (handle_, [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
             {
-                context->input->glfw_input_scroll_callback(window, x, y);
+                input::api::handler->glfw_input_scroll_callback(window, x, y);
             });
-        glfwSetFramebufferSizeCallback(instance_, [](GLFWwindow*  window, fox::int32_t   width , fox::int32_t   height  )
+        glfwSetFramebufferSizeCallback(handle_, [](GLFWwindow*  window, fox::int32_t   width , fox::int32_t   height  )
             {
                 gl::viewport(gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
             });
     }
     Window::~Window()
     {
-        glfwDestroyWindow(instance_);
+        glfwDestroyWindow(handle_);
         glfwTerminate();
     }
 }

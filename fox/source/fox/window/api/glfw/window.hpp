@@ -15,57 +15,49 @@ namespace fox::interface::api::glfw
 	{
 	public:
 		using Mode = api::Window::Mode;
-        struct Context
-        {
-			std::shared_ptr<Window>                         window{};
-			std::shared_ptr<input::api::glfw::InputHandler> input {};
-        };
 
 		Window(const std::string& name, const fox::Vector2u& dimensions);
 		~Window();
 
 		void poll_events ()
 		{
-			context_->input->update();
+			input::api::handler->update();
 			glfwPollEvents();
 		}
 		void swap_buffers()
 		{
-			glfwSwapBuffers(instance_);
+			glfwSwapBuffers(handle_);
 		}
 
 		void rename(const std::string  & title     )
 		{
-			glfwSetWindowTitle(instance_, title.c_str());
+			glfwSetWindowTitle(handle_, title.c_str());
 		}
 		void resize(const fox::Vector2u& dimensions)
 		{
-			glfwSetWindowSize(instance_, static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y));
+			glfwSetWindowSize(handle_, static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y));
 
 			dimensions_ = dimensions;
 		}
 
 		void        close() const
 		{
-			glfwSetWindowShouldClose(instance_, fox::True);
+			glfwSetWindowShouldClose(handle_, fox::True);
 		}
 		auto should_close() const -> fox::bool_t
 		{
-			return glfwWindowShouldClose(instance_);
+			return glfwWindowShouldClose(handle_);
 		}
 
 		auto handle() const -> GLFWwindow* const
 		{
-			return instance_;
+			return handle_;
 		}
 
 	private:
-        void glfw_error_callback(fox::int32_t error, const fox::char_t* description);
-
-		std::string              name_      ;
-		fox::Vector2u            dimensions_;
-		Mode                     mode_      ;
-		GLFWwindow*              instance_  ;
-		std::shared_ptr<Context> context_   ;
+		std::string   name_      ;
+		fox::Vector2u dimensions_;
+		Mode          mode_      ;
+		GLFWwindow*   handle_    ;
 	};
 }
