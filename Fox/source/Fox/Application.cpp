@@ -1,16 +1,16 @@
 #include <stdafx.hpp>
 
 #include <fox/application.hpp>
-#include <fox/core/types/collection/circular_buffer.hpp>
 #include <fox/core/image/image.hpp>
 #include <fox/core/json/json.hpp>
 #include <fox/core/time/time.hpp>
 #include <fox/core/transform/transform.hpp>
+#include <fox/core/types/collection/circular_buffer.hpp>
 #include <fox/ecs/components/components.hpp>
 #include <fox/input/input.hpp>
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/io/io.hpp>
-#include <fox/rendering/api/shader/utility.hpp>
+#include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
 #include <fox/rendering/rendering.hpp>
 #include <fox/scene/actor.hpp>

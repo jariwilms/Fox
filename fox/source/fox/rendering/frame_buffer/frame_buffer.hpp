@@ -1,7 +1,7 @@
 #pragma once
 
-#include <fox/rendering/api/frame_buffer/frame_buffer.hpp>
-#include <fox/rendering/graphics_api/graphics_api.hpp>
+#include <fox/rendering/api/api.hpp>
+#include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/render_buffer/render_buffer.hpp>
 #include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>

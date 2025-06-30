@@ -7,7 +7,7 @@
 #include <fox/input/input.hpp>
 #include <fox/math/linear_algebra/projection.hpp>
 #include <fox/math/trigonometry/trigonometry.hpp>
-#include <fox/rendering/api/shader/utility.hpp>
+#include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/rendering.hpp>
 
 namespace fox::gfx::api

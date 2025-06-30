@@ -4,7 +4,7 @@
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/rendering/graphics_api/graphics_api.hpp>
+#include <fox/rendering/api/api.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 #include <fox/rendering/model/model.hpp>

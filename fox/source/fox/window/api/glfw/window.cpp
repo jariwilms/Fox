@@ -1,7 +1,7 @@
 #include <stdafx.hpp>
 
-#include <fox/rendering/graphics_api/opengl/context/context.hpp>
-#include <fox/rendering/graphics_api/opengl/opengl.hpp>
+#include <fox/rendering/api/opengl/context/context.hpp>
+#include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/window/api/glfw/window.hpp>
 
 namespace fox::interface::api::glfw

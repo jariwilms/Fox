@@ -1,8 +1,8 @@
 #pragma once
 
-#include <fox/rendering/api/layout/vertex_layout.hpp>
+#include <fox/rendering/api/api.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
-#include <fox/rendering/graphics_api/graphics_api.hpp>
+#include <fox/rendering/layout/vertex_layout.hpp>
 
 namespace fox::gfx
 {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <fox/rendering/api/render_buffer/render_buffer.hpp>
-#include <fox/rendering/graphics_api/graphics_api.hpp>
+#include <fox/rendering/api/api.hpp>
+#include <fox/rendering/base/render_buffer/render_buffer.hpp>
 
 namespace fox::gfx
 {
