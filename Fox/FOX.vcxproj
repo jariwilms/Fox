@@ -119,6 +119,8 @@
     <ClInclude Include="source\fox\core\types\math\linear_algebra\quaternion.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\vector.hpp" />
     <ClInclude Include="source\fox\core\types\math\math.hpp" />
+    <ClInclude Include="source\fox\core\types\window\window.hpp" />
+    <ClInclude Include="source\fox\input\api\input_api.hpp" />
     <ClInclude Include="source\fox\rendering\camera\camera.hpp" />
     <ClInclude Include="source\fox\rendering\light\light.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
@@ -225,7 +227,6 @@
     <ClInclude Include="source\fox\window\api\window_api.hpp" />
     <ClInclude Include="source\fox\window\base\window.hpp" />
     <ClInclude Include="source\fox\window\window.hpp" />
-    <ClInclude Include="source\fox\window\window_manager.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
     <ClInclude Include="source\vendor\stb\stb.hpp" />
   </ItemGroup>

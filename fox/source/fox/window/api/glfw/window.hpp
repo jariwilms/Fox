@@ -2,22 +2,23 @@
 
 #include <stdafx.hpp>
 
+#include <glfw/glfw3.h>
+
 #include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/input/api/glfw/input_handler.hpp>
 #include <fox/input/input.hpp>
 #include <fox/window/base/window.hpp>
 
-namespace fox::wnd::api::glfw
+namespace fox::interface::api::glfw
 {
 	class Window
 	{
 	public:
 		using Mode = api::Window::Mode;
-
-        struct UserPointer
+        struct Context
         {
-			std::shared_ptr<Window>                         glfwWindow  {};
-			std::shared_ptr<input::api::glfw::InputHandler> inputHandler{};
+			std::shared_ptr<Window>                         window{};
+			std::shared_ptr<input::api::glfw::InputHandler> input {};
         };
 
 		Window(const std::string& name, const fox::Vector2u& dimensions);
@@ -25,7 +26,7 @@ namespace fox::wnd::api::glfw
 
 		void poll_events ()
 		{
-			userPointer_->inputHandler->update();
+			context_->input->update();
 			glfwPollEvents();
 		}
 		void swap_buffers()
@@ -61,10 +62,10 @@ namespace fox::wnd::api::glfw
 	private:
         void glfw_error_callback(fox::int32_t error, const fox::char_t* description);
 
-		std::string                  name_       ;
-		fox::Vector2u                dimensions_ ;
-		Mode                         mode_       ;
-		GLFWwindow*                  instance_   ;
-		std::shared_ptr<UserPointer> userPointer_;
+		std::string              name_      ;
+		fox::Vector2u            dimensions_;
+		Mode                     mode_      ;
+		GLFWwindow*              instance_  ;
+		std::shared_ptr<Context> context_   ;
 	};
 }

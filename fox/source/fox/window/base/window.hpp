@@ -1,6 +1,6 @@
 #pragma once
 
-namespace fox::wnd::api
+namespace fox::interface::api
 {
     class Window
     {

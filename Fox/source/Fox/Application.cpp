@@ -15,7 +15,6 @@
 #include <fox/rendering/rendering.hpp>
 #include <fox/scene/actor.hpp>
 #include <fox/scene/scene.hpp>
-#include <fox/window/window_manager.hpp>
 
 namespace fox
 {
@@ -47,17 +46,17 @@ namespace fox
         return transform_product(scene, rel, trs) * transform;
     }
 
-    Application::Application(int argc, char** argv)
+    Application::Application(fox::int32_t argc, fox::char_t* argv[])
     {
-        m_window = wnd::WindowManager::create("Window", "Fox", fox::Vector2u{ 1280u, 720u });
+        m_window = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
 
-        gfx::Geometry     ::init();
-        io ::ModelImporter::init();
-        gfx::Renderer     ::init();
-    }
-    Application::~Application()
-    {
+        std::once_flag geometryFlag{};
+        std::once_flag importerFlag{};
+        std::once_flag rendererFlag{};
 
+        std::call_once(geometryFlag, []{ gfx::Geometry     ::init(); });
+        std::call_once(importerFlag, []{ io ::ModelImporter::init(); });
+        std::call_once(rendererFlag, []{ gfx::Renderer     ::init(); });
     }
 
     int Application::run()

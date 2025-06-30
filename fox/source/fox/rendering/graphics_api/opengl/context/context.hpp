@@ -91,7 +91,7 @@ namespace fox::gfx::api::gl
             if (eSeverity == glf::Debug::Severity::Notification) return;
             if (eSeverity == glf::Debug::Severity::Low         ) return;
 
-            std::cout << std::format("@GL_DEBUG [{0}] Type::{1}; Source::{2}; Severity::{3}; Message::{4}", id, mType, mSource, mSeverity, message) << std::endl;
+            std::print("@GL_DEBUG [{0}] Type::{1}; Source::{2}; Severity::{3}; Message::{4}", id, mType, mSource, mSeverity, message);
         }
 
 		static inline glf::Context::Flag    s_contextFlags{};

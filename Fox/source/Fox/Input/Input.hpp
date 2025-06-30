@@ -1,29 +1,9 @@
 #pragma once
 
-#define FOX_INPUT_GLFW 1
-#define FOX_INPUT_SDL  2
-
-#ifndef FOX_INPUT
-#define FOX_INPUT FOX_INPUT_GLFW
-#endif
-
 #include <stdafx.hpp>
 
-#include <fox/core/types/math/linear_algebra/vector.hpp>
-#include <fox/input/api/glfw/input_handler.hpp>
-#include <fox/input/code/button.hpp>
-#include <fox/input/code/controller.hpp>
-#include <fox/input/code/key.hpp>
-#include <fox/input/code/modifier.hpp>
+#include <fox/input/api/input_api.hpp>
 
-namespace fox::input::api
-{
-#if FOX_INPUT == FOX_INPUT_GLFW
-    using handler_t = glfw::InputHandler;
-#endif
-
-    inline std::shared_ptr<api::handler_t> handler;
-}
 namespace fox::input
 {
     static auto any_key_active       () -> fox::bool_t

@@ -3,61 +3,9 @@
 #include <fox/rendering/graphics_api/opengl/context/context.hpp>
 #include <fox/rendering/graphics_api/opengl/opengl.hpp>
 #include <fox/window/api/glfw/window.hpp>
-#include <fox/window/window_manager.hpp>
 
-namespace fox::wnd::api::glfw
+namespace fox::interface::api::glfw
 {
-    static void debug_callback(gfx::api::gl::enum_t source, gfx::api::gl::enum_t type, gfx::api::gl::uint32_t id, gfx::api::gl::enum_t severity, gfx::api::gl::sizei_t length, const gfx::api::gl::char_t* message, const void* parameter)
-    {
-        const auto& sourceMessage = [source]() -> std::string
-            {
-                switch (source)
-                {
-                    case GL_DEBUG_SOURCE_API:             return "API";
-                    case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   return "WINDOW_SYSTEM";
-                    case GL_DEBUG_SOURCE_SHADER_COMPILER: return "SHADER_COMPILER";
-                    case GL_DEBUG_SOURCE_THIRD_PARTY:     return "THIRD_PARTY";
-                    case GL_DEBUG_SOURCE_APPLICATION:     return "APPLICATION";
-                    case GL_DEBUG_SOURCE_OTHER:           return "OTHER";
-
-                    default:                              throw std::invalid_argument{ "Invalid source!" };
-                }
-            }();
-        const auto& typeMessage = [type]() -> std::string
-            {
-                switch (type)
-                {
-                    case GL_DEBUG_TYPE_ERROR:               return "ERROR";
-                    case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: return "DEPRECATED_BEHAVIOR";
-                    case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  return "UNDEFINED_BEHAVIOR";
-                    case GL_DEBUG_TYPE_PORTABILITY:         return "PORTABILITY";
-                    case GL_DEBUG_TYPE_PERFORMANCE:         return "PERFORMANCE";
-                    case GL_DEBUG_TYPE_MARKER:              return "MARKER";
-                    case GL_DEBUG_TYPE_OTHER:               return "OTHER";
-
-                    default:                                throw std::invalid_argument{ "Invalid type!" };
-                }
-            }();
-        const auto& severityMessage = [severity]() -> std::string
-            {
-                switch (severity)
-                {
-                    case GL_DEBUG_SEVERITY_NOTIFICATION: return "NOTIFICATION";
-                    case GL_DEBUG_SEVERITY_LOW:          return "LOW";
-                    case GL_DEBUG_SEVERITY_MEDIUM:       return "MEDIUM";
-                    case GL_DEBUG_SEVERITY_HIGH:         return "HIGH";
-
-                    default:                             throw std::invalid_argument{ "Invalid severity!" };
-                }
-            }();
-
-        if (severityMessage == "NOTIFICATION") return;
-
-        std::cout << std::format("[GL_DEBUG] {0}, {1}, {2}, {3}: {4}", sourceMessage, typeMessage, severityMessage, id, message) << std::endl;
-    }
-
-
-
     Window::Window(const std::string& name, const fox::Vector2u& dimensions)
         : name_{ name }, dimensions_{ dimensions }, mode_{ Mode::Windowed }
     {
@@ -71,105 +19,59 @@ namespace fox::wnd::api::glfw
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT , fox::True               );
 #endif
 
-
-
+        
 
 
 
         instance_ = glfwCreateWindow(static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y), name_.c_str(), nullptr, nullptr);
         if (!instance_) throw std::runtime_error{ "Failed to create GLFW window!" };
-
+        
         glfwMakeContextCurrent(instance_);
         glfwSwapInterval(0);
 
-
-
-
-
-
-
-
         auto version = gladLoadGL(glfwGetProcAddress);
-        if (std::cmp_equal(version, 0u)) throw std::runtime_error{ "Failed to initialize GLAD!" };
+        if (!version) throw std::runtime_error{ "Failed to initialize GLAD!" };
 
         input::api::handler = std::make_shared<input::api::glfw::InputHandler>();
-        userPointer_        = std::make_shared<UserPointer>(std::shared_ptr<Window>(this, [](const Window* window) {}), input::api::handler);
-
-        glfwSetWindowUserPointer(instance_, userPointer_.get());
+        context_            = std::make_shared<Context>(std::shared_ptr<Window>(this, [](const auto* context) {  }), input::api::handler);
 
 
 
 
 
+        using namespace gfx::api;
 
-
-        namespace gl = gfx::api::gl;
         gl::Context::init();
-
-
-
-        //Set up event callbacks
-        static const auto& user_pointer = [this]() -> Window::UserPointer*
-        {
-            auto window      = wnd::WindowManager::find("Window");
-            auto userPointer = static_cast<Window::UserPointer*>(glfwGetWindowUserPointer(window->impl()->handle()));
+        static const auto& context = context_;
             
-            return userPointer;
-        };
-
-        const auto& glfw_error_callback               = [](fox::int32_t error , const fox::char_t* description)
+        glfwSetErrorCallback          (           [](fox::int32_t error , const fox::char_t* description)
             {
-                const auto& window = user_pointer()->glfwWindow;
-                window->glfw_error_callback(error, description);
-            };
-        const auto& gl_debug_callback                 = [](gl ::enum_t  source, gl ::enum_t    type  , gl ::uint32_t  id      , gl ::enum_t  severity, gl ::sizei_t length, const gl::char_t* message, const void* parameters)
+                std::print("[GLFW_ERROR] {0}: {1}\n", error, description);
+            });
+        glfwSetKeyCallback            (instance_, [](GLFWwindow*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action  , fox::int32_t mods  ) 
+            { 
+                context->input->glfw_input_key_callback(window, key, scancode, action, mods); 
+            });
+        glfwSetMouseButtonCallback    (instance_, [](GLFWwindow*  window, fox::int32_t   button, fox::int32_t   action  , fox::int32_t mods    )
             {
-                //TODO: Make like this?
-                //const auto& context = user_pointer()->renderContext; //(Points to something defined in GL.hpp?)
-                //context->gl_debug_callback(source, type, id, severity, length, message, param);
-
-                debug_callback(source, type, id, severity, length, message, parameters);
-            };
-        const auto& glfw_input_key_callback           = [](GLFWwindow*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action  , fox::int32_t mods  )
+                context->input->glfw_input_button_callback(window, button, action, mods);
+            });
+        glfwSetCursorPosCallback      (instance_, [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
             {
-                const auto& handler = user_pointer()->inputHandler;
-                handler->glfw_input_key_callback(window, key, scancode, action, mods);
-            };
-        const auto& glfw_button_callback              = [](GLFWwindow*  window, fox::int32_t   button, fox::int32_t   action  , fox::int32_t mods    )
+                context->input->glfw_input_cursor_callback(window, x, y);
+            });
+        glfwSetScrollCallback         (instance_, [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
             {
-                const auto& handler = user_pointer()->inputHandler;
-                handler->glfw_input_button_callback(window, button, action, mods);
-            };
-        const auto& glfw_input_cursor_callback        = [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
+                context->input->glfw_input_scroll_callback(window, x, y);
+            });
+        glfwSetFramebufferSizeCallback(instance_, [](GLFWwindow*  window, fox::int32_t   width , fox::int32_t   height  )
             {
-                const auto& handler = user_pointer()->inputHandler;
-                handler->glfw_input_cursor_callback(window, x, y);
-            };
-        const auto& glfw_input_scroll_callback        = [](GLFWwindow*  window, fox::float64_t x     , fox::float64_t y       )
-            {
-                const auto& handler = user_pointer()->inputHandler;
-                handler->glfw_input_scroll_callback(window, x, y);
-            };
-        const auto& glfw_frame_buffer_resize_callback = [](GLFWwindow*  window, fox::int32_t   width , fox::int32_t   height  )
-            {
-                gl::viewport( gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
-            };
-
-        glfwSetErrorCallback          (             glfw_error_callback              );
-        glfwSetKeyCallback            (instance_, glfw_input_key_callback          );
-        glfwSetMouseButtonCallback    (instance_, glfw_button_callback             );
-        glfwSetCursorPosCallback      (instance_, glfw_input_cursor_callback       );
-        glfwSetScrollCallback         (instance_, glfw_input_scroll_callback       );
-        glfwSetFramebufferSizeCallback(instance_, glfw_frame_buffer_resize_callback);
+                gl::viewport(gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
+            });
     }
     Window::~Window()
     {
         glfwDestroyWindow(instance_);
         glfwTerminate();
-    }
-
-    void Window::glfw_error_callback(fox::int32_t error, const fox::char_t* description)
-    {
-        std::print("[GLFW_ERROR] {0}: {1}\n", error, description);
     }
 }

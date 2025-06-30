@@ -2,7 +2,6 @@
 
 #include <stdafx.hpp>
 
-#include <glad/gl.h>
 #include <glfw/glfw3.h>
 
 #include <fox/input/code/button.hpp>

@@ -1,7 +1,7 @@
 #pragma once
 
 #define FOX_WINDOW_API_GLFW 1
-#define FOX_WINDOW_API_XXX  2
+#define FOX_WINDOW_API_SDL  2
 
 #ifndef FOX_WINDOW_API
 #define FOX_WINDOW_API FOX_WINDOW_API_GLFW
@@ -9,13 +9,14 @@
 
 #include <stdafx.hpp>
 
+#include <fox/core/types/window/window.hpp>
 #include <fox/input/input.hpp>
 
 #if FOX_WINDOW_API == FOX_WINDOW_API_GLFW
 #include <fox/window/api/glfw/window.hpp>
 #endif
 
-namespace fox::wnd
+namespace fox::interface
 {
 	namespace api
 	{
@@ -25,7 +26,7 @@ namespace fox::wnd
 	namespace impl
 	{
 		#if FOX_WINDOW_API == FOX_WINDOW_API_GLFW
-			using window_t = api::glfw::Window;
+			using window_t = interface::api::glfw::Window;
 		#endif
 	}
 }

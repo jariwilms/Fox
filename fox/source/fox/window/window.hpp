@@ -2,10 +2,8 @@
 
 #include <fox/window/api/window_api.hpp>
 
-namespace fox::wnd
+namespace fox::interface
 {
-	using native_window_t = fox::void_t;
-
 	class Window
 	{
 	public:
