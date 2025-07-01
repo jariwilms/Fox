@@ -2497,7 +2497,7 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 20 - Debug Output
-    static void debug_message_callback                  (debug_callback_t callback, const void* parameter = nullptr)
+    static void debug_message_callback                  (gl::debug_callback_t callback, const void* parameter = nullptr)
     {
         glDebugMessageCallback(callback, parameter);
     }
