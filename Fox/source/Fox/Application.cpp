@@ -48,7 +48,7 @@ namespace fox
 
     Application::Application(fox::int32_t argc, fox::char_t* argv[])
     {
-        m_window = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
+        window_ = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
 
         std::once_flag geometryFlag{};
         std::once_flag importerFlag{};
@@ -154,7 +154,7 @@ namespace fox
         {
             auto speed{ 5.0f * fox::time::delta() };
 
-            if (input::key_active(input::key::Escape     )) m_window->close();
+            if (input::key_active(input::key::Escape     )) window_->close();
             if (input::key_active(input::key::LeftShift  )) speed *= 10.0f;
             if (input::key_active(input::key::LeftControl)) speed /=  5.0f;
             if (input::key_active(input::key::W          )) cameraTransform.position += cameraTransform.forward() * speed;
@@ -199,10 +199,10 @@ namespace fox
         fox::time::reset();
         fox::CircularBuffer<fox::float32_t, 144u> frametimes{};
 
-        while (!m_window->should_close())
+        while (!window_->should_close())
         {
             fox::time::update();
-            m_window->poll_events();
+            window_->poll_events();
 
 
 
@@ -246,7 +246,7 @@ namespace fox
 
 
 
-            m_window->swap_buffers();
+            window_->swap_buffers();
             frametimes.push_back(fox::time::delta());
         }
 

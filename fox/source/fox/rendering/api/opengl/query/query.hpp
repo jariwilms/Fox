@@ -15,11 +15,11 @@ namespace fox::gfx::api::gl
 		{
 			throw std::logic_error{ "The method or operation has not been implemented!" };
 
-			//m_handle = gl::create_query(gl::map_query_target(target));
+			//handle_ = gl::create_query(gl::map_query_target(target));
 		}
 		~Query()
 		{
-			gl::delete_query(m_handle);
+			gl::delete_query(handle_);
 		}
 
 	private:

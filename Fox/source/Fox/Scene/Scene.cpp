@@ -7,7 +7,7 @@ namespace fox::scene
     auto Scene::create_actor() -> scene::Actor&
     {
         auto        actor = std::make_shared<scene::Actor>();
-        const auto& it    = m_actors.emplace(std::make_pair(actor->id(), std::move(actor)));
+        const auto& it    = actors_.emplace(std::make_pair(actor->id(), std::move(actor)));
         
         return *it.first->second;
     }
@@ -18,11 +18,11 @@ namespace fox::scene
         auto& rls = actor.get_component<ecs::RelationshipComponent>().get();
         for (auto& id : rls.children)
         {
-            auto& childActor = m_actors.at(id);
+            auto& childActor = actors_.at(id);
             destroy_actor(*childActor);
         }
 
-        m_actors.erase(actor.id());
+        actors_.erase(actor.id());
     }
 
     void Scene::set_parent(Actor& parent, Actor& child)

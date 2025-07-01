@@ -12,6 +12,6 @@ namespace fox
         auto run() -> fox::int32_t;
 
     private:
-        std::shared_ptr<interface::Window> m_window{};
+        std::shared_ptr<interface::Window> window_{};
     };
 }

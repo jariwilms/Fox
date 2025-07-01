@@ -16,84 +16,84 @@ namespace fox::gfx::api::gl
         using Face     = api::Cubemap::Face;
 
          Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions)
-            : m_format{ format }, m_filter{ filter }, m_wrapping{ wrapping, wrapping }, m_dimensions{ dimensions }, m_mipmapLevels{ 1u }
+            : format_{ format }, filter_{ filter }, wrapping_{ wrapping, wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            m_handle = gl::create_texture(glf::Texture::Target::CubeMap);
+            handle_ = gl::create_texture(glf::Texture::Target::CubeMap);
 
             if (filter != Filter::None)
             {
-                gl::texture_parameter(m_handle, glp::magnification_filter{ gl::map_texture_mag_filter(m_filter) });
-                gl::texture_parameter(m_handle, glp::minification_filter { gl::map_texture_min_filter(m_filter) });
-                gl::texture_parameter(m_handle, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
+                gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
+                gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
+                gl::texture_parameter(handle_, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
-                m_mipmapLevels = math::mipmap_levels(m_dimensions);
+                mipmapLevels_ = math::mipmap_levels(dimensions_);
             }
 
-            gl::texture_parameter(m_handle, glp::wrapping_s{ gl::map_texture_wrapping(m_wrapping.at(0)) });
-            gl::texture_parameter(m_handle, glp::wrapping_t{ gl::map_texture_wrapping(m_wrapping.at(1)) });
+            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(wrapping_.at(0)) });
+            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(wrapping_.at(1)) });
             
-            gl::texture_storage_2d(m_handle, gl::map_cubemap_texture_format(m_format), m_dimensions, m_mipmapLevels);
+            gl::texture_storage_2d(handle_, gl::map_cubemap_texture_format(format_), dimensions_, mipmapLevels_);
         }
          Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
             : Cubemap{ format, filter, wrapping, dimensions }
         {
-            attach_faces(faces, m_format);
+            attach_faces(faces, format_);
             generate_mipmap();
         }
          Cubemap(Format format,                                   const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
             : Cubemap{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, faces } {}
         ~Cubemap()
         {
-            gl::delete_texture(m_handle);
+            gl::delete_texture(handle_);
         }
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(m_handle, binding);
+            gl::bind_texture_unit(handle_, binding);
         }
 
         void copy      (Face face, Format format,                    std::span<const gl::byte_t> data)
         {
-            copy_range(face, format, m_dimensions, data);
+            copy_range(face, format, dimensions_, data);
         }
         void copy_range(Face face, Format format, gl::area_t region, std::span<const gl::byte_t> data)
         {
             if (data.empty()) return;
-            if (glm::any(glm::greaterThan(region.origin + region.extent, m_dimensions))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
+            if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
 
             gl::texture_sub_image_3d(
-                m_handle,
+                handle_,
                 gl::map_cubemap_texture_format_base(format),
                 gl::map_cubemap_texture_format_type(format),
                 gl::uint32_t{ 0u },
-                gl::volume_t{ gl::Vector3u{ m_dimensions, 1u }, gl::Vector3u{ 0u, 0u, gl::to_underlying(face) } },
+                gl::volume_t{ gl::Vector3u{ dimensions_, 1u }, gl::Vector3u{ 0u, 0u, gl::to_underlying(face) } },
                 data);
         }
 
         void generate_mipmap()
         {
-            if (m_filter != Filter::None) gl::generate_texture_mipmap(m_handle);
+            if (filter_ != Filter::None) gl::generate_texture_mipmap(handle_);
         }
 
         auto format       () const
         {
-            return m_format;
+            return format_;
         }
         auto filter       () const
         {
-            return m_filter;
+            return filter_;
         }
         auto wrapping     () const -> std::span<const Wrapping, 2u>
         {
-            return m_wrapping;
+            return wrapping_;
         }
         auto dimensions   () const
         {
-            return m_dimensions;
+            return dimensions_;
         }
         auto mipmap_levels() const
         {
-            return m_mipmapLevels;
+            return mipmapLevels_;
         }
 
     private:
@@ -104,16 +104,16 @@ namespace fox::gfx::api::gl
             
             for (gl::index_t index{}; const auto& face : faces)
             {
-                if (face.dimensions() != m_dimensions) throw std::invalid_argument{ "Face dimension is not equal to cubemap dimension!" };
+                if (face.dimensions() != dimensions_) throw std::invalid_argument{ "Face dimension is not equal to cubemap dimension!" };
 
                 copy(static_cast<Face>(indices.at(index++)), format, face.data());
             }
         }
 
-        Format                   m_format{};
-        Filter                   m_filter{};
-        std::array<Wrapping, 2u> m_wrapping{};
-        gl::Vector2u             m_dimensions{};
-        gl::uint32_t             m_mipmapLevels{};
+        Format                   format_{};
+        Filter                   filter_{};
+        std::array<Wrapping, 2u> wrapping_{};
+        gl::Vector2u             dimensions_{};
+        gl::uint32_t             mipmapLevels_{};
     };
 }

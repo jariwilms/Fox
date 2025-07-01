@@ -13,32 +13,32 @@ namespace fox::gfx::api::gl
         using Layout = Layout<S>;
 
         Pipeline(const Layout& layout)
-            : m_layout{ layout }
+            : layout_{ layout }
         {
-            m_handle = gl::create_program_pipeline();
+            handle_ = gl::create_program_pipeline();
 
-            if (const auto& shader = m_layout.vertex;                 shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = m_layout.tessellationControl;    shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = m_layout.tessellationEvaluation; shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = m_layout.geometry;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = m_layout.fragment;               shader) gl::use_program_stages(m_handle, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = layout_.vertex;                 shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = layout_.tessellationControl;    shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = layout_.tessellationEvaluation; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = layout_.geometry;               shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (const auto& shader = layout_.fragment;               shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
         }
         ~Pipeline()
         {
-            gl::delete_program_pipeline(m_handle);
+            gl::delete_program_pipeline(handle_);
         }
 
         void bind()
         {
-            gl::bind_program_pipeline(m_handle);
+            gl::bind_program_pipeline(handle_);
         }
 
         const Layout& layout() const
         {
-            return m_layout;
+            return layout_;
         }
 
     private:
-        Layout m_layout{};
+        Layout layout_{};
     };
 }

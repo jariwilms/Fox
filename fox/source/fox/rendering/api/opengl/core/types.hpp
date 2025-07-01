@@ -10,6 +10,7 @@ namespace fox::gfx::api::gl
 {
     using void_t     = GLvoid;
     using bool_t     = GLboolean;
+    using boolean_t  = GLboolean;
     using char_t     = GLchar;
     using byte_t     = GLubyte;
 
@@ -53,24 +54,24 @@ namespace fox::gfx::api::gl
     public:
         Object(Object&& other) noexcept
         {
-            m_handle = std::exchange(other.m_handle, gl::NullObject);
+            handle_ = std::exchange(other.handle_, gl::NullObject);
         }
 
         auto handle() const
         {
-            return m_handle;
+            return handle_;
         }
 
         Object& operator=(Object&& other) noexcept
         {
-            if (this != &other) m_handle = std::exchange(other.m_handle, m_handle);
+            if (this != &other) handle_ = std::exchange(other.handle_, handle_);
             return *this;
         }
 
     protected:
         Object() = default;
 
-        gl::handle_t m_handle{ gl::NullObject };
+        gl::handle_t handle_{ gl::NullObject };
     };
 
 
@@ -120,7 +121,7 @@ namespace fox::gfx::api::gl
         region_t(const gl::Vector<T, N>& extent = {}, const gl::Vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
-        bool operator==(const region_t&) const = default;
+        auto operator==(const region_t&) const -> bool = default;
 
         gl::Vector<T, N> extent{};
         gl::Vector<T, N> origin{};
@@ -130,7 +131,7 @@ namespace fox::gfx::api::gl
         range_t(gl::count_t count = {}, gl::index_t index = {})
             : count{ count }, index{ index } {}
 
-        bool operator==(const range_t&) const = default;
+        auto operator==(const range_t&) const -> bool = default;
 
         gl::count_t count{};
         gl::index_t index{};
@@ -140,7 +141,7 @@ namespace fox::gfx::api::gl
         byterange_t(gl::size_t size = {}, gl::offset_t offset = {})
             : size{ size }, offset{ offset } {}
 
-        bool operator==(const byterange_t&) const = default;
+        auto operator==(const byterange_t&) const -> bool = default;
 
         gl::size_t   size{};
         gl::offset_t offset{};
@@ -149,7 +150,7 @@ namespace fox::gfx::api::gl
     using length_t      = gl::region_t<gl::uint32_t, 1u>;
     using area_t        = gl::region_t<gl::uint32_t, 2u>;
     using volume_t      = gl::region_t<gl::uint32_t, 3u>;
-    using hypervolume_t = gl::region_t<gl::uint32_t, 4u>; //Apparently this exists
+    using hypervolume_t = gl::region_t<gl::uint32_t, 4u>; //Yes, this exists
 
     using lock_t        = std::tuple<gl::range_t, gl::sync_t>;
 

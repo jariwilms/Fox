@@ -19,14 +19,14 @@ namespace fox::scene
 
         auto find_actor(fox::id_t id) -> scene::Actor&
         {
-            return *m_actors.at(id);
+            return *actors_.at(id);
         }
         auto find_actor(fox::id_t id) const -> const scene::Actor&
         {
-            return *m_actors.at(id);
+            return *actors_.at(id);
         }
 
     private:
-        std::unordered_map<fox::id_t, std::shared_ptr<scene::Actor>> m_actors{};
+        std::unordered_map<fox::id_t, std::shared_ptr<scene::Actor>> actors_{};
     };
 }

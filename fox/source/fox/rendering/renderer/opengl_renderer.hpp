@@ -30,34 +30,34 @@ namespace fox::gfx::api
 
 
 
-        std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> m_mmt{};
-        std::vector<unf::Light>                                            m_lights{};
-        std::vector<unf::Light>                                            m_shadowCastingPointLights{};
-        std::vector<unf::Light>                                            m_shadowCastingDirectionalLights{};
-        std::vector<fox::Transform>                                        m_debugTransforms{};
+        std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> mmt_{};
+        std::vector<unf::Light>                                            lights_{};
+        std::vector<unf::Light>                                            shadowCastingPointLights_{};
+        std::vector<unf::Light>                                            shadowCastingDirectionalLights_{};
+        std::vector<fox::Transform>                                        debugTransforms_{};
 
-        std::shared_ptr<gfx::FrameBuffer>                                  m_gBuffer{};
-        std::shared_ptr<gfx::FrameBuffer>                                  m_sBuffer{};
-        std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   m_pBuffers{};
-        std::shared_ptr<gfx::FrameBuffer>                                  m_ssaoBuffer{};
-        std::shared_ptr<gfx::Texture2D>                                    m_ssaoNoiseTexture{};
+        std::shared_ptr<gfx::FrameBuffer>                                  gBuffer_{};
+        std::shared_ptr<gfx::FrameBuffer>                                  sBuffer_{};
+        std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   pBuffers_{};
+        std::shared_ptr<gfx::FrameBuffer>                                  ssaoBuffer_{};
+        std::shared_ptr<gfx::Texture2D>                                    ssaoNoiseTexture_{};
 
-        std::shared_ptr<gfx::Cubemap>                                      m_environmentCubemap{};
-        std::shared_ptr<gfx::Cubemap>                                      m_irradianceCubemap{};
-        std::shared_ptr<gfx::Cubemap>                                      m_preFilterCubemap{};
-        std::shared_ptr<gfx::Texture2D>                                    m_brdfTexture{};
+        std::shared_ptr<gfx::Cubemap>                                      environmentCubemap_{};
+        std::shared_ptr<gfx::Cubemap>                                      irradianceCubemap_{};
+        std::shared_ptr<gfx::Cubemap>                                      preFilterCubemap_{};
+        std::shared_ptr<gfx::Texture2D>                                    brdfTexture_{};
 
-        std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  m_contextUniform{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Matrices>>                 m_matricesUniform{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Material>>                 m_materialUniform{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Camera>>                   m_cameraUniform{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Light>>                    m_lightUniform{};
-        std::shared_ptr<gfx::UniformArrayBuffer<unf::SSAOSample, 64u>>     m_ssaoSampleUniform{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  contextUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Matrices>>                 matricesUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Material>>                 materialUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Camera>>                   cameraUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::Light>>                    lightUniform_{};
+        std::shared_ptr<gfx::UniformArrayBuffer<unf::SSAOSample, 64u>>     ssaoSampleUniform_{};
 
-        std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    m_pipelines{};
+        std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    pipelines_{};
 
-        gl::float32_t                                                      m_shadowFarPlane{ 100.0f };
+        gl::float32_t                                                      shadowFarPlane_{ 100.0f };
 
-        gfx::RenderInfo                                                    m_renderInfo{};
+        gfx::RenderInfo                                                    renderInfo_{};
     };
 }

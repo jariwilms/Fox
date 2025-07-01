@@ -19,34 +19,34 @@ namespace fox::scene
         }
         virtual ~Actor()
         {
-            registry::destroy(m_id);
+            registry::destroy(id_);
         }
 
         template<typename... T>
         auto has_component() const -> fox::bool_t
         {
-            return registry::has_component<T...>(m_id);
+            return registry::has_component<T...>(id_);
         }
         template<typename T, typename... Args>
         auto add_component(Args&&... args) -> T&
         {
-            return registry::add_component<T>(m_id, *this, std::forward<Args>(args)...);
+            return registry::add_component<T>(id_, *this, std::forward<Args>(args)...);
         }
         template<typename T>
         auto get_component() -> T&
         {
-            return registry::get_component<T>(m_id);
+            return registry::get_component<T>(id_);
         }
         template<typename T>
         auto get_component() const -> const T&
         {
-            return registry::get_component<T>(m_id);
+            return registry::get_component<T>(id_);
         }
 
         template<typename T>
         void remove_component()
         {
-            registry::remove_component<T>(m_id);
+            registry::remove_component<T>(id_);
         }
         template<> void remove_component<ecs::RelationshipComponent>() = delete;
         template<> void remove_component<ecs::TransformComponent   >() = delete;

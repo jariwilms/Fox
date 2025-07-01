@@ -9,18 +9,18 @@ namespace fox::io
 	public:
 		auto path() const -> const std::filesystem::path&
 		{
-			return m_path;
+			return path_;
 		}
 		auto name() const -> const std::filesystem::path&
 		{
-			return m_name;
+			return name_;
 		}
 
 	protected:
 		explicit Entry(const std::filesystem::path& path)
-			: m_path{ path.lexically_normal() }, m_name{ m_path.filename() } {}
+			: path_{ path.lexically_normal() }, name_{ path_.filename() } {}
 
-		std::filesystem::path m_path{};
-		std::filesystem::path m_name{};
+		std::filesystem::path path_{};
+		std::filesystem::path name_{};
 	};
 }

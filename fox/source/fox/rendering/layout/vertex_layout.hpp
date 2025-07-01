@@ -25,22 +25,22 @@ namespace fox::gfx
         template<typename T>
         void specify(fox::count_t count, fox::bool_t isNormalized = fox::False, fox::bool_t isStatic = fox::False, fox::uint32_t divisionRate = {})
         {
-            m_attributes.emplace_back(api::map_type<T>(), count, sizeof(T), isNormalized, isStatic, divisionRate);
+            attributes_.emplace_back(api::map_type<T>(), count, sizeof(T), isNormalized, isStatic, divisionRate);
         }
 
         auto attributes() const
         {
-            return std::span<const Attribute>{ m_attributes };
+            return std::span<const Attribute>{ attributes_ };
         }
         auto stride    () const
         {
-            return std::accumulate(m_attributes.begin(), m_attributes.end(), fox::size_t{ 0 }, [](fox::size_t accumulator, const auto& attribute)
+            return std::accumulate(attributes_.begin(), attributes_.end(), fox::size_t{ 0 }, [](fox::size_t accumulator, const auto& attribute)
                 {
                     return accumulator + (attribute.count * attribute.size);
                 });
         }
 
     private:
-        std::vector<Attribute> m_attributes{};
+        std::vector<Attribute> attributes_{};
     };
 }

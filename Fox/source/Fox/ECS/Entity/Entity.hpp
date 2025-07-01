@@ -9,13 +9,13 @@ namespace fox::ecs
     public:
         auto id() const -> fox::id_t
         {
-            return m_id;
+            return id_;
         }
 
     protected:
         Entity(fox::id_t id)
-            : m_id{ id } {}
+            : id_{ id } {}
 
-        fox::id_t m_id{};
+        fox::id_t id_{};
     };
 }

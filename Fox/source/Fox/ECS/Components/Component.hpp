@@ -9,42 +9,42 @@ namespace fox::ecs
 	{
 	public:
 		Component(const ecs::Entity& owner)
-			: m_owner{ owner }, m_value{} {}
+			: owner_{ owner }, value_{} {}
 		Component(const ecs::Entity& owner, const T& value)
-			: m_owner{ owner },  m_value{ value } {}
+			: owner_{ owner },  value_{ value } {}
 		template<typename... Args>
 		Component(const ecs::Entity& owner, Args... args)
- 			: m_owner{ owner }, m_value{ std::forward<Args>(args)... } {}
+ 			: owner_{ owner }, value_{ std::forward<Args>(args)... } {}
 
 		auto owner() -> ecs::Entity&
 		{
-			return m_owner;
+			return owner_;
 		}
 		auto owner() const -> ecs::Entity const&
 		{
-			return m_owner;
+			return owner_;
 		}
 
 		auto get() -> T&
 		{
-			return m_value;
+			return value_;
 		}
 		auto get() const -> T const&
 		{
-			return m_value;
+			return value_;
 		}
 
 		operator T&()
 		{
-			return m_value;
+			return value_;
 		}
 		operator T&() const
 		{
-			return m_value;
+			return value_;
 		}
 
 	protected:
-		ecs::Entity m_owner;
-		T           m_value;
+		ecs::Entity owner_;
+		T           value_;
 	};
 }

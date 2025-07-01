@@ -11,40 +11,40 @@ namespace fox::gfx::api::gl
         using Format = api::RenderBuffer::Format;
 
          RenderBuffer(Format format, const gl::Vector2u& dimensions)
-            : m_format{ format }, m_dimensions{ dimensions }
+            : format_{ format }, dimensions_{ dimensions }
         {
-            m_handle = gl::create_render_buffer();
+            handle_ = gl::create_render_buffer();
 
-            gl::render_buffer_storage(m_handle, gl::map_render_buffer_format(format), m_dimensions);
+            gl::render_buffer_storage(handle_, gl::map_render_buffer_format(format), dimensions_);
         }
         ~RenderBuffer()
         {
-            gl::delete_render_buffer(m_handle);
+            gl::delete_render_buffer(handle_);
         }
 
         void resize(const gl::Vector2u& dimensions)
         {
             auto handle = gl::create_render_buffer();
 
-            gl::render_buffer_storage(handle, gl::map_render_buffer_format(m_format), m_dimensions);
-            gl::delete_texture       (m_handle);
+            gl::render_buffer_storage(handle, gl::map_render_buffer_format(format_), dimensions_);
+            gl::delete_texture       (handle_);
 
-            m_handle     = handle;
-            m_dimensions = dimensions;
+            handle_     = handle;
+            dimensions_ = dimensions;
         }
 
         auto format    () const
         {
-            return m_format;
+            return format_;
         }
         auto dimensions() const
         {
-            return m_dimensions;
+            return dimensions_;
         }
 
     private:
-        Format       m_format{};
-        gl::Vector2u m_dimensions{};
+        Format       format_{};
+        gl::Vector2u dimensions_{};
     };
     class RenderBufferMultisample : public gl::Object
     {
@@ -52,44 +52,44 @@ namespace fox::gfx::api::gl
         using Format = api::RenderBuffer::Format;
 
          RenderBufferMultisample(Format format, const gl::Vector2u& dimensions, gl::uint32_t samples)
-            : m_format{ format }, m_dimensions{ dimensions }, m_samples{ samples }
+            : format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
-            m_handle = gl::create_render_buffer();
+            handle_ = gl::create_render_buffer();
 
-            gl::render_buffer_storage_multisample(m_handle, gl::map_render_buffer_format(format), m_dimensions, m_samples);
+            gl::render_buffer_storage_multisample(handle_, gl::map_render_buffer_format(format), dimensions_, samples_);
         }
         ~RenderBufferMultisample()
         {
-            gl::delete_render_buffer(m_handle);
+            gl::delete_render_buffer(handle_);
         }
 
         void resize(const gl::Vector2u& dimensions)
         {
             auto handle = gl::create_render_buffer();
 
-            gl::render_buffer_storage_multisample(handle, gl::map_render_buffer_format(m_format), m_dimensions, m_samples);
-            gl::delete_texture                   (m_handle);
+            gl::render_buffer_storage_multisample(handle, gl::map_render_buffer_format(format_), dimensions_, samples_);
+            gl::delete_texture                   (handle_);
 
-            m_handle     = handle;
-            m_dimensions = dimensions;
+            handle_     = handle;
+            dimensions_ = dimensions;
         }
 
         auto format    () const
         {
-            return m_format;
+            return format_;
         }
         auto dimensions() const
         {
-            return m_dimensions;
+            return dimensions_;
         }
         auto samples   () const
         {
-            return m_samples;
+            return samples_;
         }
 
     private:
-        Format       m_format{};
-        gl::Vector2u m_dimensions{};
-        gl::uint32_t m_samples{};
+        Format       format_{};
+        gl::Vector2u dimensions_{};
+        gl::uint32_t samples_{};
     };
 }

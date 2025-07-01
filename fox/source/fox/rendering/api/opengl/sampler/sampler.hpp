@@ -11,16 +11,16 @@ namespace fox::gfx::api::gl
 	public:
 		Sampler()
 		{
-			m_handle = gl::create_sampler();
+			handle_ = gl::create_sampler();
 		}
 		~Sampler()
 		{
-			gl::delete_sampler(m_handle);
+			gl::delete_sampler(handle_);
 		}
 
 		void bind(gl::binding_t slot)
 		{
-			gl::bind_sampler(m_handle, slot);
+			gl::bind_sampler(handle_, slot);
 		}
 	};
 }

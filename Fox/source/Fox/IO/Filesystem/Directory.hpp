@@ -17,26 +17,26 @@ namespace fox::io
 
         void explore()
         {
-            m_children.clear();
+            children_.clear();
 
-            for (std::filesystem::directory_iterator iterator{ m_path }; const auto& entry : iterator)
+            for (std::filesystem::directory_iterator iterator{ path_ }; const auto& entry : iterator)
             {
-                     if (entry.is_directory   ()) m_children.emplace_back(std::make_shared<entry_t>(io::Directory{ entry.path() }));
-                else if (entry.is_regular_file()) m_children.emplace_back(std::make_shared<entry_t>(io::File     { entry.path() }));
+                     if (entry.is_directory   ()) children_.emplace_back(std::make_shared<entry_t>(io::Directory{ entry.path() }));
+                else if (entry.is_regular_file()) children_.emplace_back(std::make_shared<entry_t>(io::File     { entry.path() }));
             }
         }
 
         auto children() const -> const std::vector<std::shared_ptr<entry_t>>&
         {
-            return m_children;
+            return children_;
         }
 
         std::filesystem::path operator/(const std::filesystem::path& other) const
         {
-            return m_path / other;
+            return path_ / other;
         }
 
     private:
-        std::vector<std::shared_ptr<entry_t>> m_children{};
+        std::vector<std::shared_ptr<entry_t>> children_{};
     };
 }
