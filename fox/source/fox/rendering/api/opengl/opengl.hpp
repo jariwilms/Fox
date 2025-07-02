@@ -1418,86 +1418,46 @@ namespace fox::gfx::api::gl
     {
         glBindSamplers(range.index, range.count, gl::to_underlying_ptr(samplers.data()));
     }
-    static auto sampler_parameter                       (gl::handle_t sampler, glp::sampler_parameter_t value)
+    static auto sampler_parameter                       (gl::handle_t sampler, glp::sampler_parameter_t parameter)
     {
-        const auto& sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::int32_t   value)
+        static const auto sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::int32_t   value)
             {
                 glSamplerParameterIiv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
-        const auto& sampler_parameter_uiv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::uint32_t  value)
+        static const auto sampler_parameter_uiv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::uint32_t  value)
             {
                 glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
-        const auto& sampler_parameter_fv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::float32_t value)
+        static const auto sampler_parameter_fv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::float32_t value)
             {
                 glSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
 
-        if (std::holds_alternative<glp::compare_mode>        (value))
+        const auto overload = gl::overload
         {
-            const auto& v = std::get<glp::compare_mode>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareMode, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::compare_function>    (value))
-        {
-            const auto& v = std::get<glp::compare_function>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareFunction, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::magnification_filter>(value))
-        {
-            const auto& v = std::get<glp::magnification_filter>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MagnificationFilter, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::minification_filter> (value))
-        {
-            const auto& v = std::get<glp::minification_filter>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MinificationFilter, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::wrapping_s>          (value))
-        {
-            const auto& v = std::get<glp::wrapping_s>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingS, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::wrapping_t>          (value))
-        {
-            const auto& v = std::get<glp::wrapping_t>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingT, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::wrapping_r>          (value))
-        {
-            const auto& v = std::get<glp::wrapping_r>(value);
-            sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingR, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::border_color>        (value))
-        {
-            const auto& v = std::get<glp::border_color>(value);
-            
-            if (std::holds_alternative<std::array<gl::int32_t  , 4>>(v.value))
-            {
-                const auto& w = std::get<std::array<gl::int32_t, 4>>(v.value);
-                glSamplerParameterIiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), w.data());
-            }
-            if (std::holds_alternative<std::array<gl::uint32_t , 4>>(v.value))
-            {
-                const auto& w = std::get<std::array<gl::uint32_t, 4>>(v.value);
-                glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), w.data());
-            }
-            if (std::holds_alternative<std::array<gl::float32_t, 4>>(v.value))
-            {
-                const auto& w = std::get<std::array<gl::float32_t, 4>>(v.value);
-                glSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), w.data());
-            }
-        }
-        if (std::holds_alternative<glp::maximum_lod>       (value))
-        {
-            const auto& v = std::get<glp::maximum_lod>(value);
-            sampler_parameter_fv(sampler, glf::Sampler::Parameter::MaximumLOD, v.value);
-        }
-        if (std::holds_alternative<glp::minimum_lod>       (value))
-        {
-            const auto& v = std::get<glp::minimum_lod>(value);
-            sampler_parameter_fv(sampler, glf::Sampler::Parameter::MinimumLOD, v.value);
-        }
+            [sampler](glp::compare_mode         _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareMode        , gl::to_underlying(_.value)); }, 
+            [sampler](glp::compare_function     _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareFunction    , gl::to_underlying(_.value)); }, 
+            [sampler](glp::magnification_filter _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MagnificationFilter, gl::to_underlying(_.value)); }, 
+            [sampler](glp::minification_filter  _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MinificationFilter , gl::to_underlying(_.value)); }, 
+            [sampler](glp::wrapping_s           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingS          , gl::to_underlying(_.value)); }, 
+            [sampler](glp::wrapping_t           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingT          , gl::to_underlying(_.value)); }, 
+            [sampler](glp::wrapping_r           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingR          , gl::to_underlying(_.value)); }, 
+            [sampler](glp::border_color         _) 
+                {
+                    const auto overload = gl::overload
+                    {
+                        [sampler](std::array<gl::int32_t  , 4u> _) { glSamplerParameterIiv (gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
+                        [sampler](std::array<gl::uint32_t , 4u> _) { glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
+                        [sampler](std::array<gl::float32_t, 4u> _) { glSamplerParameterfv  (gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
+                    };
+
+                    std::visit(overload, _.value);
+                }, 
+            [sampler](glp::maximum_lod          _) { sampler_parameter_fv (sampler, glf::Sampler::Parameter::MaximumLOD         ,                   _.value ); }, 
+            [sampler](glp::minimum_lod          _) { sampler_parameter_fv (sampler, glf::Sampler::Parameter::MinimumLOD         ,                   _.value ); }, 
+        };
+
+        std::visit(overload, parameter);
     }
     static auto pixel_store                             (glf::PackingMode mode, gl::int32_t parameter)
     {

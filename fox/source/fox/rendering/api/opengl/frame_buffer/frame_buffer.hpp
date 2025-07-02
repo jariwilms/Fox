@@ -23,25 +23,25 @@ namespace fox::gfx::api::gl
             : dimensions_{ dimensions }
         {
             handle_ = gl::create_frame_buffer();
-			auto colorIndex = gl::uint32_t{ 0u };
+            auto colorIndex = gl::uint32_t{ 0u };
 
-            const auto& map_texture_attachment       = [&colorIndex](api::Texture::Format      format)
+            const static auto map_texture_attachment       = [](api::Texture::Format      format, gl::uint32_t& colorIndex)
                 {
                     switch (format)
                     {
                         case api::Texture::Format::D16_UNORM:
-			            case api::Texture::Format::D24_UNORM:
-			            case api::Texture::Format::D32_FLOAT:         return api::FrameBuffer::Attachment::Depth;
+                        case api::Texture::Format::D24_UNORM:
+                        case api::Texture::Format::D32_FLOAT:         return api::FrameBuffer::Attachment::Depth;
 
-			            case api::Texture::Format::D24_UNORM_S8_UINT:
-			            case api::Texture::Format::D32_FLOAT_S8_UINT: return api::FrameBuffer::Attachment::DepthStencil;
+                        case api::Texture::Format::D24_UNORM_S8_UINT:
+                        case api::Texture::Format::D32_FLOAT_S8_UINT: return api::FrameBuffer::Attachment::DepthStencil;
 
-			            case api::Texture::Format::S8_UINT:           return api::FrameBuffer::Attachment::Stencil;
+                        case api::Texture::Format::S8_UINT:           return api::FrameBuffer::Attachment::Stencil;
 
-			            default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
+                        default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
                     }
                 };
-            const auto& map_cubemap_attachment       = [&colorIndex](api::Cubemap::Format      format)
+            const static auto map_cubemap_attachment       = [](api::Cubemap::Format      format, gl::uint32_t& colorIndex)
             {
                 switch (format)
                 {
@@ -57,7 +57,7 @@ namespace fox::gfx::api::gl
                     default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
                 }
             };
-            const auto& map_render_buffer_attachment = [&colorIndex](api::RenderBuffer::Format format)
+            const static auto map_render_buffer_attachment = [](api::RenderBuffer::Format format, gl::uint32_t& colorIndex)
             {
                 switch (format)
                 {
@@ -77,28 +77,32 @@ namespace fox::gfx::api::gl
             for (const auto& specification : specifications)
             {
                 const auto& [identifier, format] = specification;
-
-                if (std::holds_alternative<api::Texture::Format>     (format))
+                const auto  overload             = gl::overload
                 {
-                    auto texture    = std::make_shared<gl::Texture2D>(std::get<api::Texture::Format>(format), api::Texture::Filter::None, api::Texture::Wrapping::Repeat, dimensions_);
-                    auto attachment = map_texture_attachment(texture->format());
-                    
-                    attach(identifier, attachment, texture);
-                }
-                if (std::holds_alternative<api::Cubemap::Format>     (format))
-                {
-                    auto cubemap    = std::make_shared<gl::Cubemap>(std::get<api::Cubemap::Format>(format), api::Texture::Filter::None, api::Texture::Wrapping::Repeat, dimensions_);
-                    auto attachment = map_cubemap_attachment(cubemap->format());
+                    [this, &identifier, &colorIndex](api::Texture     ::Format format)
+                    {
+                        auto texture    = std::make_shared<gl::Texture2D>(format, api::Texture::Filter::None, api::Texture::Wrapping::Repeat, dimensions_);
+                        auto attachment = map_texture_attachment(texture->format(), colorIndex);
 
-                    attach(identifier, attachment, cubemap);
-                }
-                if (std::holds_alternative<api::RenderBuffer::Format>(format))
-                {
-                    auto renderBuffer = std::make_shared<gl::RenderBuffer>(std::get<api::RenderBuffer::Format>(format), dimensions_);
-                    auto attachment   = map_render_buffer_attachment(renderBuffer->format());
+                        attach(identifier, attachment, texture);
+                    }, 
+                    [this, &identifier, &colorIndex](api::Cubemap     ::Format format)
+                    {
+                        auto cubemap    = std::make_shared<gl::Cubemap>(format, api::Cubemap::Filter::None, api::Cubemap::Wrapping::Repeat, dimensions_);
+                        auto attachment = map_cubemap_attachment(cubemap->format(), colorIndex);
 
-                    attach(identifier, attachment, renderBuffer);
-                }
+                        attach(identifier, attachment, cubemap);
+                    }, 
+                    [this, &identifier, &colorIndex](api::RenderBuffer::Format format)
+                    {
+                        auto renderBuffer = std::make_shared<gl::RenderBuffer>(format, dimensions_);
+                        auto attachment   = map_render_buffer_attachment(renderBuffer->format(), colorIndex);
+
+                        attach(identifier, attachment, renderBuffer);
+                    }, 
+                };
+
+                std::visit(overload, format);
             }
             
             if (colorIndex == 0u)
@@ -111,8 +115,8 @@ namespace fox::gfx::api::gl
                 std::vector<glf::FrameBuffer::Source> colorBufferSources(colorIndex);
                 for (auto i : std::views::iota(0u, colorIndex))
                 {
-					colorBufferSources.at(i) = glf::FrameBuffer::Source::Color0 + i;
-				}
+                    colorBufferSources.at(i) = glf::FrameBuffer::Source::Color0 + i;
+                }
 
                 gl::frame_buffer_draw_buffers(handle_, colorBufferSources);
             }

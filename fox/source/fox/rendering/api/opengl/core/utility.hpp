@@ -31,4 +31,9 @@ namespace fox::gfx::api::gl
 
         return static_cast<std::make_signed<T>::type>(result);
     }
+
+
+
+    template<typename... Ts>
+    struct overload : Ts... { using Ts::operator()...; };
 }
