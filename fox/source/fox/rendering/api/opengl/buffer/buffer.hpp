@@ -314,9 +314,9 @@ namespace fox::gfx::api::gl
             
             return std::weak_ptr<std::span<T>>(data_);
         }
-        auto is_mapped() const
+        auto is_mapped() const -> gl::bool_t
         {
-            return static_cast<gl::bool_t>(data_.operator bool());
+            return data_.operator bool();
         }
         auto unmap    ()
         {
