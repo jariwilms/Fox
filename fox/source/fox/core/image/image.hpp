@@ -7,8 +7,6 @@
 #include <fox/config/config.hpp>
 #include <fox/core/types/common/common.hpp>
 #include <fox/core/types/math/linear_algebra/vector.hpp>
-#include <fox/core/utility/utility.hpp>
-#include <fox/math/constants/constants.hpp>
 
 namespace fox
 {
@@ -65,7 +63,7 @@ namespace fox
                     stbi_write_bmp_to_func(
                         vendor::stb::write_function<fox::byte_t>, 
                         &vector, dimensions.x, dimensions.y, 
-                        fox::to_underlying(image.channels()), 
+                        std::to_underlying(image.channels()), 
                         image.data().data());
 
                     return vector;
@@ -78,7 +76,7 @@ namespace fox
                     stbi_write_jpg_to_func(
                         vendor::stb::write_function<fox::byte_t>, 
                         &vector, dimensions.x, dimensions.y, 
-                        fox::to_underlying(image.channels()), 
+                        std::to_underlying(image.channels()), 
                         image.data().data(), fox::int32_t{ 100u });
 
                     return vector;
@@ -91,9 +89,9 @@ namespace fox
                     stbi_write_png_to_func(
                         vendor::stb::write_function<fox::byte_t>, 
                         &vector, dimensions.x, dimensions.y, 
-                        fox::to_underlying(image.channels()), 
+                        std::to_underlying(image.channels()), 
                         image.data().data(), 
-                        fox::to_underlying(image.channels()) * dimensions.x);
+                        std::to_underlying(image.channels()) * dimensions.x);
 
                     return vector;
                 };
@@ -105,7 +103,7 @@ namespace fox
                     stbi_write_hdr_to_func(
                         vendor::stb::write_function<fox::float32_t>, 
                         &vector, dimensions.x, dimensions.y, 
-                        fox::to_underlying(image.channels()), 
+                        std::to_underlying(image.channels()), 
                         reinterpret_cast<const fox::float32_t*>(image.data().data()));
 
                     return vector;
@@ -198,11 +196,11 @@ namespace fox
                   auto  iDimensions = fox::Vector2i{};
             
             stbi_set_flip_vertically_on_load(cfg::FLIP_IMAGES);
-            if (type == Type::Byte8  ) iPointer = stbi_load_from_memory   (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
-            if (type == Type::Byte16 ) iPointer = stbi_load_16_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
-            if (type == Type::Float32) iPointer = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
+            if (type == Type::Byte8  ) iPointer = stbi_load_from_memory   (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, std::to_underlying(channels));
+            if (type == Type::Byte16 ) iPointer = stbi_load_16_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, std::to_underlying(channels));
+            if (type == Type::Float32) iPointer = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, std::to_underlying(channels));
 
-            const auto& bpp         = fox::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
+            const auto& bpp         = std::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
                   auto  span        = std::span{ reinterpret_cast<const fox::byte_t*>(iPointer), bpp * iDimensions.x * iDimensions.y };
                   auto  vector      = std::vector<fox::byte_t>{ std::from_range, span };
 
