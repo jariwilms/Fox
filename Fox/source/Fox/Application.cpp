@@ -168,8 +168,8 @@ namespace fox
             {
                 static fox::Vector3f rotation{};
 
-                auto       & ct  = observer.get_component<ecs::TransformComponent>().get();
-                auto  const& cpr = input::cursor_position_delta() / 10.0f;
+                      auto& ct  = observer.get_component<ecs::TransformComponent>().get();
+                const auto& cpr = input::cursor_position_delta() / 10.0f;
 
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
