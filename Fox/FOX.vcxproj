@@ -105,7 +105,6 @@
     <ClInclude Include="source\fox\core\image\image.hpp" />
     <ClInclude Include="source\fox\core\json\json.hpp" />
     <ClInclude Include="source\fox\core\memory\adapter\no_init_adapter.hpp" />
-    <ClInclude Include="source\fox\core\meta\concepts.hpp" />
     <ClInclude Include="source\fox\core\time\time.hpp" />
     <ClInclude Include="source\fox\core\transform\transform.hpp" />
     <ClInclude Include="source\fox\core\types\alias\alias.hpp" />
