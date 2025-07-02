@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdafx.hpp>
+
 #include <glad/gl.h>
 #include <glfw/glfw3.h>
 
@@ -8,32 +10,32 @@
 
 namespace fox::gfx::api::gl
 {
-    using void_t     = GLvoid;
-    using bool_t     = GLboolean;
-    using boolean_t  = GLboolean;
-    using char_t     = GLchar;
-    using byte_t     = GLubyte;
+    using void_t     = GLvoid      ;
+    using bool_t     = bool        ;
+    using boolean_t  = GLboolean   ;
+    using char_t     = GLchar      ;
+    using byte_t     = GLubyte     ;
 
-    using int8_t     = GLbyte;
-    using uint8_t    = GLubyte;
-    using int16_t    = GLshort;
-    using uint16_t   = GLushort;
-    using int32_t    = GLint;
-    using uint32_t   = GLuint;
-    using int64_t    = GLint64;
-    using uint64_t   = GLuint64;
-    using float16_t  = GLhalf;
-    using float32_t  = GLfloat;
-    using float64_t  = GLdouble;
+    using int8_t     = GLbyte      ;
+    using uint8_t    = GLubyte     ;
+    using int16_t    = GLshort     ;
+    using uint16_t   = GLushort    ;
+    using int32_t    = GLint       ;
+    using uint32_t   = GLuint      ;
+    using int64_t    = GLint64     ;
+    using uint64_t   = GLuint64    ;
+    using float16_t  = GLhalf      ;
+    using float32_t  = GLfloat     ;
+    using float64_t  = GLdouble    ;
 
-    using enum_t     = GLenum;       //Enumerated constant
-    using sizei_t    = GLsizei;      //Sizes and dimensions (may not be negative)
-    using size_t     = GLsizeiptr;   //Size in bytes
-    using offset_t   = GLintptr;     //Offset in bytes
+    using enum_t     = GLenum      ; //Enumerated constant
+    using sizei_t    = GLsizei     ; //Sizes and dimensions (may not be negative)
+    using size_t     = GLsizeiptr  ; //Size in bytes
+    using offset_t   = GLintptr    ; //Offset in bytes
     using count_t    = gl::uint32_t; //Number of elements
     using index_t    = gl::uint32_t; //Number of elements offset
-    using sync_t     = GLsync;       //Synchronization primitive
-    using bitfield_t = GLbitfield;   //Bitwise combination of flags
+    using sync_t     = GLsync      ; //Synchronization primitive
+    using bitfield_t = GLbitfield  ; //Bitwise combination of flags
     using time_t     = gl::uint64_t; //Duration in nanoseconds
 
     enum : gl::bool_t
@@ -52,20 +54,9 @@ namespace fox::gfx::api::gl
     class Object
     {
     public:
-        Object(Object&& other) noexcept
-        {
-            handle_ = std::exchange(other.handle_, gl::NullObject);
-        }
-
-        auto handle() const
+        auto handle() const -> gl::handle_t
         {
             return handle_;
-        }
-
-        Object& operator=(Object&& other) noexcept
-        {
-            if (this != &other) handle_ = std::exchange(other.handle_, handle_);
-            return *this;
         }
 
     protected:
@@ -82,10 +73,10 @@ namespace fox::gfx::api::gl
     template<typename T, gl::uint32_t N> using Matrix     = glm::mat<N, N, T>;
                                          using Quaternion = glm::quat;
 
-    using Vector1b = gl::Vector<gl::bool_t,    1u>;
-    using Vector2b = gl::Vector<gl::bool_t,    2u>;
-    using Vector3b = gl::Vector<gl::bool_t,    3u>;
-    using Vector4b = gl::Vector<gl::bool_t,    4u>;
+    using Vector1b = gl::Vector<gl::boolean_t, 1u>;
+    using Vector2b = gl::Vector<gl::boolean_t, 2u>;
+    using Vector3b = gl::Vector<gl::boolean_t, 3u>;
+    using Vector4b = gl::Vector<gl::boolean_t, 4u>;
 
     using Vector1i = gl::Vector<gl::int32_t,   1u>;
     using Vector2i = gl::Vector<gl::int32_t,   2u>;
@@ -121,7 +112,7 @@ namespace fox::gfx::api::gl
         region_t(const gl::Vector<T, N>& extent = {}, const gl::Vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
-        auto operator==(const region_t&) const -> bool = default;
+        auto operator==(const region_t&) const -> gl::bool_t = default;
 
         gl::Vector<T, N> extent{};
         gl::Vector<T, N> origin{};
@@ -131,7 +122,7 @@ namespace fox::gfx::api::gl
         range_t(gl::count_t count = {}, gl::index_t index = {})
             : count{ count }, index{ index } {}
 
-        auto operator==(const range_t&) const -> bool = default;
+        auto operator==(const range_t&) const -> gl::bool_t = default;
 
         gl::count_t count{};
         gl::index_t index{};
@@ -141,7 +132,7 @@ namespace fox::gfx::api::gl
         byterange_t(gl::size_t size = {}, gl::offset_t offset = {})
             : size{ size }, offset{ offset } {}
 
-        auto operator==(const byterange_t&) const -> bool = default;
+        auto operator==(const byterange_t&) const -> gl::bool_t = default;
 
         gl::size_t   size{};
         gl::offset_t offset{};

@@ -32,11 +32,11 @@ namespace fox::gfx::api::gl
 
     //Chapter 22 - Context State Queries
     template<glf::Data D>    requires (not gl::indexed_data_c<D>)
-    static auto get_value                               ()
+    static auto get_value                               () -> auto
     {
-        const auto& get_boolean_v            = [](glf::Data data)
+        const auto& get_boolean_v            = [](glf::Data data) -> gl::bool_t
             {
-                gl::bool_t value{};
+                gl::boolean_t value{};
                 glGetBooleanv(gl::to_underlying(data), &value);
 
                 return value;
@@ -434,14 +434,14 @@ namespace fox::gfx::api::gl
         glDisablei(gl::to_underlying(F), index);
     }
     template<glf::Feature F>
-    static auto is_enabled                              ()
+    static auto is_enabled                              () -> gl::bool_t
     {
-        return static_cast<gl::bool_t>(glIsEnabled(gl::to_underlying(F)));
+        return glIsEnabled(gl::to_underlying(F));
     }
     template<glf::Feature F> requires (gl::indexed_feature_c<F>)
-    static auto is_enabled_index                        (gl::index_t index)
+    static auto is_enabled_index                        (gl::index_t index) -> gl::bool_t
     {
-        return static_cast<gl::bool_t>(glIsEnabledi(gl::to_underlying(F)));
+        return glIsEnabledi(gl::to_underlying(F));
     }
     template<glf::Callback::Pointer P>
     static auto get_pointer_value                       ()
