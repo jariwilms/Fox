@@ -20,7 +20,7 @@ namespace fox::ecs
 		{
 			return owner_;
 		}
-		auto owner() const -> ecs::Entity const&
+		auto owner() const -> const ecs::Entity&
 		{
 			return owner_;
 		}
@@ -29,7 +29,7 @@ namespace fox::ecs
 		{
 			return value_;
 		}
-		auto get() const -> T const&
+		auto get() const -> const T&
 		{
 			return value_;
 		}
