@@ -9,14 +9,13 @@
 
 namespace vendor::stb
 {
-    using context_t = std::vector<fox::byte_t>;
-
+    template<typename T>
     static void write_function(fox::void_t* context, fox::void_t* data, fox::int32_t size)
     {
-        auto* vector  = reinterpret_cast<std::vector<fox::byte_t>*>(context);
-        auto* pointer = reinterpret_cast<const fox::byte_t*>(data);
-        auto  span    = std::span<const fox::byte_t>{ pointer, pointer + size };
+              auto* ctx     = reinterpret_cast<std::vector<T>*>(context);
+        const auto* pointer = reinterpret_cast<const T*>(data);
+              auto  span    = std::span{ pointer, static_cast<fox::size_t>(size) };
 
-        vector->append_range(span);
+        ctx->append_range(span);
     }
 }
