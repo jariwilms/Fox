@@ -48,10 +48,9 @@ namespace fox
             HDR, 
         };
 
-        Image(Format format, Channels channels, const fox::Vector2u& dimensions, std::span  <const fox::byte_t>   data)
-            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::from_range, data } {}
-        Image(Format format, Channels channels, const fox::Vector2u& dimensions, std::vector<      fox::byte_t>&& data)
-            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::move(data) } {}
+        template<std::ranges::range R>
+        Image(Format format, Channels channels, const fox::Vector2u& dimensions, R&& range)
+            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::from_range, range } {}
 
         template<Extension E>
         static auto encode(const fox::Image& image) -> auto
