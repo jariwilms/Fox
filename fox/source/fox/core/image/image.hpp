@@ -49,11 +49,12 @@ namespace fox
         };
 
         Image(Format format, Channels channels, const fox::Vector2u& dimensions, std::span  <const fox::byte_t>   data)
-            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ data.begin(), data.end() } {}
+            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::from_range, data } {}
         Image(Format format, Channels channels, const fox::Vector2u& dimensions, std::vector<      fox::byte_t>&& data)
             : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::move(data) } {}
 
-        static auto encode(fox::Image const& image, Extension extension) -> std::vector<fox::byte_t>
+        template<Extension E>
+        static auto encode(const fox::Image& image) -> auto
         {
             stbi_flip_vertically_on_write(cfg::FLIP_IMAGES);
 
@@ -63,10 +64,12 @@ namespace fox
                     const auto& dimensions = image.dimensions();
 
                     stbi_write_bmp_to_func(
-                        vendor::stb::write_function, 
+                        vendor::stb::write_function<fox::byte_t>, 
                         &vector, dimensions.x, dimensions.y, 
                         fox::to_underlying(image.channels()), 
                         image.data().data());
+
+                    return vector;
                 };
             const auto& write_jpeg = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
@@ -74,10 +77,12 @@ namespace fox
                     const auto& dimensions = image.dimensions();
 
                     stbi_write_jpg_to_func(
-                        vendor::stb::write_function, 
+                        vendor::stb::write_function<fox::byte_t>, 
                         &vector, dimensions.x, dimensions.y, 
                         fox::to_underlying(image.channels()), 
                         image.data().data(), fox::int32_t{ 100u });
+
+                    return vector;
                 };
             const auto& write_png  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
@@ -85,7 +90,7 @@ namespace fox
                     const auto& dimensions = image.dimensions();
 
                     stbi_write_png_to_func(
-                        vendor::stb::write_function, 
+                        vendor::stb::write_function<fox::byte_t>, 
                         &vector, dimensions.x, dimensions.y, 
                         fox::to_underlying(image.channels()), 
                         image.data().data(), 
@@ -93,34 +98,32 @@ namespace fox
 
                     return vector;
                 };
-            const auto& write_hdr  = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            const auto& write_hdr  = [](const fox::Image& image) -> std::vector<fox::float32_t>
                 {
-                    //      auto  vector     = std::vector<fox::float32_t>{};
-                    //const auto& dimensions = image.dimensions();
+                          auto  vector     = std::vector<fox::float32_t>{};
+                    const auto& dimensions = image.dimensions();
 
-                    //stbi_write_hdr_to_func(
-                    //    vendor::stb::write_function, 
-                    //    &vector, dimensions.x, dimensions.y, 
-                    //    fox::to_underlying(image.channels()), 
-                    //    reinterpret_cast<const fox::float32_t*>(image.data().data()));
+                    stbi_write_hdr_to_func(
+                        vendor::stb::write_function<fox::float32_t>, 
+                        &vector, dimensions.x, dimensions.y, 
+                        fox::to_underlying(image.channels()), 
+                        reinterpret_cast<const fox::float32_t*>(image.data().data()));
 
-                    return {};
+                    return vector;
                 };
 
-            switch (extension)
-            {
-                case Extension::BMP : return std::invoke(write_bmp , image);
-                case Extension::JPEG: return std::invoke(write_jpeg, image);
-                case Extension::PNG : return std::invoke(write_png , image);
-                case Extension::HDR : return std::invoke(write_hdr , image);
-            }
+            if constexpr (E == Extension::BMP ) return std::invoke(write_bmp , image);
+            if constexpr (E == Extension::JPEG) return std::invoke(write_jpeg, image);
+            if constexpr (E == Extension::PNG ) return std::invoke(write_png , image);
+            if constexpr (E == Extension::HDR ) return std::invoke(write_hdr , image);
         }
         static auto decode(Format format, std::span<const fox::byte_t> data) -> fox::Image
         {
             enum class Type
             {
-                Byte,
-                Float,
+                Byte8, 
+                Byte16, 
+                Float32,
             };
 
             const auto& type        = std::invoke([](Format format)
@@ -130,17 +133,17 @@ namespace fox
                         case Format::R8:
                         case Format::RG8:
                         case Format::RGB8:
-                        case Format::RGBA8:
+                        case Format::RGBA8:        return Type::Byte8;
 
                         case Format::R16:
                         case Format::RG16:
                         case Format::RGB16:
-                        case Format::RGBA16:       return Type::Byte;
+                        case Format::RGBA16:       return Type::Byte16;
 
                         case Format::RGB16_FLOAT:
                         case Format::RGBA16_FLOAT:
                         case Format::RGB32_FLOAT:
-                        case Format::RGBA32_FLOAT: return Type::Float;
+                        case Format::RGBA32_FLOAT: return Type::Float32;
                         
                         default: throw std::invalid_argument{ "Invalid format!" };
                     };
@@ -196,18 +199,17 @@ namespace fox
                   auto  iDimensions = fox::Vector2i{};
             
             stbi_set_flip_vertically_on_load(cfg::FLIP_IMAGES);
-            if (type == Type::Byte  and bpc ==  8u) iPointer = stbi_load_from_memory   (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
-            if (type == Type::Byte  and bpc == 16u) iPointer = stbi_load_16_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
-            if (type == Type::Float               ) iPointer = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
+            if (type == Type::Byte8  ) iPointer = stbi_load_from_memory   (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
+            if (type == Type::Byte16 ) iPointer = stbi_load_16_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
+            if (type == Type::Float32) iPointer = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, fox::to_underlying(channels));
 
-                  auto* pointer       = reinterpret_cast<const fox::byte_t*>(iPointer);
-            const auto& bytesPerPixel = fox::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
-            const auto& totalSize     = bytesPerPixel * iDimensions.x * iDimensions.y;
+            const auto& bpp         = fox::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
+                  auto  span        = std::span{ reinterpret_cast<const fox::byte_t*>(iPointer), bpp * iDimensions.x * iDimensions.y };
+                  auto  vector      = std::vector<fox::byte_t>{ std::from_range, span };
 
-            std::vector<fox::byte_t> v{ pointer, pointer + totalSize };
             stbi_image_free(iPointer);
 
-            return fox::Image{ format, channels, static_cast<fox::Vector2u>(iDimensions), std::move(v) };
+            return fox::Image{ format, channels, static_cast<fox::Vector2u>(iDimensions), std::move(vector) };
         }
 
         auto format    () const -> Format
@@ -222,11 +224,7 @@ namespace fox
         {
             return dimensions_;
         }
-        auto data      () -> std::span<fox::byte_t>
-        {
-            return data_;
-        }
-        auto data      () const -> std::span<const fox::byte_t> 
+        auto data      () const -> std::span<const fox::byte_t>
         {
             return data_;
         }
