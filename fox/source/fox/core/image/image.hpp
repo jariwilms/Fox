@@ -48,7 +48,7 @@ namespace fox
 
         template<std::ranges::range R>
         Image(Format format, Channels channels, const fox::Vector2u& dimensions, R&& range)
-            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::from_range, range } {}
+            : format_{ format }, channels_{ channels }, dimensions_{ dimensions }, data_{ std::from_range, std::forward<R>(range) } {}
 
         template<Extension E>
         static auto encode(const fox::Image& image) -> auto
@@ -123,7 +123,7 @@ namespace fox
                 Float32,
             };
 
-            const auto& type        = std::invoke([](Format format)
+            const auto  type        = std::invoke([](Format format)
                 {
                     switch (format)
                     {
@@ -145,7 +145,7 @@ namespace fox
                         default: throw std::invalid_argument{ "Invalid format!" };
                     };
                 }, format);
-            const auto& channels    = std::invoke([](Format format)
+            const auto  channels    = std::invoke([](Format format)
                 {
                     switch (format)
                     {
@@ -168,7 +168,7 @@ namespace fox
                         default: throw std::invalid_argument{ "Invalid format!" };
                     };
                 }, format);
-            const auto& bpc         = std::invoke([](Format format)
+            const auto  bpc         = std::invoke([](Format format)
                 {
                     switch (format)
                     {
@@ -200,7 +200,7 @@ namespace fox
             if (type == Type::Byte16 ) iPointer = stbi_load_16_from_memory(data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, std::to_underlying(channels));
             if (type == Type::Float32) iPointer = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, std::to_underlying(channels));
 
-            const auto& bpp         = std::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
+                  auto  bpp         = std::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
                   auto  span        = std::span{ reinterpret_cast<const fox::byte_t*>(iPointer), bpp * iDimensions.x * iDimensions.y };
                   auto  vector      = std::vector<fox::byte_t>{ std::from_range, span };
 
