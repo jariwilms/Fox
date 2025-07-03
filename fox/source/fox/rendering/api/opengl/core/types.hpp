@@ -11,8 +11,8 @@
 namespace fox::gfx::api::gl
 {
     using void_t     = GLvoid      ;
-    using bool_t     = bool        ;
-    using boolean_t  = GLboolean   ;
+    using bool_t     = bool        ; //Fundamental
+    using boolean_t  = GLboolean   ; //Unsigned char
     using char_t     = GLchar      ;
     using byte_t     = GLubyte     ;
 
@@ -37,6 +37,8 @@ namespace fox::gfx::api::gl
     using sync_t     = GLsync      ; //Synchronization primitive
     using bitfield_t = GLbitfield  ; //Bitwise combination of flags
     using time_t     = gl::uint64_t; //Duration in nanoseconds
+
+    using pointer_t  = gl::void_t* ; //Generic pointer type
 
     enum : gl::bool_t
     {
@@ -148,15 +150,6 @@ namespace fox::gfx::api::gl
 
 
 
-
-    struct indirect_command_t
-    {
-        gl::count_t  count;
-        gl::count_t  instances;
-        gl::index_t  index;
-        gl::int32_t  baseVertex;
-        gl::uint32_t baseInstance;
-    };
 
     static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const void*) {}
     using debug_callback_t = decltype(_debug_callback);

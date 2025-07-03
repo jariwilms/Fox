@@ -1479,11 +1479,6 @@ namespace fox::gfx::api::glf
             D    = GL_DEPTH_COMPONENT, 
             S    = GL_STENCIL_INDEX, 
         };
-        enum class CompareMode : gl::enum_t
-        {
-            None      = GL_NONE, 
-            Reference = GL_COMPARE_REF_TO_TEXTURE, 
-        };
         enum class CompareFunction : gl::enum_t
         {
             Always       = GL_ALWAYS, 
@@ -1497,6 +1492,11 @@ namespace fox::gfx::api::glf
 
             Greater      = GL_GREATER, 
             GreaterEqual = GL_GEQUAL, 
+        };
+        enum class CompareMode : gl::enum_t
+        {
+            None      = GL_NONE, 
+            Reference = GL_COMPARE_REF_TO_TEXTURE, 
         };
         enum class CompressedFormat : gl::enum_t
         {

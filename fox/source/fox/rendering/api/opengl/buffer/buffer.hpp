@@ -17,20 +17,20 @@ namespace fox::gfx::api::gl
         {
             handle_ = gl::create_buffer();
             
-            gl::buffer_storage(
+            gl::buffer_storage<T>(
                 handle_,
                 glf::Buffer::StorageFlags::DynamicStorage |
                 glf::Buffer::StorageFlags::ReadWrite      |
                 glf::Buffer::StorageFlags::Persistent     |
                 glf::Buffer::StorageFlags::Coherent       ,
-                size_);
+                count);
         }
         explicit Buffer(std::span<const T> data)
             : size_{ static_cast<gl::size_t>(data.size_bytes()) }
         {
             handle_ = gl::create_buffer();
             
-            gl::buffer_storage(
+            gl::buffer_storage<T>(
                 handle_, 
                 glf::Buffer::StorageFlags::DynamicStorage | 
                 glf::Buffer::StorageFlags::ReadWrite      | 
@@ -62,14 +62,14 @@ namespace fox::gfx::api::gl
         {
             if (is_mapped()) unmap();
 
-            auto* ptr = gl::map_buffer_range<T>(
+            auto span = gl::map_buffer_range<T>(
                 handle_, 
                 glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
                 glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
                 glf::Buffer::Mapping::RangeAccessFlags::Coherent     ,
-                gl::byterange_t{ size() });
+                gl::range_t{ count() });
 
-            data_  = std::make_shared<std::span<T>>(ptr, count());
+            data_  = std::make_shared<std::span<T>>(span);
             range_ = count();
 
             return std::weak_ptr<std::span<T>>(data_);
@@ -78,18 +78,17 @@ namespace fox::gfx::api::gl
         {
             if (is_mapped()) unmap();
 
-            range_.count = std::min(range->count, count()               );
-            range_.index = std::min(range->index, count() - range->count);
+            range_ = gl::range_t{ std::min(range->count, count()), std::min(range->index, count() - range->count) };
 
-            auto* ptr = gl::map_buffer_range<T>(
+            auto span = gl::map_buffer_range<T>(
                 handle_,
                 glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
                 glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
                 glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
                 glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
-                gl::byterange_t{ static_cast<gl::size_t>(range_.count * sizeof(T)), static_cast<gl::offset_t>(range_.index * sizeof(T)) });
+                range_);
 
-            data_ = std::make_shared<std::span<T>>(ptr, range_.count);
+            data_ = std::make_shared<std::span<T>>(span);
             
             return std::weak_ptr<std::span<T>>(data_);
         }
@@ -191,7 +190,7 @@ namespace fox::gfx::api::gl
 
         void copy    (const T& data)
         {
-            gl::buffer_data(handle_, gl::offset_t{ 0u }, std::span<const T>{ &data, 1u });
+            gl::buffer_data(handle_, gl::count_t{ 0u }, std::span<const T>{ &data, 1u });
         }
         template<typename... T>
         void copy_sub(gl::offset_t offset, const std::tuple<T...>& data)
@@ -206,7 +205,7 @@ namespace fox::gfx::api::gl
                     ((std::memcpy(buffer.data() + offset, &args, sizeof(args)), offset += sizeof(args)), ...);
                 }, data);
 
-            gl::buffer_data(handle_, offset, fox::as_bytes(buffer));
+            gl::buffer_data<gl::byte_t>(handle_, static_cast<gl::count_t>(offset), gl::as_bytes(buffer));
         }
 
         auto size() const
@@ -283,14 +282,14 @@ namespace fox::gfx::api::gl
         {
             if (is_mapped()) unmap();
 
-            auto* ptr = gl::map_buffer_range<T>(
+            auto span = gl::map_buffer_range<T>(
                 handle_, 
                 glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
                 glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
                 glf::Buffer::Mapping::RangeAccessFlags::Coherent     ,
-                gl::byterange_t{ size() });
+                gl::range_t{ count() });
 
-            data_  = std::make_shared<std::span<T>>(ptr, count());
+            data_  = std::make_shared<std::span<T>>(span);
             range_ = count();
 
             return std::weak_ptr<std::span<T>>(data_);
@@ -299,18 +298,17 @@ namespace fox::gfx::api::gl
         {
             if (is_mapped()) unmap();
 
-            range_.count = std::min(range->count, count()               );
-            range_.index = std::min(range->index, count() - range->count);
+            range_ = gl::range_t{ std::min(range->count, count()), std::min(range->index, count() - range->count) };
 
-            auto* ptr = gl::map_buffer_range<T>(
+            auto span = gl::map_buffer_range<T>(
                 handle_,
                 glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
                 glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
                 glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
                 glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
-                gl::byterange_t{ static_cast<gl::size_t>(range_.count * sizeof(T)), static_cast<gl::offset_t>(range_.index * sizeof(T)) });
+                range_);
 
-            data_ = std::make_shared<std::span<T>>(ptr, range_.count);
+            data_ = std::make_shared<std::span<T>>(span);
             
             return std::weak_ptr<std::span<T>>(data_);
         }
