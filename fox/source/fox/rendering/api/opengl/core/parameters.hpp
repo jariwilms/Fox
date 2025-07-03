@@ -130,7 +130,7 @@ namespace fox::gfx::api::glp
 
     using dispatch_t          = std::variant<gl::Vector3u, gl::offset_t>;
     using texture_parameter_t = std::variant<
-                                    glp::compare_mode        , glp::compare_function, 
+                                    glp::compare_function    , glp::compare_mode, 
                                     glp::base_level          , glp::maximum_level, 
                                     glp::border_color        , 
                                     glp::depth_stencil_mode  , 

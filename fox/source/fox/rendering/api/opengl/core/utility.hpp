@@ -66,7 +66,7 @@ namespace fox::gfx::api::gl
     }
 
 
-    static void __todo()
+    static void todo()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
