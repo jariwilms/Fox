@@ -27,15 +27,24 @@ namespace fox
                     ((static_cast<T*>(nullptr))->*MEMBER_PTR)));
         }
 
-
+        template<template<typename> typename C, typename T>
+        static constexpr auto compare(const T& left, const T& right) -> fox::bool_t
+        {
+            return C<T>{}(left, right);
+        }
+        template<template<typename> typename C, typename T, typename U>
+        static constexpr auto compare(const T& left, const U& right) -> fox::bool_t
+        {
+            return C<void>{}(left, right);
+        }
 
         template<typename T, fox::size_t EXTENT = std::dynamic_extent>
-        auto as_bytes(std::span<const T, EXTENT> span)
+        static constexpr auto as_bytes(std::span<const T, EXTENT> span)
         {
             return std::span{ reinterpret_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
         }
         template<typename T>
-        auto as_bytes(const T& container)
+        static constexpr auto as_bytes(const T& container)
         {
             return as_bytes(std::span{ container });
         }
