@@ -24,29 +24,29 @@ namespace fox
 		True  = true,
 	};
 
-
+	
 
 	template<typename T> struct fundamental{};
 
-	template<> struct fundamental<         void     > { using type = fox::void_t   ; };
-	template<> struct fundamental<         bool     > { using type = fox::bool_t   ; };
-	template<> struct fundamental<         char     > { using type = fox::char_t   ; };
-	template<> struct fundamental<  signed char     > { using type = fox::int8_t   ; };
-	template<> struct fundamental<unsigned char     > { using type = fox::uint8_t  ; };
-	template<> struct fundamental<  signed short    > { using type = fox::int16_t  ; };
-	template<> struct fundamental<unsigned short    > { using type = fox::uint16_t ; };
-	template<> struct fundamental<  signed int      > { using type = fox::int32_t  ; };
-	template<> struct fundamental<unsigned int      > { using type = fox::uint32_t ; };
-	template<> struct fundamental<  signed long long> { using type = fox::int64_t  ; };
-	template<> struct fundamental<unsigned long long> { using type = fox::uint64_t ; };
-	template<> struct fundamental<         float    > { using type = fox::float32_t; };
-	template<> struct fundamental<         double   > { using type = fox::float64_t; };
+	template<> struct fox::fundamental<         void     > { using type = fox::void_t   ; };
+	template<> struct fox::fundamental<         bool     > { using type = fox::bool_t   ; };
+	template<> struct fox::fundamental<         char     > { using type = fox::char_t   ; };
+	template<> struct fox::fundamental<  signed char     > { using type = fox::int8_t   ; };
+	template<> struct fox::fundamental<unsigned char     > { using type = fox::uint8_t  ; };
+	template<> struct fox::fundamental<  signed short    > { using type = fox::int16_t  ; };
+	template<> struct fox::fundamental<unsigned short    > { using type = fox::uint16_t ; };
+	template<> struct fox::fundamental<  signed int      > { using type = fox::int32_t  ; };
+	template<> struct fox::fundamental<unsigned int      > { using type = fox::uint32_t ; };
+	template<> struct fox::fundamental<  signed long long> { using type = fox::int64_t  ; };
+	template<> struct fox::fundamental<unsigned long long> { using type = fox::uint64_t ; };
+	template<> struct fox::fundamental<         float    > { using type = fox::float32_t; };
+	template<> struct fox::fundamental<         double   > { using type = fox::float64_t; };
 
 	template<typename T>
 	using fundamental_t = fox::fundamental<T>::type;
 
 	template<typename T>
-	static constexpr auto to_fundamental_type(T value) -> fundamental_t<T>
+	static constexpr auto to_fundamental_type(T value) -> fox::fundamental_t<T>
 	{
 		return value;
 	}
