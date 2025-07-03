@@ -1136,7 +1136,7 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 7 - Programs and Shaders
-    static auto create_shader                           (glf::Shader::Type type)
+    static auto create_shader                           (glf::Shader::Type type) -> gl::handle_t
     {
         return static_cast<gl::handle_t>(glCreateShader(gl::to_underlying(type)));
     }
@@ -1171,7 +1171,7 @@ namespace fox::gfx::api::gl
         const auto* cstr = entry.c_str();
         glSpecializeShader(gl::to_underlying(shader), cstr, N, indices.data(), values.data());
     }
-    static auto create_program                          ()
+    static auto create_program                          () -> gl::handle_t
     {
         return static_cast<gl::handle_t>(glCreateProgram());
     }
@@ -1196,24 +1196,20 @@ namespace fox::gfx::api::gl
     {
         glDeleteProgram(gl::to_underlying(program));
     }
-    static auto create_shader_program                   (glf::Shader::Type type, const std::string& source)
+    static auto create_shader_program                   (glf::Shader::Type type, const std::string& source) -> gl::handle_t
     {
         const auto* cstr = source.c_str();
         return static_cast<gl::handle_t>(glCreateShaderProgramv(gl::to_underlying(type), gl::sizei_t{ 1 }, &cstr));
     }
-    static auto create_program_pipeline                 ()
+    static auto create_program_pipeline                 () -> gl::handle_t
     {
-        gl::handle_t handle{};
-        glCreateProgramPipelines(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle));
-
-        return handle;
+        auto handle = gl::handle_t{};
+        return glCreateProgramPipelines(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle)), handle;
     }
-    static auto create_program_pipelines                (gl::count_t count)
+    static auto create_program_pipelines                (gl::count_t count) -> std::vector<gl::handle_t>
     {
-        std::vector<gl::handle_t> handles(count);
-        glCreateProgramPipelines(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
-
-        return handles;
+        auto handles = std::vector<gl::handle_t>(count);
+        return glCreateProgramPipelines(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data())), handles;
     }
     static void delete_program_pipeline                 (gl::handle_t pipeline)
     {
@@ -1231,16 +1227,11 @@ namespace fox::gfx::api::gl
     {
         glUseProgramStages(gl::to_underlying(pipeline), gl::to_underlying(stages), gl::to_underlying(program));
     }
-    static auto get_program_binary                      (gl::handle_t program)
+    static auto get_program_binary                      (gl::handle_t program) -> gl::binary_info
     {
-        const auto& binaryLength = gl::get_program_value<glf::Program::Parameter::BinaryLength>(program);
-        std::vector<gl::uint8_t> binary(binaryLength);
-        gl::enum_t               format{};
-
-        glGetProgramBinary(gl::to_underlying(program), binaryLength, nullptr, &format, binary.data());
-
-        struct result_t{ std::vector<gl::uint8_t> binary{}; gl::enum_t format{}; };
-        return result_t{ binary, format };
+        auto binaryLength = gl::get_program_value<glf::Program::Parameter::BinaryLength>(program);
+        auto info         = gl::binary_info{};
+        return glGetProgramBinary(gl::to_underlying(program), binaryLength, nullptr, &info.format, info.binary.data()), info;
     }
     static void program_binary                          (gl::handle_t program, gl::enum_t format, std::span<const gl::byte_t> binary)
     {
@@ -1258,19 +1249,15 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 8 - Textures and Samplers
-    static auto create_texture                          (glf::Texture::Target target)
+    static auto create_texture                          (glf::Texture::Target target) -> gl::handle_t
     {
-        gl::handle_t handle{};
-        glCreateTextures(gl::to_underlying(target), gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle));
-
-        return handle;
+        auto handle = gl::handle_t{};
+        return glCreateTextures(gl::to_underlying(target), gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle)), handle;
     }
-    static auto create_textures                         (glf::Texture::Target target, gl::count_t count)
+    static auto create_textures                         (glf::Texture::Target target, gl::count_t count) -> std::vector<gl::handle_t>
     {
-        std::vector<gl::handle_t> handles(count);
-        glCreateTextures(gl::to_underlying(target), static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
-
-        return handles;
+        auto handles = std::vector<gl::handle_t>(count);
+        return glCreateTextures(gl::to_underlying(target), static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data())), handles;
     }
     static void delete_texture                          (gl::handle_t texture)
     {
@@ -1284,19 +1271,15 @@ namespace fox::gfx::api::gl
     {
         glBindTextureUnit(gl::to_underlying(binding), gl::to_underlying(texture));
     }
-    static auto create_sampler                          ()
+    static auto create_sampler                          () -> gl::handle_t
     {
-        gl::handle_t handle{};
-        glCreateSamplers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle));
-
-        return handle;
+        auto handle = gl::handle_t{};
+        return glCreateSamplers(gl::sizei_t{ 1 }, gl::to_underlying_ptr(&handle)), handle;
     }
-    static auto create_samplers                         (gl::count_t count)
+    static auto create_samplers                         (gl::count_t count) -> std::vector<gl::handle_t>
     {
-        std::vector<gl::handle_t> handles(count);
-        glCreateSamplers(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data()));
-
-        return handles;
+        auto handles = std::vector<gl::handle_t>(count);
+        return glCreateSamplers(static_cast<gl::sizei_t>(handles.size()), gl::to_underlying_ptr(handles.data())), handles;
     }
     static void delete_sampler                          (gl::handle_t sampler)
     {
@@ -1314,100 +1297,101 @@ namespace fox::gfx::api::gl
     {
         glBindSamplers(range.index, range.count, gl::to_underlying_ptr(samplers.data()));
     }
-    static auto sampler_parameter                       (gl::handle_t sampler, glp::sampler_parameter_t parameter)
+    static auto sampler_parameter                       (gl::handle_t sampler, glp::sampler_parameter_t parameter) -> auto
     {
-        static const auto sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::int32_t   value)
+        auto sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::int32_t   value)
             {
                 glSamplerParameterIiv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
-        static const auto sampler_parameter_uiv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::uint32_t  value)
+        auto sampler_parameter_uiv = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::uint32_t  value)
             {
                 glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
-        static const auto sampler_parameter_fv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::float32_t value)
+        auto sampler_parameter_fv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::float32_t value)
             {
                 glSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value);
             };
 
         const auto overload = gl::overload
         {
-            [sampler](glp::compare_mode         _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareMode        , gl::to_underlying(_.value)); }, 
-            [sampler](glp::compare_function     _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareFunction    , gl::to_underlying(_.value)); }, 
-            [sampler](glp::magnification_filter _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MagnificationFilter, gl::to_underlying(_.value)); }, 
-            [sampler](glp::minification_filter  _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MinificationFilter , gl::to_underlying(_.value)); }, 
-            [sampler](glp::wrapping_s           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingS          , gl::to_underlying(_.value)); }, 
-            [sampler](glp::wrapping_t           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingT          , gl::to_underlying(_.value)); }, 
-            [sampler](glp::wrapping_r           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingR          , gl::to_underlying(_.value)); }, 
-            [sampler](glp::border_color         _) 
+            [=](glp::compare_mode         _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareMode        , gl::to_underlying(_.value)); }, 
+            [=](glp::compare_function     _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::CompareFunction    , gl::to_underlying(_.value)); }, 
+            [=](glp::magnification_filter _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MagnificationFilter, gl::to_underlying(_.value)); }, 
+            [=](glp::minification_filter  _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::MinificationFilter , gl::to_underlying(_.value)); }, 
+            [=](glp::wrapping_s           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingS          , gl::to_underlying(_.value)); }, 
+            [=](glp::wrapping_t           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingT          , gl::to_underlying(_.value)); }, 
+            [=](glp::wrapping_r           _) { sampler_parameter_uiv(sampler, glf::Sampler::Parameter::WrappingR          , gl::to_underlying(_.value)); }, 
+            [=](glp::border_color         _) 
                 {
                     const auto overload = gl::overload
                     {
-                        [sampler](std::array<gl::int32_t  , 4u> _) { glSamplerParameterIiv (gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
-                        [sampler](std::array<gl::uint32_t , 4u> _) { glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
-                        [sampler](std::array<gl::float32_t, 4u> _) { glSamplerParameterfv  (gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
+                        [=](std::array<gl::int32_t  , 4u> _) { glSamplerParameterIiv (gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
+                        [=](std::array<gl::uint32_t , 4u> _) { glSamplerParameterIuiv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
+                        [=](std::array<gl::float32_t, 4u> _) { glSamplerParameterfv  (gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), _.data()); }, 
                     };
 
                     std::visit(overload, _.value);
                 }, 
-            [sampler](glp::maximum_lod          _) { sampler_parameter_fv (sampler, glf::Sampler::Parameter::MaximumLOD         ,                   _.value ); }, 
-            [sampler](glp::minimum_lod          _) { sampler_parameter_fv (sampler, glf::Sampler::Parameter::MinimumLOD         ,                   _.value ); }, 
+            [=](glp::maximum_lod          _) { sampler_parameter_fv (sampler, glf::Sampler::Parameter::MaximumLOD         ,                   _.value ); }, 
+            [=](glp::minimum_lod          _) { sampler_parameter_fv (sampler, glf::Sampler::Parameter::MinimumLOD         ,                   _.value ); }, 
         };
 
         std::visit(overload, parameter);
     }
-    static auto pixel_store                             (glf::PackingMode mode, gl::int32_t parameter)
+    template<glf::PackingMode P>
+    static void pixel_store                             (gl::int32_t parameter)
     {
-        glPixelStorei(gl::to_underlying(mode), parameter);
+        glPixelStorei(gl::to_underlying(P), parameter);
     }
     static void texture_sub_image_1d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, gl::length_t region, std::span<const gl::byte_t> data)
     {
         glTextureSubImage1D(
-            gl::to_underlying(texture), static_cast<gl::int32_t>(level),
+            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level), 
             static_cast<gl::int32_t>(region.origin.x), 
             static_cast<gl::sizei_t>(region.extent.x), 
-            gl::to_underlying(format), gl::to_underlying(type),
+            gl::to_underlying       (format)         , gl::to_underlying(type)        , 
             data.data());
     }
     static void texture_sub_image_2d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, gl::area_t   region, std::span<const gl::byte_t> data)
     {
         glTextureSubImage2D(
-            gl::to_underlying(texture), level,
+            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level), 
             static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y), 
-            gl::to_underlying(format), gl::to_underlying(type),
+            gl::to_underlying       (format)         , gl::to_underlying(type), 
             data.data());
     }
     static void texture_sub_image_3d                    (gl::handle_t texture, glf::Texture::BaseFormat format, glf::PixelData::Type type, gl::uint32_t level, gl::volume_t region, std::span<const gl::byte_t> data)
     {
         glTextureSubImage3D(
-            gl::to_underlying(texture), level,
+            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
             static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), static_cast<gl::int32_t>(region.origin.z), 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y), static_cast<gl::sizei_t>(region.extent.z), 
-            gl::to_underlying(format), gl::to_underlying(type),
+            gl::to_underlying       (format)         , gl::to_underlying(type)                  , 
             data.data());
     }
     static void copy_texture_sub_image_1d               (gl::handle_t texture, gl::uint32_t level, gl::length_t region, const gl::Vector2u& coordinates)
     {
         glCopyTextureSubImage1D(
-            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)        ,
-            static_cast<gl::int32_t>(region.origin.x),
-            static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates.y),
+            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)        , 
+            static_cast<gl::int32_t>(region.origin.x), 
+            static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates.y), 
             static_cast<gl::sizei_t>(region.extent.x));
     }
     static void copy_texture_sub_image_2d               (gl::handle_t texture, gl::uint32_t level, gl::area_t   region, const gl::Vector2u& coordinates)
     {
         glCopyTextureSubImage2D(
-            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level), 
-            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y),
-            static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y),
+            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
+            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
+            static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y), 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
     static void copy_texture_sub_image_3d               (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, const gl::Vector2u& coordinates)
     {
         glCopyTextureSubImage3D(
-            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          ,
-            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), static_cast<gl::int32_t>(region.origin.z),
-            static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y),
+            gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
+            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), static_cast<gl::int32_t>(region.origin.z), 
+            static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y), 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
     static void compressed_texture_sub_image_1d         (gl::handle_t texture, glf::Texture::CompressedFormat format, gl::uint32_t level, gl::length_t region, std::span<const gl::byte_t> data)
@@ -1441,125 +1425,59 @@ namespace fox::gfx::api::gl
     {
         glTextureBuffer(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer));
     }
-    static void texture_buffer_range                    (gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, gl::byterange_t range)
+    template<typename T>
+    static void texture_buffer_range                    (gl::handle_t texture, gl::handle_t buffer, glf::Buffer::Format format, gl::range_t range)
     {
-        glTextureBufferRange(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer), range.offset, range.size);
+        auto byterange = gl::convert_range<T>(range);
+        glTextureBufferRange(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer), byterange.offset, byterange.size);
     }
-    static void texture_parameter                       (gl::handle_t texture, glp::texture_parameter_t value)
+    static void texture_parameter                       (gl::handle_t texture, glp::texture_parameter_t parameter)
     {
-        const auto& texture_parameter_iv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::int32_t   value)
+        auto texture_parameter_iv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::int32_t   value) -> gl::void_t
             {
                 glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(parameter), value);
             };
-        const auto& texture_parameter_uiv = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::uint32_t  value)
+        auto texture_parameter_uiv = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::uint32_t  value) -> gl::void_t
             {
                 glTextureParameteri(gl::to_underlying(texture), gl::to_underlying(parameter), static_cast<gl::int32_t>(value));
             };
-        const auto& texture_parameter_fv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::float32_t value)
+        auto texture_parameter_fv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::float32_t value) -> gl::void_t
             {
                 glTextureParameterfv(gl::to_underlying(texture), gl::to_underlying(parameter), &value);
             };
         
-        if (std::holds_alternative<glp::compare_mode>        (value))
+        auto overload = gl::overload
         {
-            const auto& v = std::get<glp::compare_mode>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::CompareMode, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::compare_function>    (value))
-        {
-            const auto& v = std::get<glp::compare_function>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::CompareFunction, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::base_level>          (value))
-        {
-            const auto& v = std::get<glp::base_level>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::BaseLevel, v.value);
-        }
-        if (std::holds_alternative<glp::maximum_level>       (value))
-        {
-            const auto& v = std::get<glp::maximum_level>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::MaximumLevel, v.value);
-        }
-        if (std::holds_alternative<glp::border_color>        (value))
-        {
-            const auto& v = std::get<glp::border_color>(value);
+            [=](glp::compare_function     _) { texture_parameter_uiv(texture, glf::Texture::Parameter::CompareMode        , gl::to_underlying(_.value)); }, 
+            [=](glp::compare_mode         _) { texture_parameter_uiv(texture, glf::Texture::Parameter::CompareFunction    , gl::to_underlying(_.value)); }, 
+            [=](glp::base_level           _) { texture_parameter_uiv(texture, glf::Texture::Parameter::BaseLevel          ,                   _.value ); }, 
+            [=](glp::maximum_level        _) { texture_parameter_uiv(texture, glf::Texture::Parameter::MaximumLevel       ,                   _.value ); }, 
+            [=](glp::border_color         _)
+            {
+                auto overload = gl::overload
+                {
+                    [=](std::array<gl::int32_t  , 4u> _) { glTextureParameterIiv (gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::BorderColor), _.data()); }, 
+                    [=](std::array<gl::uint32_t , 4u> _) { glTextureParameterIuiv(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::BorderColor), _.data()); }, 
+                    [=](std::array<gl::float32_t, 4u> _) { glTextureParameterfv  (gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::BorderColor), _.data()); }, 
+                };
 
-            if (std::holds_alternative<std::array<gl::int32_t, 4>>(v.value))
-            {
-                const auto& w = std::get<std::array<gl::int32_t, 4>>(v.value);
-                glTextureParameterIiv(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::BorderColor), w.data());
-            }
-            if (std::holds_alternative<std::array<gl::uint32_t, 4>>(v.value))
-            {
-                const auto& w = std::get<std::array<gl::uint32_t, 4>>(v.value);
-                glTextureParameterIuiv(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::BorderColor), w.data());
-            }
-            if (std::holds_alternative<std::array<gl::float32_t, 4>>(v.value))
-            {
-                const auto& w = std::get<std::array<gl::float32_t, 4>>(v.value);
-                glTextureParameterfv(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::BorderColor), w.data());
-            }
-        }
-        if (std::holds_alternative<glp::depth_stencil_mode>  (value))
-        {
-            const auto& v = std::get<glp::depth_stencil_mode>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::DepthStencilMode, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::magnification_filter>(value))
-        {
-            const auto& v = std::get<glp::magnification_filter>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::MagnificationFilter, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::minification_filter> (value))
-        {
-            const auto& v = std::get<glp::minification_filter>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::MinificationFilter, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::maximum_anisotropy>  (value))
-        {
-            const auto& v = std::get<glp::maximum_anisotropy>(value);
-            texture_parameter_fv(texture, glf::Texture::Parameter::MaximumAnisotropy, v.value);
-        }
-        if (std::holds_alternative<glp::wrapping_s>          (value))
-        {
-            const auto& v = std::get<glp::wrapping_s>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::WrappingS, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::wrapping_t>          (value))
-        {
-            const auto& v = std::get<glp::wrapping_t>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::WrappingT, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::wrapping_r>          (value))
-        {
-            const auto& v = std::get<glp::wrapping_r>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::WrappingR, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::swizzle_r>           (value))
-        {
-            const auto& v = std::get<glp::swizzle_r>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleRed, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::swizzle_g>           (value))
-        {
-            const auto& v = std::get<glp::swizzle_g>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleGreen, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::swizzle_b>           (value))
-        {
-            const auto& v = std::get<glp::swizzle_b>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleBlue, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::swizzle_a>           (value))
-        {
-            const auto& v = std::get<glp::swizzle_a>(value);
-            texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleAlpha, gl::to_underlying(v.value));
-        }
-        if (std::holds_alternative<glp::swizzle_rgba>        (value))
-        {
-            const auto& v = std::get<glp::swizzle_rgba>(value);
-            glTextureParameterIuiv(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::SwizzleRGBA), gl::to_underlying_ptr(v.value.data()));
-        }
+                std::visit(overload, _.value);
+            }, 
+            [=](glp::depth_stencil_mode   _) { texture_parameter_uiv(texture, glf::Texture::Parameter::DepthStencilMode   , gl::to_underlying(_.value)); }, 
+            [=](glp::magnification_filter _) { texture_parameter_uiv(texture, glf::Texture::Parameter::MagnificationFilter, gl::to_underlying(_.value)); }, 
+            [=](glp::minification_filter  _) { texture_parameter_uiv(texture, glf::Texture::Parameter::MinificationFilter , gl::to_underlying(_.value)); }, 
+            [=](glp::maximum_anisotropy   _) { texture_parameter_fv (texture, glf::Texture::Parameter::MaximumAnisotropy  ,                   _.value ); }, 
+            [=](glp::wrapping_s           _) { texture_parameter_uiv(texture, glf::Texture::Parameter::WrappingS          , gl::to_underlying(_.value)); }, 
+            [=](glp::wrapping_t           _) { texture_parameter_uiv(texture, glf::Texture::Parameter::WrappingT          , gl::to_underlying(_.value)); }, 
+            [=](glp::wrapping_r           _) { texture_parameter_uiv(texture, glf::Texture::Parameter::WrappingR          , gl::to_underlying(_.value)); }, 
+            [=](glp::swizzle_r            _) { texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleRed         , gl::to_underlying(_.value)); }, 
+            [=](glp::swizzle_g            _) { texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleGreen       , gl::to_underlying(_.value)); }, 
+            [=](glp::swizzle_b            _) { texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleBlue        , gl::to_underlying(_.value)); }, 
+            [=](glp::swizzle_a            _) { texture_parameter_uiv(texture, glf::Texture::Parameter::SwizzleAlpha       , gl::to_underlying(_.value)); }, 
+            [=](glp::swizzle_rgba         _) { glTextureParameterIuiv(gl::to_underlying(texture), gl::to_underlying(glf::Texture::Parameter::SwizzleRGBA), gl::to_underlying_ptr(_.value.data())); }, 
+        };
+
+        std::visit(overload, parameter);
     }
     static void generate_texture_mipmap                 (gl::handle_t texture)
     {
@@ -1606,7 +1524,7 @@ namespace fox::gfx::api::gl
     {
         glTextureStorage3DMultisample(
             gl::to_underlying       (texture)     , 
-            static_cast<gl::sizei_t>(samples)     , gl::to_underlying       (format), 
+            static_cast<gl::sizei_t>(samples)     , gl::to_underlying       (format)      , 
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y), static_cast<gl::sizei_t>(dimensions.z), 
             fixed);
     }
@@ -1614,13 +1532,13 @@ namespace fox::gfx::api::gl
     {
         glInvalidateTexImage(
             gl::to_underlying       (texture), 
-            static_cast<gl::int32_t>(level));
+            static_cast<gl::int32_t>(level) );
     }
     static void invalidate_texture_sub_image            (gl::handle_t texture, gl::uint32_t level, gl::volume_t region)
     {
         glInvalidateTexSubImage(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
-            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), static_cast<gl::int32_t>(region.origin.z), 
+            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), static_cast<gl::int32_t>(region.origin.z) , 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y), static_cast<gl::sizei_t>(region.extent.z));
     }
     static void clear_texture_image                     (gl::handle_t texture, glf::Texture::BaseFormat format, glf::Texture::Type type, gl::uint32_t level, std::span<const gl::byte_t> data)
@@ -1629,7 +1547,7 @@ namespace fox::gfx::api::gl
             gl::to_underlying(texture), static_cast<gl::int32_t>(level), 
             gl::to_underlying(format) , gl::to_underlying       (type) , data.data());
     }
-    static void clear_texture_sub_image(gl::handle_t texture, glf::Texture::BaseFormat format, glf::Texture::Type type, gl::uint32_t level, gl::volume_t region, std::span<const gl::byte_t> data)
+    static void clear_texture_sub_image                 (gl::handle_t texture, glf::Texture::BaseFormat format, glf::Texture::Type type, gl::uint32_t level, gl::volume_t region, std::span<const gl::byte_t> data)
     {
         glClearTexSubImage(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
