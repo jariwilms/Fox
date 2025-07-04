@@ -1,8 +1,5 @@
 #pragma once
 
-#include <glad/gl.h>
-#include <glfw/glfw3.h>
-
 #include <fox/rendering/api/opengl/core/types.hpp>
 #include <fox/rendering/base/buffer/buffer.hpp>
 #include <fox/rendering/base/buffer/type.hpp>
@@ -17,21 +14,24 @@
 
 namespace fox::gfx::api::gl
 {
-    static auto map_type                                 (api::Type type)
+    static auto map_type                                 (api::Type type) -> glf::VertexArray::Attribute::Type
     {
-        if (type == api::Type::Byte           ) return glf::VertexArray::Attribute::Type::Byte;
-        if (type == api::Type::UnsignedByte   ) return glf::VertexArray::Attribute::Type::UnsignedByte;
-        if (type == api::Type::Short          ) return glf::VertexArray::Attribute::Type::Short;
-        if (type == api::Type::UnsignedShort  ) return glf::VertexArray::Attribute::Type::UnsignedShort;
-        if (type == api::Type::Integer        ) return glf::VertexArray::Attribute::Type::Integer;
-        if (type == api::Type::UnsignedInteger) return glf::VertexArray::Attribute::Type::UnsignedInteger;
-        if (type == api::Type::Float          ) return glf::VertexArray::Attribute::Type::Float;
-        if (type == api::Type::Double         ) return glf::VertexArray::Attribute::Type::Double;
+        switch (type)
+        {
+            case api::Type::Byte           : return glf::VertexArray::Attribute::Type::Byte           ;
+            case api::Type::UnsignedByte   : return glf::VertexArray::Attribute::Type::UnsignedByte   ;
+            case api::Type::Short          : return glf::VertexArray::Attribute::Type::Short          ;
+            case api::Type::UnsignedShort  : return glf::VertexArray::Attribute::Type::UnsignedShort  ;
+            case api::Type::Integer        : return glf::VertexArray::Attribute::Type::Integer        ;
+            case api::Type::UnsignedInteger: return glf::VertexArray::Attribute::Type::UnsignedInteger;
+            case api::Type::Float          : return glf::VertexArray::Attribute::Type::Float          ;
+            case api::Type::Double         : return glf::VertexArray::Attribute::Type::Double         ;
 
-        throw std::invalid_argument{ "Invalid Data Type!" };
+            default: throw std::invalid_argument{ "Invalid Data Type!" };
+        }
     }
 
-    static auto map_texture_format_base                  (api::Texture::Format format)
+    static auto map_texture_format_base                  (api::Texture::Format format) -> glf::Texture::BaseFormat
     {
         switch (format)
         {
@@ -74,7 +74,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    static auto map_texture_format                       (api::Texture::Format format)
+    static auto map_texture_format                       (api::Texture::Format format) -> glf::Texture::Format
     {
         switch (format)
         {
@@ -114,7 +114,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_texture_format_type                  (api::Texture::Format format)
+    static auto map_texture_format_type                  (api::Texture::Format format) -> glf::PixelData::Type
     {
         switch (format)
         {
@@ -154,7 +154,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_texture_min_filter                   (api::Texture::Filter filter)
+    static auto map_texture_min_filter                   (api::Texture::Filter filter) -> glf::Texture::MinificationFilter
     {
         switch (filter)
         {
@@ -166,7 +166,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static auto map_texture_mag_filter                   (api::Texture::Filter filter)
+    static auto map_texture_mag_filter                   (api::Texture::Filter filter) -> glf::Texture::MagnificationFilter
     {
         switch (filter)
         {
@@ -178,7 +178,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    static auto map_texture_wrapping                     (api::Texture::Wrapping wrapping)
+    static auto map_texture_wrapping                     (api::Texture::Wrapping wrapping) -> glf::Texture::Wrapping
     {
         switch (wrapping)
         {
@@ -192,7 +192,7 @@ namespace fox::gfx::api::gl
         }
     }
     
-    static auto map_render_buffer_format                 (api::RenderBuffer::Format format)
+    static auto map_render_buffer_format                 (api::RenderBuffer::Format format) -> glf::RenderBuffer::Format
     {
         switch (format)
         {
@@ -212,7 +212,7 @@ namespace fox::gfx::api::gl
         }
     }
     
-    static auto map_cubemap_texture_format_base          (api::Cubemap::Format format)
+    static auto map_cubemap_texture_format_base          (api::Cubemap::Format format) -> glf::Texture::BaseFormat
     {
         switch (format)
         {
@@ -255,7 +255,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid cubemap format!" };
         }
     }
-    static auto map_cubemap_texture_format               (api::Cubemap::Format format)
+    static auto map_cubemap_texture_format               (api::Cubemap::Format format) -> glf::Texture::Format
     {
         switch (format)
         {
@@ -263,39 +263,48 @@ namespace fox::gfx::api::gl
             case api::Cubemap::Format::RG8_UNORM:         return glf::Texture::Format::RG8_UNORM;
             case api::Cubemap::Format::RGB8_UNORM:        return glf::Texture::Format::RGB8_UNORM;
             case api::Cubemap::Format::RGBA8_UNORM:       return glf::Texture::Format::RGBA8_UNORM;
+            
             case api::Cubemap::Format::R16_UNORM:         return glf::Texture::Format::R16_UNORM;
             case api::Cubemap::Format::RG16_UNORM:        return glf::Texture::Format::RG16_UNORM;
             case api::Cubemap::Format::RGB16_UNORM:       return glf::Texture::Format::RGB16_UNORM;
             case api::Cubemap::Format::RGBA16_UNORM:      return glf::Texture::Format::RGBA16_UNORM;
+            
             case api::Cubemap::Format::R8_SNORM:          return glf::Texture::Format::R8_SNORM;
             case api::Cubemap::Format::RG8_SNORM:         return glf::Texture::Format::RG8_SNORM;
             case api::Cubemap::Format::RGB8_SNORM:        return glf::Texture::Format::RGB8_SNORM;
             case api::Cubemap::Format::RGBA8_SNORM:       return glf::Texture::Format::RGBA8_SNORM;
+            
             case api::Cubemap::Format::R16_SNORM:         return glf::Texture::Format::R16_SNORM;
             case api::Cubemap::Format::RG16_SNORM:        return glf::Texture::Format::RG16_SNORM;
             case api::Cubemap::Format::RGB16_SNORM:       return glf::Texture::Format::RGB16_SNORM;
             case api::Cubemap::Format::RGBA16_SNORM:      return glf::Texture::Format::RGBA16_SNORM;
+            
             case api::Cubemap::Format::RGB8_SRGB:         return glf::Texture::Format::RGB8_SRGB;
             case api::Cubemap::Format::RGBA8_SRGB:        return glf::Texture::Format::RGBA8_SRGB;
+            
             case api::Cubemap::Format::R16_FLOAT:         return glf::Texture::Format::R16_FLOAT;
             case api::Cubemap::Format::RG16_FLOAT:        return glf::Texture::Format::RG16_FLOAT;
             case api::Cubemap::Format::RGB16_FLOAT:       return glf::Texture::Format::RGB16_FLOAT;
             case api::Cubemap::Format::RGBA16_FLOAT:      return glf::Texture::Format::RGBA16_FLOAT;
+            
             case api::Cubemap::Format::R32_FLOAT:         return glf::Texture::Format::R32_FLOAT;
             case api::Cubemap::Format::RG32_FLOAT:        return glf::Texture::Format::RG32_FLOAT;
             case api::Cubemap::Format::RGB32_FLOAT:       return glf::Texture::Format::RGB32_FLOAT;
             case api::Cubemap::Format::RGBA32_FLOAT:      return glf::Texture::Format::RGBA32_FLOAT;
+            
             case api::Cubemap::Format::D16_UNORM:         return glf::Texture::Format::D16_UNORM;
             case api::Cubemap::Format::D24_UNORM:         return glf::Texture::Format::D24_UNORM;
             case api::Cubemap::Format::D32_FLOAT:         return glf::Texture::Format::D32_FLOAT;
+            
             case api::Cubemap::Format::D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
             case api::Cubemap::Format::D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
+            
             case api::Cubemap::Format::S8_UINT:           return glf::Texture::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    static auto map_cubemap_texture_format_type          (api::Cubemap::Format format)
+    static auto map_cubemap_texture_format_type          (api::Cubemap::Format format) -> glf::PixelData::Type
     {
         switch (format)
         {
@@ -336,7 +345,7 @@ namespace fox::gfx::api::gl
         }
     }
     
-    static auto map_frame_buffer_target                  (api::FrameBuffer::Target  target)
+    static auto map_frame_buffer_target                  (api::FrameBuffer::Target  target) -> glf::FrameBuffer::Target
     {
         switch (target)
         {
@@ -346,7 +355,7 @@ namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    static auto map_frame_buffer_attachment              (api::FrameBuffer::Attachment attachment)
+    static auto map_frame_buffer_attachment              (api::FrameBuffer::Attachment attachment) -> glf::FrameBuffer::Attachment
     {
         switch (attachment)
         {
@@ -367,7 +376,7 @@ namespace fox::gfx::api::gl
         }
     }
 
-    static auto map_program_stage                        (api::Shader::Stage stage)
+    static auto map_program_stage                        (api::Shader::Stage stage) -> glf::Program::Stage
     {
         switch (stage)
         {
@@ -382,7 +391,7 @@ namespace fox::gfx::api::gl
         }
     }                                                                      
     
-    static auto map_shader_type                          (api::Shader::Stage stage)
+    static auto map_shader_type                          (api::Shader::Stage stage) -> glf::Shader::Type
     {
         switch (stage)
         {
@@ -397,7 +406,7 @@ namespace fox::gfx::api::gl
         }
     }
     
-    static auto map_depth_function                       (api::RenderState::DepthFunction depthFunction)
+    static auto map_depth_function                       (api::RenderState::DepthFunction depthFunction) -> glf::DepthFunction
     {
         switch (depthFunction)
         {
@@ -414,7 +423,7 @@ namespace fox::gfx::api::gl
         }
     }
     
-    static auto map_culling_face                         (api::RenderState::FaceCulling cullingFace)
+    static auto map_culling_face                         (api::RenderState::FaceCulling cullingFace) -> glf::Culling::Facet
     {
         switch (cullingFace)
         {
