@@ -12,82 +12,81 @@ namespace fox::math
     inline namespace trigonometry
     {
         template<typename T>
-        static constexpr auto sin(T value)
+        static constexpr auto sin(const T& value) -> T
         {
             return glm::sin(value);
         }
         template<typename T>
-        static constexpr auto cos(T value)
+        static constexpr auto cos(const T& value) -> T
         {
             return glm::cos(value);
         }
         template<typename T>
-        static constexpr auto tan(T value)
+        static constexpr auto tan(const T& value) -> T
         {
             return glm::tan(value);
         }
 
         template<typename T>
-        static constexpr auto asin(T value)
+        static constexpr auto asin(const T& value) -> T
         {
             return glm::asin(value);
         }
         template<typename T>
-        static constexpr auto acos(T value)
+        static constexpr auto acos(const T& value) -> T
         {
             return glm::acos(value);
         }
         template<typename T>
-        static constexpr auto atan(T value)
+        static constexpr auto atan(const T& value) -> T
         {
             return glm::atan(value);
         }
 
         template<typename T>
-        static constexpr auto sinh(T value)
+        static constexpr auto sinh(const T& value) -> T
         {
             return glm::sinh(value);
         }
         template<typename T>
-        static constexpr auto cosh(T value)
+        static constexpr auto cosh(const T& value) -> T
         {
             return glm::cosh(value);
         }
         template<typename T>
-        static constexpr auto tanh(T value)
+        static constexpr auto tanh(const T& value) -> T
         {
             return glm::tanh(value);
         }
 
         template<typename T>
-        static constexpr auto asinh(T value)
+        static constexpr auto asinh(const T& value) -> T
         {
             return glm::asinh(value);
         }
         template<typename T>
-        static constexpr auto acosh(T value)
+        static constexpr auto acosh(const T& value) -> T
         {
             return glm::acosh(value);
         }
         template<typename T>
-        static constexpr auto atanh(T value)
+        static constexpr auto atanh(const T& value) -> T
         {
             return glm::atanh(value);
         }
 
         template<typename T>
-        static constexpr auto to_degrees(T value)
+        static constexpr auto to_degrees(const T& value) -> T
         {
             return glm::degrees(value);
         }
         template<typename T>
-        static constexpr auto to_radians(T value)
+        static constexpr auto to_radians(const T& value) -> T
         {
             return glm::radians(value);
         }
 
-        template<typename T>
-        static constexpr auto euler_angles(T value) -> fox::Vector3f
+        static           auto euler_angles(const fox::Quaternion& value) -> fox::Vector3f
         {
             return glm::eulerAngles(value);
         }
