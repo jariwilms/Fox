@@ -2,7 +2,7 @@
 
 #include <stdafx.hpp>
 
-#include <fox/input/api/input_api.hpp>
+#include <fox/input/api/api.hpp>
 
 namespace fox::input
 {
