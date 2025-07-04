@@ -99,9 +99,9 @@ namespace fox::gfx
             _->copy(data);
         }
         template<typename... T>
-        void copy_sub(fox::offset_t offset, const std::tuple<T...>& data)
+        void copy_slice(fox::offset_t offset, const std::tuple<T...>& data)
         {
-            _->copy_sub<T...>(offset, data);
+            _->copy_slice<T...>(offset, data);
         }
 
         auto size  () const -> fox::size_t

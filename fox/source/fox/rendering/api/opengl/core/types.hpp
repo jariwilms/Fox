@@ -124,7 +124,7 @@ namespace fox::gfx::api::gl
     template<typename T, gl::uint32_t N>
     struct region_t
     {
-        region_t(const gl::Vector<T, N>& extent = {}, const gl::Vector<T, N>& origin = {})
+        constexpr region_t(const gl::Vector<T, N>& extent = {}, const gl::Vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
         auto operator==(const region_t&) const -> gl::bool_t = default;
@@ -134,7 +134,7 @@ namespace fox::gfx::api::gl
     };
     struct range_t
     {
-        range_t(gl::count_t count = {}, gl::index_t index = {})
+        constexpr range_t(gl::count_t count = {}, gl::index_t index = {})
             : count{ count }, index{ index } {}
 
         auto operator==(const range_t&) const -> gl::bool_t = default;
@@ -144,7 +144,7 @@ namespace fox::gfx::api::gl
     };
     struct byterange_t
     {
-        byterange_t(gl::size_t size = {}, gl::offset_t offset = {})
+        constexpr byterange_t(gl::size_t size = {}, gl::offset_t offset = {})
             : size{ size }, offset{ offset } {}
 
         auto operator==(const byterange_t&) const -> gl::bool_t = default;

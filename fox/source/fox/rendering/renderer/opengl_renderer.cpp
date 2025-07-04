@@ -127,7 +127,7 @@ namespace fox::gfx::api
         //Convert HDR texture to cubemap
         pipelines_.at("ConvertEqui")->bind();
         matricesUniform_->bind(gfx::binding_t{ 2u });
-        matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
 
         gl::viewport(envDimensions);
         gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
@@ -138,7 +138,7 @@ namespace fox::gfx::api
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
         {
-            matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+            matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
             gl::frame_buffer_texture_layer(frameBuffer->handle(), environmentCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -154,7 +154,7 @@ namespace fox::gfx::api
         irradianceCubemap_ = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
 
         pipelines_.at("Irradiance")->bind();
-        matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
         environmentCubemap_->bind(gfx::binding_t{ 0u });
 
         gl::viewport(cvDimensions);
@@ -166,7 +166,7 @@ namespace fox::gfx::api
 
         for (fox::uint32_t index{}; const auto& view : captureViews)
         {
-            matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+            matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
             gl::frame_buffer_texture_layer(frameBuffer->handle(), irradianceCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -191,7 +191,7 @@ namespace fox::gfx::api
         preFilterCubemap_ = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
 
         pipelines_.at("PreFilter")->bind();
-        matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+        matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
         environmentCubemap_->bind(gfx::binding_t{ 0u });
         
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
@@ -209,7 +209,7 @@ namespace fox::gfx::api
 
             for (fox::uint32_t index{}; const auto& view : captureViews)
             {
-                matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+                matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
                 gl::frame_buffer_texture_layer(frameBuffer->handle(), preFilterCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, mip, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -305,7 +305,7 @@ namespace fox::gfx::api
         const auto& viewMatrix       = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
         const auto& projectionMatrix = camera.projection();
 
-        matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
+        matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
         cameraUniform_  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
 
 
@@ -432,7 +432,7 @@ namespace fox::gfx::api
 
         for (const auto& transform : debugTransforms_)
         {
-            matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+            matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, gfx::Geometry::Cube::mesh()->vertexArray->index_count());
         }
 #endif
@@ -478,8 +478,8 @@ namespace fox::gfx::api
         {
             const auto& [mesh, material, transform] = _;
 
-            matricesUniform_->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-            materialUniform_->copy    (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
+            matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+            materialUniform_->copy      (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
 
             mesh    ->vertexArray->bind();
             material->albedo     ->bind(gfx::binding_t{ 0u });
@@ -522,8 +522,8 @@ namespace fox::gfx::api
         {
             fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
-            matricesUniform_   ->copy_sub(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-            lightUniform_      ->copy({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+            matricesUniform_   ->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+            lightUniform_      ->copy      ({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
         }
