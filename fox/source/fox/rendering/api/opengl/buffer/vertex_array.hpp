@@ -10,17 +10,17 @@ namespace fox::gfx::api::gl
     class VertexArray : public gl::Object
     {
     public:
-        VertexArray()
+         VertexArray()
         {
             handle_ = gl::create_vertex_array();
         }
-        VertexArray(VertexArray&&) noexcept = default;
+         VertexArray(VertexArray&&) noexcept = default;
         ~VertexArray()
         {
             gl::delete_vertex_array(handle_);
         }
 
-        void bind()
+        void bind() const
         {
             gl::bind_vertex_array(handle_);
         }
@@ -38,18 +38,18 @@ namespace fox::gfx::api::gl
         {
             gl::vertex_array_vertex_buffer(handle_, vertexBuffer, bindingPoint_, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
 
-            gl::offset_t offset{};
-            for (const auto& attribute : layout.attributes())
+            auto offset = gl::offset_t{};
+            std::ranges::for_each(layout.attributes(), [&](const gfx::VertexLayout::Attribute& attribute)
             {
-                enable_attribute(attributeIndex_);
+                    enable_attribute(attributeIndex_);
 
-                gl::vertex_array_attribute_format (handle_, attributeIndex_, offset, gl::map_type(attribute.type), attribute.count, attribute.isNormalized);
-                gl::vertex_array_attribute_binding(handle_, attributeIndex_, bindingPoint_);
-                if (attribute.isStatic) set_attribute_divisor(static_cast<gl::binding_t>(attributeIndex_), attribute.divisionRate);
+                    gl::vertex_array_attribute_format (handle_, attributeIndex_, offset, gl::map_type(attribute.type), attribute.count, attribute.isNormalized);
+                    gl::vertex_array_attribute_binding(handle_, attributeIndex_, bindingPoint_);
+                    if (attribute.isStatic) set_attribute_divisor(static_cast<gl::binding_t>(attributeIndex_), attribute.divisionRate);
 
-                offset += static_cast<gl::offset_t>(attribute.count * attribute.size);
-                ++attributeIndex_;
-            }
+                    offset += static_cast<gl::offset_t>(attribute.count * attribute.size);
+                    ++attributeIndex_;
+            });
 
             bindingPoint_ = gl::binding_t{ gl::to_underlying(bindingPoint_) + 1u };
         }
@@ -64,12 +64,12 @@ namespace fox::gfx::api::gl
             gl::vertex_array_binding_divisor(handle_, binding, divisor);
         }
 
-        auto index_count() const
+        auto index_count() const -> gl::count_t
         {
             return indexCount_;
         }
 
-        VertexArray& operator=(VertexArray&&) noexcept = default;
+        auto operator=(VertexArray&&) noexcept -> VertexArray& = default;
 
     private:
         gl::index_t   attributeIndex_{};

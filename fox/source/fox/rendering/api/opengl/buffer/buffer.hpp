@@ -37,6 +37,7 @@ namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Coherent       , 
                 data                                     );
         }
+                 Buffer(Buffer&&) noexcept = default;
                 ~Buffer()
         {
             unmap();
@@ -167,6 +168,8 @@ namespace fox::gfx::api::gl
             return std::weak_ptr<std::span<T>>{ data_ };
         }
 
+        auto operator=(Buffer&&) noexcept -> Buffer& = default;
+
     private:
         gl::size_t                    size_ ;
         gl::range_t                   range_;
@@ -184,6 +187,7 @@ namespace fox::gfx::api::gl
 
             gl::buffer_storage<T>(handle_, glf::Buffer::StorageFlags::DynamicStorage, std::span<const T>{ &data, 1u });
         }
+                 UniformBuffer(UniformBuffer&&) noexcept = default;
                 ~UniformBuffer()
         {
             gl::delete_buffer(handle_);
@@ -218,6 +222,8 @@ namespace fox::gfx::api::gl
             return size_;
         }
 
+        auto operator=(UniformBuffer&&) noexcept -> UniformBuffer& = default;
+
     private:
         gl::size_t size_;
     };
@@ -251,6 +257,7 @@ namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Coherent       , 
                 data                                     );
         }
+                 UniformArrayBuffer(UniformArrayBuffer&&) noexcept = default;
                 ~UniformArrayBuffer()
         {
             gl::delete_buffer(handle_);
@@ -388,6 +395,8 @@ namespace fox::gfx::api::gl
         {
             return std::weak_ptr<std::span<T>>{ data_ };
         }
+
+        auto operator=(UniformArrayBuffer&&) noexcept -> UniformArrayBuffer& = default;
 
     private:
         gl::size_t                    size_ ;
