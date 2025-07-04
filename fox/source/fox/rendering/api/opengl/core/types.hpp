@@ -75,7 +75,8 @@ namespace fox::gfx::api::gl
         }
 
     protected:
-        Object() = default;
+         Object() = default;
+        ~Object() = default;
 
         gl::handle_t handle_{ gl::NullObject };
     };
