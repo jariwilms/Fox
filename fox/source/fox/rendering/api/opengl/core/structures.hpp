@@ -15,6 +15,7 @@ namespace fox::gfx::api::gl
         glf::Debug::Type     type    {};
         glf::Debug::Severity severity{};
     };
+
     struct binary_info
     {
         gl::enum_t               format{};
