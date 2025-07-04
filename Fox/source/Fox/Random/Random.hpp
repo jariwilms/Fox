@@ -38,7 +38,7 @@ namespace fox::random
     {
         if (data.empty()) throw std::range_error{ "Data is empty!" };
         
-        return data[next(1u, data.size() - 1u)];
+        return data[next(0u, data.size() - 1u)];
     }
 
 

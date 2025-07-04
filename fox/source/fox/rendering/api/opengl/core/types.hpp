@@ -56,9 +56,22 @@ namespace fox::gfx::api::gl
     class Object
     {
     public:
+        Object(Object&& other) noexcept
+             : handle_{ std::exchange(other.handle_, gl::NullObject) } {}
+
         auto handle() const -> gl::handle_t
         {
             return handle_;
+        }
+
+        auto operator=(Object&& other) noexcept -> Object&
+        {
+            if (this != &other)
+            {
+                handle_ = std::exchange(other.handle_, handle_);
+            }
+
+            return *this;
         }
 
     protected:

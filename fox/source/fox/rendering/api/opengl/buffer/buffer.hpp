@@ -13,82 +13,84 @@ namespace fox::gfx::api::gl
     {
     public:
         explicit Buffer(gl::count_t count)
-            : size_{ static_cast<gl::size_t>(count * sizeof(T)) }
+            : size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
             handle_ = gl::create_buffer();
             
             gl::buffer_storage<T>(
-                handle_,
+                handle_                                   ,
                 glf::Buffer::StorageFlags::DynamicStorage |
                 glf::Buffer::StorageFlags::ReadWrite      |
                 glf::Buffer::StorageFlags::Persistent     |
                 glf::Buffer::StorageFlags::Coherent       ,
-                count);
+                count                                    );
         }
         explicit Buffer(std::span<const T> data)
-            : size_{ static_cast<gl::size_t>(data.size_bytes()) }
+            : size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             handle_ = gl::create_buffer();
             
             gl::buffer_storage<T>(
-                handle_, 
+                handle_                                   , 
                 glf::Buffer::StorageFlags::DynamicStorage | 
                 glf::Buffer::StorageFlags::ReadWrite      | 
                 glf::Buffer::StorageFlags::Persistent     | 
                 glf::Buffer::StorageFlags::Coherent       , 
-                data);
+                data                                     );
         }
-                 Buffer(Buffer&&) noexcept = default;
                 ~Buffer()
         {
-            if (is_mapped()) unmap();
+            unmap();
+
             gl::delete_buffer(handle_);
         }
 
         void copy      (                   std::span<const T> data)
         {
-            if (std::cmp_greater(data.size_bytes(), size())) throw std::invalid_argument{ "Data exceeds buffer size!" };
+            if (gl::compare<std::greater>(data.size_bytes(), size())) throw std::invalid_argument{ "Data exceeds buffer size!" };
 
             gl::buffer_data(handle_, gl::offset_t{ 0u }, data);
         }
         void copy_range(gl::index_t index, std::span<const T> data)
         {
-            if (std::cmp_greater_equal(index, count())) throw std::invalid_argument{ "Index out of range!" };
+            if (gl::compare<std::greater_equal>(index, count())) throw std::invalid_argument{ "Index out of range!" };
 
             gl::buffer_data(handle_, static_cast<gl::offset_t>(index * sizeof(T)), data);
         }
 
-        auto map      ()
+        auto map      () -> std::weak_ptr<std::span<T>>
         {
-            if (is_mapped()) unmap();
+            unmap();
 
             auto span = gl::map_buffer_range<T>(
-                handle_, 
-                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
-                glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
-                glf::Buffer::Mapping::RangeAccessFlags::Coherent     ,
-                gl::range_t{ count() });
+                handle_                                            , 
+                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite  | 
+                glf::Buffer::Mapping::RangeAccessFlags::Persistent | 
+                glf::Buffer::Mapping::RangeAccessFlags::Coherent   , 
+                count());
 
-            data_  = std::make_shared<std::span<T>>(span);
+            data_  = std::shared_ptr<std::span<T>>(span, [this](const auto* _) { unmap(); });
             range_ = count();
 
             return std::weak_ptr<std::span<T>>(data_);
         }
-        auto map_range(gl::range_t range)
+        auto map_range(gl::range_t range) -> std::weak_ptr<std::span<T>>
         {
-            if (is_mapped()) unmap();
+            unmap();
 
-            range_ = gl::range_t{ std::min(range->count, count()), std::min(range->index, count() - range->count) };
+            range.count = std::min(range->count, count()               );
+            range.index = std::min(range->index, count() - range->count);
 
             auto span = gl::map_buffer_range<T>(
-                handle_,
-                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
-                glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
-                glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
-                glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
+                handle_                                              , 
+                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    | 
+                glf::Buffer::Mapping::RangeAccessFlags::Persistent   | 
+                glf::Buffer::Mapping::RangeAccessFlags::Coherent     | 
+                glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit, 
                 range_);
 
-            data_ = std::make_shared<std::span<T>>(span);
+            data_  = std::make_shared<std::span<T>>(span, [this](const auto* _) { unmap(); });
+            range_ = range;
             
             return std::weak_ptr<std::span<T>>(data_);
         }
@@ -96,12 +98,14 @@ namespace fox::gfx::api::gl
         {
             return data_.operator bool();
         }
-        auto unmap    ()
+        void unmap    ()
         {
-            data_.reset();
+            if (!is_mapped()) return;
+
+            data_ .reset();
             locks_.clear();
             
-            return gl::unmap_buffer(handle_);
+            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
         }
 
         void lock_range (gl::range_t range)
@@ -113,58 +117,58 @@ namespace fox::gfx::api::gl
         }
         void await_range(gl::range_t range)
         {
-            std::vector<gl::lock_t> locks{};
+            auto locks = std::vector<gl::lock_t>{};
 
-            for (const auto& [lock, sync] : locks_)
-            {
-                if (std::max(range.index, lock.index) < std::min(range.index + range.count, lock.index + lock.count))
+            std::ranges::for_each(locks_, [&](const gl::lock_t& _)
                 {
-                    auto command = glf::Synchronization::Command::None;
-                    auto time    = gl::time_t{};
-
-                    while (gl::True)
+                    const auto& [lock, sync] = _;
+                    
+                    if (std::max(range.index, lock.index) < std::min(range.index + range.count, lock.index + lock.count))
                     {
-                        auto status = gl::client_wait_sync(sync, command, time);
+                        auto command = glf::Synchronization::Command::None;
+                        auto time    = gl::time_t{};
 
-                        if (status == glf::Synchronization::Status::AlreadySignaled   ) break;
-                        if (status == glf::Synchronization::Status::ConditionSatisfied) break;
-                        if (status == glf::Synchronization::Status::WaitFailed        ) throw std::runtime_error{ "An error occurred!" };
+                        while (gl::True)
+                        {
+                            auto status = gl::client_wait_sync(sync, command, time);
 
-                        command = glf::Synchronization::Command::Flush;
-                        time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
+                            if (status == glf::Synchronization::Status::AlreadySignaled   ) break;
+                            if (status == glf::Synchronization::Status::ConditionSatisfied) break;
+                            if (status == glf::Synchronization::Status::WaitFailed        ) throw std::runtime_error{ "An error occurred!" };
+
+                            command = glf::Synchronization::Command::Flush;
+                            time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
+                        }
+
+                        gl::delete_sync(sync);
                     }
-
-                    gl::delete_sync(sync);
-                }
-                else
-                {
-                    locks.emplace_back(lock, sync);
-                }
-            }
+                    else
+                    {
+                        locks.emplace_back(lock, sync);
+                    }
+                });
 
             locks_ = std::move(locks);
         }
 
-        auto size () const
+        auto size () const -> gl::size_t
         {
             return size_;
         }
-        auto count() const
+        auto count() const -> gl::count_t
         {
             return static_cast<gl::count_t>(size() / sizeof(T));
         }
-        auto data ()
+        auto data () -> std::weak_ptr<std::span<T>>
         {
             return std::weak_ptr<std::span<T>>{ data_ };
         }
 
-        Buffer& operator=(Buffer&&) noexcept = default;
-
     private:
-        gl::size_t                    size_{};
-        gl::range_t                   range_{};
-        std::vector<gl::lock_t>       locks_{};
-        std::shared_ptr<std::span<T>> data_{};
+        gl::size_t                    size_ ;
+        gl::range_t                   range_;
+        std::vector<gl::lock_t>       locks_;
+        std::shared_ptr<std::span<T>> data_ ;
     };
     template<typename T>
     class UniformBuffer : public gl::Object
@@ -177,7 +181,10 @@ namespace fox::gfx::api::gl
 
             gl::buffer_storage(handle_, glf::Buffer::StorageFlags::DynamicStorage, std::span<const T>{ &data, 1u });
         }
-                 UniformBuffer(UniformBuffer&&) noexcept = default;
+                 UniformBuffer(UniformBuffer&&) noexcept
+        {
+
+        }
                 ~UniformBuffer()
         {
             gl::delete_buffer(handle_);
@@ -213,10 +220,13 @@ namespace fox::gfx::api::gl
             return size_;
         }
 
-        UniformBuffer& operator=(UniformBuffer&&) noexcept = default;
+        auto operator=(UniformBuffer&& other) noexcept -> UniformBuffer&
+        {
+
+        }
 
     private:
-        gl::size_t size_{};
+        gl::size_t size_;
     };
     template<typename T, gl::count_t N>
     class UniformArrayBuffer : public gl::Object
