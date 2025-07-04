@@ -1297,7 +1297,7 @@ namespace fox::gfx::api::gl
     {
         glBindSamplers(range.index, range.count, gl::to_underlying_ptr(samplers.data()));
     }
-    static auto sampler_parameter                          (gl::handle_t sampler, glp::sampler_parameter_t parameter) -> auto
+    static auto sampler_parameter                          (gl::handle_t sampler, glp::sampler_parameter_v parameter) -> auto
     {
         auto sampler_parameter_iv  = [](gl::handle_t sampler, glf::Sampler::Parameter parameter, gl::int32_t   value)
             {
@@ -1431,7 +1431,7 @@ namespace fox::gfx::api::gl
         auto byterange = gl::convert_range<T>(range);
         glTextureBufferRange(gl::to_underlying(texture), gl::to_underlying(format), gl::to_underlying(buffer), byterange.offset, byterange.size);
     }
-    static void texture_parameter                          (gl::handle_t texture, glp::texture_parameter_t parameter)
+    static void texture_parameter                          (gl::handle_t texture, glp::texture_parameter_v parameter)
     {
         auto texture_parameter_iv  = [](gl::handle_t texture, glf::Texture::Parameter parameter, gl::int32_t   value) -> gl::void_t
             {
@@ -1664,7 +1664,7 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 10 - Vertex Specification and Drawing Commands
-    static void patch_parameter                            (glp::patch_parameter_t parameter)
+    static void patch_parameter                            (glp::patch_parameter_v parameter)
     {
         auto patch_parameter_i = [](glf::Patch::Parameter parameter, gl::int32_t   value)
             {
@@ -1934,7 +1934,7 @@ namespace fox::gfx::api::gl
     {
         glPointSize(size);
     }
-    static void point_parameter                            (glp::point_parameter_t parameter)
+    static void point_parameter                            (glp::point_parameter_v parameter)
     {
         auto point_parameter_i = [](glf::Point::Parameter parameter, gl::int32_t value) -> gl::void_t
             {
@@ -2109,7 +2109,7 @@ namespace fox::gfx::api::gl
     {
         glClearStencil(static_cast<gl::int32_t>(index));
     }
-    static void clear_frame_buffer_value                   (gl::handle_t frameBuffer, glp::clear_t parameter, gl::index_t index)
+    static void clear_frame_buffer_value                   (gl::handle_t frameBuffer, glp::clear_v parameter, gl::index_t index)
     {
         auto clear_frame_buffer_iv  = [](gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::index_t index, const gl::int32_t* value)
             {
@@ -2256,7 +2256,7 @@ namespace fox::gfx::api::gl
 
 
     //Chapter 19 - Compute Shaders
-    static void dispatch_compute                           (glp::dispatch_t parameter)
+    static void dispatch_compute                           (glp::dispatch_v parameter)
     {
         auto overload = gl::overload
         {
