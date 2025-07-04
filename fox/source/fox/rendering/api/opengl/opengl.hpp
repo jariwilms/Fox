@@ -407,15 +407,15 @@ namespace fox::gfx::api::gl
         auto value = gl::pointer_t{};
         return glGetPointerv(gl::to_underlying(P), &value), value;
     }
-    template<glf::Connection C>
+    template<glf::Context::Property P>
     static auto get_string                                 () -> std::string
     {
-        return std::string{ reinterpret_cast<const gl::char_t*>(glGetString(gl::to_underlying(C))) };
+        return std::string{ reinterpret_cast<const gl::char_t*>(glGetString(gl::to_underlying(P))) };
     }
-    template<glf::Connection C>
+    template<glf::Context::Property P>
     static auto get_string_index                           (gl::index_t index) -> std::string
     {
-        return std::string{ reinterpret_cast<const gl::char_t*>(glGetStringi(gl::to_underlying(C), index)) };
+        return std::string{ reinterpret_cast<const gl::char_t*>(glGetStringi(gl::to_underlying(P), index)) };
     }
     static auto get_internal_format_value                  () -> auto
     {

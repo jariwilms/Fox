@@ -279,20 +279,20 @@ namespace fox::gfx::api::glf
             Core          = GL_CONTEXT_CORE_PROFILE_BIT, 
             Compatibility = GL_CONTEXT_COMPATIBILITY_PROFILE_BIT, 
         };
+        enum class Property : gl::enum_t
+        {
+            Renderer               = GL_RENDERER, 
+            Vendor                 = GL_VENDOR, 
+            Version                = GL_VERSION, 
+            ShadingLanguageVersion = GL_SHADING_LANGUAGE_VERSION, 
+            Extensions             = GL_EXTENSIONS, 
+            SpirVExtensions        = GL_SPIR_V_EXTENSIONS, 
+        };
         enum class ResetStrategy : gl::enum_t
         {
             NoNotification,
             LoseContext,
         };
-    };
-    enum class Connection : gl::enum_t
-    {
-        Renderer               = GL_RENDERER, 
-        Vendor                 = GL_VENDOR, 
-        Version                = GL_VERSION, 
-        ShadingLanguageVersion = GL_SHADING_LANGUAGE_VERSION, 
-        Extensions             = GL_EXTENSIONS, 
-        SpirVExtensions        = GL_SPIR_V_EXTENSIONS, 
     };
     struct     Cubemap
     {

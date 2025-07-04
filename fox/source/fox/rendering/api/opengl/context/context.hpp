@@ -9,24 +9,24 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags           = gl::get_value<glf::Data::ContextFlags>();
-			s_contextProfile         = gl::get_value<glf::Data::ContextProfileMask>();
-			s_majorVersion           = gl::get_value<glf::Data::MajorVersion>();
-			s_minorVersion           = gl::get_value<glf::Data::MinorVersion>();
-			s_vendor                 = gl::get_string<glf::Connection::Vendor>();
-			s_renderer               = gl::get_string<glf::Connection::Renderer>();
-			s_version                = gl::get_string<glf::Connection::Version>();
-            s_shadingLanguageVersion = gl::get_string<glf::Connection::ShadingLanguageVersion>();
+			s_contextFlags           = gl::get_value <glf::Data             ::ContextFlags          >();
+			s_contextProfile         = gl::get_value <glf::Data             ::ContextProfileMask    >();
+			s_majorVersion           = gl::get_value <glf::Data             ::MajorVersion          >();
+			s_minorVersion           = gl::get_value <glf::Data             ::MinorVersion          >();
+			s_vendor                 = gl::get_string<glf::Context::Property::Vendor                >();
+			s_renderer               = gl::get_string<glf::Context::Property::Renderer              >();
+			s_version                = gl::get_string<glf::Context::Property::Version               >();
+            s_shadingLanguageVersion = gl::get_string<glf::Context::Property::ShadingLanguageVersion>();
 
             if (gl::to_underlying(s_contextFlags & glf::Context::Flag::Debug))
 			{
                 gl::enable<glf::Feature::DebugOutput>();
 				gl::enable<glf::Feature::DebugOutputSynchronous>();
 
-				gl::debug_message_control (   glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare, gl::True);
+				gl::debug_message_control (glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare, gl::True);
 				gl::debug_message_callback([](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::sizei_t length, const gl::char_t* message, const gl::void_t* user_param)
                     {
-                        const auto& map_source_message   = [](glf::Debug::Source   source  )
+                        auto map_source_message   = [](glf::Debug::Source   source  )
                             {
                                 switch (source)
                                 {
@@ -40,7 +40,7 @@ namespace fox::gfx::api::gl
                                     default: throw std::invalid_argument{ "Invalid source!" };
                                 }
                             };
-                        const auto& map_severity_message = [](glf::Debug::Severity severity)
+                        auto map_severity_message = [](glf::Debug::Severity severity)
                             {
                                 switch (severity)
                                 {
@@ -52,7 +52,7 @@ namespace fox::gfx::api::gl
                                     default: throw std::invalid_argument{ "Invalid severity!" };
                                 }
                             };
-                        const auto& map_type_message     = [](glf::Debug::Type     type    )
+                        auto map_type_message     = [](glf::Debug::Type     type    )
                             {
                                 switch (type)
                                 {
@@ -70,15 +70,13 @@ namespace fox::gfx::api::gl
                                 }
                             };
 
-                        const auto& eSource              = static_cast<glf::Debug::Source>  (source);
-                        const auto& eSeverity            = static_cast<glf::Debug::Severity>(severity);
-                        const auto& eType                = static_cast<glf::Debug::Type>    (type);
+                        auto eSource              = static_cast<glf::Debug::Source>  (source);
+                        auto eSeverity            = static_cast<glf::Debug::Severity>(severity);
+                        auto eType                = static_cast<glf::Debug::Type>    (type);
 
-                        const auto& mSource              = map_source_message  (eSource);
-                        const auto& mSeverity            = map_severity_message(eSeverity);
-                        const auto& mType                = map_type_message    (eType);
-
-
+                        auto mSource              = map_source_message  (eSource);
+                        auto mSeverity            = map_severity_message(eSeverity);
+                        auto mType                = map_type_message    (eType);
 
                         if (eSeverity == glf::Debug::Severity::Notification) return;
                         if (eSeverity == glf::Debug::Severity::Low         ) return;
