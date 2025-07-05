@@ -136,11 +136,11 @@ namespace fox::gfx::api
         hdrTex->bind(gfx::binding_t{ 0u });
         cva->bind();
 
-        for (fox::uint32_t index{}; const auto& view : captureViews)
+        for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
         {
             matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-            gl::frame_buffer_texture_layer(frameBuffer->handle(), environmentCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
+            gl::frame_buffer_texture_layer(frameBuffer->handle(), environmentCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -164,11 +164,11 @@ namespace fox::gfx::api
         frameBuffer->bind(gfx::FrameBuffer::Target::Write);
         cva->bind();
 
-        for (fox::uint32_t index{}; const auto& view : captureViews)
+        for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
         {
             matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-            gl::frame_buffer_texture_layer(frameBuffer->handle(), irradianceCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
+            gl::frame_buffer_texture_layer(frameBuffer->handle(), irradianceCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -207,11 +207,11 @@ namespace fox::gfx::api
             gl::viewport(mipDimensions);
             gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
 
-            for (fox::uint32_t index{}; const auto& view : captureViews)
+            for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
             {
                 matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
 
-                gl::frame_buffer_texture_layer(frameBuffer->handle(), preFilterCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, mip, index++);
+                gl::frame_buffer_texture_layer(frameBuffer->handle(), preFilterCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, mip, index);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
@@ -253,7 +253,7 @@ namespace fox::gfx::api
         std::vector<unf::SSAOSample>                   ssaoKernel(ssaoSamples);
         std::uniform_real_distribution<fox::float32_t> distribution(0.0f, 1.0f);
         std::default_random_engine                     engine;
-        for (const auto& index : std::views::iota(0u, 64u))
+        for (auto index : std::views::iota(0u, 64u))
         {
             unf::SSAOSample sample
             { 
@@ -281,7 +281,8 @@ namespace fox::gfx::api
 
         constexpr auto             ssaoNoiseSamples{ 16u };
         std::vector<fox::Vector3f> ssaoNoise(ssaoNoiseSamples);
-        for (const auto& index : std::views::iota(0u, ssaoNoiseSamples))
+
+        for (auto index : std::views::iota(0u, ssaoNoiseSamples))
         {
             fox::Vector3f noise
             { 
@@ -518,15 +519,16 @@ namespace fox::gfx::api
         const auto& pva = gfx::Geometry::Plane::mesh()->vertexArray;
         pva->bind();
 
-        for (fox::size_t index{}; const auto& light : lights_)
+        std::ranges::for_each(lights_, [&](const auto& light)
         {
             fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
 
-            matricesUniform_   ->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
-            lightUniform_      ->copy      ({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
+            matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+            lightUniform_   ->copy      ({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
 
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
-        }
+
+        });
 
         gl::depth_mask(gl::True);
     }

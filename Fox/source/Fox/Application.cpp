@@ -182,7 +182,7 @@ namespace fox
             };
         const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
             {
-                for (const auto& i : std::views::iota(0u, limit.value_or(lights.size())))
+                for (auto i : std::views::iota(0u, limit.value_or(lights.size())))
                 {
                     const auto& [l, p] = lights[i];
 
