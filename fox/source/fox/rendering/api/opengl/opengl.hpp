@@ -921,8 +921,8 @@ namespace fox::gfx::api::gl
         {
             for (auto offset = gl::offset_t{}; auto index : std::views::iota(0u, amount))
             {
-                const auto& length = lengths.at(index);
-                      auto  log    = std::string{ messageLog.data() + offset, static_cast<std::size_t>(length) - 1u };
+                auto length = lengths.at(index);
+                auto log    = std::string{ messageLog.data() + offset, static_cast<std::size_t>(length) - 1u };
 
                 offset += length;
 
@@ -1057,13 +1057,13 @@ namespace fox::gfx::api::gl
         auto sizes   = std::vector<gl::size_t>  (ranges.size());
         auto offsets = std::vector<gl::offset_t>(ranges.size());
 
-        for (const auto& range : ranges)
-        {
-            auto byterange = gl::convert_range<T>(range);
+        std::ranges::for_each(ranges, [&](const gl::range_t& range)
+            {
+                auto byterange = gl::convert_range<T>(range);
 
-            sizes  .emplace_back(byterange.size  );
-            offsets.emplace_back(byterange.offset);
-        }
+                sizes  .emplace_back(byterange.size  );
+                offsets.emplace_back(byterange.offset);
+            });
 
         glBindBuffersRange(gl::to_underlying(target), gl::to_underlying(binding), static_cast<gl::sizei_t>(buffers.size()), gl::to_underlying_ptr(buffers.data()), offsets.data(), sizes.data());
     }

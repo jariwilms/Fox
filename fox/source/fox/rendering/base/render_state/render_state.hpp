@@ -7,6 +7,8 @@ namespace fox::gfx::api
     class RenderState
     {
     public:
+        RenderState() = delete;
+
         enum class Parameter
         {
             ClearColor, 
@@ -43,10 +45,8 @@ namespace fox::gfx::api
         };
 
     protected:
-        RenderState() = default;
-
-        static inline bool          depthTestingAlpha_{};
-        static inline bool          cullingFaceAlpha_{};
+        static inline fox::bool_t   depthTestingAlpha_{};
+        static inline fox::bool_t   cullingFaceAlpha_{};
         static inline FaceCulling   faceCulling_{};
         static inline DepthFunction depthFunction_{};
         static inline FrontFace     frontFace_{};

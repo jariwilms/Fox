@@ -6,13 +6,16 @@
 
 namespace fox::gfx::api::gl
 {
-	class Sampler : public api::Sampler, public gl::Object
+	class Sampler : public gl::Object
 	{
 	public:
-		Sampler()
+		using Parameter = api::Sampler::Parameter;
+
+		 Sampler()
 		{
 			handle_ = gl::create_sampler();
 		}
+		 Sampler(Sampler&&) noexcept = default;
 		~Sampler()
 		{
 			gl::delete_sampler(handle_);
@@ -22,5 +25,10 @@ namespace fox::gfx::api::gl
 		{
 			gl::bind_sampler(handle_, slot);
 		}
+
+		auto operator=(Sampler&&) noexcept -> Sampler& = default;
+
+	private:
+		
 	};
 }

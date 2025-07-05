@@ -102,11 +102,11 @@ namespace fox::gfx::api::gl
             //Indices are swapped intentionally          |   |
             std::array<gl::index_t, 6u> indices{ 0u, 1u, 3u, 2u, 4u, 5u };
             
-            for (gl::index_t index{}; const auto& face : faces)
+            for (auto&& [index, face] : std::views::enumerate(faces))
             {
-                if (face.dimensions() != dimensions_) throw std::invalid_argument{ "Face dimension is not equal to cubemap dimension!" };
+                if (face.dimensions() != dimensions_) throw std::invalid_argument{ "Face dimension must be equal to cubemap dimension!" };
 
-                copy(static_cast<Face>(indices.at(index++)), format, face.data());
+                copy(static_cast<Face>(indices.at(index)), format, face.data());
             }
         }
 

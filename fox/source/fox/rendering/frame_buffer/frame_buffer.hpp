@@ -95,49 +95,44 @@ namespace fox::gfx
 
         std::shared_ptr<impl::FrameBuffer> _;
     };
-    class FrameBufferMultisample
-    {
-    public:
-        using Target        = api::FrameBuffer::Target;
-        using Attachment    = api::FrameBuffer::Surface;
-        using Specification = api::FrameBuffer::Specification;
+    //class FrameBufferMultisample
+    //{
+    //public:
+    //    using Target        = api::FrameBuffer::Target;
+    //    using Attachment    = api::FrameBuffer::Surface;
+    //    using Specification = api::FrameBuffer::Specification;
 
-        static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
-        {
-            return std::shared_ptr<FrameBufferMultisample>(new FrameBufferMultisample{ dimensions, specifications, samples });
-        }
+    //    static inline auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
+    //    {
+    //        return std::shared_ptr<FrameBufferMultisample>(new FrameBufferMultisample{ dimensions, specifications, samples });
+    //    }
 
-        void bind(Target target)
-        {
-            _->bind(target);
-        }
-        
-        void bind_texture(const std::string& identifier, gfx::binding_t binding)
-        {
-            _->bind_texture(identifier, static_cast<impl::binding_t>(binding));
-        }
+    //    void bind(Target target)
+    //    {
+    //        _->bind(target);
+    //    }
 
-        auto dimensions() const -> fox::Vector2u
-        {
-            return _->dimensions();
-        }
-        auto samples   () const -> fox::uint32_t
-        {
-            return _->samples();
-        }
-        auto handle    () const -> gfx::handle_t
-        {
-            return _->handle();
-        }
-        auto impl      () const -> std::shared_ptr<impl::FrameBufferMultisample>
-        {
-            return _;
-        }
+    //    auto dimensions() const -> fox::Vector2u
+    //    {
+    //        return _->dimensions();
+    //    }
+    //    auto samples   () const -> fox::uint32_t
+    //    {
+    //        return _->samples();
+    //    }
+    //    auto handle    () const -> gfx::handle_t
+    //    {
+    //        return _->handle();
+    //    }
+    //    auto impl      () const -> std::shared_ptr<impl::FrameBufferMultisample>
+    //    {
+    //        return _;
+    //    }
 
-    protected:
-        FrameBufferMultisample(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
-            : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, specifications, samples) } {}
+    //protected:
+    //    FrameBufferMultisample(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
+    //        : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, specifications, samples) } {}
 
-        std::shared_ptr<impl::FrameBufferMultisample> _;
-    };
+    //    std::shared_ptr<impl::FrameBufferMultisample> _;
+    //};
 }

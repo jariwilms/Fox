@@ -17,6 +17,7 @@ namespace fox::gfx::api::gl
 
             gl::render_buffer_storage(handle_, gl::map_render_buffer_format(format), dimensions_);
         }
+         RenderBuffer(RenderBuffer&&) noexcept = default;
         ~RenderBuffer()
         {
             gl::delete_render_buffer(handle_);
@@ -24,27 +25,25 @@ namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            auto handle = gl::create_render_buffer();
+            if (dimensions == dimensions_) return;
 
-            gl::render_buffer_storage(handle, gl::map_render_buffer_format(format_), dimensions_);
-            gl::delete_texture       (handle_);
-
-            handle_     = handle;
-            dimensions_ = dimensions;
+            this->operator=(RenderBuffer{ format_, dimensions_ });
         }
 
-        auto format    () const
+        auto format    () const -> Format
         {
             return format_;
         }
-        auto dimensions() const
+        auto dimensions() const -> const gl::Vector2u&
         {
             return dimensions_;
         }
 
+        auto operator=(RenderBuffer&&) noexcept -> RenderBuffer& = default;
+
     private:
-        Format       format_{};
-        gl::Vector2u dimensions_{};
+        Format       format_    ;
+        gl::Vector2u dimensions_;
     };
     class RenderBufferMultisample : public gl::Object
     {
@@ -58,6 +57,7 @@ namespace fox::gfx::api::gl
 
             gl::render_buffer_storage_multisample(handle_, gl::map_render_buffer_format(format), dimensions_, samples_);
         }
+         RenderBufferMultisample(RenderBufferMultisample&&) noexcept = default;
         ~RenderBufferMultisample()
         {
             gl::delete_render_buffer(handle_);
@@ -65,31 +65,29 @@ namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            auto handle = gl::create_render_buffer();
+            if (dimensions == dimensions_) return;
 
-            gl::render_buffer_storage_multisample(handle, gl::map_render_buffer_format(format_), dimensions_, samples_);
-            gl::delete_texture                   (handle_);
-
-            handle_     = handle;
-            dimensions_ = dimensions;
+            this->operator=(RenderBufferMultisample{ format_, dimensions, samples_ });
         }
 
-        auto format    () const
+        auto format    () const -> Format
         {
             return format_;
         }
-        auto dimensions() const
+        auto dimensions() const -> const gl::Vector2u&
         {
             return dimensions_;
         }
-        auto samples   () const
+        auto samples   () const -> gl::uint32_t
         {
             return samples_;
         }
 
+        auto operator=(RenderBufferMultisample&&) noexcept -> RenderBufferMultisample& = default;
+
     private:
-        Format       format_{};
-        gl::Vector2u dimensions_{};
-        gl::uint32_t samples_{};
+        Format       format_    ;
+        gl::Vector2u dimensions_;
+        gl::uint32_t samples_   ;
     };
 }
