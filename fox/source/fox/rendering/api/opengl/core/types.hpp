@@ -54,13 +54,6 @@ namespace fox::gfx::api::gl
 
 
 
-    constexpr auto NullObject         = gl::handle_t{ 0u };
-    constexpr auto DefaultFrameBuffer = gl::handle_t{ 0u };
-
-
-
-
-
     template<typename T, gl::uint32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
     template<typename T, gl::uint32_t N> using Matrix     = glm::mat<N, N, T>;
                                          using Quaternion = glm::quat;

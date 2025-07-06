@@ -6,6 +6,11 @@
 
 namespace fox::gfx::api::gl
 {
+    constexpr auto NullObject         = gl::handle_t{ 0u };
+    constexpr auto DefaultFrameBuffer = gl::handle_t{ 0u };
+
+
+
     class Object
     {
     public:
