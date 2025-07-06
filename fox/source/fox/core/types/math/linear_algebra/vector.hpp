@@ -27,4 +27,14 @@ namespace fox
 	using Vector2d = fox::Vector<fox::float64_t, 2u>;
 	using Vector3d = fox::Vector<fox::float64_t, 3u>;
 	using Vector4d = fox::Vector<fox::float64_t, 4u>;
+
+	namespace vector
+	{
+		constexpr auto zero    = fox::Vector4f{  0.0f,  0.0f,  0.0f,  0.0f };
+		constexpr auto one     = fox::Vector4f{  1.0f,  1.0f,  1.0f,  1.0f };
+
+		constexpr auto right   = fox::Vector4f{  1.0f,  0.0f,  0.0f,  0.0f };
+		constexpr auto up      = fox::Vector4f{  0.0f,  1.0f,  0.0f,  0.0f };
+		constexpr auto forward = fox::Vector4f{  0.0f,  0.0f, -1.0f,  0.0f };
+	}
 }
