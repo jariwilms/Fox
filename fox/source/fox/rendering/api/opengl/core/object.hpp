@@ -37,7 +37,7 @@ namespace fox::gfx::api::gl
             : handle_{ handle } {}
         template<typename Dx>
         Object(gl::handle_t handle, Dx deleter)
-            : handle_{ handle }, deleter_{ std::shared_ptr<gl::handle_t>{ &handle_, std::move(deleter) } } {}
+            : handle_{ handle }, deleter_{ &handle_, std::move(deleter) } {}
 
         gl::handle_t                  handle_ ;
         std::shared_ptr<gl::handle_t> deleter_;
