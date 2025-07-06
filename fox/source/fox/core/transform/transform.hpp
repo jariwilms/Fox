@@ -11,12 +11,12 @@ namespace fox
     {
     public:
         constexpr Transform()
-            : position{ 0.0f }, rotation{ 1.0f, 0.0f, 0.0f, 0.0f }, scale{ 1.0f } {}
-        template<typename T, typename U, typename V>
-        constexpr Transform(T&& position, U&& rotation, V&& scale)
-            : position{ std::forward<T>(position) }, rotation{ std::forward<U>(math::to_radians(rotation)) }, scale{ std::forward<V>(scale) } {}
+            : position{ vector::zero }, rotation{ quaternion::identity }, scale{ vector::one } {}
+        template<typename P, typename R, typename S>
+        constexpr Transform(P&& position, R&& rotation, S&& scale)
+            : position{ std::forward<P>(position) }, rotation{ std::forward<R>(math::to_radians(rotation)) }, scale{ std::forward<S>(scale) } {}
 
-        static auto from_matrix(const fox::Matrix4f matrix)
+        static auto from_matrix(const fox::Matrix4f& matrix) -> fox::Transform
         {
             auto transform = fox::Transform{};
             std::tie(transform.position, transform.rotation, transform.scale, std::ignore, std::ignore) = math::decompose(matrix);
@@ -44,15 +44,15 @@ namespace fox
 
         auto forward     () const -> fox::Vector3f 
         {
-            return rotation * fox::Vector3f{ 0.0f, 0.0f, -1.0f };
+            return rotation * fox::vector::forward;
         }
         auto right       () const -> fox::Vector3f 
         {
-            return rotation * fox::Vector3f{ 1.0f, 0.0f, 0.0f };
+            return rotation * fox::vector::right;
         }
         auto up          () const -> fox::Vector3f 
         {
-            return rotation * fox::Vector3f{ 0.0f, 1.0f, 0.0f };
+            return rotation * fox::vector::up;
         }
 
         auto euler_angles() const -> fox::Vector3f 
@@ -72,14 +72,11 @@ namespace fox
 
         fox::Vector3f   position;
         fox::Quaternion rotation;
-        fox::Vector3f   scale   ;
+        fox::Vector3f   scale;
     };
 
     static auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
     {
-        auto transform = fox::Transform{};
-        std::tie(transform.position, transform.rotation, transform.scale, std::ignore, std::ignore) = math::decompose(left.matrix() * right.matrix());
-
-        return transform;
+        return fox::Transform::from_matrix(left.matrix() * right.matrix());
     }
 }
