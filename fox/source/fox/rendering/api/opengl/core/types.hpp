@@ -30,8 +30,8 @@ namespace fox::gfx::api::gl
 
     using enum_t     = GLenum      ; //Enumerated constant
     using sizei_t    = GLsizei     ; //Sizes and dimensions (may not be negative)
-    using size_t     = GLsizeiptr  ; //Size in bytes
-    using offset_t   = GLintptr    ; //Offset in bytes
+    using size_t     = GLsizeiptr  ; //Number of bytes
+    using offset_t   = GLintptr    ; //Number of bytes offset
     using count_t    = gl::uint32_t; //Number of elements
     using index_t    = gl::uint32_t; //Number of elements offset
     using sync_t     = GLsync      ; //Synchronization primitive
