@@ -28,13 +28,13 @@ namespace fox::gfx
             attributes_.emplace_back(api::map_type<T>(), count, sizeof(T), isNormalized, isStatic, divisionRate);
         }
 
-        auto attributes() const
+        auto attributes() const -> std::span<const Attribute>
         {
-            return std::span<const Attribute>{ attributes_ };
+            return attributes_;
         }
-        auto stride    () const
+        auto stride    () const -> fox::size_t
         {
-            return std::accumulate(attributes_.begin(), attributes_.end(), fox::size_t{ 0 }, [](fox::size_t accumulator, const auto& attribute)
+            return std::ranges::fold_left(attributes_, fox::size_t{ 0 }, [](fox::size_t accumulator, const auto& attribute) -> fox::size_t
                 {
                     return accumulator + (attribute.count * attribute.size);
                 });

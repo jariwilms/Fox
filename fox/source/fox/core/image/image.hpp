@@ -55,7 +55,7 @@ namespace fox
         {
             stbi_flip_vertically_on_write(cfg::FLIP_IMAGES);
 
-            const auto& write_bmp  = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            auto write_bmp  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                           auto  vector     = std::vector<fox::byte_t>{};
                     const auto& dimensions = image.dimensions();
@@ -68,7 +68,7 @@ namespace fox
 
                     return vector;
                 };
-            const auto& write_jpeg = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            auto write_jpeg = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                           auto  vector     = std::vector<fox::byte_t>{};
                     const auto& dimensions = image.dimensions();
@@ -81,7 +81,7 @@ namespace fox
 
                     return vector;
                 };
-            const auto& write_png  = [](const fox::Image& image) -> std::vector<fox::byte_t>
+            auto write_png  = [](const fox::Image& image) -> std::vector<fox::byte_t>
                 {
                           auto  vector     = std::vector<fox::byte_t>{};
                     const auto& dimensions = image.dimensions();
@@ -95,7 +95,7 @@ namespace fox
 
                     return vector;
                 };
-            const auto& write_hdr  = [](const fox::Image& image) -> std::vector<fox::float32_t>
+            auto write_hdr  = [](const fox::Image& image) -> std::vector<fox::float32_t>
                 {
                           auto  vector     = std::vector<fox::float32_t>{};
                     const auto& dimensions = image.dimensions();
@@ -123,7 +123,7 @@ namespace fox
                 Float32,
             };
 
-            const auto  type        = std::invoke([](Format format)
+            const auto  type        = std::invoke([](Format format) -> Type
                 {
                     switch (format)
                     {
@@ -145,7 +145,7 @@ namespace fox
                         default: throw std::invalid_argument{ "Invalid format!" };
                     };
                 }, format);
-            const auto  channels    = std::invoke([](Format format)
+            const auto  channels    = std::invoke([](Format format) -> Channels
                 {
                     switch (format)
                     {
@@ -168,7 +168,7 @@ namespace fox
                         default: throw std::invalid_argument{ "Invalid format!" };
                     };
                 }, format);
-            const auto  bpc         = std::invoke([](Format format)
+            const auto  bpc         = std::invoke([](Format format) -> fox::uint32_t
                 {
                     switch (format)
                     {

@@ -15,9 +15,9 @@ namespace fox::io
 
     std::shared_ptr<gfx::Model> ModelImporter::import(const std::filesystem::path& path)
     {
-        const auto& get_assimp_texture = [](aiMaterial const* aiMaterial, TextureType type, const std::filesystem::path& path)
+        auto get_assimp_texture = [](aiMaterial const* aiMaterial, TextureType type, const std::filesystem::path& path) -> std::optional<std::shared_ptr<gfx::Texture2D>>
             {
-                const auto& to_assimp_type = [](TextureType type)
+                auto to_assimp_type = [](TextureType type)
                     {
                         switch (type)
                         {
@@ -28,7 +28,7 @@ namespace fox::io
                             default: throw std::invalid_argument{ "Invalid texture type!" };
                         }
                     };
-                auto        option         = std::optional<std::shared_ptr<gfx::Texture2D>>{};
+                auto option         = std::optional<std::shared_ptr<gfx::Texture2D>>{};
 
                 if (aiMaterial->GetTextureCount(aiTextureType_DIFFUSE))
                 {
@@ -41,11 +41,11 @@ namespace fox::io
                 return option;
             };
 
-        auto        model         = std::make_shared<gfx::Model>();
-        const auto& absolutePath  = fox::io::root / path;
-        const auto& baseDirectory = absolutePath.parent_path();
-        auto        importer      = Assimp::Importer{};
-        const auto& importerFlags = fox::int32_t
+        auto       model         = std::make_shared<gfx::Model>();
+        const auto absolutePath  = fox::io::root / path;
+        const auto baseDirectory = absolutePath.parent_path();
+        auto       importer      = Assimp::Importer{};
+        const auto importerFlags = fox::int32_t
         {
             aiProcess_CalcTangentSpace      | //Calculate tangents and bitangents
             aiProcess_FindInvalidData       | //Removes/fixes invalid mesh data
@@ -62,7 +62,7 @@ namespace fox::io
             aiProcess_TransformUVCoords     | //Applies per-texture UV transformations
             aiProcess_Triangulate             //Split up faces with >3 indices into triangles
         };
-        const auto* aiScene       = importer.ReadFile(absolutePath.string(), importerFlags);
+        const auto* aiScene = importer.ReadFile(absolutePath.string(), importerFlags);
 
         if (!aiScene)                                     throw std::runtime_error   { "Failed to read file!"             };
         if ( aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) throw std::invalid_argument{ "Scene structure is not complete!" };
@@ -72,11 +72,11 @@ namespace fox::io
 
         for (const auto* aiMesh     : std::span<const aiMesh    * const>{ aiScene->mMeshes   , aiScene->mNumMeshes    })
         {
-            auto aiPositions     = std::span<const aiVector3D> { aiMesh->mVertices        , aiMesh->mNumVertices };
-            auto aiNormals       = std::span<const aiVector3D> { aiMesh->mNormals         , aiMesh->mNumVertices };
-            auto aiTangents      = std::span<const aiVector3D> { aiMesh->mTangents        , aiMesh->mNumVertices };
-            auto aiTexCoords     = std::span<const aiVector3D> { aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
-            auto aiFaces         = std::span<const aiFace    > { aiMesh->mFaces           , aiMesh->mNumFaces    };
+            auto aiPositions     = std::span<const aiVector3D>{ aiMesh->mVertices        , aiMesh->mNumVertices };
+            auto aiNormals       = std::span<const aiVector3D>{ aiMesh->mNormals         , aiMesh->mNumVertices };
+            auto aiTangents      = std::span<const aiVector3D>{ aiMesh->mTangents        , aiMesh->mNumVertices };
+            auto aiTexCoords     = std::span<const aiVector3D>{ aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
+            auto aiFaces         = std::span<const aiFace    >{ aiMesh->mFaces           , aiMesh->mNumFaces    };
 
             auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return fox::Vector3f{ position  .x, position  .y, position.z }; }) | std::ranges::to<std::vector>();
             auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return fox::Vector3f{ normal    .x, normal    .y, normal  .z }; }) | std::ranges::to<std::vector>();

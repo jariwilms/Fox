@@ -70,9 +70,9 @@ namespace fox::gfx::api::gl
                                 }
                             };
 
-                        auto eSource              = static_cast<glf::Debug::Source>  (source);
+                        auto eSource              = static_cast<glf::Debug::Source>  (source  );
                         auto eSeverity            = static_cast<glf::Debug::Severity>(severity);
-                        auto eType                = static_cast<glf::Debug::Type>    (type);
+                        auto eType                = static_cast<glf::Debug::Type>    (type    );
 
                         auto mSource              = map_source_message  (eSource);
                         auto mSeverity            = map_severity_message(eSeverity);
