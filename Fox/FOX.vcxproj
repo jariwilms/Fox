@@ -166,6 +166,7 @@
     <ClInclude Include="source\fox\rendering\api\opengl\core\data.hpp" />
     <ClInclude Include="source\fox\rendering\api\opengl\core\flags.hpp" />
     <ClInclude Include="source\fox\rendering\api\opengl\core\mapping.hpp" />
+    <ClInclude Include="source\fox\rendering\api\opengl\core\object.hpp" />
     <ClInclude Include="source\fox\rendering\api\opengl\core\parameters.hpp" />
     <ClInclude Include="source\fox\rendering\api\opengl\core\structures.hpp" />
     <ClInclude Include="source\fox\rendering\api\opengl\core\types.hpp" />
