@@ -1,7 +1,5 @@
 #pragma once
 
-#include <stdafx.hpp>
-
 namespace fox::gfx::api
 {
     class Pipeline
@@ -10,11 +8,11 @@ namespace fox::gfx::api
         template<typename T>
         struct Layout
         {
-            std::shared_ptr<T> vertex{};
-            std::shared_ptr<T> tessellationControl{};
-            std::shared_ptr<T> tessellationEvaluation{};
-            std::shared_ptr<T> geometry{};
-            std::shared_ptr<T> fragment{};
+            std::shared_ptr<T> vert{};
+            std::shared_ptr<T> tesc{};
+            std::shared_ptr<T> tese{};
+            std::shared_ptr<T> geom{};
+            std::shared_ptr<T> frag{};
         };
     };
 }

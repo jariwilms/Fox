@@ -73,12 +73,12 @@ namespace fox::gfx::api
                 if (geometry.has_value())
                 {
                     const auto& shaders = api::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / *geometry, dir / fragment);
-                    pipelines_.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = shaders.at(0), .geometry = shaders.at(1), .fragment = shaders.at(2) }));
+                    pipelines_.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vert = shaders.at(0), .geom = shaders.at(1), .frag = shaders.at(2) }));
                 }
                 else
                 {
                     const auto& shaders = api::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / fragment);
-                    pipelines_.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vertex = shaders.at(0), .fragment = shaders.at(1) }));
+                    pipelines_.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vert = shaders.at(0), .frag = shaders.at(1) }));
                 }
             };
 
