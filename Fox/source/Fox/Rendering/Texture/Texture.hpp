@@ -44,7 +44,7 @@ namespace fox::gfx
 
         void apply_wrapping (Wrapping s)
         {
-            _->apply_wrapping(s);
+            _->apply_wrapping({ s });
         }
         void generate_mipmap()
         {
@@ -59,11 +59,11 @@ namespace fox::gfx
         {
             return _->filter();
         }
-        auto wrapping     () const -> std::span<const Wrapping, 1u>
+        auto wrapping     () const -> const std::tuple<Wrapping>&
         {
             return _->wrapping();
         }
-        auto dimensions   () const -> fox::Vector1u
+        auto dimensions   () const -> const fox::Vector1u&
         {
             return _->dimensions();
         }
@@ -129,7 +129,7 @@ namespace fox::gfx
 
         void apply_wrapping (Wrapping s, Wrapping t)
         {
-            _->apply_wrapping(s, t);
+            _->apply_wrapping({ s, t });
         }
         void generate_mipmap()
         {
@@ -144,11 +144,11 @@ namespace fox::gfx
         {
             return _->filter();
         }
-        auto wrapping     () const -> std::span<const Wrapping, 2u>
+        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping>&
         {
             return _->wrapping();
         }
-        auto dimensions   () const -> fox::Vector2u
+        auto dimensions   () const -> const fox::Vector2u&
         {
             return _->dimensions();
         }
@@ -214,7 +214,7 @@ namespace fox::gfx
 
         void apply_wrapping (Wrapping s, Wrapping t, Wrapping r)
         {
-            _->apply_wrapping(s, t, r);
+            _->apply_wrapping({ s, t, r });
         }
         void generate_mipmap()
         {
@@ -229,11 +229,11 @@ namespace fox::gfx
         {
             return _->filter();
         }
-        auto wrapping     () const -> std::span<const Wrapping, 3u>
+        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping, Wrapping>&
         {
             return _->wrapping();
         }
-        auto dimensions   () const -> fox::Vector3u
+        auto dimensions   () const -> const fox::Vector3u&
         {
             return _->dimensions();
         }
@@ -284,7 +284,7 @@ namespace fox::gfx
         {
             return _->samples();
         }
-        auto dimensions() const -> fox::Vector2u
+        auto dimensions() const -> const fox::Vector2u&
         {
             return _->dimensions();
         }
@@ -322,7 +322,7 @@ namespace fox::gfx
         {
             return _->format();
         }
-        auto dimensions() const -> fox::Vector2u
+        auto dimensions() const -> const fox::Vector3u&
         {
             return _->dimensions();
         }

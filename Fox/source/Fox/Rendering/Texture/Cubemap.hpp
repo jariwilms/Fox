@@ -33,6 +33,15 @@ namespace fox::gfx
             _->bind(static_cast<impl::binding_t>(binding));
         }
 
+        void apply_wrapping (Wrapping s, Wrapping t)
+        {
+            _->apply_wrapping({ s, t });
+        }
+        void generate_mipmap()
+        {
+            _->generate_mipmap();
+        }
+
         auto format       () const -> Format
         {
             return _->format();
@@ -41,7 +50,7 @@ namespace fox::gfx
         {
             return _->filter();
         }
-        auto wrapping     () const -> std::span<const Wrapping, 2u>
+        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping>&
         {
             return _->wrapping();
         }
