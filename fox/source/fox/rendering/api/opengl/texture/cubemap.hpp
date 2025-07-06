@@ -10,16 +10,16 @@ namespace fox::gfx::api::gl
     class Cubemap : public gl::Object
     {
     public:
-        using Format   = api::Cubemap::Format;
-        using Filter   = api::Cubemap::Filter;
-        using Wrapping = api::Cubemap::Wrapping;
-        using Face     = api::Cubemap::Face;
+        using Format        = api::Cubemap::Format;
+        using Filter        = api::Cubemap::Filter;
+        using Wrapping      = api::Cubemap::Wrapping;
+        using WrappingProxy = gl::proxy_t<Wrapping, Wrapping>;
+        using Face          = api::Cubemap::Face;
 
-         Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions)
-            : format_{ format }, filter_{ filter }, wrapping_{ wrapping, wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
+         Cubemap(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector2u& dimensions)
+            : gl::Object{ gl::create_texture(glf::Texture::Target::CubeMap), [](auto* handle) { gl::delete_texture(*handle); } }
+            , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            handle_ = gl::create_texture(glf::Texture::Target::CubeMap);
-
             if (filter != Filter::None)
             {
                 gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
@@ -29,23 +29,20 @@ namespace fox::gfx::api::gl
                 mipmapLevels_ = math::mipmap_levels(dimensions_);
             }
 
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(wrapping_.at(0)) });
-            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(wrapping_.at(1)) });
+            const auto& [s, t] = wrapping_.pack;
+            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(t) });
             
             gl::texture_storage_2d(handle_, gl::map_cubemap_texture_format(format_), dimensions_, mipmapLevels_);
         }
-         Cubemap(Format format, Filter filter, Wrapping wrapping, const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
+         Cubemap(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
             : Cubemap{ format, filter, wrapping, dimensions }
         {
             attach_faces(faces, format_);
             generate_mipmap();
         }
-         Cubemap(Format format,                                   const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
+         Cubemap(Format format,                                        const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
             : Cubemap{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, faces } {}
-        ~Cubemap()
-        {
-            gl::delete_texture(handle_);
-        }
 
         void bind(gl::binding_t binding) const
         {
@@ -70,28 +67,36 @@ namespace fox::gfx::api::gl
                 data);
         }
 
+        void apply_wrapping (WrappingProxy wrapping)
+        {
+            wrapping_ = wrapping;
+
+            const auto& [s, t] = wrapping_.pack;
+            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(t) });
+        }
         void generate_mipmap()
         {
             if (filter_ != Filter::None) gl::generate_texture_mipmap(handle_);
         }
 
-        auto format       () const
+        auto format       () const -> Format
         {
             return format_;
         }
-        auto filter       () const
+        auto filter       () const -> Filter
         {
             return filter_;
         }
-        auto wrapping     () const -> std::span<const Wrapping, 2u>
+        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping>&
         {
-            return wrapping_;
+            return wrapping_.pack;
         }
-        auto dimensions   () const
+        auto dimensions   () const -> const gl::Vector2u&
         {
             return dimensions_;
         }
-        auto mipmap_levels() const
+        auto mipmap_levels() const -> gl::uint32_t
         {
             return mipmapLevels_;
         }
@@ -110,10 +115,10 @@ namespace fox::gfx::api::gl
             }
         }
 
-        Format                   format_{};
-        Filter                   filter_{};
-        std::array<Wrapping, 2u> wrapping_{};
-        gl::Vector2u             dimensions_{};
-        gl::uint32_t             mipmapLevels_{};
+        Format        format_;
+        Filter        filter_;
+        WrappingProxy wrapping_;
+        gl::Vector2u  dimensions_;
+        gl::uint32_t  mipmapLevels_;
     };
 }

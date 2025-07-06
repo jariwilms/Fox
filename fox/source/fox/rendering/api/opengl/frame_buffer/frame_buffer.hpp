@@ -18,12 +18,13 @@ namespace fox::gfx::api::gl
         using Surface       = api::FrameBuffer::Surface;
         using Target        = api::FrameBuffer::Target;
 
-         FrameBuffer() = default;
-         FrameBuffer(const gl::Vector2u& dimensions, std::span<const Specification> specifications)
-            : dimensions_{ dimensions }
+        FrameBuffer()
+            : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
+            , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{} {}
+        FrameBuffer(const gl::Vector2u& dimensions, std::span<const Specification> specifications)
+            : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
+            , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }
         {
-            handle_ = gl::create_frame_buffer();
-
             auto map_texture_attachment       = [](api::Texture::Format      format, gl::uint32_t& colorIndex)
                 {
                     switch (format)
@@ -123,11 +124,6 @@ namespace fox::gfx::api::gl
 
             if (gl::check_frame_buffer_status(handle_) != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
-         FrameBuffer(FrameBuffer&&) noexcept = default;
-        ~FrameBuffer()
-        {
-            gl::delete_frame_buffer(handle_);
-        }
 
         void bind(Target target)
         {
@@ -140,14 +136,14 @@ namespace fox::gfx::api::gl
             if constexpr (A == Surface::Cubemap) cubemapMap_.at(identifier)->bind(binding);
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Texture2D>    texture, gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Texture2D>    texture     , gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Cubemap>      cubemap, gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Cubemap>      cubemap     , gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, cubemap->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
@@ -239,14 +235,12 @@ namespace fox::gfx::api::gl
             return dimensions_;
         }
 
-        auto operator=(FrameBuffer&&) noexcept -> FrameBuffer& = default;
-
     private:
-        std::array<std::string, 11u>                                       attachments_    ;
-        std::unordered_map<std::string, std::shared_ptr<gl::Texture2D>>    textureMap_     ;
-        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>      cubemapMap_     ;
+        std::array<std::string, 11u>                                       attachments_;
+        std::unordered_map<std::string, std::shared_ptr<gl::Texture2D>>    textureMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>      cubemapMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::RenderBuffer>> renderBufferMap_;
-        gl::Vector2u                                                       dimensions_     ;
+        gl::Vector2u                                                       dimensions_;
     };
     class FrameBufferMultisample : public gl::Object
     {
@@ -256,12 +250,13 @@ namespace fox::gfx::api::gl
         using Surface       = api::FrameBuffer::Surface;
         using Target        = api::FrameBuffer::Target;
 
-        FrameBufferMultisample() = default;
-         FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
-            : dimensions_{ dimensions }, samples_{ samples }
+        FrameBufferMultisample(const gl::Vector2u& dimensions, gl::uint32_t samples)
+            : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
+            , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples } {}
+        FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
+            : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
+            , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples }
         {
-            handle_ = gl::create_frame_buffer();
-
             auto map_texture_attachment       = [](api::Texture::Format      format, gl::uint32_t& colorIndex)
                 {
                     switch (format)
@@ -361,11 +356,6 @@ namespace fox::gfx::api::gl
 
             if (gl::check_frame_buffer_status(handle_) != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
          }
-         FrameBufferMultisample(FrameBufferMultisample&&) noexcept = default;
-        ~FrameBufferMultisample()
-        {
-            gl::delete_frame_buffer(handle_);
-        }
         
         void bind(Target target)
         {
@@ -481,14 +471,12 @@ namespace fox::gfx::api::gl
             return samples_;
         }
 
-        auto operator=(FrameBufferMultisample&&) noexcept -> FrameBufferMultisample& = default;
-
     private:
-        gl::uint32_t                                                                  samples_        ;
-        std::array<std::string, 11u>                                                  attachments_    ;
-        std::unordered_map<std::string, std::shared_ptr<gl::Texture2DMultisample>>    textureMap_     ;
-        //std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>                 cubemapMap_     ;
+        std::array<std::string, 11u>                                                  attachments_;
+        std::unordered_map<std::string, std::shared_ptr<gl::Texture2DMultisample>>    textureMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>                 cubemapMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::RenderBufferMultisample>> renderBufferMap_;
-        gl::Vector2u                                                                  dimensions_     ;
+        gl::Vector2u                                                                  dimensions_;
+        gl::uint32_t                                                                  samples_;
     };
 }

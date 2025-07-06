@@ -50,36 +50,12 @@ namespace fox::gfx::api::gl
     enum class binding_t : gl::index_t  {};
     enum class key_t     : gl::uint64_t {};
 
-    constexpr gl::handle_t NullObject        { 0u };
-    constexpr gl::handle_t DefaultFrameBuffer{ 0u };
 
-    class Object
-    {
-    public:
-        Object(Object&& other) noexcept
-             : handle_{ std::exchange(other.handle_, gl::NullObject) } {}
 
-        auto handle() const -> gl::handle_t
-        {
-            return handle_;
-        }
 
-        auto operator=(Object&& other) noexcept -> Object&
-        {
-            if (this != &other)
-            {
-                handle_ = std::exchange(other.handle_, handle_);
-            }
 
-            return *this;
-        }
-
-    protected:
-         Object() = default;
-        ~Object() = default;
-
-        gl::handle_t handle_{ gl::NullObject };
-    };
+    constexpr auto NullObject         = gl::handle_t{ 0u };
+    constexpr auto DefaultFrameBuffer = gl::handle_t{ 0u };
 
 
 
@@ -161,10 +137,29 @@ namespace fox::gfx::api::gl
 
     using lock_t        = std::tuple<gl::range_t, gl::sync_t>;
 
+    template<typename... T>
+    class proxy_t
+    {
+    public:
+        template<typename U> requires (std::is_convertible_v<U, T> && ...)
+        constexpr proxy_t(U&&  value )
+            : pack{ std::make_tuple(static_cast<T>(std::forward<U>(value))...) } {}
+        constexpr proxy_t(T... values)
+            : pack{ std::make_tuple(values...) } {}
+
+        template<typename Fn>
+        void apply(Fn&& function)
+        {
+            std::apply([function](auto&&... value) { ((function(value)), ...); }, pack);
+        }
+
+        std::tuple<T...> pack;
+    };
 
 
 
 
-    static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const void*) {}
+
+    static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const gl::void_t*) {}
     using debug_callback_t = decltype(_debug_callback);
 }

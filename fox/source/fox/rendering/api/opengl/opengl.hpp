@@ -6,6 +6,7 @@
 #include <fox/rendering/api/opengl/core/data.hpp>
 #include <fox/rendering/api/opengl/core/flags.hpp>
 #include <fox/rendering/api/opengl/core/mapping.hpp>
+#include <fox/rendering/api/opengl/core/object.hpp>
 #include <fox/rendering/api/opengl/core/parameters.hpp>
 #include <fox/rendering/api/opengl/core/structures.hpp>
 #include <fox/rendering/api/opengl/core/types.hpp>

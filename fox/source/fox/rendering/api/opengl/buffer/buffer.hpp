@@ -12,10 +12,9 @@ namespace fox::gfx::api::gl
     {
     public:
         explicit Buffer(gl::count_t count)
-            : size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
+            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            , size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
-            handle_ = gl::create_buffer();
-            
             gl::buffer_storage<T>(
                 handle_                                   ,
                 glf::Buffer::StorageFlags::DynamicStorage |
@@ -25,10 +24,9 @@ namespace fox::gfx::api::gl
                 count                                    );
         }
         explicit Buffer(std::span<const T> data)
-            : size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
+            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
-            handle_ = gl::create_buffer();
-            
             gl::buffer_storage<T>(
                 handle_                                   , 
                 glf::Buffer::StorageFlags::DynamicStorage | 
@@ -36,13 +34,6 @@ namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Persistent     | 
                 glf::Buffer::StorageFlags::Coherent       , 
                 data                                     );
-        }
-                 Buffer(Buffer&&) noexcept = default;
-                ~Buffer()
-        {
-            unmap();
-
-            gl::delete_buffer(handle_);
         }
 
         void copy      (                   std::span<const T> data)
@@ -69,7 +60,7 @@ namespace fox::gfx::api::gl
                 glf::Buffer::Mapping::RangeAccessFlags::Coherent   , 
                 count()                                           );
 
-            data_  = std::shared_ptr<std::span<T>>{ span, [this](const auto* _) { unmap(); } };
+            data_  = std::shared_ptr<std::span<T>>{ span, [this](auto* _) { unmap(); } };
             range_ = count();
 
             return data_;
@@ -161,36 +152,31 @@ namespace fox::gfx::api::gl
         }
         auto data () const -> std::weak_ptr<std::span<const T>>
         {
-            return std::weak_ptr<std::span<const T>>{ data_ };
+            return data_;
         }
         auto data () -> std::weak_ptr<std::span<T>>
         {
-            return std::weak_ptr<std::span<T>>{ data_ };
+            return data_;
         }
 
-        auto operator=(Buffer&&) noexcept -> Buffer& = default;
-
     private:
-        gl::size_t                    size_ ;
+        gl::size_t                    size_;
         gl::range_t                   range_;
         std::vector<gl::lock_t>       locks_;
-        std::shared_ptr<std::span<T>> data_ ;
+        std::shared_ptr<std::span<T>> data_;
     };
     template<typename T>
     class UniformBuffer : public gl::Object
     {
     public:
         explicit UniformBuffer(const T& data = {})
-            : size_{ sizeof(T) }
+            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            , size_{ sizeof(T) }
         {
-            handle_ = gl::create_buffer();
-
-            gl::buffer_storage<T>(handle_, glf::Buffer::StorageFlags::DynamicStorage, std::span<const T>{ &data, 1u });
-        }
-                 UniformBuffer(UniformBuffer&&) noexcept = default;
-                ~UniformBuffer()
-        {
-            gl::delete_buffer(handle_);
+            gl::buffer_storage<T>(
+                handle_                                  , 
+                glf::Buffer::StorageFlags::DynamicStorage, 
+                std::span<const T>{ &data, 1u }         );
         }
 
         void bind(gl::binding_t binding) const
@@ -222,8 +208,6 @@ namespace fox::gfx::api::gl
             return size_;
         }
 
-        auto operator=(UniformBuffer&&) noexcept -> UniformBuffer& = default;
-
     private:
         gl::size_t size_;
     };
@@ -232,23 +216,21 @@ namespace fox::gfx::api::gl
     {
     public:
         explicit UniformArrayBuffer()
-            : size_{ static_cast<gl::size_t>(N * sizeof(T)) }
+            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            , size_{ static_cast<gl::size_t>(N * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
-            handle_ = gl::create_buffer();
-
-            gl::buffer_storage(
+            gl::buffer_storage<T>(
                 handle_, 
                 glf::Buffer::StorageFlags::DynamicStorage | 
                 glf::Buffer::StorageFlags::ReadWrite      | 
                 glf::Buffer::StorageFlags::Persistent     | 
                 glf::Buffer::StorageFlags::Coherent       , 
-                gl::size_t{ N * sizeof(T) });
+                gl::size_t{ N * sizeof(T) }              );
         }
         explicit UniformArrayBuffer(std::span<const T> data)
-            : size_{ static_cast<gl::size_t>(data.size_bytes()) }
+            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
-            handle_ = gl::create_buffer();
-
             gl::buffer_storage<T>(
                 handle_                                   , 
                 glf::Buffer::StorageFlags::DynamicStorage | 
@@ -256,11 +238,6 @@ namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Persistent     | 
                 glf::Buffer::StorageFlags::Coherent       , 
                 data                                     );
-        }
-                 UniformArrayBuffer(UniformArrayBuffer&&) noexcept = default;
-                ~UniformArrayBuffer()
-        {
-            gl::delete_buffer(handle_);
         }
 
         void bind      (gl::binding_t binding) const
@@ -389,19 +366,17 @@ namespace fox::gfx::api::gl
         }
         auto data () const -> std::weak_ptr<std::span<const T>>
         {
-            return std::weak_ptr<std::span<const T>>{ data_ };
+            return data_;
         }
         auto data () -> std::weak_ptr<std::span<T>>
         {
-            return std::weak_ptr<std::span<T>>{ data_ };
+            return data_;
         }
 
-        auto operator=(UniformArrayBuffer&&) noexcept -> UniformArrayBuffer& = default;
-
     private:
-        gl::size_t                    size_ ;
+        gl::size_t                    size_;
         gl::range_t                   range_;
         std::vector<gl::lock_t>       locks_;
-        std::shared_ptr<std::span<T>> data_ ;
+        std::shared_ptr<std::span<T>> data_;
     };
 }

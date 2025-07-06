@@ -6,26 +6,21 @@
 
 namespace fox::gfx::api::gl
 {
-    template<typename S>
-    class Pipeline : public api::Pipeline, public gl::Object
+    template<typename T = gl::Shader>
+    class Pipeline : public gl::Object
     {
     public:
-        using Layout = Layout<S>;
+        using Layout = api::Pipeline::Layout<T>;
 
         Pipeline(const Layout& layout)
-            : layout_{ layout }
+            : gl::Object{ gl::create_program_pipeline(), [](auto* handle) { gl::delete_program_pipeline(*handle); }}
+            , layout_{ layout }
         {
-            handle_ = gl::create_program_pipeline();
-
-            if (const auto& shader = layout_.vertex;                 shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = layout_.tessellationControl;    shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = layout_.tessellationEvaluation; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = layout_.geometry;               shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
-            if (const auto& shader = layout_.fragment;               shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
-        }
-        ~Pipeline()
-        {
-            gl::delete_program_pipeline(handle_);
+            if (auto shader = layout_.vert; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (auto shader = layout_.tesc; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (auto shader = layout_.tese; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (auto shader = layout_.geom; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
+            if (auto shader = layout_.frag; shader) gl::use_program_stages(handle_, shader->handle(), gl::map_program_stage(shader->stage()));
         }
 
         void bind()
@@ -33,12 +28,12 @@ namespace fox::gfx::api::gl
             gl::bind_program_pipeline(handle_);
         }
 
-        const Layout& layout() const
+        auto layout() const -> const Layout&
         {
             return layout_;
         }
 
     private:
-        Layout layout_{};
+        Layout layout_;
     };
 }

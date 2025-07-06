@@ -10,15 +10,9 @@ namespace fox::gfx::api::gl
     class VertexArray : public gl::Object
     {
     public:
-         VertexArray()
-        {
-            handle_ = gl::create_vertex_array();
-        }
-         VertexArray(VertexArray&&) noexcept = default;
-        ~VertexArray()
-        {
-            gl::delete_vertex_array(handle_);
-        }
+        VertexArray()
+            : gl::Object{ gl::create_vertex_array(), [](auto* handle) { gl::delete_vertex_array(*handle); } }
+            , attributeIndex_{}, bindingPoint_{}, indexCount_{} {}
 
         void bind() const
         {
@@ -69,11 +63,9 @@ namespace fox::gfx::api::gl
             return indexCount_;
         }
 
-        auto operator=(VertexArray&&) noexcept -> VertexArray& = default;
-
     private:
-        gl::index_t   attributeIndex_{};
-        gl::binding_t bindingPoint_{};
-        gl::count_t   indexCount_{};
+        gl::binding_t bindingPoint_;
+        gl::index_t   attributeIndex_;
+        gl::count_t   indexCount_;
     };
 }

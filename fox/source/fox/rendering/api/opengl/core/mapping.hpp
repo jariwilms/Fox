@@ -406,6 +406,21 @@ namespace fox::gfx::api::gl
         }
     }
     
+    static auto map_query_target                         (api::Query::Target target) -> glf::Query::Target
+    {
+        gl::todo();
+        return {};
+
+        //switch (target)
+        //{
+        //    //case api::Query::Target::Occlusion : return glf::Query::Target::;
+        //    //case api::Query::Target::Statistics: return 0;
+        //    //case api::Query::Target::Timestamp : return 0;
+
+        //    default: throw std::invalid_argument{ "Invalid target!" };
+        //}
+    }
+
     static auto map_depth_function                       (api::RenderState::DepthFunction depthFunction) -> glf::DepthFunction
     {
         switch (depthFunction)

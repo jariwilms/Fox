@@ -13,12 +13,10 @@ namespace fox::gfx::api::gl
 		using Target = api::Query::Target;
 
 		Query(Target target)
+			: gl::Object{ gl::create_query(gl::map_query_target(target)), [](auto* handle) { gl::delete_query(*handle); }}
+			, target_{ target }
 		{
 			gl::todo();
-		}
-		~Query()
-		{
-			//gl::delete_query(handle_);
 		}
 
 	private:

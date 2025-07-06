@@ -12,23 +12,11 @@ namespace fox::gfx::api::gl
 		using Parameter = api::Sampler::Parameter;
 
 		 Sampler()
-		{
-			handle_ = gl::create_sampler();
-		}
-		 Sampler(Sampler&&) noexcept = default;
-		~Sampler()
-		{
-			gl::delete_sampler(handle_);
-		}
+			: gl::Object{ gl::create_sampler(), [](auto* handle) { gl::delete_sampler(*handle); } } {}
 
 		void bind(gl::binding_t slot)
 		{
 			gl::bind_sampler(handle_, slot);
 		}
-
-		auto operator=(Sampler&&) noexcept -> Sampler& = default;
-
-	private:
-		
 	};
 }
