@@ -34,7 +34,7 @@ namespace fox::gfx::api::gl
         }
 
     private:
-        Format       format_    ;
+        Format       format_;
         gl::Vector2u dimensions_;
     };
     class RenderBufferMultisample : public gl::Object
@@ -70,8 +70,8 @@ namespace fox::gfx::api::gl
         }
 
     private:
-        Format       format_    ;
+        Format       format_;
         gl::Vector2u dimensions_;
-        gl::uint32_t samples_   ;
+        gl::uint32_t samples_;
     };
 }
