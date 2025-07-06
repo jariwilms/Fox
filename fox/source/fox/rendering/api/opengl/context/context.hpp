@@ -9,16 +9,16 @@ namespace fox::gfx::api::gl
 	public:
 		static void init()
 		{
-			s_contextFlags           = gl::get_value <glf::Data             ::ContextFlags          >();
-			s_contextProfile         = gl::get_value <glf::Data             ::ContextProfileMask    >();
-			s_majorVersion           = gl::get_value <glf::Data             ::MajorVersion          >();
-			s_minorVersion           = gl::get_value <glf::Data             ::MinorVersion          >();
-			s_vendor                 = gl::get_string<glf::Context::Property::Vendor                >();
-			s_renderer               = gl::get_string<glf::Context::Property::Renderer              >();
-			s_version                = gl::get_string<glf::Context::Property::Version               >();
-            s_shadingLanguageVersion = gl::get_string<glf::Context::Property::ShadingLanguageVersion>();
+			contextFlags_           = gl::get_value <glf::Data             ::ContextFlags          >();
+			contextProfile_         = gl::get_value <glf::Data             ::ContextProfileMask    >();
+			majorVersion_           = gl::get_value <glf::Data             ::MajorVersion          >();
+			minorVersion_           = gl::get_value <glf::Data             ::MinorVersion          >();
+			vendor_                 = gl::get_string<glf::Context::Property::Vendor                >();
+			renderer_               = gl::get_string<glf::Context::Property::Renderer              >();
+			version_                = gl::get_string<glf::Context::Property::Version               >();
+            shadingLanguageVersion_ = gl::get_string<glf::Context::Property::ShadingLanguageVersion>();
 
-            if (gl::to_underlying(s_contextFlags & glf::Context::Flag::Debug))
+            if (gl::to_underlying(contextFlags_ & glf::Context::Flag::Debug))
 			{
                 gl::enable<glf::Feature::DebugOutput>();
 				gl::enable<glf::Feature::DebugOutputSynchronous>();
@@ -87,13 +87,13 @@ namespace fox::gfx::api::gl
 		}
 
 	private:
-		static inline glf::Context::Flag    s_contextFlags{};
-		static inline glf::Context::Profile s_contextProfile{};
-		static inline gl::uint32_t          s_majorVersion{};
-		static inline gl::uint32_t          s_minorVersion{};
-		static inline std::string           s_vendor{};
-		static inline std::string           s_renderer{};
-		static inline std::string           s_version{};
-		static inline std::string           s_shadingLanguageVersion{};
+		static inline glf::Context::Flag    contextFlags_;
+		static inline glf::Context::Profile contextProfile_;
+		static inline gl::uint32_t          majorVersion_;
+		static inline gl::uint32_t          minorVersion_;
+		static inline std::string           vendor_;
+		static inline std::string           renderer_;
+		static inline std::string           version_;
+		static inline std::string           shadingLanguageVersion_;
 	};
 }
