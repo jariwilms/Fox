@@ -194,13 +194,13 @@ namespace fox::gfx::api::gl
             auto slice = std::array<gl::byte_t, (sizeof(T) + ... + 0u)>{};
             if (gl::compare<std::greater>(offset + slice.size(), size())) throw std::range_error{ "The given data is too large!" };
 
-            std::apply([&slice](auto&&... args)
+            std::apply([&slice](const auto&... element)
                 {
                     auto offset = gl::offset_t{};
-                    ((std::memcpy(slice.data() + offset, &args, sizeof(args)), offset += sizeof(args)), ...);
+                    ((std::memcpy(slice.data() + offset, &element, sizeof(element)), offset += sizeof(element)), ...);
                 }, data);
 
-            gl::buffer_data<gl::byte_t>(handle_, static_cast<gl::count_t>(offset), gl::as_bytes(slice));
+            gl::buffer_data<gl::byte_t>(handle_, static_cast<gl::index_t>(offset), slice);
         }
 
         auto size() const -> gl::size_t

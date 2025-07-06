@@ -134,15 +134,15 @@ namespace fox::gfx::api::gl
     {
     public:
         template<typename U> requires (std::is_convertible_v<U, T> && ...)
-        constexpr proxy_t(U&&  value )
-            : pack{ std::make_tuple(static_cast<T>(std::forward<U>(value))...) } {}
-        constexpr proxy_t(T... values)
-            : pack{ std::make_tuple(values...) } {}
+        constexpr proxy_t(U&&  element )
+            : pack{ std::make_tuple(static_cast<T>(std::forward<U>(element))...) } {}
+        constexpr proxy_t(T... elements)
+            : pack{ std::make_tuple(elements...) } {}
 
         template<typename Fn>
         void apply(Fn&& function)
         {
-            std::apply([function](auto&&... value) { ((function(value)), ...); }, pack);
+            std::apply([function](auto&&... element) { ((function(element)), ...); }, pack);
         }
 
         std::tuple<T...> pack;
