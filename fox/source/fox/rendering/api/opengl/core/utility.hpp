@@ -29,21 +29,21 @@ namespace fox::gfx::api::gl
     {
         if constexpr (std::is_integral_v<T> and std::is_integral_v<U>)
         {
-            if (std::is_same_v<C<>, std::equal_to     <>>) return std::cmp_equal        (left, right);
-            if (std::is_same_v<C<>, std::not_equal_to <>>) return std::cmp_not_equal    (left, right);
-            if (std::is_same_v<C<>, std::less         <>>) return std::cmp_less         (left, right);
-            if (std::is_same_v<C<>, std::greater      <>>) return std::cmp_greater      (left, right);
-            if (std::is_same_v<C<>, std::less_equal   <>>) return std::cmp_less_equal   (left, right);
-            if (std::is_same_v<C<>, std::greater_equal<>>) return std::cmp_greater_equal(left, right);
+            if (std::is_same_v<C<T>, std::equal_to     <T>>) return std::cmp_equal        (left, right);
+            if (std::is_same_v<C<T>, std::not_equal_to <T>>) return std::cmp_not_equal    (left, right);
+            if (std::is_same_v<C<T>, std::less         <T>>) return std::cmp_less         (left, right);
+            if (std::is_same_v<C<T>, std::greater      <T>>) return std::cmp_greater      (left, right);
+            if (std::is_same_v<C<T>, std::less_equal   <T>>) return std::cmp_less_equal   (left, right);
+            if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::cmp_greater_equal(left, right);
         }
         else
         {
-            if (std::is_same_v<C<>, std::equal_to     <>>) return std::ranges::equal_to     {}(std::forward<T>(left), std::forward<U>(right));
-            if (std::is_same_v<C<>, std::not_equal_to <>>) return std::ranges::not_equal_to {}(std::forward<T>(left), std::forward<U>(right));
-            if (std::is_same_v<C<>, std::less         <>>) return std::ranges::less         {}(std::forward<T>(left), std::forward<U>(right));
-            if (std::is_same_v<C<>, std::greater      <>>) return std::ranges::greater      {}(std::forward<T>(left), std::forward<U>(right));
-            if (std::is_same_v<C<>, std::less_equal   <>>) return std::ranges::less_equal   {}(std::forward<T>(left), std::forward<U>(right));
-            if (std::is_same_v<C<>, std::greater_equal<>>) return std::ranges::greater_equal{}(std::forward<T>(left), std::forward<U>(right));
+            if (std::is_same_v<C<T>, std::equal_to     <T>>) return std::ranges::equal_to     {}(std::forward<T>(left), std::forward<U>(right));
+            if (std::is_same_v<C<T>, std::not_equal_to <T>>) return std::ranges::not_equal_to {}(std::forward<T>(left), std::forward<U>(right));
+            if (std::is_same_v<C<T>, std::less         <T>>) return std::ranges::less         {}(std::forward<T>(left), std::forward<U>(right));
+            if (std::is_same_v<C<T>, std::greater      <T>>) return std::ranges::greater      {}(std::forward<T>(left), std::forward<U>(right));
+            if (std::is_same_v<C<T>, std::less_equal   <T>>) return std::ranges::less_equal   {}(std::forward<T>(left), std::forward<U>(right));
+            if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::ranges::greater_equal{}(std::forward<T>(left), std::forward<U>(right));
         }
     }
 
