@@ -35,7 +35,7 @@ namespace fox
         {
             rotation *= fox::Quaternion{ math::to_radians(angle) };
         }
-        void stretch_by  (const fox::Vector3f& factor     )
+        void scale_by    (const fox::Vector3f& factor     )
         {
             scale *= factor;
         }
