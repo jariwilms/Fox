@@ -12,14 +12,14 @@ namespace fox::gfx::api::gl
         return static_cast<std::underlying_type_t<T>>(value);
     }
     template<typename T>
-    inline constexpr auto to_underlying_ptr(      T* const value) noexcept ->       std::underlying_type_t<T>* const
+    inline constexpr auto to_underlying_ptr(      T* const value) noexcept -> std::underlying_type_t<T>* const
     {
-        return reinterpret_cast<std::underlying_type_t<T>* const>(value);
+        return std::bit_cast<std::underlying_type_t<T>* const>(value);
     }
     template<typename T>
     inline constexpr auto to_underlying_ptr(const T* const value) noexcept -> const std::underlying_type_t<T>* const
     {
-        return reinterpret_cast<const std::underlying_type_t<T>* const>(value);
+        return std::bit_cast<const std::underlying_type_t<T>* const>(value);
     }
 
 

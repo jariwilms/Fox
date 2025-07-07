@@ -111,14 +111,14 @@ namespace fox::gfx::api::gl
                 glGetIntegerv(gl::to_underlying(glf::Data::NumberProgramBinaryFormats), &numberProgramBinaryFormats);
 
                 auto programBinaryFormats = std::vector<gl::enum_t>(static_cast<std::uint32_t>(numberProgramBinaryFormats));
-                glGetIntegerv(gl::to_underlying(data), reinterpret_cast<gl::int32_t*>(programBinaryFormats.data()));
+                glGetIntegerv(gl::to_underlying(data), std::bit_cast<gl::int32_t*>(programBinaryFormats.data()));
 
                 return programBinaryFormats;
             };
         auto get_area_v               = [](glf::Data data) -> gl::area_t
             {
                 auto value = gl::Vector4u{};
-                glGetIntegerv(gl::to_underlying(data), reinterpret_cast<gl::int32_t*>(glm::value_ptr(value)));
+                glGetIntegerv(gl::to_underlying(data), std::bit_cast<gl::int32_t*>(glm::value_ptr(value)));
 
                 return gl::area_t{ gl::Vector2u{ value.z, value.w }, gl::Vector2u{ value.x, value.y } };
             };
@@ -349,7 +349,7 @@ namespace fox::gfx::api::gl
         auto get_area_v               = [](glf::Data data, gl::index_t index) -> gl::area_t
             {
                 auto value = gl::Vector4u{};
-                glGetIntegeri_v(gl::to_underlying(data), index, reinterpret_cast<gl::int32_t*>(glm::value_ptr(value)));
+                glGetIntegeri_v(gl::to_underlying(data), index, std::bit_cast<gl::int32_t*>(glm::value_ptr(value)));
 
                 return gl::area_t{ gl::Vector2u{ value.z, value.w }, gl::Vector2u{ value.x, value.y } };
             };
@@ -410,12 +410,12 @@ namespace fox::gfx::api::gl
     template<glf::Context::Property P>
     inline auto get_string                                 () -> std::string
     {
-        return std::string{ reinterpret_cast<const gl::char_t*>(glGetString(gl::to_underlying(P))) };
+        return std::string{ std::bit_cast<const gl::char_t*>(glGetString(gl::to_underlying(P))) };
     }
     template<glf::Context::Property P>
     inline auto get_string_index                           (gl::index_t index) -> std::string
     {
-        return std::string{ reinterpret_cast<const gl::char_t*>(glGetStringi(gl::to_underlying(P), index)) };
+        return std::string{ std::bit_cast<const gl::char_t*>(glGetStringi(gl::to_underlying(P), index)) };
     }
     inline auto get_internal_format_value                  () -> auto
     {
@@ -1097,13 +1097,13 @@ namespace fox::gfx::api::gl
     template<typename T>
     inline auto map_buffer                                 (gl::handle_t buffer, glf::Buffer::Mapping::AccessFlags access, gl::count_t count) -> std::span<T>
     {
-        return std::span{ reinterpret_cast<T*>(glMapNamedBuffer(gl::to_underlying(buffer), gl::to_underlying(access))), count };
+        return std::span{ std::bit_cast<T*>(glMapNamedBuffer(gl::to_underlying(buffer), gl::to_underlying(access))), count };
     }
     template<typename T>
     inline auto map_buffer_range                           (gl::handle_t buffer, glf::Buffer::Mapping::RangeAccessFlags access, gl::range_t range) -> std::span<T>
     {
         auto byterange = gl::convert_range<T>(range);
-        return std::span{ reinterpret_cast<T*>(glMapNamedBufferRange(gl::to_underlying(buffer), byterange.offset, byterange.size, gl::to_underlying(access))), range.count };
+        return std::span{ std::bit_cast<T*>(glMapNamedBufferRange(gl::to_underlying(buffer), byterange.offset, byterange.size, gl::to_underlying(access))), range.count };
     }
     template<typename T>
     inline void flush_buffer_range                         (gl::handle_t buffer, gl::range_t range)
@@ -1976,21 +1976,21 @@ namespace fox::gfx::api::gl
     inline void scissor_array                              (gl::index_t index, std::span<const gl::uint32_t, 4u> values)
     {
         glScissorArrayv(
-            index, 
-            static_cast<gl::sizei_t>            (values.size()), 
-            reinterpret_cast<const gl::int32_t*>(values.data()));
+            index                                            , 
+            static_cast<gl::sizei_t>         (values.size()) , 
+            std::bit_cast<const gl::int32_t*>(values.data())); 
     }
     inline void scissor_indexed                            (gl::index_t index, gl::area_t region)
     {
         glScissorIndexed(
-            index, 
-            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
+            index                                                                                , 
+            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y) ,  
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
     inline void scissor                                    (gl::area_t region)
     {
         glScissor(
-            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y), 
+            static_cast<gl::int32_t>(region.origin.x), static_cast<gl::int32_t>(region.origin.y) , 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
     inline void sample_coverage                            (gl::float32_t value, gl::bool_t invert)

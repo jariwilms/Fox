@@ -38,15 +38,11 @@ namespace fox
             return C<void>{}(left, right);
         }
 
-        template<typename T, fox::size_t EXTENT = std::dynamic_extent>
-        inline constexpr auto as_bytes(std::span<const T, EXTENT> span)
+        template<std::ranges::range R>
+        inline auto as_bytes(R&& range) -> std::span<const fox::byte_t>
         {
-            return std::span{ reinterpret_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
-        }
-        template<typename T>
-        inline constexpr auto as_bytes(const T& container)
-        {
-            return as_bytes(std::span{ container });
+            auto span = std::span{ range };
+            return std::span<const fox::byte_t>{ reinterpret_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
         }
 
 

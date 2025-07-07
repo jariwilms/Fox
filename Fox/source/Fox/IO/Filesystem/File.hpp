@@ -80,11 +80,11 @@ namespace fox::io
 	protected:
         void read_data (fox::byte_t      * data, fox::size_t size)
         {
-            stream_.read(reinterpret_cast<fox::char_t*>(data), size);
+            stream_.read(std::bit_cast<fox::char_t*>(data), size);
         }
         void write_data(fox::byte_t const* data, fox::size_t size)
         {
-            stream_.write(reinterpret_cast<const fox::char_t*>(data), size);
+            stream_.write(std::bit_cast<const fox::char_t*>(data), size);
         }
 
         std::fstream stream_{};

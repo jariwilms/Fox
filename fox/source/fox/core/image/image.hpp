@@ -104,7 +104,7 @@ namespace fox
                         vendor::stb::write_function<fox::float32_t>, 
                         &vector, dimensions.x, dimensions.y, 
                         std::to_underlying(image.channels()), 
-                        reinterpret_cast<const fox::float32_t*>(image.data().data()));
+                        std::bit_cast<const fox::float32_t*>(image.data().data()));
 
                     return vector;
                 };
@@ -201,7 +201,7 @@ namespace fox
             if (type == Type::Float32) iPointer = stbi_loadf_from_memory  (data.data(), static_cast<fox::int32_t>(data.size_bytes()), &iDimensions.x, &iDimensions.y, &iChannels, std::to_underlying(channels));
 
                   auto  bpp         = std::to_underlying(channels) * (bpc / (sizeof(fox::byte_t) * 8u));
-                  auto  span        = std::span{ reinterpret_cast<const fox::byte_t*>(iPointer), bpp * iDimensions.x * iDimensions.y };
+                  auto  span        = std::span{ std::bit_cast<const fox::byte_t*>(iPointer), bpp * iDimensions.x * iDimensions.y };
                   auto  vector      = std::vector<fox::byte_t>{ std::from_range, span };
 
             stbi_image_free(iPointer);
