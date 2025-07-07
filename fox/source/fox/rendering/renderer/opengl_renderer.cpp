@@ -294,7 +294,7 @@ namespace fox::gfx::api
             ssaoNoise.at(index) = noise;
         }
 
-        ssaoNoiseTexture_ = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Nearest, gfx::Texture2D::Wrapping::Repeat, fox::Vector2u{ 4u, 4u }, utl::as_bytes(ssaoNoise));
+        ssaoNoiseTexture_ = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Nearest, gfx::Texture2D::Wrapping::Repeat, fox::Vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::Vector3f>{ ssaoNoise }));
     }
 
     void OpenGLRenderer::start(gfx::RenderInfo renderInfo)
@@ -473,7 +473,6 @@ namespace fox::gfx::api
         auto positionTexture = gBuffer_->surface("Position");
         std::array<fox::float32_t, 4u> data{ 0.0f, 0.0f, -1000.0f };
         gl::clear_texture_image(positionTexture->handle(), glf::Texture::BaseFormat::RGB, glf::Texture::Type::Float, 0, utl::as_bytes(data));
-
 
         for (const auto& _ : mmt_)
         {
