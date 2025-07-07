@@ -17,8 +17,6 @@ namespace fox
     using Matrix3f = fox::Matrix<fox::float32_t, 3u>;
     using Matrix4f = fox::Matrix<fox::float32_t, 4u>;
 
-    using composition_t = std::tuple<fox::Vector3f, fox::Quaternion, fox::Vector3f, fox::Vector3f, fox::Vector4f>;
-
     namespace matrix
     {
         constexpr auto identity = fox::Matrix4f{ 1.0f };

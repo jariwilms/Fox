@@ -10,11 +10,14 @@ namespace fox
     class Transform
     {
     public:
-        constexpr Transform()
+        Transform()
             : position{ vector::zero }, rotation{ quaternion::identity }, scale{ vector::one } {}
+        template<typename T>
+        Transform(T&& position, T&& rotation, T&& scale)
+            : position{ std::forward<T>(position) }, rotation{ math::to_radians(std::forward<T>(rotation)) }, scale{ std::forward<T>(scale) } {}
         template<typename P, typename R, typename S>
-        constexpr Transform(P&& position, R&& rotation, S&& scale)
-            : position{ std::forward<P>(position) }, rotation{ std::forward<R>(math::to_radians(rotation)) }, scale{ std::forward<S>(scale) } {}
+        Transform(P&& position, R&& rotation, S&& scale)
+            : position{ std::forward<P>(position) }, rotation{ std::forward<R>(rotation) }, scale{ std::forward<S>(scale) } {}
 
         static auto from_matrix(const fox::Matrix4f& matrix) -> fox::Transform
         {
@@ -30,7 +33,7 @@ namespace fox
         }
         void rotate      (const fox::Vector3f& rotation   )
         {
-            this->rotation *= fox::Quaternion{ glm::radians(rotation) };
+            this->rotation *= fox::Quaternion{ math::to_radians(rotation) };
         }
         void dilate      (const fox::Vector3f& scale      )
         {
@@ -59,13 +62,13 @@ namespace fox
         {
             return math::to_degrees(math::euler_angles(rotation));
         }
-        auto matrix      () const -> fox::Matrix4f 
+        auto matrix      () const -> fox::Matrix4f
         {
-            fox::Matrix4f matrix{ 1.0f };
+            auto matrix = matrix::identity;
 
-            matrix  = math::translate(matrix, position);
-            matrix *= math::to_matrix(        rotation);
-            matrix  = math::scale    (matrix, scale   );
+            matrix = math::translate(matrix, position);
+            matrix = math::rotate   (matrix, rotation);
+            matrix = math::scale    (matrix, scale   );
 
             return matrix;
         }
