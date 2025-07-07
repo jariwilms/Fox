@@ -19,9 +19,7 @@ namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            if (dimensions == dimensions_) return;
-
-            this->operator=(RenderBuffer{ format_, dimensions_ });
+            if (dimensions != dimensions_) this->operator=(RenderBuffer{ format_, dimensions });
         }
 
         auto format    () const -> Format
@@ -51,9 +49,7 @@ namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            if (dimensions == dimensions_) return;
-
-            this->operator=(RenderBufferMultisample{ format_, dimensions, samples_ });
+            if (dimensions != dimensions_) this->operator=(RenderBufferMultisample{ format_, dimensions, samples_ });
         }
 
         auto format    () const -> Format

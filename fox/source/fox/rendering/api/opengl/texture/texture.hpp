@@ -172,26 +172,7 @@ namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            gl::todo(); //use this method as example for others
-
-            //if (dimensions == dimensions_) return;
-            //auto texture = gl::Texture2D{ format_, filter_, wrapping_, dimensions_ };
-
-
-
-            //auto handle       = gl::create_texture(glf::Texture::Target::_2D);
-            //auto mipmapLevels = math::mipmap_levels(dimensions);
-            //
-            //gl::texture_storage_2d(handle, gl::map_texture_format(format_), dimensions, mipmapLevels);
-            //__debugbreak();
-            ////gl::copy_image_sub_data(handle_, handle, glf::Texture::Target::_2D, glf::Texture::Target::_2D, gl::Vector4u{ dimensions_, 0u, 0u }, gl::Vector4u{ dimensions, 0u, 0u });
-            //gl::delete_texture(handle_);
-
-            //handle_       = handle;
-            //dimensions_   = dimensions;
-            //mipmapLevels_ = mipmapLevels;
-
-            //generate_mipmap();
+            if (dimensions != dimensions_) this->operator=(gl::Texture2D{ format_, filter_, wrapping_, dimensions });
         }
 
         auto format       () const -> Format
