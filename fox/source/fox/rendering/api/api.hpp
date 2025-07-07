@@ -13,15 +13,7 @@
 #include <fox/core/types/rendering/rendering.hpp>
 
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-#include <fox/rendering/api/opengl/buffer/buffer.hpp>
-#include <fox/rendering/api/opengl/buffer/vertex_array.hpp>
-#include <fox/rendering/api/opengl/frame_buffer/frame_buffer.hpp>
-#include <fox/rendering/api/opengl/opengl.hpp>
-#include <fox/rendering/api/opengl/render_buffer/render_buffer.hpp>
-#include <fox/rendering/api/opengl/shader/pipeline.hpp>
-#include <fox/rendering/api/opengl/shader/shader.hpp>
-#include <fox/rendering/api/opengl/texture/cubemap.hpp>
-#include <fox/rendering/api/opengl/texture/texture.hpp>
+#include <fox/rendering/api/opengl/gl.hpp>
 #endif
 
 namespace fox::gfx
@@ -74,6 +66,10 @@ namespace fox::gfx
             using Shader                  = api::gl::Shader;
             template<typename T>
             using Pipeline                = api::gl::Pipeline<T>;
+
+
+
+            constexpr auto* copy_texture  = api::gl::copy_texture;
         #endif
 
         #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_VULKAN
