@@ -3,7 +3,6 @@
 #include <stdafx.hpp>
 
 #include <fox/rendering/api/opengl/core/concepts.hpp>
-#include <fox/rendering/api/opengl/core/data.hpp>
 #include <fox/rendering/api/opengl/core/flags.hpp>
 #include <fox/rendering/api/opengl/core/mapping.hpp>
 #include <fox/rendering/api/opengl/core/object.hpp>
