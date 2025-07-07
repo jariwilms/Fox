@@ -12,9 +12,9 @@ namespace fox
     public:
         Transform()
             : position{ vector::zero }, rotation{ quaternion::identity }, scale{ vector::one } {}
-        template<typename T>
-        Transform(T&& position, T&& rotation, T&& scale)
-            : position{ std::forward<T>(position) }, rotation{ math::to_radians(std::forward<T>(rotation)) }, scale{ std::forward<T>(scale) } {}
+        template<typename V>
+        Transform(V&& position, V&& rotation, V&& scale)
+            : position{ std::forward<V>(position) }, rotation{ math::to_radians(std::forward<V>(rotation)) }, scale{ std::forward<V>(scale) } {}
         template<typename P, typename R, typename S>
         Transform(P&& position, R&& rotation, S&& scale)
             : position{ std::forward<P>(position) }, rotation{ std::forward<R>(rotation) }, scale{ std::forward<S>(scale) } {}
@@ -27,19 +27,19 @@ namespace fox
             return transform;
         }
 
-        void translate   (const fox::Vector3f& translation)
+        void translate_by(const fox::Vector3f& translation)
         {
-            this->position += translation;
+            position += translation;
         }
-        void rotate      (const fox::Vector3f& rotation   )
+        void rotate_by   (const fox::Vector3f& angle      )
         {
-            this->rotation *= fox::Quaternion{ math::to_radians(rotation) };
+            rotation *= fox::Quaternion{ math::to_radians(angle) };
         }
-        void dilate      (const fox::Vector3f& scale      )
+        void stretch_by  (const fox::Vector3f& factor     )
         {
-            this->scale *= scale;
+            scale *= factor;
         }
-
+        
         void look_at     (const fox::Vector3f& target)
         {
             rotation = math::look_at(math::normalize(target - position), up());

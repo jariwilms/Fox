@@ -50,13 +50,9 @@ namespace fox
     {
         window_ = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
 
-        std::once_flag geometryFlag{};
-        std::once_flag importerFlag{};
-        std::once_flag rendererFlag{};
-
-        std::call_once(geometryFlag, []{ gfx::Geometry     ::init(); });
-        std::call_once(importerFlag, []{ io ::ModelImporter::init(); });
-        std::call_once(rendererFlag, []{ gfx::Renderer     ::init(); });
+        gfx::Geometry     ::init();
+        io ::ModelImporter::init();
+        gfx::Renderer     ::init();
     }
 
     int Application::run()
@@ -68,7 +64,7 @@ namespace fox
         auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).get();
         auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
 
-        cameraTransform.translate(fox::Vector3f{ 0.0f, 1.0f, 2.0f });
+        cameraTransform.translate_by(fox::Vector3f{ 0.0f, 1.0f, 2.0f });
 
 
 
@@ -80,7 +76,7 @@ namespace fox
         auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
 
         model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
-        helmetTransform.translate({ 0.0f, 1.0f, 0.0f });
+        helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 
         const auto& defaultAlbedo   = io::load<io::Asset::Texture2D>("textures/albedo.png");
         const auto& defaultNormal   = io::load<io::Asset::Texture2D>("textures/normal.png");
@@ -178,7 +174,7 @@ namespace fox
         };
         const auto& rotate_helmet       = [&]
             {
-                helmetTransform.rotate(fox::Vector3f{ 0.0f, 10.0f * fox::time::delta(), 0.0f });
+                helmetTransform.rotate_by(fox::Vector3f{ 0.0f, 10.0f * fox::time::delta(), 0.0f });
             };
         const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
             {
@@ -188,7 +184,7 @@ namespace fox
 
                     fox::Transform t{};
                     t.position = p;
-                    t.dilate({ 0.1f, 0.1f, 0.1f });
+                    t.stretch_by({ 0.1f, 0.1f, 0.1f });
 
                     gfx::Renderer::render_debug(t);
                 }
