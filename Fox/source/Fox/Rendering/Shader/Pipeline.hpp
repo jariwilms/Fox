@@ -10,9 +10,12 @@ namespace fox::gfx
     public:
         using Layout = impl::Pipeline<gfx::Shader>::Layout;
 
-        static inline auto create(const Layout& layout)
+        Pipeline(std::shared_ptr<impl::Pipeline<gfx::Shader>> _)
+            : _{ _ } {}
+
+        static auto create(const Layout& layout) -> std::shared_ptr<gfx::Pipeline>
         {
-            return std::shared_ptr<Pipeline>(new Pipeline{ layout });
+            return std::make_shared<fox::from_inaccessible_ctor<gfx::Pipeline>>(layout);
         }
 
         void bind()

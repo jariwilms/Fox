@@ -18,7 +18,7 @@
 
 namespace fox::gfx
 {
-    static void copy_texture(std::shared_ptr<gfx::Texture2D> source, std::shared_ptr<gfx::Texture2D> destination)
+    inline void copy_texture(std::shared_ptr<gfx::Texture2D> source, std::shared_ptr<gfx::Texture2D> destination)
     {
 		impl::copy_texture(source->impl(), destination->impl());
     }

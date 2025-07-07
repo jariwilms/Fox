@@ -12,21 +12,21 @@ namespace fox::gfx
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-        static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector1u& dimensions)
-        {
-            return std::shared_ptr<Texture1D>(new Texture1D{ format, filter, wrapping, dimensions });
-        }
-        static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector1u& dimensions, std::span<const fox::byte_t> data)
-        {
-            return std::shared_ptr<Texture1D>(new Texture1D{ format, filter, wrapping, dimensions, data });
-        }
-        static inline auto create(Format format,                                   const fox::Vector1u& dimensions, std::span<const fox::byte_t> data)
-        {
-            return std::shared_ptr<Texture1D>(new Texture1D{ format, dimensions, data });
-        }
+        Texture1D(std::shared_ptr<impl::Texture1D> _)
+            : _{ _ } {}
 
-        Texture1D(std::shared_ptr<impl::Texture1D> texture)
-            : _{ texture } {}
+        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector1u& dimensions) -> std::shared_ptr<Texture1D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture1D>>(format, filter, wrapping, dimensions);
+        }
+        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector1u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<Texture1D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture1D>>(format, filter, wrapping, dimensions, data);
+        }
+        static auto create(Format format,                                   const fox::Vector1u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<Texture1D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture1D>>(format, dimensions, data);
+        }
 
         void bind(gfx::binding_t binding) const
         {
@@ -97,21 +97,21 @@ namespace fox::gfx
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-        static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions)
-        {
-            return std::shared_ptr<Texture2D>(new Texture2D{ format, filter, wrapping, dimensions });
-        }
-        static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions, std::span<const fox::byte_t> data)
-        {
-            return std::shared_ptr<Texture2D>(new Texture2D{ format, filter, wrapping, dimensions, data });
-        }
-        static inline auto create(Format format,                                   const fox::Vector2u& dimensions, std::span<const fox::byte_t> data)
-        {
-            return std::shared_ptr<Texture2D>(new Texture2D{ format, dimensions, data });
-        }
+        Texture2D(std::shared_ptr<impl::Texture2D> _)
+            : _{ _ } {}
 
-        Texture2D(std::shared_ptr<impl::Texture2D> texture)
-            : _{ texture } {}
+        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions) -> std::shared_ptr<Texture2D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture2D>>(format, filter, wrapping, dimensions);
+        }
+        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<Texture2D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture2D>>(format, filter, wrapping, dimensions, data);
+        }
+        static auto create(Format format,                                   const fox::Vector2u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<Texture2D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture2D>>(format, dimensions, data);
+        }
 
         void bind(gfx::binding_t binding) const
         {
@@ -182,21 +182,21 @@ namespace fox::gfx
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-        static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector3u& dimensions)
-        {
-            return std::shared_ptr<Texture3D>(new Texture3D{ format, filter, wrapping, dimensions });
-        }
-        static inline auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector3u& dimensions, std::span<const fox::byte_t> data)
-        {
-            return std::shared_ptr<Texture3D>(new Texture3D{ format, filter, wrapping, dimensions, data });
-        }
-        static inline auto create(Format format,                                   const fox::Vector3u& dimensions, std::span<const fox::byte_t> data)
-        {
-            return std::shared_ptr<Texture3D>(new Texture3D{ format, dimensions, data });
-        }
+        Texture3D(std::shared_ptr<impl::Texture3D> _)
+            : _{ _ } {}
 
-        Texture3D(std::shared_ptr<impl::Texture3D> texture)
-            : _{ texture } {}
+        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector3u& dimensions) -> std::shared_ptr<Texture3D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture3D>>(format, filter, wrapping, dimensions);
+        }
+        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector3u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<Texture3D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture3D>>(format, filter, wrapping, dimensions, data);
+        }
+        static auto create(Format format,                                   const fox::Vector3u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<Texture3D>
+        {
+            return std::make_shared<fox::from_inaccessible_ctor<Texture3D>>(format, dimensions, data);
+        }
 
         void bind(gfx::binding_t binding) const
         {
@@ -266,9 +266,12 @@ namespace fox::gfx
     public:
         using Format = api::Texture::Format;
 
-        static inline auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples)
+        Texture2DMultisample(std::shared_ptr<impl::Texture2DMultisample> _)
+            : _{ _ } {}
+
+        static auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<Texture2DMultisample>
         {
-            return std::shared_ptr<Texture2DMultisample>(new Texture2DMultisample{ format, dimensions, samples });
+            return std::make_shared<fox::from_inaccessible_ctor<Texture2DMultisample>>(format, dimensions, samples);
         }
 
         void bind(gfx::binding_t binding) const
@@ -308,9 +311,12 @@ namespace fox::gfx
     public:
         using Format = api::Texture::Format;
 
-        static inline auto create(Format format, const fox::Vector3u& dimensions, fox::uint32_t samples)
+        Texture3DMultisample(std::shared_ptr<impl::Texture3DMultisample> _)
+            : _{ _ } {}
+
+        static auto create(Format format, const fox::Vector3u& dimensions, fox::uint32_t samples) -> std::shared_ptr<Texture3DMultisample>
         {
-            return std::shared_ptr<Texture3DMultisample>(new Texture3DMultisample{ format, dimensions, samples });
+            return std::make_shared<fox::from_inaccessible_ctor<Texture3DMultisample>>(format, dimensions, samples);
         }
 
         void bind(gfx::binding_t binding) const

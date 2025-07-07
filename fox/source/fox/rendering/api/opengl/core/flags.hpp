@@ -1896,7 +1896,7 @@ namespace fox::gfx::api::glf
 
 
     template<typename T>
-    struct BitmaskTraits { static constexpr bool enable_bitmask_operations = false; };
+    struct BitmaskTraits { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::False }; };
 
     template<typename T> concept ValidBitmaskEnumClassConcept = BitmaskTraits<T>::enable_bitmask_operations;
 
@@ -1914,15 +1914,15 @@ namespace fox::gfx::api::glf
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator&=(T& first, T second) { return first = first & second; }
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator|=(T& first, T second) { return first = first | second; }
 
-    template<> struct BitmaskTraits<glf::Buffer::Mapping::RangeAccessFlags> { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Buffer::Mask>                      { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Buffer::StorageFlags>              { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Context::Flag>                     { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Context::Profile>                  { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Feature>                           { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::FrameBuffer::Attachment>           { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::FrameBuffer::Source>               { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Memory::Barrier>                   { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Memory::RegionalBarrier>           { static constexpr bool enable_bitmask_operations = true; };
-    template<> struct BitmaskTraits<glf::Program::Stage>                    { static constexpr bool enable_bitmask_operations = true; };
+    template<> struct BitmaskTraits<glf::Buffer::Mapping::RangeAccessFlags> { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Buffer::Mask>                      { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Buffer::StorageFlags>              { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Context::Flag>                     { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Context::Profile>                  { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Feature>                           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::FrameBuffer::Attachment>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::FrameBuffer::Source>               { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Memory::Barrier>                   { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Memory::RegionalBarrier>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::Program::Stage>                    { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
 }

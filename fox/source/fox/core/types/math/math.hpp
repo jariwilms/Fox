@@ -7,6 +7,8 @@
 
 namespace fox
 {
-    using radians_t = fox::float32_t;
-    using degrees_t = fox::float32_t;
+    using radians_t    = fox::float32_t;
+    using degrees_t    = fox::float32_t;
+    
+    using projection_t = fox::Matrix4f;
 }

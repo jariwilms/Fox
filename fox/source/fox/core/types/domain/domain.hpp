@@ -9,7 +9,7 @@ namespace fox
 	template<typename T>
 	struct interval_t
 	{
-		interval_t(T min = {}, T max = {})
+		interval_t(T min = { std::numeric_limits<T>::min() }, T max = { std::numeric_limits<T>::max() })
 			: min{ min }, max{ max } {}
 
 		auto operator==(const interval_t&) const -> fox::bool_t = default;

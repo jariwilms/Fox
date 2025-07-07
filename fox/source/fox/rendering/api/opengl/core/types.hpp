@@ -152,6 +152,6 @@ namespace fox::gfx::api::gl
 
 
 
-    static void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const gl::void_t*) {}
+    inline void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const gl::void_t*) {}
     using debug_callback_t = decltype(_debug_callback);
 }

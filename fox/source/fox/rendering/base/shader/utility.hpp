@@ -7,12 +7,12 @@
 
 namespace fox::gfx::api
 {
-    static auto shaders_from_source()
+    inline auto shaders_from_source()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
     template<typename Shader>
-    static auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& fragment)
+    inline auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& fragmentFile = io::load(fragment);
@@ -24,7 +24,7 @@ namespace fox::gfx::api
         };
     }
     template<typename Shader>
-    static auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& geometry, const std::filesystem::path& fragment)
+    inline auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& geometry, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& geometryFile = io::load(geometry);

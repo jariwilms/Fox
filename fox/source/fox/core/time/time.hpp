@@ -14,12 +14,12 @@ namespace fox::time
         inline fox::delta_t      delta {};
     }
 
-    static void update()
+    inline void update()
     {
         api::before = std::exchange(api::now, fox::clock_t::now());
         api::delta  = std::chrono::duration_cast<fox::duration_t>(api::now - api::before).count();
     }
-    static void reset ()
+    inline void reset ()
     {
         api::epoch  = fox::clock_t::now();
         api::now    = fox::clock_t::now();
@@ -27,14 +27,14 @@ namespace fox::time
         api::delta  = fox::delta_t{};
     }
 
-    static auto since_epoch() -> fox::delta_t
+    inline auto since_epoch() -> fox::delta_t
     {
         auto now   = fox::clock_t::now();
         auto delta = std::chrono::duration_cast<fox::duration_t>(now - api::epoch).count();
 
         return delta;
     }
-    static auto delta      () -> fox::delta_t
+    inline auto delta      () -> fox::delta_t
     {
         return api::delta;
     }

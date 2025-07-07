@@ -9,9 +9,12 @@ namespace fox::gfx
     public:
         using Stage = api::Shader::Stage;
 
-        static inline auto create(Stage stage, std::span<const fox::byte_t> binary)
+        Shader(std::shared_ptr<impl::Shader> _)
+            : _{ _ } {}
+
+        static auto create(Stage stage, std::span<const fox::byte_t> binary) -> std::shared_ptr<gfx::Shader>
         {
-            return std::shared_ptr<Shader>(new Shader{ stage, binary });
+            return std::make_shared<fox::from_inaccessible_ctor<gfx::Shader>>(stage, binary);
         }
 
         auto stage () const -> Stage

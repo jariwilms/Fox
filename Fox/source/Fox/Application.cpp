@@ -18,7 +18,7 @@
 
 namespace fox
 {
-    static void           model_to_scene_graph(scene::Scene& scene, scene::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
+    static void model_to_scene_graph(scene::Scene& scene, scene::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
         auto& tc = actor.get_component<ecs::TransformComponent>().get();
         tc = node.localTransform;
@@ -35,7 +35,7 @@ namespace fox
             model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
         }
     }
-    static fox::Transform transform_product(const scene::Scene& scene, const Relationship& relation, const fox::Transform& transform)
+    static auto transform_product   (const scene::Scene& scene, const Relationship& relation, const fox::Transform& transform) -> fox::Transform
     {
         if (!relation.parent) return transform;
 
@@ -162,7 +162,7 @@ namespace fox
 
             if (input::button_active(input::button::RightMouse))
             {
-                static fox::Vector3f rotation{};
+                static auto rotation = fox::Vector3f{};
 
                       auto& ct  = observer.get_component<ecs::TransformComponent>().get();
                 const auto& cpr = input::cursor_position_delta() / 10.0f;

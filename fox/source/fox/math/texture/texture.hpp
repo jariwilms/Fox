@@ -8,7 +8,7 @@
 namespace fox::math
 {
     template<std::integral T, fox::uint32_t N>
-    static constexpr auto mipmap_levels(const fox::Vector<T, N>& vector) -> fox::uint32_t
+    inline constexpr auto mipmap_levels(const fox::Vector<T, N>& vector) -> fox::uint32_t
     {
         return static_cast<fox::uint32_t>(glm::levels(vector));
     }

@@ -9,9 +9,12 @@ namespace fox::gfx
     class VertexArray
     {
     public:
-        static inline auto create()
+        VertexArray(std::shared_ptr<impl::VertexArray> _)
+            : _{ _ } {}
+
+        static auto create() -> std::shared_ptr<gfx::VertexArray>
         {
-            return std::shared_ptr<VertexArray>(new VertexArray{});
+            return std::make_shared<fox::from_inaccessible_ctor<gfx::VertexArray>>();
         }
 
         void bind()
@@ -34,11 +37,11 @@ namespace fox::gfx
         }
 
         template<typename T>
-        void tie(std::shared_ptr<const gfx::VertexBuffer<T>> buffer, const gfx::VertexLayout& layout)
+        void tie(std::shared_ptr<gfx::VertexBuffer<T>> buffer, const gfx::VertexLayout& layout)
         {
             _->tie(buffer->handle(), layout);
         }
-        void tie(std::shared_ptr<const gfx::IndexBuffer>     buffer)
+        void tie(std::shared_ptr<gfx::IndexBuffer>     buffer)
         {
             _->tie(buffer->handle(), buffer->count());
         }

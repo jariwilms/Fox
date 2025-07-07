@@ -78,7 +78,7 @@ namespace fox
         fox::Vector3f   scale;
     };
 
-    static auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
+    inline auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
     {
         return fox::Transform::from_matrix(left.matrix() * right.matrix());
     }

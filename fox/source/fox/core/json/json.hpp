@@ -6,7 +6,7 @@
 
 namespace fox::json
 {
-	static void test()
+	inline void test()
 	{
 		//auto config = std::ifstream{ "C:/Users/jariw/source/repos/Fox/Fox/src/Fox/Config/config.json" };
 		//auto res    = config.is_open();

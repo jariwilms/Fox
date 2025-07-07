@@ -22,13 +22,13 @@ namespace fox::gfx::api::gl
         inline auto pipeline = std::shared_ptr<gl::Pipeline<>>{};
     }
 
-    static void init()
+    inline void init()
     {
         dtl::blit   = std::make_shared<gl::FrameBuffer>();
         auto layout = gl::Pipeline<>::Layout{};
     }
 
-    static void copy_texture(std::shared_ptr<gl::Texture2D> source, std::shared_ptr<gl::Texture2D> destination)
+    inline void copy_texture(std::shared_ptr<gl::Texture2D> source, std::shared_ptr<gl::Texture2D> destination)
     {
         source->bind(gl::binding_t{ 0u });
 

@@ -11,6 +11,7 @@
 #include <fox/core/types/alias/alias.hpp>
 #include <fox/core/types/domain/domain.hpp>
 #include <fox/core/types/rendering/rendering.hpp>
+#include <fox/core/utility/utility.hpp>
 
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include <fox/rendering/api/opengl/gl.hpp>
