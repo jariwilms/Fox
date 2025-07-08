@@ -27,35 +27,34 @@ namespace fox
                     ((static_cast<T*>(nullptr))->*MEMBER_PTR)));
         }
 
-        template<template<typename> typename C, typename T>
-        inline constexpr auto compare(const T& left, const T& right) -> fox::bool_t
-        {
-            return C<T>{}(left, right);
-        }
         template<template<typename> typename C, typename T, typename U>
-        inline constexpr auto compare(const T& left, const U& right) -> fox::bool_t
+        inline constexpr auto compare(T&& left, U&& right) -> fox::bool_t
         {
-            return C<void>{}(left, right);
+            if constexpr (std::is_integral_v<T> and std::is_integral_v<U>)
+            {
+                if (std::is_same_v<C<T>, std::equal_to     <T>>) return std::cmp_equal        (left, right);
+                if (std::is_same_v<C<T>, std::not_equal_to <T>>) return std::cmp_not_equal    (left, right);
+                if (std::is_same_v<C<T>, std::less         <T>>) return std::cmp_less         (left, right);
+                if (std::is_same_v<C<T>, std::greater      <T>>) return std::cmp_greater      (left, right);
+                if (std::is_same_v<C<T>, std::less_equal   <T>>) return std::cmp_less_equal   (left, right);
+                if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::cmp_greater_equal(left, right);
+            }
+            else
+            {
+                if (std::is_same_v<C<T>, std::equal_to     <T>>) return std::ranges::equal_to     {}(std::forward<T>(left), std::forward<U>(right));
+                if (std::is_same_v<C<T>, std::not_equal_to <T>>) return std::ranges::not_equal_to {}(std::forward<T>(left), std::forward<U>(right));
+                if (std::is_same_v<C<T>, std::less         <T>>) return std::ranges::less         {}(std::forward<T>(left), std::forward<U>(right));
+                if (std::is_same_v<C<T>, std::greater      <T>>) return std::ranges::greater      {}(std::forward<T>(left), std::forward<U>(right));
+                if (std::is_same_v<C<T>, std::less_equal   <T>>) return std::ranges::less_equal   {}(std::forward<T>(left), std::forward<U>(right));
+                if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::ranges::greater_equal{}(std::forward<T>(left), std::forward<U>(right));
+            }
         }
 
         template<std::ranges::range R>
         inline auto as_bytes(R&& range) -> std::span<const fox::byte_t>
         {
             auto span = std::span{ range };
-            return std::span<const fox::byte_t>{ reinterpret_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
+            return std::span<const fox::byte_t>{ std::bit_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
         }
-
-
-
-        template<typename T>
-        struct from_inaccessible_ctor : public T
-        {
-            template<typename... Args>
-            from_inaccessible_ctor(Args&&... args)
-                : T{ std::forward<Args>(args)... } {}
-        };
-
-        template<typename... Ts>
-        struct overload : Ts... { using Ts::operator()...; };
     }
 }
