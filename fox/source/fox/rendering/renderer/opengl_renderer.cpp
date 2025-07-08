@@ -108,8 +108,8 @@ namespace fox::gfx::api
             glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  0.0f, -1.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
         };
 
-        const auto& cva = gfx::geometry::cube ->vertexArray;
-        const auto& pva = gfx::geometry::plane->vertexArray;
+        const auto& cva = gfx::geometry::cube;
+        const auto& pva = gfx::geometry::plane;
 
 
 
@@ -394,7 +394,7 @@ namespace fox::gfx::api
         gl::disable<glf::Feature::DepthTest>();
         gl::disable<glf::Feature::Blending>();
 
-        const auto& pva = gfx::geometry::plane->vertexArray;
+        const auto& pva = gfx::geometry::plane;
         pva->bind();
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
 
@@ -419,7 +419,7 @@ namespace fox::gfx::api
         gl::enable <glf::Feature::DepthTest>();
         gl::depth_function(glf::DepthFunction::LessEqual);
 
-        const auto& cva = gfx::geometry::cube->vertexArray;
+        const auto& cva = gfx::geometry::cube;
         cva->bind();
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
 
@@ -434,7 +434,7 @@ namespace fox::gfx::api
         for (const auto& transform : debugTransforms_)
         {
             matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, gfx::geometry::cube->vertexArray->index_count());
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
 #endif
 
@@ -481,12 +481,12 @@ namespace fox::gfx::api
             matricesUniform_->copy_slice(utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
             materialUniform_->copy      (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
 
-            mesh    ->vertexArray->bind();
-            material->albedo     ->bind(gfx::binding_t{ 0u });
-            material->normal     ->bind(gfx::binding_t{ 1u });
-            material->arm        ->bind(gfx::binding_t{ 2u });
+            mesh            ->bind();
+            material->albedo->bind(gfx::binding_t{ 0u });
+            material->normal->bind(gfx::binding_t{ 1u });
+            material->arm   ->bind(gfx::binding_t{ 2u });
 
-            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->vertexArray->index_count());
+            gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->index_count());
         }
     }
     void OpenGLRenderer::render_lighting(std::shared_ptr<gfx::FrameBuffer> target)
@@ -515,7 +515,7 @@ namespace fox::gfx::api
         gl::blend_function(glf::Blending::Factor::SourceAlpha, glf::Blending::Factor::One);
         gl::disable<glf::Feature::FaceCulling>();
 
-        const auto& pva = gfx::geometry::plane->vertexArray;
+        const auto& pva = gfx::geometry::plane;
         pva->bind();
 
         std::ranges::for_each(lights_, [&](const auto& light)
@@ -546,7 +546,7 @@ namespace fox::gfx::api
         gl::depth_function(glf::DepthFunction::LessEqual);
         gl::disable<glf::Feature::Blending>();
 
-        const auto& cva = gfx::geometry::cube->vertexArray;
+        const auto& cva = gfx::geometry::cube;
         cva->bind();
 
         gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());

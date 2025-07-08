@@ -10,6 +10,16 @@ namespace fox::gfx
         Mesh(std::shared_ptr<const gfx::VertexArray> vertexArray)
             : vertexArray{ vertexArray } {}
 
+        void bind       () const
+        {
+            vertexArray->bind();
+        }
+        auto index_count() const -> fox::count_t
+        {
+            return vertexArray->index_count();
+        }
+
+    private:
         std::shared_ptr<const gfx::VertexArray> vertexArray;
     };
 }
