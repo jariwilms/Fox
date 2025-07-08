@@ -17,7 +17,7 @@ namespace fox::gfx
             return std::make_shared<fox::from_inaccessible_ctor<gfx::VertexArray>>();
         }
 
-        void bind()
+        void bind() const
         {
             _->bind();
         }

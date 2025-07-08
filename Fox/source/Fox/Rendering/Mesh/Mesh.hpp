@@ -7,9 +7,9 @@ namespace fox::gfx
     struct Mesh
     {
     public:
-        Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
+        Mesh(std::shared_ptr<const gfx::VertexArray> vertexArray)
             : vertexArray{ vertexArray } {}
 
-        std::shared_ptr<gfx::VertexArray> vertexArray{};
+        std::shared_ptr<const gfx::VertexArray> vertexArray;
     };
 }
