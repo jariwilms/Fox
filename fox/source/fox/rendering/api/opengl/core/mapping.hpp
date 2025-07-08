@@ -14,21 +14,17 @@
 
 namespace fox::gfx::api::gl
 {
-    inline auto map_type                                 (api::Type type) -> glf::VertexArray::Attribute::Type
+    template<typename T>
+    inline constexpr auto map_type() -> glf::VertexArray::Attribute::Type
     {
-        switch (type)
-        {
-            case api::Type::Byte           : return glf::VertexArray::Attribute::Type::Byte           ;
-            case api::Type::UnsignedByte   : return glf::VertexArray::Attribute::Type::UnsignedByte   ;
-            case api::Type::Short          : return glf::VertexArray::Attribute::Type::Short          ;
-            case api::Type::UnsignedShort  : return glf::VertexArray::Attribute::Type::UnsignedShort  ;
-            case api::Type::Integer        : return glf::VertexArray::Attribute::Type::Integer        ;
-            case api::Type::UnsignedInteger: return glf::VertexArray::Attribute::Type::UnsignedInteger;
-            case api::Type::Float          : return glf::VertexArray::Attribute::Type::Float          ;
-            case api::Type::Double         : return glf::VertexArray::Attribute::Type::Double         ;
-
-            default: throw std::invalid_argument{ "Invalid Data Type!" };
-        }
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int8_t   >) return glf::VertexArray::Attribute::Type::Byte           ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint8_t  >) return glf::VertexArray::Attribute::Type::UnsignedByte   ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int16_t  >) return glf::VertexArray::Attribute::Type::Short          ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint16_t >) return glf::VertexArray::Attribute::Type::UnsignedShort  ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int32_t  >) return glf::VertexArray::Attribute::Type::Integer        ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint32_t >) return glf::VertexArray::Attribute::Type::UnsignedInteger;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float32_t>) return glf::VertexArray::Attribute::Type::Float          ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float64_t>) return glf::VertexArray::Attribute::Type::Double         ;
     }
 
     inline auto map_texture_format_base                  (api::Texture::Format format) -> glf::Texture::BaseFormat

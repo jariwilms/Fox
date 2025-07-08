@@ -78,21 +78,18 @@ namespace fox::io
             auto aiTexCoords     = std::span<const aiVector3D>{ aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
             auto aiFaces         = std::span<const aiFace    >{ aiMesh->mFaces           , aiMesh->mNumFaces    };
 
-            auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return fox::Vector3f{ position  .x, position  .y, position.z }; }) | std::ranges::to<std::vector>();
-            auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return fox::Vector3f{ normal    .x, normal    .y, normal  .z }; }) | std::ranges::to<std::vector>();
-            auto tangentsVector  = aiTangents  | std::views::transform([](const auto& tangent   ) { return fox::Vector3f{ tangent   .x, tangent   .y, tangent .z }; }) | std::ranges::to<std::vector>();
-            auto texCoordsVector = aiTexCoords | std::views::transform([](const auto& coordinate) { return fox::Vector2f{ coordinate.x, coordinate.y             }; }) | std::ranges::to<std::vector>();
+            auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return std::bit_cast<fox::Vector3f>(position);                            }) | std::ranges::to<std::vector>();
+            auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return std::bit_cast<fox::Vector3f>(normal  );                            }) | std::ranges::to<std::vector>();
+            auto tangentsVector  = aiTangents  | std::views::transform([](const auto& tangent   ) { return std::bit_cast<fox::Vector3f>(tangent );                            }) | std::ranges::to<std::vector>();
+            auto texCoordsVector = aiTexCoords | std::views::transform([](const auto& coordinate) { return fox::Vector2f{ coordinate.x, coordinate.y };                       }) | std::ranges::to<std::vector>();
             auto indicesVector   = aiFaces     | std::views::transform([](const auto& face      ) { return std::span<const fox::uint32_t>{ face.mIndices, face.mNumIndices }; })
                                                | std::views::join
                                                | std::ranges::to<std::vector>();
 
 
             
-            auto layout2f = gfx::VertexLayout{};
-            auto layout3f = gfx::VertexLayout{};
-
-            layout2f.specify<fox::float32_t>(2u);
-            layout3f.specify<fox::float32_t>(3u);
+            auto layout2f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 2u>>{};
+            auto layout3f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 3u>>{};
 
             auto vertexArray      = gfx::VertexArray                ::create();
             auto positionsBuffer  = gfx::VertexBuffer<fox::Vector3f>::create(positionsVector);

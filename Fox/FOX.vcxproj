@@ -105,6 +105,8 @@
     <ClInclude Include="source\fox\core\image\image.hpp" />
     <ClInclude Include="source\fox\core\json\json.hpp" />
     <ClInclude Include="source\fox\core\memory\adapter\no_init_adapter.hpp" />
+    <ClInclude Include="source\fox\core\meta\concepts.hpp" />
+    <ClInclude Include="source\fox\core\meta\meta.hpp" />
     <ClInclude Include="source\fox\core\time\time.hpp" />
     <ClInclude Include="source\fox\core\transform\transform.hpp" />
     <ClInclude Include="source\fox\core\types\alias\alias.hpp" />
@@ -203,7 +205,6 @@
     <ClInclude Include="source\fox\rendering\geometry\data\data.hpp" />
     <ClInclude Include="source\fox\rendering\geometry\geometry.hpp" />
     <ClInclude Include="source\fox\rendering\layout\layout.hpp" />
-    <ClInclude Include="source\fox\rendering\layout\vertex_layout.hpp" />
     <ClInclude Include="source\fox\rendering\light\light.hpp" />
     <ClInclude Include="source\fox\rendering\material\material.hpp" />
     <ClInclude Include="source\fox\rendering\mesh\mesh.hpp" />

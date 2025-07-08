@@ -8,6 +8,7 @@
 #define FOX_GRAPHICS_API FOX_GRAPHICS_API_OPENGL
 #endif
 
+#include <fox/core/meta/meta.hpp>
 #include <fox/core/types/alias/alias.hpp>
 #include <fox/core/types/domain/domain.hpp>
 #include <fox/core/types/rendering/rendering.hpp>

@@ -2,7 +2,7 @@
 
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
-#include <fox/rendering/layout/vertex_layout.hpp>
+#include <fox/rendering/layout/layout.hpp>
 
 namespace fox::gfx
 {
@@ -31,17 +31,12 @@ namespace fox::gfx
             _->disable_attribute(index);
         }
 
-        void set_attribute_divisor(gfx::binding_t binding, fox::uint32_t divisor)
-        {
-            _->set_attribute_divisor(binding, divisor);
-        }
-
-        template<typename T>
-        void tie(std::shared_ptr<gfx::VertexBuffer<T>> buffer, const gfx::VertexLayout& layout)
+        template<typename T, typename... attributes>
+        void tie(std::shared_ptr<gfx::VertexBuffer<T>> buffer, gfx::layout_t<attributes...> layout)
         {
             _->tie(buffer->handle(), layout);
         }
-        void tie(std::shared_ptr<gfx::IndexBuffer>     buffer)
+        void tie(std::shared_ptr<gfx::IndexBuffer>     buffer                                     )
         {
             _->tie(buffer->handle(), buffer->count());
         }

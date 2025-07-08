@@ -120,7 +120,7 @@ namespace fox::gfx::api
         auto renderBuffer    = frameBuffer->surface<gfx::FrameBuffer::Surface::RenderBuffer>("Depth");
         auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
         auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
-        environmentCubemap_ = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
+        environmentCubemap_  = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
 
 
 

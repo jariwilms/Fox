@@ -1,18 +1,16 @@
 #include <stdafx.hpp>
 
+#include <fox/io/import/model/model_importer.hpp>
 #include <fox/rendering/geometry/data/data.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/io/import/model/model_importer.hpp>
+#include <fox/rendering/layout/layout.hpp>
 
 namespace fox::gfx::geometry
 {
     static void plane_init()
     {
-        auto layout2f = gfx::VertexLayout{};
-        auto layout3f = gfx::VertexLayout{};
-
-        layout2f.specify<fox::float32_t>(2u);
-        layout3f.specify<fox::float32_t>(3u);
+        auto layout2f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 2u>>{};
+        auto layout3f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 3u>>{};
 
               auto vertexArray = gfx::VertexArray::create();
         const auto positions   = gfx::VertexBuffer<fox::float32_t>::create(data::plane::positions  );
@@ -31,11 +29,8 @@ namespace fox::gfx::geometry
     }
     static void cube_init()
     {
-        auto layout2f = gfx::VertexLayout{};
-        auto layout3f = gfx::VertexLayout{};
-
-        layout2f.specify<fox::float32_t>(2u);
-        layout3f.specify<fox::float32_t>(3u);
+        auto layout2f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 2u>>{};
+        auto layout3f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 3u>>{};
 
               auto vertexArray = gfx::VertexArray::create();
         const auto positions   = gfx::VertexBuffer<fox::float32_t>::create(data::cube::positions  );
