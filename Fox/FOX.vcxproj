@@ -200,6 +200,7 @@
     <ClInclude Include="source\fox\rendering\buffer\vertex_array.hpp" />
     <ClInclude Include="source\fox\rendering\camera\camera.hpp" />
     <ClInclude Include="source\fox\rendering\frame_buffer\frame_buffer.hpp" />
+    <ClInclude Include="source\fox\rendering\geometry\data\data.hpp" />
     <ClInclude Include="source\fox\rendering\geometry\geometry.hpp" />
     <ClInclude Include="source\fox\rendering\layout\layout.hpp" />
     <ClInclude Include="source\fox\rendering\layout\vertex_layout.hpp" />

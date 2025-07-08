@@ -50,7 +50,7 @@ namespace fox
     {
         window_ = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
 
-        gfx::Geometry     ::init();
+        gfx::geometry     ::init();
         io ::ModelImporter::init();
         gfx::Renderer     ::init();
     }
@@ -92,14 +92,14 @@ namespace fox
         auto& floorActor            = scene->create_actor();
         auto& fatc                  = floorActor.get_component<ecs::TransformComponent>().get();
         auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().get();
-        famfc.mesh                  = gfx::Geometry::Plane::mesh();
+        famfc.mesh                  = gfx::geometry::plane;
         famfc.material              = defaultMaterial;
         fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
 
         auto& boxActor              = scene->create_actor();
         auto& batc                  = boxActor.get_component<ecs::TransformComponent>().get();
         auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().get();
-        bamfc.mesh                  = gfx::Geometry::Cube::mesh();
+        bamfc.mesh                  = gfx::geometry::cube;
         bamfc.material              = defaultMaterial;
         batc                        = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
 
