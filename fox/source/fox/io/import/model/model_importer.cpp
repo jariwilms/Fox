@@ -60,10 +60,9 @@ namespace fox::io
         std::ranges::for_each(std::span<const aiMaterial* const>{ aiScene.mMaterials, aiScene.mNumMaterials }, [&](const auto* aiMaterial)
             {
                 auto material    = std::make_shared<gfx::Material>();
-
                 material->albedo = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::Albedo           ).value_or(defaultAlbedoTexture_);
                 material->normal = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::Normal           ).value_or(defaultNormalTexture_);
-                material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::MetallicRoughness).value_or(defaultARMTexture_);
+                material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::MetallicRoughness).value_or(defaultARMTexture_   );
 
                 model->materials.emplace_back(std::move(material));
             });
@@ -128,7 +127,7 @@ namespace fox::io
 
             return {};
         };
-    void ModelImporter::create_nodes      (std::shared_ptr<gfx::Model> model, fox::uint32_t nodeIndex, const aiScene& asiScene, const aiNode& aiRootNode)
+    void ModelImporter::create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t nodeIndex, const aiScene& aiScene, const aiNode& aiRootNode)
     {
         auto  matrix = math::transpose(std::bit_cast<const fox::Matrix4f>(aiRootNode.mTransformation));
         auto& root   = model->nodes.at(nodeIndex);
@@ -141,18 +140,18 @@ namespace fox::io
                       auto& childNode      = model->nodes.emplace_back(gfx::Model::Node{});
 
                 childNode.mesh     = index;
-                childNode.material = asiScene.mMeshes[index]->mMaterialIndex;
+                childNode.material = aiScene.mMeshes[index]->mMaterialIndex;
 
                 model->nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
             });
         std::ranges::for_each(std::span<aiNode* const      >{ aiRootNode.mChildren, aiRootNode.mNumChildren }, [&](aiNode* const node )
             {
-                const auto& childNodeIndex = static_cast<fox::uint32_t>(model->nodes.size());
+                const auto& childNodeIndex = model->nodes.size();
                       auto& child          = model->nodes.emplace_back(gfx::Model::Node{});
 
                 model->nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
 
-                create_nodes(model, childNodeIndex, asiScene, *node);
+                create_nodes(model, childNodeIndex, aiScene, *node);
             });
     }
 }

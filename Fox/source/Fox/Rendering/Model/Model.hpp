@@ -16,7 +16,7 @@ namespace fox::gfx
             fox::Transform               transform;
             std::optional<fox::uint32_t> mesh;
             std::optional<fox::uint32_t> material;
-            std::vector  <fox::uint32_t> children;
+            std::vector  <fox::size_t  > children;
         };
 
         Model()
