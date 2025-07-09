@@ -26,6 +26,11 @@ namespace fox::math
         return glm::scale(matrix, scale);
     }
 
+    template<typename T, fox::uint32_t N>
+    inline           auto transpose(const fox::Matrix<T, N>& matrix) -> fox::Matrix<T, N>
+    {
+        return glm::transpose(matrix);
+    }
     inline           auto decompose(const fox::Matrix4f& matrix) -> std::tuple<fox::Vector3f, fox::Quaternion, fox::Vector3f, fox::Vector3f, fox::Vector4f>
     {
         auto  composition                                    = std::tuple<fox::Vector3f, fox::Quaternion, fox::Vector3f, fox::Vector3f, fox::Vector4f>{};
