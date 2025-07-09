@@ -31,7 +31,7 @@ namespace fox::io
     private:
         static auto load_scene        (const std::filesystem::path& path) -> const aiScene&;
         static auto get_assimp_texture(const std::filesystem::path& path, const aiMaterial& aiMaterial, TextureType type) -> std::optional<std::shared_ptr<gfx::Texture2D>>;
-        static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t nodeIndex, const aiScene& aiScene, const aiNode& aiRootNode);
+        static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t index, const aiScene& aiScene, const aiNode& aiRootNode);
 
         static inline Assimp::Importer                importer_;
         static inline std::shared_ptr<gfx::Texture2D> defaultAlbedoTexture_;

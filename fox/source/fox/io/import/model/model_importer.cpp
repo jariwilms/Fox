@@ -71,6 +71,8 @@ namespace fox::io
 
         const auto& aiRootNode = *aiScene.mRootNode;
         model->nodes.emplace_back(gfx::Model::Node{});
+        model->root = fox::uint32_t{ 0u };
+
         create_nodes(model, fox::uint32_t{ 0u }, aiScene, aiRootNode);
 
 
@@ -127,29 +129,30 @@ namespace fox::io
 
             return {};
         };
-    void ModelImporter::create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t nodeIndex, const aiScene& aiScene, const aiNode& aiRootNode)
+    void ModelImporter::create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t index, const aiScene& aiScene, const aiNode& currentAiNode)
     {
-        auto  matrix = math::transpose(std::bit_cast<const fox::Matrix4f>(aiRootNode.mTransformation));
-        auto& root   = model->nodes.at(nodeIndex);
-        
-        root.transform = fox::Transform::from_matrix(matrix);
+        auto& currentNode = model->nodes.at(index);
+        currentNode.transform = fox::Transform::from_matrix(math::transpose(std::bit_cast<const fox::Matrix4f>(currentAiNode.mTransformation)));
 
-        std::ranges::for_each(std::span<const fox::uint32_t>{ aiRootNode.mMeshes  , aiRootNode.mNumMeshes   }, [&](fox::uint32_t index)
+        auto aiMeshes   = std::span<const fox::uint32_t>{ currentAiNode.mMeshes  , currentAiNode.mNumMeshes   };
+        auto aiChildren = std::span<const aiNode* const>{ currentAiNode.mChildren, currentAiNode.mNumChildren };
+
+        std::ranges::for_each(aiMeshes  , [&](fox::uint32_t index)
             {
-                const auto  childNodeIndex = static_cast<fox::uint32_t>(model->nodes.size());
+                const auto  childNodeIndex = model->nodes.size();
                       auto& childNode      = model->nodes.emplace_back(gfx::Model::Node{});
 
                 childNode.mesh     = index;
                 childNode.material = aiScene.mMeshes[index]->mMaterialIndex;
 
-                model->nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
+                model->nodes.at(index).children.emplace_back(childNodeIndex);
             });
-        std::ranges::for_each(std::span<aiNode* const      >{ aiRootNode.mChildren, aiRootNode.mNumChildren }, [&](aiNode* const node )
+        std::ranges::for_each(aiChildren, [&](const aiNode* const node )
             {
                 const auto& childNodeIndex = model->nodes.size();
                       auto& child          = model->nodes.emplace_back(gfx::Model::Node{});
 
-                model->nodes.at(nodeIndex).children.emplace_back(childNodeIndex);
+                currentNode.children.emplace_back(childNodeIndex);
 
                 create_nodes(model, childNodeIndex, aiScene, *node);
             });
