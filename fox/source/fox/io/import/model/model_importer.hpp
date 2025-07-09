@@ -26,13 +26,16 @@ namespace fox::io
 
         static void init();
 
-        static std::shared_ptr<gfx::Model> import(const std::filesystem::path& path);
+        static auto import(const std::filesystem::path& path) -> std::shared_ptr<gfx::Model>;
 
     private:
-        static void create_nodes(gfx::Model& model, fox::uint32_t nodeIndex, const aiScene& aiScene, const aiNode& aiNode);
+        static auto load_scene        (const std::filesystem::path& path) -> const aiScene&;
+        static auto get_assimp_texture(const std::filesystem::path& path, const aiMaterial& aiMaterial, TextureType type) -> std::optional<std::shared_ptr<gfx::Texture2D>>;
+        static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::uint32_t nodeIndex, const aiScene& aiScene, const aiNode& aiRootNode);
 
-        static inline std::shared_ptr<gfx::Texture2D> s_defaultAlbedoTexture{};
-        static inline std::shared_ptr<gfx::Texture2D> s_defaultNormalTexture{};
-        static inline std::shared_ptr<gfx::Texture2D> s_defaultARMTexture   {};
+        static inline Assimp::Importer                importer_;
+        static inline std::shared_ptr<gfx::Texture2D> defaultAlbedoTexture_;
+        static inline std::shared_ptr<gfx::Texture2D> defaultNormalTexture_;
+        static inline std::shared_ptr<gfx::Texture2D> defaultARMTexture_;
     };
 }

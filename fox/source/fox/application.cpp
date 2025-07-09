@@ -21,11 +21,11 @@ namespace fox
     static void model_to_scene_graph(scene::Scene& scene, scene::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
         auto& tc = actor.get_component<ecs::TransformComponent>().get();
-        tc = node.localTransform;
+        tc = node.transform;
 
         auto& mf = actor.add_component<ecs::MeshFilterComponent>().get();
-        if (node.meshIndex)     mf.mesh     = model.meshes.at(*node.meshIndex);
-        if (node.materialIndex) mf.material = model.materials.at(*node.materialIndex);
+        if (node.mesh)     mf.mesh     = model.meshes.at(*node.mesh);
+        if (node.material) mf.material = model.materials.at(*node.material);
 
         for (auto& childIndex : node.children)
         {
@@ -75,7 +75,7 @@ namespace fox
         auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
         auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
 
-        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->rootNode));
+        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->root));
         helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 
         const auto& defaultAlbedo   = io::load<io::Asset::Texture2D>("textures/albedo.png");
