@@ -71,7 +71,6 @@ namespace fox::io
 
         const auto& aiRootNode = *aiScene.mRootNode;
         model->nodes.emplace_back(gfx::Model::Node{});
-        model->root = fox::uint32_t{ 0u };
 
         create_nodes(model, fox::uint32_t{ 0u }, aiScene, aiRootNode);
 
