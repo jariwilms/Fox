@@ -75,7 +75,7 @@ namespace fox
         auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
         auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
 
-        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->root));
+        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
         helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 
         const auto& defaultAlbedo   = io::load<io::Asset::Texture2D>("textures/albedo.png");
