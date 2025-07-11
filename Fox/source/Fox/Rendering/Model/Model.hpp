@@ -11,7 +11,8 @@ namespace fox::gfx
     public:
         struct Node
         {
-            Node() = default;
+            Node()
+                : transform{}, mesh{}, material{}, children{} {}
 
             fox::Transform               transform;
             std::optional<fox::uint32_t> mesh;
@@ -20,9 +21,8 @@ namespace fox::gfx
         };
 
         Model()
-            : root{} {}
+            : nodes{ Node{} }, meshes{}, materials{} {}
 
-        std::uint32_t                               root;
         std::vector<Node>                           nodes;
         std::vector<std::shared_ptr<gfx::Mesh    >> meshes;
         std::vector<std::shared_ptr<gfx::Material>> materials;
