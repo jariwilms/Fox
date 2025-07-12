@@ -2,44 +2,42 @@
 
 #include <fox/rendering/renderer/opengl_renderer.hpp>
 
-namespace fox::gfx
+namespace fox::gfx::renderer
 {
     namespace impl
     {
 #if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
-        using Renderer = api::OpenGLRenderer;
+        using renderer_t = gfx::api::OpenGLRenderer;
 #endif
     }
-
-    class Renderer
+    namespace api
     {
-    public:
-        using renderer_t = impl::Renderer;
+        inline std::unique_ptr<impl::renderer_t> renderer;
+    }
 
-        static void init()
-        {
-            _ = std::make_unique<renderer_t>();
-        }
 
-        static void start(gfx::RenderInfo renderInfo)
-        {
-            _->start(renderInfo);
-        }
-        static void finish()
-        {
-            _->finish();
-        }
 
-        static void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
-        {
-            _->render(mesh, material, transform);
-        }
-        static void render_debug(const fox::Transform& transform)
-        {
-            _->render_debug(transform);
-        }
+    inline void init()
+    {
+        api::renderer = std::make_unique<impl::renderer_t>();
+    }
 
-    protected:
-        static inline std::unique_ptr<renderer_t> _;
-    };
+    inline void start(gfx::RenderInfo renderInfo)
+    {
+        api::renderer->start(renderInfo);
+    }
+    inline void finish()
+    {
+        api::renderer->finish();
+    }
+
+    inline void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
+    {
+        api::renderer->render(mesh, material, transform);
+    }
+    inline void render_debug(const fox::Transform& transform)
+    {
+        api::renderer->render_debug(transform);
+    }
+
 }
