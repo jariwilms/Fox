@@ -7,12 +7,12 @@ namespace fox::gfx
     class Cubemap
     {
     public:
-        using Face      = impl::Cubemap::Face;
-        using Filter    = impl::Cubemap::Filter;
-        using Format    = impl::Cubemap::Format;
-        using Wrapping  = impl::Cubemap::Wrapping;
+        using Face      = api::Cubemap::Face;
+        using Filter    = api::Cubemap::Filter;
+        using Format    = api::Cubemap::Format;
+        using Wrapping  = api::Cubemap::Wrapping;
 
-        Cubemap(std::shared_ptr<impl::Cubemap> _)
+        Cubemap(std::shared_ptr<impl::Cubemap> _) 
             : _{ _ } {}
 
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions) -> std::shared_ptr<gfx::Cubemap>
@@ -30,7 +30,7 @@ namespace fox::gfx
 
         void bind(gfx::binding_t binding) const
         {
-            _->bind(static_cast<impl::binding_t>(binding));
+            _->bind(binding);
         }
 
         void apply_wrapping (Wrapping s, Wrapping t)
