@@ -33,21 +33,13 @@ namespace fox
             return array_.at(index);
         }
         
-        constexpr auto begin    () noexcept
+        constexpr auto begin    (this auto& self) noexcept
         {
-            return array_.begin();
+            return std::ranges::begin(self.array_);
         }
-        constexpr auto begin    () const noexcept
+        constexpr auto end      (this auto& self) noexcept
         {
-            return array_.begin();
-        }
-        constexpr auto end      () noexcept
-        {
-            return array_.end();
-        }
-        constexpr auto end      () const noexcept
-        {
-            return array_.end();
+            return std::ranges::end(self.array_);
         }
         
         constexpr auto size     () const noexcept

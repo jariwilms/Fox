@@ -20,30 +20,31 @@ namespace fox
 {
     static void model_to_scene_graph(scene::Scene& scene, scene::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
     {
-        auto& tc = actor.get_component<ecs::TransformComponent>().get();
+        auto& tc = actor.get_component<ecs::TransformComponent> ().get();
+        auto& mc = actor.add_component<ecs::MeshFilterComponent>().get();
+
         tc = node.transform;
 
-        auto& mf = actor.add_component<ecs::MeshFilterComponent>().get();
-        if (node.mesh)     mf.mesh     = model.meshes.at(*node.mesh);
-        if (node.material) mf.material = model.materials.at(*node.material);
+        if (node.mesh)     mc.mesh     = model.meshes   .at(*node.mesh    );
+        if (node.material) mc.material = model.materials.at(*node.material);
 
-        for (auto& childIndex : node.children)
-        {
-            auto& childActor = scene.create_actor();
-            scene.set_parent(actor, childActor);
+        std::ranges::for_each(node.children, [&](auto child)
+            {
+                auto& childActor = scene.create_actor();
 
-            model_to_scene_graph(scene, childActor, model, model.nodes.at(childIndex));
-        }
+                scene.set_parent(actor, childActor);
+                model_to_scene_graph(scene, childActor, model, model.nodes.at(child));
+            });
     }
-    static auto transform_product   (const scene::Scene& scene, const Relationship& relation, const fox::Transform& transform) -> fox::Transform
+    static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox::Relationship& relation, const fox::Transform& transform) -> fox::Transform
     {
         if (!relation.parent) return transform;
 
-        const auto& parent = scene.find_actor(*relation.parent);
-        const auto& rel    = parent.get_component<ecs::RelationshipComponent>().get();
-        const auto& trs    = parent.get_component<ecs::TransformComponent>().get();
+        const auto& parent = scene->find_actor(*relation.parent);
+        const auto& rc     = parent.get_component<ecs::RelationshipComponent>().get();
+        const auto& tc     = parent.get_component<ecs::TransformComponent>   ().get();
 
-        return transform_product(scene, rel, trs) * transform;
+        return transform_product(scene, rc, tc) * transform;
     }
 
     Application::Application(fox::int32_t argc, fox::char_t* argv[])
@@ -52,30 +53,22 @@ namespace fox
 
         gfx::geometry     ::init();
         io ::ModelImporter::init();
-        gfx::Renderer     ::init();
+        gfx::renderer     ::init();
     }
 
     int Application::run()
     {
-        //Scene creation and camera setup
-        auto  scene           = std::make_shared<scene::Scene>();
+        auto  scene                 = std::make_shared<scene::Scene>();
 
-        auto& observer        = scene->create_actor();
-        auto& camera          = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).get();
-        auto& cameraTransform = observer.get_component<ecs::TransformComponent>().get();
-
+        auto& observer              = scene->create_actor();
+        auto& camera                = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).get();
+        auto& cameraTransform       = observer.get_component<ecs::TransformComponent>().get();
         cameraTransform.translate_by(fox::Vector3f{ 0.0f, 1.0f, 2.0f });
 
-
-
-
-
-        //Loading models
         auto& helmetActor           = scene->create_actor();
         auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
         auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
-
-        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(helmetModel->root));
+        model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
         helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 
         const auto& defaultAlbedo   = io::load<io::Asset::Texture2D>("textures/albedo.png");
@@ -90,35 +83,30 @@ namespace fox
         defaultMaterial->emissive   = defaultEmissive;
 
         auto& floorActor            = scene->create_actor();
-        auto& fatc                  = floorActor.get_component<ecs::TransformComponent>().get();
+        auto& fatc                  = floorActor.get_component<ecs::TransformComponent> ().get();
         auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().get();
         famfc.mesh                  = gfx::geometry::plane;
         famfc.material              = defaultMaterial;
         fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
 
         auto& boxActor              = scene->create_actor();
-        auto& batc                  = boxActor.get_component<ecs::TransformComponent>().get();
+        auto& batc                  = boxActor.get_component<ecs::TransformComponent> ().get();
         auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().get();
         bamfc.mesh                  = gfx::geometry::cube;
         bamfc.material              = defaultMaterial;
         batc                        = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
 
-
-
-        
-
-        //Skybox setup
-        const fox::Vector2u skyboxDimensions{ 2048u, 2048u };
-        std::array<std::filesystem::path, 6u> skyboxImageFiles
+        const auto skyboxDimensions = fox::Vector2u{ 2048u };
+        const auto skyboxImageFiles = std::array<const std::filesystem::path, fox::size_t{ 6u }>
         {
-            "textures/skybox_space2/right.png", 
-            "textures/skybox_space2/left.png",
-            "textures/skybox_space2/top.png",
+            "textures/skybox_space2/right.png" , 
+            "textures/skybox_space2/left.png"  ,
+            "textures/skybox_space2/top.png"   ,
             "textures/skybox_space2/bottom.png",
-            "textures/skybox_space2/front.png",
-            "textures/skybox_space2/back.png",
+            "textures/skybox_space2/front.png" ,
+            "textures/skybox_space2/back.png"  ,
         };
-        std::array<fox::Image, 6u> cubemapFaces
+        const auto cubemapFaces     = std::array<const fox::Image, fox::size_t{ 6u }>
         {
             io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
             io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8), 
@@ -127,26 +115,16 @@ namespace fox
             io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8), 
             io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8), 
         };
+        auto skybox                 = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
 
-        auto skybox = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
-
-
-
-
-
-        //Lights
-        std::vector<std::tuple<fox::Light, fox::Vector3f>> lights
+        auto lights                 = std::vector<std::tuple<fox::Light, fox::Vector3f>>
         {
             //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.0f, 0.0f } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
             std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
             //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
         };
 
-
-
-
-
-        const auto& move_camera         = [&]
+        auto move_camera            = [&]
         {
             auto speed{ 5.0f * fox::time::delta() };
 
@@ -172,75 +150,55 @@ namespace fox
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
         };
-        const auto& rotate_helmet       = [&]
+        auto rotate_helmet          = [&]
             {
                 helmetTransform.rotate_by(fox::Vector3f{ 0.0f, 10.0f * fox::time::delta(), 0.0f });
             };
-        const auto& render_lights_debug = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights, std::optional<fox::uint32_t> limit = {})
+        auto render_lights_debug    = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights)
             {
-                for (auto i : std::views::iota(0u, limit.value_or(lights.size())))
+                std::ranges::for_each(lights, [](const auto& tuple)
                 {
-                    const auto& [l, p] = lights[i];
-
-                    fox::Transform t{};
-                    t.position = p;
-                    t.scale_by({ 0.1f, 0.1f, 0.1f });
-
-                    gfx::Renderer::render_debug(t);
-                }
+                    const auto& [light, position] = tuple;
+                    gfx::renderer::render_debug(fox::Transform{ position, fox::Vector3f{}, fox::Vector3f{ 0.1f, 0.1f, 0.1f }});
+                });
             };
+
+
 
 
 
         fox::time::reset();
-        fox::CircularBuffer<fox::float32_t, 144u> frametimes{};
+        auto frametimes = fox::CircularBuffer<fox::float32_t, fox::size_t{ 144u }>{};
 
         while (!window_->should_close())
         {
             fox::time::update();
             window_->poll_events();
 
-
-
-
-
             move_camera();
             rotate_helmet();
 
+            auto renderInfo = gfx::RenderInfo{ camera, cameraTransform, lights, skybox };
+            gfx::renderer::start(renderInfo);
 
-
-            //auto& l = lights.at(0);
-            //auto& [_1, _2] = l;
-            //_2.x = glm::cos(fox::Time::since_epoch() / 5.0f) * 20.0f;
-            //_2.z = glm::sin(fox::Time::since_epoch() / 5.0f) * 20.0f;
-
-
-
-            gfx::RenderInfo renderInfo{ camera, cameraTransform, lights, skybox };
-            gfx::Renderer::start(renderInfo);
-
-            const auto& view = registry::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
-            view.each([&](auto entity, const ecs::RelationshipComponent& rlc, const ecs::TransformComponent& tc, const ecs::MeshFilterComponent& mfc)
+            auto view = registry::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
+            view.each([&](auto entity, const ecs::RelationshipComponent& r, const ecs::TransformComponent& t, const ecs::MeshFilterComponent& m)
                 {
-                    const auto& relation   = rlc.get();
-                    const auto& transform  = tc.get();
-                    const auto& meshFilter = mfc.get();
-                    const auto& mesh       = meshFilter.mesh;
-                    const auto& material   = meshFilter.material;
+                    const auto& relationship = r.get();
+                    const auto& transform    = t.get();
+                    const auto& meshFilter   = m.get();
+                    const auto& mesh         = meshFilter.mesh;
+                    const auto& material     = meshFilter.material;
                     
                     if (!mesh || !material) return;
 
-                    const auto& transformProduct = transform_product(*scene, relation, transform);
-                    gfx::Renderer::render(mesh, material, transformProduct);
+                    auto transformProduct = transform_product(scene, relationship, transform);
+                    gfx::renderer::render(mesh, material, transformProduct);
                 });
 
             render_lights_debug(lights);
 
-            gfx::Renderer::finish();
-
-
-
-
+            gfx::renderer::finish();
 
             window_->swap_buffers();
             frametimes.push_back(fox::time::delta());
@@ -248,14 +206,14 @@ namespace fox
 
 
 
-        const auto& avgFrameTime = std::accumulate(frametimes.begin(), frametimes.end(), 0.0f) / static_cast<fox::float32_t>(frametimes.size());
+        auto averageFrameTime = std::ranges::fold_left(frametimes, fox::float32_t{ 0.0f }, std::plus<fox::float32_t>{}) / frametimes.size();
 
         std::system("CLS");
-        std::cout << "Average frame time: " <<        avgFrameTime << '\n';
-        std::cout << "Average frame rate: " << 1.0f / avgFrameTime << '\n';
+        std::println("Average frame rate: {}", 1.0f / averageFrameTime);
+        std::println("Average frame time: {}",        averageFrameTime);
 
 
 
-        return 0;
+        return EXIT_SUCCESS;
     }
 }
