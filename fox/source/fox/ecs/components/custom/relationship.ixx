@@ -1,10 +1,10 @@
-#pragma once
+export module fox.ecs.components.relationship;
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/core/types/ecs/ecs.hpp>
+import fox.core.types.ecs;
 
-namespace fox
+export namespace fox
 {
 	struct Relationship
 	{

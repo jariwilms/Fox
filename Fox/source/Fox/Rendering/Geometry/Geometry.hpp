@@ -2,7 +2,7 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/mesh/mesh.hpp>
+import fox.rendering.mesh;
 
 namespace fox::gfx::geometry
 {

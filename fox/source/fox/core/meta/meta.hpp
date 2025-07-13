@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdafx.hpp>
+
 namespace fox
 {
     inline namespace meta

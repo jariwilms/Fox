@@ -2,9 +2,12 @@
 
 #include <stdafx.hpp>
 
-#include <fox/ecs/components/components.hpp>
-#include <fox/ecs/entity/entity.hpp>
 #include <fox/ecs/registry.hpp>
+#include <fox/ecs/components/components.hpp>
+
+import fox.core.types.fundamental;
+//import fox.ecs.components;
+import fox.ecs.entity;
 
 namespace fox::scene
 {

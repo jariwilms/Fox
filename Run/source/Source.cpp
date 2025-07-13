@@ -2,7 +2,6 @@
 #include <fox/core/image/image.hpp>
 #include <fox/core/time/time.hpp>
 #include <fox/core/transform/transform.hpp>
-#include <fox/ecs/components/components.hpp>
 #include <fox/input/input.hpp>
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/io/io.hpp>

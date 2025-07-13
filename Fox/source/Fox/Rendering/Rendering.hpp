@@ -5,8 +5,6 @@
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/rendering/material/material.hpp>
-#include <fox/rendering/mesh/mesh.hpp>
 #include <fox/rendering/model/model.hpp>
 #include <fox/rendering/render_buffer/render_buffer.hpp>
 #include <fox/rendering/render_info/render_info.hpp>
@@ -15,6 +13,9 @@
 #include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>
 #include <fox/rendering/uniform/uniform.hpp>
+
+import fox.rendering.material;
+import fox.rendering.mesh;
 
 namespace fox::gfx
 {

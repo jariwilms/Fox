@@ -1,8 +1,10 @@
-#pragma once
+module;
 
 #include <fox/rendering/buffer/vertex_array.hpp>
 
-namespace fox::gfx
+export module fox.rendering.mesh;
+
+export namespace fox::gfx
 {
     struct Mesh
     {

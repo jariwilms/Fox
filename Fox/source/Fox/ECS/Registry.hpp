@@ -2,7 +2,11 @@
 
 #include <entt/entt.hpp>
 
-#include <fox/ecs/components/component.hpp>
+import std;
+
+import fox.core.types.fundamental;
+import fox.core.types.ecs;
+import fox.ecs.component;
 
 namespace fox
 {

@@ -10,6 +10,10 @@ module;
 
 export module fox.rendering.renderer.opengl;
 
+export import fox.ecs.component;
+export import fox.ecs.components.mesh_filter;
+export import fox.ecs.components.relationship;
+
 import std;
 
 export namespace fox::gfx::api

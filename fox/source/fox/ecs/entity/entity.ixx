@@ -1,8 +1,9 @@
-#pragma once
+export module fox.ecs.entity;
 
-#include <fox/core/types/ecs/ecs.hpp>
+import fox.core.types.fundamental;
+import fox.core.types.ecs;
 
-namespace fox::ecs
+export namespace fox::ecs
 {
     class Entity
     {

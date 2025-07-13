@@ -1,8 +1,10 @@
-#pragma once
+export module fox.ecs.component;
 
-#include <fox/ecs/entity/entity.hpp>
+import std;
 
-namespace fox::ecs
+import fox.ecs.entity;
+
+export namespace fox::ecs
 {
 	template<typename T>
 	class Component

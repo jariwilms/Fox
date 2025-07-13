@@ -1,11 +1,14 @@
-#pragma once
-
-#include <stdafx.hpp>
+module;
 
 #include <fox/rendering/shader/shader.hpp>
 #include <fox/rendering/texture/texture.hpp>
+#include <fox/core/types/math/linear_algebra/vector.hpp>
 
-namespace fox::gfx
+export module fox.rendering.material;
+
+import std;
+
+export namespace fox::gfx
 {
     struct Material
     {

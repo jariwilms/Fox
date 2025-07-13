@@ -1,11 +1,16 @@
+//module;
 #pragma once
 
 #include <fox/core/transform/transform.hpp>
-#include <fox/ecs/components/component.hpp>
-#include <fox/ecs/components/custom/mesh_filter.hpp>
-#include <fox/ecs/components/custom/relationship.hpp>
 #include <fox/rendering/camera/camera.hpp>
 
+//export module fox.ecs.components;
+
+import fox.ecs.component;
+import fox.ecs.components.mesh_filter;
+import fox.ecs.components.relationship;
+
+//export 
 namespace fox::ecs
 {
 	using CameraComponent       = ecs::Component<fox::Camera>;

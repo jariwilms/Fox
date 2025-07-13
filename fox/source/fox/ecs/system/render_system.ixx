@@ -1,13 +1,13 @@
-#pragma once
+export module fox.ecs.system.render;
 
-#include <fox/ecs/system/system.hpp>
+import fox.ecs.system;
 
-namespace fox
+export namespace fox
 {
-    class RenderSystem : public fox::System
+    class RenderSystem
     {
     public:
-        void update() override
+        void update()
         {
             //start rendering here, iterate all components, then finish as shown in main()
         }
