@@ -99,7 +99,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="source\fox\application.hpp" />
     <ClInclude Include="source\fox\core\data\data.hpp" />
     <ClInclude Include="source\fox\core\data\rendering\material.hpp" />
     <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
@@ -226,7 +225,6 @@
     <ClInclude Include="source\vendor\stb\stb.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\fox\application.cpp" />
     <ClCompile Include="source\fox\config\config.ixx" />
     <ClCompile Include="source\fox\core\json\json.ixx" />
     <ClCompile Include="source\fox\core\memory\adapter\no_init_adapter.ixx" />
