@@ -2,7 +2,7 @@
 
 #include <type_traits>
 
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.fundamental;
 
 namespace fox::gfx::api
 {

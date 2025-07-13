@@ -1,10 +1,11 @@
-#pragma once
+export module fox.core.memory.adapter.no_init;
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.common;
+import fox.core.types.fundamental;
 
-namespace fox::memory
+export namespace fox::memory
 {
     //A specialized allocator that bypasses initialization when a vector is resized.
     //This allows for direct population of the raw, uninitialized memory.

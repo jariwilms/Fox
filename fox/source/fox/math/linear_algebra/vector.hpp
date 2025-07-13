@@ -1,8 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
 #include <fox/core/types/math/linear_algebra/vector.hpp>
+
+import vendor.glm;
 
 namespace fox::math
 {

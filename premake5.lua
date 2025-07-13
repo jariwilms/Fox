@@ -35,14 +35,12 @@ group ""
 
 group "Application"
 project "FOX"
-	location      "FOX"
-	language      "C++"
-	cppdialect    "C++23"
-	kind          "StaticLib"
-	staticruntime "On"
-	
-	pchheader "stdafx.hpp"
-	pchsource "fox/source/stdafx.cpp"
+	location        "FOX"
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "StaticLib"
+	staticruntime   "On"
+	buildstlmodules "On"
 	
 	defines
 	{
@@ -74,6 +72,7 @@ project "FOX"
 	{
 		"fox/source/**.hpp", 
 		"fox/source/**.cpp", 
+		"fox/source/**.ixx", 
 	}
 	
 	links
@@ -118,14 +117,21 @@ project "FOX"
 		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 
 project "RUN"
-	location      "RUN"
-	language      "C++"
-	cppdialect    "C++23"
-	kind          "ConsoleApp"
-	staticruntime "On"
+	location        "RUN"
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "ConsoleApp"
+	staticruntime   "On"
+	buildstlmodules "On"
 	
 	defines
 	{
+		'FOX_ENGINE', 
+		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
+		'FOX_ASSET_DIR=R"(C:/Users/jariw/source/repos/Fox/fox/assets)"', 
+		"FOX_MALLOC", 
+
+	
 		"GLFW_INCLUDE_NONE", 
 		"GLM_ENABLE_EXPERIMENTAL", 
 	}
@@ -146,8 +152,9 @@ project "RUN"
 	
 	files
 	{
-		"Run/source/**.hpp", 
-		"Run/source/**.cpp", 
+		"run/source/**.hpp", 
+		"run/source/**.cpp", 
+		"run/source/**.ixx", 
 	}
 	
 	links

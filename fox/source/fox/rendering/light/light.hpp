@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.fundamental;
 #include <fox/core/types/math/linear_algebra/vector.hpp>
 
 namespace fox

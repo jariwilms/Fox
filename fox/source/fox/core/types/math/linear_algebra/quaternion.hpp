@@ -1,7 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
+import vendor.glm;
 
 namespace fox
 {
@@ -9,6 +8,6 @@ namespace fox
 
     namespace quaternion
     {
-        constexpr auto identity = fox::Quaternion{ 1.0f, 0.0f, 0.0f, 0.0f };
+        const auto identity = fox::Quaternion{ 1.0f, 0.0f, 0.0f, 0.0f };
     }
 }

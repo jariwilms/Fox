@@ -1,8 +1,7 @@
 #pragma once
 
-#include <glm/glm.hpp>
-
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.fundamental;
+import vendor.glm;
 
 namespace fox
 {
@@ -30,11 +29,11 @@ namespace fox
 
 	namespace vector
 	{
-		constexpr auto zero    = fox::Vector4f{  0.0f,  0.0f,  0.0f,  0.0f  };
-		constexpr auto one     = fox::Vector4f{  1.0f,  1.0f,  1.0f,  1.0f  };
+		const auto zero    = fox::Vector4f{  0.0f,  0.0f,  0.0f,  0.0f  };
+		const auto one     = fox::Vector4f{  1.0f,  1.0f,  1.0f,  1.0f  };
 
-		constexpr auto right   = fox::Vector4f{  1.0f,  0.0f,  0.0f,  0.0f  };
-		constexpr auto up      = fox::Vector4f{  0.0f,  1.0f,  0.0f,  0.0f  };
-		constexpr auto forward = fox::Vector4f{  0.0f,  0.0f, -1.0f,  0.0f  };
+		const auto right   = fox::Vector4f{  1.0f,  0.0f,  0.0f,  0.0f  };
+		const auto up      = fox::Vector4f{  0.0f,  1.0f,  0.0f,  0.0f  };
+		const auto forward = fox::Vector4f{  0.0f,  0.0f, -1.0f,  0.0f  };
 	}
 }

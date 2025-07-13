@@ -1,11 +1,13 @@
-#pragma once
+export module fox.core.types.circular_buffer;
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/core/types/common/common.hpp>
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.fundamental;
+import fox.core.types.common;
 
-namespace fox
+import vendor.glm;
+
+export namespace fox
 {
     template<typename T, fox::size_t N>
     class CircularBuffer

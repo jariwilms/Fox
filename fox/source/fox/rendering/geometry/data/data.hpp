@@ -2,7 +2,7 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.fundamental;
 
 namespace fox::gfx::geometry::data
 {

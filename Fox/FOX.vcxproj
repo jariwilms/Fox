@@ -54,8 +54,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\jolt\include;..\vendor\mimalloc\include;..\vendor\nlohmann\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -64,6 +63,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <BuildStlModules>true</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -75,8 +75,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.hpp</PrecompiledHeaderFile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\jolt\include;..\vendor\mimalloc\include;..\vendor\nlohmann\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -88,6 +87,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <BuildStlModules>true</BuildStlModules>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -100,23 +100,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="source\fox\application.hpp" />
-    <ClInclude Include="source\fox\config\config.hpp" />
     <ClInclude Include="source\fox\core\data\data.hpp" />
     <ClInclude Include="source\fox\core\data\rendering\material.hpp" />
     <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
     <ClInclude Include="source\fox\core\image\image.hpp" />
-    <ClInclude Include="source\fox\core\json\json.hpp" />
-    <ClInclude Include="source\fox\core\memory\adapter\no_init_adapter.hpp" />
     <ClInclude Include="source\fox\core\meta\concepts.hpp" />
     <ClInclude Include="source\fox\core\meta\meta.hpp" />
     <ClInclude Include="source\fox\core\time\time.hpp" />
     <ClInclude Include="source\fox\core\transform\transform.hpp" />
     <ClInclude Include="source\fox\core\types\alias\alias.hpp" />
-    <ClInclude Include="source\fox\core\types\collection\circular_buffer.hpp" />
-    <ClInclude Include="source\fox\core\types\common\common.hpp" />
     <ClInclude Include="source\fox\core\types\domain\domain.hpp" />
     <ClInclude Include="source\fox\core\types\ecs\ecs.hpp" />
-    <ClInclude Include="source\fox\core\types\fundamental\fundamental.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\matrix.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\quaternion.hpp" />
     <ClInclude Include="source\fox\core\types\math\linear_algebra\vector.hpp" />
@@ -216,9 +210,7 @@
     <ClInclude Include="source\fox\rendering\post_processing\post_processing.hpp" />
     <ClInclude Include="source\fox\rendering\render_buffer\render_buffer.hpp" />
     <ClInclude Include="source\fox\rendering\render_info\render_info.hpp" />
-    <ClInclude Include="source\fox\rendering\renderer\opengl_renderer.hpp" />
     <ClInclude Include="source\fox\rendering\renderer\render_mode.hpp" />
-    <ClInclude Include="source\fox\rendering\renderer\renderer.hpp" />
     <ClInclude Include="source\fox\rendering\shader\pipeline.hpp" />
     <ClInclude Include="source\fox\rendering\shader\shader.hpp" />
     <ClInclude Include="source\fox\rendering\texture\cubemap.hpp" />
@@ -235,14 +227,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\fox\application.cpp" />
+    <ClCompile Include="source\fox\config\config.ixx" />
+    <ClCompile Include="source\fox\core\json\json.ixx" />
+    <ClCompile Include="source\fox\core\memory\adapter\no_init_adapter.ixx" />
+    <ClCompile Include="source\fox\core\types\collection\circular_buffer.ixx" />
+    <ClCompile Include="source\fox\core\types\common\common.ixx" />
+    <ClCompile Include="source\fox\core\types\fundamental\fundamental.ixx" />
     <ClCompile Include="source\fox\io\import\model\model_importer.cpp" />
     <ClCompile Include="source\fox\rendering\geometry\geometry.cpp" />
-    <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.cpp" />
+    <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.ixx" />
+    <ClCompile Include="source\fox\rendering\renderer\renderer.hpp" />
     <ClCompile Include="source\fox\scene\Scene.cpp" />
     <ClCompile Include="source\fox\window\api\glfw\window.cpp" />
-    <ClCompile Include="source\stdafx.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
+    <ClCompile Include="source\vendor\glm\glm.ixx" />
+    <ClCompile Include="source\vendor\nlohmann\nlohmann.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\vendor\assimp\ASSIMP.vcxproj">

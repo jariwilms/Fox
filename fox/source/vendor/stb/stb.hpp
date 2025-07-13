@@ -1,11 +1,12 @@
 #pragma once
 
-#include <stdafx.hpp>
+//#include <stb/stb_image.h>
+//#include <stb/stb_image_write.h>
 
-#include <stb/stb_image.h>
-#include <stb/stb_image_write.h>
+import std;
 
-#include <fox/core/types/common/common.hpp>
+import fox.core.types.fundamental;
+import fox.core.types.common;
 
 namespace vendor::stb
 {

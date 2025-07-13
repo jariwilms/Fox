@@ -2,7 +2,7 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/types/common/common.hpp>
+import fox.core.types.common;
 
 namespace fox::math::graph
 {

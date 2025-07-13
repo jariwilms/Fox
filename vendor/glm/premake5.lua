@@ -1,9 +1,19 @@
 project "GLM"
-	language      "C++"
-	cppdialect    "C++11"
-	kind          "StaticLib"
-	staticruntime "On"
-	
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "StaticLib"
+	staticruntime   "On"
+	buildstlmodules "On"
+
+	defines
+	{
+		"GLM_ENABLE_EXPERIMENTAL", 
+		
+		"GLM_GTC_INLINE_NAMESPACE", 
+		"GLM_EXT_INLINE_NAMESPACE", 
+		"GLM_GTX_INLINE_NAMESPACE", 
+	}
+
 	includedirs
 	{
 		"include", 
@@ -12,9 +22,9 @@ project "GLM"
 	files
 	{
 		"include/glm/**.hpp", 
-		"include/glm/**.h", 
-		
 		"include/glm/**.cpp", 
+		"include/glm/**.inl", 
+		"include/glm/**.ixx", 
 	}
 	
 	disablewarnings

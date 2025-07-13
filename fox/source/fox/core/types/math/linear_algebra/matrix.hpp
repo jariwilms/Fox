@@ -1,13 +1,7 @@
 #pragma once
 
-#include <stdafx.hpp>
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/matrix_decompose.hpp>
-
-#include <fox/core/types/math/linear_algebra/quaternion.hpp>
-#include <fox/core/types/math/linear_algebra/vector.hpp>
+import fox.core.types.fundamental;
+import vendor.glm;
 
 namespace fox
 {
@@ -19,6 +13,6 @@ namespace fox
 
     namespace matrix
     {
-        constexpr auto identity = fox::Matrix4f{ 1.0f };
+        const auto identity = fox::Matrix4f{ 1.0f };
     }
 }

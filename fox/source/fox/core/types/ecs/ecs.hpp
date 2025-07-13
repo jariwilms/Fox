@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/core/types/common/common.hpp>
+import fox.core.types.common;
 
 namespace fox
 {

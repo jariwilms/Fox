@@ -1,10 +1,8 @@
-#pragma once
+export module fox.core.json;
 
-#include <stdafx.hpp>
+import vendor.nlohmann;
 
-#include <nlohmann/json.hpp>
-
-namespace fox::json
+export namespace fox::json
 {
 	inline void test()
 	{

@@ -2,9 +2,10 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/memory/adapter/no_init_adapter.hpp>
 #include <fox/core/utility/utility.hpp>
 #include <fox/io/filesystem/entry.hpp>
+
+import fox.core.memory.adapter.no_init;
 
 namespace fox::io
 {

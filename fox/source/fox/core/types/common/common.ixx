@@ -1,8 +1,8 @@
-#pragma once
+export module fox.core.types.common;
 
-#include <fox/core/types/fundamental/fundamental.hpp>
+import fox.core.types.fundamental;
 
-namespace fox
+export namespace fox
 {
 	using byte_t   = fox::uint8_t ;
 	using size_t   = fox::uint64_t; //Number of bytes

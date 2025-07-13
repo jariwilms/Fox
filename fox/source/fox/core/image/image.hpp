@@ -1,12 +1,14 @@
 #pragma once
 
+#include <stb/stb_image.h>
+#include <stb/stb_image_write.h>
+
 #include <stdafx.hpp>
-
 #include <vendor/stb/stb.hpp>
-
-#include <fox/config/config.hpp>
-#include <fox/core/types/common/common.hpp>
 #include <fox/core/types/math/linear_algebra/vector.hpp>
+
+import fox.config;
+import fox.core.types.common;
 
 namespace fox
 {

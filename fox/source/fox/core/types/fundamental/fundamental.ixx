@@ -1,6 +1,6 @@
-#pragma once
+export module fox.core.types.fundamental;
 
-namespace fox
+export namespace fox
 {
 	using void_t     =          void     ;
 	using bool_t     =          bool     ;

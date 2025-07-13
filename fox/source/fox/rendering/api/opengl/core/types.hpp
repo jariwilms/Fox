@@ -1,11 +1,9 @@
 #pragma once
 
 #include <stdafx.hpp>
-
 #include <glad/gl.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
+import vendor.glm;
 
 namespace fox::gfx::api::gl
 {

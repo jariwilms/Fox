@@ -1,9 +1,9 @@
 #pragma once
 
-#include <glm/gtx/texture.hpp>
-
-#include <fox/core/types/fundamental/fundamental.hpp>
 #include <fox/core/types/math/linear_algebra/vector.hpp>
+
+import fox.core.types.fundamental;
+import vendor.glm;
 
 namespace fox::math
 {
