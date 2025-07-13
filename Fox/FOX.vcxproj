@@ -210,6 +210,7 @@
     <ClInclude Include="source\fox\rendering\render_buffer\render_buffer.hpp" />
     <ClInclude Include="source\fox\rendering\render_info\render_info.hpp" />
     <ClInclude Include="source\fox\rendering\renderer\render_mode.hpp" />
+    <ClInclude Include="source\fox\rendering\renderer\renderer.hpp" />
     <ClInclude Include="source\fox\rendering\shader\pipeline.hpp" />
     <ClInclude Include="source\fox\rendering\shader\shader.hpp" />
     <ClInclude Include="source\fox\rendering\texture\cubemap.hpp" />
@@ -222,7 +223,6 @@
     <ClInclude Include="source\fox\window\base\window.hpp" />
     <ClInclude Include="source\fox\window\window.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
-    <ClInclude Include="source\vendor\stb\stb.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\fox\config\config.ixx" />
@@ -234,11 +234,11 @@
     <ClCompile Include="source\fox\io\import\model\model_importer.cpp" />
     <ClCompile Include="source\fox\rendering\geometry\geometry.cpp" />
     <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.ixx" />
-    <ClCompile Include="source\fox\rendering\renderer\renderer.hpp" />
     <ClCompile Include="source\fox\scene\Scene.cpp" />
     <ClCompile Include="source\fox\window\api\glfw\window.cpp" />
     <ClCompile Include="source\vendor\glm\glm.ixx" />
     <ClCompile Include="source\vendor\nlohmann\nlohmann.ixx" />
+    <ClCompile Include="source\vendor\stb\stb.ixx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\vendor\assimp\ASSIMP.vcxproj">
