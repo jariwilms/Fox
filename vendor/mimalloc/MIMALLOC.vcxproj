@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\bin\debug\windows\MIMALLOC\</OutDir>
-    <IntDir>..\..\build\debug\windows\MIMALLOC\</IntDir>
+    <OutDir>$(ProjectDir)..\..\bin\debug\windows\MIMALLOC\</OutDir>
+    <IntDir>$(ProjectDir)..\..\build\debug\windows\MIMALLOC\</IntDir>
     <TargetName>MIMALLOC</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\bin\release\windows\MIMALLOC\</OutDir>
-    <IntDir>..\..\build\release\windows\MIMALLOC\</IntDir>
+    <OutDir>$(ProjectDir)..\..\bin\release\windows\MIMALLOC\</OutDir>
+    <IntDir>$(ProjectDir)..\..\build\release\windows\MIMALLOC\</IntDir>
     <TargetName>MIMALLOC</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

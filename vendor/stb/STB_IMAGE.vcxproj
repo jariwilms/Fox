@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\bin\debug\windows\STB_IMAGE\</OutDir>
-    <IntDir>..\..\build\debug\windows\STB_IMAGE\</IntDir>
+    <OutDir>$(ProjectDir)..\..\bin\debug\windows\STB_IMAGE\</OutDir>
+    <IntDir>$(ProjectDir)..\..\build\debug\windows\STB_IMAGE\</IntDir>
     <TargetName>STB_IMAGE</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\bin\release\windows\STB_IMAGE\</OutDir>
-    <IntDir>..\..\build\release\windows\STB_IMAGE\</IntDir>
+    <OutDir>$(ProjectDir)..\..\bin\release\windows\STB_IMAGE\</OutDir>
+    <IntDir>$(ProjectDir)..\..\build\release\windows\STB_IMAGE\</IntDir>
     <TargetName>STB_IMAGE</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

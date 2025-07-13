@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\..\bin\debug\windows\NLOHMANN\</OutDir>
-    <IntDir>..\..\build\debug\windows\NLOHMANN\</IntDir>
+    <OutDir>$(ProjectDir)..\..\bin\debug\windows\NLOHMANN\</OutDir>
+    <IntDir>$(ProjectDir)..\..\build\debug\windows\NLOHMANN\</IntDir>
     <TargetName>NLOHMANN</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\..\bin\release\windows\NLOHMANN\</OutDir>
-    <IntDir>..\..\build\release\windows\NLOHMANN\</IntDir>
+    <OutDir>$(ProjectDir)..\..\bin\release\windows\NLOHMANN\</OutDir>
+    <IntDir>$(ProjectDir)..\..\build\release\windows\NLOHMANN\</IntDir>
     <TargetName>NLOHMANN</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>

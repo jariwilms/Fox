@@ -41,14 +41,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\debug\windows\FOX\</OutDir>
-    <IntDir>..\build\debug\windows\FOX\</IntDir>
+    <OutDir>$(ProjectDir)..\bin\debug\windows\FOX\</OutDir>
+    <IntDir>$(ProjectDir)..\build\debug\windows\FOX\</IntDir>
     <TargetName>FOX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\release\windows\FOX\</OutDir>
-    <IntDir>..\build\release\windows\FOX\</IntDir>
+    <OutDir>$(ProjectDir)..\bin\release\windows\FOX\</OutDir>
+    <IntDir>$(ProjectDir)..\build\release\windows\FOX\</IntDir>
     <TargetName>FOX</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
@@ -101,6 +101,8 @@
   <ItemGroup>
     <ClInclude Include="source\fox\application.hpp" />
     <ClInclude Include="source\fox\config\config.hpp" />
+    <ClInclude Include="source\fox\core\data\data.hpp" />
+    <ClInclude Include="source\fox\core\data\rendering\material.hpp" />
     <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
     <ClInclude Include="source\fox\core\image\image.hpp" />
     <ClInclude Include="source\fox\core\json\json.hpp" />
@@ -125,39 +127,41 @@
     <ClInclude Include="source\fox\core\types\uuid\uuid.hpp" />
     <ClInclude Include="source\fox\core\types\window\window.hpp" />
     <ClInclude Include="source\fox\core\utility\utility.hpp" />
-    <ClInclude Include="source\fox\ecs\components\component.hpp" />
-    <ClInclude Include="source\fox\ecs\components\components.hpp" />
+    <ClInclude Include="source\fox\ecs\Registry.hpp" />
+    <ClInclude Include="source\fox\ecs\components\Component.hpp" />
+    <ClInclude Include="source\fox\ecs\components\Components.hpp" />
     <ClInclude Include="source\fox\ecs\components\custom\mesh_filter.hpp" />
     <ClInclude Include="source\fox\ecs\components\custom\relationship.hpp" />
-    <ClInclude Include="source\fox\ecs\entity\entity.hpp" />
-    <ClInclude Include="source\fox\ecs\registry.hpp" />
+    <ClInclude Include="source\fox\ecs\entity\Entity.hpp" />
+    <ClInclude Include="source\fox\ecs\system\System.hpp" />
     <ClInclude Include="source\fox\ecs\system\render_system.hpp" />
-    <ClInclude Include="source\fox\ecs\system\system.hpp" />
-    <ClInclude Include="source\fox\input\api\glfw\input_handler.hpp" />
+    <ClInclude Include="source\fox\input\Input.hpp" />
     <ClInclude Include="source\fox\input\api\api.hpp" />
-    <ClInclude Include="source\fox\input\code\button.hpp" />
-    <ClInclude Include="source\fox\input\code\controller.hpp" />
-    <ClInclude Include="source\fox\input\code\key.hpp" />
-    <ClInclude Include="source\fox\input\code\modifier.hpp" />
+    <ClInclude Include="source\fox\input\api\glfw\input_handler.hpp" />
+    <ClInclude Include="source\fox\input\code\Button.hpp" />
+    <ClInclude Include="source\fox\input\code\Controller.hpp" />
+    <ClInclude Include="source\fox\input\code\Key.hpp" />
+    <ClInclude Include="source\fox\input\code\Modifier.hpp" />
     <ClInclude Include="source\fox\input\context\context.hpp" />
-    <ClInclude Include="source\fox\input\input.hpp" />
     <ClInclude Include="source\fox\input\mapping\mapping.hpp" />
-    <ClInclude Include="source\fox\io\filesystem\directory.hpp" />
-    <ClInclude Include="source\fox\io\filesystem\entry.hpp" />
-    <ClInclude Include="source\fox\io\filesystem\file.hpp" />
+    <ClInclude Include="source\fox\io\IO.hpp" />
+    <ClInclude Include="source\fox\io\Loading.hpp" />
+    <ClInclude Include="source\fox\io\filesystem\Directory.hpp" />
+    <ClInclude Include="source\fox\io\filesystem\Entry.hpp" />
+    <ClInclude Include="source\fox\io\filesystem\File.hpp" />
     <ClInclude Include="source\fox\io\import\model\model_importer.hpp" />
-    <ClInclude Include="source\fox\io\io.hpp" />
-    <ClInclude Include="source\fox\io\loading.hpp" />
-    <ClInclude Include="source\fox\math\constants\constants.hpp" />
+    <ClInclude Include="source\fox\math\Math.hpp" />
+    <ClInclude Include="source\fox\math\constants\Constants.hpp" />
+    <ClInclude Include="source\fox\math\graph\graph.hpp" />
     <ClInclude Include="source\fox\math\linear_algebra\matrix.hpp" />
     <ClInclude Include="source\fox\math\linear_algebra\projection.hpp" />
     <ClInclude Include="source\fox\math\linear_algebra\quaternion.hpp" />
     <ClInclude Include="source\fox\math\linear_algebra\vector.hpp" />
-    <ClInclude Include="source\fox\math\math.hpp" />
     <ClInclude Include="source\fox\math\texture\texture.hpp" />
-    <ClInclude Include="source\fox\math\trigonometry\trigonometry.hpp" />
+    <ClInclude Include="source\fox\math\trigonometry\Trigonometry.hpp" />
     <ClInclude Include="source\fox\physics\bounding_volume\aabb.hpp" />
-    <ClInclude Include="source\fox\random\random.hpp" />
+    <ClInclude Include="source\fox\random\Random.hpp" />
+    <ClInclude Include="source\fox\rendering\Rendering.hpp" />
     <ClInclude Include="source\fox\rendering\api\api.hpp" />
     <ClInclude Include="source\fox\rendering\api\directx\directx.hpp" />
     <ClInclude Include="source\fox\rendering\api\directx\dx.hpp" />
@@ -206,8 +210,8 @@
     <ClInclude Include="source\fox\rendering\geometry\geometry.hpp" />
     <ClInclude Include="source\fox\rendering\layout\layout.hpp" />
     <ClInclude Include="source\fox\rendering\light\light.hpp" />
-    <ClInclude Include="source\fox\rendering\material\material.hpp" />
-    <ClInclude Include="source\fox\rendering\mesh\mesh.hpp" />
+    <ClInclude Include="source\fox\rendering\material\Material.hpp" />
+    <ClInclude Include="source\fox\rendering\mesh\Mesh.hpp" />
     <ClInclude Include="source\fox\rendering\model\model.hpp" />
     <ClInclude Include="source\fox\rendering\post_processing\post_processing.hpp" />
     <ClInclude Include="source\fox\rendering\render_buffer\render_buffer.hpp" />
@@ -215,16 +219,15 @@
     <ClInclude Include="source\fox\rendering\renderer\opengl_renderer.hpp" />
     <ClInclude Include="source\fox\rendering\renderer\render_mode.hpp" />
     <ClInclude Include="source\fox\rendering\renderer\renderer.hpp" />
-    <ClInclude Include="source\fox\rendering\rendering.hpp" />
     <ClInclude Include="source\fox\rendering\shader\pipeline.hpp" />
     <ClInclude Include="source\fox\rendering\shader\shader.hpp" />
     <ClInclude Include="source\fox\rendering\texture\cubemap.hpp" />
     <ClInclude Include="source\fox\rendering\texture\texture.hpp" />
     <ClInclude Include="source\fox\rendering\uniform\Uniform.hpp" />
-    <ClInclude Include="source\fox\scene\actor.hpp" />
-    <ClInclude Include="source\fox\scene\scene.hpp" />
-    <ClInclude Include="source\fox\window\api\glfw\window.hpp" />
+    <ClInclude Include="source\fox\scene\Actor.hpp" />
+    <ClInclude Include="source\fox\scene\Scene.hpp" />
     <ClInclude Include="source\fox\window\api\api.hpp" />
+    <ClInclude Include="source\fox\window\api\glfw\window.hpp" />
     <ClInclude Include="source\fox\window\base\window.hpp" />
     <ClInclude Include="source\fox\window\window.hpp" />
     <ClInclude Include="source\stdafx.hpp" />
@@ -235,7 +238,7 @@
     <ClCompile Include="source\fox\io\import\model\model_importer.cpp" />
     <ClCompile Include="source\fox\rendering\geometry\geometry.cpp" />
     <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.cpp" />
-    <ClCompile Include="source\fox\scene\scene.cpp" />
+    <ClCompile Include="source\fox\scene\Scene.cpp" />
     <ClCompile Include="source\fox\window\api\glfw\window.cpp" />
     <ClCompile Include="source\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

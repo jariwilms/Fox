@@ -41,15 +41,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>..\bin\debug\windows\RUN\</OutDir>
-    <IntDir>..\build\debug\windows\RUN\</IntDir>
+    <OutDir>$(ProjectDir)..\bin\debug\windows\RUN\</OutDir>
+    <IntDir>$(ProjectDir)..\build\debug\windows\RUN\</IntDir>
     <TargetName>RUN</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\bin\release\windows\RUN\</OutDir>
-    <IntDir>..\build\release\windows\RUN\</IntDir>
+    <OutDir>$(ProjectDir)..\bin\release\windows\RUN\</OutDir>
+    <IntDir>$(ProjectDir)..\build\release\windows\RUN\</IntDir>
     <TargetName>RUN</TargetName>
     <TargetExt>.exe</TargetExt>
   </PropertyGroup>
@@ -92,7 +92,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\source.cpp" />
+    <ClCompile Include="source\Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FOX\FOX.vcxproj">
