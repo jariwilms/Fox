@@ -1,22 +1,23 @@
 #pragma once
 
-#define FOX_GRAPHICS_API_DIRECTX 1
-#define FOX_GRAPHICS_API_OPENGL  2
-#define FOX_GRAPHICS_API_VULKAN  3
-
-#ifndef FOX_GRAPHICS_API
-#define FOX_GRAPHICS_API FOX_GRAPHICS_API_OPENGL
-#endif
-
+//#define FOX_GRAPHICS_API_DIRECTX 1
+//#define FOX_GRAPHICS_API_OPENGL  2
+//#define FOX_GRAPHICS_API_VULKAN  3
+//
+//#ifndef FOX_GRAPHICS_API
+//#define FOX_GRAPHICS_API FOX_GRAPHICS_API_OPENGL
+//#endif
+//
 #include <fox/core/meta/meta.hpp>
-#include <fox/core/types/alias/alias.hpp>
-#include <fox/core/types/domain/domain.hpp>
 #include <fox/core/types/rendering/rendering.hpp>
 #include <fox/core/utility/utility.hpp>
-
-#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
+//
+//#if FOX_GRAPHICS_API == FOX_GRAPHICS_API_OPENGL
 #include <fox/rendering/api/opengl/gl.hpp>
-#endif
+//#endif
+
+import fox.core.types.alias;
+import fox.core.types.domain;
 
 namespace fox::gfx
 {

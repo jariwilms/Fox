@@ -1,11 +1,14 @@
 #pragma once
 
-#include <stdafx.hpp>
-
 #include <fox/core/enumeration/enumeration.hpp>
 #include <fox/rendering/base/render_buffer/render_buffer.hpp>
 #include <fox/rendering/base/texture/cubemap.hpp>
 #include <fox/rendering/base/texture/texture.hpp>
+
+import std;
+
+import fox.core.types.common;
+import fox.core.types.fundamental;
 
 namespace fox::gfx::api
 {

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <fox/math/constants/constants.hpp>
 #include <fox/math/linear_algebra/matrix.hpp>
 #include <fox/math/linear_algebra/projection.hpp>
 #include <fox/math/linear_algebra/quaternion.hpp>
@@ -8,7 +7,4 @@
 #include <fox/math/texture/texture.hpp>
 #include <fox/math/trigonometry/trigonometry.hpp>
 
-namespace fox::math
-{
-    
-}
+//import fox.math.constants;

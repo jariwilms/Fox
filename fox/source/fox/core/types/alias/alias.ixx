@@ -1,8 +1,8 @@
-#pragma once
+export module fox.core.types.alias;
 
-#include <stdafx.hpp>
+import std;
 
-namespace fox
+export namespace fox
 {
     template<typename T, typename U>
     class alias_t

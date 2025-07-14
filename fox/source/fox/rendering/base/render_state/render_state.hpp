@@ -1,6 +1,7 @@
 #pragma once
 
-#include <fox/core/types/math/linear_algebra/vector.hpp>
+//import fox.core.types.fundamental;
+//#include <fox/core/types/math/math.hpp>
 
 namespace fox::gfx::api
 {
@@ -45,11 +46,11 @@ namespace fox::gfx::api
         };
 
     protected:
-        static inline fox::bool_t   depthTestingAlpha_{};
-        static inline fox::bool_t   cullingFaceAlpha_{};
-        static inline FaceCulling   faceCulling_{};
-        static inline DepthFunction depthFunction_{};
-        static inline FrontFace     frontFace_{};
-        static inline Vector4f      clearColor_{};
+        //static inline fox::bool_t   depthTestingAlpha_{};
+        //static inline fox::bool_t   cullingFaceAlpha_{};
+        //static inline FaceCulling   faceCulling_{};
+        //static inline DepthFunction depthFunction_{};
+        //static inline FrontFace     frontFace_{};
+        //static inline fox::Vector4f clearColor_{};
     };
 }

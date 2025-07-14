@@ -1,8 +1,13 @@
 #pragma once
 
+#include <stdafx.hpp>
+
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
 #include <fox/rendering/layout/layout.hpp>
+
+import fox.core.types.common;
+import fox.core.types.fundamental;
 
 namespace fox::gfx
 {

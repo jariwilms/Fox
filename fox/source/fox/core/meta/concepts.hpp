@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stdafx.hpp>
-
 #include <fox/core/utility/utility.hpp>
+
+import std;
 
 namespace fox::meta
 {

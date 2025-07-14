@@ -1,8 +1,10 @@
-#pragma once
+export module fox.core.types.math.linear_algebra.quaternion;
+
+import fox.core.types.fundamental;
 
 import vendor.glm;
 
-namespace fox
+export namespace fox
 {
     using Quaternion = glm::quat;
 

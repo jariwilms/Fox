@@ -1,7 +1,6 @@
 #pragma once
 
 import fox.core.types.fundamental;
-#include <fox/core/types/math/linear_algebra/matrix.hpp>
 #include <fox/core/types/math/math.hpp>
 
 namespace fox::math

@@ -1,15 +1,19 @@
-module;
+#pragma once
+//module;
 
 #include <fox/rendering/buffer/vertex_array.hpp>
 
-export module fox.rendering.mesh;
+//export module fox.rendering.mesh;
 
-export namespace fox::gfx
+import std;
+import fox.core.types.common;
+
+namespace fox::gfx
 {
     struct Mesh
     {
     public:
-        Mesh(std::shared_ptr<const gfx::VertexArray> vertexArray)
+        Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
             : vertexArray{ vertexArray } {}
 
         void bind       () const
@@ -22,6 +26,6 @@ export namespace fox::gfx
         }
 
     private:
-        std::shared_ptr<const gfx::VertexArray> vertexArray;
+        std::shared_ptr<gfx::VertexArray> vertexArray;
     };
 }

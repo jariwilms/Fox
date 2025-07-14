@@ -1,3 +1,4 @@
+//import std;
 #include <stdafx.hpp>
 #include <fox/core/image/image.hpp>
 #include <fox/core/time/time.hpp>
@@ -18,7 +19,7 @@ import fox.core.types.circular_buffer;
 
 using namespace fox;
 
-static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& actor, const gfx::Model& model, const gfx::Model::Node& node)
+static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& actor, gfx::Model& model, gfx::Model::Node& node)
 {
     auto& tc = actor.get_component<ecs::TransformComponent> ().get();
     auto& mc = actor.add_component<ecs::MeshFilterComponent>().get();
@@ -66,7 +67,7 @@ int main(int argc, char** argv)
 
     auto& helmetActor           = scene->create_actor();
     auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
-    auto  helmetModel           = io::ModelImporter::import("models/helmet/glTF/DamagedHelmet.gltf");
+    auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
     model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
     helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 

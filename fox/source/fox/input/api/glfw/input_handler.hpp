@@ -8,6 +8,10 @@
 #include <fox/input/code/key.hpp>
 #include <fox/input/code/modifier.hpp>
 
+#include <fox/core/types/math/math.hpp>
+
+import fox.core.types.fundamental;
+
 namespace fox::input::api::glfw
 {
     class InputHandler

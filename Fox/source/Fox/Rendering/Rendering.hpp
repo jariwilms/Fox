@@ -14,8 +14,8 @@
 #include <fox/rendering/texture/texture.hpp>
 #include <fox/rendering/uniform/uniform.hpp>
 
-import fox.rendering.material;
-import fox.rendering.mesh;
+#include <fox/rendering/material/material.hpp>
+#include <fox/rendering/mesh/mesh.hpp>
 
 namespace fox::gfx
 {

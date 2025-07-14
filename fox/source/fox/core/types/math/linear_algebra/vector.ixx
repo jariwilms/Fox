@@ -1,11 +1,13 @@
-#pragma once
+export module fox.core.types.math.linear_algebra.vector;
 
 import fox.core.types.fundamental;
+
 import vendor.glm;
 
-namespace fox
+export namespace fox
 {
-	template<typename T, fox::uint32_t N> using Vector = glm::vec<N, T, glm::packed_highp>;
+	template<typename T, fox::uint32_t N> 
+	using Vector = glm::vec<N, T, glm::packed_highp>;
 
 	using Vector1i = fox::Vector<fox::int32_t,   1u>;
 	using Vector2i = fox::Vector<fox::int32_t,   2u>;

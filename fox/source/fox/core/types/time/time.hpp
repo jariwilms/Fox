@@ -1,7 +1,8 @@
 #pragma once
 
-#include <stdafx.hpp>
+import std;
 
+import fox.core.types.common;
 import fox.core.types.fundamental;
 
 namespace fox

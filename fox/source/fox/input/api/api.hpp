@@ -9,7 +9,6 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/types/math/linear_algebra/vector.hpp>
 #include <fox/input/code/button.hpp>
 #include <fox/input/code/controller.hpp>
 #include <fox/input/code/key.hpp>
@@ -18,6 +17,8 @@
 #if FOX_INPUT_API == FOX_INPUT_API_GLFW
 #include <fox/input/api/glfw/input_handler.hpp>
 #endif
+
+import fox.core.types.math.linear_algebra.vector;
 
 namespace fox::input::api
 {

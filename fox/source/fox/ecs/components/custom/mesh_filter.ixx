@@ -1,9 +1,11 @@
+module;
+
+#include <fox/rendering/material/material.hpp>
+#include <fox/rendering/mesh/mesh.hpp>
+
 export module fox.ecs.components.mesh_filter;
 
 import std;
-
-import fox.rendering.material;
-import fox.rendering.mesh;
 
 export namespace fox
 {

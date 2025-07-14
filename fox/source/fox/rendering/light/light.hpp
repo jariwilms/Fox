@@ -1,7 +1,7 @@
 #pragma once
 
 import fox.core.types.fundamental;
-#include <fox/core/types/math/linear_algebra/vector.hpp>
+#include <fox/core/types/math/math.hpp>
 
 namespace fox
 {

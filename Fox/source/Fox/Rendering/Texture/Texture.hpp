@@ -1,7 +1,8 @@
 #pragma once
 
-#include <fox/core/types/domain/domain.hpp>
 #include <fox/rendering/api/api.hpp>
+
+import fox.core.types.domain;
 
 namespace fox::gfx
 {

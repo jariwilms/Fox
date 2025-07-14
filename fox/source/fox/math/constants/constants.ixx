@@ -1,8 +1,10 @@
-#pragma once
+export module fox.math.constants;
 
-#include <stdafx.hpp>
+import std;
 
-namespace fox::math
+import fox.core.types.fundamental;
+
+export namespace fox::math
 {
     inline namespace constant
     {

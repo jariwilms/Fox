@@ -1,14 +1,17 @@
-module;
+//module;
+#pragma once
 
 #include <fox/rendering/shader/shader.hpp>
 #include <fox/rendering/texture/texture.hpp>
-#include <fox/core/types/math/linear_algebra/vector.hpp>
 
-export module fox.rendering.material;
+//export module fox.rendering.material;
 
 import std;
 
-export namespace fox::gfx
+import fox.core.types.fundamental;
+#include <fox/core/types/math/math.hpp>
+
+namespace fox::gfx
 {
     struct Material
     {
@@ -17,11 +20,11 @@ export namespace fox::gfx
         fox::float32_t                        roughnessFactor{ 0.5f };
         fox::float32_t                        metallicFactor { 0.0f };
 
-        std::shared_ptr<const gfx::Texture2D> albedo;
-        std::shared_ptr<const gfx::Texture2D> normal;
-        std::shared_ptr<const gfx::Texture2D> arm;
-        std::shared_ptr<const gfx::Texture2D> emissive;
+        std::shared_ptr<gfx::Texture2D> albedo;
+        std::shared_ptr<gfx::Texture2D> normal;
+        std::shared_ptr<gfx::Texture2D> arm;
+        std::shared_ptr<gfx::Texture2D> emissive;
 
-        std::shared_ptr<const gfx::Shader>    shader;
+        std::shared_ptr<gfx::Shader>    shader;
     };
 }

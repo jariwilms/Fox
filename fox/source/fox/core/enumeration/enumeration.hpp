@@ -1,6 +1,4 @@
-#pragma once
-
-#include <stdafx.hpp>
+import std;
 
 import fox.core.types.fundamental;
 
