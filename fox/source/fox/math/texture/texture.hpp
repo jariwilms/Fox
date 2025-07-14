@@ -13,9 +13,4 @@ namespace fox::math
     {
         return static_cast<fox::uint32_t>(glm::levels(vector));
     }
-
-    //constexpr auto mipmap_levels(const auto& value)
-    //{
-    //    return 0u;
-    //}
 }
