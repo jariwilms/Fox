@@ -5,7 +5,6 @@
 #include <stdafx.hpp>
 #include <fox/input/input.hpp>
 #include <fox/math/linear_algebra/projection.hpp>
-#include <fox/math/trigonometry/trigonometry.hpp>
 #include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/rendering.hpp>
 //export module fox.rendering.renderer.opengl;
@@ -21,6 +20,7 @@ import fox.ecs.components.relationship;
 import fox.core.time;
 import fox.core.transform;
 import fox.core.utility;
+import fox.math.trigonometry;
 
 namespace fox::gfx::api
 {

@@ -1,10 +1,10 @@
-#pragma once
+export module fox.math.trigonometry;
 
 import fox.core.types.math;
 
 import vendor.glm;
 
-namespace fox::math
+export namespace fox::math
 {
     inline namespace trigonometry
     {
