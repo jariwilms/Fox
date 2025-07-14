@@ -1,8 +1,10 @@
-#pragma once
+module;
 
 #include <stdafx.hpp>
 
-namespace fox
+export module fox.core.meta;
+
+export namespace fox
 {
     inline namespace meta
     {

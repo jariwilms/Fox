@@ -8,7 +8,6 @@
 //#define FOX_GRAPHICS_API FOX_GRAPHICS_API_OPENGL
 //#endif
 //
-#include <fox/core/meta/meta.hpp>
 #include <fox/core/types/rendering/rendering.hpp>
 #include <fox/core/utility/utility.hpp>
 //
@@ -18,6 +17,7 @@
 
 import fox.core.types.alias;
 import fox.core.types.domain;
+import fox.core.meta;
 
 namespace fox::gfx
 {

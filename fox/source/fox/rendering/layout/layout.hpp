@@ -1,7 +1,10 @@
 #pragma once
 
+import std;
+
+import fox.core.types.common;
 import fox.core.types.fundamental;
-#include <fox/core/meta/concepts.hpp>
+import fox.core.meta.concepts;
 
 namespace fox::gfx
 {
