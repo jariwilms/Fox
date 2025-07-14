@@ -3,7 +3,6 @@
 #pragma once
 
 #include <stdafx.hpp>
-#include <fox/core/time/time.hpp>
 #include <fox/core/utility/utility.hpp>
 #include <fox/input/input.hpp>
 #include <fox/math/linear_algebra/projection.hpp>
@@ -20,6 +19,7 @@ import fox.core.types.common;
 import fox.ecs.component;
 import fox.ecs.components.mesh_filter;
 import fox.ecs.components.relationship;
+import fox.core.time;
 
 namespace fox::gfx::api
 {
