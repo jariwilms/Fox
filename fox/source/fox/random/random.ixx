@@ -1,12 +1,10 @@
-#pragma once
+export module fox.random;
 
-#include <stdafx.hpp>
+import std;
 
-import fox.core.types.common;
-import fox.core.types.fundamental;
-import fox.core.types.math;
+import fox.core.types;
 
-namespace fox::random
+export namespace fox::random
 {
     namespace api
     {
