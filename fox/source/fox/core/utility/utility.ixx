@@ -1,11 +1,11 @@
-#pragma once
+export module fox.core.utility;
 
 import std;
 
 import fox.core.types.common;
 import fox.core.types.fundamental;
 
-namespace fox
+export namespace fox
 {
     inline namespace utl
     {

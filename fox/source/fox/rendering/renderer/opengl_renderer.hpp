@@ -3,7 +3,6 @@
 #pragma once
 
 #include <stdafx.hpp>
-#include <fox/core/utility/utility.hpp>
 #include <fox/input/input.hpp>
 #include <fox/math/linear_algebra/projection.hpp>
 #include <fox/math/trigonometry/trigonometry.hpp>
@@ -21,6 +20,7 @@ import fox.ecs.components.mesh_filter;
 import fox.ecs.components.relationship;
 import fox.core.time;
 import fox.core.transform;
+import fox.core.utility;
 
 namespace fox::gfx::api
 {

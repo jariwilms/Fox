@@ -2,10 +2,12 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/utility/utility.hpp>
 #include <fox/io/filesystem/entry.hpp>
 
+import fox.core.types.common;
+import fox.core.types.fundamental;
 import fox.core.memory.adapter.no_init;
+import fox.core.utility;
 
 namespace fox::io
 {

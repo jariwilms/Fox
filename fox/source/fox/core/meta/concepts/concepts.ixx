@@ -1,9 +1,8 @@
-module;
-
-#include <stdafx.hpp>
-#include <fox/core/utility/utility.hpp>
-
 export module fox.core.meta.concepts;
+
+import std;
+
+import fox.core.utility;
 
 export namespace fox
 {

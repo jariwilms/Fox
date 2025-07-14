@@ -16,6 +16,7 @@
 
 import fox.core.image;
 import fox.core.types.math;
+import fox.core.utility;
 
 namespace fox::io
 {
