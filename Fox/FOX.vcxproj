@@ -101,7 +101,6 @@
   <ItemGroup>
     <ClInclude Include="source\fox\core\data\data.hpp" />
     <ClInclude Include="source\fox\core\data\rendering\material.hpp" />
-    <ClInclude Include="source\fox\core\enumeration\enumeration.hpp" />
     <ClInclude Include="source\fox\core\image\image.hpp" />
     <ClInclude Include="source\fox\core\meta\concepts.hpp" />
     <ClInclude Include="source\fox\core\meta\meta.hpp" />
@@ -214,6 +213,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\fox\config\config.ixx" />
+    <ClCompile Include="source\fox\core\enumeration\enumeration.ixx" />
     <ClCompile Include="source\fox\core\json\json.ixx" />
     <ClCompile Include="source\fox\core\memory\adapter\no_init_adapter.ixx" />
     <ClCompile Include="source\fox\core\types\alias\alias.ixx" />

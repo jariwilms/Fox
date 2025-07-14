@@ -1,8 +1,10 @@
+export module fox.core.enumeration;
+
 import std;
 
 import fox.core.types.fundamental;
 
-namespace fox
+export namespace fox
 {
 	template<typename T> struct  enumeration_operator{ static constexpr auto enable = fox::bool_t{ fox::False }; };
 	template<typename T> concept enumeration_operator_c = enumeration_operator<T>::enable;
