@@ -1,15 +1,14 @@
-#pragma once
-
-#include <fox/math/linear_algebra/quaternion.hpp>
+export module fox.math.linear_algebra.matrix;
 
 import std;
 
 import fox.core.types.fundamental;
 import fox.core.types.math;
+import fox.math.linear_algebra.quaternion;
 
 import vendor.glm;
 
-namespace fox::math
+export namespace fox::math
 {
     template<typename T, fox::uint32_t N>
     inline constexpr auto translate(const fox::Matrix<T, N>& matrix, const fox::Vector3f  & translation) -> fox::Matrix<T, N>

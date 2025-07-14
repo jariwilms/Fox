@@ -1,10 +1,11 @@
-#pragma once
+export module fox.math.linear_algebra.vector;
 
+import fox.core.types.fundamental;
 import fox.core.types.math;
 
 import vendor.glm;
 
-namespace fox::math
+export namespace fox::math
 {
     template<typename T, fox::uint32_t N>
     inline constexpr auto dot(const fox::Vector<T, N>& first, const fox::Vector<T, N>& second) -> fox::fundamental_t<T>

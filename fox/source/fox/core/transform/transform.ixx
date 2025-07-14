@@ -1,12 +1,9 @@
-module;
-
-#include <fox/math/math.hpp>
-
 export module fox.core.transform;
 
 import std;
 
 import fox.core.types.math;
+import fox.math;
 
 export namespace fox
 {

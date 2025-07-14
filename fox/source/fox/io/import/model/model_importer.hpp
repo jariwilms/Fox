@@ -12,11 +12,11 @@
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/model/model.hpp>
 #include <fox/rendering/texture/texture.hpp>
-#include <fox/math/math.hpp>
 
 import fox.core.image;
 import fox.core.types.math;
 import fox.core.utility;
+import fox.math;
 
 namespace fox::io
 {

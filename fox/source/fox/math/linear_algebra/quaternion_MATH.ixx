@@ -1,10 +1,10 @@
-#pragma once
+export module fox.math.linear_algebra.quaternion;
 
 import fox.core.types.math;
 
 import vendor.glm;
 
-namespace fox::math
+export namespace fox::math
 {
     inline constexpr auto conjugate(const fox::Quaternion& quaternion) -> fox::Quaternion
     {

@@ -1,9 +1,9 @@
-#pragma once
+export module fox.math.linear_algebra.projection;
 
 import fox.core.types.fundamental;
 import fox.core.types.math;
 
-namespace fox::math
+export namespace fox::math
 {
     inline auto perspective (fox::float32_t ratio, fox::radians_t fov  , fox::float32_t near  , fox::float32_t far) -> fox::Matrix4f
     {

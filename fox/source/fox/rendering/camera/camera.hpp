@@ -1,9 +1,8 @@
 #pragma once
 
-#include <fox/math/math.hpp>
-
 import fox.core.types.fundamental;
 import fox.core.types.math;
+import fox.math;
 
 namespace fox
 {
