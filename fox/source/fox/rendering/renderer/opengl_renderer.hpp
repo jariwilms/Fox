@@ -9,7 +9,6 @@
 #include <fox/math/trigonometry/trigonometry.hpp>
 #include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/rendering.hpp>
-#include <fox/core/types/math/math.hpp>
 //export module fox.rendering.renderer.opengl;
 
 //import std;
@@ -17,6 +16,7 @@
 import fox.core.types.fundamental;
 import fox.core.types.common;
 import fox.ecs.component;
+import fox.core.types.math;
 import fox.ecs.components.mesh_filter;
 import fox.ecs.components.relationship;
 import fox.core.time;

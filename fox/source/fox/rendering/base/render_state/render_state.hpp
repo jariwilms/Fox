@@ -1,8 +1,5 @@
 #pragma once
 
-//import fox.core.types.fundamental;
-//#include <fox/core/types/math/math.hpp>
-
 namespace fox::gfx::api
 {
     class RenderState

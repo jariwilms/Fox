@@ -1,11 +1,11 @@
 #pragma once
 
 #include <fox/math/linear_algebra/quaternion.hpp>
-#include <fox/core/types/math/math.hpp>
 
 import std;
 
 import fox.core.types.fundamental;
+import fox.core.types.math;
 
 import vendor.glm;
 

@@ -101,14 +101,7 @@
   <ItemGroup>
     <ClInclude Include="source\fox\core\data\data.hpp" />
     <ClInclude Include="source\fox\core\data\rendering\material.hpp" />
-    <ClInclude Include="source\fox\core\image\image.hpp" />
-    <ClInclude Include="source\fox\core\meta\concepts.hpp" />
-    <ClInclude Include="source\fox\core\meta\meta.hpp" />
-    <ClInclude Include="source\fox\core\time\time.hpp" />
-    <ClInclude Include="source\fox\core\transform\transform.hpp" />
-    <ClInclude Include="source\fox\core\types\math\math.hpp" />
     <ClInclude Include="source\fox\core\types\rendering\rendering.hpp" />
-    <ClInclude Include="source\fox\core\types\time\time.hpp" />
     <ClInclude Include="source\fox\core\types\types.hpp" />
     <ClInclude Include="source\fox\core\types\uuid\uuid.hpp" />
     <ClInclude Include="source\fox\core\types\window\window.hpp" />
@@ -214,8 +207,13 @@
   <ItemGroup>
     <ClCompile Include="source\fox\config\config.ixx" />
     <ClCompile Include="source\fox\core\enumeration\enumeration.ixx" />
+    <ClCompile Include="source\fox\core\image\image.ixx" />
     <ClCompile Include="source\fox\core\json\json.ixx" />
     <ClCompile Include="source\fox\core\memory\adapter\no_init_adapter.ixx" />
+    <ClCompile Include="source\fox\core\meta\concepts\concepts.ixx" />
+    <ClCompile Include="source\fox\core\meta\meta.ixx" />
+    <ClCompile Include="source\fox\core\time\time.ixx" />
+    <ClCompile Include="source\fox\core\transform\transform.ixx" />
     <ClCompile Include="source\fox\core\types\alias\alias.ixx" />
     <ClCompile Include="source\fox\core\types\collection\circular_buffer.ixx" />
     <ClCompile Include="source\fox\core\types\common\common.ixx" />
@@ -225,6 +223,8 @@
     <ClCompile Include="source\fox\core\types\math\linear_algebra\matrix.ixx" />
     <ClCompile Include="source\fox\core\types\math\linear_algebra\quaternion.ixx" />
     <ClCompile Include="source\fox\core\types\math\linear_algebra\vector.ixx" />
+    <ClCompile Include="source\fox\core\types\math\math.ixx" />
+    <ClCompile Include="source\fox\core\types\time\time_TYPE_RENAME.ixx" />
     <ClCompile Include="source\fox\ecs\components\component.ixx" />
     <ClCompile Include="source\fox\ecs\components\custom\mesh_filter.ixx" />
     <ClCompile Include="source\fox\ecs\components\custom\relationship.ixx" />

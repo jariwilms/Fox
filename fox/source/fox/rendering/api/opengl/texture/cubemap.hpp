@@ -1,11 +1,11 @@
 #pragma once
 
-#include <fox/core/types/math/math.hpp>
 #include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/api/opengl/texture/texture.hpp>
 #include <fox/rendering/base/texture/cubemap.hpp>
 
 import fox.core.image;
+import fox.core.types.math;
 
 namespace fox::gfx::api::gl
 {

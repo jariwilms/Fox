@@ -9,7 +9,7 @@
 import std;
 
 import fox.core.types.fundamental;
-#include <fox/core/types/math/math.hpp>
+import fox.core.types.math;
 
 namespace fox::interface::api::glfw
 {
