@@ -1,10 +1,10 @@
-#pragma once
+export module fox.core.types.window;
 
-#include <stdafx.hpp>
+import std;
 
 import fox.core.types.fundamental;
 
-namespace fox
+export namespace fox
 {
     using window_t = fox::void_t;
 }

@@ -9,12 +9,13 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/types/window/window.hpp>
 #include <fox/input/input.hpp>
 
 #if FOX_WINDOW_API == FOX_WINDOW_API_GLFW
 #include <fox/window/api/glfw/window.hpp>
 #endif
+
+import fox.core.types.window;
 
 namespace fox::interface
 {
