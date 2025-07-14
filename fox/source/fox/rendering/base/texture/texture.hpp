@@ -1,7 +1,5 @@
 #pragma once
 
-#include <fox/math/texture/texture.hpp>
-
 namespace fox::gfx::api
 {
     class Texture

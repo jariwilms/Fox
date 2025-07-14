@@ -5,6 +5,8 @@
 #include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/base/texture/texture.hpp>
 
+import fox.math.texture;
+
 namespace fox::gfx::api::gl
 {
     class Texture1D : public gl::Object

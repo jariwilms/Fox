@@ -1,10 +1,8 @@
-#pragma once
-
-#include <stdafx.hpp>
+export module fox.math.graph;
 
 import fox.core.types.common;
 
-namespace fox::math::graph
+export namespace fox::math::graph
 {
     constexpr auto root = fox::size_t{ 0u };
 }
