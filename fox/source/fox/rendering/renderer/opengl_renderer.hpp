@@ -20,6 +20,7 @@ import fox.ecs.component;
 import fox.ecs.components.mesh_filter;
 import fox.ecs.components.relationship;
 import fox.core.time;
+import fox.core.transform;
 
 namespace fox::gfx::api
 {

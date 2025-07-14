@@ -1,9 +1,13 @@
 #pragma once
 
 #include <fox/math/linear_algebra/quaternion.hpp>
+#include <fox/core/types/math/math.hpp>
+
+import std;
 
 import fox.core.types.fundamental;
-#include <fox/core/types/math/math.hpp>
+
+import vendor.glm;
 
 namespace fox::math
 {

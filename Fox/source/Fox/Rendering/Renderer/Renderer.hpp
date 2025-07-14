@@ -1,14 +1,14 @@
 //export module fox.rendering.renderer;
-
-#include <fox/rendering/render_info/render_info.hpp>
-#include <fox/core/transform/transform.hpp>
-#include <fox/rendering/renderer/opengl_renderer.hpp>
-
-import std;
 //import fox.rendering.renderer.opengl;
 
+#include <fox/rendering/render_info/render_info.hpp>
+#include <fox/rendering/renderer/opengl_renderer.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 #include <fox/rendering/material/material.hpp>
+
+import std;
+
+import fox.core.transform;
 
 auto FUCK = std::unique_ptr<fox::gfx::api::OpenGLRenderer>{};
 

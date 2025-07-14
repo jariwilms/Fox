@@ -1,7 +1,6 @@
 //module;
 #pragma once
 
-#include <fox/core/transform/transform.hpp>
 #include <fox/rendering/camera/camera.hpp>
 
 //export module fox.ecs.components;
@@ -9,6 +8,7 @@
 import fox.ecs.component;
 import fox.ecs.components.mesh_filter;
 import fox.ecs.components.relationship;
+import fox.core.transform;
 
 //export 
 namespace fox::ecs

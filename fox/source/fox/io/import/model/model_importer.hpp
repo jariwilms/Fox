@@ -13,6 +13,7 @@
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/model/model.hpp>
 #include <fox/rendering/texture/texture.hpp>
+#include <fox/math//math.hpp>
 
 import fox.core.image;
 

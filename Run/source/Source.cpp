@@ -1,5 +1,4 @@
 #include <stdafx.hpp>
-#include <fox/core/transform/transform.hpp>
 #include <fox/input/input.hpp>
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/io/io.hpp>
@@ -13,6 +12,7 @@
 import fox.core.image;
 import fox.core.types.circular_buffer;
 import fox.core.time;
+import fox.core.transform;
 
 using namespace fox;
 

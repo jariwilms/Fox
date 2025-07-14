@@ -1,12 +1,13 @@
-#pragma once
+module;
 
 #include <fox/math/math.hpp>
+#include <fox/core/types/math/math.hpp>
+
+export module fox.core.transform;
 
 import std;
 
-#include <fox/core/types/math/math.hpp>
-
-namespace fox
+export namespace fox
 {
     class Transform
     {
@@ -79,7 +80,7 @@ namespace fox
         fox::Vector3f   scale;
     };
 
-    inline auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
+    auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
     {
         return fox::Transform::from_matrix(left.matrix() * right.matrix());
     }

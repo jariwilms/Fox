@@ -1,9 +1,9 @@
 #pragma once
 
-#include <fox/core/transform/transform.hpp>
-
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
+
+import fox.core.transform;
 
 namespace fox::gfx
 {
