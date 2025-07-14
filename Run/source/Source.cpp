@@ -1,6 +1,4 @@
-//import std;
 #include <stdafx.hpp>
-#include <fox/core/image/image.hpp>
 #include <fox/core/time/time.hpp>
 #include <fox/core/transform/transform.hpp>
 #include <fox/input/input.hpp>
@@ -13,9 +11,8 @@
 #include <fox/scene/scene.hpp>
 #include <fox/window/window.hpp>
 
+import fox.core.image;
 import fox.core.types.circular_buffer;
-
-
 
 using namespace fox;
 

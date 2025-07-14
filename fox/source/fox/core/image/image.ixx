@@ -1,15 +1,19 @@
-#pragma once
+module;
 
+#include <stdafx.hpp>
 #include <fox/core/types/math/math.hpp>
 
-import std;
+export module fox.core.image;
+
+//import std;
 
 import fox.config;
 import fox.core.types.common;
+import fox.core.types.fundamental;
 
 import vendor.stb;
 
-namespace fox
+export namespace fox
 {
     class Image
     {
@@ -222,7 +226,7 @@ namespace fox
         {
             return dimensions_;
         }
-        auto data      () const -> std::span<const fox::byte_t>
+        auto data      () const -> auto //std::span<const fox::byte_t> TODO
         {
             return data_;
         }

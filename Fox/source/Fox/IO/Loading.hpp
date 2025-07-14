@@ -2,10 +2,11 @@
 
 #include <stdafx.hpp>
 
-#include <fox/core/image/image.hpp>
 #include <fox/io/filesystem/directory.hpp>
 #include <fox/io/filesystem/file.hpp>
 #include <fox/rendering/texture/texture.hpp>
+
+import fox.core.image;
 
 namespace fox::io
 {
