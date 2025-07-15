@@ -5,7 +5,6 @@ module;
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/rendering/model/model.hpp>
 #include <fox/rendering/render_buffer/render_buffer.hpp>
 #include <fox/rendering/render_info/render_info.hpp>
 #include <fox/rendering/shader/pipeline.hpp>
@@ -20,6 +19,7 @@ import fox.rendering.cubemap;
 import fox.rendering.texture;
 import fox.rendering.material;
 import fox.rendering.mesh;
+import fox.rendering.model;
 
 export namespace fox::gfx
 {

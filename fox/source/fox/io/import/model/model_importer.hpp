@@ -6,18 +6,17 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 
-#include <fox/io/import/model/model_importer.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
 #include <fox/rendering/buffer/vertex_array.hpp>
-#include <fox/rendering/model/model.hpp>
 
 import fox.io;
 import fox.io.loading;
 import fox.core.image;
-import fox.core.types.math;
+import fox.core.types;
 import fox.core.utility;
 import fox.math;
 import fox.rendering.texture;
+import fox.rendering.model;
 
 namespace fox::io
 {

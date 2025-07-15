@@ -1,10 +1,13 @@
-#pragma once
+export module fox.rendering.model;
 
+import std;
+
+import fox.core.types;
 import fox.core.transform;
 import fox.rendering.material;
 import fox.rendering.mesh;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     class Model
     {
