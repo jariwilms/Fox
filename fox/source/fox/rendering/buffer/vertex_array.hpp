@@ -4,10 +4,10 @@
 
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
-#include <fox/rendering/layout/layout.hpp>
 
 import fox.core.types.common;
 import fox.core.types.fundamental;
+import fox.rendering.layout;
 
 namespace fox::gfx
 {

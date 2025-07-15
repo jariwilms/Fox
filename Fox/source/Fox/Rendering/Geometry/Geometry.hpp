@@ -5,11 +5,11 @@
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/rendering/geometry/data/data.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/rendering/layout/layout.hpp>
 
 import fox.core.types.common;
 import fox.core.types.fundamental;
 import fox.rendering.mesh;
+import fox.rendering.layout;
 
 namespace fox::gfx::geometry
 {

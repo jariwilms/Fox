@@ -3,7 +3,8 @@
 #include <stdafx.hpp>
 
 #include <fox/rendering/api/opengl/buffer/buffer.hpp>
-#include <fox/rendering/layout/layout.hpp>
+
+import fox.rendering.layout;
 
 namespace fox::gfx::api::gl
 {
