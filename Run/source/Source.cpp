@@ -7,12 +7,12 @@
 #include <fox/rendering/rendering.hpp>
 #include <fox/scene/actor.hpp>
 #include <fox/scene/scene.hpp>
-#include <fox/window/window.hpp>
 
 import fox.core.image;
 import fox.core.types.circular_buffer;
 import fox.core.time;
 import fox.core.transform;
+import fox.window;
 
 using namespace fox;
 

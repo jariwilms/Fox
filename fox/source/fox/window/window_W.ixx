@@ -1,8 +1,11 @@
-#pragma once
+export module fox.window;
 
+import std;
+
+import fox.core.types;
 import fox.window.api;
 
-namespace fox::interface
+export namespace fox::interface
 {
 	class Window
 	{

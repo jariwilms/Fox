@@ -1,6 +1,6 @@
-#pragma once
+export module fox.window.base;
 
-namespace fox::interface::api
+export namespace fox::interface::api
 {
     class Window
     {
