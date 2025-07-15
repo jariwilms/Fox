@@ -1,42 +1,42 @@
-#pragma once
+export module fox.rendering.geometry.data;
 
-#include <stdafx.hpp>
+import std;
 
-import fox.core.types.fundamental;
+import fox.core.types;
 
-namespace fox::gfx::geometry::data
+export namespace fox::gfx::geometry::data
 {
     namespace plane
     {
-        inline const std::array<fox::float32_t, 12u> positions
+        constexpr std::array<fox::float32_t, 12u> positions
         {
              1.0f,  1.0f,  0.0f,
             -1.0f,  1.0f,  0.0f,
             -1.0f, -1.0f,  0.0f,
              1.0f, -1.0f,  0.0f,
         };
-        inline const std::array<fox::float32_t, 12u> normals
+        constexpr std::array<fox::float32_t, 12u> normals
         {
              0.0f,  0.0f,  1.0f,
              0.0f,  0.0f,  1.0f,
              0.0f,  0.0f,  1.0f,
              0.0f,  0.0f,  1.0f,
         };
-        inline const std::array<fox::float32_t, 12u> tangents
+        constexpr std::array<fox::float32_t, 12u> tangents
         {
              1.0f,  0.0f,  0.0f,
              1.0f,  0.0f,  0.0f,
              1.0f,  0.0f,  0.0f,
              1.0f,  0.0f,  0.0f,
         };
-        inline const std::array<fox::float32_t,  8u> coordinates
+        constexpr std::array<fox::float32_t,  8u> coordinates
         {
              1.0f,  1.0f,
              0.0f,  1.0f,
              0.0f,  0.0f,
              1.0f,  0.0f,
         };
-        inline const std::array<fox::uint32_t ,  6u> indices
+        constexpr std::array<fox::uint32_t ,  6u> indices
         {
                0u,    1u,    2u,
                0u,    2u,    3u,
@@ -44,7 +44,7 @@ namespace fox::gfx::geometry::data
     }
     namespace cube
     {
-        inline const std::array<fox::float32_t, 72u> positions
+        constexpr std::array<fox::float32_t, 72u> positions
         {
              0.5f,  0.5f, -0.5f,
              0.5f,  0.5f,  0.5f,
@@ -76,7 +76,7 @@ namespace fox::gfx::geometry::data
              0.5f, -0.5f, -0.5f,
             -0.5f, -0.5f, -0.5f,
         };
-        inline const std::array<fox::float32_t, 72u> normals
+        constexpr std::array<fox::float32_t, 72u> normals
         {
              1.0f,  0.0f,  0.0f,
              1.0f,  0.0f,  0.0f,
@@ -108,7 +108,7 @@ namespace fox::gfx::geometry::data
              0.0f,  0.0f, -1.0f,
              0.0f,  0.0f, -1.0f,
         };
-        inline const std::array<fox::float32_t, 72u> tangents
+        constexpr std::array<fox::float32_t, 72u> tangents
         {
              0.0f,  0.0f, -1.0f,
              0.0f,  0.0f, -1.0f,
@@ -140,7 +140,7 @@ namespace fox::gfx::geometry::data
             -1.0f,  0.0f,  0.0f,
             -1.0f,  0.0f,  0.0f,
         };
-        inline const std::array<fox::float32_t, 48u> coordinates
+        constexpr std::array<fox::float32_t, 48u> coordinates
         {
              1.0f,  1.0f,
              0.0f,  1.0f,
@@ -172,7 +172,7 @@ namespace fox::gfx::geometry::data
              0.0f,  0.0f,
              1.0f,  0.0f,
         };
-        inline const std::array<fox::uint32_t , 36u> indices
+        constexpr std::array<fox::uint32_t , 36u> indices
         {
                0u,    1u,    2u,
                0u,    2u,    3u,
