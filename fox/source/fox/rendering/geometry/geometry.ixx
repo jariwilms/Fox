@@ -1,5 +1,7 @@
 module;
 
+#include <fox/rendering/buffer/Buffer.hpp>
+#include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/io/import/model/model_importer.hpp>
 
 export module fox.rendering.geometry;
