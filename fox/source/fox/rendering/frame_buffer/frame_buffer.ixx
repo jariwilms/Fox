@@ -1,7 +1,9 @@
-#pragma once
+module;
 
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
+
+export module fox.rendering.frame_buffer;
 
 import std;
 
@@ -10,7 +12,7 @@ import fox.rendering.cubemap;
 import fox.rendering.texture;
 import fox.rendering.render_buffer;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     class FrameBuffer
     {
