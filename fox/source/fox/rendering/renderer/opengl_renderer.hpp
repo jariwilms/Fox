@@ -10,8 +10,6 @@
 #include <fox/rendering/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
 #include <fox/rendering/render_info/render_info.hpp>
-#include <fox/rendering/shader/pipeline.hpp>
-#include <fox/rendering/shader/shader.hpp>
 //export module fox.rendering.renderer.opengl;
 
 //import std;
@@ -35,6 +33,8 @@ import fox.rendering.material;
 import fox.rendering.mesh;
 import fox.rendering.model;
 import fox.rendering.render_buffer;
+import fox.rendering.pipeline;
+import fox.rendering.shader;
 
 namespace fox::gfx::api
 {

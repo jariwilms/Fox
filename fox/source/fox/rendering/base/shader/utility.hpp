@@ -1,10 +1,9 @@
 #pragma once
 
-#include <stdafx.hpp>
-
-#include <fox/rendering/shader/shader.hpp>
+import std;
 
 import fox.io;
+import fox.rendering.shader;
 
 namespace fox::gfx::api
 {

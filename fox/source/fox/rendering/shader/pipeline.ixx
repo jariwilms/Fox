@@ -1,9 +1,16 @@
-#pragma once
+module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/shader/shader.hpp>
 
-namespace fox::gfx
+export module fox.rendering.pipeline;
+
+import std;
+
+import fox.core.meta;
+import fox.core.types;
+import fox.rendering.shader;
+
+export namespace fox::gfx
 {
     class Pipeline
     {

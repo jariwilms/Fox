@@ -1,7 +1,3 @@
-module;
-
-#include <fox/rendering/shader/shader.hpp>
-
 export module fox.rendering.material;
 
 import std;
@@ -9,6 +5,7 @@ import std;
 import fox.core.types.fundamental;
 import fox.core.types.math;
 import fox.rendering.texture;
+import fox.rendering.shader;
 
 export namespace fox::gfx
 {
