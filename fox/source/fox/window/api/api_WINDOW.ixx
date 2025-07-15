@@ -1,7 +1,5 @@
 module;
 
-#include <fox/input/input.hpp>
-
 export module fox.window.api;
 
 #define FOX_WINDOW_API_GLFW 1

@@ -1,8 +1,8 @@
-#pragma once
+export module fox.input.code.button;
 
 import fox.core.types.fundamental;
 
-namespace fox::input
+export namespace fox::input
 {
     using button_t = fox::int32_t;
 
@@ -26,7 +26,7 @@ namespace fox::input
             Forward     = Button5, 
         };
 
-        static constexpr input::button_t min{ Button1 };
-        static constexpr input::button_t max{ Button8 };
+        constexpr input::button_t min{ Button1 };
+        constexpr input::button_t max{ Button8 };
     }
 }

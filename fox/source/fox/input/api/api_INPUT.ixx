@@ -1,4 +1,4 @@
-#pragma once
+export module fox.input.api;
 
 #define FOX_INPUT_API_GLFW 1
 #define FOX_INPUT_API_SDL  2
@@ -7,20 +7,20 @@
 #define FOX_INPUT_API FOX_INPUT_API_GLFW
 #endif
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/input/code/button.hpp>
-#include <fox/input/code/controller.hpp>
-#include <fox/input/code/key.hpp>
-#include <fox/input/code/modifier.hpp>
+import fox.input.code.button;
+import fox.input.code.controller;
+import fox.input.code.key;
+import fox.input.code.modifier;
 
 #if FOX_INPUT_API == FOX_INPUT_API_GLFW
-#include <fox/input/api/glfw/input_handler.hpp>
+import fox.input.api.glfw;
 #endif
 
 import fox.core.types.math.linear_algebra.vector;
 
-namespace fox::input::api
+export namespace fox::input::api
 {
 #if FOX_INPUT_API == FOX_INPUT_API_GLFW
     using handler_t = glfw::InputHandler;

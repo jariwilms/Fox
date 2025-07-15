@@ -1,8 +1,8 @@
-#pragma once
+export module fox.input.code.modifier;
 
 import fox.core.types.fundamental;
 
-namespace fox::input
+export namespace fox::input
 {
     using modifier_t = fox::int32_t;
 
@@ -20,7 +20,7 @@ namespace fox::input
             NumLock  = 0x1 << 5u, 
         };
     
-        static constexpr input::modifier_t min{ Shift };
-        static constexpr input::modifier_t max{ NumLock };
+        constexpr input::modifier_t min{ Shift   };
+        constexpr input::modifier_t max{ NumLock };
     }
 }

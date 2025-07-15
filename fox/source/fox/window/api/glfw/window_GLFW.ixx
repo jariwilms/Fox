@@ -2,8 +2,6 @@ module;
 
 #include <glfw/glfw3.h>
 
-#include <fox/input/api/glfw/input_handler.hpp>
-#include <fox/input/input.hpp>
 #include <fox/rendering/api/opengl/context/context.hpp>
 #include <fox/rendering/api/opengl/opengl.hpp>
 
@@ -13,6 +11,8 @@ import std;
 
 import fox.core.types;
 import fox.window.base;
+import fox.input;
+import fox.input.api.glfw;
 
 export namespace fox::interface::api::glfw
 {

@@ -1,17 +1,18 @@
-#pragma once
-
-#include <stdafx.hpp>
+module;
 
 #include <glfw/glfw3.h>
 
-#include <fox/input/code/button.hpp>
-#include <fox/input/code/key.hpp>
-#include <fox/input/code/modifier.hpp>
+export module fox.input.api.glfw;
 
-import fox.core.types.math;
-import fox.core.types.fundamental;
+import std;
 
-namespace fox::input::api::glfw
+import fox.input.code.button;
+import fox.input.code.controller;
+import fox.input.code.key;
+import fox.input.code.modifier;
+import fox.core.types;
+
+export namespace fox::input::api::glfw
 {
     class InputHandler
     {
@@ -96,7 +97,7 @@ namespace fox::input::api::glfw
             {
                 case GLFW_RELEASE: activeKeys_.set(key, fox::False); break;
                 case GLFW_PRESS  : activeKeys_.set(key, fox::True ); break;
-                case GLFW_REPEAT :                                    break;
+                case GLFW_REPEAT :                                   break;
             }
         }
         void glfw_input_button_callback(GLFWwindow* window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t mods)
@@ -107,7 +108,7 @@ namespace fox::input::api::glfw
             {
                 case GLFW_RELEASE: activeButtons_.set(button, fox::False); break;
                 case GLFW_PRESS  : activeButtons_.set(button, fox::True ); break;
-                case GLFW_REPEAT :                                          break;
+                case GLFW_REPEAT :                                         break;
             }
         }
         void glfw_input_cursor_callback(GLFWwindow* window, fox::float64_t x     , fox::float64_t y                                               )

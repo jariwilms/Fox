@@ -1,8 +1,8 @@
-#pragma once
+export module fox.input.code.controller;
 
 import fox.core.types.fundamental;
 
-namespace fox::input
+export namespace fox::input
 {
     using controller_t = fox::int32_t;
 
@@ -22,7 +22,7 @@ namespace fox::input
             HatLeftDown  = HatLeft  | HatDown,  
         };
 
-        static constexpr input::controller_t min{ HatCentered };
-        static constexpr input::controller_t max{ HatLeft     };
+        constexpr input::controller_t min{ HatCentered };
+        constexpr input::controller_t max{ HatLeft     };
     }
 }

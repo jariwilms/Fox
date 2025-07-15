@@ -1,10 +1,15 @@
-#pragma once
+export module fox.input;
 
-#include <stdafx.hpp>
+import std;
+import fox.core.types;
 
-#include <fox/input/api/api.hpp>
+export import fox.input.api;
+export import fox.input.code.button;
+export import fox.input.code.controller;
+export import fox.input.code.key;
+export import fox.input.code.modifier;
 
-namespace fox::input
+export namespace fox::input
 {
     inline auto any_key_active       () -> fox::bool_t
     {

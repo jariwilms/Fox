@@ -1,8 +1,8 @@
-#pragma once
+export module fox.input.code.key;
 
 import fox.core.types.fundamental;
 
-namespace fox::input
+export namespace fox::input
 {
     using key_t = fox::int32_t;
 
@@ -140,7 +140,7 @@ namespace fox::input
             Menu         = 348, 
         };
 
-        static constexpr input::key_t min{ key::Space };
-        static constexpr input::key_t max{ key::Menu };
+        constexpr input::key_t min{ key::Space };
+        constexpr input::key_t max{ key::Menu  };
     }
 }

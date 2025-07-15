@@ -1,5 +1,4 @@
 #include <stdafx.hpp>
-#include <fox/input/input.hpp>
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/io/io.hpp>
 #include <fox/rendering/base/shader/utility.hpp>
@@ -16,6 +15,7 @@ import fox.scene;
 import fox.scene.actor;
 import fox.ecs.components;
 import fox.ecs.registry;
+import fox.input;
 
 using namespace fox;
 
