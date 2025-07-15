@@ -2,7 +2,6 @@
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
-#include <fox/rendering/rendering.hpp>
 #include <entt/entt.hpp>
 
 import fox.io;
@@ -17,6 +16,7 @@ import fox.scene.actor;
 import fox.ecs.components;
 import fox.ecs.registry;
 import fox.input;
+import fox.rendering;
 
 using namespace fox;
 

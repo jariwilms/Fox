@@ -12,9 +12,7 @@
 #include <fox/rendering/api/opengl/gl.hpp>
 //#endif
 
-import fox.core.types.alias;
-import fox.core.types.domain;
-import fox.core.types.rendering;
+import fox.core.types;
 import fox.core.meta;
 import fox.core.utility;
 

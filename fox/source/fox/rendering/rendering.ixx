@@ -1,4 +1,4 @@
-#pragma once
+module;
 
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
@@ -13,11 +13,14 @@
 #include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>
 #include <fox/rendering/uniform/uniform.hpp>
-
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 
-namespace fox::gfx
+export module fox.rendering;
+
+import std;
+
+export namespace fox::gfx
 {
     inline void copy_texture(std::shared_ptr<gfx::Texture2D> source, std::shared_ptr<gfx::Texture2D> destination)
     {
