@@ -16,7 +16,6 @@
 #include <fox/rendering/shader/shader.hpp>
 #include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>
-#include <fox/rendering/uniform/uniform.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 //export module fox.rendering.renderer.opengl;
@@ -34,6 +33,7 @@ import fox.core.transform;
 import fox.core.utility;
 import fox.math;
 import fox.input;
+import fox.rendering.uniform;
 import fox.rendering;
 
 namespace fox::gfx::api

@@ -12,13 +12,14 @@ module;
 #include <fox/rendering/shader/shader.hpp>
 #include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>
-#include <fox/rendering/uniform/uniform.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 
 export module fox.rendering;
 
 import std;
+
+import fox.rendering.uniform;
 
 export namespace fox::gfx
 {

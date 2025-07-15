@@ -1,8 +1,10 @@
-#pragma once
+export module fox.rendering.uniform;
 
-#include <stdafx.hpp>
+import std;
 
-namespace fox::gfx::unf
+import fox.core.types;
+
+export namespace fox::gfx::unf
 {
     //Graphics API's often enforce specific data layout requirements.
     //Padding may be automatically inserted when using certain data types to ensure proper alignment boundaries are maintained.
