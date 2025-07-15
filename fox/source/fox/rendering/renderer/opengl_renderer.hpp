@@ -9,7 +9,6 @@
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
-#include <fox/rendering/render_info/render_info.hpp>
 //export module fox.rendering.renderer.opengl;
 
 //import std;
@@ -35,6 +34,7 @@ import fox.rendering.model;
 import fox.rendering.render_buffer;
 import fox.rendering.pipeline;
 import fox.rendering.shader;
+import fox.rendering.render_info;
 
 namespace fox::gfx::api
 {
