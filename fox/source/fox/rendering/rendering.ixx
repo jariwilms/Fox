@@ -10,7 +10,6 @@ module;
 #include <fox/rendering/render_info/render_info.hpp>
 #include <fox/rendering/shader/pipeline.hpp>
 #include <fox/rendering/shader/shader.hpp>
-#include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
@@ -20,11 +19,12 @@ export module fox.rendering;
 import std;
 
 import fox.rendering.uniform;
+import fox.rendering.cubemap;
 
 export namespace fox::gfx
 {
     inline void copy_texture(std::shared_ptr<gfx::Texture2D> source, std::shared_ptr<gfx::Texture2D> destination)
     {
-		impl::copy_texture(source->impl(), destination->impl());
+        impl::copy_texture(source->impl(), destination->impl());
     }
 }

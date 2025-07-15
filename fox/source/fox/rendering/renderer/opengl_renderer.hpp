@@ -14,7 +14,6 @@
 #include <fox/rendering/render_info/render_info.hpp>
 #include <fox/rendering/shader/pipeline.hpp>
 #include <fox/rendering/shader/shader.hpp>
-#include <fox/rendering/texture/cubemap.hpp>
 #include <fox/rendering/texture/texture.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
@@ -35,6 +34,7 @@ import fox.math;
 import fox.input;
 import fox.rendering.uniform;
 import fox.rendering;
+import fox.rendering.cubemap;
 
 namespace fox::gfx::api
 {
