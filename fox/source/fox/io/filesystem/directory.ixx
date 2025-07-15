@@ -1,11 +1,11 @@
-#pragma once
+export module fox.io.filesystem.directory;
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/io/filesystem/entry.hpp>
-#include <fox/io/filesystem/file.hpp>
+import fox.io.filesystem.entry;
+import fox.io.filesystem.file;
 
-namespace fox::io
+export namespace fox::io
 {
     class Directory : public io::Entry
     {

@@ -1,8 +1,8 @@
-#pragma once
+export module fox.io.filesystem.entry;
 
-#include <stdafx.hpp>
+import std;
 
-namespace fox::io
+export namespace fox::io
 {
 	class Entry
 	{

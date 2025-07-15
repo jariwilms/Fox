@@ -1,11 +1,12 @@
 #include <stdafx.hpp>
 #include <fox/io/import/model/model_importer.hpp>
-#include <fox/io/io.hpp>
 #include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
 #include <fox/rendering/rendering.hpp>
 #include <entt/entt.hpp>
 
+import fox.io;
+import fox.io.loading;
 import fox.core.image;
 import fox.core.types.circular_buffer;
 import fox.core.time;

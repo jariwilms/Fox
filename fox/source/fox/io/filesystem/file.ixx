@@ -1,15 +1,13 @@
-#pragma once
+export module fox.io.filesystem.file;
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/io/filesystem/entry.hpp>
-
-import fox.core.types.common;
-import fox.core.types.fundamental;
 import fox.core.memory.adapter.no_init;
+import fox.core.types;
 import fox.core.utility;
+import fox.io.filesystem.entry;
 
-namespace fox::io
+export namespace fox::io
 {
 	class File : public Entry
 	{

@@ -7,12 +7,13 @@
 #include <assimp/scene.h>
 
 #include <fox/io/import/model/model_importer.hpp>
-#include <fox/io/io.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/model/model.hpp>
 #include <fox/rendering/texture/texture.hpp>
 
+import fox.io;
+import fox.io.loading;
 import fox.core.image;
 import fox.core.types.math;
 import fox.core.utility;

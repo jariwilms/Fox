@@ -1,14 +1,17 @@
-#pragma once
+module;
 
-#include <stdafx.hpp>
-
-#include <fox/io/filesystem/directory.hpp>
-#include <fox/io/filesystem/file.hpp>
 #include <fox/rendering/texture/texture.hpp>
 
-import fox.core.image;
+export module fox.io.loading;
 
-namespace fox::io
+import std;
+
+import fox.core.image;
+import fox.io.filesystem.directory;
+import fox.io.filesystem.entry;
+import fox.io.filesystem.file;
+
+export namespace fox::io
 {
     enum class Asset
     {

@@ -2,8 +2,9 @@
 
 #include <stdafx.hpp>
 
-#include <fox/io/io.hpp>
 #include <fox/rendering/shader/shader.hpp>
+
+import fox.io;
 
 namespace fox::gfx::api
 {
