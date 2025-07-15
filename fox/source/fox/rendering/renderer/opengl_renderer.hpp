@@ -14,8 +14,6 @@
 #include <fox/rendering/render_info/render_info.hpp>
 #include <fox/rendering/shader/pipeline.hpp>
 #include <fox/rendering/shader/shader.hpp>
-#include <fox/rendering/material/material.hpp>
-#include <fox/rendering/mesh/mesh.hpp>
 //export module fox.rendering.renderer.opengl;
 
 //import std;
@@ -35,6 +33,8 @@ import fox.rendering.uniform;
 import fox.rendering;
 import fox.rendering.cubemap;
 import fox.rendering.texture;
+import fox.rendering.material;
+import fox.rendering.mesh;
 
 namespace fox::gfx::api
 {

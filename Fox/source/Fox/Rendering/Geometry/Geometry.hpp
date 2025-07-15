@@ -2,8 +2,6 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/mesh/mesh.hpp>
-
 #include <fox/io/import/model/model_importer.hpp>
 #include <fox/rendering/geometry/data/data.hpp>
 #include <fox/rendering/geometry/geometry.hpp>
@@ -11,6 +9,7 @@
 
 import fox.core.types.common;
 import fox.core.types.fundamental;
+import fox.rendering.mesh;
 
 namespace fox::gfx::geometry
 {

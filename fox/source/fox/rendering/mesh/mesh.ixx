@@ -1,14 +1,13 @@
-#pragma once
-//module;
+module;
 
 #include <fox/rendering/buffer/vertex_array.hpp>
 
-//export module fox.rendering.mesh;
+export module fox.rendering.mesh;
 
 import std;
 import fox.core.types.common;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     struct Mesh
     {
