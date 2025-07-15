@@ -1,6 +1,6 @@
-#pragma once
+export module fox.rendering.post_processing;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     enum class PostProcessing
     {
