@@ -10,7 +10,6 @@
 #include <fox/rendering/buffer/buffer.hpp>
 #include <fox/rendering/buffer/vertex_array.hpp>
 #include <fox/rendering/model/model.hpp>
-#include <fox/rendering/texture/texture.hpp>
 
 import fox.io;
 import fox.io.loading;
@@ -18,6 +17,7 @@ import fox.core.image;
 import fox.core.types.math;
 import fox.core.utility;
 import fox.math;
+import fox.rendering.texture;
 
 namespace fox::io
 {

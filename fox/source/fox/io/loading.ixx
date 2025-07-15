@@ -1,7 +1,3 @@
-module;
-
-#include <fox/rendering/texture/texture.hpp>
-
 export module fox.io.loading;
 
 import std;
@@ -10,6 +6,7 @@ import fox.core.image;
 import fox.io.filesystem.directory;
 import fox.io.filesystem.entry;
 import fox.io.filesystem.file;
+import fox.rendering.texture;
 
 export namespace fox::io
 {

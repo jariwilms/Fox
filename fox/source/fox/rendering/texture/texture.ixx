@@ -1,10 +1,14 @@
-#pragma once
+module;
 
 #include <fox/rendering/api/api.hpp>
+#include <fox/rendering/base/texture/texture.hpp>
 
-import fox.core.types.domain;
+export module fox.rendering.texture;
 
-namespace fox::gfx
+import std;
+import fox.core.types;
+
+export namespace fox::gfx
 {
     class Texture1D
     {

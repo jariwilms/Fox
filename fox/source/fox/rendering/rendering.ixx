@@ -10,7 +10,6 @@ module;
 #include <fox/rendering/render_info/render_info.hpp>
 #include <fox/rendering/shader/pipeline.hpp>
 #include <fox/rendering/shader/shader.hpp>
-#include <fox/rendering/texture/texture.hpp>
 #include <fox/rendering/material/material.hpp>
 #include <fox/rendering/mesh/mesh.hpp>
 
@@ -20,6 +19,7 @@ import std;
 
 import fox.rendering.uniform;
 import fox.rendering.cubemap;
+import fox.rendering.texture;
 
 export namespace fox::gfx
 {

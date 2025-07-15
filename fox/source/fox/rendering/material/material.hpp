@@ -2,7 +2,6 @@
 #pragma once
 
 #include <fox/rendering/shader/shader.hpp>
-#include <fox/rendering/texture/texture.hpp>
 
 //export module fox.rendering.material;
 
@@ -10,6 +9,7 @@ import std;
 
 import fox.core.types.fundamental;
 import fox.core.types.math;
+import fox.rendering.texture;
 
 namespace fox::gfx
 {
