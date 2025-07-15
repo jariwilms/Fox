@@ -1,4 +1,8 @@
-#pragma once
+module;
+
+#include <fox/input/input.hpp>
+
+export module fox.window.api;
 
 #define FOX_WINDOW_API_GLFW 1
 #define FOX_WINDOW_API_SDL  2
@@ -7,17 +11,15 @@
 #define FOX_WINDOW_API FOX_WINDOW_API_GLFW
 #endif
 
-#include <stdafx.hpp>
-
-#include <fox/input/input.hpp>
+import std;
 
 #if FOX_WINDOW_API == FOX_WINDOW_API_GLFW
-#include <fox/window/api/glfw/window.hpp>
+import fox.window.api.glfw;
 #endif
 
 import fox.core.types.window;
 
-namespace fox::interface
+export namespace fox::interface
 {
 	namespace api
 	{

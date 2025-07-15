@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fox/window/api/api.hpp>
+import fox.window.api;
 
 namespace fox::interface
 {
