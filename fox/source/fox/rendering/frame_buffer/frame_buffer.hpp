@@ -2,10 +2,13 @@
 
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
-#include <fox/rendering/render_buffer/render_buffer.hpp>
 
+import std;
+
+import fox.core.types;
 import fox.rendering.cubemap;
 import fox.rendering.texture;
+import fox.rendering.render_buffer;
 
 namespace fox::gfx
 {
