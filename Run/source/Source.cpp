@@ -17,6 +17,7 @@ import fox.ecs.components;
 import fox.ecs.registry;
 import fox.input;
 import fox.rendering;
+import fox.rendering.light;
 
 using namespace fox;
 

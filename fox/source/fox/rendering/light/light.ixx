@@ -1,9 +1,8 @@
-#pragma once
+export module fox.rendering.light;
 
-import fox.core.types.fundamental;
-import fox.core.types.math;
+import fox.core.types;
 
-namespace fox
+export namespace fox
 {
     struct Light
     {

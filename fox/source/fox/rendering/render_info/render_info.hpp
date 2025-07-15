@@ -1,12 +1,11 @@
 #pragma once
 
-#include <stdafx.hpp>
-
-#include <fox/rendering/light/light.hpp>
+import std;
 
 import fox.core.transform;
 import fox.rendering.cubemap;
 import fox.rendering.camera;
+import fox.rendering.light;
 
 namespace fox::gfx
 {
