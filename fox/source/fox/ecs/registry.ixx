@@ -1,6 +1,8 @@
-#pragma once
+module;
 
 #include <entt/entt.hpp>
+
+export module fox.ecs.registry;
 
 import std;
 
@@ -8,7 +10,7 @@ import fox.core.types.fundamental;
 import fox.core.types.ecs;
 import fox.ecs.component;
 
-namespace fox
+export namespace fox
 {
     namespace registry::api
     {

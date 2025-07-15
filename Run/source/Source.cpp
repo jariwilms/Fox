@@ -5,14 +5,17 @@
 #include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
 #include <fox/rendering/rendering.hpp>
-#include <fox/scene/actor.hpp>
-#include <fox/scene/scene.hpp>
+#include <entt/entt.hpp>
 
 import fox.core.image;
 import fox.core.types.circular_buffer;
 import fox.core.time;
 import fox.core.transform;
 import fox.window;
+import fox.scene;
+import fox.scene.actor;
+import fox.ecs.components;
+import fox.ecs.registry;
 
 using namespace fox;
 

@@ -1,5 +1,7 @@
 #pragma once
 
+import std;
+
 import fox.core.types.fundamental;
 import fox.core.types.math;
 import fox.math;

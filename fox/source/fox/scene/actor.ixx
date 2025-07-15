@@ -1,15 +1,17 @@
-#pragma once
+module;
 
-#include <stdafx.hpp>
+#include <entt/entt.hpp>
 
-#include <fox/ecs/registry.hpp>
-#include <fox/ecs/components/components.hpp>
+export module fox.scene.actor;
+
+import std;
 
 import fox.core.types.fundamental;
-//import fox.ecs.components;
+import fox.ecs.components;
 import fox.ecs.entity;
+import fox.ecs.registry;
 
-namespace fox::scene
+export namespace fox::scene
 {
     class Actor : public ecs::Entity
     {

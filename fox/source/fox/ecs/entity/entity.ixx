@@ -1,6 +1,5 @@
 export module fox.ecs.entity;
 
-import fox.core.types.fundamental;
 import fox.core.types.ecs;
 
 export namespace fox::ecs
