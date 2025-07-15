@@ -11,7 +11,9 @@
 #include <fox/rendering/base/texture/cubemap.hpp>
 #include <fox/rendering/base/texture/texture.hpp>
 
+import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
+import fox.rendering.api.opengl.utility;
 
 namespace fox::gfx::api::gl
 {

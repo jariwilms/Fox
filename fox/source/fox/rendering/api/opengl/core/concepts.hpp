@@ -1,6 +1,7 @@
 #pragma once
 
-#include <fox/rendering/api/opengl/core/flags.hpp>
+import fox.rendering.api.opengl.flags;
+import fox.rendering.api.opengl.types;
 
 namespace fox::gfx::api::gl
 {

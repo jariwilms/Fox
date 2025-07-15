@@ -1,10 +1,10 @@
-#pragma once
+export module fox.rendering.api.opengl.utility;
 
 import std;
 
 import fox.rendering.api.opengl.types;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     template<typename T>
     inline constexpr auto to_underlying    (      T        value) noexcept -> std::underlying_type_t<T>

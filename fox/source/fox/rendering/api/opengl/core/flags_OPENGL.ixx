@@ -1,12 +1,15 @@
-#pragma once
+module;
 
-#include <stdafx.hpp>
 #include <glad/gl.h>
-#include <fox/rendering/api/opengl/core/utility.hpp>
 
+export module fox.rendering.api.opengl.flags;
+
+import std;
+
+import fox.rendering.api.opengl.utility;
 import fox.rendering.api.opengl.types;
 
-namespace fox::gfx::api::glf
+export namespace fox::gfx::api::glf
 {
     struct     AtomicCounterBuffer
     {
