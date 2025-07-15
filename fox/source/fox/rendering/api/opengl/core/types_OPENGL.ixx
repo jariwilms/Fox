@@ -1,11 +1,14 @@
-#pragma once
+module;
 
-#include <stdafx.hpp>
 #include <glad/gl.h>
+
+export module fox.rendering.api.opengl.types;
+
+import std;
 
 import vendor.glm;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     using void_t     = GLvoid      ;
     using bool_t     = bool        ; //Fundamental
@@ -150,6 +153,6 @@ namespace fox::gfx::api::gl
 
 
 
-    inline void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const gl::void_t*) {}
+    void _debug_callback(gl::enum_t, gl::enum_t, gl::uint32_t, gl::enum_t, gl::sizei_t, const gl::char_t*, const gl::void_t*) {}
     using debug_callback_t = decltype(_debug_callback);
 }

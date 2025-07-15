@@ -1,9 +1,10 @@
 #pragma once
 
 #include <stdafx.hpp>
-
-#include <fox/rendering/api/opengl/core/types.hpp>
+#include <glad/gl.h>
 #include <fox/rendering/api/opengl/core/utility.hpp>
+
+import fox.rendering.api.opengl.types;
 
 namespace fox::gfx::api::glf
 {

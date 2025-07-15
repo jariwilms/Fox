@@ -1,6 +1,5 @@
 #pragma once
 
-#include <fox/rendering/api/opengl/core/types.hpp>
 #include <fox/rendering/base/buffer/buffer.hpp>
 #include <fox/rendering/base/buffer/type.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
@@ -11,6 +10,8 @@
 #include <fox/rendering/base/shader/shader.hpp>
 #include <fox/rendering/base/texture/cubemap.hpp>
 #include <fox/rendering/base/texture/texture.hpp>
+
+import fox.rendering.api.opengl.types;
 
 namespace fox::gfx::api::gl
 {

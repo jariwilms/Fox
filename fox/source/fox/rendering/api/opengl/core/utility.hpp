@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stdafx.hpp>
+import std;
 
-#include <fox/rendering/api/opengl/core/types.hpp>
+import fox.rendering.api.opengl.types;
 
 namespace fox::gfx::api::gl
 {
