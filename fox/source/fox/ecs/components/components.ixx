@@ -1,13 +1,10 @@
-module;
-
-#include <fox/rendering/camera/camera.hpp>
-
 export module fox.ecs.components;
 
 import fox.ecs.component;
 import fox.ecs.components.mesh_filter;
 import fox.ecs.components.relationship;
 import fox.core.transform;
+import fox.rendering.camera;
 
 export namespace fox::ecs
 {

@@ -2,11 +2,11 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/camera/camera.hpp>
 #include <fox/rendering/light/light.hpp>
 
 import fox.core.transform;
 import fox.rendering.cubemap;
+import fox.rendering.camera;
 
 namespace fox::gfx
 {

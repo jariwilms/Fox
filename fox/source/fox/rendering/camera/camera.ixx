@@ -1,12 +1,11 @@
-#pragma once
+export module fox.rendering.camera;
 
 import std;
 
-import fox.core.types.fundamental;
-import fox.core.types.math;
+import fox.core.types;
 import fox.math;
 
-namespace fox
+export namespace fox
 {
     class Camera
     {
