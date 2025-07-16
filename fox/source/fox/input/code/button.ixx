@@ -1,6 +1,6 @@
 export module fox.input.code.button;
 
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox::input
 {
@@ -8,7 +8,7 @@ export namespace fox::input
 
     namespace button
     {
-        enum : button_t
+        enum : input::button_t
         {
             Button1 = 0, 
             Button2 = 1, 

@@ -1,6 +1,6 @@
 export module fox.input.code.modifier;
 
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox::input
 {
@@ -8,7 +8,7 @@ export namespace fox::input
 
     namespace modifier
     {
-        enum : modifier_t
+        enum : input::modifier_t
         {
             None     = 0x0, 
 

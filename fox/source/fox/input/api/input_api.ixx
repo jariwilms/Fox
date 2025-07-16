@@ -1,4 +1,10 @@
 export module fox.input.api;
+export import fox.input.code.button;
+export import fox.input.code.controller;
+export import fox.input.code.key;
+export import fox.input.code.modifier;
+
+import std;
 
 #define FOX_INPUT_API_GLFW 1
 #define FOX_INPUT_API_SDL  2
@@ -7,18 +13,9 @@ export module fox.input.api;
 #define FOX_INPUT_API FOX_INPUT_API_GLFW
 #endif
 
-import std;
-
-import fox.input.code.button;
-import fox.input.code.controller;
-import fox.input.code.key;
-import fox.input.code.modifier;
-
 #if FOX_INPUT_API == FOX_INPUT_API_GLFW
 import fox.input.api.glfw;
 #endif
-
-import fox.core.types.math.linear_algebra.vector;
 
 export namespace fox::input::api
 {

@@ -6,11 +6,11 @@ export module fox.input.api.glfw;
 
 import std;
 
+import fox.core.types;
 import fox.input.code.button;
 import fox.input.code.controller;
 import fox.input.code.key;
 import fox.input.code.modifier;
-import fox.core.types;
 
 export namespace fox::input::api::glfw
 {
@@ -19,10 +19,10 @@ export namespace fox::input::api::glfw
     public:
         void update                    ()
         {
-            lastActiveKeys_     = activeKeys_;
-            lastActiveButtons_  = activeButtons_;
+            lastActiveKeys_     = activeKeys_    ;
+            lastActiveButtons_  = activeButtons_ ;
             lastCursorPosition_ = cursorPosition_;
-            lastScrollWheel_    = scrollWheel_;
+            lastScrollWheel_    = scrollWheel_   ;
         }
         void reset                     ()
         {

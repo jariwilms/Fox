@@ -1,6 +1,6 @@
 export module fox.input.code.controller;
 
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox::input
 {
@@ -8,7 +8,7 @@ export namespace fox::input
 
     namespace controller
     {
-        enum : controller_t
+        enum : input::controller_t
         {
             HatCentered  = 0x0 << 0u, 
             HatUp        = 0x1 << 0u, 

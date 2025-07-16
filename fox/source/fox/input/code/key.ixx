@@ -1,6 +1,6 @@
 export module fox.input.code.key;
 
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox::input
 {
@@ -8,7 +8,7 @@ export namespace fox::input
 
     namespace key
     {
-        enum : key_t
+        enum : input::key_t
         {
             Space        =  32, 
             Apostrophe   =  39, 
