@@ -1,4 +1,4 @@
-#pragma once
+module;
 
 #include <fox/rendering/base/buffer/buffer.hpp>
 #include <fox/rendering/base/buffer/type.hpp>
@@ -11,11 +11,15 @@
 #include <fox/rendering/base/texture/cubemap.hpp>
 #include <fox/rendering/base/texture/texture.hpp>
 
+export module fox.rendering.api.opengl.mapping;
+
+import std;
+
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 import fox.rendering.api.opengl.utility;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     template<typename T>
     inline constexpr auto map_type() -> glf::VertexArray::Attribute::Type

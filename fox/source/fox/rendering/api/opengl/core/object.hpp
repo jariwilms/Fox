@@ -1,6 +1,7 @@
 #pragma once
 
 import std;
+
 import fox.rendering.api.opengl.types;
 
 namespace fox::gfx::api::gl

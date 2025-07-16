@@ -253,11 +253,11 @@ namespace fox::gfx::api::gl
         {
             gl::buffer_data(handle_, gl::offset_t{ 0u }, std::span<const T>{ data });
         }
-        void copy_index(fox::index_t index, const T& data)
+        void copy_index(gl::index_t index, const T& data)
         {
             gl::buffer_data(handle_, index, std::span<const T>{ &data, 1u });
         }
-        void copy_range(fox::index_t index, std::span<const T> data)
+        void copy_range(gl::index_t index, std::span<const T> data)
         {
             gl::buffer_data(handle_, index, data);
         }

@@ -6,6 +6,7 @@
 #include <fox/rendering/base/texture/texture.hpp>
 
 import fox.math.texture;
+import fox.rendering.api.opengl.mapping;
 
 namespace fox::gfx::api::gl
 {
@@ -94,7 +95,7 @@ namespace fox::gfx::api::gl
         {
             return dimensions_;
         }
-        auto mipmap_levels() const -> fox::uint32_t
+        auto mipmap_levels() const -> gl::uint32_t
         {
             return mipmapLevels_;
         }

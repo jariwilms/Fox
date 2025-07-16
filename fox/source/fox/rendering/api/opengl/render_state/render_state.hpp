@@ -2,9 +2,10 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/api/opengl/core/mapping.hpp>
 #include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/base/render_state/render_state.hpp>
+
+import fox.rendering.api.opengl.mapping;
 
 namespace fox::gfx::api::gl
 {

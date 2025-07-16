@@ -1,9 +1,11 @@
-#pragma once
+export module fox.rendering.api.opengl.concepts;
+
+import std;
 
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     template<glf::Feature F>
     concept indexed_feature_c = 
