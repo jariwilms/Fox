@@ -1,8 +1,6 @@
-#pragma once
+export module fox.core.data:material;
 
-#include <fox/io/io.hpp>
-
-namespace fox::data::rendering
+export namespace fox::data::rendering
 {
     //inline const auto albedo   = io::load<io::Asset::Texture2D>("textures/albedo.png"  );
     //inline const auto normal   = io::load<io::Asset::Texture2D>("textures/normal.png"  );
