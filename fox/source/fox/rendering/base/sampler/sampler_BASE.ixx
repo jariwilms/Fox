@@ -1,6 +1,6 @@
-#pragma once
+export module fox.rendering.base.sampler;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
 	class Sampler
 	{

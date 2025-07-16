@@ -1,12 +1,9 @@
-module;
-
-#include <fox/rendering/base/query/query.hpp>
-
 export module fox.rendering.api.opengl.query;
 
 import std;
 
 import fox.rendering.api.opengl;
+import fox.rendering.base.query;
 
 export namespace fox::gfx::api::gl
 {

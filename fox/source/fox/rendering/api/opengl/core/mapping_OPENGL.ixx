@@ -3,9 +3,7 @@ module;
 #include <fox/rendering/base/buffer/buffer.hpp>
 #include <fox/rendering/base/buffer/type.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
-#include <fox/rendering/base/query/query.hpp>
 #include <fox/rendering/base/render_buffer/render_buffer.hpp>
-#include <fox/rendering/base/render_state/render_state.hpp>
 #include <fox/rendering/base/shader/pipeline.hpp>
 #include <fox/rendering/base/shader/shader.hpp>
 #include <fox/rendering/base/texture/cubemap.hpp>
@@ -18,6 +16,8 @@ import std;
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 import fox.rendering.api.opengl.utility;
+import fox.rendering.base.query;
+import fox.rendering.base.render_state;
 
 export namespace fox::gfx::api::gl
 {
