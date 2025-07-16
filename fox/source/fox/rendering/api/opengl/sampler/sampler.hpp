@@ -1,11 +1,9 @@
 #pragma once
 
-#include <fox/rendering/api/opengl/texture/texture.hpp>
 #include <fox/rendering/base/sampler/sampler.hpp>
 
 import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+import fox.rendering.api.opengl.texture;
 
 namespace fox::gfx::api::gl
 {

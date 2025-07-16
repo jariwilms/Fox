@@ -1,15 +1,15 @@
-#pragma once
-
-#include <stdafx.hpp>
+module;
 
 #include <fox/rendering/base/texture/texture.hpp>
 
+export module fox.rendering.api.opengl.texture;
+
+import std;
+
 import fox.math.texture;
 import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     class Texture1D : public gl::Object
     {

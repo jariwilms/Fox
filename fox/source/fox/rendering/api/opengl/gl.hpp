@@ -8,14 +8,14 @@
 #include <fox/rendering/api/opengl/sampler/sampler.hpp>
 #include <fox/rendering/api/opengl/shader/pipeline.hpp>
 #include <fox/rendering/api/opengl/shader/shader.hpp>
-#include <fox/rendering/api/opengl/texture/cubemap.hpp>
-#include <fox/rendering/api/opengl/texture/texture.hpp>
 
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.buffer;
 import fox.rendering.api.opengl.vertex_array;
 import fox.rendering.api.opengl.query;
 import fox.rendering.api.opengl.context;
+import fox.rendering.api.opengl.cubemap;
+import fox.rendering.api.opengl.texture;
 
 namespace fox::gfx::api::gl
 {

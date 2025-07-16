@@ -1,15 +1,18 @@
-#pragma once
+module;
 
-#include <fox/rendering/api/opengl/texture/texture.hpp>
 #include <fox/rendering/base/texture/cubemap.hpp>
+
+export module fox.rendering.api.opengl.cubemap;
+
+import std;
 
 import fox.core.image;
 import fox.core.types.math;
+import fox.math.texture;
 import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+import fox.rendering.api.opengl.texture;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     class Cubemap : public gl::Object
     {
