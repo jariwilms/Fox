@@ -1,7 +1,5 @@
 module;
 
-#include <fox/rendering/base/buffer/buffer.hpp>
-#include <fox/rendering/base/buffer/type.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
 
 export module fox.rendering.api.opengl.mapping;
@@ -11,13 +9,15 @@ import std;
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 import fox.rendering.api.opengl.utility;
-import fox.rendering.base.query;
-import fox.rendering.base.render_state;
+import fox.rendering.base.buffer;
 import fox.rendering.base.cubemap;
-import fox.rendering.base.texture;
 import fox.rendering.base.pipeline;
-import fox.rendering.base.shader;
+import fox.rendering.base.query;
 import fox.rendering.base.render_buffer;
+import fox.rendering.base.render_state;
+import fox.rendering.base.shader;
+import fox.rendering.base.texture;
+import fox.rendering.base.vertex_array;
 
 export namespace fox::gfx::api::gl
 {
