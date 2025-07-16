@@ -1,14 +1,14 @@
-#pragma once
-
-#include <stdafx.hpp>
+module;
 
 #include <fox/rendering/base/query/query.hpp>
 
-import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+export module fox.rendering.api.opengl.query;
 
-namespace fox::gfx::api::gl
+import std;
+
+import fox.rendering.api.opengl;
+
+export namespace fox::gfx::api::gl
 {
 	class Query : public gl::Object
 	{
