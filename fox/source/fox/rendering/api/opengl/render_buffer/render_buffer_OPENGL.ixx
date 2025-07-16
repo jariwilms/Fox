@@ -1,12 +1,14 @@
-#pragma once
+module;
 
 #include <fox/rendering/base/render_buffer/render_buffer.hpp>
 
-import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+export module fox.rendering.api.opengl.render_buffer;
 
-namespace fox::gfx::api::gl
+import std;
+
+import fox.rendering.api.opengl;
+
+export namespace fox::gfx::api::gl
 {
     class RenderBuffer : public gl::Object
     {

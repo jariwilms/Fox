@@ -2,10 +2,10 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/api/opengl/render_buffer/render_buffer.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
 
 import fox.rendering.api.opengl;
+import fox.rendering.api.opengl.render_buffer;
 import fox.rendering.api.opengl.cubemap;
 import fox.rendering.api.opengl.texture;
 
