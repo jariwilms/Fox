@@ -1,7 +1,6 @@
 module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
 
 export module fox.rendering.frame_buffer;
 
@@ -11,6 +10,7 @@ import fox.core.types;
 import fox.rendering.cubemap;
 import fox.rendering.texture;
 import fox.rendering.render_buffer;
+import fox.rendering.base.frame_buffer;
 
 export namespace fox::gfx
 {

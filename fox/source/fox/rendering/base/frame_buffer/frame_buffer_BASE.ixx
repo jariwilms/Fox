@@ -1,15 +1,14 @@
-#pragma once
+export module fox.rendering.base.frame_buffer;
 
 import std;
 
-import fox.core.types.common;
-import fox.core.types.fundamental;
+import fox.core.types;
 import fox.core.enumeration;
 import fox.rendering.base.cubemap;
 import fox.rendering.base.texture;
 import fox.rendering.base.render_buffer;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
     class FrameBuffer
     {

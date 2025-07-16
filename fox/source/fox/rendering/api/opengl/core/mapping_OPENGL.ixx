@@ -1,7 +1,3 @@
-module;
-
-#include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
-
 export module fox.rendering.api.opengl.mapping;
 
 import std;
@@ -18,6 +14,7 @@ import fox.rendering.base.render_state;
 import fox.rendering.base.shader;
 import fox.rendering.base.texture;
 import fox.rendering.base.vertex_array;
+import fox.rendering.base.frame_buffer;
 
 export namespace fox::gfx::api::gl
 {
