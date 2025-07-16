@@ -1,13 +1,14 @@
-#pragma once
-
-#include <stdafx.hpp>
+module;
 
 #include <fox/rendering/base/render_state/render_state.hpp>
 
-import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
+export module fox.rendering.api.opengl.render_state;
 
-namespace fox::gfx::api::gl
+import std;
+
+import fox.rendering.api.opengl;
+
+export namespace fox::gfx::api::gl
 {
     class RenderState : public api::RenderState
     {

@@ -3,7 +3,6 @@
 #include <stdafx.hpp>
 
 #include <fox/rendering/api/opengl/frame_buffer/frame_buffer.hpp>
-#include <fox/rendering/api/opengl/render_state/render_state.hpp>
 
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.buffer;
@@ -16,6 +15,7 @@ import fox.rendering.api.opengl.shader;
 import fox.rendering.api.opengl.texture;
 import fox.rendering.api.opengl.vertex_array;
 import fox.rendering.api.opengl.sampler;
+import fox.rendering.api.opengl.render_state;
 
 namespace fox::gfx::api::gl
 {
