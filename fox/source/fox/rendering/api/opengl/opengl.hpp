@@ -4,15 +4,14 @@
 
 #include <glad/gl.h>
 
-#include <fox/rendering/api/opengl/core/parameters.hpp>
-#include <fox/rendering/api/opengl/core/structures.hpp>
-
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 import fox.rendering.api.opengl.utility;
 import fox.rendering.api.opengl.concepts;
 import fox.rendering.api.opengl.mapping;
 import fox.rendering.api.opengl.object;
+import fox.rendering.api.opengl.parameters;
+import fox.rendering.api.opengl.structures;
 
 namespace fox::gfx::api::gl
 {

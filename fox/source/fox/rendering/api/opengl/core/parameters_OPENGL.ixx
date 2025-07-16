@@ -1,11 +1,11 @@
-#pragma once
+export module fox.rendering.api.opengl.parameters;
 
 import std;
 
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 
-namespace fox::gfx::api::glp
+export namespace fox::gfx::api::glp
 {
     struct color_index
     {
