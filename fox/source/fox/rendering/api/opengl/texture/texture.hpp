@@ -7,6 +7,7 @@
 
 import fox.math.texture;
 import fox.rendering.api.opengl.mapping;
+import fox.rendering.api.opengl.object;
 
 namespace fox::gfx::api::gl
 {

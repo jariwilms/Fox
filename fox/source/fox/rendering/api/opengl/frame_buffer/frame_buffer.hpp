@@ -8,6 +8,9 @@
 #include <fox/rendering/api/opengl/texture/texture.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
 
+import fox.rendering.api.opengl.mapping;
+import fox.rendering.api.opengl.object;
+
 namespace fox::gfx::api::gl
 {
     class FrameBuffer : public gl::Object

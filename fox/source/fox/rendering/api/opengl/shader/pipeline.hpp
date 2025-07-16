@@ -4,6 +4,9 @@
 #include <fox/rendering/api/opengl/shader/shader.hpp>
 #include <fox/rendering/base/shader/pipeline.hpp>
 
+import fox.rendering.api.opengl.mapping;
+import fox.rendering.api.opengl.object;
+
 namespace fox::gfx::api::gl
 {
     template<typename T = gl::Shader>

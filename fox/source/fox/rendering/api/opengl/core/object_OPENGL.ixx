@@ -1,10 +1,10 @@
-#pragma once
+export module fox.rendering.api.opengl.object;
 
 import std;
 
 import fox.rendering.api.opengl.types;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     constexpr auto NullObject         = gl::handle_t{ 0u };
     constexpr auto DefaultFrameBuffer = gl::handle_t{ 0u };

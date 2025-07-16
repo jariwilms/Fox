@@ -6,6 +6,8 @@
 
 import fox.core.image;
 import fox.core.types.math;
+import fox.rendering.api.opengl.mapping;
+import fox.rendering.api.opengl.object;
 
 namespace fox::gfx::api::gl
 {

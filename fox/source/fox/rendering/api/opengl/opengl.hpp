@@ -4,7 +4,6 @@
 
 #include <glad/gl.h>
 
-#include <fox/rendering/api/opengl/core/object.hpp>
 #include <fox/rendering/api/opengl/core/parameters.hpp>
 #include <fox/rendering/api/opengl/core/structures.hpp>
 
@@ -13,6 +12,7 @@ import fox.rendering.api.opengl.types;
 import fox.rendering.api.opengl.utility;
 import fox.rendering.api.opengl.concepts;
 import fox.rendering.api.opengl.mapping;
+import fox.rendering.api.opengl.object;
 
 namespace fox::gfx::api::gl
 {

@@ -5,6 +5,9 @@
 #include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/base/query/query.hpp>
 
+import fox.rendering.api.opengl.mapping;
+import fox.rendering.api.opengl.object;
+
 namespace fox::gfx::api::gl
 {
 	class Query : public gl::Object
