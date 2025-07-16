@@ -13,6 +13,15 @@ namespace api
 }
 export namespace fox::time
 {
+    auto delta      () -> fox::delta_t
+    {
+        return api::delta;
+    }
+    auto since_epoch() -> fox::delta_t
+    {
+        return std::chrono::duration_cast<fox::duration_t>(fox::clock_t::now() - api::epoch).count();
+    }
+    
     void update()
     {
         api::before = std::exchange(api::now, fox::clock_t::now());
@@ -24,17 +33,5 @@ export namespace fox::time
         api::now    = fox::clock_t::now();
         api::before = fox::clock_t::now();
         api::delta  = fox::delta_t{};
-    }
-
-    auto since_epoch() -> fox::delta_t
-    {
-        auto now   = fox::clock_t::now();
-        auto delta = std::chrono::duration_cast<fox::duration_t>(now - api::epoch).count();
-
-        return delta;
-    }
-    auto delta      () -> fox::delta_t
-    {
-        return api::delta;
     }
 }
