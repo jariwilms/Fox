@@ -1,21 +1,22 @@
-#pragma once
+module;
 
-#include <stdafx.hpp>
 #include <glad/gl.h>
 #include <fox/rendering/base/shader/shader.hpp>
 
-import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+export module fox.rendering.api.opengl.shader;
 
-namespace fox::gfx::api::gl
+import std;
+
+import fox.rendering.api.opengl;
+
+export namespace fox::gfx::api::gl
 {
     class Shader : public gl::Object
     {
     public:
         using Stage = api::Shader::Stage;
 
-        Shader(Stage stage, std::span<const fox::byte_t> binary)
+        Shader(Stage stage, std::span<const gl::byte_t> binary)
             : gl::Object{ gl::create_program(), [](auto* handle) { gl::delete_program(*handle); }}
             , stage_{ stage }
         {

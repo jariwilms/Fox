@@ -5,17 +5,17 @@
 #include <fox/rendering/api/opengl/frame_buffer/frame_buffer.hpp>
 #include <fox/rendering/api/opengl/render_state/render_state.hpp>
 #include <fox/rendering/api/opengl/sampler/sampler.hpp>
-#include <fox/rendering/api/opengl/shader/pipeline.hpp>
-#include <fox/rendering/api/opengl/shader/shader.hpp>
 
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.buffer;
-import fox.rendering.api.opengl.vertex_array;
-import fox.rendering.api.opengl.query;
 import fox.rendering.api.opengl.context;
-import fox.rendering.api.opengl.render_buffer;
 import fox.rendering.api.opengl.cubemap;
+import fox.rendering.api.opengl.pipeline;
+import fox.rendering.api.opengl.query;
+import fox.rendering.api.opengl.render_buffer;
+import fox.rendering.api.opengl.shader;
 import fox.rendering.api.opengl.texture;
+import fox.rendering.api.opengl.vertex_array;
 
 namespace fox::gfx::api::gl
 {

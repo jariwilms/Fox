@@ -1,13 +1,15 @@
-#pragma once
+module;
 
-#include <fox/rendering/api/opengl/shader/shader.hpp>
 #include <fox/rendering/base/shader/pipeline.hpp>
 
-import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+export module fox.rendering.api.opengl.pipeline;
 
-namespace fox::gfx::api::gl
+import std;
+
+import fox.rendering.api.opengl;
+import fox.rendering.api.opengl.shader;
+
+export namespace fox::gfx::api::gl
 {
     template<typename T = gl::Shader>
     class Pipeline : public gl::Object

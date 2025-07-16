@@ -1,5 +1,7 @@
 #pragma once
 
+import std;
+
 namespace fox::gfx::api
 {
     class Pipeline
