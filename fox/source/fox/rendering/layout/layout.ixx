@@ -2,13 +2,12 @@ export module fox.rendering.layout;
 
 import std;
 
-import fox.core.types.common;
-import fox.core.types.fundamental;
-import fox.core.meta.concepts;
+import fox.core.types;
+import fox.core.meta;
 
 export namespace fox::gfx
 {
-    template<typename T, fox::uint32_t N, fox::index_t L = 0u, fox::uint32_t I = 0u> requires (fox::meta::in_closed_interval<N, 1u, 4u>)
+    template<typename T, fox::uint32_t N, fox::index_t L = 0u, fox::uint32_t I = 0u> requires (meta::within_closed_interval<N, 1u, 4u>)
     struct attribute_t
     {
         using type = T;

@@ -22,7 +22,7 @@ export namespace fox::gfx
 
         static auto create(const Layout& layout) -> std::shared_ptr<gfx::Pipeline>
         {
-            return std::make_shared<fox::from_inaccessible_ctor<gfx::Pipeline>>(layout);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::Pipeline>>(layout);
         }
 
         void bind()

@@ -2,7 +2,7 @@ export module fox.core.transform;
 
 import std;
 
-import fox.core.types.math;
+import fox.core.types;
 import fox.math;
 
 export namespace fox

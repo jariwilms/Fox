@@ -24,15 +24,15 @@ export namespace fox::gfx
 
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions) -> std::shared_ptr<gfx::Cubemap>
         {
-            return std::make_shared<fox::from_inaccessible_ctor<gfx::Cubemap>>(format, filter, wrapping, dimensions);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::Cubemap>>(format, filter, wrapping, dimensions);
         }
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions, std::span<const fox::Image> faces) -> std::shared_ptr<gfx::Cubemap>
         {
-            return std::make_shared<fox::from_inaccessible_ctor<gfx::Cubemap>>(format, filter, wrapping, dimensions, faces);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::Cubemap>>(format, filter, wrapping, dimensions, faces);
         }
         static auto create(Format format,                                   const fox::Vector2u& dimensions, std::span<const fox::Image> faces) -> std::shared_ptr<gfx::Cubemap>
         {
-            return std::make_shared<fox::from_inaccessible_ctor<gfx::Cubemap>>(format, dimensions, faces);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::Cubemap>>(format, dimensions, faces);
         }
 
         void bind(gfx::binding_t binding) const

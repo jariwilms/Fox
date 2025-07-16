@@ -1,22 +1,18 @@
-module;
-
-#include <stdafx.hpp>
-
 export module fox.core.meta;
+export import fox.core.meta.concepts;
 
-export namespace fox
+import std;
+
+export namespace fox::meta
 {
-    inline namespace meta
+    template<typename T>
+    struct from_inaccessible_ctor : public T
     {
-        template<typename T>
-        struct from_inaccessible_ctor : public T
-        {
-            template<typename... Args>
-            from_inaccessible_ctor(Args&&... args)
-                : T{ std::forward<Args>(args)... } {}
-        };
+        template<typename... Args>
+        from_inaccessible_ctor(Args&&... args)
+            : T{ std::forward<Args>(args)... } {}
+    };
 
-        template<typename... Ts>
-        struct overload : Ts... { using Ts::operator()...; };
-    }
+    template<typename... Ts>
+    struct overload : Ts... { using Ts::operator()...; };
 }

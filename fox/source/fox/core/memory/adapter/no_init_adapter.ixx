@@ -2,8 +2,7 @@ export module fox.core.memory.adapter.no_init;
 
 import std;
 
-import fox.core.types.common;
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox::memory
 {
@@ -20,7 +19,7 @@ export namespace fox::memory
         template<typename U> 
         struct rebind
         {
-            using other = no_init_adapter<typename std::allocator_traits<A>::template rebind_alloc<U>>;
+            using other = memory::no_init_adapter<typename std::allocator_traits<A>::template rebind_alloc<U>>;
         };
 
         template<typename U>
@@ -42,12 +41,12 @@ export namespace fox::memory
     };
 
     template<class T, class U>
-    auto operator==(const no_init_adapter<T>& left, const no_init_adapter<U>& right) noexcept -> fox::bool_t
+    auto operator==(const memory::no_init_adapter<T>& left, const memory::no_init_adapter<U>& right) noexcept -> fox::bool_t
     {
         return static_cast<const T&>(left) == static_cast<const U&>(right);
     }
     template<class T, class U>
-    auto operator!=(const no_init_adapter<T>& left, const no_init_adapter<U>& right) noexcept -> fox::bool_t
+    auto operator!=(const memory::no_init_adapter<T>& left, const memory::no_init_adapter<U>& right) noexcept -> fox::bool_t
     {
         return !(left == right);
     }

@@ -1,12 +1,8 @@
-module;
-
-#include <stdafx.hpp>
-
 export module fox.core.time;
 
-import fox.core.types.common;
-import fox.core.types.fundamental;
-import fox.core.types.time;
+import std;
+
+import fox.core.types;
 
 namespace api
 {
@@ -15,7 +11,6 @@ namespace api
     fox::time_point_t before{};
     fox::delta_t      delta {};
 }
-
 export namespace fox::time
 {
     void update()

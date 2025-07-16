@@ -1,6 +1,6 @@
 export module fox.config;
 
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox::cfg
 {

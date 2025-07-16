@@ -1,25 +1,18 @@
 export module fox.core.meta.concepts;
 
-import std;
-
-import fox.core.utility;
-
-export namespace fox
+export namespace fox::meta
 {
-    inline namespace meta
+    inline namespace concepts
     {
-        inline namespace concepts
+        template<auto value, auto min, auto max>
+        concept within_open_interval = requires
         {
-            template<auto value, auto min, auto max>
-            concept in_open_interval = requires
-            {
-                fox::compare<std::greater>(value, min) and fox::compare<std::less>(value, max);
-            };
-            template<auto value, auto min, auto max>
-            concept in_closed_interval = requires
-            {
-                fox::compare<std::greater_equal>(value, min) and fox::compare<std::less_equal>(value, max);
-            };
-        }
+            value > min and value < max;
+        };
+        template<auto value, auto min, auto max>
+        concept within_closed_interval = requires
+        {
+            value >= min and value <= max;
+        };
     }
 }

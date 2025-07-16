@@ -22,7 +22,7 @@ export namespace fox::gfx
 
         static auto create(Stage stage, std::span<const fox::byte_t> binary) -> std::shared_ptr<gfx::Shader>
         {
-            return std::make_shared<fox::from_inaccessible_ctor<gfx::Shader>>(stage, binary);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::Shader>>(stage, binary);
         }
 
         auto stage () const -> Stage

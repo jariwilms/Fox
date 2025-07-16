@@ -1,13 +1,9 @@
-module;
-
-#include <stdafx.hpp>
-
 export module fox.core.image;
 
+import std;
+
 import fox.config;
-import fox.core.types.common;
-import fox.core.types.fundamental;
-import fox.core.types.math;
+import fox.core.types;
 
 import vendor.stb;
 

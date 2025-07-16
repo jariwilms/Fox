@@ -2,25 +2,24 @@ export module fox.core.utility;
 
 import std;
 
-import fox.core.types.common;
-import fox.core.types.fundamental;
+import fox.core.types;
 
 export namespace fox
 {
     inline namespace utl
     {
         template<typename T>
-        inline constexpr auto size_of()
+        constexpr auto size_of()
         {
             return sizeof(T);
         }
         template<typename T>
-        inline constexpr auto size_of(const T& value)
+        constexpr auto size_of(const T& value)
         {
             return sizeof(value);
         }
         template<typename T, auto MEMBER_PTR>
-        inline constexpr auto offset_of()
+        constexpr auto offset_of()
         {
             return reinterpret_cast<fox::size_t>(
                 &reinterpret_cast<const volatile fox::byte_t&>(
@@ -28,7 +27,7 @@ export namespace fox
         }
 
         template<template<typename> typename C, typename T, typename U>
-        inline constexpr auto compare(T&& left, U&& right) -> fox::bool_t
+        constexpr auto compare(T&& left, U&& right) -> fox::bool_t
         {
             if constexpr (std::is_integral_v<T> and std::is_integral_v<U>)
             {
@@ -51,7 +50,7 @@ export namespace fox
         }
 
         template<std::ranges::range R>
-        inline auto as_bytes(R&& range) -> std::span<const fox::byte_t>
+        auto as_bytes(R&& range) -> std::span<const fox::byte_t>
         {
             auto span = std::span{ range };
             return std::span<const fox::byte_t>{ std::bit_cast<const fox::byte_t*>(span.data()), span.size_bytes() };
