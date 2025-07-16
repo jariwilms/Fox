@@ -1,6 +1,6 @@
 export module fox.math.linear_algebra.quaternion;
 
-import fox.core.types.math;
+import fox.core.types;
 
 import vendor.glm;
 

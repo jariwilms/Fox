@@ -2,8 +2,7 @@ export module fox.math.linear_algebra.matrix;
 
 import std;
 
-import fox.core.types.fundamental;
-import fox.core.types.math;
+import fox.core.types;
 import fox.math.linear_algebra.quaternion;
 
 import vendor.glm;

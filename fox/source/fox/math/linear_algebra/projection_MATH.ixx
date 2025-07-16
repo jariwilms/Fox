@@ -1,7 +1,8 @@
 export module fox.math.linear_algebra.projection;
 
-import fox.core.types.fundamental;
-import fox.core.types.math;
+import fox.core.types;
+
+import vendor.glm;
 
 export namespace fox::math
 {
