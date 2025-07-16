@@ -1,12 +1,14 @@
 module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/base/texture/texture.hpp>
 
 export module fox.rendering.texture;
 
 import std;
+
 import fox.core.types;
+import fox.core.meta;
+import fox.rendering.base.texture;
 
 export namespace fox::gfx
 {

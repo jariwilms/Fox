@@ -1,12 +1,13 @@
 module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/base/texture/cubemap.hpp>
 
 export module fox.rendering.cubemap;
 
 import std;
+
 import fox.core.types;
+import fox.rendering.base.cubemap;
 
 export namespace fox::gfx
 {

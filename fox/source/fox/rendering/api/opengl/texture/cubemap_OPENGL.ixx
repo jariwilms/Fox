@@ -1,7 +1,3 @@
-module;
-
-#include <fox/rendering/base/texture/cubemap.hpp>
-
 export module fox.rendering.api.opengl.cubemap;
 
 import std;
@@ -11,6 +7,7 @@ import fox.core.types.math;
 import fox.math.texture;
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.texture;
+import fox.rendering.base.cubemap;
 
 export namespace fox::gfx::api::gl
 {

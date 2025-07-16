@@ -1,8 +1,8 @@
-#pragma once
+export module fox.rendering.base.cubemap;
 
-#include <fox/rendering/base/texture/texture.hpp>
+import fox.rendering.base.texture;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
 	class Cubemap
 	{

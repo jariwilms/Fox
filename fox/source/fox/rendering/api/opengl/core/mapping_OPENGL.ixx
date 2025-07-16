@@ -6,8 +6,6 @@ module;
 #include <fox/rendering/base/render_buffer/render_buffer.hpp>
 #include <fox/rendering/base/shader/pipeline.hpp>
 #include <fox/rendering/base/shader/shader.hpp>
-#include <fox/rendering/base/texture/cubemap.hpp>
-#include <fox/rendering/base/texture/texture.hpp>
 
 export module fox.rendering.api.opengl.mapping;
 
@@ -18,6 +16,8 @@ import fox.rendering.api.opengl.types;
 import fox.rendering.api.opengl.utility;
 import fox.rendering.base.query;
 import fox.rendering.base.render_state;
+import fox.rendering.base.cubemap;
+import fox.rendering.base.texture;
 
 export namespace fox::gfx::api::gl
 {
