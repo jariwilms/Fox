@@ -1,13 +1,13 @@
 module;
 
 #include <glad/gl.h>
-#include <fox/rendering/base/shader/shader.hpp>
 
 export module fox.rendering.api.opengl.shader;
 
 import std;
 
 import fox.rendering.api.opengl;
+import fox.rendering.base.shader;
 
 export namespace fox::gfx::api::gl
 {

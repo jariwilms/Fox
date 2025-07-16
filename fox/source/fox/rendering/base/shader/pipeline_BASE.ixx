@@ -1,8 +1,8 @@
-#pragma once
+export module fox.rendering.base.pipeline;
 
 import std;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
     class Pipeline
     {

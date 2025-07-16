@@ -3,7 +3,6 @@
 #pragma once
 
 #include <stdafx.hpp>
-#include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/api/api.hpp>
 #include <fox/rendering/buffer/buffer.hpp>
 #include <fox/rendering/buffer/vertex_array.hpp>
@@ -35,6 +34,9 @@ import fox.rendering.shader;
 import fox.rendering.render_info;
 import fox.rendering.geometry;
 import fox.rendering.frame_buffer;
+import fox.rendering.base.utility;
+import fox.rendering.base.pipeline;
+import fox.rendering.base.shader;
 
 namespace fox::gfx::api
 {

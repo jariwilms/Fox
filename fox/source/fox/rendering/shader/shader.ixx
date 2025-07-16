@@ -1,7 +1,6 @@
 module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/base/shader/shader.hpp>
 
 export module fox.rendering.shader;
 
@@ -9,6 +8,7 @@ import std;
 
 import fox.core.meta;
 import fox.core.types;
+import fox.rendering.base.shader;
 
 export namespace fox::gfx
 {

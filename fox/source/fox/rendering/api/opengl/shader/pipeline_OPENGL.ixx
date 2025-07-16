@@ -1,13 +1,11 @@
-module;
-
-#include <fox/rendering/base/shader/pipeline.hpp>
-
 export module fox.rendering.api.opengl.pipeline;
 
 import std;
 
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.shader;
+import fox.rendering.base.pipeline;
+import fox.rendering.base.shader;
 
 export namespace fox::gfx::api::gl
 {

@@ -1,11 +1,12 @@
-#pragma once
+export module fox.rendering.base.utility;
 
 import std;
 
 import fox.io;
+import fox.io.loading;
 import fox.rendering.shader;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
     inline auto shaders_from_source()
     {

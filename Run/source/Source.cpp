@@ -1,6 +1,5 @@
 #include <stdafx.hpp>
 #include <fox/io/import/model/model_importer.hpp>
-#include <fox/rendering/base/shader/utility.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
 #include <entt/entt.hpp>
 
@@ -18,6 +17,7 @@ import fox.ecs.registry;
 import fox.input;
 import fox.rendering;
 import fox.rendering.light;
+import fox.rendering.base.utility;
 
 using namespace fox;
 
