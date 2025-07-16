@@ -1,13 +1,12 @@
-#pragma once
+export module fox.rendering.api.opengl.vertex_array;
 
-#include <stdafx.hpp>
-
-#include <fox/rendering/api/opengl/buffer/buffer.hpp>
+import std;
 
 import fox.rendering.layout;
 import fox.rendering.api.opengl;
+import fox.rendering.api.opengl.buffer;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     class VertexArray : public gl::Object
     {

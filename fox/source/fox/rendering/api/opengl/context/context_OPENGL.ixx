@@ -1,10 +1,10 @@
-#pragma once
+export module fox.rendering.api.opengl.context;
 
 import std;
 
 import fox.rendering.api.opengl;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
 	class Context
 	{

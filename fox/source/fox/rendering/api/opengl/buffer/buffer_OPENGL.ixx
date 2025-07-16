@@ -1,12 +1,14 @@
-#pragma once
+module;
 
 #include <fox/rendering/base/buffer/buffer.hpp>
+
+export module fox.rendering.api.opengl.buffer;
 
 import std;
 
 import fox.rendering.api.opengl;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     template<typename T>
     class Buffer : public gl::Object

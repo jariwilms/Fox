@@ -3,8 +3,6 @@ module;
 #include <glad/gl.h>
 #include <glfw/glfw3.h>
 
-#include <fox/rendering/api/opengl/context/context.hpp>
-
 export module fox.window.api.glfw;
 
 import std;
@@ -14,6 +12,7 @@ import fox.window.base;
 import fox.input;
 import fox.input.api.glfw;
 import fox.rendering.api.opengl;
+import fox.rendering.api.opengl.context;
 
 export namespace fox::interface::api::glfw
 {
