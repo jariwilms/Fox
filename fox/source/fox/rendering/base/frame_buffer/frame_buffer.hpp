@@ -1,7 +1,5 @@
 #pragma once
 
-#include <fox/rendering/base/render_buffer/render_buffer.hpp>
-
 import std;
 
 import fox.core.types.common;
@@ -9,6 +7,7 @@ import fox.core.types.fundamental;
 import fox.core.enumeration;
 import fox.rendering.base.cubemap;
 import fox.rendering.base.texture;
+import fox.rendering.base.render_buffer;
 
 namespace fox::gfx::api
 {

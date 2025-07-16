@@ -1,9 +1,14 @@
 module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/base/render_buffer/render_buffer.hpp>
 
 export module fox.rendering.render_buffer;
+
+import std;
+
+import fox.core.types;
+import fox.core.meta;
+import fox.rendering.base.render_buffer;
 
 export namespace fox::gfx
 {

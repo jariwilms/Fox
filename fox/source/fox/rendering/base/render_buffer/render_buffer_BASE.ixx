@@ -1,6 +1,6 @@
-#pragma once
+export module fox.rendering.base.render_buffer;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
 	class RenderBuffer
 	{

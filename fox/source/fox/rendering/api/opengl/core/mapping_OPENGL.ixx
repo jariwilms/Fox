@@ -3,7 +3,6 @@ module;
 #include <fox/rendering/base/buffer/buffer.hpp>
 #include <fox/rendering/base/buffer/type.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
-#include <fox/rendering/base/render_buffer/render_buffer.hpp>
 
 export module fox.rendering.api.opengl.mapping;
 
@@ -18,6 +17,7 @@ import fox.rendering.base.cubemap;
 import fox.rendering.base.texture;
 import fox.rendering.base.pipeline;
 import fox.rendering.base.shader;
+import fox.rendering.base.render_buffer;
 
 export namespace fox::gfx::api::gl
 {

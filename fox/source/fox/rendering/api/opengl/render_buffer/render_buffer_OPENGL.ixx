@@ -1,12 +1,9 @@
-module;
-
-#include <fox/rendering/base/render_buffer/render_buffer.hpp>
-
 export module fox.rendering.api.opengl.render_buffer;
 
 import std;
 
 import fox.rendering.api.opengl;
+import fox.rendering.base.render_buffer;
 
 export namespace fox::gfx::api::gl
 {
