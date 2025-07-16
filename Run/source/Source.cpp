@@ -6,7 +6,7 @@
 import fox.io;
 import fox.io.loading;
 import fox.core.image;
-import fox.core.types.circular_buffer;
+import fox.core.types;
 import fox.core.time;
 import fox.core.transform;
 import fox.window;
@@ -18,6 +18,7 @@ import fox.input;
 import fox.rendering;
 import fox.rendering.light;
 import fox.rendering.base.utility;
+import fox.rendering.material;
 
 using namespace fox;
 
