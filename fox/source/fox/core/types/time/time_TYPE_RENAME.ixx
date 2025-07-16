@@ -1,8 +1,6 @@
-module;
-
-#include <stdafx.hpp>
-
 export module fox.core.types.time;
+
+import std;
 
 import fox.core.types.fundamental;
 

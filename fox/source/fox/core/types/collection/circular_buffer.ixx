@@ -2,10 +2,7 @@ export module fox.core.types.circular_buffer;
 
 import std;
 
-import fox.core.types.fundamental;
 import fox.core.types.common;
-
-import vendor.glm;
 
 export namespace fox
 {
