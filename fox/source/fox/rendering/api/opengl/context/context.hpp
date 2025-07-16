@@ -1,6 +1,8 @@
 #pragma once
 
-#include <fox/rendering/api/opengl/opengl.hpp>
+import std;
+
+import fox.rendering.api.opengl;
 
 namespace fox::gfx::api::gl
 {

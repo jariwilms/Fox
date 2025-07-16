@@ -5,8 +5,7 @@
 #include <fox/rendering/api/opengl/buffer/buffer.hpp>
 
 import fox.rendering.layout;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+import fox.rendering.api.opengl;
 
 namespace fox::gfx::api::gl
 {

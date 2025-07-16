@@ -1,10 +1,10 @@
 #pragma once
 
 #include <stdafx.hpp>
-
-#include <fox/rendering/api/opengl/opengl.hpp>
+#include <glad/gl.h>
 #include <fox/rendering/base/shader/shader.hpp>
 
+import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.mapping;
 import fox.rendering.api.opengl.object;
 

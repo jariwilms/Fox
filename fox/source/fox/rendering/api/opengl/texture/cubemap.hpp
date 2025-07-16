@@ -1,11 +1,11 @@
 #pragma once
 
-#include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/api/opengl/texture/texture.hpp>
 #include <fox/rendering/base/texture/cubemap.hpp>
 
 import fox.core.image;
 import fox.core.types.math;
+import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.mapping;
 import fox.rendering.api.opengl.object;
 

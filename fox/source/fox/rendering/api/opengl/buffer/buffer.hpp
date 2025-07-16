@@ -1,12 +1,10 @@
 #pragma once
 
-#include <stdafx.hpp>
-
-#include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/base/buffer/buffer.hpp>
 
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
+import std;
+
+import fox.rendering.api.opengl;
 
 namespace fox::gfx::api::gl
 {

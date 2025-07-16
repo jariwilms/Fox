@@ -2,12 +2,12 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/api/opengl/render_buffer/render_buffer.hpp>
 #include <fox/rendering/api/opengl/texture/cubemap.hpp>
 #include <fox/rendering/api/opengl/texture/texture.hpp>
 #include <fox/rendering/base/frame_buffer/frame_buffer.hpp>
 
+import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.mapping;
 import fox.rendering.api.opengl.object;
 

@@ -2,10 +2,10 @@
 
 #include <stdafx.hpp>
 
-#include <fox/rendering/api/opengl/opengl.hpp>
 #include <fox/rendering/base/texture/texture.hpp>
 
 import fox.math.texture;
+import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.mapping;
 import fox.rendering.api.opengl.object;
 

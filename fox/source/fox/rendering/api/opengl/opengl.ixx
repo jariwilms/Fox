@@ -1,19 +1,20 @@
-#pragma once
+module;
 
 #include <stdafx.hpp>
-
 #include <glad/gl.h>
 
-import fox.rendering.api.opengl.flags;
-import fox.rendering.api.opengl.types;
-import fox.rendering.api.opengl.utility;
-import fox.rendering.api.opengl.concepts;
-import fox.rendering.api.opengl.mapping;
-import fox.rendering.api.opengl.object;
-import fox.rendering.api.opengl.parameters;
-import fox.rendering.api.opengl.structures;
+export module fox.rendering.api.opengl;
 
-namespace fox::gfx::api::gl
+export import fox.rendering.api.opengl.concepts;
+export import fox.rendering.api.opengl.flags;
+export import fox.rendering.api.opengl.mapping;
+export import fox.rendering.api.opengl.object;
+export import fox.rendering.api.opengl.parameters;
+export import fox.rendering.api.opengl.structures;
+export import fox.rendering.api.opengl.types;
+export import fox.rendering.api.opengl.utility;
+
+export namespace fox::gfx::api::gl
 {
     //OpenGL C++ Wrapper Library
     //
