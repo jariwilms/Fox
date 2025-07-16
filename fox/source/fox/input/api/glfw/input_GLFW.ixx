@@ -1,10 +1,8 @@
-module;
-
-#include <glfw/glfw3.h>
-
 export module fox.input.api.glfw;
 
 import std;
+
+import <glfw/glfw3.h>;
 
 import fox.core.types;
 import fox.input.code.button;

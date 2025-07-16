@@ -17,6 +17,7 @@ import fox.core.utility;
 import fox.math;
 import fox.rendering.texture;
 import fox.rendering.model;
+import fox.rendering.layout;
 
 namespace fox::io
 {
