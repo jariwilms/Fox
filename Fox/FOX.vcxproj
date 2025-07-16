@@ -232,6 +232,7 @@
     <ClCompile Include="source\fox\window\api\glfw\window_GLFW.ixx" />
     <ClCompile Include="source\fox\window\base\window_BASE.ixx" />
     <ClCompile Include="source\fox\window\window_W.ixx" />
+    <ClCompile Include="source\vendor\entt\entt.ixx" />
     <ClCompile Include="source\vendor\glad\glad.ixx" />
     <ClCompile Include="source\vendor\glm\glm.ixx" />
     <ClCompile Include="source\vendor\nlohmann\nlohmann.ixx" />

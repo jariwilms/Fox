@@ -2,7 +2,7 @@ export module fox.ecs.components.relationship;
 
 import std;
 
-import fox.core.types.ecs;
+import fox.core.types;
 
 export namespace fox
 {
