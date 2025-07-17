@@ -1,36 +1,37 @@
 #pragma once
 
 import std;
-import <fox/rendering/api/api.hpp>;
-import fox.core.types.fundamental;
-import fox.core.types.common;
-import fox.ecs.component;
-import fox.core.types.math;
-import fox.ecs.components.mesh_filter;
-import fox.ecs.components.relationship;
 import fox.core.time;
 import fox.core.transform;
+import fox.core.types.common;
+import fox.core.types.fundamental;
+import fox.core.types.math;
 import fox.core.utility;
-import fox.math;
+import fox.ecs.component;
+import fox.ecs.components.mesh_filter;
+import fox.ecs.components.relationship;
 import fox.input;
-import fox.rendering.uniform;
-import fox.rendering;
+import fox.math;
+import fox.rendering.api;
+import fox.rendering.base.pipeline;
+import fox.rendering.base.shader;
+import fox.rendering.base.utility;
+import fox.rendering.buffer;
 import fox.rendering.cubemap;
-import fox.rendering.texture;
+import fox.rendering.frame_buffer;
+import fox.rendering.geometry;
 import fox.rendering.material;
 import fox.rendering.mesh;
 import fox.rendering.model;
-import fox.rendering.render_buffer;
 import fox.rendering.pipeline;
-import fox.rendering.shader;
+import fox.rendering.render_buffer;
 import fox.rendering.render_info;
-import fox.rendering.geometry;
-import fox.rendering.frame_buffer;
-import fox.rendering.base.utility;
-import fox.rendering.base.pipeline;
-import fox.rendering.base.shader;
+import fox.rendering.shader;
+import fox.rendering.texture;
+import fox.rendering.uniform;
 import fox.rendering.vertex_array;
-import fox.rendering.buffer;
+import fox.rendering;
+import fox.rendering.api.gl;
 
 namespace fox::gfx::api
 {
@@ -632,7 +633,7 @@ namespace fox::gfx::api
         std::shared_ptr<gfx::UniformBuffer<unf::Light>>                    lightUniform_{};
         std::shared_ptr<gfx::UniformArrayBuffer<unf::SSAOSample, 64u>>     ssaoSampleUniform_{};
         std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    pipelines_{};
-        gl::float32_t                                                      shadowFarPlane_{ 100.0f };
+        fox::float32_t                                                     shadowFarPlane_{ 100.0f };
         gfx::RenderInfo                                                    renderInfo_{};
     };
 }

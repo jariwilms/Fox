@@ -3,8 +3,8 @@ export module fox.rendering.vertex_array;
 import std;
 import fox.core.types;
 import fox.core.meta;
+import fox.rendering.api;
 import fox.rendering.layout;
-import <fox/rendering/api/api.hpp>;
 import fox.rendering.buffer;
 
 export namespace fox::gfx

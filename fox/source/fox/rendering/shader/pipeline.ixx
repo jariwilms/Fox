@@ -1,13 +1,9 @@
-module;
-
-#include <fox/rendering/api/api.hpp>
-
 export module fox.rendering.pipeline;
 
 import std;
-
 import fox.core.meta;
 import fox.core.types;
+import fox.rendering.api;
 import fox.rendering.shader;
 
 export namespace fox::gfx

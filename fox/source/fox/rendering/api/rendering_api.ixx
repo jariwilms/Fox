@@ -1,4 +1,4 @@
-#pragma once
+export module fox.rendering.api;
 
 import std;
 import fox.core.meta;
@@ -6,7 +6,7 @@ import fox.core.types;
 import fox.core.utility;
 import fox.rendering.api.gl;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     namespace impl
     {

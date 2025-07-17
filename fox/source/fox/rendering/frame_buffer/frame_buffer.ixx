@@ -1,12 +1,9 @@
-module;
-
-#include <fox/rendering/api/api.hpp>
-
 export module fox.rendering.frame_buffer;
 
 import std;
-
+import fox.core.meta;
 import fox.core.types;
+import fox.rendering.api;
 import fox.rendering.cubemap;
 import fox.rendering.texture;
 import fox.rendering.render_buffer;

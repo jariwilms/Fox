@@ -1,12 +1,10 @@
-module;
-
-#include <fox/rendering/api/api.hpp>
-
 export module fox.rendering.cubemap;
 
 import std;
 import fox.core.image;
+import fox.core.meta;
 import fox.core.types;
+import fox.rendering.api;
 import fox.rendering.base.cubemap;
 
 export namespace fox::gfx

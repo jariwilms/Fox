@@ -3,7 +3,7 @@ export module fox.rendering.buffer;
 import std;
 import fox.core.types;
 import fox.core.meta;
-import <fox/rendering/api/api.hpp>;
+import fox.rendering.api;
 
 export namespace fox::gfx
 {
