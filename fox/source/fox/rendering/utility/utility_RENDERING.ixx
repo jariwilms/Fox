@@ -1,19 +1,17 @@
-export module fox.rendering.base.utility;
+export module fox.rendering.utility;
 
 import std;
-
 import fox.io;
-import fox.io.loading;
 import fox.rendering.shader;
 
-export namespace fox::gfx::api
+export namespace fox::gfx::utl
 {
-    inline auto shaders_from_source()
+    auto shaders_from_source()
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
     template<typename Shader>
-    inline auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& fragment)
+    auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& fragmentFile = io::load(fragment);
@@ -25,7 +23,7 @@ export namespace fox::gfx::api
         };
     }
     template<typename Shader>
-    inline auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& geometry, const std::filesystem::path& fragment)
+    auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& geometry, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& geometryFile = io::load(geometry);
