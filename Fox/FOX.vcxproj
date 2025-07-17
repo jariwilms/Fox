@@ -99,21 +99,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="source\fox\io\import\model\model_importer.hpp" />
-    <ClInclude Include="source\fox\rendering\api\api.hpp" />
-    <ClInclude Include="source\fox\rendering\api\opengl\frame_buffer\frame_buffer.hpp" />
-    <ClInclude Include="source\fox\rendering\api\opengl\gl.hpp" />
-    <ClInclude Include="source\fox\rendering\buffer\Buffer.hpp" />
-    <ClInclude Include="source\fox\rendering\buffer\vertex_array.hpp" />
-    <ClInclude Include="source\fox\rendering\renderer\opengl_renderer.hpp" />
-    <ClInclude Include="source\fox\rendering\renderer\render_mode.hpp" />
-    <ClInclude Include="source\fox\rendering\renderer\renderer.hpp" />
-    <ClInclude Include="source\stdafx.hpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="source\fox\config\config.ixx" />
     <ClCompile Include="source\fox\core\data\data.ixx" />
-    <ClCompile Include="source\fox\core\data\rendering\material_DATA.ixx" />
+    <ClCompile Include="source\fox\core\data\rendering\material_data.ixx" />
     <ClCompile Include="source\fox\core\enumeration\enumeration.ixx" />
     <ClCompile Include="source\fox\core\image\image.ixx" />
     <ClCompile Include="source\fox\core\json\json.ixx" />
@@ -159,6 +147,7 @@
     <ClCompile Include="source\fox\io\filesystem\directory.ixx" />
     <ClCompile Include="source\fox\io\filesystem\entry.ixx" />
     <ClCompile Include="source\fox\io\filesystem\file.ixx" />
+    <ClCompile Include="source\fox\io\import\model\model_importer.ixx" />
     <ClCompile Include="source\fox\io\io.ixx" />
     <ClCompile Include="source\fox\io\loading.ixx" />
     <ClCompile Include="source\fox\math\constants\constants.ixx" />
@@ -186,6 +175,8 @@
     <ClCompile Include="source\fox\rendering\api\opengl\core\structures_OPENGL.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\core\types_OPENGL.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\core\utility_OPENGL.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\frame_buffer\frame_buffer_OPENGL.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\gl.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\opengl.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\query\query_OPENGL.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\render_buffer\render_buffer_OPENGL.ixx" />
@@ -195,6 +186,7 @@
     <ClCompile Include="source\fox\rendering\api\opengl\shader\shader_OPENGL.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\texture\cubemap_OPENGL.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\texture\texture_OPENGL.ixx" />
+    <ClCompile Include="source\fox\rendering\api\rendering_api.ixx" />
     <ClCompile Include="source\fox\rendering\api\vulkan\vk.ixx" />
     <ClCompile Include="source\fox\rendering\api\vulkan\vulkan.ixx" />
     <ClCompile Include="source\fox\rendering\base\buffer\buffer_BASE.ixx" />
@@ -206,9 +198,10 @@
     <ClCompile Include="source\fox\rendering\base\sampler\sampler_BASE.ixx" />
     <ClCompile Include="source\fox\rendering\base\shader\pipeline_BASE.ixx" />
     <ClCompile Include="source\fox\rendering\base\shader\shader_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\shader\utility_BASE.ixx" />
     <ClCompile Include="source\fox\rendering\base\texture\cubemap_BASE.ixx" />
     <ClCompile Include="source\fox\rendering\base\texture\texture_BASE.ixx" />
+    <ClCompile Include="source\fox\rendering\buffer\buffer.ixx" />
+    <ClCompile Include="source\fox\rendering\buffer\vertex_array.ixx" />
     <ClCompile Include="source\fox\rendering\camera\camera.ixx" />
     <ClCompile Include="source\fox\rendering\frame_buffer\frame_buffer.ixx" />
     <ClCompile Include="source\fox\rendering\geometry\data\data_GEOMETRY.ixx" />
@@ -221,12 +214,16 @@
     <ClCompile Include="source\fox\rendering\post_processing\post_processing.ixx" />
     <ClCompile Include="source\fox\rendering\render_buffer\render_buffer.ixx" />
     <ClCompile Include="source\fox\rendering\render_info\render_info.ixx" />
+    <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.ixx" />
+    <ClCompile Include="source\fox\rendering\renderer\render_mode.ixx" />
+    <ClCompile Include="source\fox\rendering\renderer\renderer.ixx" />
     <ClCompile Include="source\fox\rendering\rendering.ixx" />
     <ClCompile Include="source\fox\rendering\shader\pipeline.ixx" />
     <ClCompile Include="source\fox\rendering\shader\shader.ixx" />
     <ClCompile Include="source\fox\rendering\texture\cubemap.ixx" />
     <ClCompile Include="source\fox\rendering\texture\texture.ixx" />
     <ClCompile Include="source\fox\rendering\uniform\uniform.ixx" />
+    <ClCompile Include="source\fox\rendering\utility\utility_RENDERING.ixx" />
     <ClCompile Include="source\fox\scene\actor.ixx" />
     <ClCompile Include="source\fox\scene\scene.ixx" />
     <ClCompile Include="source\fox\window\api\api_WINDOW.ixx" />
