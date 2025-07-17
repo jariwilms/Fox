@@ -15,7 +15,7 @@ auto importer = assimp::importer{};
 
 export namespace assimp
 {
-    auto read_file        (const std::filesystem::path& path, processing_flags flags) -> assimp::scene
+    auto read_file        (const std::filesystem::path& path, processing_flags flags) -> const assimp::scene&
     {
         const auto* aiScene = ::importer.ReadFile(path.string(), std::to_underlying(flags));
 
@@ -23,9 +23,9 @@ export namespace assimp
         if (!aiScene->mFlags & std::to_underlying(assimp::scene_flags::incomplete)) throw std::runtime_error{ "Scene is incomplete!"    };
         if (!aiScene->mRootNode                                                   ) throw std::runtime_error{ "Scene has no root node!" };
 
-        return assimp::scene{ aiScene };
+        return *aiScene;
     }
-    auto load_scene       (const std::filesystem::path& path) -> assimp::scene
+    auto load_scene       (const std::filesystem::path& path) -> const assimp::scene&
     {
         return read_file(path, 
             assimp::processing_flags::calculate_tangent_space  | 

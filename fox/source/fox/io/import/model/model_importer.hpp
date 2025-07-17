@@ -1,9 +1,6 @@
 #pragma once
 
 import std;
-import <assimp/importer.hpp>;
-import <assimp/postprocess.h>;
-import <assimp/scene.h>;
 import fox.core.image;
 import fox.core.types;
 import fox.core.utility;
@@ -17,19 +14,13 @@ import fox.rendering.model;
 import fox.rendering.texture;
 import <fox/rendering/buffer/buffer.hpp>;
 import <fox/rendering/buffer/vertex_array.hpp>;
+import vendor.assimp;
 
 namespace fox::io
 {
     class ModelImporter
     {
     public:
-        enum class TextureType
-        {
-            Albedo, 
-            Normal, 
-            MetallicRoughness, 
-        };
-
         static void init()
         {
             defaultAlbedoTexture_ = io::load<io::Asset::Texture2D>("textures/albedo.png");
@@ -43,17 +34,17 @@ namespace fox::io
             const auto  modelPath      = fox::io::root / path;
             const auto  modelDirectory = modelPath.parent_path();
 
-            const auto& aiScene        = load_scene(modelPath);
+            const auto& aiScene        = assimp::load_scene(modelPath);
 
 
 
-            std::ranges::for_each(std::span<const aiMesh    * const>{ aiScene.mMeshes   , aiScene.mNumMeshes    }, [&](const auto* aiMesh    )
+            std::ranges::for_each(std::span<const assimp::mesh    * const>{ aiScene.mMeshes   , aiScene.mNumMeshes    }, [&](const auto* aiMesh    )
                 {
-                    auto aiPositions     = std::span<const aiVector3D>{ aiMesh->mVertices        , aiMesh->mNumVertices };
-                    auto aiNormals       = std::span<const aiVector3D>{ aiMesh->mNormals         , aiMesh->mNumVertices };
-                    auto aiTangents      = std::span<const aiVector3D>{ aiMesh->mTangents        , aiMesh->mNumVertices };
-                    auto aiTexCoords     = std::span<const aiVector3D>{ aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
-                    auto aiFaces         = std::span<const aiFace    >{ aiMesh->mFaces           , aiMesh->mNumFaces    };
+                    auto aiPositions     = std::span<const assimp::vector_3d>{ aiMesh->mVertices        , aiMesh->mNumVertices };
+                    auto aiNormals       = std::span<const assimp::vector_3d>{ aiMesh->mNormals         , aiMesh->mNumVertices };
+                    auto aiTangents      = std::span<const assimp::vector_3d>{ aiMesh->mTangents        , aiMesh->mNumVertices };
+                    auto aiTexCoords     = std::span<const assimp::vector_3d>{ aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
+                    auto aiFaces         = std::span<const assimp::face     >{ aiMesh->mFaces           , aiMesh->mNumFaces    };
 
                     auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return std::bit_cast<fox::Vector3f>(position);                            }) | std::ranges::to<std::vector>();
                     auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return std::bit_cast<fox::Vector3f>(normal  );                            }) | std::ranges::to<std::vector>();
@@ -81,12 +72,12 @@ namespace fox::io
 
                     model->meshes.emplace_back(std::move(std::make_shared<gfx::Mesh>(vertexArray)));
                 });
-            std::ranges::for_each(std::span<const aiMaterial* const>{ aiScene.mMaterials, aiScene.mNumMaterials }, [&](const auto* aiMaterial)
+            std::ranges::for_each(std::span<const assimp::material* const>{ aiScene.mMaterials, aiScene.mNumMaterials }, [&](const auto* aiMaterial)
                 {
                     auto material    = std::make_shared<gfx::Material>();
-                    material->albedo = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::Albedo           ).value_or(defaultAlbedoTexture_);
-                    material->normal = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::Normal           ).value_or(defaultNormalTexture_);
-                    material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, TextureType::MetallicRoughness).value_or(defaultARMTexture_   );
+                    material->albedo = get_assimp_texture(modelDirectory, *aiMaterial, assimp::texture_type::albedo            ).value_or(defaultAlbedoTexture_);
+                    material->normal = get_assimp_texture(modelDirectory, *aiMaterial, assimp::texture_type::normal            ).value_or(defaultNormalTexture_);
+                    material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, assimp::texture_type::metallic_roughness).value_or(defaultARMTexture_   );
 
                     model->materials.emplace_back(std::move(material));
                 });
@@ -104,63 +95,22 @@ namespace fox::io
         }
 
     private:
-        static auto load_scene        (const std::filesystem::path& path) -> const aiScene&
+        static auto get_assimp_texture(const std::filesystem::path& path, const assimp::material& aiMaterial, assimp::texture_type type) -> std::optional<std::shared_ptr<gfx::Texture2D>>
         {
-            const auto* aiScene = importer_.ReadFile(path.string(), 
-                aiProcess_CalcTangentSpace      | //Calculate tangents and bitangents
-                aiProcess_FindInvalidData       | //Removes/fixes invalid mesh data
-                aiProcess_FixInfacingNormals    | //Inverts inwards facing normals
-                aiProcess_GenBoundingBoxes      | //Generates AABB's for each mesh
-                aiProcess_GenSmoothNormals      | //Generate normals for all faces of all meshes
-                aiProcess_GenUVCoords           | //Converts non UV-mappings to texture coordinates channels
-                aiProcess_ImproveCacheLocality  | //Reorder triangles for better vertex cache locality
-                aiProcess_JoinIdenticalVertices | //Let each mesh contain unique vertices
-                aiProcess_OptimizeGraph         | //Nodes without animations, bones etc. are collapsed and joined
-                aiProcess_OptimizeMeshes        | //Reduces the number of meshes
-                aiProcess_SortByPType           | //Split meshes with >1 primitive type into submeshes
-                aiProcess_SplitLargeMeshes      | //Split up larges meshes into smaller meshes
-                aiProcess_TransformUVCoords     | //Applies per-texture UV transformations
-                aiProcess_Triangulate             //Split up faces with >3 indices into triangles
-            );
-
-            if (!aiScene)                                     throw std::runtime_error{ "Failed to create scene!" };
-            if ( aiScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) throw std::runtime_error{ "Scene is not complete!"  };
-            if (!aiScene->mRootNode)                          throw std::runtime_error{ "Scene has no root node!" };
-
-            return *aiScene;
-        }
-        static auto get_assimp_texture(const std::filesystem::path& path, const aiMaterial& aiMaterial, TextureType type) -> std::optional<std::shared_ptr<gfx::Texture2D>>
-        {
-            auto to_assimp_type = [](TextureType type)
-                {
-                    switch (type)
-                    {
-                        case TextureType::Albedo:            return aiTextureType_DIFFUSE;
-                        case TextureType::Normal:            return aiTextureType_NORMALS;
-                        case TextureType::MetallicRoughness: return aiTextureType_METALNESS;
-
-                        default: throw std::invalid_argument{ "Invalid texture type!" };
-                    }
-                };
-
-            auto aiTextureType = to_assimp_type(type);
-            if (fox::compare<std::greater>(aiMaterial.GetTextureCount(aiTextureType), fox::uint32_t{ 0u }))
+            if (fox::compare<std::greater>(assimp::get_texture_count(aiMaterial, type), fox::uint32_t{ 0u }))
             {
-                auto aiTextureName = aiString{};
-                auto aiReturn      = aiMaterial.GetTexture(aiTextureType, fox::uint32_t{ 0u }, &aiTextureName);
-
-                if (aiReturn == AI_SUCCESS) return io::load<io::Asset::Texture2D>(path / aiTextureName.C_Str());
+                if (auto result = assimp::get_texture(aiMaterial, type); result) return io::load<io::Asset::Texture2D>(path / result.value());
             }
 
-            return {};
+            return std::nullopt;
         };
-        static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t index, const aiScene& aiScene, const aiNode& currentAiNode)
+        static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t index, const assimp::scene& aiScene, const assimp::node& currentAiNode)
         {
             auto& currentNode = model->nodes.at(index);
             currentNode.transform = fox::Transform::from_matrix(math::transpose(std::bit_cast<const fox::Matrix4f>(currentAiNode.mTransformation)));
 
             auto aiMeshes   = std::span<const fox::uint32_t>{ currentAiNode.mMeshes  , currentAiNode.mNumMeshes   };
-            auto aiChildren = std::span<const aiNode* const>{ currentAiNode.mChildren, currentAiNode.mNumChildren };
+            auto aiChildren = std::span<const assimp::node* const>{ currentAiNode.mChildren, currentAiNode.mNumChildren };
 
             std::ranges::for_each(aiMeshes  , [&](fox::uint32_t index)
                 {
@@ -172,7 +122,7 @@ namespace fox::io
 
                     model->nodes.at(index).children.emplace_back(childNodeIndex);
                 });
-            std::ranges::for_each(aiChildren, [&](const aiNode* const node )
+            std::ranges::for_each(aiChildren, [&](const assimp::node* const node )
                 {
                     const auto& childNodeIndex = model->nodes.size();
                     auto& child          = model->nodes.emplace_back(gfx::Model::Node{});
@@ -183,7 +133,7 @@ namespace fox::io
                 });
         }
 
-        static inline Assimp::Importer                importer_;
+        //static inline Assimp::Importer                importer_;
         static inline std::shared_ptr<gfx::Texture2D> defaultAlbedoTexture_;
         static inline std::shared_ptr<gfx::Texture2D> defaultNormalTexture_;
         static inline std::shared_ptr<gfx::Texture2D> defaultARMTexture_;
