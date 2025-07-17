@@ -64,6 +64,9 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <BuildStlModules>true</BuildStlModules>
+      <ModuleOutputFile>$(IntDir)%(RelativeDir)</ModuleOutputFile>
+      <ModuleDependenciesFile>$(IntDir)%(RelativeDir)</ModuleDependenciesFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,6 +91,9 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <BuildStlModules>true</BuildStlModules>
+      <ModuleOutputFile>$(IntDir)%(RelativeDir)</ModuleOutputFile>
+      <ModuleDependenciesFile>$(IntDir)%(RelativeDir)</ModuleDependenciesFile>
+      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -101,11 +107,11 @@
   <ItemGroup>
     <ClCompile Include="source\fox\config\config.ixx" />
     <ClCompile Include="source\fox\core\data\data.ixx" />
-    <ClCompile Include="source\fox\core\data\rendering\material_data.ixx" />
+    <ClCompile Include="source\fox\core\data\rendering\material.ixx" />
     <ClCompile Include="source\fox\core\enumeration\enumeration.ixx" />
     <ClCompile Include="source\fox\core\image\image.ixx" />
     <ClCompile Include="source\fox\core\json\json.ixx" />
-    <ClCompile Include="source\fox\core\memory\adapter\no_init_adapter.ixx" />
+    <ClCompile Include="source\fox\core\memory\adapter\no_init.ixx" />
     <ClCompile Include="source\fox\core\meta\concepts\concepts.ixx" />
     <ClCompile Include="source\fox\core\meta\meta.ixx" />
     <ClCompile Include="source\fox\core\time\time.ixx" />
@@ -116,17 +122,19 @@
     <ClCompile Include="source\fox\core\types\domain\domain.ixx" />
     <ClCompile Include="source\fox\core\types\ecs\ecs.ixx" />
     <ClCompile Include="source\fox\core\types\fundamental\fundamental.ixx" />
-    <ClCompile Include="source\fox\core\types\math\linear_algebra\matrix_type.ixx" />
-    <ClCompile Include="source\fox\core\types\math\linear_algebra\quaternion_type.ixx" />
-    <ClCompile Include="source\fox\core\types\math\linear_algebra\vector_type.ixx" />
-    <ClCompile Include="source\fox\core\types\math\math_type.ixx" />
-    <ClCompile Include="source\fox\core\types\rendering\rendering_TYPE.ixx" />
-    <ClCompile Include="source\fox\core\types\time\time_TYPE_RENAME.ixx" />
+    <ClCompile Include="source\fox\core\types\math\linear_algebra\matrix.ixx" />
+    <ClCompile Include="source\fox\core\types\math\linear_algebra\quaternion.ixx" />
+    <ClCompile Include="source\fox\core\types\math\linear_algebra\vector.ixx" />
+    <ClCompile Include="source\fox\core\types\math\math.ixx" />
+    <ClCompile Include="source\fox\core\types\rendering\rendering.ixx" />
+    <ClCompile Include="source\fox\core\types\time\time.ixx">
+      <ObjectFileName>$(IntDir)\time1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\core\types\types.ixx" />
     <ClCompile Include="source\fox\core\types\uuid\uuid.ixx" />
     <ClCompile Include="source\fox\core\types\window\window.ixx" />
     <ClCompile Include="source\fox\core\utility\utility.ixx" />
-    <ClCompile Include="source\fox\ecs\api\ecs_api.ixx" />
+    <ClCompile Include="source\fox\ecs\api\api.ixx" />
     <ClCompile Include="source\fox\ecs\components\component.ixx" />
     <ClCompile Include="source\fox\ecs\components\components.ixx" />
     <ClCompile Include="source\fox\ecs\components\custom\mesh_filter.ixx" />
@@ -135,101 +143,181 @@
     <ClCompile Include="source\fox\ecs\registry.ixx" />
     <ClCompile Include="source\fox\ecs\system\render_system.ixx" />
     <ClCompile Include="source\fox\ecs\system\system.ixx" />
-    <ClCompile Include="source\fox\input\api\glfw\input_glfw.ixx" />
-    <ClCompile Include="source\fox\input\api\input_api.ixx" />
+    <ClCompile Include="source\fox\input\api\api.ixx">
+      <ObjectFileName>$(IntDir)\api1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\input\api\glfw\input.ixx" />
     <ClCompile Include="source\fox\input\code\button.ixx" />
     <ClCompile Include="source\fox\input\code\controller.ixx" />
     <ClCompile Include="source\fox\input\code\key.ixx" />
     <ClCompile Include="source\fox\input\code\modifier.ixx" />
     <ClCompile Include="source\fox\input\context\context.ixx" />
-    <ClCompile Include="source\fox\input\input.ixx" />
+    <ClCompile Include="source\fox\input\input.ixx">
+      <ObjectFileName>$(IntDir)\input1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\input\mapping\mapping.ixx" />
     <ClCompile Include="source\fox\io\filesystem\directory.ixx" />
     <ClCompile Include="source\fox\io\filesystem\entry.ixx" />
     <ClCompile Include="source\fox\io\filesystem\file.ixx" />
-    <ClCompile Include="source\fox\io\import\model\model_importer.ixx" />
+    <ClCompile Include="source\fox\io\import\model\importer.ixx" />
     <ClCompile Include="source\fox\io\io.ixx" />
     <ClCompile Include="source\fox\io\loading.ixx" />
     <ClCompile Include="source\fox\math\constants\constants.ixx" />
     <ClCompile Include="source\fox\math\graph\graph.ixx" />
-    <ClCompile Include="source\fox\math\linear_algebra\matrix_math.ixx" />
-    <ClCompile Include="source\fox\math\linear_algebra\projection_math.ixx" />
-    <ClCompile Include="source\fox\math\linear_algebra\quaternion_math.ixx" />
-    <ClCompile Include="source\fox\math\linear_algebra\vector_math.ixx" />
-    <ClCompile Include="source\fox\math\math.ixx" />
-    <ClCompile Include="source\fox\math\texture\texture_math.ixx" />
+    <ClCompile Include="source\fox\math\linear_algebra\matrix.ixx">
+      <ObjectFileName>$(IntDir)\matrix1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\math\linear_algebra\projection.ixx" />
+    <ClCompile Include="source\fox\math\linear_algebra\quaternion.ixx">
+      <ObjectFileName>$(IntDir)\quaternion1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\math\linear_algebra\vector.ixx">
+      <ObjectFileName>$(IntDir)\vector1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\math\math.ixx">
+      <ObjectFileName>$(IntDir)\math1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\math\texture\texture.ixx" />
     <ClCompile Include="source\fox\math\trigonometry\trigonometry.ixx" />
     <ClCompile Include="source\fox\physics\bounding_volume\aabb.ixx" />
     <ClCompile Include="source\fox\physics\physics.ixx" />
     <ClCompile Include="source\fox\random\random.ixx" />
+    <ClCompile Include="source\fox\rendering\api\api.ixx">
+      <ObjectFileName>$(IntDir)\api2.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\api\directx\directx.ixx" />
     <ClCompile Include="source\fox\rendering\api\directx\dx.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\buffer\buffer_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\buffer\vertex_array_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\context\context_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\concepts_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\flags_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\mapping_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\object_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\parameters_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\structures_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\types_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\core\utility_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\frame_buffer\frame_buffer_OPENGL.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\buffer\buffer.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\buffer\vertex_array.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\context\context.ixx">
+      <ObjectFileName>$(IntDir)\context1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\api\opengl\core\concepts.ixx">
+      <ObjectFileName>$(IntDir)\concepts1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\api\opengl\core\flags.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\core\mapping.ixx">
+      <ObjectFileName>$(IntDir)\mapping1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\api\opengl\core\object.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\core\parameters.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\core\structures.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\core\types.ixx">
+      <ObjectFileName>$(IntDir)\types1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\api\opengl\core\utility.ixx">
+      <ObjectFileName>$(IntDir)\utility1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\api\opengl\frame_buffer\frame_buffer.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\gl.ixx" />
     <ClCompile Include="source\fox\rendering\api\opengl\opengl.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\query\query_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\render_buffer\render_buffer_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\render_state\render_state_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\sampler\sampler_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\shader\pipeline_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\shader\shader_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\texture\cubemap_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\opengl\texture\texture_OPENGL.ixx" />
-    <ClCompile Include="source\fox\rendering\api\rendering_api.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\query\query.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\render_buffer\render_buffer.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\render_state\render_state.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\sampler\sampler.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\shader\pipeline.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\shader\shader.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\texture\cubemap.ixx" />
+    <ClCompile Include="source\fox\rendering\api\opengl\texture\texture.ixx">
+      <ObjectFileName>$(IntDir)\texture1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\api\vulkan\vk.ixx" />
     <ClCompile Include="source\fox\rendering\api\vulkan\vulkan.ixx" />
-    <ClCompile Include="source\fox\rendering\base\buffer\buffer_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\buffer\vertex_array_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\frame_buffer\frame_buffer_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\query\query_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\render_buffer\render_buffer_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\render_state\render_state_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\sampler\sampler_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\shader\pipeline_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\shader\shader_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\texture\cubemap_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\base\texture\texture_BASE.ixx" />
-    <ClCompile Include="source\fox\rendering\buffer\buffer.ixx" />
-    <ClCompile Include="source\fox\rendering\buffer\vertex_array.ixx" />
+    <ClCompile Include="source\fox\rendering\base\buffer\buffer.ixx">
+      <ObjectFileName>$(IntDir)\buffer1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\buffer\vertex_array.ixx">
+      <ObjectFileName>$(IntDir)\vertex_array1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\frame_buffer\frame_buffer.ixx">
+      <ObjectFileName>$(IntDir)\frame_buffer1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\query\query.ixx">
+      <ObjectFileName>$(IntDir)\query1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\render_buffer\render_buffer.ixx">
+      <ObjectFileName>$(IntDir)\render_buffer1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\render_state\render_state.ixx">
+      <ObjectFileName>$(IntDir)\render_state1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\sampler\sampler.ixx">
+      <ObjectFileName>$(IntDir)\sampler1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\shader\pipeline.ixx">
+      <ObjectFileName>$(IntDir)\pipeline1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\shader\shader.ixx">
+      <ObjectFileName>$(IntDir)\shader1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\texture\cubemap.ixx">
+      <ObjectFileName>$(IntDir)\cubemap1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\base\texture\texture.ixx">
+      <ObjectFileName>$(IntDir)\texture2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\buffer\buffer.ixx">
+      <ObjectFileName>$(IntDir)\buffer2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\buffer\vertex_array.ixx">
+      <ObjectFileName>$(IntDir)\vertex_array2.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\camera\camera.ixx" />
-    <ClCompile Include="source\fox\rendering\frame_buffer\frame_buffer.ixx" />
-    <ClCompile Include="source\fox\rendering\geometry\data\data_GEOMETRY.ixx" />
+    <ClCompile Include="source\fox\rendering\frame_buffer\frame_buffer.ixx">
+      <ObjectFileName>$(IntDir)\frame_buffer2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\geometry\data\data.ixx">
+      <ObjectFileName>$(IntDir)\data1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\geometry\geometry.ixx" />
     <ClCompile Include="source\fox\rendering\layout\layout.ixx" />
     <ClCompile Include="source\fox\rendering\light\light.ixx" />
-    <ClCompile Include="source\fox\rendering\material\material.ixx" />
+    <ClCompile Include="source\fox\rendering\material\material.ixx">
+      <ObjectFileName>$(IntDir)\material1.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\mesh\mesh.ixx" />
     <ClCompile Include="source\fox\rendering\model\model.ixx" />
     <ClCompile Include="source\fox\rendering\post_processing\post_processing.ixx" />
-    <ClCompile Include="source\fox\rendering\render_buffer\render_buffer.ixx" />
+    <ClCompile Include="source\fox\rendering\render_buffer\render_buffer.ixx">
+      <ObjectFileName>$(IntDir)\render_buffer2.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\render_info\render_info.ixx" />
     <ClCompile Include="source\fox\rendering\renderer\opengl_renderer.ixx" />
     <ClCompile Include="source\fox\rendering\renderer\render_mode.ixx" />
     <ClCompile Include="source\fox\rendering\renderer\renderer.ixx" />
-    <ClCompile Include="source\fox\rendering\rendering.ixx" />
-    <ClCompile Include="source\fox\rendering\shader\pipeline.ixx" />
-    <ClCompile Include="source\fox\rendering\shader\shader.ixx" />
-    <ClCompile Include="source\fox\rendering\texture\cubemap.ixx" />
-    <ClCompile Include="source\fox\rendering\texture\texture.ixx" />
+    <ClCompile Include="source\fox\rendering\rendering.ixx">
+      <ObjectFileName>$(IntDir)\rendering1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\shader\pipeline.ixx">
+      <ObjectFileName>$(IntDir)\pipeline2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\shader\shader.ixx">
+      <ObjectFileName>$(IntDir)\shader2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\texture\cubemap.ixx">
+      <ObjectFileName>$(IntDir)\cubemap2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\rendering\texture\texture.ixx">
+      <ObjectFileName>$(IntDir)\texture3.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\rendering\uniform\uniform.ixx" />
-    <ClCompile Include="source\fox\rendering\utility\utility_RENDERING.ixx" />
+    <ClCompile Include="source\fox\rendering\utility\utility.ixx">
+      <ObjectFileName>$(IntDir)\utility2.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\fox\scene\actor.ixx" />
     <ClCompile Include="source\fox\scene\scene.ixx" />
-    <ClCompile Include="source\fox\window\api\api_WINDOW.ixx" />
-    <ClCompile Include="source\fox\window\api\glfw\window_GLFW.ixx" />
-    <ClCompile Include="source\fox\window\base\window_BASE.ixx" />
-    <ClCompile Include="source\fox\window\window_W.ixx" />
+    <ClCompile Include="source\fox\window\api\api.ixx">
+      <ObjectFileName>$(IntDir)\api3.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\window\api\glfw\window.ixx">
+      <ObjectFileName>$(IntDir)\window1.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\window\base\window.ixx">
+      <ObjectFileName>$(IntDir)\window2.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="source\fox\window\window.ixx">
+      <ObjectFileName>$(IntDir)\window3.obj</ObjectFileName>
+    </ClCompile>
     <ClCompile Include="source\vendor\assimp\assimp.ixx" />
     <ClCompile Include="source\vendor\assimp\assimp_types.ixx" />
     <ClCompile Include="source\vendor\entt\entt.ixx" />
