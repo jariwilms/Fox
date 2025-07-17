@@ -2,7 +2,6 @@ module;
 
 #include <fox/rendering/buffer/Buffer.hpp>
 #include <fox/rendering/buffer/vertex_array.hpp>
-#include <fox/io/import/model/model_importer.hpp>
 
 export module fox.rendering.geometry;
 
@@ -12,6 +11,7 @@ import fox.core.types;
 import fox.rendering.mesh;
 import fox.rendering.layout;
 import fox.rendering.geometry.data;
+import fox.io.model_importer;
 
 export namespace fox::gfx::geometry
 {

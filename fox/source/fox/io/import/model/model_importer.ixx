@@ -1,10 +1,9 @@
-#pragma once
+export module fox.io.model_importer;
 
 import std;
 import fox.core.image;
 import fox.core.types;
 import fox.core.utility;
-import fox.io.loading;
 import fox.io;
 import fox.math;
 import fox.rendering.layout;
@@ -16,7 +15,7 @@ import <fox/rendering/buffer/buffer.hpp>;
 import <fox/rendering/buffer/vertex_array.hpp>;
 import vendor.assimp;
 
-namespace fox::io
+export namespace fox::io
 {
     class ModelImporter
     {

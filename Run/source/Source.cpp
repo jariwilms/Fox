@@ -1,5 +1,4 @@
 #include <stdafx.hpp>
-#include <fox/io/import/model/model_importer.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
 #include <entt/entt.hpp>
 
@@ -19,6 +18,7 @@ import fox.rendering;
 import fox.rendering.light;
 import fox.rendering.base.utility;
 import fox.rendering.material;
+import fox.io.model_importer;
 
 using namespace fox;
 
