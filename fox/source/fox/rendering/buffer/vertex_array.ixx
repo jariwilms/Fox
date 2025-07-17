@@ -1,15 +1,13 @@
-#pragma once
+export module fox.rendering.vertex_array;
 
-#include <stdafx.hpp>
-
-#include <fox/rendering/api/api.hpp>
-#include <fox/rendering/buffer/buffer.hpp>
-
-import fox.core.types.common;
-import fox.core.types.fundamental;
+import std;
+import fox.core.types;
+import fox.core.meta;
 import fox.rendering.layout;
+import <fox/rendering/api/api.hpp>;
+import <fox/rendering/buffer/buffer.hpp>;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     class VertexArray
     {

@@ -1,11 +1,8 @@
-module;
-
-#include <fox/rendering/buffer/vertex_array.hpp>
-
 export module fox.rendering.mesh;
 
 import std;
-import fox.core.types.common;
+import fox.core.types;
+import fox.rendering.vertex_array;
 
 export namespace fox::gfx
 {
