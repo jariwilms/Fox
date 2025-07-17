@@ -23,5 +23,5 @@ export namespace fox::input::api
     using handler_t = glfw::InputHandler;
 #endif
 
-    inline std::shared_ptr<api::handler_t> handler;
+    auto handler = std::shared_ptr<api::handler_t>{};
 }

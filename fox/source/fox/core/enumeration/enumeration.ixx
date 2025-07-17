@@ -1,7 +1,6 @@
 export module fox.core.enumeration;
 
 import std;
-
 import fox.core.types;
 
 export namespace fox

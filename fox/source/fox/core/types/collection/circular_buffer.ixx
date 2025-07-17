@@ -1,7 +1,6 @@
 export module fox.core.types.circular_buffer;
 
 import std;
-
 import fox.core.types.common;
 
 export namespace fox

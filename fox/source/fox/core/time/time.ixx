@@ -1,13 +1,12 @@
 export module fox.core.time;
 
 import std;
-
 import fox.core.types;
 
-fox::time_point_t now;
-fox::time_point_t before;
-fox::time_point_t epoch;
-fox::delta_t      delta;
+auto now    = fox::time_point_t{};
+auto before = fox::time_point_t{};
+auto epoch  = fox::time_point_t{};
+auto delta  = fox::delta_t     {};
 
 export namespace fox::time
 {

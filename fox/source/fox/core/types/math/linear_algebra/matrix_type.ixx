@@ -1,7 +1,6 @@
 export module fox.core.types.math.linear_algebra.matrix;
 
 import fox.core.types.fundamental;
-
 import vendor.glm;
 
 export namespace fox

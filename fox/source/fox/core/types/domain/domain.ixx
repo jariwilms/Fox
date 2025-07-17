@@ -1,7 +1,6 @@
 export module fox.core.types.domain;
 
 import std;
-
 import fox.core.types.common;
 import fox.core.types.fundamental;
 import fox.core.types.math.linear_algebra.vector;
@@ -19,8 +18,7 @@ export namespace fox
 		T min;
 		T max;
 	};
-
-	struct     range_t
+	struct range_t
 	{
 		range_t(fox::count_t count = {}, fox::index_t index = {})
 			: count{ count }, index{ index } {}
@@ -40,7 +38,6 @@ export namespace fox
 		fox::size_t   size;
 		fox::offset_t offset;
 	};
-
 	template<typename T, fox::uint32_t N>
 	struct region_t
 	{

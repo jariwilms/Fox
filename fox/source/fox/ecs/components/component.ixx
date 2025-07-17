@@ -1,7 +1,6 @@
 export module fox.ecs.component;
 
 import std;
-
 import fox.ecs.entity;
 
 export namespace fox::ecs

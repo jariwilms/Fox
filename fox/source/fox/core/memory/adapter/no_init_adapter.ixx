@@ -1,7 +1,6 @@
 export module fox.core.memory.adapter.no_init;
 
 import std;
-
 import fox.core.types;
 
 export namespace fox::memory

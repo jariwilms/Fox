@@ -1,7 +1,6 @@
 export module fox.ecs.components.mesh_filter;
 
 import std;
-
 import fox.rendering.material;
 import fox.rendering.mesh;
 

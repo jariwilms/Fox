@@ -1,7 +1,6 @@
 export module fox.core.types.uuid;
 
 import std;
-
 import fox.core.types.fundamental;
 
 export namespace fox

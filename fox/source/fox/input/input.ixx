@@ -6,7 +6,6 @@ export import fox.input.code.key;
 export import fox.input.code.modifier;
 
 import std;
-
 import fox.core.types;
 
 export namespace fox::input
@@ -64,4 +63,3 @@ export namespace fox::input
         return api::handler->scroll_wheel_delta();
     }
 }
-

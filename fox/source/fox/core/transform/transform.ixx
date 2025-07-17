@@ -1,7 +1,6 @@
 export module fox.core.transform;
 
 import std;
-
 import fox.core.types;
 import fox.math;
 

@@ -1,5 +1,4 @@
 export module fox.core.types.math;
-
 export import fox.core.types.math.linear_algebra.matrix;
 export import fox.core.types.math.linear_algebra.quaternion;
 export import fox.core.types.math.linear_algebra.vector;

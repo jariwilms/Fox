@@ -1,5 +1,4 @@
 export module fox.core.types;
-
 export import fox.core.types.alias;
 export import fox.core.types.circular_buffer;
 export import fox.core.types.common;

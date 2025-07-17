@@ -1,10 +1,8 @@
 export module fox.core.image;
 
 import std;
-
 import fox.config;
 import fox.core.types;
-
 import vendor.stb;
 
 export namespace fox

@@ -1,7 +1,6 @@
 export module fox.core.types.time;
 
 import std;
-
 import fox.core.types.fundamental;
 
 export namespace fox

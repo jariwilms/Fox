@@ -1,14 +1,13 @@
 export module fox.input.api.glfw;
 
 import std;
-
 import <glfw/glfw3.h>;
-
 import fox.core.types;
 import fox.input.code.button;
 import fox.input.code.controller;
 import fox.input.code.key;
 import fox.input.code.modifier;
+//import vendor.glfw;
 
 export namespace fox::input::api::glfw
 {

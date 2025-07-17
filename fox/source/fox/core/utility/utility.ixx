@@ -1,7 +1,6 @@
 export module fox.core.utility;
 
 import std;
-
 import fox.core.types;
 
 export namespace fox
