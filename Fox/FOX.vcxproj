@@ -138,6 +138,7 @@
     <ClCompile Include="source\fox\core\types\uuid\uuid.ixx" />
     <ClCompile Include="source\fox\core\types\window\window.ixx" />
     <ClCompile Include="source\fox\core\utility\utility.ixx" />
+    <ClCompile Include="source\fox\ecs\api\ecs_api.ixx" />
     <ClCompile Include="source\fox\ecs\components\component.ixx" />
     <ClCompile Include="source\fox\ecs\components\components.ixx" />
     <ClCompile Include="source\fox\ecs\components\custom\mesh_filter.ixx" />
@@ -167,7 +168,7 @@
     <ClCompile Include="source\fox\math\linear_algebra\quaternion_math.ixx" />
     <ClCompile Include="source\fox\math\linear_algebra\vector_math.ixx" />
     <ClCompile Include="source\fox\math\math.ixx" />
-    <ClCompile Include="source\fox\math\texture\math_texture.ixx" />
+    <ClCompile Include="source\fox\math\texture\texture_math.ixx" />
     <ClCompile Include="source\fox\math\trigonometry\trigonometry.ixx" />
     <ClCompile Include="source\fox\physics\bounding_volume\aabb.ixx" />
     <ClCompile Include="source\fox\physics\physics.ixx" />
@@ -232,6 +233,8 @@
     <ClCompile Include="source\fox\window\api\glfw\window_GLFW.ixx" />
     <ClCompile Include="source\fox\window\base\window_BASE.ixx" />
     <ClCompile Include="source\fox\window\window_W.ixx" />
+    <ClCompile Include="source\vendor\assimp\assimp.ixx" />
+    <ClCompile Include="source\vendor\assimp\assimp_types.ixx" />
     <ClCompile Include="source\vendor\entt\entt.ixx" />
     <ClCompile Include="source\vendor\glad\glad.ixx" />
     <ClCompile Include="source\vendor\glfw\glfw.ixx" />
