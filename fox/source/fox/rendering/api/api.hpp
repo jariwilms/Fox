@@ -1,11 +1,10 @@
 #pragma once
 
-#include <fox/rendering/api/opengl/gl.hpp>
-
 import std;
 import fox.core.meta;
 import fox.core.types;
 import fox.core.utility;
+import fox.rendering.api.gl;
 
 namespace fox::gfx
 {
