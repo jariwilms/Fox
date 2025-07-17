@@ -1,7 +1,6 @@
 export module fox.io.filesystem.file;
 
 import std;
-
 import fox.core.memory.adapter.no_init;
 import fox.core.types;
 import fox.core.utility;

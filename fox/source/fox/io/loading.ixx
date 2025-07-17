@@ -1,7 +1,6 @@
 export module fox.io.loading;
 
 import std;
-
 import fox.core.image;
 import fox.io.filesystem.directory;
 import fox.io.filesystem.entry;

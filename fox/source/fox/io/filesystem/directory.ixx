@@ -1,7 +1,6 @@
 export module fox.io.filesystem.directory;
 
 import std;
-
 import fox.io.filesystem.entry;
 import fox.io.filesystem.file;
 
