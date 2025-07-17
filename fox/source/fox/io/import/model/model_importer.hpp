@@ -1,23 +1,22 @@
 #pragma once
 
-#include <stdafx.hpp>
-
-#include <assimp/importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-
-#include <fox/rendering/buffer/buffer.hpp>
-#include <fox/rendering/buffer/vertex_array.hpp>
-
-import fox.io;
-import fox.io.loading;
+import std;
+import <assimp/importer.hpp>;
+import <assimp/postprocess.h>;
+import <assimp/scene.h>;
 import fox.core.image;
 import fox.core.types;
 import fox.core.utility;
+import fox.io.loading;
+import fox.io;
 import fox.math;
-import fox.rendering.texture;
-import fox.rendering.model;
 import fox.rendering.layout;
+import fox.rendering.material;
+import fox.rendering.mesh;
+import fox.rendering.model;
+import fox.rendering.texture;
+import <fox/rendering/buffer/buffer.hpp>;
+import <fox/rendering/buffer/vertex_array.hpp>;
 
 namespace fox::io
 {
@@ -40,7 +39,7 @@ namespace fox::io
 
         static auto import2            (const std::filesystem::path& path) -> std::shared_ptr<gfx::Model>
         {
-            auto  model          = std::make_shared<gfx::Model>();
+                  auto  model          = std::make_shared<gfx::Model>();
             const auto  modelPath      = fox::io::root / path;
             const auto  modelDirectory = modelPath.parent_path();
 
