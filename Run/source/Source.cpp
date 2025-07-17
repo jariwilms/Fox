@@ -18,6 +18,7 @@ import fox.rendering.light;
 import fox.rendering.base.utility;
 import fox.rendering.material;
 import fox.io.model_importer;
+import fox.rendering.geometry;
 
 using namespace fox;
 

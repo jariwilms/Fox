@@ -1,4 +1,4 @@
-#pragma once
+export module fox.rendering.renderer.opengl;
 
 import std;
 import fox.core.time;
@@ -33,7 +33,7 @@ import fox.rendering.vertex_array;
 import fox.rendering;
 import fox.rendering.api.gl;
 
-namespace fox::gfx::api
+export namespace fox::gfx::api
 {
     class OpenGLRenderer
     {
