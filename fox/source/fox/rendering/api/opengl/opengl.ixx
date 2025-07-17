@@ -16,17 +16,17 @@ export import fox.rendering.api.opengl.utility;
 
 export namespace fox::gfx::api::gl
 {
-    //OpenGL C++ Wrapper Library
+    //C++ OpenGL Wrapper Library
     //
-    //This library provides a more modern, robust, and user-friendly interface for OpenGL.
+    //This library provides a modern, robust, and user-friendly interface for OpenGL.
     //Its primary goals are to:
     //    * Offer a more intuitive and correct interface for development.
-    //    * Encapsulate existing OpenGL functions, simplifying the integration of custom logic.
+    //    * Encapsulate existing OpenGL functions, simplifying integration of custom logic.
     //    * Implement state caching to eliminate redundant driver calls.
     //    * Ensure compile-time and runtime safety through comprehensive input validation.
     //
-    //For consistency, functions are organized based on their order in the official OpenGL 4.6 Core Profile Specification.
-    //https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
+    //Functions are organized based on their appearance in the OpenGL 4.6 Core Profile Specification.
+    //Reference: https://registry.khronos.org/OpenGL/specs/gl/glspec46.core.pdf
 
 
     
