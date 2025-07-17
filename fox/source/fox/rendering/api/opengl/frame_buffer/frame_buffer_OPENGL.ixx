@@ -1,4 +1,4 @@
-#pragma once
+export module fox.rendering.api.opengl.frame_buffer;
 
 import std;
 import fox.rendering.api.opengl;
@@ -7,7 +7,7 @@ import fox.rendering.api.opengl.render_buffer;
 import fox.rendering.api.opengl.texture;
 import fox.rendering.base.frame_buffer;
 
-namespace fox::gfx::api::gl
+export namespace fox::gfx::api::gl
 {
     class FrameBuffer : public gl::Object
     {
@@ -252,7 +252,7 @@ namespace fox::gfx::api::gl
         FrameBufferMultisample(const gl::Vector2u& dimensions, gl::uint32_t samples)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples } {}
-        FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
+        FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, gl::uint32_t samples)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples }
         {
