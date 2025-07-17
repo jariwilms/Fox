@@ -31,7 +31,7 @@ static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& ac
 
     if (node.mesh)     mc.mesh     = model.meshes   .at(*node.mesh    );
     if (node.material) mc.material = model.materials.at(*node.material);
-
+    
     std::ranges::for_each(node.children, [&](auto child)
         {
             auto& childActor = scene.create_actor();
