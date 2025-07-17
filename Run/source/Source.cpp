@@ -1,26 +1,18 @@
 import std;
-import fox.io;
-import fox.io.loading;
 import fox.core.image;
-import fox.core.types;
 import fox.core.time;
 import fox.core.transform;
-import fox.window;
-import fox.scene;
-import fox.scene.actor;
+import fox.core.types;
 import fox.ecs.components;
 import fox.ecs.registry;
 import fox.input;
-import fox.rendering;
-import fox.rendering.light;
-import fox.rendering.base.utility;
-import fox.rendering.material;
 import fox.io.model_importer;
-import fox.rendering.geometry;
+import fox.io;
+import fox.rendering;
+import fox.scene.actor;
+import fox.scene;
+import fox.window;
 import fox.rendering.renderer;
-import fox.rendering.model;
-import fox.rendering.cubemap;
-import fox.rendering.render_info;
 
 using namespace fox;
 

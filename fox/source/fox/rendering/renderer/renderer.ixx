@@ -2,11 +2,8 @@ export module fox.rendering.renderer;
 
 import std;
 import fox.core.transform;
-import fox.rendering.material;
-import fox.rendering.mesh;
-import fox.rendering.model;
-import fox.rendering.render_info;
 import fox.rendering.renderer.opengl;
+import fox.rendering;
 
 auto renderer_ = std::unique_ptr<fox::gfx::api::OpenGLRenderer>{};
 
