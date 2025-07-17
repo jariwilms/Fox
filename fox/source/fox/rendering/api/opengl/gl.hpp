@@ -1,9 +1,8 @@
 #pragma once
 
-#include <stdafx.hpp>
-
 #include <fox/rendering/api/opengl/frame_buffer/frame_buffer.hpp>
 
+import std;
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.buffer;
 import fox.rendering.api.opengl.context;

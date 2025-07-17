@@ -1,10 +1,9 @@
 #pragma once
 
-#include <stdafx.hpp>
-
+import std;
 import fox.rendering.api.opengl;
-import fox.rendering.api.opengl.render_buffer;
 import fox.rendering.api.opengl.cubemap;
+import fox.rendering.api.opengl.render_buffer;
 import fox.rendering.api.opengl.texture;
 import fox.rendering.base.frame_buffer;
 

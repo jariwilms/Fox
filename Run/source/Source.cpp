@@ -1,7 +1,6 @@
-#include <stdafx.hpp>
 #include <fox/rendering/renderer/renderer.hpp>
-#include <entt/entt.hpp>
 
+import std;
 import fox.io;
 import fox.io.loading;
 import fox.core.image;
@@ -217,7 +216,7 @@ int main(int argc, char** argv)
 
 
 
-    return EXIT_SUCCESS;
+    return 0;
 
 
 

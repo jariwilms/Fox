@@ -1,13 +1,7 @@
-//module;
-
 #pragma once
 
-#include <stdafx.hpp>
-#include <fox/rendering/api/api.hpp>
-//export module fox.rendering.renderer.opengl;
-
-//import std;
-
+import std;
+import <fox/rendering/api/api.hpp>;
 import fox.core.types.fundamental;
 import fox.core.types.common;
 import fox.ecs.component;

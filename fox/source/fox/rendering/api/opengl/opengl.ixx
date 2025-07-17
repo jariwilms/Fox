@@ -1,10 +1,7 @@
-module;
-
-#include <stdafx.hpp>
-#include <glad/gl.h>
-
 export module fox.rendering.api.opengl;
 
+import std;
+import <glad/gl.h>;
 export import fox.rendering.api.opengl.concepts;
 export import fox.rendering.api.opengl.flags;
 export import fox.rendering.api.opengl.mapping;
