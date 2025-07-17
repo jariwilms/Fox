@@ -5,7 +5,7 @@ module;
 export module fox.rendering.cubemap;
 
 import std;
-
+import fox.core.image;
 import fox.core.types;
 import fox.rendering.base.cubemap;
 
