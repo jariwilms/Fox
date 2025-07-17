@@ -1,39 +1,37 @@
-#pragma once
+export module fox.rendering.renderer;
 
 import std;
-
 import fox.core.transform;
 import fox.rendering.material;
 import fox.rendering.mesh;
+import fox.rendering.model;
 import fox.rendering.render_info;
 import fox.rendering.renderer.opengl;
-import fox.rendering.model;
 
-auto FUCK = std::unique_ptr<fox::gfx::api::OpenGLRenderer>{};
+auto renderer_ = std::unique_ptr<fox::gfx::api::OpenGLRenderer>{};
 
-namespace fox::gfx::renderer
+export namespace fox::gfx::renderer
 {
     inline void init()
     {
-        FUCK = std::make_unique<fox::gfx::api::OpenGLRenderer>();
+        renderer_ = std::make_unique<fox::gfx::api::OpenGLRenderer>();
     }
 
     inline void start(gfx::RenderInfo renderInfo)
     {
-        FUCK->start(renderInfo);
+        renderer_->start(renderInfo);
     }
     inline void finish()
     {
-        FUCK->finish();
+        renderer_->finish();
     }
 
     inline void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
     {
-        FUCK->render(mesh, material, transform);
+        renderer_->render(mesh, material, transform);
     }
     inline void render_debug(const fox::Transform& transform)
     {
-        FUCK->render_debug(transform);
+        renderer_->render_debug(transform);
     }
-
 }

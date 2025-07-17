@@ -1,5 +1,3 @@
-#include <fox/rendering/renderer/renderer.hpp>
-
 import std;
 import fox.io;
 import fox.io.loading;
@@ -19,6 +17,10 @@ import fox.rendering.base.utility;
 import fox.rendering.material;
 import fox.io.model_importer;
 import fox.rendering.geometry;
+import fox.rendering.renderer;
+import fox.rendering.model;
+import fox.rendering.cubemap;
+import fox.rendering.render_info;
 
 using namespace fox;
 
