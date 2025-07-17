@@ -1,7 +1,6 @@
 export module fox.window;
 
 import std;
-
 import fox.core.types;
 import fox.window.api;
 
