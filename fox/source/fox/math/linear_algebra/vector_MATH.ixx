@@ -1,7 +1,7 @@
 export module fox.math.linear_algebra.vector;
 
+import std;
 import fox.core.types;
-
 import vendor.glm;
 
 export namespace fox::math

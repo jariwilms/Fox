@@ -1,7 +1,6 @@
 export module fox.math.linear_algebra.matrix;
 
 import std;
-
 import fox.core.types;
 import fox.math.linear_algebra.quaternion;
 

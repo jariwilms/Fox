@@ -1,5 +1,4 @@
 export module fox.math;
-
 export import fox.math.constants;
 export import fox.math.graph;
 export import fox.math.linear_algebra.matrix;

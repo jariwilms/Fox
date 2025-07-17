@@ -1,7 +1,6 @@
 export module fox.math.constants;
 
 import std;
-
 import fox.core.types;
 
 export namespace fox::math
