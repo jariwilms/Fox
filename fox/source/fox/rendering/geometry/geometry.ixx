@@ -1,7 +1,3 @@
-module;
-
-#include <fox/rendering/buffer/Buffer.hpp>
-
 export module fox.rendering.geometry;
 
 import std;
@@ -11,6 +7,7 @@ import fox.rendering.mesh;
 import fox.rendering.layout;
 import fox.rendering.geometry.data;
 import fox.io.model_importer;
+import fox.rendering.buffer;
 import fox.rendering.vertex_array;
 
 export namespace fox::gfx::geometry

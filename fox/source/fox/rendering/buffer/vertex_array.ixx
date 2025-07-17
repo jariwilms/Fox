@@ -5,7 +5,7 @@ import fox.core.types;
 import fox.core.meta;
 import fox.rendering.layout;
 import <fox/rendering/api/api.hpp>;
-import <fox/rendering/buffer/buffer.hpp>;
+import fox.rendering.buffer;
 
 export namespace fox::gfx
 {

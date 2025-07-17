@@ -1,8 +1,11 @@
-#pragma once
+export module fox.rendering.buffer;
 
-#include <fox/rendering/api/api.hpp>
+import std;
+import fox.core.types;
+import fox.core.meta;
+import <fox/rendering/api/api.hpp>;
 
-namespace fox::gfx
+export namespace fox::gfx
 {
     template<typename T>
     class VertexBuffer

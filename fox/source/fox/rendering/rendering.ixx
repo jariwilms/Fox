@@ -1,7 +1,6 @@
 module;
 
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/buffer/buffer.hpp>
 
 export module fox.rendering;
 
@@ -18,6 +17,7 @@ import fox.rendering.render_info;
 import fox.rendering.shader;
 import fox.rendering.texture;
 import fox.rendering.uniform;
+import fox.rendering.buffer;
 import fox.rendering.vertex_array;
 
 export namespace fox::gfx

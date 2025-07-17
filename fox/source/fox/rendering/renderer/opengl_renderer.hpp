@@ -4,7 +4,6 @@
 
 #include <stdafx.hpp>
 #include <fox/rendering/api/api.hpp>
-#include <fox/rendering/buffer/buffer.hpp>
 //export module fox.rendering.renderer.opengl;
 
 //import std;
@@ -37,6 +36,7 @@ import fox.rendering.base.utility;
 import fox.rendering.base.pipeline;
 import fox.rendering.base.shader;
 import fox.rendering.vertex_array;
+import fox.rendering.buffer;
 
 namespace fox::gfx::api
 {

@@ -11,7 +11,7 @@ import fox.rendering.material;
 import fox.rendering.mesh;
 import fox.rendering.model;
 import fox.rendering.texture;
-import <fox/rendering/buffer/buffer.hpp>;
+import fox.rendering.buffer;
 import fox.rendering.vertex_array;
 import vendor.assimp;
 
