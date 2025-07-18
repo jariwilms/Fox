@@ -31,9 +31,9 @@ export namespace fox
         enum class Extension
         {
             BMP, 
+            HDR, 
             JPG, 
             PNG, 
-            HDR, 
         };
 
         template<std::ranges::range R>
