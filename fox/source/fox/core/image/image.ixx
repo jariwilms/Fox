@@ -77,28 +77,6 @@ export namespace fox
                         default: throw std::invalid_argument{ "Invalid format!" };
                     }
                 }, format);
-            const auto bpc      = std::invoke([ ](Format format) -> fox::uint32_t
-                {
-                    switch (format)
-                    {
-                        case Format::R8:
-                        case Format::RG8:
-                        case Format::RGB8:
-                        case Format::RGBA8:        return 8u;
-
-                        case Format::R16:
-                        case Format::RG16:
-                        case Format::RGB16:
-                        case Format::RGBA16:
-                        case Format::RGB16_FLOAT:
-                        case Format::RGBA16_FLOAT: return 16u;
-
-                        case Format::RGB32_FLOAT:
-                        case Format::RGBA32_FLOAT: return 32u;
-
-                        default: throw std::invalid_argument{ "Invalid format!" };
-                    };
-                }, format);
             const auto result   = std::invoke([&](Format format)
                 {
                     switch (format)
