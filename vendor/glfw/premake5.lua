@@ -8,7 +8,6 @@ project "GLFW"
 	includedirs
 	{
 		"./", 
-		
 		"%{prj.name}/src", 
 	}
 	
