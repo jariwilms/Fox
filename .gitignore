@@ -2,7 +2,7 @@ bin/
 build/
 doc/temp
 
-**/*.vcxproj
+#**/*.vcxproj
 **/*.vcxproj.filters
 **/*.vcxproj.user
 
