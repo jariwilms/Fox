@@ -45,8 +45,7 @@ static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox:
     return transform_product(scene, rc, tc) * transform;
 }
 
-
-int main(int argc, char** argv)
+int main()
 {
     auto window_ = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
 
@@ -139,9 +138,7 @@ int main(int argc, char** argv)
             {
                 static auto rotation = fox::Vector3f{};
 
-                auto& ct  = observer.get_component<ecs::TransformComponent>().get();
-                const auto& cpr = input::cursor_position_delta() / 10.0f;
-
+                const auto cpr = input::cursor_position_delta() / 10.0f;
                 rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
@@ -212,30 +209,4 @@ int main(int argc, char** argv)
 
 
     return 0;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //fox::Application* ptr;
-    //auto application = std::make_unique<fox::Application>(argc, argv);
-
-    //return application->run();
 }
