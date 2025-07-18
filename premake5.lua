@@ -4,7 +4,7 @@ workspace "Fox Engine"
 	
 	configurations 
 	{ 
-		"Debug"  , 
+		"Debug", 
 		"Release", 
 	}
 	
@@ -163,15 +163,6 @@ project "RUN"
 	includedirs
 	{
 		"fox/source", 
-		
-		"%{includedir.ASSIMP}", 
-		"%{includedir.ENTT}", 
-		"%{includedir.GLAD}", 
-		"%{includedir.GLFW}", 
-		"%{includedir.GLM}", 
-		"%{includedir.JOLT}", 
-		"%{includedir.NLOHMANN}", 
-		"%{includedir.STB}", 
 	}
 	
 	files
