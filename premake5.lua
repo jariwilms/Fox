@@ -21,6 +21,24 @@ workspace "Fox Engine"
 		["STB"     ] = "vendor/stb/include", 
 	}
 
+	filter "system:windows"
+		systemversion "latest"
+	
+	filter "configurations:Debug"
+		runtime   "Debug"
+		symbols   "On"
+		
+		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
+	
+	filter "configurations:Release"
+		runtime   "Release"
+		optimize  "On"
+		
+		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
+		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
+
+
 group "Dependencies"
 	include "vendor/assimp"
 	include "vendor/entt"
@@ -99,25 +117,14 @@ project "FOX"
 		defines
 		{
 			"NOMINMAX", 
-			
 			"FOX_PLATFORM_WINDOWS", 
 		}
 	
 	filter "configurations:Debug"
 		defines   "FOX_DEBUG"
-		runtime   "Debug"
-		symbols   "On"
 		
-		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
-		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
-	
 	filter "configurations:Release"
 		defines   "FOX_RELEASE"
-		runtime   "Release"
-		optimize  "On"
-		
-		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
-		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 
 
 
@@ -193,17 +200,4 @@ project "RUN"
 		"FOX", 
 	}
 	
-	filter "configurations:Debug"
-		runtime   "Debug"
-		symbols   "On"
-		
-		targetdir "%{wks.location}/bin/debug/windows/%{prj.name}"
-		objdir    "%{wks.location}/build/debug/windows/%{prj.name}"
-	
-	filter "configurations:Release"
-		runtime   "Release"
-		optimize  "On"
-		
-		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
-		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 group ""
