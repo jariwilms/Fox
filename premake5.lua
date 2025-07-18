@@ -38,6 +38,28 @@ workspace "Fox Engine"
 		targetdir "%{wks.location}/bin/release/windows/%{prj.name}"
 		objdir    "%{wks.location}/build/release/windows/%{prj.name}"
 
+	--
+	-- @brief Visual Studio: Bugfix for C++ Modules (same module file name per project)
+	-- Credit goes to larioteo
+	-- https://github.com/premake/premake-core/issues/2177
+	--
+	require("vstudio")
+	premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+		local m     = premake.vstudio.vc2010
+		local calls = base(prj)
+		
+		if premake.project.iscpp(prj) and string.find(prj.filename, "FOX") then
+			table.insertafter(calls, premake.xmlDeclaration,  function()
+				premake.w('<ModuleDependenciesFile>$(IntDir)\\%%(RelativeDir)</ModuleDependenciesFile>')
+				premake.w('<ModuleOutputFile>$(IntDir)\\%%(RelativeDir)</ModuleOutputFile>')
+				premake.w('<ObjectFileName>$(IntDir)\\%%(RelativeDir)</ObjectFileName>')
+			end)
+		end
+
+		return calls
+	end)
+
+
 
 group "Dependencies"
 	include "vendor/assimp"
@@ -50,6 +72,8 @@ group "Dependencies"
 	include "vendor/nlohmann"
 	include "vendor/stb"
 group ""
+
+
 
 group "Application"
 project "FOX"
@@ -123,29 +147,6 @@ project "FOX"
 		
 	filter "configurations:Release"
 		defines   "FOX_RELEASE"
-
-
-
---
--- @brief Visual Studio: Bugfix for C++ Modules (same module file name per project)
--- Credit goes to larioteo
--- https://github.com/premake/premake-core/issues/2177
---
-require("vstudio")
-premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
-    local m = premake.vstudio.vc2010
-    local calls = base(prj)
-
-    if premake.project.iscpp(prj) then
-		table.insertafter(calls, premake.xmlDeclaration,  function()
-			premake.w('<ModuleDependenciesFile>$(IntDir)\\%%(RelativeDir)</ModuleDependenciesFile>')
-			premake.w('<ModuleOutputFile>$(IntDir)\\%%(RelativeDir)</ModuleOutputFile>')
-			premake.w('<ObjectFileName>$(IntDir)\\%%(RelativeDir)</ObjectFileName>')
-		end)
-    end
-
-    return calls
-end)
 
 
 
