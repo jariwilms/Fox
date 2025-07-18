@@ -7,7 +7,7 @@ import fox.core.types;
 import fox.core.memory.adapter.no_init;
 import fox.core.utility;
 
-namespace stb
+       namespace stb
 {
     template<typename T>
     void write_function(fox::void_t* context, fox::void_t* data, fox::int32_t size)
