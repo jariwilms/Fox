@@ -66,12 +66,10 @@ project "FOX"
 	defines
 	{
 		'FOX_ENGINE', 
-		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
-		'FOX_ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 		"FOX_MALLOC", 
+		'FOX_ASSET_DIR=R"($(ProjectDir)assets\\.)"', 
 		
 		"GLFW_INCLUDE_NONE", 
-		"GLM_ENABLE_EXPERIMENTAL", 
 	}
 	
 	includedirs
@@ -161,18 +159,6 @@ project "RUN"
 	buildstlmodules  "On"
 	warnings         "Extra"
 	externalwarnings "Off"
-
-	defines
-	{
-		'FOX_ENGINE', 
-		'FOX_PROJECT_DIR=R"($(ProjectDir).)"', 
-		'FOX_ASSET_DIR=R"(C:/Users/jariw/source/repos/Fox/fox/assets)"', 
-		"FOX_MALLOC", 
-
-	
-		"GLFW_INCLUDE_NONE", 
-		"GLM_ENABLE_EXPERIMENTAL", 
-	}
 	
 	includedirs
 	{
