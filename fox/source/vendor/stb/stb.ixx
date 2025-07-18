@@ -96,7 +96,7 @@ export namespace stb
         }
     }
 
-    auto write_bmp_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, fox::Vector2u dimensions) -> std::vector<fox::byte_t>
+    auto write_bmp_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, const fox::Vector2u& dimensions) -> std::vector<fox::byte_t>
     {
         auto vector = std::vector<fox::byte_t>{};
 
@@ -107,7 +107,7 @@ export namespace stb
 
         return vector;
     }
-    auto write_hdr_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, fox::Vector2u dimensions) -> std::vector<fox::float32_t>
+    auto write_hdr_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, const fox::Vector2u& dimensions) -> std::vector<fox::float32_t>
     {
         auto vector = std::vector<fox::float32_t>{};
 
@@ -118,7 +118,7 @@ export namespace stb
 
         return vector;
     }
-    auto write_jpg_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, fox::Vector2u dimensions) -> std::vector<fox::byte_t>
+    auto write_jpg_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, const fox::Vector2u& dimensions) -> std::vector<fox::byte_t>
     {
         auto vector = std::vector<fox::byte_t>{};
 
@@ -129,7 +129,7 @@ export namespace stb
 
         return vector;
     }
-    auto write_png_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, fox::Vector2u dimensions) -> std::vector<fox::byte_t>
+    auto write_png_to_function       (std::span<const fox::byte_t> data, fox::uint32_t channels, const fox::Vector2u& dimensions) -> std::vector<fox::byte_t>
     {
         auto vector = std::vector<fox::byte_t>{};
 
