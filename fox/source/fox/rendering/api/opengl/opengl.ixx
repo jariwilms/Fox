@@ -1626,7 +1626,7 @@ export namespace fox::gfx::api::gl
             gl::to_underlying       (format)      ,
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y));
     }
-    inline void render_buffer_storage_multisample          (gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions, gl::uint8_t samples)
+    inline void render_buffer_storage_multisample          (gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions, gl::uint32_t samples)
     {
         glNamedRenderbufferStorageMultisample(
             gl::to_underlying       (renderBuffer),
@@ -2109,7 +2109,7 @@ export namespace fox::gfx::api::gl
     {
         glClearStencil(static_cast<gl::int32_t>(index));
     }
-    inline void clear_frame_buffer_value                   (gl::handle_t frameBuffer, glp::clear_v parameter, gl::index_t index)
+    inline void clear_frame_buffer_value                   (gl::handle_t frameBuffer, glp::clear_v parameter)
     {
         auto clear_frame_buffer_iv  = [](gl::handle_t frameBuffer, glf::FrameBuffer::Attachment attachment, gl::index_t index, const gl::int32_t* value)
             {
