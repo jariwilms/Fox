@@ -1,6 +1,0 @@
-#include "bindings.spl"
-
-layout(set = 0, binding = CAMERA_BINDING) uniform Camera
-{
-	vec4 position;
-} u_Camera;

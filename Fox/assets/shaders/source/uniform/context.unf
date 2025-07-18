@@ -1,9 +1,0 @@
-#include "bindings.spl"
-
-layout(set = 0, binding = CONTEXT_BINDING) uniform Context
-{
-	vec2  resolution;
-	vec2  mousePosition;
-	float time;
-	float deltaTime;
-} u_Context;
