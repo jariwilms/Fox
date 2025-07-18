@@ -1,0 +1,8 @@
+#include "bindings.spl"
+
+layout(set = 0, binding = MATRICES_BINDING) uniform Matrices
+{
+	mat4 model;
+	mat4 view;
+	mat4 projection;
+} u_Matrices;

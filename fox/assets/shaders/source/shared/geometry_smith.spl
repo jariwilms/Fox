@@ -1,0 +1,18 @@
+#include "constants.spl"
+#include "geometry_schlick_ggx.spl"
+
+#ifndef GEOMETRY_SMITH
+#define GEOMETRY_SMITH
+
+float geometry_smith(vec3 normal, vec3 viewDirection, vec3 lightDirection, float roughness)
+{
+    const float normalDotViewDirection  = max(dot(normal, viewDirection ), 0.0);
+    const float normalDotLightDirection = max(dot(normal, lightDirection), 0.0);
+	
+    const float viewGeometryTerm        = geometry_schlick_ggx(normalDotViewDirection , roughness);
+    const float lightGeometryTerm       = geometry_schlick_ggx(normalDotLightDirection, roughness);
+
+    return viewGeometryTerm * lightGeometryTerm;
+}
+
+#endif

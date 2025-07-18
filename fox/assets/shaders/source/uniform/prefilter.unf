@@ -1,0 +1,7 @@
+#include "bindings.spl"
+
+layout(set = 0, binding = PREFILTER_BINDING) uniform PreFilter
+{
+	uint  resolution;
+	float roughness;
+} u_PreFilter;
