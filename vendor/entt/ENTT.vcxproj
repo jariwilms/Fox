@@ -63,6 +63,9 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
+      <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -83,6 +86,9 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
+      <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

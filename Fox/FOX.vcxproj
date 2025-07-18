@@ -64,9 +64,9 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <BuildStlModules>true</BuildStlModules>
-      <ModuleOutputFile>$(IntDir)%(RelativeDir)</ModuleOutputFile>
-      <ModuleDependenciesFile>$(IntDir)%(RelativeDir)</ModuleDependenciesFile>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
+      <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -91,9 +91,9 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
       <BuildStlModules>true</BuildStlModules>
-      <ModuleOutputFile>$(IntDir)%(RelativeDir)</ModuleOutputFile>
-      <ModuleDependenciesFile>$(IntDir)%(RelativeDir)</ModuleDependenciesFile>
-      <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
+      <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
+      <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
+      <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
