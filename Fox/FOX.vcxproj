@@ -56,7 +56,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
-      <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FOX_ENGINE;FOX_MALLOC;FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\jolt\include;..\vendor\mimalloc\include;..\vendor\nlohmann\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -81,7 +81,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
-      <PreprocessorDefinitions>FOX_ENGINE;FOX_PROJECT_DIR=R"($(ProjectDir).)";FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";FOX_MALLOC;GLFW_INCLUDE_NONE;GLM_ENABLE_EXPERIMENTAL;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FOX_ENGINE;FOX_MALLOC;FOX_ASSET_DIR=R"($(ProjectDir)assets\.)";GLFW_INCLUDE_NONE;NOMINMAX;FOX_PLATFORM_WINDOWS;FOX_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>source;..\vendor\assimp\include;..\vendor\entt\include;..\vendor\glad\include;..\vendor\glfw\include;..\vendor\glm\include;..\vendor\jolt\include;..\vendor\mimalloc\include;..\vendor\nlohmann\include;..\vendor\stb\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
