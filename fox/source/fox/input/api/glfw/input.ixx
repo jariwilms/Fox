@@ -1,13 +1,12 @@
 export module fox.input.api.glfw;
 
 import std;
-import <glfw/glfw3.h>;
 import fox.core.types;
 import fox.input.code.button;
 import fox.input.code.controller;
 import fox.input.code.key;
 import fox.input.code.modifier;
-//import vendor.glfw;
+import vendor.glfw;
 
 export namespace fox::input::api::glfw
 {
@@ -27,10 +26,11 @@ export namespace fox::input::api::glfw
             lastActiveKeys_   .reset();
             activeButtons_    .reset();
             lastActiveButtons_.reset();
-            modifiers_        .reset();
 
             cursorPosition_     = {};
             lastCursorPosition_ = {};
+            scrollWheel_        = {};
+            lastScrollWheel_    = {};
         }
 
         auto any_key_active            ()                     const -> fox::bool_t
@@ -86,47 +86,46 @@ export namespace fox::input::api::glfw
             return lastScrollWheel_ - scrollWheel_;
         }
 
-        void glfw_input_key_callback   (GLFWwindow* window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t mods)
+        void glfw_input_key_callback   (::glfw::window*, input::key_t    key   , fox::int32_t    , fox::int32_t action, input::modifier_t)
         {
             if (std::cmp_less(key, key::min) or std::cmp_greater(key, key::max)) return;
 
-            switch (action)
+            switch (::glfw::input_action{ action })
             {
-                case GLFW_RELEASE: activeKeys_.set(key, fox::False); break;
-                case GLFW_PRESS  : activeKeys_.set(key, fox::True ); break;
-                case GLFW_REPEAT :                                   break;
+                case ::glfw::input_action::release: activeKeys_.set(key, fox::False); break;
+                case ::glfw::input_action::press  : activeKeys_.set(key, fox::True ); break;
+                case ::glfw::input_action::repeat :                                   break;
             }
         }
-        void glfw_input_button_callback(GLFWwindow* window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t mods)
+        void glfw_input_button_callback(::glfw::window*, input::button_t button,                   fox::int32_t action, input::modifier_t)
         {
             if (std::cmp_less(button, button::min) or std::cmp_greater(button, button::max)) return;
 
-            switch (action)
+            switch (::glfw::input_action{ action })
             {
-                case GLFW_RELEASE: activeButtons_.set(button, fox::False); break;
-                case GLFW_PRESS  : activeButtons_.set(button, fox::True ); break;
-                case GLFW_REPEAT :                                         break;
+                case ::glfw::input_action::release: activeButtons_.set(button, fox::False); break;
+                case ::glfw::input_action::press  : activeButtons_.set(button, fox::True ); break;
+                case ::glfw::input_action::repeat :                                         break;
             }
         }
-        void glfw_input_cursor_callback(GLFWwindow* window, fox::float64_t x     , fox::float64_t y                                               )
+        void glfw_input_cursor_callback(::glfw::window*, fox::float64_t  x     , fox::float64_t y                                        )
         {
             cursorPosition_ = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
-        void glfw_input_scroll_callback(GLFWwindow* window, fox::float64_t x     , fox::float64_t y                                               )
+        void glfw_input_scroll_callback(::glfw::window*, fox::float64_t  x     , fox::float64_t y                                        )
         {
             scrollWheel_ = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
     
     protected:
-        std::bitset<key     ::max> activeKeys_{};
-        std::bitset<key     ::max> lastActiveKeys_{};
-        std::bitset<button  ::max> activeButtons_{};
-        std::bitset<button  ::max> lastActiveButtons_{};
-        std::bitset<modifier::max> modifiers_{};
+        std::bitset<key     ::max> activeKeys_;
+        std::bitset<key     ::max> lastActiveKeys_;
+        std::bitset<button  ::max> activeButtons_;
+        std::bitset<button  ::max> lastActiveButtons_;
 
-        fox::Vector2f              cursorPosition_{};
-        fox::Vector2f              lastCursorPosition_{};
-        fox::Vector2f              scrollWheel_{};
-        fox::Vector2f              lastScrollWheel_{};
+        fox::Vector2f              cursorPosition_;
+        fox::Vector2f              lastCursorPosition_;
+        fox::Vector2f              scrollWheel_;
+        fox::Vector2f              lastScrollWheel_;
     };
 }

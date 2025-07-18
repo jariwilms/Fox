@@ -8,12 +8,6 @@ export namespace glfw
 {
     using window = GLFWwindow;
 
-    enum class action
-    {
-        release = GLFW_RELEASE, 
-        press   = GLFW_PRESS  , 
-        repeat  = GLFW_REPEAT , 
-    };
     enum class hint
     {
         context_version_major = GLFW_CONTEXT_VERSION_MAJOR, 
@@ -28,6 +22,12 @@ export namespace glfw
         opengl_core_profile    = GLFW_OPENGL_CORE_PROFILE, 
         opengl_version_major_4 = 4                       ,
         opengl_version_minor_6 = 6                       ,
+    };
+    enum class input_action
+    {
+        release = GLFW_RELEASE, 
+        press   = GLFW_PRESS  , 
+        repeat  = GLFW_REPEAT , 
     };
     enum class result
     {
