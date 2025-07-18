@@ -1,8 +1,11 @@
 project "JOLT"
-	language      "C++"
-	cppdialect    "C++17"
-	kind          "StaticLib"
-	staticruntime "On"
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "StaticLib"
+	staticruntime   "On"
+	enablemodules   "Off"
+	buildstlmodules "Off"
+	warnings        "Off"
 	
 	includedirs
 	{
@@ -14,11 +17,6 @@ project "JOLT"
 		"include/**.h", 
 		"include/**.cpp", 
 		"include/**.inl", 
-	}
-	
-	disablewarnings
-	{
-		6385, 
 	}
 	
 	filter "system:windows"

@@ -1,12 +1,9 @@
 project "GLFW"
 	language      "C"
+	cdialect      "C23"
 	kind          "StaticLib"
 	staticruntime "On"
-	
-	defines
-	{
-		"_CRT_SECURE_NO_WARNINGS", 
-	}
+	warnings      "Off"
 	
 	includedirs
 	{

@@ -55,14 +55,15 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>26827;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <AdditionalIncludeDirectories>include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <EnableModules>false</EnableModules>
+      <BuildStlModules>false</BuildStlModules>
       <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
       <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
@@ -75,8 +76,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>26827;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <AdditionalIncludeDirectories>include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -84,8 +84,10 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <EnableModules>false</EnableModules>
+      <BuildStlModules>false</BuildStlModules>
       <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
       <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>

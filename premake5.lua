@@ -1,24 +1,24 @@
-workspace "fox"
+workspace "Fox Engine"
 	architecture "x64"
 	startproject "RUN"
 	
-	configurations
-	{
-		"Debug", 
+	configurations 
+	{ 
+		"Debug"  , 
 		"Release", 
 	}
 	
 	includedir = 
 	{
-		["ASSIMP"]   = "vendor/assimp/include", 
-		["ENTT"]     = "vendor/entt/include", 
-		["GLAD"]     = "vendor/glad/include", 
-		["GLFW"]     = "vendor/glfw/include", 
-		["GLM"]      = "vendor/glm/include", 
-		["JOLT"]     = "vendor/jolt/include", 
+		["ASSIMP"  ] = "vendor/assimp/include", 
+		["ENTT"    ] = "vendor/entt/include", 
+		["GLAD"    ] = "vendor/glad/include", 
+		["GLFW"    ] = "vendor/glfw/include", 
+		["GLM"     ] = "vendor/glm/include", 
+		["JOLT"    ] = "vendor/jolt/include", 
 		["MIMALLOC"] = "vendor/mimalloc/include", 
 		["NLOHMANN"] = "vendor/nlohmann/include", 
-		["STB"]      = "vendor/stb/include", 
+		["STB"     ] = "vendor/stb/include", 
 	}
 
 group "Dependencies"
@@ -35,12 +35,15 @@ group ""
 
 group "Application"
 project "FOX"
-	location        "FOX"
-	language        "C++"
-	cppdialect      "C++23"
-	kind            "StaticLib"
-	staticruntime   "On"
-	buildstlmodules "On"
+	location         "fox"
+	language         "C++"
+	cppdialect       "C++23"
+	kind             "StaticLib"
+	staticruntime    "On"
+	enablemodules    "On"
+	buildstlmodules  "On"
+	warnings         "Extra"
+	externalwarnings "Off"
 	
 	defines
 	{
@@ -85,7 +88,7 @@ project "FOX"
 		"JOLT", 
 		"MIMALLOC", 
 		"NLOHMANN", 
-		"STB_IMAGE", 
+		"STB", 
 		
 		"opengl32.lib", 
 	}
@@ -142,13 +145,16 @@ end)
 
 
 project "RUN"
-	location        "RUN"
-	language        "C++"
-	cppdialect      "C++23"
-	kind            "ConsoleApp"
-	staticruntime   "On"
-	buildstlmodules "On"
-	
+	location         "run"
+	language         "C++"
+	cppdialect       "C++23"
+	kind             "ConsoleApp"
+	staticruntime    "On"
+	enablemodules    "On"
+	buildstlmodules  "On"
+	warnings         "Extra"
+	externalwarnings "Off"
+
 	defines
 	{
 		'FOX_ENGINE', 

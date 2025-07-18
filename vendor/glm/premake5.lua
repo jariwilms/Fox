@@ -3,8 +3,10 @@ project "GLM"
 	cppdialect      "C++23"
 	kind            "StaticLib"
 	staticruntime   "On"
+	enablemodules   "On"
 	buildstlmodules "On"
-
+	warnings        "Off"
+	
 	defines
 	{
 		"GLM_ENABLE_EXPERIMENTAL", 
@@ -13,7 +15,7 @@ project "GLM"
 		"GLM_EXT_INLINE_NAMESPACE", 
 		"GLM_GTX_INLINE_NAMESPACE", 
 	}
-
+	
 	includedirs
 	{
 		"include", 

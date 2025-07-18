@@ -55,13 +55,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <EnableModules>false</EnableModules>
+      <BuildStlModules>false</BuildStlModules>
       <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
       <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>
@@ -74,8 +75,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <DisableSpecificWarnings>26819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -84,6 +84,8 @@
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
+      <EnableModules>false</EnableModules>
+      <BuildStlModules>false</BuildStlModules>
       <ModuleDependenciesFile>$(IntDir)\%(RelativeDir)</ModuleDependenciesFile>
       <ModuleOutputFile>$(IntDir)\%(RelativeDir)</ModuleOutputFile>
       <ObjectFileName>$(IntDir)\%(RelativeDir)</ObjectFileName>

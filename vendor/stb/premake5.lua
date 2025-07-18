@@ -1,16 +1,16 @@
-project "STB_IMAGE"
+project "STB"
 	language      "C"
+	cdialect      "C23"
 	kind          "StaticLib"
 	staticruntime "On"
+	warnings      "Off"
 	
 	defines 
 	{
-		"_CRT_SECURE_NO_WARNINGS", 
-		
 		"STB_IMAGE_IMPLEMENTATION", 
 		"STB_IMAGE_WRITE_IMPLEMENTATION", 
 	}
-
+	
 	includedirs
 	{
 		"include/stb", 

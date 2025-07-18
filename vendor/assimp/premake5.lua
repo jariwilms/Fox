@@ -1,14 +1,14 @@
 project "ASSIMP"
-	language      "C++"
-	cppdialect    "C++17"
-	kind          "StaticLib"
-	staticruntime "On"
+	language        "C++"
+	cppdialect      "C++17"
+	kind            "StaticLib"
+	staticruntime   "On"
+	enablemodules   "Off"
+	buildstlmodules "Off"
+	warnings        "Off"
 	
 	defines
 	{
-		"_SCL_SECURE_NO_WARNINGS", 
-		"_CRT_SECURE_NO_WARNINGS", 
-		
 		"WIN32", 
 		"_WINDOWS", 
 		"WIN32_LEAN_AND_MEAN", 

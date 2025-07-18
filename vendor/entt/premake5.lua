@@ -1,8 +1,11 @@
 project "ENTT"
-	language      "C++"
-	cppdialect    "C++17"
-	kind          "StaticLib"
-	staticruntime "On"
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "StaticLib"
+	staticruntime   "On"
+	enablemodules   "Off"
+	buildstlmodules "Off"
+	warnings        "Off"
 	
 	includedirs
 	{
@@ -14,11 +17,6 @@ project "ENTT"
 	{
 		"include/**", 
 		"src/**", 
-	}
-	
-	disablewarnings
-	{
-		26827, 
 	}
 	
 	filter "system:windows"

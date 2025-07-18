@@ -1,8 +1,9 @@
 project "MIMALLOC"
-	language      "C++"
-	cppdialect    "C++17"
+	language      "C"
+	cdialect      "C23"
 	kind          "StaticLib"
 	staticruntime "On"
+	warnings      "Off"
 	
 	defines 
 	{
@@ -36,11 +37,6 @@ project "MIMALLOC"
 		"src/segment.c", 
 		"src/segment-map.c", 
 		"src/stats.c", 
-	}
-	
-	disablewarnings
-	{
-		28251, 
 	}
 	
 	filter "system:windows"

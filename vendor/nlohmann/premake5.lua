@@ -1,8 +1,11 @@
 project "NLOHMANN"
-	language      "C++"
-	cppdialect    "C++11"
-	kind          "StaticLib"
-	staticruntime "On"
+	language        "C++"
+	cppdialect      "C++11"
+	kind            "StaticLib"
+	staticruntime   "On"
+	enablemodules   "Off"
+	buildstlmodules "Off"
+	warnings        "Off"
 	
 	includedirs
 	{
@@ -13,11 +16,6 @@ project "NLOHMANN"
 	{
 		"include/nlohmann/json.hpp", 
 		"source/json.cpp", 
-	}
-	
-	disablewarnings
-	{
-		26819, 
 	}
 	
 	filter "system:windows"
