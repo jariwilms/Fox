@@ -8,22 +8,34 @@ export namespace fox
     inline namespace utl
     {
         template<typename T>
-        constexpr auto size_of()
+        constexpr auto byte_size_of()
         {
             return sizeof(T);
         }
         template<typename T>
-        constexpr auto size_of(const T& value)
+        constexpr auto byte_size_of(const T& value)
         {
             return sizeof(value);
         }
+        template<typename T>
+        constexpr auto bit_size_of (const T& value)
+        {
+            return utl::byte_size_of(value) * fox::uint64_t{ 8u };
+        }
+        template<typename T>
+        constexpr auto bit_size_of ()
+        {
+            return utl::byte_size_of<T>() * fox::uint64_t{ 8u };
+        }
         template<typename T, auto MEMBER_PTR>
-        constexpr auto offset_of()
+        constexpr auto offset_of   ()
         {
             return reinterpret_cast<fox::size_t>(
                 &reinterpret_cast<const volatile fox::byte_t&>(
                     ((static_cast<T*>(nullptr))->*MEMBER_PTR)));
         }
+
+
 
         template<template<typename> typename C, typename T, typename U>
         constexpr auto compare(T&& left, U&& right) -> fox::bool_t
@@ -47,6 +59,8 @@ export namespace fox
                 if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::ranges::greater_equal{}(std::forward<T>(left), std::forward<U>(right));
             }
         }
+
+
 
         template<std::ranges::range R>
         auto as_bytes(R&& range) -> std::span<const fox::byte_t>
