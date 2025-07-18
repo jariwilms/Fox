@@ -26,7 +26,7 @@ export namespace fox::gfx::api::gl
 				gl::enable<glf::Feature::DebugOutputSynchronous>();
 
 				gl::debug_message_control (glf::Debug::Source::DontCare, glf::Debug::Type::DontCare, glf::Debug::Severity::DontCare, gl::True);
-				gl::debug_message_callback([](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::sizei_t length, const gl::char_t* message, const gl::void_t* user_param)
+				gl::debug_message_callback([](gl::enum_t source, gl::enum_t type, gl::uint32_t id, gl::enum_t severity, gl::sizei_t length, const gl::char_t* message, const gl::void_t* const)
                     {
                         auto map_source_message   = [](glf::Debug::Source   source  )
                             {

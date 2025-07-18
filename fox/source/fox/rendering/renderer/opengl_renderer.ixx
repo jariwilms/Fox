@@ -24,8 +24,8 @@ export namespace fox::gfx::api
 
 
 
-            const fox::uint32_t multisamples{ 4u };
-            const fox::uint32_t lightCount{ 32u };
+            //const fox::uint32_t multisamples{ 4u };
+            //const fox::uint32_t lightCount{ 32u };
             const fox::Vector2u viewportDimensions { 1280u,  720u };
             const fox::Vector2u shadowMapDimensions{ 2048u, 2048u };
 

@@ -176,7 +176,7 @@ int main()
         gfx::renderer::start(renderInfo);
 
         auto view = registry::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
-        view.each([&](auto entity, const ecs::RelationshipComponent& r, const ecs::TransformComponent& t, const ecs::MeshFilterComponent& m)
+        view.each([&](auto, const ecs::RelationshipComponent& r, const ecs::TransformComponent& t, const ecs::MeshFilterComponent& m)
             {
                 const auto& relationship = r.get();
                 const auto& transform    = t.get();

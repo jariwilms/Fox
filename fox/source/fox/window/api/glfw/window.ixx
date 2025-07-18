@@ -65,7 +65,7 @@ export namespace fox::interface::api::glfw
                 {
                     input::api::handler->glfw_input_scroll_callback(window, x, y);
                 });
-            ::glfw::set_frame_buffer_size_callback(handle_, [](::glfw::window*  window, fox::int32_t   width , fox::int32_t   height  )
+            ::glfw::set_frame_buffer_size_callback(handle_, [](::glfw::window*        , fox::int32_t   width , fox::int32_t   height  )
                 {
                     gl::viewport(gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
                 });

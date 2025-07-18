@@ -124,8 +124,6 @@ export namespace fox::io
             std::ranges::for_each(aiChildren, [&](const assimp::node* const node )
                 {
                     const auto& childNodeIndex = model->nodes.size();
-                    auto& child          = model->nodes.emplace_back(gfx::Model::Node{});
-
                     currentNode.children.emplace_back(childNodeIndex);
 
                     create_nodes(model, childNodeIndex, aiScene, *node);
