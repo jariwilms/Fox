@@ -16,7 +16,7 @@ workspace "Fox Engine"
 		["JOLT"    ] = "vendor/jolt/include", 
 		["MIMALLOC"] = "vendor/mimalloc/include", 
 		["NLOHMANN"] = "vendor/nlohmann/include", 
-		["STB"     ] = "vendor/stb/include", 
+		["STB"     ] = "vendor/stb", 
 	}
 
 	filter "system:windows"
@@ -239,7 +239,37 @@ project "GLM"
 	include "vendor/jolt"
 	include "vendor/mimalloc"
 	include "vendor/nlohmann"
-	include "vendor/stb"
+	
+	
+project "STB"
+	location      "build"
+	language      "C"
+	cdialect      "C23"
+	kind          "StaticLib"
+	staticruntime "On"
+	warnings      "Off"
+	
+	defines 
+	{
+		"STB_IMAGE_IMPLEMENTATION", 
+		"STB_IMAGE_WRITE_IMPLEMENTATION", 
+	}
+	
+	includedirs
+	{
+		"vendor/stb", 
+	}
+	
+	files
+	{
+		"vendor/stb/stb_image.h", 
+		"vendor/stb/stb_image_write.h", 
+		
+		--"%{prj.location}/stb_image.c", 
+	}
+
+
+
 group ""
 
 
