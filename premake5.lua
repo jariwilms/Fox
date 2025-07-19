@@ -199,7 +199,30 @@ project "ASSIMP"
 
 
 
-include "vendor/entt"
+project "ENTT"
+	location        "vcx"
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "StaticLib"
+	staticruntime   "On"
+	enablemodules   "Off"
+	buildstlmodules "Off"
+	warnings        "Off"
+	
+	includedirs
+	{
+		"vendor/entt/single_include", 
+		"vendor/entt/src", 
+	}
+	
+	files
+	{
+		"vendor/entt/single_include/**", 
+		"vendor/entt/src/**", 
+	}
+
+
+
 include "vendor/glad"
 include "vendor/glfw"
 
