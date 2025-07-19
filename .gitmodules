@@ -4,3 +4,6 @@
 [submodule "vendor/assimp"]
 	path = vendor/assimp
 	url = https://github.com/jariwilms/assimp-6.0.2.git
+[submodule "vendor/stb/stb"]
+	path = vendor/stb/stb
+	url = https://github.com/nothings/stb.git
