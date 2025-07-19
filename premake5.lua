@@ -14,7 +14,7 @@ workspace "Fox Engine"
 		["ENTT"    ] = "vendor/entt/include", 
 		["GLAD"    ] = "vendor/glad/include", 
 		["GLFW"    ] = "vendor/glfw/include", 
-		["GLM"     ] = "vendor/glm/include", 
+		["GLM"     ] = "vendor/glm", 
 		["JOLT"    ] = "vendor/jolt/include", 
 		["MIMALLOC"] = "vendor/mimalloc/include", 
 		["NLOHMANN"] = "vendor/nlohmann/include", 
