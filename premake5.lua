@@ -61,7 +61,7 @@ workspace "Fox Engine"
 
 group "Dependencies"
 project "ASSIMP"
-	location        "vendor/assimp"
+	location        "vcx"
 	language        "C++"
 	cppdialect      "C++17"
 	kind            "StaticLib"
@@ -158,43 +158,43 @@ project "ASSIMP"
 	}
 	
 	includedirs {
-		"%{prj.location}", 
-		"%{prj.location}/.", 
-		"%{prj.location}/code", 
-		"%{prj.location}/code/..", 
-		"%{prj.location}/code/../contrib", 
-		"%{prj.location}/code/../contrib/openddlparser/include", 
-		"%{prj.location}/code/../contrib/pugixml/src", 
-		"%{prj.location}/code/../contrib/rapidjson/include", 
-		"%{prj.location}/code/../contrib/unzip", 
-		"%{prj.location}/code/../contrib/utf8cpp/source", 
-		"%{prj.location}/code/../include", 
-		"%{prj.location}/code/../include", 
-		"%{prj.location}/contrib/zlib", 
-		"%{prj.location}/contrib/zlib", 
-		"%{prj.location}/include", 
-		"%{prj.location}/include", 
+		"vendor/assimp", 
+		"vendor/assimp/.", 
+		"vendor/assimp/code", 
+		"vendor/assimp/code/..", 
+		"vendor/assimp/code/../contrib", 
+		"vendor/assimp/code/../contrib/openddlparser/include", 
+		"vendor/assimp/code/../contrib/pugixml/src", 
+		"vendor/assimp/code/../contrib/rapidjson/include", 
+		"vendor/assimp/code/../contrib/unzip", 
+		"vendor/assimp/code/../contrib/utf8cpp/source", 
+		"vendor/assimp/code/../include", 
+		"vendor/assimp/code/../include", 
+		"vendor/assimp/contrib/zlib", 
+		"vendor/assimp/contrib/zlib", 
+		"vendor/assimp/include", 
+		"vendor/assimp/include", 
 	}
 	
 	files {
-		"%{prj.location}/code/AssetLib/STEPParser/**", 
-		"%{prj.location}/code/AssetLib/glTF/**", 
-		"%{prj.location}/code/AssetLib/glTF2/**", 
-		"%{prj.location}/code/AssetLib/glTFCommon/**", 
-		"%{prj.location}/code/CApi/**", 
-		"%{prj.location}/code/Common/**", 
-		"%{prj.location}/code/Geometry/**", 
-		"%{prj.location}/code/Material/**", 
-		"%{prj.location}/code/PostProcessing/**", 
-		"%{prj.location}/contrib/Open3DGC/**", 
-		"%{prj.location}/contrib/clipper/**", 
-		"%{prj.location}/contrib/openddlparser/**", 
-		"%{prj.location}/contrib/poly2tri/**", 
-		"%{prj.location}/contrib/pugixml/**", 
-		"%{prj.location}/contrib/stb/**", 
-		"%{prj.location}/contrib/unzip/**", 
-		"%{prj.location}/include/assimp/**", 
-		"%{prj.location}/include/assimp/Compiler/**", 
+		"vendor/assimp/code/AssetLib/STEPParser/**", 
+		"vendor/assimp/code/AssetLib/glTF/**", 
+		"vendor/assimp/code/AssetLib/glTF2/**", 
+		"vendor/assimp/code/AssetLib/glTFCommon/**", 
+		"vendor/assimp/code/CApi/**", 
+		"vendor/assimp/code/Common/**", 
+		"vendor/assimp/code/Geometry/**", 
+		"vendor/assimp/code/Material/**", 
+		"vendor/assimp/code/PostProcessing/**", 
+		"vendor/assimp/contrib/Open3DGC/**", 
+		"vendor/assimp/contrib/clipper/**", 
+		"vendor/assimp/contrib/openddlparser/**", 
+		"vendor/assimp/contrib/poly2tri/**", 
+		"vendor/assimp/contrib/pugixml/**", 
+		"vendor/assimp/contrib/stb/**", 
+		"vendor/assimp/contrib/unzip/**", 
+		"vendor/assimp/include/assimp/**", 
+		"vendor/assimp/include/assimp/Compiler/**", 
 	}
 
 
@@ -206,7 +206,7 @@ include "vendor/glfw"
 
 
 project "GLM"
-	location        "vendor/glm"
+	location        "vcx"
 	language        "C++"
 	cppdialect      "C++23"
 	kind            "StaticLib"
@@ -224,14 +224,14 @@ project "GLM"
 	}
 	
 	includedirs {
-		"%{prj.location}", 
+		"vendor/glm", 
 	}	
 	
 	files {
-		"%{prj.location}/glm/**.hpp", 
-		"%{prj.location}/glm/**.cpp", 
-		"%{prj.location}/glm/**.inl", 
-		"%{prj.location}/glm/**.ixx", 
+		"vendor/glm/glm/**.hpp", 
+		"vendor/glm/glm/**.cpp", 
+		"vendor/glm/glm/**.inl", 
+		"vendor/glm/glm/**.ixx", 
 	}
 
 
@@ -242,7 +242,7 @@ project "GLM"
 	
 	
 project "STB"
-	location      "build"
+	location      "vcx"
 	language      "C"
 	cdialect      "C23"
 	kind          "StaticLib"
@@ -276,7 +276,7 @@ group ""
 
 group "Application"
 project "FOX"
-	location         "fox"
+	location         "vcx"
 	language         "C++"
 	cppdialect       "C++23"
 	kind             "StaticLib"
@@ -295,7 +295,7 @@ project "FOX"
 	}
 	
 	includedirs {
-		"%{prj.name}/source", 
+		"fox/source", 
 		
 		"%{includedir.ASSIMP}", 
 		"%{includedir.ENTT}", 
@@ -345,7 +345,7 @@ project "FOX"
 
 
 project "RUN"
-	location         "run"
+	location         "vcx"
 	language         "C++"
 	cppdialect       "C++23"
 	kind             "ConsoleApp"
