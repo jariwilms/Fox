@@ -66,7 +66,43 @@ group "Dependencies"
 	include "vendor/entt"
 	include "vendor/glad"
 	include "vendor/glfw"
-	include "vendor/glm"
+
+
+
+project "GLM"
+	location        "vendor/glm"
+	language        "C++"
+	cppdialect      "C++23"
+	kind            "StaticLib"
+	staticruntime   "On"
+	enablemodules   "On"
+	buildstlmodules "On"
+	warnings        "Off"
+	
+	defines
+	{
+		"GLM_ENABLE_EXPERIMENTAL", 
+		
+		"GLM_GTC_INLINE_NAMESPACE", 
+		"GLM_EXT_INLINE_NAMESPACE", 
+		"GLM_GTX_INLINE_NAMESPACE", 
+	}
+	
+	includedirs
+	{
+		"%{prj.location}", 
+	}	
+	
+	files
+	{
+		"%{prj.location}/glm/**.hpp", 
+		"%{prj.location}/glm/**.cpp", 
+		"%{prj.location}/glm/**.inl", 
+		"%{prj.location}/glm/**.ixx", 
+	}
+
+
+
 	include "vendor/jolt"
 	include "vendor/mimalloc"
 	include "vendor/nlohmann"
