@@ -45,9 +45,9 @@ export namespace fox::io
                     auto aiTexCoords     = std::span<const assimp::vector_3d>{ aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
                     auto aiFaces         = std::span<const assimp::face     >{ aiMesh->mFaces           , aiMesh->mNumFaces    };
 
-                    auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return std::bit_cast<fox::Vector3f>(position);                            }) | std::ranges::to<std::vector>();
-                    auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return std::bit_cast<fox::Vector3f>(normal  );                            }) | std::ranges::to<std::vector>();
-                    auto tangentsVector  = aiTangents  | std::views::transform([](const auto& tangent   ) { return std::bit_cast<fox::Vector3f>(tangent );                            }) | std::ranges::to<std::vector>();
+                    auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return fox::Vector3f{ position.x, position.y, position.z };                              }) | std::ranges::to<std::vector>();
+                    auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return fox::Vector3f{ normal  .x, normal  .y, normal  .z };                              }) | std::ranges::to<std::vector>();
+                    auto tangentsVector  = aiTangents  | std::views::transform([](const auto& tangent   ) { return fox::Vector3f{ tangent .x, tangent .y, tangent .z };                              }) | std::ranges::to<std::vector>();
                     auto texCoordsVector = aiTexCoords | std::views::transform([](const auto& coordinate) { return fox::Vector2f{ coordinate.x, coordinate.y };                       }) | std::ranges::to<std::vector>();
                     auto indicesVector   = aiFaces     | std::views::transform([](const auto& face      ) { return std::span<const fox::uint32_t>{ face.mIndices, face.mNumIndices }; })
                         | std::views::join
@@ -106,7 +106,10 @@ export namespace fox::io
         static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t index, const assimp::scene& aiScene, const assimp::node& currentAiNode)
         {
             auto& currentNode = model->nodes.at(index);
-            currentNode.transform = fox::Transform::from_matrix(math::transpose(std::bit_cast<const fox::Matrix4f>(currentAiNode.mTransformation)));
+
+            const auto& c = currentAiNode.mTransformation;
+            auto mymat = fox::Matrix4f{ c.a1, c.a2, c.a3, c.a4, c.b1, c.b2, c.b3, c.b4, c.c1, c.c2, c.c3, c.c4, c.d1, c.d2, c.d3, c.d4, };
+            currentNode.transform = fox::Transform::from_matrix(math::transpose(mymat));
 
             auto aiMeshes   = std::span<const fox::uint32_t>{ currentAiNode.mMeshes  , currentAiNode.mNumMeshes   };
             auto aiChildren = std::span<const assimp::node* const>{ currentAiNode.mChildren, currentAiNode.mNumChildren };
