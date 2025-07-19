@@ -107,9 +107,7 @@ export namespace fox::io
         {
             auto& currentNode = model->nodes.at(index);
 
-            const auto& c = currentAiNode.mTransformation;
-            auto mymat = fox::Matrix4f{ c.a1, c.a2, c.a3, c.a4, c.b1, c.b2, c.b3, c.b4, c.c1, c.c2, c.c3, c.c4, c.d1, c.d2, c.d3, c.d4, };
-            currentNode.transform = fox::Transform::from_matrix(math::transpose(mymat));
+            currentNode.transform = fox::Transform::from_matrix(math::transpose(std::bit_cast<fox::Matrix4f>(currentAiNode.mTransformation)));
 
             auto aiMeshes   = std::span<const fox::uint32_t>{ currentAiNode.mMeshes  , currentAiNode.mNumMeshes   };
             auto aiChildren = std::span<const assimp::node* const>{ currentAiNode.mChildren, currentAiNode.mNumChildren };
