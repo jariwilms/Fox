@@ -1,12 +1,9 @@
-module;
-
-#include <assimp/importer.hpp>
-#include <assimp/postprocess.h>
-#include <assimp/scene.h>
-
 export module vendor.assimp:types;
 
 import std;
+import <assimp/importer.hpp>;
+import <assimp/postprocess.h>;
+import <assimp/scene.h>;
 import fox.core.types;
 
 export namespace assimp

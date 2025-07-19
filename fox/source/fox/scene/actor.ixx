@@ -1,11 +1,7 @@
-module;
-
-#include <entt/entt.hpp>
-
 export module fox.scene.actor;
 
 import std;
-
+import <entt/entt.hpp>;
 import fox.core.types.fundamental;
 import fox.ecs.components;
 import fox.ecs.entity;

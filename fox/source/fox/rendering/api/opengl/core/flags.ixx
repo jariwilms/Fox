@@ -1,11 +1,7 @@
-module;
-
-#include <glad/gl.h>
-
 export module fox.rendering.api.opengl.flags;
 
 import std;
-
+import <glad/gl.h>;
 import fox.rendering.api.opengl.utility;
 import fox.rendering.api.opengl.types;
 

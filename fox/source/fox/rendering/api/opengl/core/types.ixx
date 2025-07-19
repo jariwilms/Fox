@@ -1,11 +1,7 @@
-module;
-
-#include <glad/gl.h>
-
 export module fox.rendering.api.opengl.types;
 
 import std;
-
+import <glad/gl.h>;
 import vendor.glm;
 
 export namespace fox::gfx::api::gl

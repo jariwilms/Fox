@@ -1,11 +1,7 @@
-module;
-
-#include <glad/gl.h>
-
 export module fox.rendering.api.opengl.shader;
 
 import std;
-
+import <glad/gl.h>;
 import fox.rendering.api.opengl;
 import fox.rendering.base.shader;
 
