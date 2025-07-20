@@ -7,7 +7,7 @@ export namespace fox
     class RenderSystem
     {
     public:
-        void update()
+        void update() const
         {
             //start rendering here, iterate all components, then finish as shown in main()
         }

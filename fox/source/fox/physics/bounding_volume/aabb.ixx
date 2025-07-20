@@ -1,6 +1,6 @@
 export module fox.physics.aabb;
 
-//import <jolt/geometry/aabox.h>;
+import vendor.jolt;
 
 export namespace fox::physics
 {
