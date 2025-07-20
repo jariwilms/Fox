@@ -11,7 +11,7 @@ export namespace fox::io
 	class File : public Entry
 	{
 	public:
-        File(const std::filesystem::path& path)
+        explicit File(const std::filesystem::path& path)
             : Entry{ path }
         {
             stream_.exceptions(std::fstream::badbit);

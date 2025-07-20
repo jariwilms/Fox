@@ -30,7 +30,7 @@ export namespace fox
             return projection_;
         }
 
-    protected:
+    private:
         fox::float32_t aspect_;
         fox::float32_t fov_;
         fox::Matrix4f  projection_;

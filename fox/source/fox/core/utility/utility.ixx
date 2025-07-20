@@ -38,26 +38,14 @@ export namespace fox
 
 
         template<template<typename> typename C, typename T, typename U>
-        constexpr auto compare(T&& left, U&& right) -> fox::bool_t
+        inline constexpr auto compare(T&& left, U&& right) -> fox::bool_t
         {
-            if constexpr (std::is_integral_v<T> and std::is_integral_v<U>)
-            {
-                if (std::is_same_v<C<T>, std::equal_to     <T>>) return std::cmp_equal        (left, right);
-                if (std::is_same_v<C<T>, std::not_equal_to <T>>) return std::cmp_not_equal    (left, right);
-                if (std::is_same_v<C<T>, std::less         <T>>) return std::cmp_less         (left, right);
-                if (std::is_same_v<C<T>, std::greater      <T>>) return std::cmp_greater      (left, right);
-                if (std::is_same_v<C<T>, std::less_equal   <T>>) return std::cmp_less_equal   (left, right);
-                if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::cmp_greater_equal(left, right);
-            }
-            else
-            {
-                if (std::is_same_v<C<T>, std::equal_to     <T>>) return std::ranges::equal_to     {}(std::forward<T>(left), std::forward<U>(right));
-                if (std::is_same_v<C<T>, std::not_equal_to <T>>) return std::ranges::not_equal_to {}(std::forward<T>(left), std::forward<U>(right));
-                if (std::is_same_v<C<T>, std::less         <T>>) return std::ranges::less         {}(std::forward<T>(left), std::forward<U>(right));
-                if (std::is_same_v<C<T>, std::greater      <T>>) return std::ranges::greater      {}(std::forward<T>(left), std::forward<U>(right));
-                if (std::is_same_v<C<T>, std::less_equal   <T>>) return std::ranges::less_equal   {}(std::forward<T>(left), std::forward<U>(right));
-                if (std::is_same_v<C<T>, std::greater_equal<T>>) return std::ranges::greater_equal{}(std::forward<T>(left), std::forward<U>(right));
-            }
+            if constexpr (std::is_same_v<C<fox::void_t>, std::equal_to     <fox::void_t>>) return std::cmp_equal        (left, right);
+            if constexpr (std::is_same_v<C<fox::void_t>, std::not_equal_to <fox::void_t>>) return std::cmp_not_equal    (left, right);
+            if constexpr (std::is_same_v<C<fox::void_t>, std::less         <fox::void_t>>) return std::cmp_less         (left, right);
+            if constexpr (std::is_same_v<C<fox::void_t>, std::greater      <fox::void_t>>) return std::cmp_greater      (left, right);
+            if constexpr (std::is_same_v<C<fox::void_t>, std::less_equal   <fox::void_t>>) return std::cmp_less_equal   (left, right);
+            if constexpr (std::is_same_v<C<fox::void_t>, std::greater_equal<fox::void_t>>) return std::cmp_greater_equal(left, right);
         }
 
 

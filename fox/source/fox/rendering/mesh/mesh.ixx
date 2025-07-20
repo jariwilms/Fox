@@ -9,7 +9,7 @@ export namespace fox::gfx
     struct Mesh
     {
     public:
-        Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
+        explicit Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
             : vertexArray{ vertexArray } {}
 
         void bind       () const

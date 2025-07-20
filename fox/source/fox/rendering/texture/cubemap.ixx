@@ -17,7 +17,7 @@ export namespace fox::gfx
         using Format    = api::Cubemap::Format;
         using Wrapping  = api::Cubemap::Wrapping;
 
-        Cubemap(std::shared_ptr<impl::Cubemap> _) 
+        explicit Cubemap(std::shared_ptr<impl::Cubemap> _) 
             : _{ _ } {}
 
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions) -> std::shared_ptr<gfx::Cubemap>
@@ -84,6 +84,7 @@ export namespace fox::gfx
         Cubemap(Format format,                                   const fox::Vector2u& dimensions, std::span<const fox::Image> faces)
             : _{ std::make_shared<impl::Cubemap>(format, dimensions, faces) } {}
 
+    private:
         std::shared_ptr<impl::Cubemap> _;
     };
 }

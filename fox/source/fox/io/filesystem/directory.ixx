@@ -11,7 +11,7 @@ export namespace fox::io
     public:
         using entry_t = std::variant<io::Directory, io::File>;
 
-        Directory(const std::filesystem::path& path)
+        explicit Directory(const std::filesystem::path& path)
             : io::Entry{ path } {}
 
         void explore()

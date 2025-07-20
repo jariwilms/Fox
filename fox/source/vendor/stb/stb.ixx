@@ -22,8 +22,6 @@ import fox.core.utility;
     {
         stbi_image_free(pointer);
     }
-
-    auto deleter = [](std::span<fox::byte_t>* span) { stb::free_image(span->data()); delete span; };
 }
 export namespace stb
 {

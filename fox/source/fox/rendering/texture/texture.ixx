@@ -15,7 +15,7 @@ export namespace fox::gfx
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-        Texture1D(std::shared_ptr<impl::Texture1D> _)
+        explicit Texture1D(std::shared_ptr<impl::Texture1D> _)
             : _{ _ } {}
 
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector1u& dimensions) -> std::shared_ptr<Texture1D>
@@ -91,6 +91,7 @@ export namespace fox::gfx
         Texture1D(Format format,                                   const fox::Vector1u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::Texture1D>(format, dimensions, data) } {}
 
+    private:
         std::shared_ptr<impl::Texture1D> _;
     };
     class Texture2D
@@ -100,7 +101,7 @@ export namespace fox::gfx
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-        Texture2D(std::shared_ptr<impl::Texture2D> _)
+        explicit Texture2D(std::shared_ptr<impl::Texture2D> _)
             : _{ _ } {}
 
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector2u& dimensions) -> std::shared_ptr<Texture2D>
@@ -176,6 +177,7 @@ export namespace fox::gfx
         Texture2D(Format format,                                   const fox::Vector2u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::Texture2D>(format, dimensions, data) } {}
 
+    private:
         std::shared_ptr<impl::Texture2D> _;
     };
     class Texture3D
@@ -185,7 +187,7 @@ export namespace fox::gfx
         using Filter   = api::Texture::Filter;
         using Wrapping = api::Texture::Wrapping;
 
-        Texture3D(std::shared_ptr<impl::Texture3D> _)
+        explicit Texture3D(std::shared_ptr<impl::Texture3D> _)
             : _{ _ } {}
 
         static auto create(Format format, Filter filter, Wrapping wrapping, const fox::Vector3u& dimensions) -> std::shared_ptr<Texture3D>
@@ -261,6 +263,7 @@ export namespace fox::gfx
         Texture3D(Format format,                                   const fox::Vector3u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::Texture3D>(format, dimensions, data) } {}
 
+    private:
         std::shared_ptr<impl::Texture3D> _;
     };
 
@@ -269,7 +272,7 @@ export namespace fox::gfx
     public:
         using Format = api::Texture::Format;
 
-        Texture2DMultisample(std::shared_ptr<impl::Texture2DMultisample> _)
+        explicit Texture2DMultisample(std::shared_ptr<impl::Texture2DMultisample> _)
             : _{ _ } {}
 
         static auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<Texture2DMultisample>
@@ -307,6 +310,7 @@ export namespace fox::gfx
         Texture2DMultisample(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::Texture2DMultisample>(format, dimensions, samples) } {}
 
+    private:
         std::shared_ptr<impl::Texture2DMultisample> _;
     };
     class Texture3DMultisample
@@ -314,7 +318,7 @@ export namespace fox::gfx
     public:
         using Format = api::Texture::Format;
 
-        Texture3DMultisample(std::shared_ptr<impl::Texture3DMultisample> _)
+        explicit Texture3DMultisample(std::shared_ptr<impl::Texture3DMultisample> _)
             : _{ _ } {}
 
         static auto create(Format format, const fox::Vector3u& dimensions, fox::uint32_t samples) -> std::shared_ptr<Texture3DMultisample>
@@ -352,6 +356,7 @@ export namespace fox::gfx
         Texture3DMultisample(Format format, const fox::Vector3u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::Texture3DMultisample>(format, dimensions, samples) } {}
 
+    private:
         std::shared_ptr<impl::Texture3DMultisample> _;
     };
 }

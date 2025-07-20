@@ -13,7 +13,7 @@ export namespace fox::ecs
         }
 
     protected:
-        Entity(fox::id_t id)
+        explicit Entity(fox::id_t id)
             : id_{ id } {}
 
         fox::id_t id_{};

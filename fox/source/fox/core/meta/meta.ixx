@@ -9,7 +9,7 @@ export namespace fox::meta
     struct from_inaccessible_ctor : public T
     {
         template<typename... Args>
-        from_inaccessible_ctor(Args&&... args)
+        explicit from_inaccessible_ctor(Args&&... args)
             : T{ std::forward<Args>(args)... } {}
     };
 

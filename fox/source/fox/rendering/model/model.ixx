@@ -14,8 +14,7 @@ export namespace fox::gfx
     public:
         struct Node
         {
-            Node()
-                : transform{}, mesh{}, material{}, children{} {}
+            Node() = default;
 
             fox::Transform               transform;
             std::optional<fox::uint32_t> mesh;

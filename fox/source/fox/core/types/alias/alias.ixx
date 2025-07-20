@@ -4,7 +4,7 @@ import std;
 
 export namespace fox
 {
-    template<typename T, typename U>
+    template<typename T, typename U> requires (std::is_same_v<std::underlying_type_t<T>, std::underlying_type_t<U>>)
     class alias_t
     {
     public:

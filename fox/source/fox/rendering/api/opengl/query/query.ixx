@@ -12,7 +12,7 @@ export namespace fox::gfx::api::gl
 	public:
 		using Target = api::Query::Target;
 
-		Query(Target target)
+		explicit Query(Target target)
 			: gl::Object{ gl::create_query(gl::map_query_target(target)), [](auto* handle) { gl::delete_query(*handle); }}
 			, target_{ target }
 		{

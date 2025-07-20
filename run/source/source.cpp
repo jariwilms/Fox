@@ -18,8 +18,8 @@ using namespace fox;
 
 static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& actor, gfx::Model& model, gfx::Model::Node& node)
 {
-    auto& tc = actor.get_component<ecs::TransformComponent> ().get();
-    auto& mc = actor.add_component<ecs::MeshFilterComponent>().get();
+    auto& tc = actor.get_component<ecs::TransformComponent> ().value();
+    auto& mc = actor.add_component<ecs::MeshFilterComponent>().value();
 
     tc = node.transform;
 
@@ -39,8 +39,8 @@ static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox:
     if (!relation.parent) return transform;
 
     const auto& parent = scene->find_actor(*relation.parent);
-    const auto& rc     = parent.get_component<ecs::RelationshipComponent>().get();
-    const auto& tc     = parent.get_component<ecs::TransformComponent>   ().get();
+    const auto& rc     = parent.get_component<ecs::RelationshipComponent>().value();
+    const auto& tc     = parent.get_component<ecs::TransformComponent>   ().value();
 
     return transform_product(scene, rc, tc) * transform;
 }
@@ -57,12 +57,12 @@ int main()
     auto  scene                 = std::make_shared<scene::Scene>();
 
     auto& observer              = scene->create_actor();
-    auto& camera                = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).get();
-    auto& cameraTransform       = observer.get_component<ecs::TransformComponent>().get();
+    auto& camera                = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).value();
+    auto& cameraTransform       = observer.get_component<ecs::TransformComponent>().value();
     cameraTransform.translate_by(fox::Vector3f{ 0.0f, 1.0f, 2.0f });
 
     auto& helmetActor           = scene->create_actor();
-    auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().get();
+    auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().value();
     auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
     model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
     helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
@@ -79,15 +79,15 @@ int main()
     defaultMaterial->emissive   = defaultEmissive;
 
     auto& floorActor            = scene->create_actor();
-    auto& fatc                  = floorActor.get_component<ecs::TransformComponent> ().get();
-    auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().get();
+    auto& fatc                  = floorActor.get_component<ecs::TransformComponent> ().value();
+    auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().value();
     famfc.mesh                  = gfx::geometry::plane;
     famfc.material              = defaultMaterial;
     fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
 
     auto& boxActor              = scene->create_actor();
-    auto& batc                  = boxActor.get_component<ecs::TransformComponent> ().get();
-    auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().get();
+    auto& batc                  = boxActor.get_component<ecs::TransformComponent> ().value();
+    auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().value();
     bamfc.mesh                  = gfx::geometry::cube;
     bamfc.material              = defaultMaterial;
     batc                        = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
@@ -178,9 +178,9 @@ int main()
         auto view = registry::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
         view.each([&](auto, const ecs::RelationshipComponent& r, const ecs::TransformComponent& t, const ecs::MeshFilterComponent& m)
             {
-                const auto& relationship = r.get();
-                const auto& transform    = t.get();
-                const auto& meshFilter   = m.get();
+                const auto& relationship = r.value();
+                const auto& transform    = t.value();
+                const auto& meshFilter   = m.value();
                 const auto& mesh         = meshFilter.mesh;
                 const auto& material     = meshFilter.material;
 

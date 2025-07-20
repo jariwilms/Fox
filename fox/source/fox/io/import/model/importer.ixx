@@ -96,7 +96,7 @@ export namespace fox::io
     private:
         static auto get_assimp_texture(const std::filesystem::path& path, const assimp::material& aiMaterial, assimp::texture_type type) -> std::optional<std::shared_ptr<gfx::Texture2D>>
         {
-            if (fox::compare<std::greater>(assimp::get_texture_count(aiMaterial, type), fox::uint32_t{ 0u }))
+            if (assimp::get_texture_count(aiMaterial, type))
             {
                 if (auto result = assimp::get_texture(aiMaterial, type); result) return io::load<io::Asset::Texture2D>(path / result.value());
             }
