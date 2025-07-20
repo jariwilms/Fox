@@ -245,16 +245,16 @@ export namespace fox::gfx::api::gl
     {
     public:
         using Attachment    = api::FrameBuffer::Attachment;
-        using Specification = api::FrameBuffer::Specification;
+        using Specification = api::FrameBuffer::SpecificationMultisample;
         using Surface       = api::FrameBuffer::Surface;
         using Target        = api::FrameBuffer::Target;
 
         FrameBufferMultisample(const gl::Vector2u& dimensions, gl::uint32_t samples)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
-            , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples } {}
+            , attachments_{}, textureMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples } {}
         FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, gl::uint32_t samples)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
-            , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples }
+            , attachments_{}, textureMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples }
         {
             auto map_texture_attachment       = [](api::Texture::Format      format, gl::uint32_t& colorIndex)
                 {
@@ -272,22 +272,6 @@ export namespace fox::gfx::api::gl
                         default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
                     }
                 };
-            auto map_cubemap_attachment       = [](api::Cubemap::Format      format, gl::uint32_t& colorIndex)
-            {
-                switch (format)
-                {
-                    case api::Cubemap::Format::D16_UNORM:
-                    case api::Cubemap::Format::D24_UNORM:
-                    case api::Cubemap::Format::D32_FLOAT:         return api::FrameBuffer::Attachment::Depth;
-
-                    case api::Cubemap::Format::D24_UNORM_S8_UINT:
-                    case api::Cubemap::Format::D32_FLOAT_S8_UINT: return api::FrameBuffer::Attachment::DepthStencil;
-
-                    case api::Cubemap::Format::S8_UINT:           return api::FrameBuffer::Attachment::Stencil;
-
-                    default:                                      return api::FrameBuffer::Attachment::Color0 + colorIndex++;
-                }
-            };
             auto map_render_buffer_attachment = [](api::RenderBuffer::Format format, gl::uint32_t& colorIndex)
             {
                 switch (format)
@@ -317,13 +301,6 @@ export namespace fox::gfx::api::gl
                             auto attachment = map_texture_attachment(texture->format(), colorIndex);
 
                             attach(identifier, attachment, texture);
-                        }, 
-                        [&](api::Cubemap     ::Format format)
-                        {
-                            //auto cubemap    = std::make_shared<gl::Cubemap>(format, api::Cubemap::Filter::None, api::Cubemap::Wrapping::Repeat, dimensions_);
-                            //auto attachment = map_cubemap_attachment(cubemap->format(), colorIndex);
-
-                            //attach(identifier, attachment, cubemap);
                         }, 
                         [&](api::RenderBuffer::Format format)
                         {
@@ -364,7 +341,6 @@ export namespace fox::gfx::api::gl
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
         {
             if constexpr (A == Surface::Texture) textureMap_.at(identifier)->bind(binding);
-            //if constexpr (A == Surface::Cubemap) cubemapMap_.at(identifier)->bind(binding);
         }
 
         void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Texture2DMultisample>    texture, gl::uint32_t level = 0u)
@@ -373,13 +349,6 @@ export namespace fox::gfx::api::gl
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
-        }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Cubemap>                 cubemap, gl::uint32_t level = 0u)
-        {
-            //gl::frame_buffer_texture(handle_, cubemap->handle(), gl::map_frame_buffer_attachment(attachment), level);
-
-            //attachments_.at(gl::to_underlying(attachment)) = identifier;
-            //cubemapMap_.emplace(identifier, cubemap);
         }
         void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::RenderBufferMultisample> renderBuffer)
         {
@@ -396,11 +365,6 @@ export namespace fox::gfx::api::gl
             {
                 gl::frame_buffer_texture(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 textureMap_.erase(identifier);
-            }
-            if constexpr (A == Surface::Cubemap)
-            {
-                //gl::frame_buffer_texture(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
-                //cubemapMap_.erase(identifier);
             }
             if constexpr (A == Surface::RenderBuffer)
             {
@@ -447,10 +411,6 @@ export namespace fox::gfx::api::gl
             {
                 return textureMap_.at(identifier);
             }
-            if constexpr (A == Surface::Cubemap)
-            {
-                //return cubemapMap_.at(identifier);
-            }
             if constexpr (A == Surface::RenderBuffer)
             {
                 return renderBufferMap_.at(identifier);
@@ -473,7 +433,6 @@ export namespace fox::gfx::api::gl
     private:
         std::array<std::string, 11u>                                                  attachments_;
         std::unordered_map<std::string, std::shared_ptr<gl::Texture2DMultisample>>    textureMap_;
-        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>                 cubemapMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::RenderBufferMultisample>> renderBufferMap_;
         gl::Vector2u                                                                  dimensions_;
         gl::uint32_t                                                                  samples_;

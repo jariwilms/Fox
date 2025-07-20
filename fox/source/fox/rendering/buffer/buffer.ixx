@@ -94,7 +94,7 @@ export namespace fox::gfx
     class UniformBuffer
     {
     public:
-        UniformBuffer(std::shared_ptr<impl::UniformBuffer<T>> _)
+        explicit UniformBuffer(std::shared_ptr<impl::UniformBuffer<T>> _)
             : _{ _ } {}
 
         static auto create(const T& data = {}) -> std::shared_ptr<gfx::UniformBuffer<T>>
@@ -134,6 +134,7 @@ export namespace fox::gfx
         UniformBuffer(const T& data = {})
             : _{ std::make_shared<impl::UniformBuffer<T>>(data) } {}
 
+    private:
         std::shared_ptr<impl::UniformBuffer<T>> _;
     };
     template<typename T, fox::count_t N>

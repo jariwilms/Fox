@@ -106,7 +106,7 @@ export namespace fox::gfx
     {
     public:
         using Attachment    = api::FrameBuffer::Attachment;
-        using Specification = api::FrameBuffer::Specification;
+        using Specification = api::FrameBuffer::SpecificationMultisample;
         using Surface       = api::FrameBuffer::Surface;
         using Target        = api::FrameBuffer::Target;
 
@@ -132,10 +132,6 @@ export namespace fox::gfx
         {
             _->attach(identifier, attachment, texture->impl(), level);
         }
-        //void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::Cubemap>      cubemap, fox::uint32_t level = 0u)
-        //{
-        //    _->attach(identifier, attachment, cubemap->impl(), level);
-        //}
         void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::RenderBufferMultisample> renderBuffer)
         {
             _->attach(identifier, attachment, renderBuffer->impl());

@@ -19,7 +19,7 @@ import fox.rendering.base.frame_buffer;
 export namespace fox::gfx::api::gl
 {
     template<typename T>
-    inline constexpr auto map_type() -> glf::VertexArray::Attribute::Type
+    constexpr auto map_type             () -> glf::VertexArray::Attribute::Type
     {
         if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int8_t   >) return glf::VertexArray::Attribute::Type::Byte           ;
         if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint8_t  >) return glf::VertexArray::Attribute::Type::UnsignedByte   ;
@@ -31,7 +31,7 @@ export namespace fox::gfx::api::gl
         if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float64_t>) return glf::VertexArray::Attribute::Type::Double         ;
     }
 
-    inline auto map_texture_format_base                  (api::Texture::Format format) -> glf::Texture::BaseFormat
+    auto map_texture_format_base        (api::Texture::Format format) -> glf::Texture::BaseFormat
     {
         switch (format)
         {
@@ -74,7 +74,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid texture format!" };
         }
     }
-    inline auto map_texture_format                       (api::Texture::Format format) -> glf::Texture::Format
+    auto map_texture_format             (api::Texture::Format format) -> glf::Texture::Format
     {
         switch (format)
         {
@@ -114,7 +114,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    inline auto map_texture_format_type                  (api::Texture::Format format) -> glf::PixelData::Type
+    auto map_texture_format_type        (api::Texture::Format format) -> glf::PixelData::Type
     {
         switch (format)
         {
@@ -154,7 +154,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    inline auto map_texture_min_filter                   (api::Texture::Filter filter) -> glf::Texture::MinificationFilter
+    auto map_texture_min_filter         (api::Texture::Filter filter) -> glf::Texture::MinificationFilter
     {
         switch (filter)
         {
@@ -166,7 +166,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    inline auto map_texture_mag_filter                   (api::Texture::Filter filter) -> glf::Texture::MagnificationFilter
+    auto map_texture_mag_filter         (api::Texture::Filter filter) -> glf::Texture::MagnificationFilter
     {
         switch (filter)
         {
@@ -178,7 +178,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    inline auto map_texture_wrapping                     (api::Texture::Wrapping wrapping) -> glf::Texture::Wrapping
+    auto map_texture_wrapping           (api::Texture::Wrapping wrapping) -> glf::Texture::Wrapping
     {
         switch (wrapping)
         {
@@ -191,8 +191,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    
-    inline auto map_render_buffer_format                 (api::RenderBuffer::Format format) -> glf::RenderBuffer::Format
+    auto map_render_buffer_format       (api::RenderBuffer::Format format) -> glf::RenderBuffer::Format
     {
         switch (format)
         {
@@ -211,8 +210,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    
-    inline auto map_cubemap_texture_format_base          (api::Cubemap::Format format) -> glf::Texture::BaseFormat
+    auto map_cubemap_texture_format_base(api::Cubemap::Format format) -> glf::Texture::BaseFormat
     {
         switch (format)
         {
@@ -255,7 +253,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid cubemap format!" };
         }
     }
-    inline auto map_cubemap_texture_format               (api::Cubemap::Format format) -> glf::Texture::Format
+    auto map_cubemap_texture_format     (api::Cubemap::Format format) -> glf::Texture::Format
     {
         switch (format)
         {
@@ -304,7 +302,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    inline auto map_cubemap_texture_format_type          (api::Cubemap::Format format) -> glf::PixelData::Type
+    auto map_cubemap_texture_format_type(api::Cubemap::Format format) -> glf::PixelData::Type
     {
         switch (format)
         {
@@ -344,8 +342,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    
-    inline auto map_frame_buffer_target                  (api::FrameBuffer::Target  target) -> glf::FrameBuffer::Target
+    auto map_frame_buffer_target        (api::FrameBuffer::Target  target) -> glf::FrameBuffer::Target
     {
         switch (target)
         {
@@ -355,7 +352,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer target!" };
         }
     }
-    inline auto map_frame_buffer_attachment              (api::FrameBuffer::Attachment attachment) -> glf::FrameBuffer::Attachment
+    auto map_frame_buffer_attachment    (api::FrameBuffer::Attachment attachment) -> glf::FrameBuffer::Attachment
     {
         switch (attachment)
         {
@@ -375,8 +372,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid framebuffer attachment!" };
         }
     }
-
-    inline auto map_program_stage                        (api::Shader::Stage stage) -> glf::Program::Stage
+    auto map_program_stage              (api::Shader::Stage stage) -> glf::Program::Stage
     {
         switch (stage)
         {
@@ -390,8 +386,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }                                                                      
-    
-    inline auto map_shader_type                          (api::Shader::Stage stage) -> glf::Shader::Type
+    auto map_shader_type                (api::Shader::Stage stage) -> glf::Shader::Type
     {
         switch (stage)
         {
@@ -405,23 +400,35 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    
-    inline auto map_query_target                         (api::Query::Target target) -> glf::Query::Target
+    auto map_query_target               (api::Query::Target target) -> glf::Query::Target
     {
-        gl::todo();
-        return {};
+        switch (target)
+        {
+            case api::Query::Target::AnySamplesPassed                        : return glf::Query::Target::AnySamplesPassed;
+            case api::Query::Target::AnySamplesPassedConservative            : return glf::Query::Target::AnySamplesPassedConservative;
+            case api::Query::Target::ClippingInputPrimitives                 : return glf::Query::Target::ClippingInputPrimitives;
+            case api::Query::Target::ClippingOutputPrimitives                : return glf::Query::Target::ClippingOutputPrimitives;
+            case api::Query::Target::ComputeShaderInvocations                : return glf::Query::Target::ComputeShaderInvocations;
+            case api::Query::Target::FragmentShaderInvocations               : return glf::Query::Target::FragmentShaderInvocations;
+            case api::Query::Target::GeometryShaderInvocations               : return glf::Query::Target::GeometryShaderInvocations;
+            case api::Query::Target::GeometryShaderPrimitivesEmitted         : return glf::Query::Target::GeometryShaderPrimitivesEmitted;
+            case api::Query::Target::PrimitivesGenerated                     : return glf::Query::Target::PrimitivesGenerated;
+            case api::Query::Target::PrimitivesSubmitted                     : return glf::Query::Target::PrimitivesSubmitted;
+            case api::Query::Target::SamplesPassed                           : return glf::Query::Target::SamplesPassed;
+            case api::Query::Target::TessellationControlShaderPatches        : return glf::Query::Target::TessellationControlShaderPatches;
+            case api::Query::Target::TessellationEvaluationShaderInvocations : return glf::Query::Target::TessellationEvaluationShaderInvocations;
+            case api::Query::Target::TimeElapsed                             : return glf::Query::Target::TimeElapsed;
+            case api::Query::Target::Timestamp                               : return glf::Query::Target::Timestamp;
+            case api::Query::Target::TransformFeedbackOverflow               : return glf::Query::Target::TransformFeedbackOverflow;
+            case api::Query::Target::TransformFeedbackPrimitivesWritten      : return glf::Query::Target::TransformFeedbackPrimitivesWritten;
+            case api::Query::Target::TransformFeedbackStreamOverflow         : return glf::Query::Target::TransformFeedbackStreamOverflow;
+            case api::Query::Target::VertexShaderInvocations                 : return glf::Query::Target::VertexShaderInvocations;
+            case api::Query::Target::VerticesSubmitted                       : return glf::Query::Target::VerticesSubmitted;
 
-        //switch (target)
-        //{
-        //    //case api::Query::Target::Occlusion : return glf::Query::Target::;
-        //    //case api::Query::Target::Statistics: return 0;
-        //    //case api::Query::Target::Timestamp : return 0;
-
-        //    default: throw std::invalid_argument{ "Invalid target!" };
-        //}
+            default: throw std::invalid_argument{ "Invalid target!" };
+        }
     }
-
-    inline auto map_depth_function                       (api::RenderState::DepthFunction depthFunction) -> glf::DepthFunction
+    auto map_depth_function             (api::RenderState::DepthFunction depthFunction) -> glf::DepthFunction
     {
         switch (depthFunction)
         {
@@ -437,8 +444,7 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid depth function!" };
         }
     }
-    
-    inline auto map_culling_face                         (api::RenderState::FaceCulling cullingFace) -> glf::Culling::Facet
+    auto map_culling_face               (api::RenderState::FaceCulling cullingFace) -> glf::Culling::Facet
     {
         switch (cullingFace)
         {

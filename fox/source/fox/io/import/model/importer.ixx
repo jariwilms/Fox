@@ -131,7 +131,6 @@ export namespace fox::io
                 });
         }
 
-        //static inline Assimp::Importer                importer_;
         static inline std::shared_ptr<gfx::Texture2D> defaultAlbedoTexture_;
         static inline std::shared_ptr<gfx::Texture2D> defaultNormalTexture_;
         static inline std::shared_ptr<gfx::Texture2D> defaultARMTexture_;

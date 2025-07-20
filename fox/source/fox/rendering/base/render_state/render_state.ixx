@@ -41,13 +41,5 @@ export namespace fox::gfx::api
             Clockwise, 
             CounterClockwise, 
         };
-
-    protected:
-        //static inline fox::bool_t   depthTestingAlpha_{};
-        //static inline fox::bool_t   cullingFaceAlpha_{};
-        //static inline FaceCulling   faceCulling_{};
-        //static inline DepthFunction depthFunction_{};
-        //static inline FrontFace     frontFace_{};
-        //static inline fox::Vector4f clearColor_{};
     };
 }

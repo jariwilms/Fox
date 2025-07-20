@@ -7,9 +7,26 @@ export namespace fox::gfx::api
 	public:
 		enum class Target
 		{
-			Occlusion, 
-			Statistics, 
-			Timestamp, 
+            AnySamplesPassed, 
+            AnySamplesPassedConservative, 
+            ClippingInputPrimitives, 
+            ClippingOutputPrimitives, 
+            ComputeShaderInvocations, 
+            FragmentShaderInvocations, 
+            GeometryShaderInvocations, 
+            GeometryShaderPrimitivesEmitted, 
+            PrimitivesGenerated, 
+            PrimitivesSubmitted, 
+            SamplesPassed, 
+            TessellationControlShaderPatches, 
+            TessellationEvaluationShaderInvocations, 
+            TimeElapsed, 
+            Timestamp, 
+            TransformFeedbackOverflow, 
+            TransformFeedbackPrimitivesWritten, 
+            TransformFeedbackStreamOverflow, 
+            VertexShaderInvocations, 
+            VerticesSubmitted, 
 		};
 	};
 }

@@ -20,12 +20,12 @@ export namespace fox
         template<typename T>
         constexpr auto bit_size_of (const T& value)
         {
-            return utl::byte_size_of(value) * fox::uint64_t{ 8u };
+            return utl::byte_size_of(value) * fox::size_t{ 8u };
         }
         template<typename T>
         constexpr auto bit_size_of ()
         {
-            return utl::byte_size_of<T>() * fox::uint64_t{ 8u };
+            return utl::byte_size_of<T>() * fox::size_t{ 8u };
         }
         template<typename T, auto MEMBER_PTR>
         constexpr auto offset_of   ()
