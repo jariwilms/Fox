@@ -11,11 +11,11 @@ workspace "Fox Engine"
 		["ENTT"    ] = "vendor/entt/single_include", 
 		["GLAD"    ] = "vendor/glad/include", 
 		["GLFW"    ] = "vendor/glfw/include", 
-		["GLM"     ] = "vendor/glm", 
+		["GLM"     ] = "vendor/glm/include", 
 		["JOLT"    ] = "vendor/jolt/include", 
 		["MIMALLOC"] = "vendor/mimalloc/include", 
 		["NLOHMANN"] = "vendor/nlohmann/include", 
-		["STB"     ] = "vendor/stb", 
+		["STB"     ] = "vendor/stb/include", 
 	}
 
 	filter "system:windows"
