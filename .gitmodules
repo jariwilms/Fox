@@ -10,3 +10,6 @@
 [submodule "vendor/entt"]
 	path = vendor/entt
 	url = https://github.com/skypjack/entt.git
+[submodule "vendor"]
+	path = vendor
+	url = https://github.com/jariwilms/fox-vendor.git
