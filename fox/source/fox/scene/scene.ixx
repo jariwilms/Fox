@@ -25,7 +25,7 @@ export namespace fox::scene
         {
             unset_parent(actor);
 
-            auto& rls = actor.get_component<ecs::RelationshipComponent>().get();
+            auto& rls = actor.get_component<ecs::RelationshipComponent>().value();
             for (auto& id : rls.children)
             {
                 auto& childActor = actors_.at(id);
@@ -39,20 +39,20 @@ export namespace fox::scene
         {
             unset_parent(child);
 
-            auto& rel  = child.get_component<ecs::RelationshipComponent>().get();
-            auto& prel = parent.get_component<ecs::RelationshipComponent>().get();
+            auto& rel  = child.get_component<ecs::RelationshipComponent>().value();
+            auto& prel = parent.get_component<ecs::RelationshipComponent>().value();
 
             prel.children.emplace_back(child.id());
             rel.parent = parent.id();
         }
         void unset_parent(Actor& child)
         {
-            auto& rel = child.get_component<ecs::RelationshipComponent>().get();
+            auto& rel = child.get_component<ecs::RelationshipComponent>().value();
 
             if (rel.parent)
             {
                 const auto& parent   = *rel.parent;
-                auto& relative = registry::get_component<ecs::RelationshipComponent>(parent).get();
+                auto& relative = registry::get_component<ecs::RelationshipComponent>(parent).value();
 
                 const auto& it = std::find(relative.children.begin(), relative.children.end(), child.id());
                 if (it != relative.children.end())

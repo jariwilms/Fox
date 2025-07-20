@@ -17,7 +17,8 @@ export namespace fox::io
 		}
 
 	protected:
-		explicit Entry(const std::filesystem::path& path)
+		explicit 
+		Entry(const std::filesystem::path& path)
 			: path_{ path.lexically_normal() }, name_{ path_.filename() } {}
 
 		std::filesystem::path path_{};

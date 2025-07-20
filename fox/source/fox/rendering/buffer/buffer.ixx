@@ -41,9 +41,11 @@ export namespace fox::gfx
         }
 
     protected:
-        explicit VertexBuffer(std::span<const T> data)
+        explicit 
+        VertexBuffer(std::span<const T> data)
             : _{ std::make_shared<impl::VertexBuffer<T>>(data) } {}
-        explicit VertexBuffer(fox::count_t count)
+        explicit 
+        VertexBuffer(fox::count_t count)
             : _{ std::make_shared<impl::VertexBuffer<T>>(count) } {}
 
         std::shared_ptr<impl::VertexBuffer<T>> _;

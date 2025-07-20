@@ -11,7 +11,8 @@ export namespace fox::gfx::api::gl
     class Buffer : public gl::Object
     {
     public:
-        explicit Buffer(gl::count_t count)
+        explicit 
+        Buffer(gl::count_t count)
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
@@ -23,7 +24,8 @@ export namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Coherent       ,
                 count                                    );
         }
-        explicit Buffer(std::span<const T> data)
+        explicit 
+        Buffer(std::span<const T> data)
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
@@ -169,7 +171,8 @@ export namespace fox::gfx::api::gl
     class UniformBuffer : public gl::Object
     {
     public:
-        explicit UniformBuffer(const T& data = {})
+        explicit 
+        UniformBuffer(const T& data = {})
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ sizeof(T) }
         {
@@ -215,7 +218,8 @@ export namespace fox::gfx::api::gl
     class UniformArrayBuffer : public gl::Object
     {
     public:
-        explicit UniformArrayBuffer()
+        explicit 
+        UniformArrayBuffer()
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(N * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
@@ -227,7 +231,8 @@ export namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Coherent       , 
                 gl::size_t{ N * sizeof(T) }              );
         }
-        explicit UniformArrayBuffer(std::span<const T> data)
+        explicit 
+        UniformArrayBuffer(std::span<const T> data)
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
