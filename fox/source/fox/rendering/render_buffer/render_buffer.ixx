@@ -13,7 +13,7 @@ export namespace fox::gfx
     public:
         using Format = api::RenderBuffer::Format;
 
-        RenderBuffer(std::shared_ptr<impl::RenderBuffer> _)
+        explicit RenderBuffer(std::shared_ptr<impl::RenderBuffer> _)
             : _{ _ } {}
 
         static auto create(Format format, const fox::Vector2u& dimensions) -> std::shared_ptr<gfx::RenderBuffer>
@@ -38,6 +38,7 @@ export namespace fox::gfx
         RenderBuffer(Format format, const fox::Vector2u& dimensions)
             : _{ std::make_shared<impl::RenderBuffer>(format, dimensions) } {}
 
+    private:
         std::shared_ptr<impl::RenderBuffer> _;
     };
     class RenderBufferMultisample
@@ -45,7 +46,7 @@ export namespace fox::gfx
     public:
         using Format = api::RenderBuffer::Format;
 
-        RenderBufferMultisample(std::shared_ptr<impl::RenderBufferMultisample> _)
+        explicit RenderBufferMultisample(std::shared_ptr<impl::RenderBufferMultisample> _)
             : _{ _ } {}
 
         static auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::RenderBufferMultisample>
@@ -74,6 +75,7 @@ export namespace fox::gfx
         RenderBufferMultisample(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::RenderBufferMultisample>(format, dimensions, samples) } {}
 
+    private:
         std::shared_ptr<impl::RenderBufferMultisample> _;
     };
 }

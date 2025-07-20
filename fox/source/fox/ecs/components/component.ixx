@@ -9,13 +9,12 @@ export namespace fox::ecs
     class Component
     {
     public:
-        explicit 
-        Component(const ecs::Entity& owner)
+        explicit Component(const ecs::Entity& owner)
             : owner_{ owner }, value_{} {}
-        Component(const ecs::Entity& owner, const T& value)
+                 Component(const ecs::Entity& owner, const T& value)
             : owner_{ owner },  value_{ value } {}
         template<typename... Args>
-        Component(const ecs::Entity& owner, Args... args)
+                 Component(const ecs::Entity& owner, Args... args)
             : owner_{ owner }, value_{ std::forward<Args>(args)... } {}
 
         auto owner(this auto&& self) -> auto&&

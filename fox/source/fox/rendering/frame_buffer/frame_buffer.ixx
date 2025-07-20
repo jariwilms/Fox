@@ -19,7 +19,7 @@ export namespace fox::gfx
         using Surface       = api::FrameBuffer::Surface;
         using Target        = api::FrameBuffer::Target;
 
-        FrameBuffer(std::shared_ptr<impl::FrameBuffer> _)
+        explicit FrameBuffer(std::shared_ptr<impl::FrameBuffer> _)
             : _{ _ } {}
 
         static auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications) -> std::shared_ptr<gfx::FrameBuffer>
@@ -99,6 +99,7 @@ export namespace fox::gfx
         FrameBuffer(const fox::Vector2u& dimensions, std::span<const Specification> specifications)
             : _{ std::make_shared<impl::FrameBuffer>(dimensions, specifications) } {}
 
+    private:
         std::shared_ptr<impl::FrameBuffer> _;
     };
     class FrameBufferMultisample
@@ -109,7 +110,7 @@ export namespace fox::gfx
         using Surface       = api::FrameBuffer::Surface;
         using Target        = api::FrameBuffer::Target;
 
-        FrameBufferMultisample(std::shared_ptr<impl::FrameBufferMultisample> _)
+        explicit FrameBufferMultisample(std::shared_ptr<impl::FrameBufferMultisample> _)
             : _{ _ } {}
 
         static auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples) -> std::shared_ptr<gfx::FrameBufferMultisample>
@@ -193,6 +194,7 @@ export namespace fox::gfx
         FrameBufferMultisample(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
             : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, specifications, samples) } {}
 
+    private:
         std::shared_ptr<impl::FrameBufferMultisample> _;
     };
 }

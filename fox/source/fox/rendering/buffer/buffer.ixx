@@ -11,7 +11,7 @@ export namespace fox::gfx
     class VertexBuffer
     {
     public:
-        VertexBuffer(std::shared_ptr<impl::VertexBuffer<T>> _)
+        explicit VertexBuffer(std::shared_ptr<impl::VertexBuffer<T>> _)
             : _{ _ } {}
 
         static auto create(std::span<const T> data) -> std::shared_ptr<gfx::VertexBuffer<T>>
@@ -41,19 +41,18 @@ export namespace fox::gfx
         }
 
     protected:
-        explicit 
-        VertexBuffer(std::span<const T> data)
+        explicit VertexBuffer(std::span<const T> data)
             : _{ std::make_shared<impl::VertexBuffer<T>>(data) } {}
-        explicit 
-        VertexBuffer(fox::count_t count)
+        explicit VertexBuffer(fox::count_t count)
             : _{ std::make_shared<impl::VertexBuffer<T>>(count) } {}
 
+    private:
         std::shared_ptr<impl::VertexBuffer<T>> _;
     };
     class IndexBuffer
     {
     public:
-        IndexBuffer(std::shared_ptr<impl::IndexBuffer> _)
+        explicit IndexBuffer(std::shared_ptr<impl::IndexBuffer> _)
             : _{ _ } {}
 
         static auto create(std::span<const fox::index_t> data) -> std::shared_ptr<gfx::IndexBuffer>
@@ -83,11 +82,12 @@ export namespace fox::gfx
         }
 
     protected:
-        IndexBuffer(std::span<const fox::index_t> data)
+        explicit IndexBuffer(std::span<const fox::index_t> data)
             : _{ std::make_shared<impl::IndexBuffer>(data) } {}
-        IndexBuffer(fox::count_t count)
+        explicit IndexBuffer(fox::count_t count)
             : _{ std::make_shared<impl::IndexBuffer>(count) } {}
 
+    private:
         std::shared_ptr<impl::IndexBuffer> _;
     };
     template<typename T>
@@ -140,7 +140,7 @@ export namespace fox::gfx
     class UniformArrayBuffer
     {
     public:
-        UniformArrayBuffer(std::shared_ptr<impl::UniformArrayBuffer<T, N>> _)
+        explicit UniformArrayBuffer(std::shared_ptr<impl::UniformArrayBuffer<T, N>> _)
             : _{ _ } {}
 
         static auto create() -> std::shared_ptr<gfx::UniformArrayBuffer<T, N>>
@@ -188,11 +188,12 @@ export namespace fox::gfx
         }
 
     protected:
-        UniformArrayBuffer()
+                 UniformArrayBuffer()
             : _{ std::make_shared<impl::UniformArrayBuffer<T, N>>() } {}
-        UniformArrayBuffer(std::span<const T> data)
+        explicit UniformArrayBuffer(std::span<const T> data)
             : _{ std::make_shared<impl::UniformArrayBuffer<T, N>>(data) } {}
 
+    private:
         std::shared_ptr<impl::UniformArrayBuffer<T, N>> _;
     };
 }

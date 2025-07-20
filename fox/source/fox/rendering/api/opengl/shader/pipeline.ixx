@@ -15,7 +15,7 @@ export namespace fox::gfx::api::gl
     public:
         using Layout = api::Pipeline::Layout<T>;
 
-        Pipeline(const Layout& layout)
+        explicit Pipeline(const Layout& layout)
             : gl::Object{ gl::create_program_pipeline(), [](auto* handle) { gl::delete_program_pipeline(*handle); }}
             , layout_{ layout }
         {

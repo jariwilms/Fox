@@ -14,7 +14,7 @@ export namespace fox::gfx::api::gl
     class Object
     {
     public:
-        Object(Object&& other) noexcept
+        explicit Object(Object&& other) noexcept
             : handle_{ std::exchange(other.handle_, gl::NullObject) } {}
 
         auto handle() const -> gl::handle_t
@@ -33,10 +33,10 @@ export namespace fox::gfx::api::gl
         }
 
     protected:
-        Object(gl::handle_t handle)
+        explicit Object(gl::handle_t handle)
             : handle_{ handle } {}
         template<typename Dx>
-        Object(gl::handle_t handle, Dx deleter)
+        explicit Object(gl::handle_t handle, Dx deleter)
             : handle_{ handle }, deleter_{ &handle_, std::move(deleter) } {}
 
         gl::handle_t                  handle_ ;

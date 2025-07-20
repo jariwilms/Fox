@@ -13,7 +13,7 @@ export namespace fox::gfx
     public:
         using Stage = api::Shader::Stage;
 
-        Shader(std::shared_ptr<impl::Shader> _)
+        explicit Shader(std::shared_ptr<impl::Shader> _)
             : _{ _ } {}
 
         static auto create(Stage stage, std::span<const fox::byte_t> binary) -> std::shared_ptr<gfx::Shader>
@@ -38,6 +38,7 @@ export namespace fox::gfx
         Shader(Stage stage, std::span<const fox::byte_t> binary)
             : _{ std::make_shared<impl::Shader>(stage, binary) } {}
 
+    private:
         std::shared_ptr<impl::Shader> _;
     };
 }

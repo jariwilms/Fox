@@ -11,11 +11,5 @@ export namespace fox::gfx::api
 			Statistics, 
 			Timestamp, 
 		};
-
-	protected:
-		Query(Target target)
-			: target_{ target } {}
-
-		Target target_{};
 	};
 }

@@ -12,7 +12,7 @@ export namespace fox::gfx
     class VertexArray
     {
     public:
-        VertexArray(std::shared_ptr<impl::VertexArray> _)
+        explicit VertexArray(std::shared_ptr<impl::VertexArray> _)
             : _{ _ } {}
 
         static auto create() -> std::shared_ptr<gfx::VertexArray>
@@ -61,6 +61,7 @@ export namespace fox::gfx
         VertexArray()
             : _{ std::make_shared<impl::VertexArray>() } {}
 
+    private:
         std::shared_ptr<impl::VertexArray> _;
     };
 }

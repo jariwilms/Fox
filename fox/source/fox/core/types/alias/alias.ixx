@@ -8,10 +8,9 @@ export namespace fox
     class alias_t
     {
     public:
-        alias_t(U value = {})
+                 alias_t(U value = {})
             : value_{ static_cast<T>(value) } {}
-        explicit 
-        alias_t(std::underlying_type_t<U> value = {})
+        explicit alias_t(std::underlying_type_t<U> value = {})
             : value_{ static_cast<T>(value) } {}
 
         operator auto() const

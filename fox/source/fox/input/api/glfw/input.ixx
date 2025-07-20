@@ -10,7 +10,7 @@ import vendor.glfw;
 
 export namespace fox::input::api::glfw
 {
-    class InputHandler
+    class input_handler
     {
     public:
         void update                    ()
@@ -117,7 +117,7 @@ export namespace fox::input::api::glfw
             scrollWheel_ = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
     
-    protected:
+    private:
         std::bitset<key     ::max> activeKeys_;
         std::bitset<key     ::max> lastActiveKeys_;
         std::bitset<button  ::max> activeButtons_;

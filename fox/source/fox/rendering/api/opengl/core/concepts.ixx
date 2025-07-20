@@ -1,12 +1,16 @@
 export module fox.rendering.api.opengl.concepts;
 
 import std;
-
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 
 export namespace fox::gfx::api::gl
 {
+    template<typename T, typename... Ts>
+    constexpr auto all_same_type = gl::bool_t{ std::conjunction_v<std::is_same<T, Ts>...> };
+
+
+
     template<glf::Feature F>
     concept indexed_feature_c = 
         (

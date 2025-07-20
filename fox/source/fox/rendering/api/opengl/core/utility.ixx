@@ -1,8 +1,8 @@
 export module fox.rendering.api.opengl.utility;
 
 import std;
-
 import fox.rendering.api.opengl.types;
+import fox.rendering.api.opengl.domain;
 
 export namespace fox::gfx::api::gl
 {

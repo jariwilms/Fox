@@ -13,7 +13,7 @@ export namespace fox::gfx
     public:
         using Layout = impl::Pipeline<gfx::Shader>::Layout;
 
-        Pipeline(std::shared_ptr<impl::Pipeline<gfx::Shader>> _)
+        explicit Pipeline(std::shared_ptr<impl::Pipeline<gfx::Shader>> _)
             : _{ _ } {}
 
         static auto create(const Layout& layout) -> std::shared_ptr<gfx::Pipeline>
@@ -39,6 +39,7 @@ export namespace fox::gfx
         Pipeline(const Layout& layout)
             : _{ std::make_shared<impl::Pipeline<gfx::Shader>>(layout) } {}
 
+    private:
         std::shared_ptr<impl::Pipeline<gfx::Shader>> _;
     };
 }

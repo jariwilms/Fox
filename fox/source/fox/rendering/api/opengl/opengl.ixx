@@ -1,15 +1,17 @@
 export module fox.rendering.api.opengl;
-
-import std;
-import <glad/gl.h>;
 export import fox.rendering.api.opengl.concepts;
+export import fox.rendering.api.opengl.domain;
 export import fox.rendering.api.opengl.flags;
 export import fox.rendering.api.opengl.mapping;
 export import fox.rendering.api.opengl.object;
 export import fox.rendering.api.opengl.parameters;
+export import fox.rendering.api.opengl.proxy;
 export import fox.rendering.api.opengl.structures;
 export import fox.rendering.api.opengl.types;
 export import fox.rendering.api.opengl.utility;
+
+import std;
+import <glad/gl.h>;
 
 export namespace fox::gfx::api::gl
 {
