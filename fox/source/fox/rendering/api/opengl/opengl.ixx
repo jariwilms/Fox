@@ -110,7 +110,7 @@ export namespace fox::gfx::api::gl
                 auto numberProgramBinaryFormats = gl::int32_t{};
                 glGetIntegerv(gl::to_underlying(glf::Data::NumberProgramBinaryFormats), &numberProgramBinaryFormats);
 
-                auto programBinaryFormats = std::vector<gl::enum_t>(static_cast<std::uint32_t>(numberProgramBinaryFormats));
+                auto programBinaryFormats = std::vector<gl::enum_t>(static_cast<gl::uint32_t>(numberProgramBinaryFormats));
                 glGetIntegerv(gl::to_underlying(data), std::bit_cast<gl::int32_t*>(programBinaryFormats.data()));
 
                 return programBinaryFormats;
@@ -873,7 +873,7 @@ export namespace fox::gfx::api::gl
             };
         
         auto maximumVertexAttributes = gl::get_value<glf::Data::MaximumVertexAttributes>();
-        if (gl::compare<std::greater>(index, maximumVertexAttributes - 1u)) throw std::out_of_range{ "The given index is out of range!" };
+        if (gl::compare<std::greater>(index, maximumVertexAttributes - gl::uint32_t{ 1u })) throw std::out_of_range{"The given index is out of range!"};
         
         if constexpr (P == glf::VertexArray::Parameter::BindingOffset ) return static_cast<gl::uint64_t>                     (get_vertex_array_indexed64_iv(vertexArray, P, index));
         if constexpr (P == glf::VertexArray::Parameter::Divisor       ) return static_cast<gl::uint32_t>                     (get_vertex_array_indexed32_iv(vertexArray, P, index));

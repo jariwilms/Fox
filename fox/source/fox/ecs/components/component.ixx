@@ -44,7 +44,7 @@ export namespace fox::ecs
 			return value_;
 		}
 
-	protected:
+	private:
 		ecs::Entity owner_;
 		T           value_;
 	};
