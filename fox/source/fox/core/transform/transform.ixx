@@ -72,13 +72,13 @@ export namespace fox
             return matrix;
         }
 
+        auto operator*(const fox::Transform& other) -> fox::Transform
+        {
+            return fox::Transform::from_matrix(matrix() * other.matrix());
+        }
+        
         fox::Vector3f   position;
         fox::Quaternion rotation;
         fox::Vector3f   scale;
     };
-
-    auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
-    {
-        return fox::Transform::from_matrix(left.matrix() * right.matrix());
-    }
 }

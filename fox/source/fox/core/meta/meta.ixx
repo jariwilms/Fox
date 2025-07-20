@@ -6,9 +6,9 @@ import std;
 export namespace fox::meta
 {
     template<typename T>
-    struct from_inaccessible_ctor : public T
+    struct from_inaccessible_ctor final : public T
     {
-        template<typename... Args>
+        template<typename... Args> requires (!std::same_as<meta::from_inaccessible_ctor<T>, std::remove_cvref_t<Args>> && ...)
         explicit from_inaccessible_ctor(Args&&... args)
             : T{ std::forward<Args>(args)... } {}
     };

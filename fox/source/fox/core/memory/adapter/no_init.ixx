@@ -10,7 +10,6 @@ export namespace fox::memory
     //It can significantly improve performance for large allocations by eliminating redundant initialization.
     //https://stackoverflow.com/a/21028912
     //https://www.boost.org/doc/libs/1_75_0/boost/core/noinit_adaptor.hpp
-
     template<typename A>
     class no_init_adapter : public A
     {
@@ -37,16 +36,17 @@ export namespace fox::memory
         {
             pointer->~U();
         }
+
+        template<class T, class U>
+        friend auto operator==(const memory::no_init_adapter<T>& left, const memory::no_init_adapter<U>& right) noexcept -> fox::bool_t
+        {
+            return static_cast<const T&>(left) == static_cast<const U&>(right);
+        }
+        template<class T, class U>
+        friend auto operator!=(const memory::no_init_adapter<T>& left, const memory::no_init_adapter<U>& right) noexcept -> fox::bool_t
+        {
+            return !(left == right);
+        }
     };
 
-    template<class T, class U>
-    auto operator==(const memory::no_init_adapter<T>& left, const memory::no_init_adapter<U>& right) noexcept -> fox::bool_t
-    {
-        return static_cast<const T&>(left) == static_cast<const U&>(right);
-    }
-    template<class T, class U>
-    auto operator!=(const memory::no_init_adapter<T>& left, const memory::no_init_adapter<U>& right) noexcept -> fox::bool_t
-    {
-        return !(left == right);
-    }
 }
