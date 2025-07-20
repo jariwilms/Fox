@@ -43,9 +43,9 @@ export namespace fox::math::bitwise
         return first xor second;
     }
     template<std::unsigned_integral T>
-    constexpr auto compl_     (T first, T second) -> T
+    constexpr auto compl_     (T first) -> T
     {
-        return first compl second;
+        return compl first;
     }
 
     template<std::unsigned_integral T>
