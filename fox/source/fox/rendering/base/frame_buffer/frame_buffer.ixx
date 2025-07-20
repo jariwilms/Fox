@@ -38,6 +38,16 @@ export namespace fox::gfx::api
             std::string identifier{};
             format_v    format;
         };
+        struct     SpecificationMultisample
+        {
+            using format_v = std::variant<api::Texture::Format, api::RenderBuffer::Format>;
+
+            SpecificationMultisample(const std::string& identifier, format_v format)
+                : identifier{ identifier }, format{ format } {}
+
+            std::string identifier{};
+            format_v    format;
+        };
         enum class Surface
         {
             Texture,

@@ -14,12 +14,7 @@ export namespace fox::gfx::api::gl
 
         static void init()
         {
-            //cullingFaceAlpha_  = gl::False;
-            //depthTestingAlpha_ = gl::False;
-            //faceCulling_       = FaceCulling::Back;
-            //depthFunction_     = DepthFunction::Less;
-            //frontFace_         = FrontFace::CounterClockwise;
-            //clearColor_        = fox::Vector4f{ 0.0f };
+            
         }
     };
 }

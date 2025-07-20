@@ -115,9 +115,7 @@ int main()
 
     auto lights                 = std::vector<std::tuple<fox::Light, fox::Vector3f>>
     {
-        //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.0f, 0.0f } * fox::Vector3f{ 50.0f }, 0.0f }, fox::Vector3f{ -3.0f, 8.0f, -3.0f }), 
-        std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 0.1f, 0.2f, 1.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{ -3.0f, 2.0f,  3.0f }), 
-        //std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.4f, 0.0f } * fox::Vector3f{ 20.0f }, 0.0f }, fox::Vector3f{  3.0f, 2.0f,  3.0f }), 
+        std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.5f, 0.0f } * fox::Vector3f{ 400.0f }, 0.0f }, fox::Vector3f{ 6.0f, 1.0f, 4.5f }), 
     };
 
     auto move_camera            = [&]
