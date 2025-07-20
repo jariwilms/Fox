@@ -17,7 +17,7 @@ export namespace fox::gfx
 
         static auto create() -> std::shared_ptr<gfx::VertexArray>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexArray>>();
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexArray>>(std::in_place_t{});
         }
 
         void bind() const

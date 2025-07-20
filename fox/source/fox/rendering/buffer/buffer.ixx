@@ -16,11 +16,11 @@ export namespace fox::gfx
 
         static auto create(std::span<const T> data) -> std::shared_ptr<gfx::VertexBuffer<T>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexBuffer<T>>>(data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexBuffer<T>>>(std::in_place_t{}, data);
         }
         static auto create(fox::count_t count) -> std::shared_ptr<gfx::VertexBuffer<T>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexBuffer<T>>>(count);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexBuffer<T>>>(std::in_place_t{}, count);
         }
 
         auto size  () const -> fox::size_t
@@ -57,11 +57,11 @@ export namespace fox::gfx
 
         static auto create(std::span<const fox::index_t> data) -> std::shared_ptr<gfx::IndexBuffer>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::IndexBuffer>>(data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::IndexBuffer>>(std::in_place_t{}, data);
         }
         static auto create(fox::count_t count) -> std::shared_ptr<gfx::IndexBuffer>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::IndexBuffer>>(count);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::IndexBuffer>>(std::in_place_t{}, count);
         }
 
         auto size  () const -> fox::size_t
@@ -99,7 +99,7 @@ export namespace fox::gfx
 
         static auto create(const T& data = {}) -> std::shared_ptr<gfx::UniformBuffer<T>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformBuffer<T>>>(data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformBuffer<T>>>(std::in_place_t{}, data);
         }
 
         void bind(gfx::binding_t binding) const
@@ -146,11 +146,11 @@ export namespace fox::gfx
 
         static auto create() -> std::shared_ptr<gfx::UniformArrayBuffer<T, N>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformArrayBuffer<T, N>>>();
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformArrayBuffer<T, N>>>(std::in_place_t{});
         }
         static auto create(std::span<const T> data) -> std::shared_ptr<gfx::UniformArrayBuffer<T, N>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformArrayBuffer<T, N>>>(data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformArrayBuffer<T, N>>>(std::in_place_t{}, data);
         }
 
         void bind      (gfx::binding_t binding) const
