@@ -38,7 +38,7 @@ export namespace fox
 
 
         template<template<typename> typename C, typename T, typename U>
-        inline constexpr auto compare(T&& left, U&& right) -> fox::bool_t
+        constexpr auto compare(const T left, const U right) -> fox::bool_t
         {
             if constexpr (std::is_same_v<C<fox::void_t>, std::equal_to     <fox::void_t>>) return std::cmp_equal        (left, right);
             if constexpr (std::is_same_v<C<fox::void_t>, std::not_equal_to <fox::void_t>>) return std::cmp_not_equal    (left, right);
@@ -47,7 +47,11 @@ export namespace fox
             if constexpr (std::is_same_v<C<fox::void_t>, std::less_equal   <fox::void_t>>) return std::cmp_less_equal   (left, right);
             if constexpr (std::is_same_v<C<fox::void_t>, std::greater_equal<fox::void_t>>) return std::cmp_greater_equal(left, right);
         }
-
+        template<template<typename> typename C, typename T, typename U> requires (std::is_enum_v<T> && std::is_enum_v<U>)
+        constexpr auto compare_enum(const T left, const U right) -> fox::bool_t
+        {
+            return fox::compare<C>(std::to_underlying(left), std::to_underlying(right));
+        }
 
 
         template<std::ranges::range R>

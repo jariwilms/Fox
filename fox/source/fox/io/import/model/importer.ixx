@@ -45,10 +45,10 @@ export namespace fox::io
                     auto aiTexCoords     = std::span<const assimp::vector_3d>{ aiMesh->mTextureCoords[0], aiMesh->mNumVertices };
                     auto aiFaces         = std::span<const assimp::face     >{ aiMesh->mFaces           , aiMesh->mNumFaces    };
 
-                    auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return fox::Vector3f{ position.x, position.y, position.z };                              }) | std::ranges::to<std::vector>();
-                    auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return fox::Vector3f{ normal  .x, normal  .y, normal  .z };                              }) | std::ranges::to<std::vector>();
-                    auto tangentsVector  = aiTangents  | std::views::transform([](const auto& tangent   ) { return fox::Vector3f{ tangent .x, tangent .y, tangent .z };                              }) | std::ranges::to<std::vector>();
-                    auto texCoordsVector = aiTexCoords | std::views::transform([](const auto& coordinate) { return fox::Vector2f{ coordinate.x, coordinate.y };                       }) | std::ranges::to<std::vector>();
+                    auto positionsVector = aiPositions | std::views::transform([](const auto& position  ) { return fox::Vector3f{ position  .x, position  .y, position.z           }; }) | std::ranges::to<std::vector>();
+                    auto normalsVector   = aiNormals   | std::views::transform([](const auto& normal    ) { return fox::Vector3f{ normal    .x, normal    .y, normal  .z           }; }) | std::ranges::to<std::vector>();
+                    auto tangentsVector  = aiTangents  | std::views::transform([](const auto& tangent   ) { return fox::Vector3f{ tangent   .x, tangent   .y, tangent .z           }; }) | std::ranges::to<std::vector>();
+                    auto texCoordsVector = aiTexCoords | std::views::transform([](const auto& coordinate) { return fox::Vector2f{ coordinate.x, coordinate.y                       }; }) | std::ranges::to<std::vector>();
                     auto indicesVector   = aiFaces     | std::views::transform([](const auto& face      ) { return std::span<const fox::uint32_t>{ face.mIndices, face.mNumIndices }; })
                         | std::views::join
                         | std::ranges::to<std::vector>();

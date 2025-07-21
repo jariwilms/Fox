@@ -131,7 +131,7 @@ export namespace fox::gfx
         }
 
     protected:
-        UniformBuffer(const T& data = {})
+        explicit UniformBuffer(const T& data = {})
             : _{ std::make_shared<impl::UniformBuffer<T>>(data) } {}
 
     private:
