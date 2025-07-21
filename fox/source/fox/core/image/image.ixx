@@ -43,9 +43,9 @@ export namespace fox
         template<Extension E>
         static auto encode(const fox::Image& image) -> auto
         {
-            using enum Extension;
-            
             stb::set_flip_vertically_on_write(cfg::FLIP_IMAGES);
+            
+            using enum Extension;
             if constexpr (E == BMP) return stb::write_bmp_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
             if constexpr (E == JPG) return stb::write_jpg_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
             if constexpr (E == PNG) return stb::write_png_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
