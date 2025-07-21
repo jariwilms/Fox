@@ -50,16 +50,16 @@ export namespace fox::gfx::api::gl
 
     inline constexpr auto range_overlaps(gl::range_t     first, gl::range_t     second) -> gl::bool_t
     {
-        return (first.index < second.index + second.count) and (second.index < first.index + second.count);
+        return (first.index < second.index + second.count) && (second.index < first.index + second.count);
     }
     inline constexpr auto range_overlaps(gl::byterange_t first, gl::byterange_t second) -> gl::bool_t
     {
-        return (first.offset < second.offset + second.size) and (second.offset < first.offset + second.size);
+        return (first.offset < second.offset + second.size) && (second.offset < first.offset + second.size);
     }
 
 
 
-    template<typename T> requires std::is_integral_v<T> and std::is_unsigned_v<T>
+    template<typename T> requires std::is_integral_v<T> && std::is_unsigned_v<T>
     inline constexpr auto to_positive_signed_integral(T value) -> std::make_signed_t<T>
     {
         constexpr auto bitsize = sizeof(T) * 8u;

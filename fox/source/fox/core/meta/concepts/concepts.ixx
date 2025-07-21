@@ -13,12 +13,12 @@ export namespace fox::meta
         template<auto value, auto min, auto max>
         concept within_open_interval = requires
         {
-            value > min and value < max;
+            value > min && value < max;
         };
         template<auto value, auto min, auto max>
         concept within_closed_interval = requires
         {
-            value >= min and value <= max;
+            value >= min && value <= max;
         };
     }
 }

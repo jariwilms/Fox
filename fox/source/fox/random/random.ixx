@@ -21,17 +21,17 @@ export namespace fox::random
             if constexpr (std::is_integral_v      <T>) return std::uniform_int_distribution <T>{ interval.min, interval.max }(::engine);
             if constexpr (std::is_floating_point_v<T>) return std::uniform_real_distribution<T>{ interval.min, interval.max }(::engine);
         }
-        template<typename T> requires (std::is_integral_v<T> and std::is_unsigned_v<T>)
+        template<typename T> requires (std::is_integral_v<T> && std::is_unsigned_v<T>)
         auto binomial (fox::count_t trials = 1u, fox::float64_t probability = 0.5)
         {
             return std::binomial_distribution<T>{ trials, probability }(::engine);
         } 
-        template<typename T> requires (std::is_integral_v<T> and std::is_unsigned_v<T>)
+        template<typename T> requires (std::is_integral_v<T> && std::is_unsigned_v<T>)
         auto bernoulli(fox::float64_t probability = 0.5)
         {
             return std::bernoulli_distribution{ probability }(::engine);
         }
-        template<typename T> requires (std::is_integral_v<T> and std::is_unsigned_v<T>)
+        template<typename T> requires (std::is_integral_v<T> && std::is_unsigned_v<T>)
         auto poisson  (fox::float64_t mean = 1.0)
         {
             return std::poisson_distribution{ mean }(::engine);

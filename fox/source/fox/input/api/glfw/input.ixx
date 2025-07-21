@@ -48,11 +48,11 @@ export namespace fox::input::api::glfw
         }
         auto key_pressed               (input::key_t    code) const -> fox::bool_t
         {
-            return activeKeys_.test(code) and !lastActiveKeys_.test(code);
+            return activeKeys_.test(code) && !lastActiveKeys_.test(code);
         }
         auto key_released              (input::key_t    code) const -> fox::bool_t
         {
-            return !activeKeys_.test(code) and lastActiveKeys_.test(code);
+            return !activeKeys_.test(code) && lastActiveKeys_.test(code);
         }
 
         auto button_active             (input::button_t code) const -> fox::bool_t
@@ -61,11 +61,11 @@ export namespace fox::input::api::glfw
         }
         auto button_pressed            (input::button_t code) const -> fox::bool_t
         {
-            return activeButtons_.test(code) and !lastActiveButtons_.test(code);
+            return activeButtons_.test(code) && !lastActiveButtons_.test(code);
         }
         auto button_released           (input::button_t code) const -> fox::bool_t
         {
-            return !activeButtons_.test(code) and lastActiveButtons_.test(code);
+            return !activeButtons_.test(code) && lastActiveButtons_.test(code);
         }
 
         auto cursor_position           ()                     const -> fox::Vector2f
@@ -88,7 +88,7 @@ export namespace fox::input::api::glfw
 
         void glfw_input_key_callback   (::glfw::window*, input::key_t    key   , fox::int32_t    , fox::int32_t action, input::modifier_t)
         {
-            if (std::cmp_less(key, key::min) or std::cmp_greater(key, key::max)) return;
+            if (std::cmp_less(key, key::min) || std::cmp_greater(key, key::max)) return;
 
             switch (::glfw::input_action{ action })
             {
@@ -99,7 +99,7 @@ export namespace fox::input::api::glfw
         }
         void glfw_input_button_callback(::glfw::window*, input::button_t button,                   fox::int32_t action, input::modifier_t)
         {
-            if (std::cmp_less(button, button::min) or std::cmp_greater(button, button::max)) return;
+            if (std::cmp_less(button, button::min) || std::cmp_greater(button, button::max)) return;
 
             switch (::glfw::input_action{ action })
             {

@@ -72,9 +72,9 @@ export namespace fox
             return matrix;
         }
 
-        auto operator*(const fox::Transform& other) -> fox::Transform
+        friend auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
         {
-            return fox::Transform::from_matrix(matrix() * other.matrix());
+            return fox::Transform::from_matrix(left.matrix() * right.matrix());
         }
         
         fox::Vector3f   position;

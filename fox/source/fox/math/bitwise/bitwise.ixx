@@ -99,10 +99,10 @@ export namespace fox::math::bitwise
     template<bitwise::bit B, bitwise::significance S, typename T>
     constexpr auto consecutive(T value) -> fox::size_t
     {
-        if constexpr (B == bitwise::bit::zero and S == bitwise::significance::least) return std::countr_zero(value);
-        if constexpr (B == bitwise::bit::one  and S == bitwise::significance::least) return std::countr_one (value);
-        if constexpr (B == bitwise::bit::zero and S == bitwise::significance::most ) return std::countl_zero(value);
-        if constexpr (B == bitwise::bit::one  and S == bitwise::significance::most ) return std::countl_one (value);
+        if constexpr (B == bitwise::bit::zero && S == bitwise::significance::least) return std::countr_zero(value);
+        if constexpr (B == bitwise::bit::one  && S == bitwise::significance::least) return std::countr_one (value);
+        if constexpr (B == bitwise::bit::zero && S == bitwise::significance::most ) return std::countl_zero(value);
+        if constexpr (B == bitwise::bit::one  && S == bitwise::significance::most ) return std::countl_one (value);
     }
 
     template<std::unsigned_integral T, std::unsigned_integral U>
