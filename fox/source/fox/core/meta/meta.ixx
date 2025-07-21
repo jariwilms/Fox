@@ -11,6 +11,9 @@ export namespace fox::meta
         template<typename... Args>
         explicit from_inaccessible_ctor(std::in_place_t, Args&&... args)
             : T{ std::forward<Args>(args)... } {}
+
+        from_inaccessible_ctor(const meta::from_inaccessible_ctor<T>& )          = delete;
+        from_inaccessible_ctor(      meta::from_inaccessible_ctor<T>&&) noexcept = delete;
     };
 
     template<typename... Ts>
