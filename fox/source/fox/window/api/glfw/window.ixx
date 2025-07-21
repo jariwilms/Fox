@@ -12,10 +12,10 @@ import vendor.glfw;
 
 export namespace fox::interface::api::glfw
 {
-	class Window
-	{
-	public:
-		using Mode = api::Window::Mode;
+    class Window
+    {
+    public:
+        using Mode = api::Window::Mode;
 
         Window(const std::string& title, const fox::Vector2u& dimensions)
             : title_{ title }, dimensions_{ dimensions }, mode_{ Mode::Windowed }
@@ -49,13 +49,13 @@ export namespace fox::interface::api::glfw
                 {
                     std::print("[GLFW_ERROR] {0}: {1}\n", error, description);
                 });
-            ::glfw::set_key_callback              (handle_, [](::glfw::window*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action  , fox::int32_t mods  ) 
+            ::glfw::set_key_callback              (handle_, [](::glfw::window*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t modifiers) 
                 { 
-                    input::api::handler->glfw_input_key_callback(window, key, scancode, action, mods); 
+                    input::api::handler->glfw_input_key_callback(window, input::key{ key }, scancode, action, input::modifier{ modifiers }); 
                 });
-            ::glfw::set_mouse_button_callback     (handle_, [](::glfw::window*  window, fox::int32_t   button, fox::int32_t   action  , fox::int32_t mods    )
+            ::glfw::set_mouse_button_callback     (handle_, [](::glfw::window*  window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t modifiers)
                 {
-                    input::api::handler->glfw_input_button_callback(window, button, action, mods);
+                    input::api::handler->glfw_input_button_callback(window, input::button{ button }, action, input::modifier{ modifiers });
                 });
             ::glfw::set_cursor_position_callback  (handle_, [](::glfw::window*  window, fox::float64_t x     , fox::float64_t y       )
                 {
@@ -76,44 +76,44 @@ export namespace fox::interface::api::glfw
             ::glfw::terminate();
         }
 
-		void poll_events ()
-		{
-			input::api::handler->update();
-			::glfw::poll_events();
-		}
-		void swap_buffers()
-		{
-			::glfw::swap_buffers(handle_);
-		}
+        void poll_events ()
+        {
+            input::api::handler->update();
+            ::glfw::poll_events();
+        }
+        void swap_buffers()
+        {
+            ::glfw::swap_buffers(handle_);
+        }
 
-		void rename(const std::string  & title     )
-		{
-			::glfw::set_window_title(handle_, title.c_str());
-		}
-		void resize(const fox::Vector2u& dimensions)
-		{
-			::glfw::set_window_size(handle_, dimensions);
-			dimensions_ = dimensions;
-		}
+        void rename(const std::string  & title     )
+        {
+            ::glfw::set_window_title(handle_, title.c_str());
+        }
+        void resize(const fox::Vector2u& dimensions)
+        {
+            ::glfw::set_window_size(handle_, dimensions);
+            dimensions_ = dimensions;
+        }
 
-		void        close() const
-		{
-			glfwSetWindowShouldClose(handle_, fox::True);
-		}
-		auto should_close() const -> fox::bool_t
-		{
-			return ::glfw::window_should_close(handle_);
-		}
+        void        close() const
+        {
+            glfwSetWindowShouldClose(handle_, fox::True);
+        }
+        auto should_close() const -> fox::bool_t
+        {
+            return ::glfw::window_should_close(handle_);
+        }
 
-		auto handle() const -> ::glfw::window* const
-		{
-			return handle_;
-		}
+        auto handle() const -> ::glfw::window* const
+        {
+            return handle_;
+        }
 
-	private:
-		::glfw::window* handle_    ;
-		std::string     title_     ;
-		fox::Vector2u   dimensions_;
-		Mode            mode_      ;
-	};
+    private:
+        ::glfw::window* handle_    ;
+        std::string     title_     ;
+        fox::Vector2u   dimensions_;
+        Mode            mode_      ;
+    };
 }

@@ -15,53 +15,53 @@ export namespace fox::gfx::api::gl
     concept indexed_feature_c = 
         (
                F == glf::Feature::Blending 
-            or F == glf::Feature::ScissorTest
+            || F == glf::Feature::ScissorTest
         );
 
     template<glf::Data D>
     concept indexed_data_c =
         (
                D == glf::Data::MaximumComputeWorkGroupCount
-            or D == glf::Data::MaximumComputeWorkGroupSize
-            or D == glf::Data::SampleMaskValue
-            or D == glf::Data::ShaderStorageBufferSize
-            or D == glf::Data::ShaderStorageBufferStart
-            or D == glf::Data::TransformfeedbackBufferSize
-            or D == glf::Data::TransformFeedbackBufferStart
-            or D == glf::Data::UniformBufferSize
-            or D == glf::Data::UniformBufferStart
-            or D == glf::Data::VertexBindingDivisor
-            or D == glf::Data::VertexBindingOffset
-            or D == glf::Data::VertexBindingStride
-            or D == glf::Data::VertexBindingBuffer
+            || D == glf::Data::MaximumComputeWorkGroupSize
+            || D == glf::Data::SampleMaskValue
+            || D == glf::Data::ShaderStorageBufferSize
+            || D == glf::Data::ShaderStorageBufferStart
+            || D == glf::Data::TransformfeedbackBufferSize
+            || D == glf::Data::TransformFeedbackBufferStart
+            || D == glf::Data::UniformBufferSize
+            || D == glf::Data::UniformBufferStart
+            || D == glf::Data::VertexBindingDivisor
+            || D == glf::Data::VertexBindingOffset
+            || D == glf::Data::VertexBindingStride
+            || D == glf::Data::VertexBindingBuffer
         );
 
     template<typename T>
     concept arithmetic_type_c =
         (
                std::is_same_v<T, gl::int8_t   >  
-            or std::is_same_v<T, gl::uint8_t  >
-            or std::is_same_v<T, gl::int16_t  >
-            or std::is_same_v<T, gl::uint16_t >
-            or std::is_same_v<T, gl::int32_t  >
-            or std::is_same_v<T, gl::uint32_t >
-            or std::is_same_v<T, gl::int64_t  >
-            or std::is_same_v<T, gl::uint64_t >
-            or std::is_same_v<T, gl::float16_t>
-            or std::is_same_v<T, gl::float32_t>
-            or std::is_same_v<T, gl::float64_t>
+            || std::is_same_v<T, gl::uint8_t  >
+            || std::is_same_v<T, gl::int16_t  >
+            || std::is_same_v<T, gl::uint16_t >
+            || std::is_same_v<T, gl::int32_t  >
+            || std::is_same_v<T, gl::uint32_t >
+            || std::is_same_v<T, gl::int64_t  >
+            || std::is_same_v<T, gl::uint64_t >
+            || std::is_same_v<T, gl::float16_t>
+            || std::is_same_v<T, gl::float32_t>
+            || std::is_same_v<T, gl::float64_t>
         );
 
     template<glf::Texture::Target T, glf::Texture::Target U>
     concept valid_texture_view_c = 
-           (T == glf::Texture::Target::_1D                 and (U == glf::Texture::Target::_1D            or U == glf::Texture::Target::_1DArray                                                                                             ))
-        or (T == glf::Texture::Target::_2D                 and (U == glf::Texture::Target::_2D            or U == glf::Texture::Target::_2DArray                                                                                             ))
-        or (T == glf::Texture::Target::_3D                 and (U == glf::Texture::Target::_3D                                                                                                                                               ))
-        or (T == glf::Texture::Target::CubeMap             and (U == glf::Texture::Target::CubeMap        or U == glf::Texture::Target::_2D                 or U == glf::Texture::Target::_2DArray or U == glf::Texture::Target::CubeMapArray))
-        or (T == glf::Texture::Target::Rectangle           and (U == glf::Texture::Target::Rectangle                                                                                                                                         ))
-        or (T == glf::Texture::Target::_1DArray            and (U == glf::Texture::Target::_1D            or U == glf::Texture::Target::_1DArray                                                                                             ))
-        or (T == glf::Texture::Target::_2DArray            and (U == glf::Texture::Target::_2D            or U == glf::Texture::Target::_2DArray                                                                                             ))
-        or (T == glf::Texture::Target::CubeMapArray        and (U == glf::Texture::Target::_2D            or U == glf::Texture::Target::_2DArray            or U == glf::Texture::Target::CubeMap  or U == glf::Texture::Target::CubeMapArray))
-        or (T == glf::Texture::Target::_2DMultisample      and (U == glf::Texture::Target::_2DMultisample or U == glf::Texture::Target::_2DMultisampleArray                                                                                  ))
-        or (T == glf::Texture::Target::_2DMultisampleArray and (U == glf::Texture::Target::_2DMultisample or U == glf::Texture::Target::_2DMultisampleArray                                                                                  ));
+           (T == glf::Texture::Target::_1D                 && (U == glf::Texture::Target::_1D            || U == glf::Texture::Target::_1DArray                                                                                             ))
+        || (T == glf::Texture::Target::_2D                 && (U == glf::Texture::Target::_2D            || U == glf::Texture::Target::_2DArray                                                                                             ))
+        || (T == glf::Texture::Target::_3D                 && (U == glf::Texture::Target::_3D                                                                                                                                               ))
+        || (T == glf::Texture::Target::CubeMap             && (U == glf::Texture::Target::CubeMap        || U == glf::Texture::Target::_2D                 || U == glf::Texture::Target::_2DArray || U == glf::Texture::Target::CubeMapArray))
+        || (T == glf::Texture::Target::Rectangle           && (U == glf::Texture::Target::Rectangle                                                                                                                                         ))
+        || (T == glf::Texture::Target::_1DArray            && (U == glf::Texture::Target::_1D            || U == glf::Texture::Target::_1DArray                                                                                             ))
+        || (T == glf::Texture::Target::_2DArray            && (U == glf::Texture::Target::_2D            || U == glf::Texture::Target::_2DArray                                                                                             ))
+        || (T == glf::Texture::Target::CubeMapArray        && (U == glf::Texture::Target::_2D            || U == glf::Texture::Target::_2DArray            || U == glf::Texture::Target::CubeMap  || U == glf::Texture::Target::CubeMapArray))
+        || (T == glf::Texture::Target::_2DMultisample      && (U == glf::Texture::Target::_2DMultisample || U == glf::Texture::Target::_2DMultisampleArray                                                                                  ))
+        || (T == glf::Texture::Target::_2DMultisampleArray && (U == glf::Texture::Target::_2DMultisample || U == glf::Texture::Target::_2DMultisampleArray                                                                                  ));
 }

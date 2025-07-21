@@ -24,7 +24,7 @@ export namespace fox::gfx
 
         static auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications) -> std::shared_ptr<gfx::FrameBuffer>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::FrameBuffer>>(dimensions, specifications);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::FrameBuffer>>(std::in_place_t{}, dimensions, specifications);
         }
 
         void bind(Target target)
@@ -115,7 +115,7 @@ export namespace fox::gfx
 
         static auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples) -> std::shared_ptr<gfx::FrameBufferMultisample>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::FrameBufferMultisample>>(dimensions, specifications, samples);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::FrameBufferMultisample>>(std::in_place_t{}, dimensions, specifications, samples);
         }
 
         void bind(Target target)

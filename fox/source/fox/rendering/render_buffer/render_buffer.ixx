@@ -18,7 +18,7 @@ export namespace fox::gfx
 
         static auto create(Format format, const fox::Vector2u& dimensions) -> std::shared_ptr<gfx::RenderBuffer>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::RenderBuffer>>(format, dimensions);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::RenderBuffer>>(std::in_place_t{}, format, dimensions);
         }
 
         auto dimensions() const -> const fox::Vector2u&
@@ -51,7 +51,7 @@ export namespace fox::gfx
 
         static auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::RenderBufferMultisample>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::RenderBufferMultisample>>(format, dimensions, samples);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::RenderBufferMultisample>>(std::in_place_t{}, format, dimensions, samples);
         }
 
         auto dimensions() const -> const fox::Vector2u&

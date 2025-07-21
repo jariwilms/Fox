@@ -348,7 +348,7 @@ export namespace fox::gfx::api
                     0.01f,
                 };
 
-                if (light.isShadowCasting and std::cmp_less(shadowCastingLightCount, maximumShadowCastingLights))
+                if (light.isShadowCasting && std::cmp_less(shadowCastingLightCount, maximumShadowCastingLights))
                 {
                     switch (light.type)
                     {

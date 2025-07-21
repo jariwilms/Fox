@@ -43,12 +43,13 @@ export namespace fox
         template<Extension E>
         static auto encode(const fox::Image& image) -> auto
         {
-            stb::set_flip_vertically_on_write(cfg::FLIP_IMAGES);
+            using enum Extension;
             
-            if constexpr (E == Extension::BMP) return stb::write_bmp_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
-            if constexpr (E == Extension::JPG) return stb::write_jpg_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
-            if constexpr (E == Extension::PNG) return stb::write_png_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
-            if constexpr (E == Extension::HDR) return stb::write_hdr_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            stb::set_flip_vertically_on_write(cfg::FLIP_IMAGES);
+            if constexpr (E == BMP) return stb::write_bmp_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == JPG) return stb::write_jpg_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == PNG) return stb::write_png_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == HDR) return stb::write_hdr_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
         }
         static auto decode(Format format, std::span<const fox::byte_t> data) -> fox::Image
         {

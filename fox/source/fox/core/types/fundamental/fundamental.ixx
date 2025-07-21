@@ -46,7 +46,7 @@ export namespace fox
 	using fundamental_t = fox::fundamental<T>::type;
 
 	template<typename T>
-	inline constexpr auto to_fundamental_type(T value) -> fox::fundamental_t<T>
+	constexpr auto to_fundamental_type(T value) -> fox::fundamental_t<T>
 	{
 		return value;
 	}

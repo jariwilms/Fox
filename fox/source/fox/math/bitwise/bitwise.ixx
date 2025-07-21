@@ -28,27 +28,6 @@ export namespace fox::math::bitwise
     };
 
     template<std::unsigned_integral T>
-    constexpr auto and_       (T first, T second) -> T
-    {
-        return first bitand second;
-    }
-    template<std::unsigned_integral T>
-    constexpr auto or_        (T first, T second) -> T
-    {
-        return first bitor second;
-    }
-    template<std::unsigned_integral T>
-    constexpr auto xor_       (T first, T second) -> T
-    {
-        return first xor second;
-    }
-    template<std::unsigned_integral T>
-    constexpr auto compl_     (T first) -> T
-    {
-        return compl first;
-    }
-
-    template<std::unsigned_integral T>
     constexpr auto all        (T value, fox::size_t position) -> fox::bool_t
     {
         return std::bitset<fox::bit_size_of<T>()>{ value }.all();
@@ -99,10 +78,13 @@ export namespace fox::math::bitwise
     template<bitwise::bit B, bitwise::significance S, typename T>
     constexpr auto consecutive(T value) -> fox::size_t
     {
-        if constexpr (B == bitwise::bit::zero and S == bitwise::significance::least) return std::countr_zero(value);
-        if constexpr (B == bitwise::bit::one  and S == bitwise::significance::least) return std::countr_one (value);
-        if constexpr (B == bitwise::bit::zero and S == bitwise::significance::most ) return std::countl_zero(value);
-        if constexpr (B == bitwise::bit::one  and S == bitwise::significance::most ) return std::countl_one (value);
+        using enum bitwise::bit; 
+        using enum bitwise::significance;
+
+        if constexpr (B == zero && S == least) return std::countr_zero(value);
+        if constexpr (B == one  && S == least) return std::countr_one (value);
+        if constexpr (B == zero && S == most ) return std::countl_zero(value);
+        if constexpr (B == one  && S == most ) return std::countl_one (value);
     }
 
     template<std::unsigned_integral T, std::unsigned_integral U>
@@ -135,7 +117,7 @@ export namespace fox::math::bitwise
     template<std::unsigned_integral T>
     constexpr auto parity     (T value) -> T
     {
-        return bitwise::and_(bitwise::count(value), T{ 1u });
+        return bitwise::count(value) && T{ 1u };
     }
 
     template <class T, class U>
