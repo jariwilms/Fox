@@ -2,10 +2,10 @@ param([string]$Shader = "")
 
 # Configuration
 $Vendor          = "LunarG"
-$VendorDirectory = "..\vendor\lunarg"
+$VendorDirectory = "..\..\vendor\lunarg"
 $Compiler        = "glslc.exe"
 $Flags           = @("-Werror", "-O")
-$ShaderDirectory = "..\fox\assets\shaders"
+$ShaderDirectory = "..\..\fox\assets\shaders"
 $SourceDirectory = "$ShaderDirectory\source"
 $OutputDirectory = "$ShaderDirectory\compiled"
 
