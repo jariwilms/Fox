@@ -34,7 +34,7 @@ static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& ac
             model_to_scene_graph(scene, childActor, model, model.nodes.at(child));
         });
 }
-static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox::Relationship& relation, const fox::Transform& transform) -> fox::Transform
+static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox::Relationship& relation, const fox::transform& transform) -> fox::transform
 {
     if (!relation.parent) return transform;
 
@@ -83,14 +83,14 @@ int main()
     auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().value();
     famfc.mesh                  = gfx::geometry::plane;
     famfc.material              = defaultMaterial;
-    fatc                        = fox::Transform{ fox::vector3f{ 0.0f, -1.0f, 0.0f }, fox::vector3f{ -90.0f, 0.0f, 0.0f }, fox::vector3f{ 50.0f } };
+    fatc                        = fox::transform{ fox::vector3f{ 0.0f, -1.0f, 0.0f }, fox::vector3f{ -90.0f, 0.0f, 0.0f }, fox::vector3f{ 50.0f } };
 
     auto& boxActor              = scene->create_actor();
     auto& batc                  = boxActor.get_component<ecs::TransformComponent> ().value();
     auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().value();
     bamfc.mesh                  = gfx::geometry::cube;
     bamfc.material              = defaultMaterial;
-    batc                        = fox::Transform{ fox::vector3f{ 3.0f, 1.0f, -5.0f }, fox::vector3f{ 0.0f, 30.0f, 0.0f }, fox::vector3f{ 4.0f } };
+    batc                        = fox::transform{ fox::vector3f{ 3.0f, 1.0f, -5.0f }, fox::vector3f{ 0.0f, 30.0f, 0.0f }, fox::vector3f{ 4.0f } };
 
     const auto skyboxDimensions = fox::vector2u{ 2048u };
     const auto skyboxImageFiles = std::array<const std::filesystem::path, fox::size_t{ 6u }>
@@ -151,7 +151,7 @@ int main()
             std::ranges::for_each(lights, [](const auto& tuple)
                 {
                     const auto& [light, position] = tuple;
-                    gfx::renderer::render_debug(fox::Transform{ position, fox::vector3f{}, fox::vector3f{ 0.1f, 0.1f, 0.1f }});
+                    gfx::renderer::render_debug(fox::transform{ position, fox::vector3f{}, fox::vector3f{ 0.1f, 0.1f, 0.1f }});
                 });
         };
 

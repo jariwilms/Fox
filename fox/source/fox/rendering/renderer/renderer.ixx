@@ -23,11 +23,11 @@ export namespace fox::gfx::renderer
         renderer_->finish();
     }
 
-    void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
+    void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::transform& transform)
     {
         renderer_->render(mesh, material, transform);
     }
-    void render_debug(const fox::Transform& transform)
+    void render_debug(const fox::transform& transform)
     {
         renderer_->render_debug(transform);
     }

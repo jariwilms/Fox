@@ -16,7 +16,7 @@ export namespace fox::gfx
         {
             Node() = default;
 
-            fox::Transform               transform;
+            fox::transform               transform;
             std::optional<fox::uint32_t> mesh;
             std::optional<fox::uint32_t> material;
             std::vector  <fox::size_t  > children;

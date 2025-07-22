@@ -459,11 +459,11 @@ export namespace fox::gfx::api
             gl::blit_frame_buffer(pBuffers_.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, pBuffers_.at(0)->dimensions(), dimensions);
         }
 
-        void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::Transform& transform)
+        void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::transform& transform)
         {
             mmt_.emplace_back(mesh, material, transform);
         }
-        void render_debug(const fox::Transform& transform)
+        void render_debug(const fox::transform& transform)
         {
             debugTransforms_.emplace_back(transform);
         }
@@ -533,7 +533,7 @@ export namespace fox::gfx::api
 
             std::ranges::for_each(lights_, [&](const auto& light)
                 {
-                    fox::Transform sphereTransform{ light.position, fox::vector3f{}, fox::vector3f{light.radius} };
+                    fox::transform sphereTransform{ light.position, fox::vector3f{}, fox::vector3f{light.radius} };
 
                     matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
                     lightUniform_   ->copy      ({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
@@ -565,11 +565,11 @@ export namespace fox::gfx::api
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
 
-        std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::Transform>> mmt_{};
+        std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::transform>> mmt_{};
         std::vector<unf::Light>                                            lights_{};
         std::vector<unf::Light>                                            shadowCastingPointLights_{};
         std::vector<unf::Light>                                            shadowCastingDirectionalLights_{};
-        std::vector<fox::Transform>                                        debugTransforms_{};
+        std::vector<fox::transform>                                        debugTransforms_{};
         std::shared_ptr<gfx::FrameBuffer>                                  gBuffer_{};
         std::shared_ptr<gfx::FrameBuffer>                                  sBuffer_{};
         std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   pBuffers_{};

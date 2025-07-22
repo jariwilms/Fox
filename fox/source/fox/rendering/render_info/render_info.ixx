@@ -13,7 +13,7 @@ export namespace fox::gfx
     struct RenderInfo
     {
         fox::Camera                                                  camera;
-        fox::Transform                                               cameraTransform;
+        fox::transform                                               cameraTransform;
         std::span      <const std::tuple<fox::Light, fox::vector3f>> lights;
         std::shared_ptr<const gfx::Cubemap>                          skybox;
     };

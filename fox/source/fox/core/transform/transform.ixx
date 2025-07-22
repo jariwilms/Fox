@@ -6,21 +6,21 @@ import fox.math;
 
 export namespace fox
 {
-    class Transform
+    class transform
     {
     public:
-        Transform()
+        transform()
             : position{ fox::vector<>::zero }, rotation{ quaternion::identity }, scale{ fox::vector<>::one } {}
         template<typename V>
-        Transform(V&& position, V&& rotation, V&& scale)
+        transform(V&& position, V&& rotation, V&& scale)
             : position{ std::forward<V>(position) }, rotation{ math::to_radians(std::forward<V>(rotation)) }, scale{ std::forward<V>(scale) } {}
         template<typename P, typename R, typename S>
-        Transform(P&& position, R&& rotation, S&& scale)
+        transform(P&& position, R&& rotation, S&& scale)
             : position{ std::forward<P>(position) }, rotation{ std::forward<R>(rotation) }, scale{ std::forward<S>(scale) } {}
 
-        static auto from_matrix(const fox::Matrix4f& matrix) -> fox::Transform
+        static auto from_matrix(const fox::Matrix4f& matrix) -> fox::transform
         {
-            auto transform = fox::Transform{};
+            auto transform = fox::transform{};
             std::tie(transform.position, transform.rotation, transform.scale, std::ignore, std::ignore) = math::decompose(matrix);
 
             return transform;
@@ -72,9 +72,9 @@ export namespace fox
             return matrix;
         }
 
-        friend auto operator*(const fox::Transform& left, const fox::Transform& right) -> fox::Transform
+        friend auto operator*(const fox::transform& left, const fox::transform& right) -> fox::transform
         {
-            return fox::Transform::from_matrix(left.matrix() * right.matrix());
+            return fox::transform::from_matrix(left.matrix() * right.matrix());
         }
         
         fox::vector3f   position;
