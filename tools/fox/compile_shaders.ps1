@@ -1,11 +1,14 @@
-param([string]$Shader = "")
+param(
+    [string]$Path,
+    [string]$Shader = ""
+)
 
 # Configuration
 $Vendor          = "LunarG"
-$VendorDirectory = "..\lunarg"
+$VendorDirectory = "$PSScriptRoot\..\lunarg"
 $Compiler        = "glslc.exe"
 $Flags           = @("-Werror", "-O")
-$ShaderDirectory = "..\..\fox\assets\shaders"
+$ShaderDirectory = "$PSScriptRoot\..\..\fox\assets\shaders"
 $SourceDirectory = "$ShaderDirectory\source"
 $OutputDirectory = "$ShaderDirectory\compiled"
 
