@@ -22,7 +22,7 @@ export namespace fox::gfx
         explicit FrameBuffer(std::shared_ptr<impl::FrameBuffer> _)
             : _{ _ } {}
 
-        static auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications) -> std::shared_ptr<gfx::FrameBuffer>
+        static auto create(const fox::vector2u& dimensions, std::span<const Specification> specifications) -> std::shared_ptr<gfx::FrameBuffer>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::FrameBuffer>>(std::in_place_t{}, dimensions, specifications);
         }
@@ -65,7 +65,7 @@ export namespace fox::gfx
             _->write_to(identifier, static_cast<impl::index_t>(index), level);
         }
 
-        void resize(const fox::Vector2u& dimensions)
+        void resize(const fox::vector2u& dimensions)
         {
             _->resize(dimensions);
         }
@@ -82,7 +82,7 @@ export namespace fox::gfx
             return _->attachment(attachment);
         }
         
-        auto dimensions() const -> const fox::Vector2u&
+        auto dimensions() const -> const fox::vector2u&
         {
             return _->dimensions();
         }
@@ -96,7 +96,7 @@ export namespace fox::gfx
         }
 
     protected:
-        FrameBuffer(const fox::Vector2u& dimensions, std::span<const Specification> specifications)
+        FrameBuffer(const fox::vector2u& dimensions, std::span<const Specification> specifications)
             : _{ std::make_shared<impl::FrameBuffer>(dimensions, specifications) } {}
 
     private:
@@ -113,7 +113,7 @@ export namespace fox::gfx
         explicit FrameBufferMultisample(std::shared_ptr<impl::FrameBufferMultisample> _)
             : _{ _ } {}
 
-        static auto create(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples) -> std::shared_ptr<gfx::FrameBufferMultisample>
+        static auto create(const fox::vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples) -> std::shared_ptr<gfx::FrameBufferMultisample>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::FrameBufferMultisample>>(std::in_place_t{}, dimensions, specifications, samples);
         }
@@ -152,7 +152,7 @@ export namespace fox::gfx
             _->write_to(identifier, static_cast<impl::index_t>(index), level);
         }
 
-        void resize(const fox::Vector2u& dimensions)
+        void resize(const fox::vector2u& dimensions)
         {
             _->resize(dimensions);
         }
@@ -169,7 +169,7 @@ export namespace fox::gfx
             return _->attachment(attachment);
         }
 
-        auto dimensions() const -> const fox::Vector2u&
+        auto dimensions() const -> const fox::vector2u&
         {
             return _->dimensions();
         }
@@ -187,7 +187,7 @@ export namespace fox::gfx
         }
 
     protected:
-        FrameBufferMultisample(const fox::Vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
+        FrameBufferMultisample(const fox::vector2u& dimensions, std::span<const Specification> specifications, fox::uint32_t samples)
             : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, specifications, samples) } {}
 
     private:

@@ -17,7 +17,7 @@ export namespace fox::interface::api::glfw
     public:
         using Mode = api::Window::Mode;
 
-        Window(const std::string& title, const fox::Vector2u& dimensions)
+        Window(const std::string& title, const fox::vector2u& dimensions)
             : title_{ title }, dimensions_{ dimensions }, mode_{ Mode::Windowed }
         {
             ::glfw::initialize();
@@ -90,7 +90,7 @@ export namespace fox::interface::api::glfw
         {
             ::glfw::set_window_title(handle_, title.c_str());
         }
-        void resize(const fox::Vector2u& dimensions)
+        void resize(const fox::vector2u& dimensions)
         {
             ::glfw::set_window_size(handle_, dimensions);
             dimensions_ = dimensions;
@@ -113,7 +113,7 @@ export namespace fox::interface::api::glfw
     private:
         ::glfw::window* handle_    ;
         std::string     title_     ;
-        fox::Vector2u   dimensions_;
+        fox::vector2u   dimensions_;
         Mode            mode_      ;
     };
 }

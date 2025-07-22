@@ -24,8 +24,8 @@ export namespace fox::gfx::api
 
 
 
-            const fox::Vector2u viewportDimensions { 1280u,  720u };
-            const fox::Vector2u shadowMapDimensions{ 2048u, 2048u };
+            const fox::vector2u viewportDimensions { 1280u,  720u };
+            const fox::vector2u shadowMapDimensions{ 2048u, 2048u };
 
             using FS = gfx::FrameBuffer::Specification;
             using TF = gfx::Texture2D::Format;
@@ -111,12 +111,12 @@ export namespace fox::gfx::api
             auto captureProjection = math::perspective(1.0f, math::to_radians(90.0f), 0.1f, 10.0f);
             const std::array<fox::Matrix4f, 6> captureViews =
             {
-                glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  1.0f,  0.0f,  0.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
-                glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{ -1.0f,  0.0f,  0.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
-                glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  1.0f,  0.0f }, fox::Vector3f{ 0.0f,  0.0f,  1.0f }),
-                glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f, -1.0f,  0.0f }, fox::Vector3f{ 0.0f,  0.0f, -1.0f }),
-                glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  0.0f,  1.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
-                glm::lookAt(fox::Vector3f{ 0.0f, 0.0f, 0.0f }, fox::Vector3f{  0.0f,  0.0f, -1.0f }, fox::Vector3f{ 0.0f, -1.0f,  0.0f }),
+                glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{  1.0f,  0.0f,  0.0f }, fox::vector3f{ 0.0f, -1.0f,  0.0f }),
+                glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{ -1.0f,  0.0f,  0.0f }, fox::vector3f{ 0.0f, -1.0f,  0.0f }),
+                glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{  0.0f,  1.0f,  0.0f }, fox::vector3f{ 0.0f,  0.0f,  1.0f }),
+                glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{  0.0f, -1.0f,  0.0f }, fox::vector3f{ 0.0f,  0.0f, -1.0f }),
+                glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{  0.0f,  0.0f,  1.0f }, fox::vector3f{ 0.0f, -1.0f,  0.0f }),
+                glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{  0.0f,  0.0f, -1.0f }, fox::vector3f{ 0.0f, -1.0f,  0.0f }),
             };
 
             const auto& cva = gfx::geometry::cube;
@@ -125,11 +125,11 @@ export namespace fox::gfx::api
 
 
             //Load HDR environment texture
-            const fox::Vector2u envDimensions{ 512u, 512u };
+            const fox::vector2u envDimensions{ 512u, 512u };
             const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
             auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
             auto renderBuffer    = frameBuffer->surface<gfx::FrameBuffer::Surface::RenderBuffer>("Depth");
-            auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::Image::Format::RGB32_FLOAT);
+            auto hdrImage        = io::load<io::Asset::Image>("textures/kloppenheim_sky.hdr", fox::image::e_format::rgb32_float);
             auto hdrTex          = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
             environmentCubemap_  = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, envDimensions);
 
@@ -165,7 +165,7 @@ export namespace fox::gfx::api
 
 
             //Irradiance step
-            const fox::Vector2u cvDimensions{ 32u, 32u };
+            const fox::vector2u cvDimensions{ 32u, 32u };
 
             irradianceCubemap_ = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
 
@@ -197,7 +197,7 @@ export namespace fox::gfx::api
 
 
             //PreFilter step
-            const fox::Vector2u reflectionDimensions{ 128u, 128u };
+            const fox::vector2u reflectionDimensions{ 128u, 128u };
 
             auto preFilterBuffer = gfx::UniformBuffer<unf::PreFilter>::create();
             preFilterBuffer->bind(gfx::binding_t{ 5u });
@@ -214,7 +214,7 @@ export namespace fox::gfx::api
             fox::uint32_t maxMipLevels{ preFilterCubemap_->mipmap_levels() };
             for (const auto& mip : std::views::iota(0u, maxMipLevels))
             {
-                const fox::Vector2u mipDimensions{ reflectionDimensions.x * std::pow(0.5f, mip), reflectionDimensions.y * std::pow(0.5f, mip) };
+                const fox::vector2u mipDimensions{ reflectionDimensions.x * std::pow(0.5f, mip), reflectionDimensions.y * std::pow(0.5f, mip) };
                 const auto& roughness = static_cast<fox::float32_t>(mip) / (maxMipLevels - 1u);
                 preFilterBuffer->copy(unf::PreFilter{ envDimensions.x, roughness });
 
@@ -293,11 +293,11 @@ export namespace fox::gfx::api
 
 
             constexpr auto             ssaoNoiseSamples{ 16u };
-            std::vector<fox::Vector3f> ssaoNoise(ssaoNoiseSamples);
+            std::vector<fox::vector3f> ssaoNoise(ssaoNoiseSamples);
 
             for (auto index : std::views::iota(0u, ssaoNoiseSamples))
             {
-                fox::Vector3f noise
+                fox::vector3f noise
                 { 
                     distribution(engine) * 2.0f - 1.0f, 
                     distribution(engine) * 2.0f - 1.0f, 
@@ -307,7 +307,7 @@ export namespace fox::gfx::api
                 ssaoNoise.at(index) = noise;
             }
 
-            ssaoNoiseTexture_ = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Nearest, gfx::Texture2D::Wrapping::Repeat, fox::Vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::Vector3f>{ ssaoNoise }));
+            ssaoNoiseTexture_ = gfx::Texture2D::create(gfx::Texture2D::Format::RGB32_FLOAT, gfx::Texture2D::Filter::Nearest, gfx::Texture2D::Wrapping::Repeat, fox::vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::vector3f>{ ssaoNoise }));
         }
 
         void start(gfx::RenderInfo renderInfo)
@@ -320,7 +320,7 @@ export namespace fox::gfx::api
             const auto& projectionMatrix = camera.projection();
 
             matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
-            cameraUniform_  ->copy    (unf::Camera{ fox::Vector4f{ transform.position, 1.0f } });
+            cameraUniform_  ->copy    (unf::Camera{ fox::vector4f{ transform.position, 1.0f } });
 
 
 
@@ -339,8 +339,8 @@ export namespace fox::gfx::api
             {
                 unf::Light result
                 {
-                    fox::Vector4f{ position,    1.0f },
-                    fox::Vector4f{ light.color, 1.0f },
+                    fox::vector4f{ position,    1.0f },
+                    fox::vector4f{ light.color, 1.0f },
 
                     light.radius,
 
@@ -366,8 +366,8 @@ export namespace fox::gfx::api
         }
         void finish()
         {
-            const fox::Vector2u  dimensions{ 1280u,  720u };
-            const fox::Vector2u sDimensions{ 2048u, 2048u };
+            const fox::vector2u  dimensions{ 1280u,  720u };
+            const fox::vector2u sDimensions{ 2048u, 2048u };
 
             //Bind Uniform Buffers to correct indices
             contextUniform_-> bind(gfx::binding_t{ 0u });
@@ -533,7 +533,7 @@ export namespace fox::gfx::api
 
             std::ranges::for_each(lights_, [&](const auto& light)
                 {
-                    fox::Transform sphereTransform{ light.position, fox::Vector3f{}, fox::Vector3f{light.radius} };
+                    fox::Transform sphereTransform{ light.position, fox::vector3f{}, fox::vector3f{light.radius} };
 
                     matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
                     lightUniform_   ->copy      ({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });

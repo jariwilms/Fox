@@ -39,13 +39,13 @@ export namespace fox::gfx::api::gl
             
             gl::texture_storage_2d(handle_, gl::map_cubemap_texture_format(format_), dimensions_, mipmapLevels_);
         }
-         Cubemap(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
+         Cubemap(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector2u& dimensions, std::span<const fox::image> faces)
             : Cubemap{ format, filter, wrapping, dimensions }
         {
             attach_faces(faces, format_);
             generate_mipmap();
         }
-         Cubemap(Format format,                                        const gl::Vector2u& dimensions, std::span<const fox::Image> faces)
+         Cubemap(Format format,                                        const gl::Vector2u& dimensions, std::span<const fox::image> faces)
             : Cubemap{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, faces } {}
 
         void bind(gl::binding_t binding) const
@@ -106,7 +106,7 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        void attach_faces(std::span<const fox::Image> faces, Format format)
+        void attach_faces(std::span<const fox::image> faces, Format format)
         {
             //Indices are swapped intentionally          |   |
             std::array<gl::index_t, 6u> indices{ 0u, 1u, 3u, 2u, 4u, 5u };

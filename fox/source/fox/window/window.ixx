@@ -11,7 +11,7 @@ export namespace fox::interface
 	public:
 		using Mode = impl::window_t::Mode;
 
-		static auto create(const std::string& name, const fox::Vector2u& dimensions)
+		static auto create(const std::string& name, const fox::vector2u& dimensions)
 		{
 			return std::shared_ptr<Window>{ new Window{ name, dimensions } };
 		}
@@ -29,7 +29,7 @@ export namespace fox::interface
 		{
 			_->rename(title);
 		}
-		void resize(const fox::Vector2u& dimensions)
+		void resize(const fox::vector2u& dimensions)
 		{
 			_->resize(dimensions);
 		}
@@ -49,7 +49,7 @@ export namespace fox::interface
 		}
 
 	private:
-		Window(const std::string& name, const fox::Vector2u& dimensions)
+		Window(const std::string& name, const fox::vector2u& dimensions)
 			: _{ std::make_shared<impl::window_t>(name, dimensions) } {}
 
 		std::shared_ptr<impl::window_t> _{};

@@ -45,20 +45,20 @@ export namespace fox::input
         return api::handler->button_released(code);
     }
 
-    auto cursor_position      () -> fox::Vector2f
+    auto cursor_position      () -> fox::vector2f
     {
         return api::handler->cursor_position();
     }
-    auto cursor_position_delta() -> fox::Vector2f
+    auto cursor_position_delta() -> fox::vector2f
     {
         return api::handler->cursor_position_delta();
     }
 
-    auto scroll_wheel         () -> fox::Vector2f
+    auto scroll_wheel         () -> fox::vector2f
     {
         return api::handler->scroll_wheel();
     }
-    auto scroll_wheel_delta   () -> fox::Vector2f
+    auto scroll_wheel_delta   () -> fox::vector2f
     {
         return api::handler->scroll_wheel_delta();
     }

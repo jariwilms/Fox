@@ -47,7 +47,7 @@ static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox:
 
 int main()
 {
-    auto window_ = interface::Window::create("Fox", fox::Vector2u{ 1280u, 720u });
+    auto window_ = interface::Window::create("Fox", fox::vector2u{ 1280u, 720u });
 
     gfx::geometry     ::init();
     io ::ModelImporter::init();
@@ -59,7 +59,7 @@ int main()
     auto& observer              = scene->create_actor();
     auto& camera                = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).value();
     auto& cameraTransform       = observer.get_component<ecs::TransformComponent>().value();
-    cameraTransform.translate_by(fox::Vector3f{ 0.0f, 1.0f, 2.0f });
+    cameraTransform.translate_by(fox::vector3f{ 0.0f, 1.0f, 2.0f });
 
     auto& helmetActor           = scene->create_actor();
     auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().value();
@@ -83,16 +83,16 @@ int main()
     auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().value();
     famfc.mesh                  = gfx::geometry::plane;
     famfc.material              = defaultMaterial;
-    fatc                        = fox::Transform{ fox::Vector3f{ 0.0f, -1.0f, 0.0f }, fox::Vector3f{ -90.0f, 0.0f, 0.0f }, fox::Vector3f{ 50.0f } };
+    fatc                        = fox::Transform{ fox::vector3f{ 0.0f, -1.0f, 0.0f }, fox::vector3f{ -90.0f, 0.0f, 0.0f }, fox::vector3f{ 50.0f } };
 
     auto& boxActor              = scene->create_actor();
     auto& batc                  = boxActor.get_component<ecs::TransformComponent> ().value();
     auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().value();
     bamfc.mesh                  = gfx::geometry::cube;
     bamfc.material              = defaultMaterial;
-    batc                        = fox::Transform{ fox::Vector3f{ 3.0f, 1.0f, -5.0f }, fox::Vector3f{ 0.0f, 30.0f, 0.0f }, fox::Vector3f{ 4.0f } };
+    batc                        = fox::Transform{ fox::vector3f{ 3.0f, 1.0f, -5.0f }, fox::vector3f{ 0.0f, 30.0f, 0.0f }, fox::vector3f{ 4.0f } };
 
-    const auto skyboxDimensions = fox::Vector2u{ 2048u };
+    const auto skyboxDimensions = fox::vector2u{ 2048u };
     const auto skyboxImageFiles = std::array<const std::filesystem::path, fox::size_t{ 6u }>
     {
         "textures/skybox_space2/right.png" , 
@@ -102,20 +102,20 @@ int main()
         "textures/skybox_space2/front.png" ,
         "textures/skybox_space2/back.png"  ,
     };
-    const auto cubemapFaces     = std::array<const fox::Image, fox::size_t{ 6u }>
+    const auto cubemapFaces     = std::array<const fox::image, fox::size_t{ 6u }>
     {
-        io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::Image::Format::RGB8), 
-        io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::Image::Format::RGB8), 
-        io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::Image::Format::RGB8), 
-        io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::Image::Format::RGB8), 
-        io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::Image::Format::RGB8), 
-        io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::Image::Format::RGB8), 
+        io::load<io::Asset::Image>(skyboxImageFiles.at(0), fox::image::e_format::rgb8), 
+        io::load<io::Asset::Image>(skyboxImageFiles.at(1), fox::image::e_format::rgb8), 
+        io::load<io::Asset::Image>(skyboxImageFiles.at(2), fox::image::e_format::rgb8), 
+        io::load<io::Asset::Image>(skyboxImageFiles.at(3), fox::image::e_format::rgb8), 
+        io::load<io::Asset::Image>(skyboxImageFiles.at(4), fox::image::e_format::rgb8), 
+        io::load<io::Asset::Image>(skyboxImageFiles.at(5), fox::image::e_format::rgb8), 
     };
     auto skybox                 = gfx::Cubemap::create(gfx::Cubemap::Format::RGB8_UNORM, skyboxDimensions, cubemapFaces);
 
-    auto lights                 = std::vector<std::tuple<fox::Light, fox::Vector3f>>
+    auto lights                 = std::vector<std::tuple<fox::Light, fox::vector3f>>
     {
-        std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::Vector3f{ 1.0f, 0.5f, 0.0f } * fox::Vector3f{ 400.0f }, 0.0f }, fox::Vector3f{ 6.0f, 1.0f, 4.5f }), 
+        std::make_tuple(fox::Light{ fox::Light::Type::Point, fox::vector3f{ 1.0f, 0.5f, 0.0f } * fox::vector3f{ 400.0f }, 0.0f }, fox::vector3f{ 6.0f, 1.0f, 4.5f }), 
     };
 
     auto move_camera            = [&]
@@ -134,24 +134,24 @@ int main()
 
             if (input::button_active(input::button::RightMouse))
             {
-                static auto rotation = fox::Vector3f{};
+                static auto rotation = fox::vector3f{};
 
                 const auto cpr = input::cursor_position_delta() / 10.0f;
-                rotation += fox::Vector3f{ cpr.y, cpr.x, 0.0f };
+                rotation += fox::vector3f{ cpr.y, cpr.x, 0.0f };
 
                 cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
             }
         };
     auto rotate_helmet          = [&]
         {
-            helmetTransform.rotate_by(fox::Vector3f{ 0.0f, 10.0f * fox::time::delta(), 0.0f });
+            helmetTransform.rotate_by(fox::vector3f{ 0.0f, 10.0f * fox::time::delta(), 0.0f });
         };
-    auto render_lights_debug    = [&](std::span<const std::tuple<fox::Light, fox::Vector3f>> lights)
+    auto render_lights_debug    = [&](std::span<const std::tuple<fox::Light, fox::vector3f>> lights)
         {
             std::ranges::for_each(lights, [](const auto& tuple)
                 {
                     const auto& [light, position] = tuple;
-                    gfx::renderer::render_debug(fox::Transform{ position, fox::Vector3f{}, fox::Vector3f{ 0.1f, 0.1f, 0.1f }});
+                    gfx::renderer::render_debug(fox::Transform{ position, fox::vector3f{}, fox::vector3f{ 0.1f, 0.1f, 0.1f }});
                 });
         };
 

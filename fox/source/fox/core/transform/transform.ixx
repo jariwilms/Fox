@@ -10,7 +10,7 @@ export namespace fox
     {
     public:
         Transform()
-            : position{ vector::zero }, rotation{ quaternion::identity }, scale{ vector::one } {}
+            : position{ fox::vector<>::zero }, rotation{ quaternion::identity }, scale{ fox::vector<>::one } {}
         template<typename V>
         Transform(V&& position, V&& rotation, V&& scale)
             : position{ std::forward<V>(position) }, rotation{ math::to_radians(std::forward<V>(rotation)) }, scale{ std::forward<V>(scale) } {}
@@ -26,38 +26,38 @@ export namespace fox
             return transform;
         }
 
-        void translate_by(const fox::Vector3f& translation)
+        void translate_by(const fox::vector3f& translation)
         {
             position += translation;
         }
-        void rotate_by   (const fox::Vector3f& angle      )
+        void rotate_by   (const fox::vector3f& angle      )
         {
             rotation *= fox::Quaternion{ math::to_radians(angle) };
         }
-        void scale_by    (const fox::Vector3f& factor     )
+        void scale_by    (const fox::vector3f& factor     )
         {
             scale *= factor;
         }
         
-        void look_at     (const fox::Vector3f& target)
+        void look_at     (const fox::vector3f& target)
         {
             rotation = math::look_at(math::normalize(target - position), up());
         }
 
-        auto forward     () const -> fox::Vector3f 
+        auto forward     () const -> fox::vector3f 
         {
-            return rotation * fox::vector::forward;
+            return rotation * fox::vector<>::forward;
         }
-        auto right       () const -> fox::Vector3f 
+        auto right       () const -> fox::vector3f 
         {
-            return rotation * fox::vector::right;
+            return rotation * fox::vector<>::right;
         }
-        auto up          () const -> fox::Vector3f 
+        auto up          () const -> fox::vector3f 
         {
-            return rotation * fox::vector::up;
+            return rotation * fox::vector<>::up;
         }
 
-        auto euler_angles() const -> fox::Vector3f 
+        auto euler_angles() const -> fox::vector3f 
         {
             return math::to_degrees(math::euler_angles(rotation));
         }
@@ -77,8 +77,8 @@ export namespace fox
             return fox::Transform::from_matrix(left.matrix() * right.matrix());
         }
         
-        fox::Vector3f   position;
+        fox::vector3f   position;
         fox::Quaternion rotation;
-        fox::Vector3f   scale;
+        fox::vector3f   scale;
     };
 }

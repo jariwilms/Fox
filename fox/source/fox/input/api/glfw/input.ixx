@@ -69,20 +69,20 @@ export namespace fox::input::api::glfw
             return !activeButtons_.test(std::to_underlying(code)) && lastActiveButtons_.test(std::to_underlying(code));
         }
 
-        auto cursor_position           ()                     const -> fox::Vector2f
+        auto cursor_position           ()                     const -> fox::vector2f
         {
             return cursorPosition_;
         }
-        auto cursor_position_delta     ()                     const -> fox::Vector2f
+        auto cursor_position_delta     ()                     const -> fox::vector2f
         {
             return cursorPosition_ - lastCursorPosition_;
         }
 
-        auto scroll_wheel              ()                     const -> fox::Vector2f
+        auto scroll_wheel              ()                     const -> fox::vector2f
         {
             return scrollWheel_;
         }
-        auto scroll_wheel_delta        ()                     const -> fox::Vector2f
+        auto scroll_wheel_delta        ()                     const -> fox::vector2f
         {
             return lastScrollWheel_ - scrollWheel_;
         }
@@ -109,11 +109,11 @@ export namespace fox::input::api::glfw
         }
         void glfw_input_cursor_callback(::glfw::window*, fox::float64_t  x     , fox::float64_t y                                      )
         {
-            cursorPosition_ = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
+            cursorPosition_ = fox::vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
         void glfw_input_scroll_callback(::glfw::window*, fox::float64_t  x     , fox::float64_t y                                      )
         {
-            scrollWheel_ = fox::Vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
+            scrollWheel_ = fox::vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
     
     private:
@@ -122,9 +122,9 @@ export namespace fox::input::api::glfw
         std::bitset<std::to_underlying(input::button_max)> activeButtons_;
         std::bitset<std::to_underlying(input::button_max)> lastActiveButtons_;
 
-        fox::Vector2f                                      cursorPosition_;
-        fox::Vector2f                                      lastCursorPosition_;
-        fox::Vector2f                                      scrollWheel_;
-        fox::Vector2f                                      lastScrollWheel_;
+        fox::vector2f                                      cursorPosition_;
+        fox::vector2f                                      lastCursorPosition_;
+        fox::vector2f                                      scrollWheel_;
+        fox::vector2f                                      lastScrollWheel_;
     };
 }

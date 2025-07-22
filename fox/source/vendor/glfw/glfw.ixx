@@ -44,7 +44,7 @@ export namespace glfw
         ::glfwTerminate();
     }
     
-    auto create_window                 (const std::string& title, fox::Vector2u dimensions) -> glfw::window*
+    auto create_window                 (const std::string& title, fox::vector2u dimensions) -> glfw::window*
     {
         auto handle = ::glfwCreateWindow(
             static_cast<fox::int32_t>(dimensions.x), 
@@ -71,7 +71,7 @@ export namespace glfw
     {
         ::glfwSetWindowTitle(window, title.c_str());
     }
-    void set_window_size               (glfw::window* window, const fox::Vector2u& dimensions)
+    void set_window_size               (glfw::window* window, const fox::vector2u& dimensions)
     {
         ::glfwSetWindowSize(
             window                                  , 

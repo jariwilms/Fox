@@ -16,12 +16,12 @@ export namespace fox::gfx
         explicit RenderBuffer(std::shared_ptr<impl::RenderBuffer> _)
             : _{ _ } {}
 
-        static auto create(Format format, const fox::Vector2u& dimensions) -> std::shared_ptr<gfx::RenderBuffer>
+        static auto create(Format format, const fox::vector2u& dimensions) -> std::shared_ptr<gfx::RenderBuffer>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::RenderBuffer>>(std::in_place_t{}, format, dimensions);
         }
 
-        auto dimensions() const -> const fox::Vector2u&
+        auto dimensions() const -> const fox::vector2u&
         {
             return _->dimensions();
         }
@@ -35,7 +35,7 @@ export namespace fox::gfx
         }
 
     protected:
-        RenderBuffer(Format format, const fox::Vector2u& dimensions)
+        RenderBuffer(Format format, const fox::vector2u& dimensions)
             : _{ std::make_shared<impl::RenderBuffer>(format, dimensions) } {}
 
     private:
@@ -49,12 +49,12 @@ export namespace fox::gfx
         explicit RenderBufferMultisample(std::shared_ptr<impl::RenderBufferMultisample> _)
             : _{ _ } {}
 
-        static auto create(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::RenderBufferMultisample>
+        static auto create(Format format, const fox::vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::RenderBufferMultisample>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::RenderBufferMultisample>>(std::in_place_t{}, format, dimensions, samples);
         }
 
-        auto dimensions() const -> const fox::Vector2u&
+        auto dimensions() const -> const fox::vector2u&
         {
             return _->dimensions();
         }
@@ -72,7 +72,7 @@ export namespace fox::gfx
         }
 
     protected:
-        RenderBufferMultisample(Format format, const fox::Vector2u& dimensions, fox::uint32_t samples)
+        RenderBufferMultisample(Format format, const fox::vector2u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::RenderBufferMultisample>(format, dimensions, samples) } {}
 
     private:

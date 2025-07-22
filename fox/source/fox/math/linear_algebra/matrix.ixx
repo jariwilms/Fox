@@ -9,7 +9,7 @@ import vendor.glm;
 export namespace fox::math
 {
     template<typename T, fox::uint32_t N>
-    constexpr auto translate(const fox::Matrix<T, N>& matrix, const fox::Vector3f  & translation) -> fox::Matrix<T, N>
+    constexpr auto translate(const fox::Matrix<T, N>& matrix, const fox::vector3f  & translation) -> fox::Matrix<T, N>
     {
         return glm::translate(matrix, translation);
     }
@@ -22,7 +22,7 @@ export namespace fox::math
         return glm::rotate(matrix, angle, axis);
     }
     template<typename T, fox::uint32_t N>
-    constexpr auto scale    (const fox::Matrix<T, N>& matrix, const fox::Vector3f  & scale      ) -> fox::Matrix<T, N>
+    constexpr auto scale    (const fox::Matrix<T, N>& matrix, const fox::vector3f  & scale      ) -> fox::Matrix<T, N>
     {
         return glm::scale(matrix, scale);
     }
@@ -32,9 +32,9 @@ export namespace fox::math
     {
         return glm::transpose(matrix);
     }
-              auto decompose(const fox::Matrix4f& matrix) -> std::tuple<fox::Vector3f, fox::Quaternion, fox::Vector3f, fox::Vector3f, fox::Vector4f>
+              auto decompose(const fox::Matrix4f& matrix) -> std::tuple<fox::vector3f, fox::Quaternion, fox::vector3f, fox::vector3f, fox::vector4f>
     {
-        auto  composition                                    = std::tuple<fox::Vector3f, fox::Quaternion, fox::Vector3f, fox::Vector3f, fox::Vector4f>{};
+        auto  composition                                    = std::tuple<fox::vector3f, fox::Quaternion, fox::vector3f, fox::vector3f, fox::vector4f>{};
         auto& [position, rotation, scale, skew, perspective] = composition;
 
         glm::decompose(matrix, scale, rotation, position, skew, perspective);

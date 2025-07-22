@@ -41,13 +41,13 @@ export namespace fox
 	template<typename T, fox::uint32_t N>
 	struct region_t
 	{
-		region_t(const fox::Vector<T, N>& extent = {}, const fox::Vector<T, N>& origin = {})
+		region_t(const fox::vector_t<T, N>& extent = {}, const fox::vector<T, N>& origin = {})
 			: extent{ extent }, origin{ origin } {}
 
 		auto operator==(const region_t&) const -> fox::bool_t = default;
 
-		fox::Vector<T, N> extent;
-		fox::Vector<T, N> origin;
+		fox::vector_t<T, N> extent;
+		fox::vector_t<T, N> origin;
 	};
 
 	using length_t      = fox::region_t<fox::uint32_t, 1u>;

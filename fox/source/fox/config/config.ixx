@@ -4,5 +4,5 @@ import fox.core.types;
 
 export namespace fox::cfg
 {
-    constexpr auto FLIP_IMAGES = fox::True;
+    constexpr auto flip_images = fox::True;
 }

@@ -14,8 +14,8 @@ export namespace fox::gfx::unf
     using int32_t   = fox::int32_t;
     using uint32_t  = fox::uint32_t;
     using float32_t = fox::float32_t;
-    using Vector2f  = fox::Vector2f;
-    using Vector4f  = fox::Vector4f;
+    using Vector2f  = fox::vector2f;
+    using Vector4f  = fox::vector4f;
     using Matrix4f  = fox::Matrix4f;
 
 

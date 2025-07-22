@@ -29,17 +29,17 @@ export namespace fox::io
     {
         return std::make_shared<io::File>(path);
     }
-    template<> inline auto _load<io::Asset::Image>    (const std::filesystem::path& path, fox::Image::Format format)
+    template<> inline auto _load<io::Asset::Image>    (const std::filesystem::path& path, fox::image::e_format format)
     {
         const auto& file  = io::_load(path);
         const auto& data  = file->read();
-        const auto& image = fox::Image::decode(format, *data);
+        const auto& image = fox::image::decode(format, *data);
         
         return image;
     }
     template<> inline auto _load<io::Asset::Texture2D>(const std::filesystem::path& path)
     {
-        const auto& image = io::_load<io::Asset::Image>(path, fox::Image::Format::RGBA8);
+        const auto& image = io::_load<io::Asset::Image>(path, fox::image::e_format::rgba8);
 
         return gfx::Texture2D::create(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
     }
