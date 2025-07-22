@@ -30,7 +30,7 @@ export namespace fox::io
         auto read (std::optional<fox::size_t> limit = {}) -> std::shared_ptr<std::vector<fox::byte_t>>
         {
             const auto bufferSize = std::min(limit.value_or(size()), size());
-                  auto buffer     = std::vector<fox::byte_t, memory::no_init_adapter<std::allocator<fox::byte_t>>>(bufferSize);
+                  auto buffer     = std::vector<fox::byte_t, memory::adapter::no_init<std::allocator<fox::byte_t>>>(bufferSize);
                   
             read_data(buffer.data(), buffer.size());
             
