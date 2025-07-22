@@ -1,6 +1,5 @@
 export module fox.core.types.math.linear_algebra.vector;
 
-import std;
 import fox.core.types.fundamental;
 import vendor.glm;
 
