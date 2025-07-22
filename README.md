@@ -34,10 +34,11 @@ If you wish to use it for code formatting, you can register a keybind in Visual 
 Visual Studio > Tools > External Tools... > Add
   - Title: Uncrustify
   - Command: tools\uncrustify\uncrustify.exe
-  - Arguments: -c $(SolutionDir)tools\uncrustify\uncrustify.cfg -l CPP --replace $(ItemPath)
+  - Arguments: -c $(SolutionDir)tools\uncrustify\uncrustify.cfg -l CPP --replace $(ItemPath) --no-backup
   - Initial directory: $(ItemDir)
   - [v] Use Output Window
 ```
+It is only recommended to use the "--no-backup" flag if files are under source control
 
 #### Register a keybind
 ```
