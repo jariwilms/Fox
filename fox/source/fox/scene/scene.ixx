@@ -40,7 +40,7 @@ export namespace fox
             prel.children.emplace_back(child.id());
             rel .parent = parent.id();
         }
-        void unset_parent (fox::actor& child)
+        void unset_parent (                    fox::actor& child)
         {
             auto& rel = child.get_component<ecs::relationship_component>().value();
 
