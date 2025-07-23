@@ -4,23 +4,41 @@ import std;
 
 export namespace fox::io
 {
-	class Entry
+	class entry
 	{
 	public:
-		auto path() const -> const std::filesystem::path&
+		auto path     () const -> const std::filesystem::path&
 		{
 			return path_;
 		}
-		auto name() const -> const std::filesystem::path&
+		auto name     () const -> std::filesystem::path
 		{
-			return name_;
+			return path_.filename();
+		}
+		auto stem     () const -> std::filesystem::path
+		{
+			return path_.stem();
+		}
+		auto extension() const -> std::filesystem::path
+		{
+			return path_.extension();
+		}
+
+		void rename(const std::string& name)
+		{
+			auto parent = path_.parent_path();
+			auto target = parent / name;
+
+			std::filesystem::rename(path_, target);
+
+			path_ = target;
 		}
 
 	protected:
-		explicit Entry(const std::filesystem::path& path)
-			: path_{ path.lexically_normal() }, name_{ path_.filename() } {}
+		explicit entry(const std::filesystem::path& path)
+			: path_{ path.lexically_normal().make_preferred() } { }
 
+	private:
 		std::filesystem::path path_{};
-		std::filesystem::path name_{};
 	};
 }

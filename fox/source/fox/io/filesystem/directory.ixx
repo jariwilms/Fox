@@ -6,36 +6,35 @@ import fox.io.filesystem.file;
 
 export namespace fox::io
 {
-    class Directory : public io::Entry
+    class directory : public io::entry
     {
     public:
-        using entry_t = std::variant<io::Directory, io::File>;
+        using entry_t = std::variant<io::directory, io::file>;
 
-        explicit Directory(const std::filesystem::path& path)
-            : io::Entry{ path } {}
+        explicit directory(const std::filesystem::path& path)
+            : io::entry{ path } {}
 
         void explore()
         {
             children_.clear();
-
-            for (const auto& entry : std::filesystem::directory_iterator{ path_ })
-            {
-                     if (entry.is_directory   ()) children_.emplace_back(std::make_shared<entry_t>(io::Directory{ entry.path() }));
-                else if (entry.is_regular_file()) children_.emplace_back(std::make_shared<entry_t>(io::File     { entry.path() }));
-            }
+            std::ranges::for_each(std::filesystem::directory_iterator{ path() }, [&](const auto& entry)
+                {
+                         if (entry.is_directory   ()) children_.emplace_back(std::make_shared<entry_t>(io::directory{ entry.path() }));
+                    else if (entry.is_regular_file()) children_.emplace_back(std::make_shared<entry_t>(io::file     { entry.path() }));
+                });
         }
 
-        auto children() const -> const std::vector<std::shared_ptr<entry_t>>&
+        auto children(this auto&& self) -> auto&&
         {
-            return children_;
+            return self.children_;
         }
 
-        std::filesystem::path operator/(const std::filesystem::path& other) const
+        auto operator/(const std::filesystem::path& other) const -> std::filesystem::path
         {
-            return path_ / other;
+            return path() / other;
         }
 
     private:
-        std::vector<std::shared_ptr<entry_t>> children_{};
+        std::vector<std::shared_ptr<entry_t>> children_;
     };
 }

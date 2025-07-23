@@ -8,85 +8,67 @@ import fox.io.filesystem.entry;
 
 export namespace fox::io
 {
-	class File : public Entry
-	{
-	public:
-        explicit File(const std::filesystem::path& path)
-            : Entry{ path }
+    class file : public io::entry
+    {
+    public:
+        explicit file(const std::filesystem::path& path)
+            : io::entry{ path }
         {
             stream_.exceptions(std::fstream::badbit);
-            stream_.open      (path_, std::ios::in | std::ios::out | std::ios::app | std::ios::binary);
+            stream_.open      (io::entry::path(), std::ios::in | std::ios::out | std::ios::app | std::ios::binary);
 
             if (!stream_) throw std::runtime_error{ "Failed to open file!" };
         }
 
-        static auto touch(const std::filesystem::path& path) -> std::shared_ptr<io::File>
+        static auto touch   (const std::filesystem::path& path) -> std::shared_ptr<io::file>
         {
-            std::ofstream{ path }.close();
-            
-            return std::make_shared<io::File>(path);
+            return std::ofstream{ path }.close(), std::make_shared<io::file>(path);
         }
 
-        auto read (std::optional<fox::size_t> limit = {}) -> std::shared_ptr<std::vector<fox::byte_t>>
+        auto read           (std::optional<fox::size_t> limit = std::nullopt) -> std::shared_ptr<std::vector<fox::byte_t>>
         {
-            const auto bufferSize = std::min(limit.value_or(size()), size());
-                  auto buffer     = std::vector<fox::byte_t, memory::adapter::no_init<std::allocator<fox::byte_t>>>(bufferSize);
-                  
+            auto buffer = std::vector<fox::byte_t, memory::adapter::no_init<std::allocator<fox::byte_t>>>(limit.value_or(size()));
             read_data(buffer.data(), buffer.size());
             
             return std::make_shared<std::vector<fox::byte_t>>(std::from_range, std::move(buffer));
         }
-        void write(std::span<const fox::byte_t> data)
+        void write          (std::span<const fox::byte_t> data)
         {
             write_data(data.data(), data.size_bytes());
         }
 
-        void save    ()
+        void save           ()
         {
             stream_.flush();
         }
-        void resize  (fox::size_t size)
+        void resize         (fox::size_t size)
         {
-            std::filesystem::resize_file(path_, size);
+            std::filesystem::resize_file(path(), size);
         }
-        void truncate()
+        void truncate       ()
         {
-            stream_.open(path_, std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
-        }
-        void rename  (const std::string& name)
-        {
-            auto parent  = path_.parent_path();
-            auto newPath = parent / name;
-
-            std::filesystem::rename(path_, newPath);
-
-            path_ = newPath;
-            name_ = name;
+            stream_.open(path(), std::ios::in | std::ios::out | std::ios::trunc | std::ios::binary);
         }
 
-        auto extension      () const -> std::filesystem::path
-        {
-            return path_.extension();
-        }
         auto last_write_time() const -> std::filesystem::file_time_type
         {
-            return std::filesystem::last_write_time(path_);
+            return std::filesystem::last_write_time(path());
         }
         auto size           () const -> fox::size_t
         {
-            return std::filesystem::file_size(path_);
+            return std::filesystem::file_size(path());
         }
 
-	protected:
+    private:
         void read_data (fox::byte_t      * data, fox::size_t size)
         {
-            stream_.read(std::bit_cast<fox::char_t*>(data), size);
+            stream_.read(std::bit_cast<fox::char_t*>(data), std::min(size, io::file::size()));
         }
         void write_data(fox::byte_t const* data, fox::size_t size)
         {
-            stream_.write(std::bit_cast<const fox::char_t*>(data), size);
+            stream_.write(std::bit_cast<const fox::char_t*>(data), std::min(size, io::file::size()));
         }
 
-        std::fstream stream_{};
-	};
+        std::fstream stream_;
+    };
 }

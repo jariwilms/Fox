@@ -17,7 +17,7 @@ import vendor.assimp;
 
 export namespace fox::io
 {
-    class ModelImporter
+    class model_importer
     {
     public:
         static void init()
@@ -133,6 +133,6 @@ export namespace fox::io
 
         static inline std::shared_ptr<gfx::Texture2D> defaultAlbedoTexture_;
         static inline std::shared_ptr<gfx::Texture2D> defaultNormalTexture_;
-        static inline std::shared_ptr<gfx::Texture2D> defaultARMTexture_;
+        static inline std::shared_ptr<gfx::Texture2D> defaultARMTexture_   ;
     };
 }
