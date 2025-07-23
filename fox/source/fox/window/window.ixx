@@ -10,7 +10,7 @@ export namespace fox::interface
 	class window
 	{
 	public:
-		using e_mode = api::window_t::e_mode;
+		using mode_e = api::window_t::mode_e;
 
 		static auto create(const std::string& title, const fox::vector2u& dimensions) -> std::shared_ptr<interface::window>
 		{

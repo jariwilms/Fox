@@ -6,22 +6,22 @@ import fox.core.utility;
 
 export namespace fox::math::bitwise
 {
-    enum class e_bit
+    enum class bit_e
     {
         zero, 
         one, 
     };
-    enum class e_significance
+    enum class significance_e
     {
         least, 
         most, 
     };
-    enum class e_rotation
+    enum class rotation_e
     {
         left, 
         right, 
     };
-    enum class e_endian
+    enum class endian_e
     {
         little, 
         big, 
@@ -69,22 +69,19 @@ export namespace fox::math::bitwise
     {
         return std::bitset<fox::bit_width<T>()>{ value }.count();
     }
-    template<bitwise::e_rotation R, std::unsigned_integral T>
+    template<bitwise::rotation_e R, std::unsigned_integral T>
     constexpr auto rotate     (T value, fox::size_t rotation) -> T
     {
-        if constexpr (R == bitwise::e_rotation::left ) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
-        if constexpr (R == bitwise::e_rotation::right) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
+        if constexpr (R == bitwise::rotation_e::left ) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
+        if constexpr (R == bitwise::rotation_e::right) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
     }
-    template<bitwise::e_bit B, bitwise::e_significance S, typename T>
+    template<bitwise::bit_e B, bitwise::significance_e S, typename T>
     constexpr auto consecutive(T value) -> fox::size_t
     {
-        using enum bitwise::e_bit; 
-        using enum bitwise::e_significance;
-
-        if constexpr (B == zero && S == least) return std::countr_zero(value);
-        if constexpr (B == one  && S == least) return std::countr_one (value);
-        if constexpr (B == zero && S == most ) return std::countl_zero(value);
-        if constexpr (B == one  && S == most ) return std::countl_one (value);
+        if constexpr (B == bitwise::bit_e::zero && S == bitwise::significance_e::least) return std::countr_zero(value);
+        if constexpr (B == bitwise::bit_e::one  && S == bitwise::significance_e::least) return std::countr_one (value);
+        if constexpr (B == bitwise::bit_e::zero && S == bitwise::significance_e::most ) return std::countl_zero(value);
+        if constexpr (B == bitwise::bit_e::one  && S == bitwise::significance_e::most ) return std::countl_one (value);
     }
 
     template<std::unsigned_integral T, std::unsigned_integral U>

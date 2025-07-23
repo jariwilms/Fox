@@ -15,10 +15,10 @@ export namespace fox::interface::api::glfw
     class window
     {
     public:
-        using e_mode = api::window::e_mode;
+        using mode_e = api::window::mode_e;
 
         window(const std::string& title, const fox::vector2u& dimensions)
-            : title_{ title }, dimensions_{ dimensions }, mode_{ e_mode::windowed }
+            : title_{ title }, dimensions_{ dimensions }, mode_{ mode_e::windowed }
         {
             ::glfw::initialize();
 
@@ -111,9 +111,9 @@ export namespace fox::interface::api::glfw
         }
 
     private:
-        ::glfw::window_t* handle_    ;
+        ::glfw::window_t* handle_  ;
         std::string     title_     ;
         fox::vector2u   dimensions_;
-        e_mode          mode_      ;
+        mode_e          mode_      ;
     };
 }

@@ -129,7 +129,7 @@ export namespace fox::gfx::api
             const std::array<gfx::frame_buffer::specification_e, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
             auto frameBuffer     = gfx::frame_buffer::create(envDimensions, manifest);
             auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::RenderBuffer>("Depth");
-            auto hdrImage        = io::load<io::e_asset::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
+            auto hdrImage        = io::load<io::asset_e::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
             auto hdrTex          = gfx::texture2d::create(gfx::texture2d::e_format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
             environmentCubemap_  = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::None, gfx::cubemap::wrapping_e::ClampToEdge, envDimensions);
 

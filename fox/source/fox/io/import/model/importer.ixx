@@ -22,9 +22,9 @@ export namespace fox::io
     public:
         static void init()
         {
-            defaultAlbedoTexture_ = io::load<io::e_asset::texture2d>("textures/albedo.png");
-            defaultNormalTexture_ = io::load<io::e_asset::texture2d>("textures/normal.png");
-            defaultARMTexture_    = io::load<io::e_asset::texture2d>("textures/arm.png");
+            defaultAlbedoTexture_ = io::load<io::asset_e::texture2d>("textures/albedo.png");
+            defaultNormalTexture_ = io::load<io::asset_e::texture2d>("textures/normal.png");
+            defaultARMTexture_    = io::load<io::asset_e::texture2d>("textures/arm.png");
         }
 
         static auto import2            (const std::filesystem::path& path) -> std::shared_ptr<gfx::model>
@@ -98,7 +98,7 @@ export namespace fox::io
         {
             if (assimp::get_texture_count(aiMaterial, type))
             {
-                if (auto result = assimp::get_texture(aiMaterial, type); result) return io::load<io::e_asset::texture2d>(path / result.value());
+                if (auto result = assimp::get_texture(aiMaterial, type); result) return io::load<io::asset_e::texture2d>(path / result.value());
             }
 
             return std::nullopt;

@@ -2,9 +2,9 @@ export module fox.rendering.render_mode;
 
 export namespace fox::gfx
 {
-	enum class RenderMode
+	enum class render_mode_e
 	{
-		Forward, 
-		Deferred, 
+		forward, 
+		deferred, 
 	};
 }

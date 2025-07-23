@@ -54,10 +54,10 @@ int main()
     model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
     helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 
-    const auto& defaultAlbedo   = io::load<io::e_asset::texture2d>("textures/albedo.png");
-    const auto& defaultNormal   = io::load<io::e_asset::texture2d>("textures/normal.png");
-    const auto& defaultARM      = io::load<io::e_asset::texture2d>("textures/arm.png");
-    const auto& defaultEmissive = io::load<io::e_asset::texture2d>("textures/emissive.png");
+    const auto& defaultAlbedo   = io::load<io::asset_e::texture2d>("textures/albedo.png");
+    const auto& defaultNormal   = io::load<io::asset_e::texture2d>("textures/normal.png");
+    const auto& defaultARM      = io::load<io::asset_e::texture2d>("textures/arm.png");
+    const auto& defaultEmissive = io::load<io::asset_e::texture2d>("textures/emissive.png");
 
     auto defaultMaterial        = std::make_shared<gfx::material>();
     defaultMaterial->albedo     = defaultAlbedo;
@@ -91,12 +91,12 @@ int main()
     };
     const auto cubemapFaces     = std::array<const fox::image, fox::size_t{ 6u }>
     {
-        io::load<io::e_asset::image>(skyboxImageFiles.at(0), fox::image::format_e::rgb8), 
-        io::load<io::e_asset::image>(skyboxImageFiles.at(1), fox::image::format_e::rgb8), 
-        io::load<io::e_asset::image>(skyboxImageFiles.at(2), fox::image::format_e::rgb8), 
-        io::load<io::e_asset::image>(skyboxImageFiles.at(3), fox::image::format_e::rgb8), 
-        io::load<io::e_asset::image>(skyboxImageFiles.at(4), fox::image::format_e::rgb8), 
-        io::load<io::e_asset::image>(skyboxImageFiles.at(5), fox::image::format_e::rgb8), 
+        io::load<io::asset_e::image>(skyboxImageFiles.at(0), fox::image::format_e::rgb8), 
+        io::load<io::asset_e::image>(skyboxImageFiles.at(1), fox::image::format_e::rgb8), 
+        io::load<io::asset_e::image>(skyboxImageFiles.at(2), fox::image::format_e::rgb8), 
+        io::load<io::asset_e::image>(skyboxImageFiles.at(3), fox::image::format_e::rgb8), 
+        io::load<io::asset_e::image>(skyboxImageFiles.at(4), fox::image::format_e::rgb8), 
+        io::load<io::asset_e::image>(skyboxImageFiles.at(5), fox::image::format_e::rgb8), 
     };
     auto skybox                 = gfx::cubemap::create(gfx::cubemap::format_e::RGB8_UNORM, skyboxDimensions, cubemapFaces);
 

@@ -5,7 +5,7 @@ export namespace fox::interface::api
     class window
     {
 	public:
-		enum class e_mode
+		enum class mode_e
 		{
 			windowed  , 
 			borderless, 

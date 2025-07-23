@@ -2,7 +2,7 @@ export module fox.rendering.post_processing;
 
 export namespace fox::gfx
 {
-    enum class post_processing
+    enum class post_processing_e
     {
         ambient_occlusion, 
         anti_aliasing, 

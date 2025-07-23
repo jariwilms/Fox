@@ -9,20 +9,20 @@ import fox.rendering.texture;
 
 export namespace fox::io
 {
-    enum class e_asset
+    enum class asset_e
     {
-        file,
-        image,
-        //texture1d,
-        texture2d,
-        //texture3d,
-        //shader, 
-        //model, 
+        file, 
+        image, 
+        texture1d, 
+        texture2d, 
+        texture3d, 
+        shader, 
+        model, 
     };
 
     const io::directory root{ FOX_ASSET_DIR };
 
-    template<io::e_asset A = io::e_asset::file, typename... Args>
+    template<io::asset_e A = io::asset_e::file, typename... Args>
     auto load(const std::filesystem::path& path, Args&&... args)
     {
         auto absolute       = path.is_absolute() ? path : root / path;
@@ -40,9 +40,8 @@ export namespace fox::io
                 return gfx::texture2d::create(gfx::texture2d::e_format::RGBA8_UNORM, image.dimensions(), image.data());
             };
 
-        using enum io::e_asset;
-        if constexpr (A == file     ) return std::invoke(load_file     , absolute, std::forward<Args>(args)...);
-        if constexpr (A == image    ) return std::invoke(load_image    , absolute, std::forward<Args>(args)...);
-        if constexpr (A == texture2d) return std::invoke(load_texture2d, absolute, std::forward<Args>(args)...);
+        if constexpr (A == asset_e::file     ) return std::invoke(load_file     , absolute, std::forward<Args>(args)...);
+        if constexpr (A == asset_e::image    ) return std::invoke(load_image    , absolute, std::forward<Args>(args)...);
+        if constexpr (A == asset_e::texture2d) return std::invoke(load_texture2d, absolute, std::forward<Args>(args)...);
     }
 }
