@@ -8,13 +8,13 @@ export namespace fox::gfx::api::gl
     template<typename T, gl::uint32_t N>
     struct region_t
     {
-        constexpr region_t(const gl::Vector<T, N>& extent = {}, const gl::Vector<T, N>& origin = {})
+        constexpr region_t(const gl::vector<T, N>& extent = {}, const gl::vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
         auto operator==(const region_t&) const -> gl::bool_t = default;
 
-        gl::Vector<T, N> extent{};
-        gl::Vector<T, N> origin{};
+        gl::vector<T, N> extent{};
+        gl::vector<T, N> origin{};
     };
     struct range_t
     {

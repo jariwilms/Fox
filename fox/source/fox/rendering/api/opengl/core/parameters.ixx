@@ -10,7 +10,7 @@ export namespace fox::gfx::api::glp
     struct color_index
     {
         gl::uint32_t                                           index{};
-        std::variant<gl::Vector4i, gl::Vector4u, gl::Vector4f> color{};
+        std::variant<gl::vector4i, gl::vector4u, gl::vector4f> color{};
     };
     struct depth
     {
@@ -130,7 +130,7 @@ export namespace fox::gfx::api::glp
 
 
 
-    using dispatch_v          = std::variant<gl::Vector3u, gl::offset_t>;
+    using dispatch_v          = std::variant<gl::vector3u, gl::offset_t>;
     using texture_parameter_v = std::variant<
                                     glp::compare_function    , glp::compare_mode, 
                                     glp::base_level          , glp::maximum_level, 

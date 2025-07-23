@@ -67,7 +67,7 @@ export namespace fox::interface::api::glfw
                 });
             ::glfw::set_frame_buffer_size_callback(handle_, [](::glfw::window_t*        , fox::int32_t   width , fox::int32_t   height  )
                 {
-                    gl::viewport(gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
+                    gl::viewport(gl::vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
                 });
         }
         ~window()

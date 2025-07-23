@@ -8,11 +8,11 @@ import fox.rendering.base.buffer;
 export namespace fox::gfx::api::gl
 {
     template<typename T>
-    class buffer : public gl::Object
+    class buffer : public gl::object
     {
     public:
         explicit buffer(gl::count_t count)
-            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
@@ -24,7 +24,7 @@ export namespace fox::gfx::api::gl
                 count                                    );
         }
         explicit buffer(std::span<const T> data)
-            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
@@ -166,11 +166,11 @@ export namespace fox::gfx::api::gl
         std::shared_ptr<std::span<T>> data_;
     };
     template<typename T>
-    class uniform_buffer : public gl::Object
+    class uniform_buffer : public gl::object
     {
     public:
         explicit uniform_buffer(const T& data = {})
-            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ sizeof(T) }
         {
             gl::buffer_storage<T>(
@@ -212,11 +212,11 @@ export namespace fox::gfx::api::gl
         gl::size_t size_;
     };
     template<typename T, gl::count_t N>
-    class uniform_array_buffer : public gl::Object
+    class uniform_array_buffer : public gl::object
     {
     public:
         explicit uniform_array_buffer()
-            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(N * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
@@ -228,7 +228,7 @@ export namespace fox::gfx::api::gl
                 gl::size_t{ N * sizeof(T) }              );
         }
         explicit uniform_array_buffer(std::span<const T> data)
-            : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
+            : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(

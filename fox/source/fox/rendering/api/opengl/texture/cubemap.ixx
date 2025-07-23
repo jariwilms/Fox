@@ -10,17 +10,17 @@ import fox.rendering.base.cubemap;
 
 export namespace fox::gfx::api::gl
 {
-    class cubemap : public gl::Object
+    class cubemap : public gl::object
     {
     public:
         using format_e   = api::Cubemap::Format;
         using filter_e   = api::Cubemap::Filter;
         using wrapping_e = api::Cubemap::Wrapping;
-        using wrapping_t = gl::proxy_t<wrapping_e, wrapping_e>;
+        using wrapping_t = gl::proxy<wrapping_e, wrapping_e>;
         using face_e     = api::Cubemap::Face;
 
-         cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector2u& dimensions)
-            : gl::Object{ gl::create_texture(glf::Texture::Target::CubeMap), [](auto* handle) { gl::delete_texture(*handle); } }
+         cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions)
+            : gl::object{ gl::create_texture(glf::Texture::Target::CubeMap), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
             if (filter != filter_e::None)
@@ -38,13 +38,13 @@ export namespace fox::gfx::api::gl
             
             gl::texture_storage_2d(handle_, gl::map_cubemap_texture_format(format_), dimensions_, mipmapLevels_);
         }
-         cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector2u& dimensions, std::span<const fox::image> faces)
+         cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions, std::span<const fox::image> faces)
             : cubemap{ format, filter, wrapping, dimensions }
         {
             attach_faces(faces, format_);
             generate_mipmap();
         }
-         cubemap(format_e format,                                        const gl::Vector2u& dimensions, std::span<const fox::image> faces)
+         cubemap(format_e format,                                        const gl::vector2u& dimensions, std::span<const fox::image> faces)
             : cubemap{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, faces } {}
 
         void bind(gl::binding_t binding) const
@@ -66,7 +66,7 @@ export namespace fox::gfx::api::gl
                 gl::map_cubemap_texture_format_base(format),
                 gl::map_cubemap_texture_format_type(format),
                 gl::uint32_t{ 0u },
-                gl::volume_t{ gl::Vector3u{ dimensions_, 1u }, gl::Vector3u{ 0u, 0u, gl::to_underlying(face) } },
+                gl::volume_t{ gl::vector3u{ dimensions_, 1u }, gl::vector3u{ 0u, 0u, gl::to_underlying(face) } },
                 data);
         }
 
@@ -95,7 +95,7 @@ export namespace fox::gfx::api::gl
         {
             return wrapping_.pack;
         }
-        auto dimensions   () const -> const gl::Vector2u&
+        auto dimensions   () const -> const gl::vector2u&
         {
             return dimensions_;
         }
@@ -121,7 +121,7 @@ export namespace fox::gfx::api::gl
         format_e     format_;
         filter_e     filter_;
         wrapping_t   wrapping_;
-        gl::Vector2u dimensions_;
+        gl::vector2u dimensions_;
         gl::uint32_t mipmapLevels_;
     };
 }

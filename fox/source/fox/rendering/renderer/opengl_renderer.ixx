@@ -456,7 +456,7 @@ export namespace fox::gfx::api
 
             //Blit the final result into the default framebuffer
             //gl::blit_frame_buffer(ssaoBuffer_->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
-            gl::blit_frame_buffer(pBuffers_.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, pBuffers_.at(0)->dimensions(), dimensions);
+            gl::blit_frame_buffer(pBuffers_.at(0)->handle(), gl::default_frame_buffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, pBuffers_.at(0)->dimensions(), dimensions);
         }
 
         void render(std::shared_ptr<const gfx::mesh> mesh, std::shared_ptr<const gfx::material> material, const fox::transform& transform)

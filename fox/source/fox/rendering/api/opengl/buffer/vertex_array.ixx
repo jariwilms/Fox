@@ -7,11 +7,11 @@ import fox.rendering.api.opengl.buffer;
 
 export namespace fox::gfx::api::gl
 {
-    class vertex_array : public gl::Object
+    class vertex_array : public gl::object
     {
     public:
         vertex_array()
-            : gl::Object{ gl::create_vertex_array(), [](auto* handle) { gl::delete_vertex_array(*handle); } }
+            : gl::object{ gl::create_vertex_array(), [](auto* handle) { gl::delete_vertex_array(*handle); } }
             , attributeIndex_{}, bindingPoint_{}, indexCount_{} {}
 
         void bind() const

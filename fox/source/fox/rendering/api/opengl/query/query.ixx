@@ -6,13 +6,13 @@ import fox.rendering.base.query;
 
 export namespace fox::gfx::api::gl
 {
-	class query : public gl::Object
+	class query : public gl::object
 	{
 	public:
 		using target_e = api::Query::Target;
 
 		explicit query(target_e target)
-			: gl::Object{ gl::create_query(gl::map_query_target(target)), [](auto* handle) { gl::delete_query(*handle); }}
+			: gl::object{ gl::create_query(gl::map_query_target(target)), [](auto* handle) { gl::delete_query(*handle); }}
 			, target_{ target }
 		{
 			gl::todo();

@@ -960,7 +960,7 @@ export namespace fox::gfx::api::glf
             SamplePosition = GL_SAMPLE_POSITION, 
         };
     };
-    struct     Object
+    struct     object
     {
         enum class Type : gl::enum_t
         {
@@ -1428,7 +1428,7 @@ export namespace fox::gfx::api::glf
             None  = GL_NONE, 
             Flush = GL_SYNC_FLUSH_COMMANDS_BIT, 
         };
-        struct     Object
+        struct     object
         {
             enum class Condition : gl::enum_t
             {

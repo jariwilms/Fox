@@ -41,6 +41,7 @@ export namespace fox::gfx::api::gl
     }
 
 
+
     template<typename T>
     constexpr auto convert_range(gl::range_t     range) -> gl::byterange_t
     {

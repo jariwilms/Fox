@@ -7,13 +7,13 @@ import fox.rendering.base.shader;
 
 export namespace fox::gfx::api::gl
 {
-    class shader : public gl::Object
+    class shader : public gl::object
     {
     public:
         using stage_e = api::Shader::Stage;
 
         shader(stage_e stage, std::span<const gl::byte_t> binary)
-            : gl::Object{ gl::create_program(), [](auto* handle) { gl::delete_program(*handle); }}
+            : gl::object{ gl::create_program(), [](auto* handle) { gl::delete_program(*handle); }}
             , stage_{ stage }
         {
             auto type   = gl::map_shader_type(stage);

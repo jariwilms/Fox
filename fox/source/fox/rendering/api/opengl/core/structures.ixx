@@ -15,13 +15,11 @@ export namespace fox::gfx::api::gl
         glf::Debug::Type     type;
         glf::Debug::Severity severity;
     };
-
     struct binary_info
     {
         gl::enum_t               format;
         std::vector<gl::uint8_t> binary; 
     };
-
     struct indirect_command
     {
         gl::count_t  count;

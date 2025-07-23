@@ -72,24 +72,24 @@ export namespace fox::gfx::api::gl
                 auto value = gl::float64_t{};
                 return glGetDoublev(gl::to_underlying(data), &value), value;
             };
-        auto get_vector4b_v           = [](glf::Data data) -> gl::Vector4b
+        auto get_vector4b_v           = [](glf::Data data) -> gl::vector4b
             {
-                auto value = gl::Vector4b{};
+                auto value = gl::vector4b{};
                 return glGetBooleanv(gl::to_underlying(data), glm::value_ptr(value)), value;
             };
-        auto get_vector2i_v           = [](glf::Data data) -> gl::Vector2i
+        auto get_vector2i_v           = [](glf::Data data) -> gl::vector2i
             {
-                auto value = gl::Vector2i{};
+                auto value = gl::vector2i{};
                 return glGetIntegerv(gl::to_underlying(data), glm::value_ptr(value)), value;
             };
-        auto get_vector2f_v           = [](glf::Data data) -> gl::Vector2f
+        auto get_vector2f_v           = [](glf::Data data) -> gl::vector2f
             {
-                auto value = gl::Vector2f{};
+                auto value = gl::vector2f{};
                 return glGetFloatv(gl::to_underlying(data), glm::value_ptr(value)), value;
             };
-        auto get_vector4f_v           = [](glf::Data data) -> gl::Vector4f
+        auto get_vector4f_v           = [](glf::Data data) -> gl::vector4f
             {
-                auto value = gl::Vector4f{};
+                auto value = gl::vector4f{};
                 return glGetFloatv(gl::to_underlying(data), glm::value_ptr(value)), value;
             };
         auto get_handle_v             = [](glf::Data data) -> gl::handle_t
@@ -119,10 +119,10 @@ export namespace fox::gfx::api::gl
             };
         auto get_area_v               = [](glf::Data data) -> gl::area_t
             {
-                auto value = gl::Vector4u{};
+                auto value = gl::vector4u{};
                 glGetIntegerv(gl::to_underlying(data), std::bit_cast<gl::int32_t*>(glm::value_ptr(value)));
 
-                return gl::area_t{ gl::Vector2u{ value.z, value.w }, gl::Vector2u{ value.x, value.y } };
+                return gl::area_t{ gl::vector2u{ value.z, value.w }, gl::vector2u{ value.x, value.y } };
             };
 
         if constexpr (D == glf::Data::AliasedLineWidthRange                           ) return get_vector2f_v(D);
@@ -350,10 +350,10 @@ export namespace fox::gfx::api::gl
             };
         auto get_area_v               = [](glf::Data data, gl::index_t index) -> gl::area_t
             {
-                auto value = gl::Vector4u{};
+                auto value = gl::vector4u{};
                 glGetIntegeri_v(gl::to_underlying(data), index, std::bit_cast<gl::int32_t*>(glm::value_ptr(value)));
 
-                return gl::area_t{ gl::Vector2u{ value.z, value.w }, gl::Vector2u{ value.x, value.y } };
+                return gl::area_t{ gl::vector2u{ value.z, value.w }, gl::vector2u{ value.x, value.y } };
             };
         
         if constexpr (D == glf::Data::MaximumComputeWorkGroupCount  ) return get_unsigned_integer32_v(D, index);
@@ -436,9 +436,9 @@ export namespace fox::gfx::api::gl
                 return glGetSynciv(sync, gl::to_underlying(property), gl::sizei_t{ 1 }, nullptr, &value), value;
             };
 
-        if constexpr (P == glf::Synchronization::Property::Type     ) return static_cast<glf::Synchronization::Object::Type>     (get_sync_iv(sync, P));
-        if constexpr (P == glf::Synchronization::Property::Status   ) return static_cast<glf::Synchronization::Object::Status>   (get_sync_iv(sync, P));
-        if constexpr (P == glf::Synchronization::Property::Condition) return static_cast<glf::Synchronization::Object::Condition>(get_sync_iv(sync, P));
+        if constexpr (P == glf::Synchronization::Property::Type     ) return static_cast<glf::Synchronization::object::Type>     (get_sync_iv(sync, P));
+        if constexpr (P == glf::Synchronization::Property::Status   ) return static_cast<glf::Synchronization::object::Status>   (get_sync_iv(sync, P));
+        if constexpr (P == glf::Synchronization::Property::Condition) return static_cast<glf::Synchronization::object::Condition>(get_sync_iv(sync, P));
         if constexpr (P == glf::Synchronization::Property::Flags    ) return gl::bitfield_t{ 0u };
     }
     template<glf::Query::Symbol S>
@@ -687,9 +687,9 @@ export namespace fox::gfx::api::gl
                 auto value = gl::float32_t{};
                 return glGetSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(parameter), &value), value;
             };
-        auto get_border_color          = [](gl::handle_t sampler) -> gl::Vector4f
+        auto get_border_color          = [](gl::handle_t sampler) -> gl::vector4f
             {
-                auto value = gl::Vector4f{};
+                auto value = gl::vector4f{};
                 return glGetSamplerParameterfv(gl::to_underlying(sampler), gl::to_underlying(glf::Sampler::Parameter::BorderColor), glm::value_ptr(value)), value;
             };
 
@@ -711,7 +711,7 @@ export namespace fox::gfx::api::gl
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM )
         {
-            auto value = std::vector<gl::Vector4u>(size);
+            auto value = std::vector<gl::vector4u>(size);
 
             glGetTextureImage(
                 gl::to_underlying       (texture)                      , 
@@ -731,7 +731,7 @@ export namespace fox::gfx::api::gl
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM )
         {
-            auto value = std::vector<gl::Vector4u>(size);
+            auto value = std::vector<gl::vector4u>(size);
 
             glGetTextureSubImage(
                 gl::to_underlying       (texture)                      , 
@@ -753,7 +753,7 @@ export namespace fox::gfx::api::gl
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM )
         {
-            auto value = std::vector<gl::Vector4u>(size);
+            auto value = std::vector<gl::vector4u>(size);
 
             glGetCompressedTextureImage(
                 gl::to_underlying       (texture)                      , 
@@ -772,7 +772,7 @@ export namespace fox::gfx::api::gl
     {
         if constexpr (F == glf::Texture::Format::RGBA8_UNORM )
         {
-            auto value = std::vector<gl::Vector4u>(size);
+            auto value = std::vector<gl::vector4u>(size);
 
             glGetCompressedTextureSubImage(
                 gl::to_underlying       (texture)        , 
@@ -807,7 +807,7 @@ export namespace fox::gfx::api::gl
         if constexpr (P == glf::FrameBuffer::Parameter::DefaultSamples             ) return static_cast<gl::uint32_t>          (get_frame_buffer_parameter_iv   (frameBuffer, P));
         if constexpr (P == glf::FrameBuffer::Parameter::DefaultFixedSampleLocations) return static_cast<gl::bool_t>            (get_frame_buffer_parameter_iv   (frameBuffer, P));
 
-        if (frameBuffer == gl::DefaultFrameBuffer) throw std::invalid_argument{ "Operation may not be called on the default framebuffer!" };
+        if (frameBuffer == gl::default_frame_buffer) throw std::invalid_argument{ "Operation may not be called on the default framebuffer!" };
 
         if constexpr (P == glf::FrameBuffer::Parameter::ColorReadFormat            ) return static_cast<glf::PixelData::Format>(get_frame_buffer_parameter_iv(frameBuffer, P));
         if constexpr (P == glf::FrameBuffer::Parameter::ColorReadType              ) return static_cast<glf::PixelData::Type>  (get_frame_buffer_parameter_iv(frameBuffer, P));
@@ -965,7 +965,7 @@ export namespace fox::gfx::api::gl
     //Chapter 4 - Event Model
     auto fence_sync                                 () -> gl::sync_t
     {
-        return static_cast<gl::sync_t>(glFenceSync(gl::to_underlying(glf::Synchronization::Object::Condition::GPUCommandsComplete), gl::bitfield_t{ 0u }));
+        return static_cast<gl::sync_t>(glFenceSync(gl::to_underlying(glf::Synchronization::object::Condition::GPUCommandsComplete), gl::bitfield_t{ 0u }));
     }
     void delete_sync                                (gl::sync_t sync)
     {
@@ -1372,7 +1372,7 @@ export namespace fox::gfx::api::gl
             gl::to_underlying       (format)         , gl::to_underlying(type)                  , 
             data.data());
     }
-    void copy_texture_sub_image_1d                  (gl::handle_t texture, gl::uint32_t level, gl::length_t region, const gl::Vector2u& coordinates)
+    void copy_texture_sub_image_1d                  (gl::handle_t texture, gl::uint32_t level, gl::length_t region, const gl::vector2u& coordinates)
     {
         glCopyTextureSubImage1D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)        , 
@@ -1380,7 +1380,7 @@ export namespace fox::gfx::api::gl
             static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates.y), 
             static_cast<gl::sizei_t>(region.extent.x));
     }
-    void copy_texture_sub_image_2d                  (gl::handle_t texture, gl::uint32_t level, gl::area_t   region, const gl::Vector2u& coordinates)
+    void copy_texture_sub_image_2d                  (gl::handle_t texture, gl::uint32_t level, gl::area_t   region, const gl::vector2u& coordinates)
     {
         glCopyTextureSubImage2D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
@@ -1388,7 +1388,7 @@ export namespace fox::gfx::api::gl
             static_cast<gl::int32_t>(coordinates  .x), static_cast<gl::int32_t>(coordinates  .y), 
             static_cast<gl::sizei_t>(region.extent.x), static_cast<gl::sizei_t>(region.extent.y));
     }
-    void copy_texture_sub_image_3d                  (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, const gl::Vector2u& coordinates)
+    void copy_texture_sub_image_3d                  (gl::handle_t texture, gl::uint32_t level, gl::volume_t region, const gl::vector2u& coordinates)
     {
         glCopyTextureSubImage3D(
             gl::to_underlying       (texture)        , static_cast<gl::int32_t>(level)          , 
@@ -1493,7 +1493,7 @@ export namespace fox::gfx::api::gl
     {
         glTextureView(gl::to_underlying(destination), gl::to_underlying(U), gl::to_underlying(source), gl::to_underlying(format), minimumLevel, levels, minimumLayer, layers);
     }
-    void texture_storage_1d                         (gl::handle_t texture, glf::Texture::Format format, const gl::Vector1u& dimensions, gl::uint32_t levels)
+    void texture_storage_1d                         (gl::handle_t texture, glf::Texture::Format format, const gl::vector1u& dimensions, gl::uint32_t levels)
     {
         glTextureStorage1D(
             gl::to_underlying       (texture)      , 
@@ -1501,7 +1501,7 @@ export namespace fox::gfx::api::gl
             gl::to_underlying       (format)       , 
             static_cast<gl::sizei_t>(dimensions.x));
     }
-    void texture_storage_2d                         (gl::handle_t texture, glf::Texture::Format format, const gl::Vector2u& dimensions, gl::uint32_t levels)
+    void texture_storage_2d                         (gl::handle_t texture, glf::Texture::Format format, const gl::vector2u& dimensions, gl::uint32_t levels)
     {
         glTextureStorage2D(
             gl::to_underlying       (texture)     , 
@@ -1509,7 +1509,7 @@ export namespace fox::gfx::api::gl
             gl::to_underlying       (format)      , 
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y));
     }
-    void texture_storage_3d                         (gl::handle_t texture, glf::Texture::Format format, const gl::Vector3u& dimensions, gl::uint32_t levels)
+    void texture_storage_3d                         (gl::handle_t texture, glf::Texture::Format format, const gl::vector3u& dimensions, gl::uint32_t levels)
     {
         glTextureStorage3D(
             gl::to_underlying       (texture)     , 
@@ -1517,7 +1517,7 @@ export namespace fox::gfx::api::gl
             gl::to_underlying       (format)      , 
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y), static_cast<gl::sizei_t>(dimensions.z));
     }
-    void texture_storage_2d_multisample             (gl::handle_t texture, glf::Texture::Format format, const gl::Vector2u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::True)
+    void texture_storage_2d_multisample             (gl::handle_t texture, glf::Texture::Format format, const gl::vector2u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::True)
     {
         glTextureStorage2DMultisample(
             gl::to_underlying       (texture)     , 
@@ -1525,7 +1525,7 @@ export namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y), 
             fixed);
     }
-    void texture_storage_3d_multisample             (gl::handle_t texture, glf::Texture::Format format, const gl::Vector3u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::True)
+    void texture_storage_3d_multisample             (gl::handle_t texture, glf::Texture::Format format, const gl::vector3u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::True)
     {
         glTextureStorage3DMultisample(
             gl::to_underlying       (texture)     , 
@@ -1621,14 +1621,14 @@ export namespace fox::gfx::api::gl
     {
         glDeleteRenderbuffers(static_cast<gl::sizei_t>(renderBuffers.size()), gl::to_underlying_ptr(renderBuffers.data()));
     }
-    void render_buffer_storage                      (gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions)
+    void render_buffer_storage                      (gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::vector2u& dimensions)
     {
         glNamedRenderbufferStorage(
             gl::to_underlying       (renderBuffer),
             gl::to_underlying       (format)      ,
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y));
     }
-    void render_buffer_storage_multisample          (gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::Vector2u& dimensions, gl::uint32_t samples)
+    void render_buffer_storage_multisample          (gl::handle_t renderBuffer, glf::RenderBuffer::Format format, const gl::vector2u& dimensions, gl::uint32_t samples)
     {
         glNamedRenderbufferStorageMultisample(
             gl::to_underlying       (renderBuffer),
@@ -1687,7 +1687,7 @@ export namespace fox::gfx::api::gl
         std::visit(overload, parameter);
     }
     template<typename T, gl::uint32_t N, gl::bool_t NORM = gl::False>
-    void vertex_attribute                           (gl::index_t index, const gl::Vector<T, N>& value)
+    void vertex_attribute                           (gl::index_t index, const gl::vector<T, N>& value)
     {
         auto maximumAttributes = gl::get_value<glf::Data::MaximumVertexAttributes>();
         if (gl::compare<std::greater>(index, maximumAttributes)) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
@@ -1893,19 +1893,19 @@ export namespace fox::gfx::api::gl
     {
         glClipControl(gl::to_underlying(origin), gl::to_underlying(mode));
     }
-    void depth_range_array_value                    (gl::index_t index, std::span<const gl::Vector2d> ranges)
+    void depth_range_array_value                    (gl::index_t index, std::span<const gl::vector2d> ranges)
     {
         glDepthRangeArrayv(index, static_cast<gl::sizei_t>(ranges.size()), glm::value_ptr(*ranges.data()));
     }
-    void depth_range_indexed                        (gl::index_t index, const gl::Vector2d& range)
+    void depth_range_indexed                        (gl::index_t index, const gl::vector2d& range)
     {
         glDepthRangeIndexed(index, range.x, range.y);
     }
-    void depth_range                                (const gl::Vector2f& range)
+    void depth_range                                (const gl::vector2f& range)
     {
         glDepthRangef(range.x, range.y);
     }
-    void viewport_array_value                       (gl::index_t index, std::span<const gl::Vector2f> ranges)
+    void viewport_array_value                       (gl::index_t index, std::span<const gl::vector2f> ranges)
     {
         glViewportArrayv(index, static_cast<gl::sizei_t>(ranges.size()), glm::value_ptr(*ranges.data()));
     }
@@ -1923,9 +1923,9 @@ export namespace fox::gfx::api::gl
 
 
     //Chapter 14 - Fixed-Function Primitive Assembly and Rasterization
-    auto get_multisample_value                      (gl::index_t index) -> gl::Vector2f
+    auto get_multisample_value                      (gl::index_t index) -> gl::vector2f
     {
-        auto value = gl::Vector2f{};
+        auto value = gl::vector2f{};
         return glGetMultisamplefv(gl::to_underlying(glf::Multisample::Parameter::SamplePosition), index, glm::value_ptr(value)), value;
     }
     void minimum_sample_shading                     (gl::float32_t value)
@@ -2059,7 +2059,7 @@ export namespace fox::gfx::api::gl
     {
         glBlendFuncSeparatei(index, gl::to_underlying(sourceColor), gl::to_underlying(destinationColor), gl::to_underlying(sourceAlpha), gl::to_underlying(destinationAlpha));
     }
-    void blend_color                                (const gl::Vector4f& color)
+    void blend_color                                (const gl::vector4f& color)
     {
         glBlendColor(color.r, color.g, color.b, color.a);
     }
@@ -2075,11 +2075,11 @@ export namespace fox::gfx::api::gl
     {
         glNamedFramebufferDrawBuffers(gl::to_underlying(frameBuffer), static_cast<gl::sizei_t>(sources.size()), gl::to_underlying_ptr(sources.data()));
     }
-    void color_mask                                 (const gl::Vector4b& mask)
+    void color_mask                                 (const gl::vector4b& mask)
     {
         glColorMask(mask.r, mask.g, mask.b, mask.a);
     }
-    void color_mask_index                           (gl::handle_t buffer, const gl::Vector4b& mask)
+    void color_mask_index                           (gl::handle_t buffer, const gl::vector4b& mask)
     {
         glColorMaski(gl::to_underlying(buffer), mask.r, mask.g, mask.b, mask.a);
     }
@@ -2099,7 +2099,7 @@ export namespace fox::gfx::api::gl
     {
         glClear(gl::to_underlying(mask));
     }
-    void clear_color                                (const gl::Vector4f& color)
+    void clear_color                                (const gl::vector4f& color)
     {
         glClearColor(color.r, color.g, color.b, color.a);
     }
@@ -2136,9 +2136,9 @@ export namespace fox::gfx::api::gl
             {
                 auto overload = gl::overload
                 {
-                    [=](gl::Vector4i __) { clear_frame_buffer_iv (frameBuffer, glf::FrameBuffer::Attachment::Color0, _.index, glm::value_ptr(__)); }, 
-                    [=](gl::Vector4u __) { clear_frame_buffer_uiv(frameBuffer, glf::FrameBuffer::Attachment::Color0, _.index, glm::value_ptr(__)); }, 
-                    [=](gl::Vector4f __) { clear_frame_buffer_fv (frameBuffer, glf::FrameBuffer::Attachment::Color0, _.index, glm::value_ptr(__)); }, 
+                    [=](gl::vector4i __) { clear_frame_buffer_iv (frameBuffer, glf::FrameBuffer::Attachment::Color0, _.index, glm::value_ptr(__)); }, 
+                    [=](gl::vector4u __) { clear_frame_buffer_uiv(frameBuffer, glf::FrameBuffer::Attachment::Color0, _.index, glm::value_ptr(__)); }, 
+                    [=](gl::vector4f __) { clear_frame_buffer_fv (frameBuffer, glf::FrameBuffer::Attachment::Color0, _.index, glm::value_ptr(__)); }, 
                 };
 
                 std::visit(overload, _.color);
@@ -2262,7 +2262,7 @@ export namespace fox::gfx::api::gl
     {
         auto overload = gl::overload
         {
-            [=](gl::Vector3u _) { glDispatchCompute        (_.x, _.y, _.z); }, 
+            [=](gl::vector3u _) { glDispatchCompute        (_.x, _.y, _.z); }, 
             [=](gl::offset_t _) { glDispatchComputeIndirect(_            ); }, 
         };
         
@@ -2296,7 +2296,7 @@ export namespace fox::gfx::api::gl
     {
         glPopDebugGroup();
     }
-    void object_label                               (gl::handle_t identifier, glf::Object::Type type, const std::string& label)
+    void object_label                               (gl::handle_t identifier, glf::object::Type type, const std::string& label)
     {
         const auto* cstr = label.c_str();
         glObjectLabel(gl::to_underlying(type), gl::to_underlying(identifier), gl::sizei_t{ -1 }, cstr);

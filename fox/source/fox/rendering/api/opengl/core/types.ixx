@@ -50,38 +50,43 @@ export namespace fox::gfx::api::gl
 
 
 
-    template<typename T, gl::uint32_t N> using Vector     = glm::vec<N, T, glm::packed_highp>;
-    template<typename T, gl::uint32_t N> using Matrix     = glm::mat<N, N, T>;
-                                         using Quaternion = glm::quat;
+    template<typename T, gl::uint32_t N>
+    using vector     = glm::vec<N, T, glm::packed_highp>;
+    template<typename T, gl::uint32_t R, gl::uint32_t C = R>
+    using matrix     = glm::mat<R, C, T>;
+    template<typename T>
+    using quaternion = glm::qua<T, glm::packed_highp>;
 
-    using Vector1b = gl::Vector<gl::boolean_t, 1u>;
-    using Vector2b = gl::Vector<gl::boolean_t, 2u>;
-    using Vector3b = gl::Vector<gl::boolean_t, 3u>;
-    using Vector4b = gl::Vector<gl::boolean_t, 4u>;
 
-    using Vector1i = gl::Vector<gl::int32_t,   1u>;
-    using Vector2i = gl::Vector<gl::int32_t,   2u>;
-    using Vector3i = gl::Vector<gl::int32_t,   3u>;
-    using Vector4i = gl::Vector<gl::int32_t,   4u>;
 
-    using Vector1u = gl::Vector<gl::uint32_t,  1u>;
-    using Vector2u = gl::Vector<gl::uint32_t,  2u>;
-    using Vector3u = gl::Vector<gl::uint32_t,  3u>;
-    using Vector4u = gl::Vector<gl::uint32_t,  4u>;
+    using vector1b = gl::vector<gl::boolean_t, 1u>;
+    using vector2b = gl::vector<gl::boolean_t, 2u>;
+    using vector3b = gl::vector<gl::boolean_t, 3u>;
+    using vector4b = gl::vector<gl::boolean_t, 4u>;
 
-    using Vector1f = gl::Vector<gl::float32_t, 1u>;
-    using Vector2f = gl::Vector<gl::float32_t, 2u>;
-    using Vector3f = gl::Vector<gl::float32_t, 3u>;
-    using Vector4f = gl::Vector<gl::float32_t, 4u>;
+    using vector1i = gl::vector<gl::int32_t,   1u>;
+    using vector2i = gl::vector<gl::int32_t,   2u>;
+    using vector3i = gl::vector<gl::int32_t,   3u>;
+    using vector4i = gl::vector<gl::int32_t,   4u>;
 
-    using Vector1d = gl::Vector<gl::float64_t, 1u>;
-    using Vector2d = gl::Vector<gl::float64_t, 2u>;
-    using Vector3d = gl::Vector<gl::float64_t, 3u>;
-    using Vector4d = gl::Vector<gl::float64_t, 4u>;
+    using vector1u = gl::vector<gl::uint32_t,  1u>;
+    using vector2u = gl::vector<gl::uint32_t,  2u>;
+    using vector3u = gl::vector<gl::uint32_t,  3u>;
+    using vector4u = gl::vector<gl::uint32_t,  4u>;
 
-    using Matrix2f = gl::Matrix<gl::float32_t, 2u>;
-    using Matrix3f = gl::Matrix<gl::float32_t, 3u>;
-    using Matrix4f = gl::Matrix<gl::float32_t, 4u>;
+    using vector1f = gl::vector<gl::float32_t, 1u>;
+    using vector2f = gl::vector<gl::float32_t, 2u>;
+    using vector3f = gl::vector<gl::float32_t, 3u>;
+    using vector4f = gl::vector<gl::float32_t, 4u>;
+
+    using vector1d = gl::vector<gl::float64_t, 1u>;
+    using vector2d = gl::vector<gl::float64_t, 2u>;
+    using vector3d = gl::vector<gl::float64_t, 3u>;
+    using vector4d = gl::vector<gl::float64_t, 4u>;
+
+    using matrix2f = gl::matrix<gl::float32_t, 2u>;
+    using matrix3f = gl::matrix<gl::float32_t, 3u>;
+    using matrix4f = gl::matrix<gl::float32_t, 4u>;
 
 
 
