@@ -92,8 +92,8 @@ export namespace fox::input::api::glfw
             if (fox::compare_enum<std::less>(key, input::key_min) || fox::compare_enum<std::greater>(key, input::key_max)) return;
             switch (::glfw::input_action{ action })
             {
-                case ::glfw::input_action::release: activeKeys_.set(std::to_underlying(key), fox::False); break;
-                case ::glfw::input_action::press  : activeKeys_.set(std::to_underlying(key), fox::True ); break;
+                case ::glfw::input_action::release: activeKeys_.set(std::to_underlying(key), fox::false_); break;
+                case ::glfw::input_action::press  : activeKeys_.set(std::to_underlying(key), fox::true_ ); break;
                 case ::glfw::input_action::repeat :                                                       break;
             }
         }
@@ -102,8 +102,8 @@ export namespace fox::input::api::glfw
             if (fox::compare_enum<std::less>(button, input::button_min) || fox::compare_enum<std::greater>(button, input::button_max)) return;
             switch (::glfw::input_action{ action })
             {
-                case ::glfw::input_action::release: activeButtons_.set(std::to_underlying(button), fox::False); break;
-                case ::glfw::input_action::press  : activeButtons_.set(std::to_underlying(button), fox::True ); break;
+                case ::glfw::input_action::release: activeButtons_.set(std::to_underlying(button), fox::false_); break;
+                case ::glfw::input_action::press  : activeButtons_.set(std::to_underlying(button), fox::true_ ); break;
                 case ::glfw::input_action::repeat :                                                             break;
             }
         }

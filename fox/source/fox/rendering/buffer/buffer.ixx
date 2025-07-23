@@ -157,7 +157,7 @@ export namespace fox::gfx
         {
             _->bind(static_cast<impl::binding_t>(binding));
         }
-        void bind_range(gfx::binding_t binding, fox::range_t range) const
+        void bind_range(gfx::binding_t binding, fox::range range) const
         {
             _->bind(static_cast<impl::binding_t>(binding), impl::range_t{ range.count, range.index });
         }

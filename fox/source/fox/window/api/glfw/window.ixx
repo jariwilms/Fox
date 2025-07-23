@@ -27,7 +27,7 @@ export namespace fox::interface::api::glfw
             ::glfw::window_hint(::glfw::hint::opengl_profile       , ::glfw::hint_value::opengl_core_profile);
             ::glfw::window_hint(::glfw::hint::refresh_rate         , ::glfw::hint_value::dont_care);
 #ifdef FOX_DEBUG
-            ::glfw::window_hint(::glfw::hint::opengl_debug_context , fox::True);
+            ::glfw::window_hint(::glfw::hint::opengl_debug_context , fox::true_);
 #endif
 
             handle_ = ::glfw::create_window(title_, dimensions);
@@ -98,7 +98,7 @@ export namespace fox::interface::api::glfw
 
         void        close() const
         {
-            glfwSetWindowShouldClose(handle_, fox::True);
+            glfwSetWindowShouldClose(handle_, fox::true_);
         }
         auto should_close() const -> fox::bool_t
         {

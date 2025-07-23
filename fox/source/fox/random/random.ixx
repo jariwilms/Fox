@@ -11,12 +11,12 @@ export namespace fox::random
     namespace distribution
     {
         template<typename T> requires (std::is_arithmetic_v<T>)
-        auto normal   (fox::interval_t<T> interval = {})
+        auto normal   (fox::interval<T> interval = {})
         {
             return std::normal_distribution<T>{ interval.min, interval.max }(::engine);
         }
         template<typename T> requires (std::is_arithmetic_v<T>)
-        auto uniform  (fox::interval_t<T> interval = {})
+        auto uniform  (fox::interval<T> interval = {})
         {
             if constexpr (std::is_integral_v      <T>) return std::uniform_int_distribution <T>{ interval.min, interval.max }(::engine);
             if constexpr (std::is_floating_point_v<T>) return std::uniform_real_distribution<T>{ interval.min, interval.max }(::engine);
@@ -43,7 +43,7 @@ export namespace fox::random
         ::engine.seed(seed);
     }
     template<typename T>
-    auto next   (fox::interval_t<T> interval = {})
+    auto next   (fox::interval<T> interval = {})
     {
         return distribution::uniform<T>(interval);
     }

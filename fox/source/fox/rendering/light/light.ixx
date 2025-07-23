@@ -15,7 +15,7 @@ export namespace fox
             Spot, 
         };
 
-        Light(Type type = Type::Point, const fox::vector3f& color = fox::vector<>::one, fox::float32_t radius = { 10.0f }, fox::bool_t isShadowCasting = { fox::False })
+        Light(Type type = Type::Point, const fox::vector3f& color = fox::vector<>::one, fox::float32_t radius = { 10.0f }, fox::bool_t isShadowCasting = { fox::false_ })
             : type{ type }, color{ color }, radius{ radius }, isShadowCasting{ isShadowCasting } {}
 
         Type           type;

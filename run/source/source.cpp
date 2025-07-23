@@ -160,7 +160,7 @@ int main()
 
 
     fox::time::reset();
-    auto frametimes = fox::CircularBuffer<fox::float32_t, fox::size_t{ 144u }>{};
+    auto frametimes = fox::circular_buffer<fox::float32_t, fox::size_t{ 144u }>{};
 
     while (!window_->should_close())
     {

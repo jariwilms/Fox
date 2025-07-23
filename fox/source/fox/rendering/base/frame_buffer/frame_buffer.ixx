@@ -63,5 +63,5 @@ export namespace fox::gfx::api
 };
 namespace fox
 {
-    template<> struct fox::enumeration_operator<gfx::api::FrameBuffer::Attachment> { static constexpr auto enable = fox::bool_t{ fox::True }; };
+    template<> struct fox::enumeration_operator<gfx::api::FrameBuffer::Attachment> { static constexpr auto enable = fox::bool_t{ fox::true_ }; };
 }

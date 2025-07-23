@@ -47,6 +47,6 @@ export namespace fox::gfx
         using Pipeline                = api::gl::Pipeline<T>;
     }
 
-    using handle_t  = fox::alias_t<fox::handle_t , impl::handle_t >;
-    using binding_t = fox::alias_t<fox::binding_t, impl::binding_t>;
+    using handle_t  = fox::alias<fox::handle_t , impl::handle_t >;
+    using binding_t = fox::alias<fox::binding_t, impl::binding_t>;
 }

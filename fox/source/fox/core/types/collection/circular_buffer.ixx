@@ -6,10 +6,10 @@ import fox.core.types.common;
 export namespace fox
 {
     template<typename T, fox::size_t N>
-    class CircularBuffer
+    class circular_buffer
     {
     public:
-        CircularBuffer() = default;
+        circular_buffer() = default;
 
         constexpr auto push_back(T&& value) -> T&
         {

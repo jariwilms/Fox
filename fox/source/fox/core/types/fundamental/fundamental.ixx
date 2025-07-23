@@ -2,26 +2,26 @@ export module fox.core.types.fundamental;
 
 export namespace fox
 {
-	using void_t     =          void     ;
-	using bool_t     =          bool     ;
-	using char_t     =          char     ;
-	using schar_t    =   signed char     ;
-	using uchar_t    = unsigned char     ;
-	using int8_t     =   signed char     ;
-	using uint8_t    = unsigned char     ;
-	using int16_t    =   signed short    ;
-	using uint16_t   = unsigned short    ;
-	using int32_t    =   signed int      ;
-	using uint32_t   = unsigned int      ;
-	using int64_t    =   signed long long;
-	using uint64_t   = unsigned long long;
-	using float32_t  =          float    ;
-	using float64_t  =          double   ;
+	using void_t    =          void     ;
+	using bool_t    =          bool     ;
+	using char_t    =          char     ;
+	using schar_t   =   signed char     ;
+	using uchar_t   = unsigned char     ;
+	using int8_t    =   signed char     ;
+	using uint8_t   = unsigned char     ;
+	using int16_t   =   signed short    ;
+	using uint16_t  = unsigned short    ;
+	using int32_t   =   signed int      ;
+	using uint32_t  = unsigned int      ;
+	using int64_t   =   signed long long;
+	using uint64_t  = unsigned long long;
+	using float32_t =          float    ;
+	using float64_t =          double   ;
 
 	enum : fox::bool_t
 	{
-		False = false,
-		True  = true,
+		false_ = false,
+		true_  = true,
 	};
 
 	
