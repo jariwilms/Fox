@@ -2,14 +2,14 @@ export module fox.window.base;
 
 export namespace fox::interface::api
 {
-    class Window
+    class window
     {
 	public:
-		enum class Mode
+		enum class e_mode
 		{
-			Windowed,
-			Borderless,
-			Fullscreen
+			windowed  , 
+			borderless, 
+			fullscreen, 
 		};
     };
 }

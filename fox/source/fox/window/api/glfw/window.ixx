@@ -12,20 +12,20 @@ import vendor.glfw;
 
 export namespace fox::interface::api::glfw
 {
-    class Window
+    class window
     {
     public:
-        using Mode = api::Window::Mode;
+        using e_mode = api::window::e_mode;
 
-        Window(const std::string& title, const fox::vector2u& dimensions)
-            : title_{ title }, dimensions_{ dimensions }, mode_{ Mode::Windowed }
+        window(const std::string& title, const fox::vector2u& dimensions)
+            : title_{ title }, dimensions_{ dimensions }, mode_{ e_mode::windowed }
         {
             ::glfw::initialize();
 
             ::glfw::window_hint(::glfw::hint::context_version_major, ::glfw::hint_value::opengl_version_major_4);
             ::glfw::window_hint(::glfw::hint::context_version_minor, ::glfw::hint_value::opengl_version_minor_6);
-            ::glfw::window_hint(::glfw::hint::opengl_profile       , ::glfw::hint_value::opengl_core_profile);
-            ::glfw::window_hint(::glfw::hint::refresh_rate         , ::glfw::hint_value::dont_care);
+            ::glfw::window_hint(::glfw::hint::opengl_profile       , ::glfw::hint_value::opengl_core_profile   );
+            ::glfw::window_hint(::glfw::hint::refresh_rate         , ::glfw::hint_value::dont_care             );
 #ifdef FOX_DEBUG
             ::glfw::window_hint(::glfw::hint::opengl_debug_context , fox::true_);
 #endif
@@ -70,7 +70,7 @@ export namespace fox::interface::api::glfw
                     gl::viewport(gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
                 });
         }
-        ~Window()
+        ~window()
         {
             ::glfw::destroy_window(handle_);
             ::glfw::terminate();
@@ -98,7 +98,7 @@ export namespace fox::interface::api::glfw
 
         void        close() const
         {
-            glfwSetWindowShouldClose(handle_, fox::true_);
+            ::glfw::set_window_should_close(handle_, fox::true_);
         }
         auto should_close() const -> fox::bool_t
         {
@@ -114,6 +114,6 @@ export namespace fox::interface::api::glfw
         ::glfw::window* handle_    ;
         std::string     title_     ;
         fox::vector2u   dimensions_;
-        Mode            mode_      ;
+        e_mode          mode_      ;
     };
 }

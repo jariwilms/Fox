@@ -1,19 +1,20 @@
 export module fox.window;
 
 import std;
+import fox.core.meta;
 import fox.core.types;
 import fox.window.api;
 
 export namespace fox::interface
 {
-	class Window
+	class window
 	{
 	public:
-		using Mode = impl::window_t::Mode;
+		using e_mode = api::window_t::e_mode;
 
-		static auto create(const std::string& name, const fox::vector2u& dimensions)
+		static auto create(const std::string& title, const fox::vector2u& dimensions) -> std::shared_ptr<interface::window>
 		{
-			return std::shared_ptr<Window>{ new Window{ name, dimensions } };
+			return std::make_shared<meta::from_inaccessible_ctor<interface::window>>(std::in_place_t{}, title, dimensions);
 		}
 
 		void poll_events ()
@@ -25,11 +26,11 @@ export namespace fox::interface
 			_->swap_buffers();
 		}
 
-		void rename(const std::string  & title     )
+		void rename      (const std::string  & title     )
 		{
 			_->rename(title);
 		}
-		void resize(const fox::vector2u& dimensions)
+		void resize      (const fox::vector2u& dimensions)
 		{
 			_->resize(dimensions);
 		}
@@ -43,15 +44,16 @@ export namespace fox::interface
 			return _->should_close();
 		}
 
-		auto impl() const
+		auto impl        () const -> std::shared_ptr<api::window_t>
 		{
 			return _;
 		}
 
-	private:
-		Window(const std::string& name, const fox::vector2u& dimensions)
-			: _{ std::make_shared<impl::window_t>(name, dimensions) } {}
+	protected:
+		window(const std::string& title, const fox::vector2u& dimensions)
+			: _{ std::make_shared<api::window_t>(title, dimensions) } {}
 
-		std::shared_ptr<impl::window_t> _{};
+	private:
+		std::shared_ptr<api::window_t> _;
 	};
 }
