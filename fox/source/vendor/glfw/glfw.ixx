@@ -6,9 +6,9 @@ import fox.core.types;
 
 export namespace glfw
 {
-    using window = GLFWwindow;
+    using window_t = GLFWwindow;
 
-    enum class hint
+    enum class e_hint
     {
         context_version_major = GLFW_CONTEXT_VERSION_MAJOR, 
         context_version_minor = GLFW_CONTEXT_VERSION_MINOR, 
@@ -16,20 +16,20 @@ export namespace glfw
         opengl_profile        = GLFW_OPENGL_PROFILE       , 
         refresh_rate          = GLFW_REFRESH_RATE         , 
     };
-    enum class hint_value
+    enum class e_hint_value
     {
         dont_care              = GLFW_DONT_CARE          , 
         opengl_core_profile    = GLFW_OPENGL_CORE_PROFILE, 
         opengl_version_major_4 = 4                       ,
         opengl_version_minor_6 = 6                       ,
     };
-    enum class input_action
+    enum class e_input_action
     {
         release = GLFW_RELEASE, 
         press   = GLFW_PRESS  , 
         repeat  = GLFW_REPEAT , 
     };
-    enum class result
+    enum class e_result
     {
         failure = GLFW_FALSE, 
         success = GLFW_TRUE , 
@@ -44,7 +44,7 @@ export namespace glfw
         ::glfwTerminate();
     }
     
-    auto create_window                 (const std::string& title, fox::vector2u dimensions) -> glfw::window*
+    auto create_window                 (const std::string& title, fox::vector2u dimensions) -> glfw::window_t*
     {
         auto handle = ::glfwCreateWindow(
             static_cast<fox::int32_t>(dimensions.x), 
@@ -54,40 +54,40 @@ export namespace glfw
         if (!handle) throw std::runtime_error{ "Failed to create GLFW window!" };
         return handle;
     }
-    void destroy_window                (glfw::window* window)
+    void destroy_window                (glfw::window_t* window)
     {
         ::glfwDestroyWindow(window);
     }
-    void window_hint                   (glfw::hint hint, fox::int32_t     value)
+    void window_hint                   (glfw::e_hint hint, fox::int32_t       value)
     {
         ::glfwWindowHint(std::to_underlying(hint), value);
     }
-    void window_hint                   (glfw::hint hint, glfw::hint_value value)
+    void window_hint                   (glfw::e_hint hint, glfw::e_hint_value value)
     {
         ::glfwWindowHint(std::to_underlying(hint), std::to_underlying(value));
     }
 
-    void set_window_title              (glfw::window* window, const std::string& title)
+    void set_window_title              (glfw::window_t* window, const std::string& title)
     {
         ::glfwSetWindowTitle(window, title.c_str());
     }
-    void set_window_size               (glfw::window* window, const fox::vector2u& dimensions)
+    void set_window_size               (glfw::window_t* window, const fox::vector2u& dimensions)
     {
         ::glfwSetWindowSize(
             window                                  , 
             static_cast<fox::int32_t>(dimensions.x) , 
             static_cast<fox::int32_t>(dimensions.y));
     }
-    void set_window_should_close       (glfw::window* window, fox::bool_t value)
+    void set_window_should_close       (glfw::window_t* window, fox::bool_t value)
     {
         ::glfwSetWindowShouldClose(window, value);
     }
-    auto window_should_close           (glfw::window* window) -> fox::bool_t
+    auto window_should_close           (glfw::window_t* window) -> fox::bool_t
     {
         return ::glfwWindowShouldClose(window);
     }
 
-    void make_context_current          (glfw::window* window)
+    void make_context_current          (glfw::window_t* window)
     {
         ::glfwMakeContextCurrent(window);
     }
@@ -99,32 +99,32 @@ export namespace glfw
     {
         ::glfwPollEvents();
     }
-    void swap_buffers                  (glfw::window* window)
+    void swap_buffers                  (glfw::window_t* window)
     {
         ::glfwSwapBuffers(window);
     }
 
-    void set_error_callback            (                      auto lambda)
+    void set_error_callback            (                        auto lambda)
     {
         ::glfwSetErrorCallback(lambda);
     }
-    void set_key_callback              (glfw::window* window, auto lambda)
+    void set_key_callback              (glfw::window_t* window, auto lambda)
     {
         ::glfwSetKeyCallback(window, lambda);
     }
-    void set_mouse_button_callback     (glfw::window* window, auto lambda)
+    void set_mouse_button_callback     (glfw::window_t* window, auto lambda)
     {
         ::glfwSetMouseButtonCallback(window, lambda);
     }
-    void set_cursor_position_callback  (glfw::window* window, auto lambda)
+    void set_cursor_position_callback  (glfw::window_t* window, auto lambda)
     {
         ::glfwSetCursorPosCallback(window, lambda);
     }
-    void set_scroll_callback           (glfw::window* window, auto lambda)
+    void set_scroll_callback           (glfw::window_t* window, auto lambda)
     {
         ::glfwSetScrollCallback(window, lambda);
     }
-    void set_frame_buffer_size_callback(glfw::window* window, auto lambda)
+    void set_frame_buffer_size_callback(glfw::window_t* window, auto lambda)
     {
         ::glfwSetFramebufferSizeCallback(window, lambda);
     }
