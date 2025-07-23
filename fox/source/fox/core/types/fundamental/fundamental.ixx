@@ -24,7 +24,7 @@ export namespace fox
 		true_  = true,
 	};
 
-	
+
 
 	template<typename T> struct fundamental{};
 
