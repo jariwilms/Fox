@@ -45,11 +45,10 @@ export namespace fox
         {
             stb::set_flip_vertically_on_write(cfg::flip_images);
 
-            using enum extension_e;
-            if constexpr (E == bmp) return stb::write_bmp_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
-            if constexpr (E == jpg) return stb::write_jpg_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
-            if constexpr (E == png) return stb::write_png_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
-            if constexpr (E == hdr) return stb::write_hdr_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == extension_e::bmp) return stb::write_bmp_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == extension_e::jpg) return stb::write_jpg_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == extension_e::png) return stb::write_png_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
+            if constexpr (E == extension_e::hdr) return stb::write_hdr_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
         }
         static auto decode(format_e format, std::span<const fox::byte_t> data) -> fox::image
         {
