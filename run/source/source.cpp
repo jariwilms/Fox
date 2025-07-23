@@ -1,18 +1,5 @@
 import std;
-import fox.core.image;
-import fox.core.time;
-import fox.core.transform;
-import fox.core.types;
-import fox.ecs.components;
-import fox.ecs.registry;
-import fox.input;
-import fox.io.model_importer;
-import fox.io;
-import fox.rendering;
-import fox.scene.actor;
-import fox.scene;
-import fox.window;
-import fox.rendering.renderer;
+import fox;
 
 using namespace fox;
 

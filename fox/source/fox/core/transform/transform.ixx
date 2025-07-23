@@ -32,7 +32,7 @@ export namespace fox
         }
         void rotate_by   (const fox::vector3f& angle      )
         {
-            rotation *= fox::quaternion4f{ math::to_radians(angle) };
+            rotation *= math::compose_angles(math::to_radians(angle));
         }
         void scale_by    (const fox::vector3f& factor     )
         {

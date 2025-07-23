@@ -30,50 +30,50 @@ export namespace fox::math::bitwise
     template<std::unsigned_integral T>
     constexpr auto all        (T value, fox::size_t position) -> fox::bool_t
     {
-        return std::bitset<fox::bit_size_of<T>()>{ value }.all();
+        return std::bitset<fox::bit_width<T>()>{ value }.all();
     }
     template<std::unsigned_integral T>
     constexpr auto any        (T value, fox::size_t position) -> fox::bool_t
     {
-        return std::bitset<fox::bit_size_of<T>()>{ value }.any();
+        return std::bitset<fox::bit_width<T>()>{ value }.any();
     }
     template<std::unsigned_integral T>
     constexpr auto none       (T value, fox::size_t position) -> fox::bool_t
     {
-        return std::bitset<fox::bit_size_of<T>()>{ value }.none();
+        return std::bitset<fox::bit_width<T>()>{ value }.none();
     }
 
     template<std::unsigned_integral T>
     constexpr auto test       (T value, fox::size_t position) -> fox::bool_t
     {
-        return std::bitset<fox::bit_size_of<T>()>{ value }.test(position);
+        return std::bitset<fox::bit_width<T>()>{ value }.test(position);
     }
     template<std::unsigned_integral T>
     constexpr auto set        (T value, fox::size_t position) -> T
     {
-        return static_cast<T>(std::bitset<fox::bit_size_of<T>()>{ value }.set(position).to_ullong());
+        return static_cast<T>(std::bitset<fox::bit_width<T>()>{ value }.set(position).to_ullong());
     }
     template<std::unsigned_integral T>
     constexpr auto clear      (T value, fox::size_t position) -> T
     {
-        return static_cast<T>(std::bitset<fox::bit_size_of<T>()>{ value }.reset(position).to_ullong());
+        return static_cast<T>(std::bitset<fox::bit_width<T>()>{ value }.reset(position).to_ullong());
     }
     template<std::unsigned_integral T>
     constexpr auto flip       (T value, fox::size_t position) -> T
     {
-        return static_cast<T>(std::bitset<fox::bit_size_of<T>()>{ value }.flip(position).to_ullong());
+        return static_cast<T>(std::bitset<fox::bit_width<T>()>{ value }.flip(position).to_ullong());
     }
 
     template<std::unsigned_integral T>
     constexpr auto count      (T value) -> fox::size_t
     {
-        return std::bitset<fox::bit_size_of<T>()>{ value }.count();
+        return std::bitset<fox::bit_width<T>()>{ value }.count();
     }
     template<bitwise::rotation R, std::unsigned_integral T>
     constexpr auto rotate     (T value, fox::size_t rotation) -> T
     {
-        if constexpr (R == bitwise::rotation::left ) return static_cast<T>((std::bitset<fox::bit_size_of<T>()>{ value } << rotation).to_ullong());
-        if constexpr (R == bitwise::rotation::right) return static_cast<T>((std::bitset<fox::bit_size_of<T>()>{ value } << rotation).to_ullong());
+        if constexpr (R == bitwise::rotation::left ) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
+        if constexpr (R == bitwise::rotation::right) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
     }
     template<bitwise::bit B, bitwise::significance S, typename T>
     constexpr auto consecutive(T value) -> fox::size_t
@@ -90,12 +90,12 @@ export namespace fox::math::bitwise
     template<std::unsigned_integral T, std::unsigned_integral U>
     constexpr auto set_mask   (T value, U mask) -> T
     {
-        return static_cast<T>((std::bitset<fox::bit_size_of<T>()>{ value } |= mask).to_ullong());
+        return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } |= mask).to_ullong());
     }
     template<std::unsigned_integral T, std::unsigned_integral U>
     constexpr auto clear_mask (T value, U mask) -> T
     {
-        return static_cast<T>((std::bitset<fox::bit_size_of<T>()>{ value } bitand std::bitset<fox::bit_size_of<T>()>{ mask }.flip()).to_ullong());
+        return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } bitand std::bitset<fox::bit_width<T>()>{ mask }.flip()).to_ullong());
     }
 
     template<std::unsigned_integral T>

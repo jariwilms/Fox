@@ -8,27 +8,27 @@ export namespace fox
     inline namespace utl
     {
         template<typename T>
-        constexpr auto byte_size_of()
+        constexpr auto size_of  ()
         {
             return sizeof(T);
         }
         template<typename T>
-        constexpr auto byte_size_of(const T& value)
+        constexpr auto size_of  (const T& value)
         {
             return sizeof(value);
         }
         template<typename T>
-        constexpr auto bit_size_of (const T& value)
+        constexpr auto bit_width(const T& value)
         {
-            return utl::byte_size_of(value) * fox::size_t{ 8u };
+            return utl::size_of(value) * fox::size_t{ 8u };
         }
         template<typename T>
-        constexpr auto bit_size_of ()
+        constexpr auto bit_width()
         {
-            return utl::byte_size_of<T>() * fox::size_t{ 8u };
+            return utl::size_of<T>() * fox::size_t{ 8u };
         }
         template<typename T, auto MEMBER_PTR>
-        constexpr auto offset_of   ()
+        constexpr auto offset_of()
         {
             return reinterpret_cast<fox::size_t>(
                 &reinterpret_cast<const volatile fox::byte_t&>(

@@ -1,4 +1,5 @@
 export module fox.scene;
+export import fox.scene.actor;
 
 import std;
 import <entt/entt.hpp>;

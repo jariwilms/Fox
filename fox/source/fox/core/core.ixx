@@ -1,0 +1,12 @@
+export module fox.core;
+export import fox.core.data;
+export import fox.core.enumeration;
+export import fox.core.image;
+export import fox.core.json;
+export import fox.core.memory;
+export import fox.core.meta;
+export import fox.core.time;
+export import fox.core.transform;
+export import fox.core.types;
+export import fox.core.utility;
+export import fox.core.uuid;

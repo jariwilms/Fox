@@ -6,48 +6,50 @@ import fox.ecs.api;
 import fox.ecs.component;
 import vendor.entt;
 
-auto registry = fox::ecs::api::registry_t{};
-
+namespace fox::registry
+{
+    auto registry_ = fox::ecs::api::registry_t{};
+}
 export namespace fox::registry
 {
     auto create() -> fox::id_t
     {
-        return ::registry.create();
+        return registry_.create();
     }
     void destroy(fox::id_t id)
     {
-        ::registry.destroy(id);
+        registry_.destroy(id);
     }
 
     template<typename... T>
     auto has_component   (fox::id_t id) -> fox::bool_t
     {
-        return ::registry.all_of<T...>(id);
+        return registry_.all_of<T...>(id);
     }
     template<typename T, typename... Args>
     auto add_component   (fox::id_t id, Args&&... args) -> T&
     {
-        return ::registry.emplace<T>(id, std::forward<Args>(args)...);
+        return registry_.emplace<T>(id, std::forward<Args>(args)...);
     }
     template<typename T>
     auto get_component   (fox::id_t id) -> T&
     {
-        return ::registry.get<T>(id);
+        return registry_.get<T>(id);
     }
     template<typename T>
     void remove_component(fox::id_t id)
     {
-        ::registry.remove<T>(id);
+        registry_.remove<T>(id);
     }
 
     template<typename... T>
     auto view() -> auto
     {
-        return ::registry.view<T...>();
+        return registry_.view<T...>();
     }
     template<typename... T>
     auto group() -> auto
     {
-        return ::registry.group<T...>();
+        return registry_.group<T...>();
     }
 }
