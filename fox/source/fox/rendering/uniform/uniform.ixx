@@ -8,64 +8,72 @@ export namespace fox::gfx::unf
 {
     //Graphics API's often enforce specific data layout requirements.
     //Padding may be automatically inserted when using certain data types to ensure proper alignment boundaries are maintained.
-    //To prevent alignment-related issues, it is recommended to use the following types for uniform buffer data.
-    //Reference: https://learn.microsoft.com/en-us/cpp/cpp/alignment-cpp-declarations?view=msvc-170
+    //To prevent alignment-related issues, it is recommended to use types that align fully on 4, 8, or 16 byte boundaries.
+    //For more information: https://learn.microsoft.com/en-us/cpp/cpp/alignment-cpp-declarations?view=msvc-170
 
-    using int32_t   = fox::int32_t;
-    using uint32_t  = fox::uint32_t;
-    using float32_t = fox::float32_t;
-    using Vector2f  = fox::vector2f;
-    using Vector4f  = fox::vector4f;
-    using Matrix4f  = fox::matrix4f;
+    //Binding 0
+    struct context 
+    {
+        fox::vector2f  resolution;
+        fox::vector2f  mousePosition;
+        fox::float32_t time;
+        fox::float32_t deltaTime;
+    };
 
+    //Binding 1
+    struct camera 
+    {
+        fox::vector4f position;
+    };
 
+    //Binding 2
+    struct matrices 
+    {
+        fox::matrix4f model      = fox::matrix<>::identity;
+        fox::matrix4f view       = fox::matrix<>::identity;
+        fox::matrix4f projection = fox::matrix<>::identity;
+    };
 
-    struct Context //Binding 0
+    //Binding 3
+    struct material 
     {
-        unf::Vector2f  resolution{};
-        unf::Vector2f  mousePosition{};
-        unf::float32_t time{};
-        unf::float32_t deltaTime{};
+        fox::vector4f  color;
+        fox::float32_t roughness;
+        fox::float32_t metallic;
     };
-    struct Camera //Binding 1
-    {
-        unf::Vector4f position{};
-    };
-    struct Matrices //Binding 2
-    {
-        unf::Matrix4f model     { 1.0f };
-        unf::Matrix4f view      { 1.0f };
-        unf::Matrix4f projection{ 1.0f };
-    };
-    struct Material //Binding 3
-    {
-        unf::Vector4f  color{};
-        unf::float32_t roughness{};
-        unf::float32_t metallic{};
-    };
-    struct Light //Binding 4
-    {
-        unf::Vector4f  position{};
-        unf::Vector4f  color{};
-        unf::float32_t radius{};
-        unf::float32_t linearFalloff{};
-        unf::float32_t quadraticFalloff{};
 
-        unf::float32_t _padding{};
-    };
-    struct PreFilter //Binding 5
+    //Binding 4
+    struct light 
     {
-        unf::uint32_t  resolution{};
-        unf::float32_t value{};
+        fox::vector4f  position;
+        fox::vector4f  color;
+        fox::float32_t radius;
+        fox::float32_t linearFalloff;
+        fox::float32_t quadraticFalloff;
+
+        fox::float32_t _;
     };
-    struct LightShadow //Binding 6
+
+    //Binding 5
+    struct pre_filter 
     {
-        unf::Vector4f  position{};
-        unf::float32_t farPlane{};
+        fox::uint32_t  resolution;
+        fox::float32_t value;
     };
-    using  SSAOSample = unf::Vector4f; //Binding 7 or smth idk
-    struct ShadowProjection //Binding 13
+
+    //Binding 6
+    struct light_shadow 
     {
-        unf::Matrix4f projection{ 1.0f };
+        fox::vector4f  position;
+        fox::float32_t farPlane;
+    };
+
+    //Binding 7 or smth idk
+    using ssao_sample = fox::vector4f; 
+
+    //Binding 13
+    struct shadow_projection            
+    {
+        fox::matrix4f projection = fox::matrix<>::identity;
     };
 }

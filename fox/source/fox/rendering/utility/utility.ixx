@@ -10,13 +10,13 @@ export namespace fox::gfx::utl
     {
         throw std::logic_error{ "The method or operation has not been implemented!" };
     }
-    template<typename Shader>
+    template<typename S>
     auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& fragmentFile = io::load(fragment);
 
-        return std::array<std::shared_ptr<Shader>, 2>
+        return std::array<std::shared_ptr<S>, 2u>
         {
             gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile  ->read()), 
             gfx::Shader::create(gfx::Shader::Stage::Fragment, *fragmentFile->read()), 
@@ -29,7 +29,7 @@ export namespace fox::gfx::utl
         const auto& geometryFile = io::load(geometry);
         const auto& fragmentFile = io::load(fragment);
 
-        return std::array<std::shared_ptr<Shader>, 3>
+        return std::array<std::shared_ptr<Shader>, 3u>
         {
             gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile  ->read()), 
             gfx::Shader::create(gfx::Shader::Stage::Geometry, *geometryFile->read()),

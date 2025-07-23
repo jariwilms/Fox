@@ -58,11 +58,11 @@ export namespace fox::gfx::api
             pBuffers_.at(0)  = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
             pBuffers_.at(1)  = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
 
-            contextUniform_  = gfx::UniformBuffer<unf::Context> ::create();
-            matricesUniform_ = gfx::UniformBuffer<unf::Matrices>::create();
-            materialUniform_ = gfx::UniformBuffer<unf::Material>::create();
-            cameraUniform_   = gfx::UniformBuffer<unf::Camera>  ::create();
-            lightUniform_    = gfx::UniformBuffer<unf::Light>   ::create();
+            contextUniform_  = gfx::UniformBuffer<unf::context> ::create();
+            matricesUniform_ = gfx::UniformBuffer<unf::matrices>::create();
+            materialUniform_ = gfx::UniformBuffer<unf::material>::create();
+            cameraUniform_   = gfx::UniformBuffer<unf::camera>  ::create();
+            lightUniform_    = gfx::UniformBuffer<unf::light>   ::create();
 
 
 
@@ -138,7 +138,7 @@ export namespace fox::gfx::api
             //Convert HDR texture to cubemap
             pipelines_.at("ConvertEqui")->bind();
             matricesUniform_->bind(gfx::binding_t{ 2u });
-            matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+            matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
 
             gl::viewport(envDimensions);
             gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
@@ -149,7 +149,7 @@ export namespace fox::gfx::api
 
             for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
             {
-                matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+                matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(view));
 
                 gl::frame_buffer_texture_layer(frameBuffer->handle(), environmentCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -170,7 +170,7 @@ export namespace fox::gfx::api
             irradianceCubemap_ = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::None, gfx::Cubemap::Wrapping::ClampToEdge, cvDimensions);
 
             pipelines_.at("Irradiance")->bind();
-            matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+            matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
             gl::viewport(cvDimensions);
@@ -182,7 +182,7 @@ export namespace fox::gfx::api
 
             for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
             {
-                matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+                matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(view));
 
                 gl::frame_buffer_texture_layer(frameBuffer->handle(), irradianceCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -199,13 +199,13 @@ export namespace fox::gfx::api
             //PreFilter step
             const fox::vector2u reflectionDimensions{ 128u, 128u };
 
-            auto preFilterBuffer = gfx::UniformBuffer<unf::PreFilter>::create();
+            auto preFilterBuffer = gfx::UniformBuffer<unf::pre_filter>::create();
             preFilterBuffer->bind(gfx::binding_t{ 5u });
 
             preFilterCubemap_ = gfx::Cubemap::create(gfx::Cubemap::Format::RGB16_FLOAT, gfx::Cubemap::Filter::Trilinear, gfx::Cubemap::Wrapping::ClampToEdge, reflectionDimensions);
 
             pipelines_.at("PreFilter")->bind();
-            matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::projection>(), std::make_tuple(captureProjection));
+            matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
             frameBuffer->bind(gfx::FrameBuffer::Target::Write);
@@ -216,14 +216,14 @@ export namespace fox::gfx::api
             {
                 const fox::vector2u mipDimensions{ reflectionDimensions.x * std::pow(0.5f, mip), reflectionDimensions.y * std::pow(0.5f, mip) };
                 const auto& roughness = static_cast<fox::float32_t>(mip) / (maxMipLevels - 1u);
-                preFilterBuffer->copy(unf::PreFilter{ envDimensions.x, roughness });
+                preFilterBuffer->copy(unf::pre_filter{ envDimensions.x, roughness });
 
                 gl::viewport(mipDimensions);
                 gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
 
                 for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
                 {
-                    matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(view));
+                    matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(view));
 
                     gl::frame_buffer_texture_layer(frameBuffer->handle(), preFilterCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, mip, index++);
                     gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
@@ -263,12 +263,12 @@ export namespace fox::gfx::api
 
 
             constexpr auto                                 ssaoSamples{ 64u };
-            std::vector<unf::SSAOSample>                   ssaoKernel(ssaoSamples);
+            std::vector<unf::ssao_sample>                   ssaoKernel(ssaoSamples);
             std::uniform_real_distribution<fox::float32_t> distribution(0.0f, 1.0f);
             std::default_random_engine                     engine;
             for (auto index : std::views::iota(0u, 64u))
             {
-                unf::SSAOSample sample
+                unf::ssao_sample sample
                 { 
                     distribution(engine) * 2.0f - 1.0f, 
                     distribution(engine) * 2.0f - 1.0f, 
@@ -287,7 +287,7 @@ export namespace fox::gfx::api
                 ssaoKernel.at(index) = sample;
             }
 
-            ssaoSampleUniform_ = gfx::UniformArrayBuffer<unf::SSAOSample, ssaoSamples>::create(ssaoKernel);
+            ssaoSampleUniform_ = gfx::UniformArrayBuffer<unf::ssao_sample, ssaoSamples>::create(ssaoKernel);
             ssaoSampleUniform_->bind(gfx::binding_t{ 7u });
 
 
@@ -319,8 +319,8 @@ export namespace fox::gfx::api
             const auto& viewMatrix       = glm::lookAt(transform.position, transform.position + transform.forward(), transform.up());
             const auto& projectionMatrix = camera.projection();
 
-            matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
-            cameraUniform_  ->copy    (unf::Camera{ fox::vector4f{ transform.position, 1.0f } });
+            matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(viewMatrix, projectionMatrix));
+            cameraUniform_  ->copy    (unf::camera{ fox::vector4f{ transform.position, 1.0f } });
 
 
 
@@ -337,7 +337,7 @@ export namespace fox::gfx::api
 
             for (const auto& [light, position] : renderInfo_.lights)
             {
-                unf::Light result
+                unf::light result
                 {
                     fox::vector4f{ position,    1.0f },
                     fox::vector4f{ light.color, 1.0f },
@@ -376,7 +376,7 @@ export namespace fox::gfx::api
             materialUniform_->bind(gfx::binding_t{ 3u });
             lightUniform_->   bind(gfx::binding_t{ 4u });
 
-            contextUniform_->copy(unf::Context{ dimensions, input::cursor_position(), fox::time::since_epoch(), fox::time::delta() });
+            contextUniform_->copy(unf::context{ dimensions, input::cursor_position(), fox::time::since_epoch(), fox::time::delta() });
 
 
 
@@ -445,7 +445,7 @@ export namespace fox::gfx::api
 
             for (const auto& transform : debugTransforms_)
             {
-                matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
+                matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::model>(), std::make_tuple(transform.matrix()));
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
             }
 #endif
@@ -491,8 +491,8 @@ export namespace fox::gfx::api
             {
                 const auto& [mesh, material, transform] = _;
 
-                matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(transform.matrix()));
-                materialUniform_->copy      (unf::Material{ material->color, material->roughnessFactor, material->metallicFactor });
+                matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::model>(), std::make_tuple(transform.matrix()));
+                materialUniform_->copy      (unf::material{ material->color, material->roughnessFactor, material->metallicFactor });
 
                 mesh            ->bind();
                 material->albedo->bind(gfx::binding_t{ 0u });
@@ -535,7 +535,7 @@ export namespace fox::gfx::api
                 {
                     fox::transform sphereTransform{ light.position, fox::vector3f{}, fox::vector3f{light.radius} };
 
-                    matricesUniform_->copy_slice(fox::utl::offset_of<unf::Matrices, &unf::Matrices::model>(), std::make_tuple(sphereTransform.matrix()));
+                    matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::model>(), std::make_tuple(sphereTransform.matrix()));
                     lightUniform_   ->copy      ({ light.position, light.color, light.radius, light.linearFalloff, light.quadraticFalloff });
 
                     gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, pva->index_count());
@@ -566,9 +566,9 @@ export namespace fox::gfx::api
         }
 
         std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::transform>> mmt_{};
-        std::vector<unf::Light>                                            lights_{};
-        std::vector<unf::Light>                                            shadowCastingPointLights_{};
-        std::vector<unf::Light>                                            shadowCastingDirectionalLights_{};
+        std::vector<unf::light>                                            lights_{};
+        std::vector<unf::light>                                            shadowCastingPointLights_{};
+        std::vector<unf::light>                                            shadowCastingDirectionalLights_{};
         std::vector<fox::transform>                                        debugTransforms_{};
         std::shared_ptr<gfx::FrameBuffer>                                  gBuffer_{};
         std::shared_ptr<gfx::FrameBuffer>                                  sBuffer_{};
@@ -579,12 +579,12 @@ export namespace fox::gfx::api
         std::shared_ptr<gfx::Cubemap>                                      irradianceCubemap_{};
         std::shared_ptr<gfx::Cubemap>                                      preFilterCubemap_{};
         std::shared_ptr<gfx::Texture2D>                                    brdfTexture_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Context>>                  contextUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Matrices>>                 matricesUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Material>>                 materialUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Camera>>                   cameraUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::Light>>                    lightUniform_{};
-        std::shared_ptr<gfx::UniformArrayBuffer<unf::SSAOSample, 64u>>     ssaoSampleUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::context>>                  contextUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::matrices>>                 matricesUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::material>>                 materialUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::camera>>                   cameraUniform_{};
+        std::shared_ptr<gfx::UniformBuffer<unf::light>>                    lightUniform_{};
+        std::shared_ptr<gfx::UniformArrayBuffer<unf::ssao_sample, 64u>>     ssaoSampleUniform_{};
         std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    pipelines_{};
         fox::float32_t                                                     shadowFarPlane_{ 100.0f };
         gfx::RenderInfo                                                    renderInfo_{};
