@@ -2,7 +2,7 @@ export module fox.rendering.base.render_buffer;
 
 export namespace fox::gfx::api
 {
-	class RenderBuffer
+	class render_buffer
 	{
 	public:
 		enum class Format

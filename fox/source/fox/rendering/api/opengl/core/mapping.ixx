@@ -18,16 +18,16 @@ import fox.rendering.base.frame_buffer;
 export namespace fox::gfx::api::gl
 {
     template<typename T>
-    constexpr auto map_type             () -> glf::VertexArray::Attribute::Type
+    constexpr auto map_type             () -> glf::vertex_array::Attribute::Type
     {
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int8_t   >) return glf::VertexArray::Attribute::Type::Byte           ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint8_t  >) return glf::VertexArray::Attribute::Type::UnsignedByte   ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int16_t  >) return glf::VertexArray::Attribute::Type::Short          ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint16_t >) return glf::VertexArray::Attribute::Type::UnsignedShort  ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int32_t  >) return glf::VertexArray::Attribute::Type::Integer        ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint32_t >) return glf::VertexArray::Attribute::Type::UnsignedInteger;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float32_t>) return glf::VertexArray::Attribute::Type::Float          ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float64_t>) return glf::VertexArray::Attribute::Type::Double         ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int8_t   >) return glf::vertex_array::Attribute::Type::Byte           ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint8_t  >) return glf::vertex_array::Attribute::Type::UnsignedByte   ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int16_t  >) return glf::vertex_array::Attribute::Type::Short          ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint16_t >) return glf::vertex_array::Attribute::Type::UnsignedShort  ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int32_t  >) return glf::vertex_array::Attribute::Type::Integer        ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint32_t >) return glf::vertex_array::Attribute::Type::UnsignedInteger;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float32_t>) return glf::vertex_array::Attribute::Type::Float          ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float64_t>) return glf::vertex_array::Attribute::Type::Double         ;
     }
 
     auto map_texture_format_base        (api::Texture::Format format) -> glf::Texture::BaseFormat
@@ -202,32 +202,32 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    auto map_render_buffer_format       (api::RenderBuffer::Format format) -> glf::RenderBuffer::Format
+    auto map_render_buffer_format       (api::render_buffer::Format format) -> glf::render_buffer::Format
     {
         switch (format)
         {
-            using enum api::RenderBuffer::Format;
+            using enum api::render_buffer::Format;
 
-            case R8_UNORM         : return glf::RenderBuffer::Format::R8;
-            case RG8_UNORM        : return glf::RenderBuffer::Format::RG8;
-            case RGB8_UNORM       : return glf::RenderBuffer::Format::RGB8;
-            case RGBA8_UNORM      : return glf::RenderBuffer::Format::RGBA8;
-            case RGBA8_SRGB       : return glf::RenderBuffer::Format::RGBA8_SRGB;
-            case D16_UNORM        : return glf::RenderBuffer::Format::D16_UNORM;
-            case D24_UNORM        : return glf::RenderBuffer::Format::D24_UNORM;
-            case D32_FLOAT        : return glf::RenderBuffer::Format::D32_FLOAT;
-            case D24_UNORM_S8_UINT: return glf::RenderBuffer::Format::D24_UNORM_S8_UINT;
-            case D32_FLOAT_S8_UINT: return glf::RenderBuffer::Format::D32_FLOAT_S8_UINT;
-            case S8_UINT          : return glf::RenderBuffer::Format::S8_UINT;
+            case R8_UNORM         : return glf::render_buffer::Format::R8;
+            case RG8_UNORM        : return glf::render_buffer::Format::RG8;
+            case RGB8_UNORM       : return glf::render_buffer::Format::RGB8;
+            case RGBA8_UNORM      : return glf::render_buffer::Format::RGBA8;
+            case RGBA8_SRGB       : return glf::render_buffer::Format::RGBA8_SRGB;
+            case D16_UNORM        : return glf::render_buffer::Format::D16_UNORM;
+            case D24_UNORM        : return glf::render_buffer::Format::D24_UNORM;
+            case D32_FLOAT        : return glf::render_buffer::Format::D32_FLOAT;
+            case D24_UNORM_S8_UINT: return glf::render_buffer::Format::D24_UNORM_S8_UINT;
+            case D32_FLOAT_S8_UINT: return glf::render_buffer::Format::D32_FLOAT_S8_UINT;
+            case S8_UINT          : return glf::render_buffer::Format::S8_UINT;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_cubemap_texture_format_base(api::Cubemap::Format format) -> glf::Texture::BaseFormat
+    auto map_cubemap_texture_format_base(api::cubemap::Format format) -> glf::Texture::BaseFormat
     {
         switch (format)
         {
-            using enum api::Cubemap::Format;
+            using enum api::cubemap::Format;
 
             case R8_UNORM    :
             case R16_UNORM   :
@@ -268,11 +268,11 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_cubemap_texture_format     (api::Cubemap::Format format) -> glf::Texture::Format
+    auto map_cubemap_texture_format     (api::cubemap::Format format) -> glf::Texture::Format
     {
         switch (format)
         {
-            using enum api::Cubemap::Format;
+            using enum api::cubemap::Format;
 
             case R8_UNORM         : return glf::Texture::Format::R8_UNORM;
             case RG8_UNORM        : return glf::Texture::Format::RG8_UNORM;
@@ -319,11 +319,11 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_cubemap_texture_format_type(api::Cubemap::Format format) -> glf::PixelData::Type
+    auto map_cubemap_texture_format_type(api::cubemap::Format format) -> glf::PixelData::Type
     {
         switch (format)
         {
-            using enum api::Cubemap::Format;
+            using enum api::cubemap::Format;
 
             case R8_UNORM    :
             case RG8_UNORM   :
@@ -361,45 +361,45 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_frame_buffer_target        (api::FrameBuffer::Target  target) -> glf::FrameBuffer::Target
+    auto map_frame_buffer_target        (api::frame_buffer::Target  target) -> glf::frame_buffer::Target
     {
         switch (target)
         {
-            using enum api::FrameBuffer::Target;
+            using enum api::frame_buffer::Target;
 
-            case Read : return glf::FrameBuffer::Target::Read;
-            case Write: return glf::FrameBuffer::Target::Write;
+            case Read : return glf::frame_buffer::Target::Read;
+            case Write: return glf::frame_buffer::Target::Write;
 
             default: throw std::invalid_argument{ "Invalid target!" };
         }
     }
-    auto map_frame_buffer_attachment    (api::FrameBuffer::Attachment attachment) -> glf::FrameBuffer::Attachment
+    auto map_frame_buffer_attachment    (api::frame_buffer::Attachment attachment) -> glf::frame_buffer::Attachment
     {
         switch (attachment)
         {
-            using enum api::FrameBuffer::Attachment;
+            using enum api::frame_buffer::Attachment;
 
-            case Color0      : return glf::FrameBuffer::Attachment::Color0; 
-            case Color1      : return glf::FrameBuffer::Attachment::Color1; 
-            case Color2      : return glf::FrameBuffer::Attachment::Color2; 
-            case Color3      : return glf::FrameBuffer::Attachment::Color3; 
-            case Color4      : return glf::FrameBuffer::Attachment::Color4; 
-            case Color5      : return glf::FrameBuffer::Attachment::Color5; 
-            case Color6      : return glf::FrameBuffer::Attachment::Color6; 
-            case Color7      : return glf::FrameBuffer::Attachment::Color7; 
+            case Color0      : return glf::frame_buffer::Attachment::Color0; 
+            case Color1      : return glf::frame_buffer::Attachment::Color1; 
+            case Color2      : return glf::frame_buffer::Attachment::Color2; 
+            case Color3      : return glf::frame_buffer::Attachment::Color3; 
+            case Color4      : return glf::frame_buffer::Attachment::Color4; 
+            case Color5      : return glf::frame_buffer::Attachment::Color5; 
+            case Color6      : return glf::frame_buffer::Attachment::Color6; 
+            case Color7      : return glf::frame_buffer::Attachment::Color7; 
 
-            case Depth       : return glf::FrameBuffer::Attachment::Depth;
-            case Stencil     : return glf::FrameBuffer::Attachment::Stencil;
-            case DepthStencil: return glf::FrameBuffer::Attachment::DepthStencil;
+            case Depth       : return glf::frame_buffer::Attachment::Depth;
+            case Stencil     : return glf::frame_buffer::Attachment::Stencil;
+            case DepthStencil: return glf::frame_buffer::Attachment::DepthStencil;
 
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    auto map_program_stage              (api::Shader::Stage stage) -> glf::Program::Stage
+    auto map_program_stage              (api::shader::Stage stage) -> glf::Program::Stage
     {
         switch (stage)
         {
-            using enum api::Shader::Stage;
+            using enum api::shader::Stage;
 
             case Vertex                : return glf::Program::Stage::Vertex;
             case TessellationControl   : return glf::Program::Stage::TessellationControl;
@@ -411,18 +411,18 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }                                                                      
-    auto map_shader_type                (api::Shader::Stage stage) -> glf::Shader::Type
+    auto map_shader_type                (api::shader::Stage stage) -> glf::shader::Type
     {
         switch (stage)
         {
-            using enum api::Shader::Stage;
+            using enum api::shader::Stage;
 
-            case Vertex                : return glf::Shader::Type::Vertex;
-            case TessellationControl   : return glf::Shader::Type::TessellationControl;
-            case TessellationEvaluation: return glf::Shader::Type::TessellationEvaluation;
-            case Geometry              : return glf::Shader::Type::Geometry;
-            case Fragment              : return glf::Shader::Type::Fragment;
-            case Compute               : return glf::Shader::Type::Compute;
+            case Vertex                : return glf::shader::Type::Vertex;
+            case TessellationControl   : return glf::shader::Type::TessellationControl;
+            case TessellationEvaluation: return glf::shader::Type::TessellationEvaluation;
+            case Geometry              : return glf::shader::Type::Geometry;
+            case Fragment              : return glf::shader::Type::Fragment;
+            case Compute               : return glf::shader::Type::Compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }

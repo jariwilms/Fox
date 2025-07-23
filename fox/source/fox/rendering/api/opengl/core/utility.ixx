@@ -43,21 +43,21 @@ export namespace fox::gfx::api::gl
 
 
     template<typename T>
-    constexpr auto convert_range(gl::range_t     range) -> gl::byterange_t
+    constexpr auto convert_range(gl::range     range) -> gl::byterange
     {
-        return gl::byterange_t{ static_cast<gl::size_t>(range.count * sizeof(T)), static_cast<gl::offset_t>(range.index * sizeof(T)) };
+        return gl::byterange{ static_cast<gl::size_t>(range.count * sizeof(T)), static_cast<gl::offset_t>(range.index * sizeof(T)) };
     }
     template<typename T>
-    constexpr auto convert_range(gl::byterange_t range) -> gl::range_t
+    constexpr auto convert_range(gl::byterange range) -> gl::range
     {
-        return gl::range_t{ static_cast<gl::count_t>(range.size / sizeof(T)), static_cast<gl::index_t>(range.offset / sizeof(T)) };
+        return gl::range{ static_cast<gl::count_t>(range.size / sizeof(T)), static_cast<gl::index_t>(range.offset / sizeof(T)) };
     }
 
-    constexpr auto range_overlaps(gl::range_t     first, gl::range_t     second) -> gl::bool_t
+    constexpr auto range_overlaps(gl::range     first, gl::range     second) -> gl::bool_t
     {
         return (first.index < second.index + second.count) && (second.index < first.index + second.count);
     }
-    constexpr auto range_overlaps(gl::byterange_t first, gl::byterange_t second) -> gl::bool_t
+    constexpr auto range_overlaps(gl::byterange first, gl::byterange second) -> gl::bool_t
     {
         return (first.offset < second.offset + second.size) && (second.offset < first.offset + second.size);
     }

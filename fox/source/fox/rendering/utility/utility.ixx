@@ -22,14 +22,14 @@ export namespace fox::gfx::utl
             gfx::shader::create(gfx::shader::stage_e::Fragment, *fragmentFile->read()), 
         };
     }
-    template<typename Shader>
+    template<typename shader>
     auto shaders_from_binaries(const std::filesystem::path& vertex, const std::filesystem::path& geometry, const std::filesystem::path& fragment)
     {
         const auto& vertexFile   = io::load(vertex);
         const auto& geometryFile = io::load(geometry);
         const auto& fragmentFile = io::load(fragment);
 
-        return std::array<std::shared_ptr<Shader>, 3u>
+        return std::array<std::shared_ptr<shader>, 3u>
         {
             gfx::shader::create(gfx::shader::stage_e::Vertex,   *vertexFile  ->read()), 
             gfx::shader::create(gfx::shader::stage_e::Geometry, *geometryFile->read()),

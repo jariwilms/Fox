@@ -128,7 +128,7 @@ export namespace fox::gfx::api
             const fox::vector2u envDimensions{ 512u, 512u };
             const std::array<gfx::frame_buffer::specification_e, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
             auto frameBuffer     = gfx::frame_buffer::create(envDimensions, manifest);
-            auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::RenderBuffer>("Depth");
+            auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::render_buffer>("Depth");
             auto hdrImage        = io::load<io::asset_e::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
             auto hdrTex          = gfx::texture2d::create(gfx::texture2d::e_format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
             environmentCubemap_  = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::None, gfx::cubemap::wrapping_e::ClampToEdge, envDimensions);
@@ -141,7 +141,7 @@ export namespace fox::gfx::api
             matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
 
             gl::viewport(envDimensions);
-            gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
+            gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::frame_buffer::Source::Color0);
 
             frameBuffer->bind(gfx::frame_buffer::target_e::Write);
             hdrTex->bind(gfx::binding_t{ 0u });
@@ -151,7 +151,7 @@ export namespace fox::gfx::api
             {
                 matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(view));
 
-                gl::frame_buffer_texture_layer(frameBuffer->handle(), environmentCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
+                gl::frame_buffer_texture_layer(frameBuffer->handle(), environmentCubemap_->handle(), glf::frame_buffer::Attachment::Color0, 0, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
             }
@@ -174,8 +174,8 @@ export namespace fox::gfx::api
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
             gl::viewport(cvDimensions);
-            gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
-            gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
+            gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::frame_buffer::Source::Color0);
+            gl::render_buffer_storage(renderBuffer->handle(), glf::render_buffer::Format::D24_UNORM, cvDimensions);
 
             frameBuffer->bind(gfx::frame_buffer::target_e::Write);
             cva->bind();
@@ -184,7 +184,7 @@ export namespace fox::gfx::api
             {
                 matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(view));
 
-                gl::frame_buffer_texture_layer(frameBuffer->handle(), irradianceCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, 0, index++);
+                gl::frame_buffer_texture_layer(frameBuffer->handle(), irradianceCubemap_->handle(), glf::frame_buffer::Attachment::Color0, 0, index++);
                 gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
             }
@@ -219,13 +219,13 @@ export namespace fox::gfx::api
                 preFilterBuffer->copy(unf::pre_filter{ envDimensions.x, roughness });
 
                 gl::viewport(mipDimensions);
-                gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, mipDimensions);
+                gl::render_buffer_storage(renderBuffer->handle(), glf::render_buffer::Format::D24_UNORM, mipDimensions);
 
                 for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
                 {
                     matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::view>(), std::make_tuple(view));
 
-                    gl::frame_buffer_texture_layer(frameBuffer->handle(), preFilterCubemap_->handle(), glf::FrameBuffer::Attachment::Color0, mip, index++);
+                    gl::frame_buffer_texture_layer(frameBuffer->handle(), preFilterCubemap_->handle(), glf::frame_buffer::Attachment::Color0, mip, index++);
                     gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
                     gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
                 }
@@ -238,8 +238,8 @@ export namespace fox::gfx::api
             pipelines_.at("BRDF")->bind();
 
             gl::viewport(envDimensions);
-            gl::frame_buffer_texture(frameBuffer->handle(), brdfTexture_->handle(), glf::FrameBuffer::Attachment::Color0, 0);
-            gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, envDimensions);
+            gl::frame_buffer_texture(frameBuffer->handle(), brdfTexture_->handle(), glf::frame_buffer::Attachment::Color0, 0);
+            gl::render_buffer_storage(renderBuffer->handle(), glf::render_buffer::Format::D24_UNORM, envDimensions);
             gl::clear(glf::Buffer::Mask::Color | glf::Buffer::Mask::Depth);
 
             pva->bind();
@@ -456,7 +456,7 @@ export namespace fox::gfx::api
 
             //Blit the final result into the default framebuffer
             //gl::blit_frame_buffer(ssaoBuffer_->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, dimensions, dimensions);
-            gl::blit_frame_buffer(pBuffers_.at(0)->handle(), gl::default_frame_buffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, pBuffers_.at(0)->dimensions(), dimensions);
+            gl::blit_frame_buffer(pBuffers_.at(0)->handle(), gl::default_frame_buffer, glf::Buffer::Mask::Color, glf::frame_buffer::Filter::Nearest, pBuffers_.at(0)->dimensions(), dimensions);
         }
 
         void render(std::shared_ptr<const gfx::mesh> mesh, std::shared_ptr<const gfx::material> material, const fox::transform& transform)
@@ -504,10 +504,10 @@ export namespace fox::gfx::api
         }
         void render_lighting(std::shared_ptr<gfx::frame_buffer> target)
         {
-            target->bind(api::FrameBuffer::Target::Write);
+            target->bind(api::frame_buffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
 
-            gl::blit_frame_buffer(gBuffer_->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, gBuffer_->dimensions(), target->dimensions());
+            gl::blit_frame_buffer(gBuffer_->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::frame_buffer::Filter::Nearest, gBuffer_->dimensions(), target->dimensions());
 
 
 
@@ -551,7 +551,7 @@ export namespace fox::gfx::api
             pipelines_.at("Skybox")->bind();
             renderInfo_.skybox->bind(gfx::binding_t{ 0u });
 
-            gl::blit_frame_buffer(previous->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::FrameBuffer::Filter::Nearest, previous->dimensions(), target->dimensions());
+            gl::blit_frame_buffer(previous->handle(), target->handle(), glf::Buffer::Mask::Depth, glf::frame_buffer::Filter::Nearest, previous->dimensions(), target->dimensions());
 
             gl::viewport(target->dimensions());
             gl::disable<glf::Feature::FaceCulling>();

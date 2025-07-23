@@ -6,41 +6,41 @@ import fox.rendering.api.opengl.types;
 export namespace fox::gfx::api::gl
 {
     template<typename T, gl::uint32_t N>
-    struct region_t
+    struct region
     {
-        constexpr region_t(const gl::vector<T, N>& extent = {}, const gl::vector<T, N>& origin = {})
+        constexpr region(const gl::vector<T, N>& extent = {}, const gl::vector<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
-        auto operator==(const region_t&) const -> gl::bool_t = default;
+        auto operator==(const region&) const -> gl::bool_t = default;
 
         gl::vector<T, N> extent{};
         gl::vector<T, N> origin{};
     };
-    struct range_t
+    struct range
     {
-        constexpr range_t(gl::count_t count = {}, gl::index_t index = {})
+        constexpr range(gl::count_t count = {}, gl::index_t index = {})
             : count{ count }, index{ index } {}
 
-        auto operator==(const range_t&) const -> gl::bool_t = default;
+        auto operator==(const range&) const -> gl::bool_t = default;
 
         gl::count_t count{};
         gl::index_t index{};
     };
-    struct byterange_t
+    struct byterange
     {
-        constexpr byterange_t(gl::size_t size = {}, gl::offset_t offset = {})
+        constexpr byterange(gl::size_t size = {}, gl::offset_t offset = {})
             : size{ size }, offset{ offset } {}
 
-        auto operator==(const byterange_t&) const -> gl::bool_t = default;
+        auto operator==(const byterange&) const -> gl::bool_t = default;
 
         gl::size_t   size{};
         gl::offset_t offset{};
     };
 
-    using length_t      = gl::region_t<gl::uint32_t, 1u>;
-    using area_t        = gl::region_t<gl::uint32_t, 2u>;
-    using volume_t      = gl::region_t<gl::uint32_t, 3u>;
-    using hypervolume_t = gl::region_t<gl::uint32_t, 4u>; //Yes, this exists
+    using length_t      = gl::region<gl::uint32_t, 1u>;
+    using area_t        = gl::region<gl::uint32_t, 2u>;
+    using volume_t      = gl::region<gl::uint32_t, 3u>;
+    using hypervolume_t = gl::region<gl::uint32_t, 4u>; //Yes, this exists
 
-    using lock_t        = std::tuple<gl::range_t, gl::sync_t>;
+    using lock_t        = std::tuple<gl::range, gl::sync_t>;
 }

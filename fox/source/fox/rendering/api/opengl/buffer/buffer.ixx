@@ -65,7 +65,7 @@ export namespace fox::gfx::api::gl
 
             return data_;
         }
-        auto map_range(gl::range_t range) -> std::weak_ptr<std::span<T>>
+        auto map_range(gl::range range) -> std::weak_ptr<std::span<T>>
         {
             unmap();
 
@@ -99,14 +99,14 @@ export namespace fox::gfx::api::gl
             if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
         }
 
-        void lock_range (gl::range_t range)
+        void lock_range (gl::range range)
         {
             range.count = std::min(range.count, count()              );
             range.index = std::min(range.index, count() - range.count);
 
             locks_.emplace_back(range, gl::fence_sync());
         }
-        void await_range(gl::range_t range)
+        void await_range(gl::range range)
         {
             auto locks = std::vector<gl::lock_t>{};
 
@@ -161,7 +161,7 @@ export namespace fox::gfx::api::gl
 
     private:
         gl::size_t                    size_;
-        gl::range_t                   range_;
+        gl::range                   range_;
         std::vector<gl::lock_t>       locks_;
         std::shared_ptr<std::span<T>> data_;
     };
@@ -181,7 +181,7 @@ export namespace fox::gfx::api::gl
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_buffer_base(handle_, glf::Buffer::BaseTarget::UniformBuffer, binding);
+            gl::bind_buffer_base(handle_, glf::Buffer::BaseTarget::uniform_buffer, binding);
         }
 
         void copy      (const T& data)
@@ -242,11 +242,11 @@ export namespace fox::gfx::api::gl
 
         void bind      (gl::binding_t binding) const
         {
-            gl::bind_buffer_base(handle_, glf::Buffer::BaseTarget::UniformBuffer, binding);
+            gl::bind_buffer_base(handle_, glf::Buffer::BaseTarget::uniform_buffer, binding);
         }
-        void bind_range(gl::binding_t binding, gl::range_t range) const
+        void bind_range(gl::binding_t binding, gl::range range) const
         {
-            gl::bind_buffer_range<T>(handle_, glf::Buffer::BaseTarget::UniformBuffer, binding, range);
+            gl::bind_buffer_range<T>(handle_, glf::Buffer::BaseTarget::uniform_buffer, binding, range);
         }
 
         void copy      (std::span<const T, N> data)
@@ -278,7 +278,7 @@ export namespace fox::gfx::api::gl
 
             return data_;
         }
-        auto map_range(gl::range_t range) -> std::weak_ptr<std::span<T>>
+        auto map_range(gl::range range) -> std::weak_ptr<std::span<T>>
         {
             unmap();
 
@@ -313,14 +313,14 @@ export namespace fox::gfx::api::gl
 
         }
 
-        void lock_range (gl::range_t range)
+        void lock_range (gl::range range)
         {
             range.count = std::min(range.count, count()              );
             range.index = std::min(range.index, count() - range.count);
 
             locks_.emplace_back(range, gl::fence_sync());
         }
-        void await_range(gl::range_t range)
+        void await_range(gl::range range)
         {
             auto locks = std::vector<gl::lock_t>{};
 
@@ -375,7 +375,7 @@ export namespace fox::gfx::api::gl
 
     private:
         gl::size_t                    size_;
-        gl::range_t                   range_;
+        gl::range                   range_;
         std::vector<gl::lock_t>       locks_;
         std::shared_ptr<std::span<T>> data_;
     };

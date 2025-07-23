@@ -12,7 +12,7 @@ export namespace fox::gfx::api::gl
     class pipeline : public gl::object
     {
     public:
-        using layout_t = api::Pipeline::Layout<T>;
+        using layout_t = api::pipeline::Layout<T>;
 
         explicit pipeline(const layout_t& layout)
             : gl::object{ gl::create_program_pipeline(), [](auto* handle) { gl::delete_program_pipeline(*handle); }}

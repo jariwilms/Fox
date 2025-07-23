@@ -4,7 +4,7 @@ import std;
 
 export namespace fox::gfx::api
 {
-    class Pipeline
+    class pipeline
     {
     public:
         template<typename T>

@@ -10,7 +10,7 @@ export namespace fox::gfx::api::gl
     class shader : public gl::object
     {
     public:
-        using stage_e = api::Shader::Stage;
+        using stage_e = api::shader::Stage;
 
         shader(stage_e stage, std::span<const gl::byte_t> binary)
             : gl::object{ gl::create_program(), [](auto* handle) { gl::delete_program(*handle); }}
@@ -23,7 +23,7 @@ export namespace fox::gfx::api::gl
             gl::shader_binary(shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary);
             gl::specialize_shader(shader, "main");
 
-            auto compileStatus = gl::get_shader_value<glf::Shader::Parameter::CompileStatus>(shader);
+            auto compileStatus = gl::get_shader_value<glf::shader::Parameter::CompileStatus>(shader);
             if (compileStatus != gl::True) throw std::runtime_error{ gl::get_shader_info_log(shader) };
             
             gl::attach_shader(handle_, shader);

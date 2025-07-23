@@ -12,7 +12,7 @@ export namespace fox::gfx
     class vertex_array
     {
     public:
-        explicit vertex_array(std::shared_ptr<impl::VertexArray> _)
+        explicit vertex_array(std::shared_ptr<impl::vertex_array> _)
             : _{ _ } {}
 
         static auto create() -> std::shared_ptr<gfx::vertex_array>
@@ -52,16 +52,16 @@ export namespace fox::gfx
         {
             return _->handle();
         }
-        auto impl       () const -> std::shared_ptr<impl::VertexArray>
+        auto impl       () const -> std::shared_ptr<impl::vertex_array>
         {
             return _;
         }
 
     protected:
         vertex_array()
-            : _{ std::make_shared<impl::VertexArray>() } {}
+            : _{ std::make_shared<impl::vertex_array>() } {}
 
     private:
-        std::shared_ptr<impl::VertexArray> _;
+        std::shared_ptr<impl::vertex_array> _;
     };
 }

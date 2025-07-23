@@ -14,12 +14,12 @@ export namespace fox::gfx
     class frame_buffer
     {
     public:
-        using attachment_e    = api::FrameBuffer::Attachment;
-        using specification_e = api::FrameBuffer::Specification;
-        using surface_e       = api::FrameBuffer::Surface;
-        using target_e        = api::FrameBuffer::Target;
+        using attachment_e    = api::frame_buffer::Attachment;
+        using specification_e = api::frame_buffer::Specification;
+        using surface_e       = api::frame_buffer::Surface;
+        using target_e        = api::frame_buffer::Target;
 
-        explicit frame_buffer(std::shared_ptr<impl::FrameBuffer> _)
+        explicit frame_buffer(std::shared_ptr<impl::frame_buffer> _)
             : _{ _ } {}
 
         static auto create(const fox::vector2u& dimensions, std::span<const specification_e> specifications) -> std::shared_ptr<gfx::frame_buffer>
@@ -74,8 +74,8 @@ export namespace fox::gfx
         auto surface   (const std::string& identifier)
         {
             if constexpr (A == surface_e::Texture     ) return std::make_shared<gfx::texture2d>    (_->surface<A>(identifier));
-            if constexpr (A == surface_e::Cubemap     ) return std::make_shared<gfx::cubemap>      (_->surface<A>(identifier));
-            if constexpr (A == surface_e::RenderBuffer) return std::make_shared<gfx::render_buffer>(_->surface<A>(identifier));
+            if constexpr (A == surface_e::cubemap     ) return std::make_shared<gfx::cubemap>      (_->surface<A>(identifier));
+            if constexpr (A == surface_e::render_buffer) return std::make_shared<gfx::render_buffer>(_->surface<A>(identifier));
         }
         auto attachment(attachment_e attachment) -> std::string
         {
@@ -90,27 +90,27 @@ export namespace fox::gfx
         {
             return _->handle();
         }
-        auto impl      () const -> std::shared_ptr<impl::FrameBuffer>
+        auto impl      () const -> std::shared_ptr<impl::frame_buffer>
         {
             return _;
         }
 
     protected:
         frame_buffer(const fox::vector2u& dimensions, std::span<const specification_e> specifications)
-            : _{ std::make_shared<impl::FrameBuffer>(dimensions, specifications) } {}
+            : _{ std::make_shared<impl::frame_buffer>(dimensions, specifications) } {}
 
     private:
-        std::shared_ptr<impl::FrameBuffer> _;
+        std::shared_ptr<impl::frame_buffer> _;
     };
     class frame_buffer_ms
     {
     public:
-        using attachment_e    = api::FrameBuffer::Attachment;
-        using specification_e = api::FrameBuffer::SpecificationMultisample;
-        using surface_e       = api::FrameBuffer::Surface;
-        using target_e        = api::FrameBuffer::Target;
+        using attachment_e    = api::frame_buffer::Attachment;
+        using specification_e = api::frame_buffer::SpecificationMultisample;
+        using surface_e       = api::frame_buffer::Surface;
+        using target_e        = api::frame_buffer::Target;
 
-        explicit frame_buffer_ms(std::shared_ptr<impl::FrameBufferMultisample> _)
+        explicit frame_buffer_ms(std::shared_ptr<impl::frame_buffer_ms> _)
             : _{ _ } {}
 
         static auto create(const fox::vector2u& dimensions, std::span<const specification_e> specifications, fox::uint32_t samples) -> std::shared_ptr<gfx::frame_buffer_ms>
@@ -161,8 +161,8 @@ export namespace fox::gfx
         auto surface   (const std::string& identifier)
         {
             if constexpr (A == surface_e::Texture)      return std::make_shared<gfx::texture2d>   (_->surface<A>(identifier));
-            if constexpr (A == surface_e::Cubemap)      return std::make_shared<gfx::cubemap>     (_->surface<A>(identifier));
-            if constexpr (A == surface_e::RenderBuffer) return std::make_shared<gfx::render_buffer>(_->surface<A>(identifier));
+            if constexpr (A == surface_e::cubemap)      return std::make_shared<gfx::cubemap>     (_->surface<A>(identifier));
+            if constexpr (A == surface_e::render_buffer) return std::make_shared<gfx::render_buffer>(_->surface<A>(identifier));
         }
         auto attachment(attachment_e attachment) -> std::string
         {
@@ -181,16 +181,16 @@ export namespace fox::gfx
         {
             return _->handle();
         }
-        auto impl      () const -> std::shared_ptr<impl::FrameBufferMultisample>
+        auto impl      () const -> std::shared_ptr<impl::frame_buffer_ms>
         {
             return _;
         }
 
     protected:
         frame_buffer_ms(const fox::vector2u& dimensions, std::span<const specification_e> specifications, fox::uint32_t samples)
-            : _{ std::make_shared<impl::FrameBufferMultisample>(dimensions, specifications, samples) } {}
+            : _{ std::make_shared<impl::frame_buffer_ms>(dimensions, specifications, samples) } {}
 
     private:
-        std::shared_ptr<impl::FrameBufferMultisample> _;
+        std::shared_ptr<impl::frame_buffer_ms> _;
     };
 }

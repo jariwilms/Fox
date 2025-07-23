@@ -4,7 +4,7 @@ import fox.rendering.base.texture;
 
 export namespace fox::gfx::api
 {
-	class Cubemap
+	class cubemap
 	{
 	public:
         enum class Format

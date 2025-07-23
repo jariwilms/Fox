@@ -12,12 +12,12 @@ export namespace fox::gfx
     class cubemap
     {
     public:
-        using face_e     = api::Cubemap::Face;
-        using filter_e   = api::Cubemap::Filter;
-        using format_e   = api::Cubemap::Format;
-        using wrapping_e = api::Cubemap::Wrapping;
+        using face_e     = api::cubemap::Face;
+        using filter_e   = api::cubemap::Filter;
+        using format_e   = api::cubemap::Format;
+        using wrapping_e = api::cubemap::Wrapping;
 
-        explicit cubemap(std::shared_ptr<impl::Cubemap> _) 
+        explicit cubemap(std::shared_ptr<impl::cubemap> _) 
             : _{ _ } {}
 
         static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions) -> std::shared_ptr<gfx::cubemap>
@@ -71,20 +71,20 @@ export namespace fox::gfx
         {
             return _->handle();
         }
-        auto impl         () const -> std::shared_ptr<impl::Cubemap>
+        auto impl         () const -> std::shared_ptr<impl::cubemap>
         {
             return _;
         }
 
     protected:
         cubemap(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions)
-            : _{ std::make_shared<impl::Cubemap>(format, filter, wrapping, dimensions) } {}
+            : _{ std::make_shared<impl::cubemap>(format, filter, wrapping, dimensions) } {}
         cubemap(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions, std::span<const fox::image> faces)
-            : _{ std::make_shared<impl::Cubemap>(format, filter, wrapping, dimensions, faces) } {}
+            : _{ std::make_shared<impl::cubemap>(format, filter, wrapping, dimensions, faces) } {}
         cubemap(format_e format,                                       const fox::vector2u& dimensions, std::span<const fox::image> faces)
-            : _{ std::make_shared<impl::Cubemap>(format, dimensions, faces) } {}
+            : _{ std::make_shared<impl::cubemap>(format, dimensions, faces) } {}
 
     private:
-        std::shared_ptr<impl::Cubemap> _;
+        std::shared_ptr<impl::cubemap> _;
     };
 }

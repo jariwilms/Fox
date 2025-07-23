@@ -2,7 +2,7 @@ export module fox.rendering.base.shader;
 
 export namespace fox::gfx::api
 {
-    class Shader
+    class shader
     {
     public:
         enum class Stage

@@ -6,6 +6,9 @@ import fox.rendering.api.opengl.types;
 
 export namespace fox::gfx::api::gl
 {
+    template<typename T>
+    concept arithmetic_type = std::integral<T> || std::floating_point<T>;
+
     template<typename T, typename... Ts>
     constexpr auto all_same_type = gl::bool_t{ std::conjunction_v<std::is_same<T, Ts>...> };
 
@@ -17,7 +20,6 @@ export namespace fox::gfx::api::gl
                F == glf::Feature::Blending 
             || F == glf::Feature::ScissorTest
         );
-
     template<glf::Data D>
     concept indexed_data_c =
         (
@@ -35,23 +37,6 @@ export namespace fox::gfx::api::gl
             || D == glf::Data::VertexBindingStride
             || D == glf::Data::VertexBindingBuffer
         );
-
-    template<typename T>
-    concept arithmetic_type_c =
-        (
-               std::is_same_v<T, gl::int8_t   >  
-            || std::is_same_v<T, gl::uint8_t  >
-            || std::is_same_v<T, gl::int16_t  >
-            || std::is_same_v<T, gl::uint16_t >
-            || std::is_same_v<T, gl::int32_t  >
-            || std::is_same_v<T, gl::uint32_t >
-            || std::is_same_v<T, gl::int64_t  >
-            || std::is_same_v<T, gl::uint64_t >
-            || std::is_same_v<T, gl::float16_t>
-            || std::is_same_v<T, gl::float32_t>
-            || std::is_same_v<T, gl::float64_t>
-        );
-
     template<glf::Texture::Target T, glf::Texture::Target U>
     concept valid_texture_view_c = 
            (T == glf::Texture::Target::_1D                 && (U == glf::Texture::Target::_1D            || U == glf::Texture::Target::_1DArray                                                                                             ))

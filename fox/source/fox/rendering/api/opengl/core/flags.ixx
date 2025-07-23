@@ -93,7 +93,7 @@ export namespace fox::gfx::api::glf
         {
             AtomicCounterBuffer     = GL_ATOMIC_COUNTER_BUFFER,
             ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER,
-            UniformBuffer           = GL_UNIFORM_BUFFER,
+            uniform_buffer           = GL_UNIFORM_BUFFER,
             TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
         };
         enum class Format : gl::enum_t
@@ -223,7 +223,7 @@ export namespace fox::gfx::api::glf
             ShaderStorageBuffer     = GL_SHADER_STORAGE_BUFFER,
             TextureBuffer           = GL_TEXTURE_BUFFER,
             TransformFeedbackBuffer = GL_TRANSFORM_FEEDBACK_BUFFER,
-            UniformBuffer           = GL_UNIFORM_BUFFER,
+            uniform_buffer           = GL_UNIFORM_BUFFER,
         };
         enum class Usage : gl::enum_t
         {
@@ -294,7 +294,7 @@ export namespace fox::gfx::api::glf
             LoseContext,
         };
     };
-    struct     Cubemap
+    struct     cubemap
     {
         enum class Format : gl::enum_t
         {
@@ -690,7 +690,7 @@ export namespace fox::gfx::api::glf
         SmoothLines                = GL_LINE_SMOOTH, 
         StencilTest                = GL_STENCIL_TEST, 
     };
-    struct     FrameBuffer
+    struct     frame_buffer
     {
         enum class Attachment : gl::enum_t
         {
@@ -965,16 +965,16 @@ export namespace fox::gfx::api::glf
         enum class Type : gl::enum_t
         {
             Buffer            = GL_BUFFER, 
-            Shader            = GL_SHADER, 
+            shader            = GL_SHADER, 
             Program           = GL_PROGRAM, 
-            VertexArray       = GL_VERTEX_ARRAY, 
+            vertex_array       = GL_VERTEX_ARRAY, 
             Query             = GL_QUERY, 
             ProgramPipeline   = GL_PROGRAM_PIPELINE, 
             TransformFeedback = GL_TRANSFORM_FEEDBACK, 
             Sampler           = GL_SAMPLER, 
             Texture           = GL_TEXTURE, 
-            RenderBuffer      = GL_RENDERBUFFER, 
-            FrameBuffer       = GL_FRAMEBUFFER, 
+            render_buffer      = GL_RENDERBUFFER, 
+            frame_buffer       = GL_FRAMEBUFFER, 
         };
     };
     enum class Orientation : gl::enum_t
@@ -1092,7 +1092,7 @@ export namespace fox::gfx::api::glf
             SpriteCoordinateOrigin = GL_POINT_SPRITE_COORD_ORIGIN, 
         };
     };
-    struct     Pipeline
+    struct     pipeline
     {
         enum class Property : gl::enum_t
         {
@@ -1298,7 +1298,7 @@ export namespace fox::gfx::api::glf
             VerticesSubmitted                       = GL_VERTICES_SUBMITTED, 
         };
     };
-    struct     RenderBuffer
+    struct     render_buffer
     {
         enum class Format : gl::enum_t
         {
@@ -1334,7 +1334,7 @@ export namespace fox::gfx::api::glf
         };
         enum class Target : gl::enum_t
         {
-            RenderBuffer = GL_RENDERBUFFER,
+            render_buffer = GL_RENDERBUFFER,
         };
     };
     struct     Sampler
@@ -1359,7 +1359,7 @@ export namespace fox::gfx::api::glf
             LodBias             = GL_TEXTURE_LOD_BIAS, 
         };
     };
-    struct     Shader
+    struct     shader
     {
         enum class Parameter : gl::enum_t
         {
@@ -1822,7 +1822,7 @@ export namespace fox::gfx::api::glf
             ReferencedByComputeShader                = GL_UNIFORM_BLOCK_REFERENCED_BY_COMPUTE_SHADER, 
         };
     };
-    struct     VertexArray
+    struct     vertex_array
     {
         struct     Attribute
         {
@@ -1920,8 +1920,8 @@ export namespace fox::gfx::api::glf
     template<> struct BitmaskTraits<glf::Context::Flag>                     { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
     template<> struct BitmaskTraits<glf::Context::Profile>                  { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
     template<> struct BitmaskTraits<glf::Feature>                           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<glf::FrameBuffer::Attachment>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<glf::FrameBuffer::Source>               { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::frame_buffer::Attachment>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<glf::frame_buffer::Source>               { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
     template<> struct BitmaskTraits<glf::Memory::Barrier>                   { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
     template<> struct BitmaskTraits<glf::Memory::RegionalBarrier>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
     template<> struct BitmaskTraits<glf::Program::Stage>                    { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };

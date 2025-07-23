@@ -13,11 +13,11 @@ export namespace fox::gfx::api::gl
     class cubemap : public gl::object
     {
     public:
-        using format_e   = api::Cubemap::Format;
-        using filter_e   = api::Cubemap::Filter;
-        using wrapping_e = api::Cubemap::Wrapping;
+        using format_e   = api::cubemap::Format;
+        using filter_e   = api::cubemap::Filter;
+        using wrapping_e = api::cubemap::Wrapping;
         using wrapping_t = gl::proxy<wrapping_e, wrapping_e>;
-        using face_e     = api::Cubemap::Face;
+        using face_e     = api::cubemap::Face;
 
          cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions)
             : gl::object{ gl::create_texture(glf::Texture::Target::CubeMap), [](auto* handle) { gl::delete_texture(*handle); } }

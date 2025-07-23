@@ -10,7 +10,7 @@ import fox.rendering.base.render_buffer;
 
 export namespace fox::gfx::api
 {
-    class FrameBuffer
+    class frame_buffer
     {
     public:
         enum class Attachment
@@ -30,7 +30,7 @@ export namespace fox::gfx::api
         };
         struct     Specification
         {
-            using format_v = std::variant<api::Texture::Format, api::Cubemap::Format, api::RenderBuffer::Format>;
+            using format_v = std::variant<api::Texture::Format, api::cubemap::Format, api::render_buffer::Format>;
 
             Specification(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}
@@ -40,7 +40,7 @@ export namespace fox::gfx::api
         };
         struct     SpecificationMultisample
         {
-            using format_v = std::variant<api::Texture::Format, api::RenderBuffer::Format>;
+            using format_v = std::variant<api::Texture::Format, api::render_buffer::Format>;
 
             SpecificationMultisample(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}
@@ -51,8 +51,8 @@ export namespace fox::gfx::api
         enum class Surface
         {
             Texture,
-            Cubemap,
-            RenderBuffer,
+            cubemap,
+            render_buffer,
         };
         enum class Target
         {
@@ -63,5 +63,5 @@ export namespace fox::gfx::api
 };
 namespace fox
 {
-    template<> struct fox::enumeration_operator<gfx::api::FrameBuffer::Attachment> { static constexpr auto enable = fox::bool_t{ fox::true_ }; };
+    template<> struct fox::enumeration_operator<gfx::api::frame_buffer::Attachment> { static constexpr auto enable = fox::bool_t{ fox::true_ }; };
 }
