@@ -7,12 +7,12 @@ import fox.rendering.base.shader;
 
 export namespace fox::gfx::api::gl
 {
-    class Shader : public gl::Object
+    class shader : public gl::Object
     {
     public:
-        using Stage = api::Shader::Stage;
+        using stage_e = api::Shader::Stage;
 
-        Shader(Stage stage, std::span<const gl::byte_t> binary)
+        shader(stage_e stage, std::span<const gl::byte_t> binary)
             : gl::Object{ gl::create_program(), [](auto* handle) { gl::delete_program(*handle); }}
             , stage_{ stage }
         {
@@ -36,12 +36,12 @@ export namespace fox::gfx::api::gl
             gl::delete_shader(         shader);
         }
 
-        auto stage() const -> Stage
+        auto stage() const -> stage_e
         {
             return stage_;
         }
 
     private:
-        Stage stage_;
+        stage_e stage_;
     };
 }

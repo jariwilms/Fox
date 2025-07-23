@@ -1,18 +1,17 @@
 export module fox.rendering.api.opengl.query;
 
 import std;
-
 import fox.rendering.api.opengl;
 import fox.rendering.base.query;
 
 export namespace fox::gfx::api::gl
 {
-	class Query : public gl::Object
+	class query : public gl::Object
 	{
 	public:
-		using Target = api::Query::Target;
+		using target_e = api::Query::Target;
 
-		explicit Query(Target target)
+		explicit query(target_e target)
 			: gl::Object{ gl::create_query(gl::map_query_target(target)), [](auto* handle) { gl::delete_query(*handle); }}
 			, target_{ target }
 		{
@@ -20,6 +19,6 @@ export namespace fox::gfx::api::gl
 		}
 
 	private:
-		Target target_;
+		target_e target_;
 	};
 }

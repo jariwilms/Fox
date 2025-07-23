@@ -1,7 +1,6 @@
 export module fox.rendering.api.opengl.pipeline;
 
 import std;
-
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.shader;
 import fox.rendering.base.pipeline;
@@ -9,13 +8,13 @@ import fox.rendering.base.shader;
 
 export namespace fox::gfx::api::gl
 {
-    template<typename T = gl::Shader>
-    class Pipeline : public gl::Object
+    template<typename T = gl::shader>
+    class pipeline : public gl::Object
     {
     public:
-        using Layout = api::Pipeline::Layout<T>;
+        using layout_t = api::Pipeline::Layout<T>;
 
-        explicit Pipeline(const Layout& layout)
+        explicit pipeline(const layout_t& layout)
             : gl::Object{ gl::create_program_pipeline(), [](auto* handle) { gl::delete_program_pipeline(*handle); }}
             , layout_{ layout }
         {
@@ -31,12 +30,12 @@ export namespace fox::gfx::api::gl
             gl::bind_program_pipeline(handle_);
         }
 
-        auto layout() const -> const Layout&
+        auto layout() const -> const layout_t&
         {
             return layout_;
         }
 
     private:
-        Layout layout_;
+        layout_t layout_;
     };
 }

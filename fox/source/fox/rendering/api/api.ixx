@@ -36,15 +36,15 @@ export namespace fox::gfx
             
         using Cubemap                 = api::gl::cubemap;
             
-        using RenderBuffer            = api::gl::RenderBuffer;
-        using RenderBufferMultisample = api::gl::RenderBufferMultisample;
+        using RenderBuffer            = api::gl::render_buffer;
+        using RenderBufferMultisample = api::gl::render_buffer_ms;
             
         using FrameBuffer             = api::gl::FrameBuffer;
         using FrameBufferMultisample  = api::gl::FrameBufferMultisample;
             
-        using Shader                  = api::gl::Shader;
+        using Shader                  = api::gl::shader;
         template<typename T>
-        using Pipeline                = api::gl::Pipeline<T>;
+        using Pipeline                = api::gl::pipeline<T>;
     }
 
     using handle_t  = fox::alias<fox::handle_t , impl::handle_t >;

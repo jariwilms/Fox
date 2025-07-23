@@ -95,7 +95,7 @@ export namespace fox::gfx::api::gl
                         }, 
                         [&](api::RenderBuffer::Format format)
                         {
-                            auto renderBuffer = std::make_shared<gl::RenderBuffer>(format, dimensions_);
+                            auto renderBuffer = std::make_shared<gl::render_buffer>(format, dimensions_);
                             auto attachment   = map_render_buffer_attachment(renderBuffer->format(), colorIndex);
 
                             attach(identifier, attachment, renderBuffer);
@@ -149,7 +149,7 @@ export namespace fox::gfx::api::gl
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             cubemapMap_.emplace(identifier, cubemap);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::RenderBuffer> renderBuffer)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::render_buffer> renderBuffer)
         {
             gl::frame_buffer_render_buffer(handle_, renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
 
@@ -238,7 +238,7 @@ export namespace fox::gfx::api::gl
         std::array<std::string, 11u>                                       attachments_;
         std::unordered_map<std::string, std::shared_ptr<gl::texture2d>>    textureMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::cubemap>>      cubemapMap_;
-        std::unordered_map<std::string, std::shared_ptr<gl::RenderBuffer>> renderBufferMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::render_buffer>> renderBufferMap_;
         gl::Vector2u                                                       dimensions_;
     };
     class FrameBufferMultisample : public gl::Object
@@ -350,7 +350,7 @@ export namespace fox::gfx::api::gl
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::RenderBufferMultisample> renderBuffer)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::render_buffer_ms> renderBuffer)
         {
             gl::frame_buffer_render_buffer(handle_, renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
 
@@ -433,7 +433,7 @@ export namespace fox::gfx::api::gl
     private:
         std::array<std::string, 11u>                                       attachments_;
         std::unordered_map<std::string, std::shared_ptr<gl::texture2d_ms>> textureMap_;
-        std::unordered_map<std::string, std::shared_ptr<gl::RenderBufferMultisample>> renderBufferMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::render_buffer_ms>> renderBufferMap_;
         gl::Vector2u                                                       dimensions_;
         gl::uint32_t                                                       samples_;
     };

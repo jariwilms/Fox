@@ -6,12 +6,12 @@ import fox.rendering.base.sampler;
 
 export namespace fox::gfx::api::gl
 {
-	class Sampler : public gl::Object
+	class sampler : public gl::Object
 	{
 	public:
-		using Parameter = api::Sampler::Parameter;
+		using parameter_e = api::Sampler::Parameter;
 
-		 Sampler()
+		sampler()
 			: gl::Object{ gl::create_sampler(), [](auto* handle) { gl::delete_sampler(*handle); } } {}
 
 		void bind(gl::binding_t slot)
