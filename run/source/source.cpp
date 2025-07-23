@@ -37,7 +37,7 @@ int main()
     auto window_ = interface::Window::create("Fox", fox::vector2u{ 1280u, 720u });
 
     gfx::geometry     ::init();
-    io ::ModelImporter::init();
+    io ::model_importer::init();
     gfx::renderer     ::init();
 
 
@@ -50,7 +50,7 @@ int main()
 
     auto& helmetActor           = scene->create_actor();
     auto& helmetTransform       = helmetActor.get_component<ecs::transform_component>().value();
-    auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
+    auto  helmetModel           = io::model_importer::import2("models/helmet/glTF/DamagedHelmet.gltf");
     model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
     helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
 
