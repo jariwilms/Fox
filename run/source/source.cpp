@@ -34,7 +34,7 @@ static auto transform_product   (std::shared_ptr<fox::scene> scene, const fox::r
 
 int main()
 {
-    auto window_ = interface::Window::create("Fox", fox::vector2u{ 1280u, 720u });
+    auto window_ = interface::window::create("Fox", fox::vector2u{ 1280u, 720u });
 
     gfx::geometry     ::init();
     io ::model_importer::init();
