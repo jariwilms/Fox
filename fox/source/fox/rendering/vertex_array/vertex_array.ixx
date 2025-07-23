@@ -39,7 +39,7 @@ export namespace fox::gfx
         {
             _->tie(buffer->handle(), layout);
         }
-        void tie(std::shared_ptr<gfx::index_buffer>     buffer                                     )
+        void tie(std::shared_ptr<gfx::index_buffer>     buffer)
         {
             _->tie(buffer->handle(), buffer->count());
         }
