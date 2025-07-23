@@ -41,7 +41,7 @@ export namespace fox::interface::api::glfw
 
 
             using namespace gfx::api;
-            gl::Context::init();
+            gl::context::init();
 
             input::api::handler = std::make_unique<input::api::glfw::input_handler>();
 

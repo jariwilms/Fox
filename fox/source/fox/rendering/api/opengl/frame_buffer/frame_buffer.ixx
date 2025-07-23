@@ -9,18 +9,18 @@ import fox.rendering.base.frame_buffer;
 
 export namespace fox::gfx::api::gl
 {
-    class FrameBuffer : public gl::Object
+    class frame_buffer : public gl::Object
     {
     public:
-        using Attachment    = api::FrameBuffer::Attachment;
-        using Specification = api::FrameBuffer::Specification;
-        using Surface       = api::FrameBuffer::Surface;
-        using Target        = api::FrameBuffer::Target;
+        using attachment_e    = api::FrameBuffer::Attachment;
+        using specification_e = api::FrameBuffer::Specification;
+        using surface_e       = api::FrameBuffer::Surface;
+        using target_e        = api::FrameBuffer::Target;
 
-        FrameBuffer()
+        frame_buffer()
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{} {}
-        FrameBuffer(const gl::Vector2u& dimensions, std::span<const Specification> specifications)
+        frame_buffer(const gl::Vector2u& dimensions, std::span<const specification_e> specifications)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }
         {
@@ -124,32 +124,32 @@ export namespace fox::gfx::api::gl
             if (gl::check_frame_buffer_status(handle_) != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
 
-        void bind(Target target)
+        void bind(target_e target)
         {
             gl::bind_frame_buffer(handle_, gl::map_frame_buffer_target(target));
         }
-        template<Surface A = Surface::Texture>
+        template<surface_e A = surface_e::Texture>
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
         {
-            if constexpr (A == Surface::Texture) textureMap_.at(identifier)->bind(binding);
-            if constexpr (A == Surface::Cubemap) cubemapMap_.at(identifier)->bind(binding);
+            if constexpr (A == surface_e::Texture) textureMap_.at(identifier)->bind(binding);
+            if constexpr (A == surface_e::Cubemap) cubemapMap_.at(identifier)->bind(binding);
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::texture2d>    texture     , gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::texture2d>    texture     , gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::cubemap>      cubemap     , gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::cubemap>      cubemap     , gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, cubemap->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             cubemapMap_.emplace(identifier, cubemap);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::render_buffer> renderBuffer)
+        void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::render_buffer> renderBuffer)
         {
             gl::frame_buffer_render_buffer(handle_, renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
 
@@ -157,20 +157,20 @@ export namespace fox::gfx::api::gl
             renderBufferMap_.emplace(identifier, renderBuffer);
         }
         
-        template<Surface A = Surface::Texture>
-        void detach(const std::string& identifier, Attachment attachment)
+        template<surface_e A = surface_e::Texture>
+        void detach(const std::string& identifier, attachment_e attachment)
         {
-            if constexpr (A == Surface::Texture)
+            if constexpr (A == surface_e::Texture)
             {
                 gl::frame_buffer_texture(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 textureMap_.erase(identifier);
             }
-            if constexpr (A == Surface::Cubemap)
+            if constexpr (A == surface_e::Cubemap)
             {
                 gl::frame_buffer_texture(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 cubemapMap_.erase(identifier);
             }
-            if constexpr (A == Surface::RenderBuffer)
+            if constexpr (A == surface_e::RenderBuffer)
             {
                 gl::frame_buffer_render_buffer(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 renderBufferMap_.erase(identifier);
@@ -208,24 +208,24 @@ export namespace fox::gfx::api::gl
             dimensions_ = dimensions;
         }
 
-        template<Surface A = Surface::Texture>
+        template<surface_e A = surface_e::Texture>
         auto surface(const std::string& identifier) -> auto
         {
-            if constexpr (A == Surface::Texture)
+            if constexpr (A == surface_e::Texture)
             {
                 return textureMap_.at(identifier);
             }
-            if constexpr (A == Surface::Cubemap)
+            if constexpr (A == surface_e::Cubemap)
             {
                 return cubemapMap_.at(identifier);
             }
-            if constexpr (A == Surface::RenderBuffer)
+            if constexpr (A == surface_e::RenderBuffer)
             {
                 return renderBufferMap_.at(identifier);
             }
         }
         
-        auto attachment(Attachment attachment) const -> const std::string&
+        auto attachment(attachment_e attachment) const -> const std::string&
         {
             return attachments_.at(gl::to_underlying(attachment));
         }
@@ -241,18 +241,18 @@ export namespace fox::gfx::api::gl
         std::unordered_map<std::string, std::shared_ptr<gl::render_buffer>> renderBufferMap_;
         gl::Vector2u                                                       dimensions_;
     };
-    class FrameBufferMultisample : public gl::Object
+    class frame_buffer_ms : public gl::Object
     {
     public:
-        using Attachment    = api::FrameBuffer::Attachment;
-        using Specification = api::FrameBuffer::SpecificationMultisample;
-        using Surface       = api::FrameBuffer::Surface;
-        using Target        = api::FrameBuffer::Target;
+        using attachment_e    = api::FrameBuffer::Attachment;
+        using specification_e = api::FrameBuffer::SpecificationMultisample;
+        using surface_e       = api::FrameBuffer::Surface;
+        using target_e        = api::FrameBuffer::Target;
 
-        FrameBufferMultisample(const gl::Vector2u& dimensions, gl::uint32_t samples)
+        frame_buffer_ms(const gl::Vector2u& dimensions, gl::uint32_t samples)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples } {}
-        FrameBufferMultisample(const gl::Vector2u& dimensions, std::span<const Specification> specifications, gl::uint32_t samples)
+        frame_buffer_ms(const gl::Vector2u& dimensions, std::span<const specification_e> specifications, gl::uint32_t samples)
             : gl::Object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples }
         {
@@ -333,24 +333,24 @@ export namespace fox::gfx::api::gl
             if (gl::check_frame_buffer_status(handle_) != glf::FrameBuffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
          }
         
-        void bind(Target target)
+        void bind(target_e target)
         {
             gl::bind_frame_buffer(handle_, gl::map_frame_buffer_target(target));
         }
-        template<Surface A = Surface::Texture>
+        template<surface_e A = surface_e::Texture>
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
         {
-            if constexpr (A == Surface::Texture) textureMap_.at(identifier)->bind(binding);
+            if constexpr (A == surface_e::Texture) textureMap_.at(identifier)->bind(binding);
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::texture2d_ms>    texture, gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::texture2d_ms>    texture, gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::render_buffer_ms> renderBuffer)
+        void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::render_buffer_ms> renderBuffer)
         {
             gl::frame_buffer_render_buffer(handle_, renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
 
@@ -358,15 +358,15 @@ export namespace fox::gfx::api::gl
             renderBufferMap_.emplace(identifier, renderBuffer);
         }
 
-        template<Surface A = Surface::Texture>
-        void detach(const std::string& identifier, Attachment attachment)
+        template<surface_e A = surface_e::Texture>
+        void detach(const std::string& identifier, attachment_e attachment)
         {
-            if constexpr (A == Surface::Texture)
+            if constexpr (A == surface_e::Texture)
             {
                 gl::frame_buffer_texture(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 textureMap_.erase(identifier);
             }
-            if constexpr (A == Surface::RenderBuffer)
+            if constexpr (A == surface_e::RenderBuffer)
             {
                 gl::frame_buffer_render_buffer(handle_, gl::NullObject, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 renderBufferMap_.erase(identifier);
@@ -404,20 +404,20 @@ export namespace fox::gfx::api::gl
             dimensions_ = dimensions;
         }
 
-        template<Surface A = Surface::Texture>
+        template<surface_e A = surface_e::Texture>
         auto surface(const std::string& identifier) -> auto
         {
-            if constexpr (A == Surface::Texture)
+            if constexpr (A == surface_e::Texture)
             {
                 return textureMap_.at(identifier);
             }
-            if constexpr (A == Surface::RenderBuffer)
+            if constexpr (A == surface_e::RenderBuffer)
             {
                 return renderBufferMap_.at(identifier);
             }
         }
 
-        auto attachment(Attachment attachment) const -> const std::string&
+        auto attachment(attachment_e attachment) const -> const std::string&
         {
             return attachments_.at(gl::to_underlying(attachment));
         }

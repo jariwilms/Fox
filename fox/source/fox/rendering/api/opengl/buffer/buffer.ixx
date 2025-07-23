@@ -8,10 +8,10 @@ import fox.rendering.base.buffer;
 export namespace fox::gfx::api::gl
 {
     template<typename T>
-    class Buffer : public gl::Object
+    class buffer : public gl::Object
     {
     public:
-        explicit Buffer(gl::count_t count)
+        explicit buffer(gl::count_t count)
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
@@ -23,7 +23,7 @@ export namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Coherent       ,
                 count                                    );
         }
-        explicit Buffer(std::span<const T> data)
+        explicit buffer(std::span<const T> data)
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
@@ -166,10 +166,10 @@ export namespace fox::gfx::api::gl
         std::shared_ptr<std::span<T>> data_;
     };
     template<typename T>
-    class UniformBuffer : public gl::Object
+    class uniform_buffer : public gl::Object
     {
     public:
-        explicit UniformBuffer(const T& data = {})
+        explicit uniform_buffer(const T& data = {})
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ sizeof(T) }
         {
@@ -212,10 +212,10 @@ export namespace fox::gfx::api::gl
         gl::size_t size_;
     };
     template<typename T, gl::count_t N>
-    class UniformArrayBuffer : public gl::Object
+    class uniform_array_buffer : public gl::Object
     {
     public:
-        explicit UniformArrayBuffer()
+        explicit uniform_array_buffer()
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(N * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
@@ -227,7 +227,7 @@ export namespace fox::gfx::api::gl
                 glf::Buffer::StorageFlags::Coherent       , 
                 gl::size_t{ N * sizeof(T) }              );
         }
-        explicit UniformArrayBuffer(std::span<const T> data)
+        explicit uniform_array_buffer(std::span<const T> data)
             : gl::Object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {

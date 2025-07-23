@@ -1,17 +1,16 @@
 export module fox.rendering.api.opengl.vertex_array;
 
 import std;
-
 import fox.rendering.layout;
 import fox.rendering.api.opengl;
 import fox.rendering.api.opengl.buffer;
 
 export namespace fox::gfx::api::gl
 {
-    class VertexArray : public gl::Object
+    class vertex_array : public gl::Object
     {
     public:
-        VertexArray()
+        vertex_array()
             : gl::Object{ gl::create_vertex_array(), [](auto* handle) { gl::delete_vertex_array(*handle); } }
             , attributeIndex_{}, bindingPoint_{}, indexCount_{} {}
 

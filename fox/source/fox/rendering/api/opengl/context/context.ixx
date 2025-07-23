@@ -6,7 +6,7 @@ import fox.rendering.api.opengl;
 
 export namespace fox::gfx::api::gl
 {
-	class Context
+	class context
 	{
 	public:
 		static void init()

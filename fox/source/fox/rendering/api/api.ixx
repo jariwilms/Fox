@@ -19,14 +19,14 @@ export namespace fox::gfx
         using volume_t                = api::gl::volume_t;
             
         template<typename T>
-        using VertexBuffer            = api::gl::Buffer<T>;
-        using IndexBuffer             = api::gl::Buffer<fox::index_t>;
+        using VertexBuffer            = api::gl::buffer<T>;
+        using IndexBuffer             = api::gl::buffer<fox::index_t>;
         template<typename T>
-        using UniformBuffer           = api::gl::UniformBuffer<T>;
+        using UniformBuffer           = api::gl::uniform_buffer<T>;
         template<typename T, fox::uint64_t N>
-        using UniformArrayBuffer      = api::gl::UniformArrayBuffer<T, N>;
+        using UniformArrayBuffer      = api::gl::uniform_array_buffer<T, N>;
             
-        using VertexArray             = api::gl::VertexArray;
+        using VertexArray             = api::gl::vertex_array;
             
         using Texture1D               = api::gl::texture1d;
         using Texture2D               = api::gl::texture2d;
@@ -39,8 +39,8 @@ export namespace fox::gfx
         using RenderBuffer            = api::gl::render_buffer;
         using RenderBufferMultisample = api::gl::render_buffer_ms;
             
-        using FrameBuffer             = api::gl::FrameBuffer;
-        using FrameBufferMultisample  = api::gl::FrameBufferMultisample;
+        using FrameBuffer             = api::gl::frame_buffer;
+        using FrameBufferMultisample  = api::gl::frame_buffer_ms;
             
         using Shader                  = api::gl::shader;
         template<typename T>
