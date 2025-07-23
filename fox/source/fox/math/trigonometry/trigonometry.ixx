@@ -8,65 +8,65 @@ export namespace fox::math
 {
     inline namespace trigonometry
     {
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto sin(const T& value) -> T
         {
             return glm::sin(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto cos(const T& value) -> T
         {
             return glm::cos(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto tan(const T& value) -> T
         {
             return glm::tan(value);
         }
 
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto asin(const T& value) -> T
         {
             return glm::asin(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto acos(const T& value) -> T
         {
             return glm::acos(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto atan(const T& value) -> T
         {
             return glm::atan(value);
         }
 
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto sinh(const T& value) -> T
         {
             return glm::sinh(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto cosh(const T& value) -> T
         {
             return glm::cosh(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto tanh(const T& value) -> T
         {
             return glm::tanh(value);
         }
 
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto asinh(const T& value) -> T
         {
             return glm::asinh(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto acosh(const T& value) -> T
         {
             return glm::acosh(value);
         }
-        template<typename T>
+        template<std::floating_point T>
         constexpr auto atanh(const T& value) -> T
         {
             return glm::atanh(value);
@@ -88,7 +88,7 @@ export namespace fox::math
             return glm::eulerAngles(value);
         }
 
-        template<typename T, fox::uint32_t N>
+        template<std::floating_point T, fox::uint32_t N>
         constexpr auto look_at(const fox::vector_t<T, N>& direction, const fox::vector_t<T, N>& up) -> fox::quaternion4f
         {
             return glm::quatLookAt(direction, up);

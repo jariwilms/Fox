@@ -58,7 +58,7 @@ export namespace fox::gfx::geometry
     }
     void sphere_init()
     {
-        sphere = io::ModelImporter::import2("models/sphere/Sphere.gltf")->meshes.at(0u);
+        sphere = io::model_importer::import2("models/sphere/Sphere.gltf")->meshes.at(0u);
     }
 
     void init()

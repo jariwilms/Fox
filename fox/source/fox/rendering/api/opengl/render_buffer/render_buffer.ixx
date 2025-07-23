@@ -21,7 +21,7 @@ export namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            if (dimensions != dimensions_) this->operator=(RenderBuffer{ format_, dimensions });
+            if (dimensions != dimensions_) gl::RenderBuffer::operator=(RenderBuffer{ format_, dimensions });
         }
 
         auto format    () const -> Format
@@ -51,7 +51,7 @@ export namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            if (dimensions != dimensions_) this->operator=(RenderBufferMultisample{ format_, dimensions, samples_ });
+            if (dimensions != dimensions_) gl::RenderBufferMultisample::operator=(RenderBufferMultisample{ format_, dimensions, samples_ });
         }
 
         auto format    () const -> Format

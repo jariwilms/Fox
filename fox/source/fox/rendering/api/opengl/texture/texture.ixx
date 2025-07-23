@@ -173,7 +173,7 @@ export namespace fox::gfx::api::gl
 
         void resize(const gl::Vector2u& dimensions)
         {
-            if (dimensions != dimensions_) this->operator=(gl::Texture2D{ format_, filter_, wrapping_, dimensions });
+            if (dimensions != dimensions_) gl::Texture2D::operator=(gl::Texture2D{ format_, filter_, wrapping_, dimensions });
         }
 
         auto format       () const -> Format

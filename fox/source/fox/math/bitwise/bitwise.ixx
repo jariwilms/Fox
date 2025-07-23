@@ -6,22 +6,22 @@ import fox.core.utility;
 
 export namespace fox::math::bitwise
 {
-    enum class bit
+    enum class e_bit
     {
         zero, 
         one, 
     };
-    enum class significance
+    enum class e_significance
     {
         least, 
         most, 
     };
-    enum class rotation
+    enum class e_rotation
     {
         left, 
         right, 
     };
-    enum class endian
+    enum class e_endian
     {
         little, 
         big, 
@@ -69,17 +69,17 @@ export namespace fox::math::bitwise
     {
         return std::bitset<fox::bit_width<T>()>{ value }.count();
     }
-    template<bitwise::rotation R, std::unsigned_integral T>
+    template<bitwise::e_rotation R, std::unsigned_integral T>
     constexpr auto rotate     (T value, fox::size_t rotation) -> T
     {
-        if constexpr (R == bitwise::rotation::left ) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
-        if constexpr (R == bitwise::rotation::right) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
+        if constexpr (R == bitwise::e_rotation::left ) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
+        if constexpr (R == bitwise::e_rotation::right) return static_cast<T>((std::bitset<fox::bit_width<T>()>{ value } << rotation).to_ullong());
     }
-    template<bitwise::bit B, bitwise::significance S, typename T>
+    template<bitwise::e_bit B, bitwise::e_significance S, typename T>
     constexpr auto consecutive(T value) -> fox::size_t
     {
-        using enum bitwise::bit; 
-        using enum bitwise::significance;
+        using enum bitwise::e_bit; 
+        using enum bitwise::e_significance;
 
         if constexpr (B == zero && S == least) return std::countr_zero(value);
         if constexpr (B == one  && S == least) return std::countr_one (value);
