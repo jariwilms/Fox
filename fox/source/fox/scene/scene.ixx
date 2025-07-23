@@ -2,79 +2,66 @@ export module fox.scene;
 export import fox.scene.actor;
 
 import std;
-import <entt/entt.hpp>;
-import fox.ecs.registry;
 import fox.core.types;
-import fox.scene.actor;
 import fox.ecs.components;
+import fox.ecs.registry;
 
-export namespace fox::scene
+export namespace fox
 {
-    class Scene
+    class scene
     {
     public:
-        Scene() = default;
-
-        auto create_actor() -> scene::Actor&
+        auto create_actor () -> fox::actor&
         {
-                  auto  actor = std::make_shared<scene::Actor>();
-            const auto& it    = actors_.emplace(std::make_pair(actor->id(), std::move(actor)));
-
-            return *it.first->second;
+            auto actor = std::make_shared<fox::actor>();
+            return *actors_.emplace(std::make_pair(actor->id(), std::move(actor))).first->second;
         }
-        void destroy_actor(Actor& actor)
+        void destroy_actor(fox::actor& actor)
         {
             unset_parent(actor);
 
-            auto& rls = actor.get_component<ecs::RelationshipComponent>().value();
+            auto& rls = actor.get_component<ecs::relationship_component>().value();
             for (auto& id : rls.children)
             {
-                auto& childActor = actors_.at(id);
-                destroy_actor(*childActor);
+                auto& childactor = actors_.at(id);
+                destroy_actor(*childactor);
             }
 
             actors_.erase(actor.id());
         }
 
-        void set_parent(Actor& parent, Actor& child)
+        void set_parent   (fox::actor& parent, fox::actor& child)
         {
             unset_parent(child);
 
-            auto& rel  = child.get_component<ecs::RelationshipComponent>().value();
-            auto& prel = parent.get_component<ecs::RelationshipComponent>().value();
+            auto& prel = parent.get_component<ecs::relationship_component>().value();
+            auto&  rel = child .get_component<ecs::relationship_component>().value();
 
             prel.children.emplace_back(child.id());
-            rel.parent = parent.id();
+            rel .parent = parent.id();
         }
-        void unset_parent(Actor& child)
+        void unset_parent (fox::actor& child)
         {
-            auto& rel = child.get_component<ecs::RelationshipComponent>().value();
+            auto& rel = child.get_component<ecs::relationship_component>().value();
 
             if (rel.parent)
             {
                 const auto& parent   = *rel.parent;
-                auto& relative = registry::get_component<ecs::RelationshipComponent>(parent).value();
+                      auto& relative = ecs::registry::get_component<ecs::relationship_component>(parent).value();
+                const auto& it       = std::find(relative.children.begin(), relative.children.end(), child.id());
 
-                const auto& it = std::find(relative.children.begin(), relative.children.end(), child.id());
-                if (it != relative.children.end())
-                {
-                    relative.children.erase(it);
-                }
-
+                if (it != relative.children.end()) relative.children.erase(it);
+                
                 rel.parent = std::nullopt;
             }
         }
 
-        auto find_actor(fox::id_t id) -> scene::Actor&
+        auto find_actor   (this auto&& self, fox::id_t id) -> auto&&
         {
-            return *actors_.at(id);
-        }
-        auto find_actor(fox::id_t id) const -> const scene::Actor&
-        {
-            return *actors_.at(id);
+            return *self.actors_.at(id);
         }
 
     private:
-        std::unordered_map<fox::id_t, std::shared_ptr<scene::Actor>> actors_{};
+        std::unordered_map<fox::id_t, std::shared_ptr<fox::actor>> actors_;
     };
 }

@@ -3,10 +3,10 @@ import fox;
 
 using namespace fox;
 
-static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& actor, gfx::Model& model, gfx::Model::Node& node)
+static void model_to_scene_graph(fox::scene& scene, fox::actor& actor, gfx::Model& model, gfx::Model::Node& node)
 {
-    auto& tc = actor.get_component<ecs::TransformComponent> ().value();
-    auto& mc = actor.add_component<ecs::MeshFilterComponent>().value();
+    auto& tc = actor.get_component<ecs::transform_component  >().value();
+    auto& mc = actor.add_component<ecs::mesh_filter_component>().value();
 
     tc = node.transform;
 
@@ -21,13 +21,13 @@ static void model_to_scene_graph(fox::scene::Scene& scene, fox::scene::Actor& ac
             model_to_scene_graph(scene, childActor, model, model.nodes.at(child));
         });
 }
-static auto transform_product   (std::shared_ptr<scene::Scene> scene, const fox::Relationship& relation, const fox::transform& transform) -> fox::transform
+static auto transform_product   (std::shared_ptr<fox::scene> scene, const fox::relationship& relation, const fox::transform& transform) -> fox::transform
 {
     if (!relation.parent) return transform;
 
     const auto& parent = scene->find_actor(*relation.parent);
-    const auto& rc     = parent.get_component<ecs::RelationshipComponent>().value();
-    const auto& tc     = parent.get_component<ecs::TransformComponent>   ().value();
+    const auto& rc     = parent.get_component<ecs::relationship_component>().value();
+    const auto& tc     = parent.get_component<ecs::transform_component>   ().value();
 
     return transform_product(scene, rc, tc) * transform;
 }
@@ -41,15 +41,15 @@ int main()
     gfx::renderer     ::init();
 
 
-    auto  scene                 = std::make_shared<scene::Scene>();
+    auto  scene                 = std::make_shared<fox::scene>();
 
     auto& observer              = scene->create_actor();
-    auto& camera                = observer.add_component<ecs::CameraComponent>(16.0f / 9.0f, 82.0f).value();
-    auto& cameraTransform       = observer.get_component<ecs::TransformComponent>().value();
+    auto& camera                = observer.add_component<ecs::camera_component>(16.0f / 9.0f, 82.0f).value();
+    auto& cameraTransform       = observer.get_component<ecs::transform_component>().value();
     cameraTransform.translate_by(fox::vector3f{ 0.0f, 1.0f, 2.0f });
 
     auto& helmetActor           = scene->create_actor();
-    auto& helmetTransform       = helmetActor.get_component<ecs::TransformComponent>().value();
+    auto& helmetTransform       = helmetActor.get_component<ecs::transform_component>().value();
     auto  helmetModel           = io::ModelImporter::import2("models/helmet/glTF/DamagedHelmet.gltf");
     model_to_scene_graph(*scene, helmetActor, *helmetModel, helmetModel->nodes.at(fox::size_t{ 0u }));
     helmetTransform.translate_by({ 0.0f, 1.0f, 0.0f });
@@ -66,15 +66,15 @@ int main()
     defaultMaterial->emissive   = defaultEmissive;
 
     auto& floorActor            = scene->create_actor();
-    auto& fatc                  = floorActor.get_component<ecs::TransformComponent> ().value();
-    auto& famfc                 = floorActor.add_component<ecs::MeshFilterComponent>().value();
+    auto& fatc                  = floorActor.get_component<ecs::transform_component> ().value();
+    auto& famfc                 = floorActor.add_component<ecs::mesh_filter_component>().value();
     famfc.mesh                  = gfx::geometry::plane;
     famfc.material              = defaultMaterial;
     fatc                        = fox::transform{ fox::vector3f{ 0.0f, -1.0f, 0.0f }, fox::vector3f{ -90.0f, 0.0f, 0.0f }, fox::vector3f{ 50.0f } };
 
     auto& boxActor              = scene->create_actor();
-    auto& batc                  = boxActor.get_component<ecs::TransformComponent> ().value();
-    auto& bamfc                 = boxActor.add_component<ecs::MeshFilterComponent>().value();
+    auto& batc                  = boxActor.get_component<ecs::transform_component> ().value();
+    auto& bamfc                 = boxActor.add_component<ecs::mesh_filter_component>().value();
     bamfc.mesh                  = gfx::geometry::cube;
     bamfc.material              = defaultMaterial;
     batc                        = fox::transform{ fox::vector3f{ 3.0f, 1.0f, -5.0f }, fox::vector3f{ 0.0f, 30.0f, 0.0f }, fox::vector3f{ 4.0f } };
@@ -160,8 +160,8 @@ int main()
         auto renderInfo = gfx::RenderInfo{ camera, cameraTransform, lights, skybox };
         gfx::renderer::start(renderInfo);
 
-        auto view = registry::view<ecs::RelationshipComponent, ecs::TransformComponent, ecs::MeshFilterComponent>();
-        view.each([&](auto, const ecs::RelationshipComponent& r, const ecs::TransformComponent& t, const ecs::MeshFilterComponent& m)
+        auto view = ecs::registry::view<ecs::relationship_component, ecs::transform_component, ecs::mesh_filter_component>();
+        view.each([&](auto, const ecs::relationship_component& r, const ecs::transform_component& t, const ecs::mesh_filter_component& m)
             {
                 const auto& relationship = r.value();
                 const auto& transform    = t.value();

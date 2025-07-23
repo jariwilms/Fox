@@ -1,55 +1,17 @@
 export module fox.scene.actor;
 
-import std;
-import <entt/entt.hpp>;
-import fox.core.types.fundamental;
 import fox.ecs.components;
 import fox.ecs.entity;
-import fox.ecs.registry;
 
-export namespace fox::scene
+export namespace fox
 {
-    class Actor : public ecs::Entity
+    class actor : public ecs::entity
     {
     public:
-        Actor()
-            : ecs::Entity{ registry::create() }
+        actor()
         {
-            add_component<ecs::RelationshipComponent>();
-            add_component<ecs::TransformComponent>();
+            add_component<ecs::relationship_component>();
+            add_component<ecs::transform_component   >();
         }
-        virtual ~Actor()
-        {
-            registry::destroy(id_);
-        }
-
-        template<typename... T>
-        auto has_component() const -> fox::bool_t
-        {
-            return registry::has_component<T...>(id_);
-        }
-        template<typename T, typename... Args>
-        auto add_component(Args&&... args) -> T&
-        {
-            return registry::add_component<T>(id_, *this, std::forward<Args>(args)...);
-        }
-        template<typename T>
-        auto get_component() -> T&
-        {
-            return registry::get_component<T>(id_);
-        }
-        template<typename T>
-        auto get_component() const -> const T&
-        {
-            return registry::get_component<T>(id_);
-        }
-
-        template<typename T>
-        void remove_component()
-        {
-            registry::remove_component<T>(id_);
-        }
-        template<> void remove_component<ecs::RelationshipComponent>() = delete;
-        template<> void remove_component<ecs::TransformComponent   >() = delete;
     };
 }

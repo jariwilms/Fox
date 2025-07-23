@@ -6,9 +6,9 @@ import fox.rendering.mesh;
 
 export namespace fox
 {
-	struct MeshFilter
+	struct mesh_filter
 	{
-		std::shared_ptr<gfx::Mesh>     mesh{};
-		std::shared_ptr<gfx::Material> material{};
+		std::shared_ptr<gfx::Mesh>     mesh;
+		std::shared_ptr<gfx::Material> material;
 	};
 }

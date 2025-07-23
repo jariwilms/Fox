@@ -8,8 +8,8 @@ import fox.rendering.camera;
 
 export namespace fox::ecs
 {
-	using CameraComponent       = ecs::Component<fox::Camera>;
-	using MeshFilterComponent   = ecs::Component<fox::MeshFilter>;
-	using RelationshipComponent = ecs::Component<fox::Relationship>;
-	using TransformComponent    = ecs::Component<fox::transform>;
+	using camera_component       = ecs::component<fox::Camera>;
+	using mesh_filter_component  = ecs::component<fox::mesh_filter>;
+	using relationship_component = ecs::component<fox::relationship>;
+	using transform_component    = ecs::component<fox::transform>;
 }

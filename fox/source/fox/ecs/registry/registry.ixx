@@ -3,53 +3,48 @@ export module fox.ecs.registry;
 import std;
 import fox.core.types;
 import fox.ecs.api;
-import fox.ecs.component;
 import vendor.entt;
 
-namespace fox::registry
-{
-    auto registry_ = fox::ecs::api::registry_t{};
-}
-export namespace fox::registry
+export namespace fox::ecs::registry
 {
     auto create() -> fox::id_t
     {
-        return registry_.create();
+        return api::registry->create();
     }
     void destroy(fox::id_t id)
     {
-        registry_.destroy(id);
+        api::registry->destroy(id);
     }
 
     template<typename... T>
     auto has_component   (fox::id_t id) -> fox::bool_t
     {
-        return registry_.all_of<T...>(id);
+        return api::registry->has_component<T...>(id);
     }
     template<typename T, typename... Args>
     auto add_component   (fox::id_t id, Args&&... args) -> T&
     {
-        return registry_.emplace<T>(id, std::forward<Args>(args)...);
+        return api::registry->add_component<T>(id, std::forward<Args>(args)...);
     }
     template<typename T>
     auto get_component   (fox::id_t id) -> T&
     {
-        return registry_.get<T>(id);
+        return api::registry->get_component<T>(id);
     }
     template<typename T>
     void remove_component(fox::id_t id)
     {
-        registry_.remove<T>(id);
+        api::registry->remove_component<T>(id);
     }
 
     template<typename... T>
     auto view() -> auto
     {
-        return registry_.view<T...>();
+        return api::registry->view<T...>();
     }
     template<typename... T>
     auto group() -> auto
     {
-        return registry_.group<T...>();
+        return api::registry->group<T...>();
     }
 }

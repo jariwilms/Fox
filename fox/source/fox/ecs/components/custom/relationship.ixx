@@ -5,9 +5,9 @@ import fox.core.types;
 
 export namespace fox
 {
-	struct Relationship
+	struct relationship
 	{
-		std::optional<fox::id_t> parent{};
-		std::vector  <fox::id_t> children{};
+		std::optional<fox::id_t> parent;
+		std::vector  <fox::id_t> children;
 	};
 }

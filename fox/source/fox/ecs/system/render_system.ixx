@@ -1,10 +1,8 @@
 export module fox.ecs.system.render;
 
-import fox.ecs.system;
-
 export namespace fox
 {
-    class RenderSystem
+    class render_system
     {
     public:
         void update() const
