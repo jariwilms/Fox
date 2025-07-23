@@ -16,10 +16,10 @@ export namespace fox::gfx
         fox::float32_t                        roughnessFactor{ 0.5f };
         fox::float32_t                        metallicFactor { 0.0f };
 
-        std::shared_ptr<gfx::Texture2D> albedo;
-        std::shared_ptr<gfx::Texture2D> normal;
-        std::shared_ptr<gfx::Texture2D> arm;
-        std::shared_ptr<gfx::Texture2D> emissive;
+        std::shared_ptr<gfx::texture2d> albedo;
+        std::shared_ptr<gfx::texture2d> normal;
+        std::shared_ptr<gfx::texture2d> arm;
+        std::shared_ptr<gfx::texture2d> emissive;
 
         std::shared_ptr<gfx::Shader>    shader;
     };

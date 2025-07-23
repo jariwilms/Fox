@@ -37,11 +37,11 @@ export namespace fox::gfx
             _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::Texture2D>    texture, fox::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::texture2d>    texture, fox::uint32_t level = 0u)
         {
             _->attach(identifier, attachment, texture->impl(), level);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::Cubemap>      cubemap, fox::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::cubemap>      cubemap, fox::uint32_t level = 0u)
         {
             _->attach(identifier, attachment, cubemap->impl(), level);
         }
@@ -73,8 +73,8 @@ export namespace fox::gfx
         template<Surface A = Surface::Texture>
         auto surface   (const std::string& identifier)
         {
-            if constexpr (A == Surface::Texture     ) return std::make_shared<gfx::Texture2D>   (_->surface<A>(identifier));
-            if constexpr (A == Surface::Cubemap     ) return std::make_shared<gfx::Cubemap>     (_->surface<A>(identifier));
+            if constexpr (A == Surface::Texture     ) return std::make_shared<gfx::texture2d>   (_->surface<A>(identifier));
+            if constexpr (A == Surface::Cubemap     ) return std::make_shared<gfx::cubemap>     (_->surface<A>(identifier));
             if constexpr (A == Surface::RenderBuffer) return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
         }
         auto attachment(Attachment attachment) -> std::string
@@ -128,7 +128,7 @@ export namespace fox::gfx
             _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::Texture2DMultisample>    texture, fox::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gfx::texture2d_ms>    texture, fox::uint32_t level = 0u)
         {
             _->attach(identifier, attachment, texture->impl(), level);
         }
@@ -160,8 +160,8 @@ export namespace fox::gfx
         template<Surface A = Surface::Texture>
         auto surface   (const std::string& identifier)
         {
-            if constexpr (A == Surface::Texture)      return std::make_shared<gfx::Texture2D>   (_->surface<A>(identifier));
-            if constexpr (A == Surface::Cubemap)      return std::make_shared<gfx::Cubemap>     (_->surface<A>(identifier));
+            if constexpr (A == Surface::Texture)      return std::make_shared<gfx::texture2d>   (_->surface<A>(identifier));
+            if constexpr (A == Surface::Cubemap)      return std::make_shared<gfx::cubemap>     (_->surface<A>(identifier));
             if constexpr (A == Surface::RenderBuffer) return std::make_shared<gfx::RenderBuffer>(_->surface<A>(identifier));
         }
         auto attachment(Attachment attachment) -> std::string

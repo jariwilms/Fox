@@ -15,6 +15,6 @@ export namespace fox::gfx
         fox::Camera                                                  camera;
         fox::transform                                               cameraTransform;
         std::span      <const std::tuple<fox::Light, fox::vector3f>> lights;
-        std::shared_ptr<const gfx::Cubemap>                          skybox;
+        std::shared_ptr<const gfx::cubemap>                          skybox;
     };
 }

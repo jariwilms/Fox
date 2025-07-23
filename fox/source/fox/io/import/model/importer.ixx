@@ -22,9 +22,9 @@ export namespace fox::io
     public:
         static void init()
         {
-            defaultAlbedoTexture_ = io::load<io::Asset::Texture2D>("textures/albedo.png");
-            defaultNormalTexture_ = io::load<io::Asset::Texture2D>("textures/normal.png");
-            defaultARMTexture_    = io::load<io::Asset::Texture2D>("textures/arm.png");
+            defaultAlbedoTexture_ = io::load<io::e_asset::texture2d>("textures/albedo.png");
+            defaultNormalTexture_ = io::load<io::e_asset::texture2d>("textures/normal.png");
+            defaultARMTexture_    = io::load<io::e_asset::texture2d>("textures/arm.png");
         }
 
         static auto import2            (const std::filesystem::path& path) -> std::shared_ptr<gfx::Model>
@@ -94,11 +94,11 @@ export namespace fox::io
         }
 
     private:
-        static auto get_assimp_texture(const std::filesystem::path& path, const assimp::material& aiMaterial, assimp::e_texture_type type) -> std::optional<std::shared_ptr<gfx::Texture2D>>
+        static auto get_assimp_texture(const std::filesystem::path& path, const assimp::material& aiMaterial, assimp::e_texture_type type) -> std::optional<std::shared_ptr<gfx::texture2d>>
         {
             if (assimp::get_texture_count(aiMaterial, type))
             {
-                if (auto result = assimp::get_texture(aiMaterial, type); result) return io::load<io::Asset::Texture2D>(path / result.value());
+                if (auto result = assimp::get_texture(aiMaterial, type); result) return io::load<io::e_asset::texture2d>(path / result.value());
             }
 
             return std::nullopt;
@@ -131,8 +131,8 @@ export namespace fox::io
                 });
         }
 
-        static inline std::shared_ptr<gfx::Texture2D> defaultAlbedoTexture_;
-        static inline std::shared_ptr<gfx::Texture2D> defaultNormalTexture_;
-        static inline std::shared_ptr<gfx::Texture2D> defaultARMTexture_   ;
+        static inline std::shared_ptr<gfx::texture2d> defaultAlbedoTexture_;
+        static inline std::shared_ptr<gfx::texture2d> defaultNormalTexture_;
+        static inline std::shared_ptr<gfx::texture2d> defaultARMTexture_   ;
     };
 }

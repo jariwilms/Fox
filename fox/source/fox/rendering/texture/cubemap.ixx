@@ -9,28 +9,28 @@ import fox.rendering.base.cubemap;
 
 export namespace fox::gfx
 {
-    class Cubemap
+    class cubemap
     {
     public:
-        using Face      = api::Cubemap::Face;
-        using Filter    = api::Cubemap::Filter;
-        using Format    = api::Cubemap::Format;
-        using Wrapping  = api::Cubemap::Wrapping;
+        using face_e     = api::Cubemap::Face;
+        using filter_e   = api::Cubemap::Filter;
+        using format_e   = api::Cubemap::Format;
+        using wrapping_e = api::Cubemap::Wrapping;
 
-        explicit Cubemap(std::shared_ptr<impl::Cubemap> _) 
+        explicit cubemap(std::shared_ptr<impl::Cubemap> _) 
             : _{ _ } {}
 
-        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::vector2u& dimensions) -> std::shared_ptr<gfx::Cubemap>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions) -> std::shared_ptr<gfx::cubemap>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::Cubemap>>(std::in_place_t{}, format, filter, wrapping, dimensions);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::cubemap>>(std::in_place_t{}, format, filter, wrapping, dimensions);
         }
-        static auto create(Format format, Filter filter, Wrapping wrapping, const fox::vector2u& dimensions, std::span<const fox::image> faces) -> std::shared_ptr<gfx::Cubemap>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions, std::span<const fox::image> faces) -> std::shared_ptr<gfx::cubemap>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::Cubemap>>(std::in_place_t{}, format, filter, wrapping, dimensions, faces);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::cubemap>>(std::in_place_t{}, format, filter, wrapping, dimensions, faces);
         }
-        static auto create(Format format,                                   const fox::vector2u& dimensions, std::span<const fox::image> faces) -> std::shared_ptr<gfx::Cubemap>
+        static auto create(format_e format,                                   const fox::vector2u& dimensions, std::span<const fox::image> faces) -> std::shared_ptr<gfx::cubemap>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::Cubemap>>(std::in_place_t{}, format, dimensions, faces);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::cubemap>>(std::in_place_t{}, format, dimensions, faces);
         }
 
         void bind(gfx::binding_t binding) const
@@ -38,7 +38,7 @@ export namespace fox::gfx
             _->bind(binding);
         }
 
-        void apply_wrapping (Wrapping s, Wrapping t)
+        void apply_wrapping (wrapping_e s, wrapping_e t)
         {
             _->apply_wrapping({ s, t });
         }
@@ -47,15 +47,15 @@ export namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const -> Format
+        auto format       () const -> format_e
         {
             return _->format();
         }
-        auto filter       () const -> Filter
+        auto filter       () const -> filter_e
         {
             return _->filter();
         }
-        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e, wrapping_e>&
         {
             return _->wrapping();
         }
@@ -77,11 +77,11 @@ export namespace fox::gfx
         }
 
     protected:
-        Cubemap(Format format, Filter filter, Wrapping wrapping, const fox::vector2u& dimensions)
+        cubemap(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions)
             : _{ std::make_shared<impl::Cubemap>(format, filter, wrapping, dimensions) } {}
-        Cubemap(Format format, Filter filter, Wrapping wrapping, const fox::vector2u& dimensions, std::span<const fox::image> faces)
+        cubemap(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions, std::span<const fox::image> faces)
             : _{ std::make_shared<impl::Cubemap>(format, filter, wrapping, dimensions, faces) } {}
-        Cubemap(Format format,                                   const fox::vector2u& dimensions, std::span<const fox::image> faces)
+        cubemap(format_e format,                                       const fox::vector2u& dimensions, std::span<const fox::image> faces)
             : _{ std::make_shared<impl::Cubemap>(format, dimensions, faces) } {}
 
     private:

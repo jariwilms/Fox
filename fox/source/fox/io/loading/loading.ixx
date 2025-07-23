@@ -9,20 +9,20 @@ import fox.rendering.texture;
 
 export namespace fox::io
 {
-    enum class Asset
+    enum class e_asset
     {
-        File,
-        Image,
-        //Texture1D,
-        Texture2D,
-        //Texture3D,
-        //Shader, 
-        //Model, 
+        file,
+        image,
+        //texture1d,
+        texture2d,
+        //texture3d,
+        //shader, 
+        //model, 
     };
 
     const io::directory root{ FOX_ASSET_DIR };
 
-    template<Asset A = Asset::File, typename... Args>
+    template<io::e_asset A = io::e_asset::file, typename... Args>
     auto load(const std::filesystem::path& path, Args&&... args)
     {
         auto absolute       = path.is_absolute() ? path : root / path;
@@ -34,14 +34,15 @@ export namespace fox::io
             {
                 return fox::image::decode(format, *load_file(path)->read());
             };
-        auto load_texture2d = [&](const std::filesystem::path& path) -> std::shared_ptr<gfx::Texture2D>
+        auto load_texture2d = [&](const std::filesystem::path& path) -> std::shared_ptr<gfx::texture2d>
             {
                 auto image = load_image(path, fox::image::e_format::rgba8);
-                return gfx::Texture2D::create(gfx::Texture2D::Format::RGBA8_UNORM, image.dimensions(), image.data());
+                return gfx::texture2d::create(gfx::texture2d::e_format::RGBA8_UNORM, image.dimensions(), image.data());
             };
 
-        if constexpr (A == io::Asset::File     ) return std::invoke(load_file     , absolute, std::forward<Args>(args)...);
-        if constexpr (A == io::Asset::Image    ) return std::invoke(load_image    , absolute, std::forward<Args>(args)...);
-        if constexpr (A == io::Asset::Texture2D) return std::invoke(load_texture2d, absolute, std::forward<Args>(args)...);
+        using enum io::e_asset;
+        if constexpr (A == file     ) return std::invoke(load_file     , absolute, std::forward<Args>(args)...);
+        if constexpr (A == image    ) return std::invoke(load_image    , absolute, std::forward<Args>(args)...);
+        if constexpr (A == texture2d) return std::invoke(load_texture2d, absolute, std::forward<Args>(args)...);
     }
 }
