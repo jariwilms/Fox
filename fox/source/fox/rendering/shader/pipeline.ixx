@@ -11,7 +11,7 @@ export namespace fox::gfx
     class pipeline
     {
     public:
-        using layout_t = impl::Pipeline<gfx::shader>::Layout;
+        using layout_t = impl::Pipeline<gfx::shader>::layout_t;
 
         explicit pipeline(std::shared_ptr<impl::Pipeline<gfx::shader>> _)
             : _{ _ } {}

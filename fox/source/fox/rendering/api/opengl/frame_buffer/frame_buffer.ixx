@@ -304,7 +304,7 @@ export namespace fox::gfx::api::gl
                         }, 
                         [&](api::RenderBuffer::Format format)
                         {
-                            auto renderBuffer = std::make_shared<gl::RenderBufferMultisample>(format, dimensions_, samples_);
+                            auto renderBuffer = std::make_shared<gl::render_buffer_ms>(format, dimensions_, samples_);
                             auto attachment   = map_render_buffer_attachment(renderBuffer->format(), colorIndex);
 
                             attach(identifier, attachment, renderBuffer);
