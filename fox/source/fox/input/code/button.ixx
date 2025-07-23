@@ -7,22 +7,22 @@ export namespace fox::input
 {
     enum class button : fox::int32_t
     {
-        Button1 = 0, 
-        Button2 = 1, 
-        Button3 = 2, 
-        Button4 = 3, 
-        Button5 = 4, 
-        Button6 = 5,
-        Button7 = 6,
-        Button8 = 7,
+        button1 = 0, 
+        button2 = 1, 
+        button3 = 2, 
+        button4 = 3, 
+        button5 = 4, 
+        button6 = 5,
+        button7 = 6,
+        button8 = 7,
 
-        LeftMouse   = Button1, 
-        RightMouse  = Button2, 
-        MiddleMouse = Button3, 
-        Back        = Button4, 
-        Forward     = Button5, 
+        left_mouse   = button1, 
+        right_mouse  = button2, 
+        middle_mouse = button3, 
+        back         = button4, 
+        forward      = button5, 
     };
 
-    constexpr auto button_min = input::button::Button1;
-    constexpr auto button_max = input::button::Button8;
+    constexpr auto button_min = input::button::button1;
+    constexpr auto button_max = input::button::button8;
 }

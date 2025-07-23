@@ -109,17 +109,17 @@ int main()
         {
             auto speed{ 5.0f * fox::time::delta() };
 
-            if (input::key_active(input::key::Escape     )) window_->close();
-            if (input::key_active(input::key::LeftShift  )) speed *= 10.0f;
-            if (input::key_active(input::key::LeftControl)) speed /=  5.0f;
-            if (input::key_active(input::key::W          )) cameraTransform.position += cameraTransform.forward() * speed;
-            if (input::key_active(input::key::A          )) cameraTransform.position -= cameraTransform.right  () * speed;
-            if (input::key_active(input::key::S          )) cameraTransform.position -= cameraTransform.forward() * speed;
-            if (input::key_active(input::key::D          )) cameraTransform.position += cameraTransform.right  () * speed;
-            if (input::key_active(input::key::E          )) cameraTransform.position += cameraTransform.up     () * speed;
-            if (input::key_active(input::key::Q          )) cameraTransform.position -= cameraTransform.up     () * speed;
+            if (input::key_active(input::key::escape      )) window_->close();
+            if (input::key_active(input::key::left_shift  )) speed *= 10.0f;
+            if (input::key_active(input::key::left_control)) speed /=  5.0f;
+            if (input::key_active(input::key::w           )) cameraTransform.position += cameraTransform.forward() * speed;
+            if (input::key_active(input::key::a           )) cameraTransform.position -= cameraTransform.right  () * speed;
+            if (input::key_active(input::key::s           )) cameraTransform.position -= cameraTransform.forward() * speed;
+            if (input::key_active(input::key::d           )) cameraTransform.position += cameraTransform.right  () * speed;
+            if (input::key_active(input::key::e           )) cameraTransform.position += cameraTransform.up     () * speed;
+            if (input::key_active(input::key::q           )) cameraTransform.position -= cameraTransform.up     () * speed;
 
-            if (input::button_active(input::button::RightMouse))
+            if (input::button_active(input::button::right_mouse))
             {
                 static auto rotation = fox::vector3f{};
 
