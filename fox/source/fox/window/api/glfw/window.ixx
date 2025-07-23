@@ -22,12 +22,12 @@ export namespace fox::interface::api::glfw
         {
             ::glfw::initialize();
 
-            ::glfw::window_hint(::glfw::hint::context_version_major, ::glfw::hint_value::opengl_version_major_4);
-            ::glfw::window_hint(::glfw::hint::context_version_minor, ::glfw::hint_value::opengl_version_minor_6);
-            ::glfw::window_hint(::glfw::hint::opengl_profile       , ::glfw::hint_value::opengl_core_profile   );
-            ::glfw::window_hint(::glfw::hint::refresh_rate         , ::glfw::hint_value::dont_care             );
+            ::glfw::window_hint(::glfw::e_hint::context_version_major, ::glfw::e_hint_value::opengl_version_major_4);
+            ::glfw::window_hint(::glfw::e_hint::context_version_minor, ::glfw::e_hint_value::opengl_version_minor_6);
+            ::glfw::window_hint(::glfw::e_hint::opengl_profile       , ::glfw::e_hint_value::opengl_core_profile   );
+            ::glfw::window_hint(::glfw::e_hint::refresh_rate         , ::glfw::e_hint_value::dont_care             );
 #ifdef FOX_DEBUG
-            ::glfw::window_hint(::glfw::hint::opengl_debug_context , fox::true_);
+            ::glfw::window_hint(::glfw::e_hint::opengl_debug_context , fox::true_);
 #endif
 
             handle_ = ::glfw::create_window(title_, dimensions);
@@ -49,23 +49,23 @@ export namespace fox::interface::api::glfw
                 {
                     std::print("[GLFW_ERROR] {0}: {1}\n", error, description);
                 });
-            ::glfw::set_key_callback              (handle_, [](::glfw::window*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t modifiers) 
+            ::glfw::set_key_callback              (handle_, [](::glfw::window_t*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t modifiers) 
                 { 
                     input::api::handler->glfw_input_key_callback(window, input::key{ key }, scancode, action, input::modifier{ modifiers }); 
                 });
-            ::glfw::set_mouse_button_callback     (handle_, [](::glfw::window*  window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t modifiers)
+            ::glfw::set_mouse_button_callback     (handle_, [](::glfw::window_t*  window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t modifiers)
                 {
                     input::api::handler->glfw_input_button_callback(window, input::button{ button }, action, input::modifier{ modifiers });
                 });
-            ::glfw::set_cursor_position_callback  (handle_, [](::glfw::window*  window, fox::float64_t x     , fox::float64_t y       )
+            ::glfw::set_cursor_position_callback  (handle_, [](::glfw::window_t*  window, fox::float64_t x     , fox::float64_t y       )
                 {
                     input::api::handler->glfw_input_cursor_callback(window, x, y);
                 });
-            ::glfw::set_scroll_callback           (handle_, [](::glfw::window*  window, fox::float64_t x     , fox::float64_t y       )
+            ::glfw::set_scroll_callback           (handle_, [](::glfw::window_t*  window, fox::float64_t x     , fox::float64_t y       )
                 {
                     input::api::handler->glfw_input_scroll_callback(window, x, y);
                 });
-            ::glfw::set_frame_buffer_size_callback(handle_, [](::glfw::window*        , fox::int32_t   width , fox::int32_t   height  )
+            ::glfw::set_frame_buffer_size_callback(handle_, [](::glfw::window_t*        , fox::int32_t   width , fox::int32_t   height  )
                 {
                     gl::viewport(gl::Vector2u{ static_cast<gl::uint32_t>(width), static_cast<gl::uint32_t>(height) });
                 });
@@ -105,13 +105,13 @@ export namespace fox::interface::api::glfw
             return ::glfw::window_should_close(handle_);
         }
 
-        auto handle() const -> ::glfw::window* const
+        auto handle() const -> ::glfw::window_t* const
         {
             return handle_;
         }
 
     private:
-        ::glfw::window* handle_    ;
+        ::glfw::window_t* handle_    ;
         std::string     title_     ;
         fox::vector2u   dimensions_;
         e_mode          mode_      ;
