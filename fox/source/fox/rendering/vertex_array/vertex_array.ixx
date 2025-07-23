@@ -9,15 +9,15 @@ import fox.rendering.buffer;
 
 export namespace fox::gfx
 {
-    class VertexArray
+    class vertex_array
     {
     public:
-        explicit VertexArray(std::shared_ptr<impl::VertexArray> _)
+        explicit vertex_array(std::shared_ptr<impl::VertexArray> _)
             : _{ _ } {}
 
-        static auto create() -> std::shared_ptr<gfx::VertexArray>
+        static auto create() -> std::shared_ptr<gfx::vertex_array>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexArray>>(std::in_place_t{});
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::vertex_array>>(std::in_place_t{});
         }
 
         void bind() const
@@ -34,8 +34,8 @@ export namespace fox::gfx
             _->disable_attribute(index);
         }
 
-        template<typename T, typename... attributes>
-        void tie(std::shared_ptr<gfx::VertexBuffer<T>> buffer, gfx::layout_t<attributes...> layout)
+        template<typename T, typename... Attributes>
+        void tie(std::shared_ptr<gfx::VertexBuffer<T>> buffer, gfx::vertex_layout<Attributes...> layout)
         {
             _->tie(buffer->handle(), layout);
         }
@@ -58,7 +58,7 @@ export namespace fox::gfx
         }
 
     protected:
-        VertexArray()
+        vertex_array()
             : _{ std::make_shared<impl::VertexArray>() } {}
 
     private:

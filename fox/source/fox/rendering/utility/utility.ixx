@@ -18,8 +18,8 @@ export namespace fox::gfx::utl
 
         return std::array<std::shared_ptr<S>, 2u>
         {
-            gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile  ->read()), 
-            gfx::Shader::create(gfx::Shader::Stage::Fragment, *fragmentFile->read()), 
+            gfx::shader::create(gfx::shader::stage_e::Vertex,   *vertexFile  ->read()), 
+            gfx::shader::create(gfx::shader::stage_e::Fragment, *fragmentFile->read()), 
         };
     }
     template<typename Shader>
@@ -31,9 +31,9 @@ export namespace fox::gfx::utl
 
         return std::array<std::shared_ptr<Shader>, 3u>
         {
-            gfx::Shader::create(gfx::Shader::Stage::Vertex,   *vertexFile  ->read()), 
-            gfx::Shader::create(gfx::Shader::Stage::Geometry, *geometryFile->read()),
-            gfx::Shader::create(gfx::Shader::Stage::Fragment, *fragmentFile->read()), 
+            gfx::shader::create(gfx::shader::stage_e::Vertex,   *vertexFile  ->read()), 
+            gfx::shader::create(gfx::shader::stage_e::Geometry, *geometryFile->read()),
+            gfx::shader::create(gfx::shader::stage_e::Fragment, *fragmentFile->read()), 
         };
     }
 }

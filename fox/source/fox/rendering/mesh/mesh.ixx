@@ -6,10 +6,10 @@ import fox.rendering.vertex_array;
 
 export namespace fox::gfx
 {
-    struct Mesh
+    struct mesh
     {
     public:
-        explicit Mesh(std::shared_ptr<gfx::VertexArray> vertexArray)
+        explicit mesh(std::shared_ptr<gfx::vertex_array> vertexArray)
             : vertexArray{ vertexArray } {}
 
         void bind       () const
@@ -22,6 +22,6 @@ export namespace fox::gfx
         }
 
     private:
-        std::shared_ptr<gfx::VertexArray> vertexArray;
+        std::shared_ptr<gfx::vertex_array> vertexArray;
     };
 }

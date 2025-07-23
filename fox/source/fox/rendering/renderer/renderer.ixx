@@ -14,7 +14,7 @@ export namespace fox::gfx::renderer
         renderer_ = std::make_unique<fox::gfx::api::OpenGLRenderer>();
     }
 
-    void start(gfx::RenderInfo renderInfo)
+    void start(gfx::render_info renderInfo)
     {
         renderer_->start(renderInfo);
     }
@@ -23,7 +23,7 @@ export namespace fox::gfx::renderer
         renderer_->finish();
     }
 
-    void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::transform& transform)
+    void render(std::shared_ptr<const gfx::mesh> mesh, std::shared_ptr<const gfx::material> material, const fox::transform& transform)
     {
         renderer_->render(mesh, material, transform);
     }

@@ -1,7 +1,6 @@
 export module fox.rendering.model;
 
 import std;
-
 import fox.core.types;
 import fox.core.transform;
 import fox.rendering.material;
@@ -9,12 +8,12 @@ import fox.rendering.mesh;
 
 export namespace fox::gfx
 {
-    class Model
+    class model
     {
     public:
-        struct Node
+        struct node
         {
-            Node() = default;
+            node() = default;
 
             fox::transform               transform;
             std::optional<fox::uint32_t> mesh;
@@ -22,11 +21,11 @@ export namespace fox::gfx
             std::vector  <fox::size_t  > children;
         };
 
-        Model()
-            : nodes{ Node{} }, meshes{}, materials{} {}
+        model()
+            : nodes{ node{} }, meshes{}, materials{} {}
 
-        std::vector<Node>                           nodes;
-        std::vector<std::shared_ptr<gfx::Mesh    >> meshes;
-        std::vector<std::shared_ptr<gfx::Material>> materials;
+        std::vector<node>                           nodes;
+        std::vector<std::shared_ptr<gfx::mesh    >> meshes;
+        std::vector<std::shared_ptr<gfx::material>> materials;
     };
 }

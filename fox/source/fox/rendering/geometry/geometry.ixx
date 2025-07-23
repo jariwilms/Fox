@@ -12,16 +12,16 @@ import fox.rendering.vertex_array;
 
 export namespace fox::gfx::geometry
 {
-    std::shared_ptr<gfx::Mesh> plane;
-    std::shared_ptr<gfx::Mesh> cube;
-    std::shared_ptr<gfx::Mesh> sphere;
+    std::shared_ptr<gfx::mesh> plane;
+    std::shared_ptr<gfx::mesh> cube;
+    std::shared_ptr<gfx::mesh> sphere;
 
     void plane_init()
     {
-        auto layout2f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 2u>>{};
-        auto layout3f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 3u>>{};
+        auto layout2f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 2u>>{};
+        auto layout3f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
 
-              auto vertexArray = gfx::VertexArray                 ::create();
+              auto vertexArray = gfx::vertex_array                 ::create();
         const auto positions   = gfx::VertexBuffer<fox::float32_t>::create(data::plane::positions  );
         const auto normals     = gfx::VertexBuffer<fox::float32_t>::create(data::plane::normals    );
         const auto tangents    = gfx::VertexBuffer<fox::float32_t>::create(data::plane::tangents   );
@@ -34,14 +34,14 @@ export namespace fox::gfx::geometry
         vertexArray->tie(coordinates, layout2f);
         vertexArray->tie(indices              );
 
-        plane = std::make_shared<gfx::Mesh>(vertexArray);
+        plane = std::make_shared<gfx::mesh>(vertexArray);
     }
     void cube_init()
     {
-        auto layout2f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 2u>>{};
-        auto layout3f = gfx::layout_t<gfx::attribute_t<fox::float32_t, 3u>>{};
+        auto layout2f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 2u>>{};
+        auto layout3f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
 
-        auto vertexArray = gfx::VertexArray::create();
+        auto vertexArray = gfx::vertex_array::create();
         const auto positions   = gfx::VertexBuffer<fox::float32_t>::create(data::cube::positions  );
         const auto normals     = gfx::VertexBuffer<fox::float32_t>::create(data::cube::normals    );
         const auto tangents    = gfx::VertexBuffer<fox::float32_t>::create(data::cube::tangents   );
@@ -54,7 +54,7 @@ export namespace fox::gfx::geometry
         vertexArray->tie(coordinates, layout2f);
         vertexArray->tie(indices              );
 
-        cube = std::make_shared<gfx::Mesh>(vertexArray);
+        cube = std::make_shared<gfx::mesh>(vertexArray);
     }
     void sphere_init()
     {

@@ -4,21 +4,20 @@ import fox.core.types;
 
 export namespace fox
 {
-    struct Light
+    struct light
     {
-    public:
-        enum class Type
+        enum class type_e
         {
-            Area, 
-            Directional, 
-            Point, 
-            Spot, 
+            area, 
+            directional, 
+            point, 
+            spot, 
         };
 
-        Light(Type type = Type::Point, const fox::vector3f& color = fox::vector<>::one, fox::float32_t radius = { 10.0f }, fox::bool_t isShadowCasting = { fox::false_ })
+        light(type_e type = type_e::point, const fox::vector3f& color = fox::vector<>::one, fox::float32_t radius = { 10.0f }, fox::bool_t isShadowCasting = { fox::false_ })
             : type{ type }, color{ color }, radius{ radius }, isShadowCasting{ isShadowCasting } {}
 
-        Type           type;
+        type_e         type;
         fox::vector3f  color;
         fox::float32_t radius;
         fox::bool_t    isShadowCasting;

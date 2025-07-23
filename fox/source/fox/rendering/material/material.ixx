@@ -1,7 +1,6 @@
 export module fox.rendering.material;
 
 import std;
-
 import fox.core.types.fundamental;
 import fox.core.types.math;
 import fox.rendering.texture;
@@ -9,7 +8,7 @@ import fox.rendering.shader;
 
 export namespace fox::gfx
 {
-    struct Material
+    struct material
     {
         std::string                           name           { "Material"  };
         fox::vector4f                         color          { fox::vector<>::one };
@@ -21,6 +20,6 @@ export namespace fox::gfx
         std::shared_ptr<gfx::texture2d> arm;
         std::shared_ptr<gfx::texture2d> emissive;
 
-        std::shared_ptr<gfx::Shader>    shader;
+        std::shared_ptr<gfx::shader>    shader;
     };
 }

@@ -8,7 +8,7 @@ import fox.core.meta;
 export namespace fox::gfx
 {
     template<typename T, fox::uint32_t N, fox::index_t L = 0u, fox::uint32_t I = 0u> requires (meta::within_closed_interval<N, 1u, 4u>)
-    struct attribute_t
+    struct vertex_attribute
     {
         using type = T;
 
@@ -34,7 +34,7 @@ export namespace fox::gfx
         }
     };
     template<typename... T>
-    struct layout_t
+    struct vertex_layout
     {
         constexpr auto stride    () const -> fox::size_t
         {

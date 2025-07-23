@@ -30,7 +30,7 @@ export namespace fox::gfx::api::gl
         }
 
         template<typename... attributes>
-        void tie(gl::handle_t vertexBuffer, gfx::layout_t<attributes...> layout)
+        void tie(gl::handle_t vertexBuffer, gfx::vertex_layout<attributes...> layout)
         {
             gl::vertex_array_vertex_buffer(handle_, vertexBuffer, bindingPoint_, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
 

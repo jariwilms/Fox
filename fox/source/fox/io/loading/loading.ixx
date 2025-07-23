@@ -30,13 +30,13 @@ export namespace fox::io
             {
                 return std::make_shared<io::file>(path);
             };
-        auto load_image     = [&](const std::filesystem::path& path, fox::image::e_format format) -> fox::image
+        auto load_image     = [&](const std::filesystem::path& path, fox::image::format_e format) -> fox::image
             {
                 return fox::image::decode(format, *load_file(path)->read());
             };
         auto load_texture2d = [&](const std::filesystem::path& path) -> std::shared_ptr<gfx::texture2d>
             {
-                auto image = load_image(path, fox::image::e_format::rgba8);
+                auto image = load_image(path, fox::image::format_e::rgba8);
                 return gfx::texture2d::create(gfx::texture2d::e_format::RGBA8_UNORM, image.dimensions(), image.data());
             };
 

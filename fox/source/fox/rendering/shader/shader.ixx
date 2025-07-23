@@ -8,20 +8,20 @@ import fox.rendering.base.shader;
 
 export namespace fox::gfx
 {
-    class Shader
+    class shader
     {
     public:
-        using Stage = api::Shader::Stage;
+        using stage_e = api::Shader::Stage;
 
-        explicit Shader(std::shared_ptr<impl::Shader> _)
+        explicit shader(std::shared_ptr<impl::Shader> _)
             : _{ _ } {}
 
-        static auto create(Stage stage, std::span<const fox::byte_t> binary) -> std::shared_ptr<gfx::Shader>
+        static auto create(stage_e stage, std::span<const fox::byte_t> binary) -> std::shared_ptr<gfx::shader>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::Shader>>(std::in_place_t{}, stage, binary);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::shader>>(std::in_place_t{}, stage, binary);
         }
 
-        auto stage () const -> Stage
+        auto stage () const -> stage_e
         {
             return _->stage();
         }
@@ -35,7 +35,7 @@ export namespace fox::gfx
         }
 
     protected:
-        Shader(Stage stage, std::span<const fox::byte_t> binary)
+        shader(stage_e stage, std::span<const fox::byte_t> binary)
             : _{ std::make_shared<impl::Shader>(stage, binary) } {}
 
     private:

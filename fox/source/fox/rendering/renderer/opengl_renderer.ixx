@@ -27,11 +27,11 @@ export namespace fox::gfx::api
             const fox::vector2u viewportDimensions { 1280u,  720u };
             const fox::vector2u shadowMapDimensions{ 2048u, 2048u };
 
-            using FS = gfx::FrameBuffer::Specification;
+            using FS = gfx::frame_buffer::specification_e;
             using TF = gfx::texture2d::e_format;
-            using RF = gfx::RenderBuffer::Format;
+            using RF = gfx::render_buffer::format_e;
             using CF = gfx::cubemap::format_e;
-            using FA = gfx::FrameBuffer::Attachment;
+            using FA = gfx::frame_buffer::attachment_e;
             {
                 "Position",     FA::Color0      , TF::RGB16_FLOAT,
                     "Albedo",       FA::Color1      , TF::RGBA8_UNORM,
@@ -53,10 +53,10 @@ export namespace fox::gfx::api
 
 
 
-            gBuffer_         = gfx::FrameBuffer::create(viewportDimensions , gBufferManifest  );
-            sBuffer_         = gfx::FrameBuffer::create(shadowMapDimensions, sBufferManifest  );
-            pBuffers_.at(0)  = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
-            pBuffers_.at(1)  = gfx::FrameBuffer::create(viewportDimensions , pBufferManifest  );
+            gBuffer_         = gfx::frame_buffer::create(viewportDimensions , gBufferManifest  );
+            sBuffer_         = gfx::frame_buffer::create(shadowMapDimensions, sBufferManifest  );
+            pBuffers_.at(0)  = gfx::frame_buffer::create(viewportDimensions , pBufferManifest  );
+            pBuffers_.at(1)  = gfx::frame_buffer::create(viewportDimensions , pBufferManifest  );
 
             contextUniform_  = gfx::UniformBuffer<unf::context> ::create();
             matricesUniform_ = gfx::UniformBuffer<unf::matrices>::create();
@@ -68,7 +68,7 @@ export namespace fox::gfx::api
 
 
 
-            auto depthTexture = sBuffer_->surface<gfx::FrameBuffer::Surface::Texture>("Depth");
+            auto depthTexture = sBuffer_->surface<gfx::frame_buffer::surface_e::Texture>("Depth");
             const std::array<fox::float32_t, 4> borderColor{ 1.0f, 1.0f, 1.0f, 1.0f };
             gl::texture_parameter(depthTexture->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
             gl::texture_parameter(depthTexture->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
@@ -83,13 +83,13 @@ export namespace fox::gfx::api
 
                     if (geometry.has_value())
                     {
-                        const auto& shaders = gfx::utl::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / *geometry, dir / fragment);
-                        pipelines_.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vert = shaders.at(0), .geom = shaders.at(1), .frag = shaders.at(2) }));
+                        const auto& shaders = gfx::utl::shaders_from_binaries<gfx::shader>(dir / vertex, dir / *geometry, dir / fragment);
+                        pipelines_.emplace(identifier, gfx::pipeline::create(gfx::pipeline::layout_t{ .vert = shaders.at(0), .geom = shaders.at(1), .frag = shaders.at(2) }));
                     }
                     else
                     {
-                        const auto& shaders = gfx::utl::shaders_from_binaries<gfx::Shader>(dir / vertex, dir / fragment);
-                        pipelines_.emplace(identifier, gfx::Pipeline::create(gfx::Pipeline::Layout{ .vert = shaders.at(0), .frag = shaders.at(1) }));
+                        const auto& shaders = gfx::utl::shaders_from_binaries<gfx::shader>(dir / vertex, dir / fragment);
+                        pipelines_.emplace(identifier, gfx::pipeline::create(gfx::pipeline::layout_t{ .vert = shaders.at(0), .frag = shaders.at(1) }));
                     }
                 };
 
@@ -126,10 +126,10 @@ export namespace fox::gfx::api
 
             //Load HDR environment texture
             const fox::vector2u envDimensions{ 512u, 512u };
-            const std::array<gfx::FrameBuffer::Specification, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
-            auto frameBuffer     = gfx::FrameBuffer::create(envDimensions, manifest);
-            auto renderBuffer    = frameBuffer->surface<gfx::FrameBuffer::Surface::RenderBuffer>("Depth");
-            auto hdrImage        = io::load<io::e_asset::image>("textures/kloppenheim_sky.hdr", fox::image::e_format::rgb32_float);
+            const std::array<gfx::frame_buffer::specification_e, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
+            auto frameBuffer     = gfx::frame_buffer::create(envDimensions, manifest);
+            auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::RenderBuffer>("Depth");
+            auto hdrImage        = io::load<io::e_asset::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
             auto hdrTex          = gfx::texture2d::create(gfx::texture2d::e_format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
             environmentCubemap_  = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::None, gfx::cubemap::wrapping_e::ClampToEdge, envDimensions);
 
@@ -143,7 +143,7 @@ export namespace fox::gfx::api
             gl::viewport(envDimensions);
             gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
 
-            frameBuffer->bind(gfx::FrameBuffer::Target::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
             hdrTex->bind(gfx::binding_t{ 0u });
             cva->bind();
 
@@ -177,7 +177,7 @@ export namespace fox::gfx::api
             gl::frame_buffer_draw_buffer(frameBuffer->handle(), glf::FrameBuffer::Source::Color0);
             gl::render_buffer_storage(renderBuffer->handle(), glf::RenderBuffer::Format::D24_UNORM, cvDimensions);
 
-            frameBuffer->bind(gfx::FrameBuffer::Target::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
             cva->bind();
 
             for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
@@ -208,7 +208,7 @@ export namespace fox::gfx::api
             matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
-            frameBuffer->bind(gfx::FrameBuffer::Target::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
             cva->bind();
 
             fox::uint32_t maxMipLevels{ preFilterCubemap_->mipmap_levels() };
@@ -255,8 +255,8 @@ export namespace fox::gfx::api
 
 
             std::array<FS, 1> ssaoFrameBufferManifest{ FS{ "Occlusion", TF::R32_FLOAT }};
-            ssaoBuffer_ = gfx::FrameBuffer::create(viewportDimensions, ssaoFrameBufferManifest);
-            auto occlusion = ssaoBuffer_->surface<gfx::FrameBuffer::Surface::Texture>("Occlusion");
+            ssaoBuffer_ = gfx::frame_buffer::create(viewportDimensions, ssaoFrameBufferManifest);
+            auto occlusion = ssaoBuffer_->surface<gfx::frame_buffer::surface_e::Texture>("Occlusion");
             gl::texture_parameter(occlusion->handle(), glp::magnification_filter{ glf::Texture::MagnificationFilter::Nearest });
             gl::texture_parameter(occlusion->handle(), glp::minification_filter { glf::Texture::MinificationFilter ::Nearest });
 
@@ -310,7 +310,7 @@ export namespace fox::gfx::api
             ssaoNoiseTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::RGB32_FLOAT, gfx::texture2d::e_filter::Nearest, gfx::texture2d::e_wrapping::Repeat, fox::vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::vector3f>{ ssaoNoise }));
         }
 
-        void start(gfx::RenderInfo renderInfo)
+        void start(gfx::render_info renderInfo)
         {
             renderInfo_ = renderInfo;
 
@@ -352,10 +352,10 @@ export namespace fox::gfx::api
                 {
                     switch (light.type)
                     {
-                        case fox::Light::Type::Area:        throw std::exception{ "" };                            break;
-                        case fox::Light::Type::Directional: shadowCastingDirectionalLights_.emplace_back(result); break;
-                        case fox::Light::Type::Point:       shadowCastingPointLights_      .emplace_back(result); break;
-                        case fox::Light::Type::Spot:        throw std::exception{ "" };                            break;
+                        case fox::light::type_e::area:        throw std::exception{ "" };                           break;
+                        case fox::light::type_e::directional: shadowCastingDirectionalLights_.emplace_back(result); break;
+                        case fox::light::type_e::point:       shadowCastingPointLights_      .emplace_back(result); break;
+                        case fox::light::type_e::spot:        throw std::exception{ "" };                           break;
                     }
 
                     ++shadowCastingLightCount;
@@ -392,7 +392,7 @@ export namespace fox::gfx::api
 
 
 
-            ssaoBuffer_->bind(gfx::FrameBuffer::Target::Write);
+            ssaoBuffer_->bind(gfx::frame_buffer::target_e::Write);
 
             pipelines_.at("SSAO")->bind();
             gBuffer_->bind_surface("Position", gfx::binding_t{ 0u });
@@ -422,7 +422,7 @@ export namespace fox::gfx::api
 
 
 
-            pBuffers_.at(0)->bind(gfx::FrameBuffer::Target::Write);
+            pBuffers_.at(0)->bind(gfx::frame_buffer::target_e::Write);
             pipelines_.at("Background")->bind();
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
@@ -459,7 +459,7 @@ export namespace fox::gfx::api
             gl::blit_frame_buffer(pBuffers_.at(0)->handle(), gl::DefaultFrameBuffer, glf::Buffer::Mask::Color, glf::FrameBuffer::Filter::Nearest, pBuffers_.at(0)->dimensions(), dimensions);
         }
 
-        void render(std::shared_ptr<const gfx::Mesh> mesh, std::shared_ptr<const gfx::Material> material, const fox::transform& transform)
+        void render(std::shared_ptr<const gfx::mesh> mesh, std::shared_ptr<const gfx::material> material, const fox::transform& transform)
         {
             mmt_.emplace_back(mesh, material, transform);
         }
@@ -469,9 +469,9 @@ export namespace fox::gfx::api
         }
 
     private:
-        void render_meshes(std::shared_ptr<gfx::FrameBuffer> frameBuffer, std::shared_ptr<gfx::Pipeline> shader)
+        void render_meshes(std::shared_ptr<gfx::frame_buffer> frameBuffer, std::shared_ptr<gfx::pipeline> shader)
         {
-            frameBuffer->bind(gfx::FrameBuffer::Target::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
             shader->bind();
 
             gl::viewport      (frameBuffer->dimensions());
@@ -502,7 +502,7 @@ export namespace fox::gfx::api
                 gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, mesh->index_count());
             }
         }
-        void render_lighting(std::shared_ptr<gfx::FrameBuffer> target)
+        void render_lighting(std::shared_ptr<gfx::frame_buffer> target)
         {
             target->bind(api::FrameBuffer::Target::Write);
             gl::clear(glf::Buffer::Mask::All);
@@ -544,7 +544,7 @@ export namespace fox::gfx::api
 
             gl::depth_mask(gl::True);
         }
-        void render_skybox(std::shared_ptr<gfx::FrameBuffer> target, std::shared_ptr<gfx::FrameBuffer> previous)
+        void render_skybox(std::shared_ptr<gfx::frame_buffer> target, std::shared_ptr<gfx::frame_buffer> previous)
         {
             if (!renderInfo_.skybox) return;
 
@@ -565,15 +565,15 @@ export namespace fox::gfx::api
             gl::draw_elements(glf::Draw::Mode::Triangles, glf::Draw::Type::UnsignedInt, cva->index_count());
         }
 
-        std::vector<std::tuple<std::shared_ptr<const gfx::Mesh>, std::shared_ptr<const gfx::Material>, fox::transform>> mmt_{};
+        std::vector<std::tuple<std::shared_ptr<const gfx::mesh>, std::shared_ptr<const gfx::material>, fox::transform>> mmt_{};
         std::vector<unf::light>                                            lights_{};
         std::vector<unf::light>                                            shadowCastingPointLights_{};
         std::vector<unf::light>                                            shadowCastingDirectionalLights_{};
         std::vector<fox::transform>                                        debugTransforms_{};
-        std::shared_ptr<gfx::FrameBuffer>                                  gBuffer_{};
-        std::shared_ptr<gfx::FrameBuffer>                                  sBuffer_{};
-        std::array<std::shared_ptr<gfx::FrameBuffer>, 2>                   pBuffers_{};
-        std::shared_ptr<gfx::FrameBuffer>                                  ssaoBuffer_{};
+        std::shared_ptr<gfx::frame_buffer>                                  gBuffer_{};
+        std::shared_ptr<gfx::frame_buffer>                                  sBuffer_{};
+        std::array<std::shared_ptr<gfx::frame_buffer>, 2>                   pBuffers_{};
+        std::shared_ptr<gfx::frame_buffer>                                  ssaoBuffer_{};
         std::shared_ptr<gfx::texture2d>                                    ssaoNoiseTexture_{};
         std::shared_ptr<gfx::cubemap>                                      environmentCubemap_{};
         std::shared_ptr<gfx::cubemap>                                      irradianceCubemap_{};
@@ -585,8 +585,8 @@ export namespace fox::gfx::api
         std::shared_ptr<gfx::UniformBuffer<unf::camera>>                   cameraUniform_{};
         std::shared_ptr<gfx::UniformBuffer<unf::light>>                    lightUniform_{};
         std::shared_ptr<gfx::UniformArrayBuffer<unf::ssao_sample, 64u>>     ssaoSampleUniform_{};
-        std::unordered_map<std::string, std::shared_ptr<gfx::Pipeline>>    pipelines_{};
+        std::unordered_map<std::string, std::shared_ptr<gfx::pipeline>>    pipelines_{};
         fox::float32_t                                                     shadowFarPlane_{ 100.0f };
-        gfx::RenderInfo                                                    renderInfo_{};
+        gfx::render_info                                                   renderInfo_{};
     };
 }

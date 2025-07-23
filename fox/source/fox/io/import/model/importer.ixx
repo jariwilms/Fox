@@ -27,9 +27,9 @@ export namespace fox::io
             defaultARMTexture_    = io::load<io::e_asset::texture2d>("textures/arm.png");
         }
 
-        static auto import2            (const std::filesystem::path& path) -> std::shared_ptr<gfx::Model>
+        static auto import2            (const std::filesystem::path& path) -> std::shared_ptr<gfx::model>
         {
-                  auto  model          = std::make_shared<gfx::Model>();
+                  auto  model          = std::make_shared<gfx::model>();
             const auto  modelPath      = fox::io::root / path;
             const auto  modelDirectory = modelPath.parent_path();
 
@@ -53,10 +53,10 @@ export namespace fox::io
                         | std::views::join
                         | std::ranges::to<std::vector>();
 
-                    auto layout2f        = gfx::layout_t<gfx::attribute_t<fox::float32_t, 2u>>{};
-                    auto layout3f        = gfx::layout_t<gfx::attribute_t<fox::float32_t, 3u>>{};
+                    auto layout2f        = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 2u>>{};
+                    auto layout3f        = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
 
-                    auto vertexArray     = gfx::VertexArray                ::create();
+                    auto vertexArray     = gfx::vertex_array                ::create();
                     auto positionsBuffer = gfx::VertexBuffer<fox::vector3f>::create(positionsVector);
                     auto normalsBuffer   = gfx::VertexBuffer<fox::vector3f>::create(normalsVector);
                     auto tangentsBuffer  = gfx::VertexBuffer<fox::vector3f>::create(tangentsVector);
@@ -69,11 +69,11 @@ export namespace fox::io
                     vertexArray->tie(texCoordsBuffer, layout2f);
                     vertexArray->tie(indicesBuffer            );
 
-                    model->meshes.emplace_back(std::move(std::make_shared<gfx::Mesh>(vertexArray)));
+                    model->meshes.emplace_back(std::move(std::make_shared<gfx::mesh>(vertexArray)));
                 });
             std::ranges::for_each(std::span<const assimp::material* const>{ aiScene.mMaterials, aiScene.mNumMaterials }, [&](const auto* aiMaterial)
                 {
-                    auto material    = std::make_shared<gfx::Material>();
+                    auto material    = std::make_shared<gfx::material>();
                     material->albedo = get_assimp_texture(modelDirectory, *aiMaterial, assimp::e_texture_type::albedo            ).value_or(defaultAlbedoTexture_);
                     material->normal = get_assimp_texture(modelDirectory, *aiMaterial, assimp::e_texture_type::normal            ).value_or(defaultNormalTexture_);
                     material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, assimp::e_texture_type::metallic_roughness).value_or(defaultARMTexture_   );
@@ -84,7 +84,7 @@ export namespace fox::io
 
 
             const auto& aiRootNode = *aiScene.mRootNode;
-            model->nodes.emplace_back(gfx::Model::Node{});
+            model->nodes.emplace_back(gfx::model::node{});
 
             create_nodes(model, fox::uint32_t{ 0u }, aiScene, aiRootNode);
 
@@ -103,7 +103,7 @@ export namespace fox::io
 
             return std::nullopt;
         };
-        static void create_nodes      (std::shared_ptr<gfx::Model> model, fox::size_t index, const assimp::scene& aiScene, const assimp::node& currentAiNode)
+        static void create_nodes      (std::shared_ptr<gfx::model> model, fox::size_t index, const assimp::scene& aiScene, const assimp::node& currentAiNode)
         {
             auto& currentNode = model->nodes.at(index);
 
@@ -115,7 +115,7 @@ export namespace fox::io
             std::ranges::for_each(aiMeshes  , [&](fox::uint32_t index)
                 {
                     const auto  childNodeIndex = model->nodes.size();
-                    auto& childNode      = model->nodes.emplace_back(gfx::Model::Node{});
+                    auto& childNode      = model->nodes.emplace_back(gfx::model::node{});
 
                     childNode.mesh     = index;
                     childNode.material = aiScene.mMeshes[index]->mMaterialIndex;

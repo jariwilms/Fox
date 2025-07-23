@@ -8,7 +8,7 @@ export namespace fox
 {
 	struct mesh_filter
 	{
-		std::shared_ptr<gfx::Mesh>     mesh;
-		std::shared_ptr<gfx::Material> material;
+		std::shared_ptr<gfx::mesh>     mesh;
+		std::shared_ptr<gfx::material> material;
 	};
 }

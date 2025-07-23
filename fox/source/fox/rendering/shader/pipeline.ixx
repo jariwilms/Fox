@@ -8,17 +8,17 @@ import fox.rendering.shader;
 
 export namespace fox::gfx
 {
-    class Pipeline
+    class pipeline
     {
     public:
-        using Layout = impl::Pipeline<gfx::Shader>::Layout;
+        using layout_t = impl::Pipeline<gfx::shader>::Layout;
 
-        explicit Pipeline(std::shared_ptr<impl::Pipeline<gfx::Shader>> _)
+        explicit pipeline(std::shared_ptr<impl::Pipeline<gfx::shader>> _)
             : _{ _ } {}
 
-        static auto create(const Layout& layout) -> std::shared_ptr<gfx::Pipeline>
+        static auto create(const layout_t& layout) -> std::shared_ptr<gfx::pipeline>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::Pipeline>>(std::in_place_t{}, layout);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::pipeline>>(std::in_place_t{}, layout);
         }
 
         void bind()
@@ -30,16 +30,16 @@ export namespace fox::gfx
         {
             return _->handle();
         }
-        auto impl  () const -> std::shared_ptr<impl::Pipeline<gfx::Shader>>
+        auto impl  () const -> std::shared_ptr<impl::Pipeline<gfx::shader>>
         {
             return _;
         }
 
     protected:
-        Pipeline(const Layout& layout)
-            : _{ std::make_shared<impl::Pipeline<gfx::Shader>>(layout) } {}
+        pipeline(const layout_t& layout)
+            : _{ std::make_shared<impl::Pipeline<gfx::shader>>(layout) } {}
 
     private:
-        std::shared_ptr<impl::Pipeline<gfx::Shader>> _;
+        std::shared_ptr<impl::Pipeline<gfx::shader>> _;
     };
 }

@@ -10,7 +10,7 @@ export namespace fox
     class image
     {
     public:
-        enum class e_format
+        enum class format_e
         {
             r8,
             rg8,
@@ -28,7 +28,7 @@ export namespace fox
             rgb32_float,
             rgba32_float,
         };
-        enum class e_extension
+        enum class extension_e
         {
             bmp,
             hdr,
@@ -37,21 +37,21 @@ export namespace fox
         };
 
         template<std::ranges::range R>
-        image(e_format format, const fox::vector2u& dimensions, R&& range)
+        image(format_e format, const fox::vector2u& dimensions, R&& range)
             : format_{ format }, dimensions_{ dimensions }, data_{ std::from_range, std::forward<R>(range) } {}
 
-        template<e_extension E>
+        template<extension_e E>
         static auto encode(const fox::image& image) -> auto
         {
             stb::set_flip_vertically_on_write(cfg::flip_images);
 
-            using enum e_extension;
+            using enum extension_e;
             if constexpr (E == bmp) return stb::write_bmp_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
             if constexpr (E == jpg) return stb::write_jpg_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
             if constexpr (E == png) return stb::write_png_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
             if constexpr (E == hdr) return stb::write_hdr_to_function(data_, std::to_underlying(map_channels(format_)), dimensions_);
         }
-        static auto decode(e_format format, std::span<const fox::byte_t> data) -> fox::image
+        static auto decode(format_e format, std::span<const fox::byte_t> data) -> fox::image
         {
             stb::set_flip_vertically_on_load(cfg::flip_images);
 
@@ -59,7 +59,7 @@ export namespace fox
                 {
                     switch (format)
                     {
-                        using enum e_format;
+                        using enum format_e;
 
                         case r8          :
                         case r16         : return fox::uint32_t{ 1u };
@@ -84,7 +84,7 @@ export namespace fox
                 {
                     switch (format)
                     {
-                        using enum e_format;
+                        using enum format_e;
 
                         case r8          :
                         case rg8         :
@@ -108,7 +108,7 @@ export namespace fox
             return fox::image{ format, result.dimensions, std::move(result.data) };
         }
 
-        auto format    () const -> e_format
+        auto format    () const -> format_e
         {
             return format_;
         }
@@ -122,7 +122,7 @@ export namespace fox
         }
 
     private:
-        e_format                 format_;
+        format_e                 format_;
         fox::vector2u            dimensions_;
         std::vector<fox::byte_t> data_;
     };
