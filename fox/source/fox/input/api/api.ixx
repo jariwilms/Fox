@@ -10,5 +10,5 @@ import fox.input.api.glfw;
 export namespace fox::input::api
 {
     using handler_t = glfw::input_handler;
-    auto  handler   = std::shared_ptr<api::handler_t>{};
+    auto  handler   = std::unique_ptr<api::handler_t>{};
 }

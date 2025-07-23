@@ -19,6 +19,6 @@ export namespace fox::input
         HatLeftDown  = HatLeft  | HatDown,  
     };
 
-    constexpr auto controller_min{ input::controller::HatCentered };
-    constexpr auto controller_max{ input::controller::HatLeft     };
+    constexpr auto controller_min = input::controller::HatCentered;
+    constexpr auto controller_max = input::controller::HatLeft    ;
 }

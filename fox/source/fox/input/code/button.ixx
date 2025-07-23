@@ -23,6 +23,6 @@ export namespace fox::input
         Forward     = Button5, 
     };
 
-    constexpr auto button_min{ input::button::Button1 };
-    constexpr auto button_max{ input::button::Button8 };
+    constexpr auto button_min = input::button::Button1;
+    constexpr auto button_max = input::button::Button8;
 }

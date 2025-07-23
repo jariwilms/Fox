@@ -43,7 +43,7 @@ export namespace fox::interface::api::glfw
             using namespace gfx::api;
             gl::Context::init();
 
-            input::api::handler = std::make_shared<input::api::glfw::input_handler>();
+            input::api::handler = std::make_unique<input::api::glfw::input_handler>();
 
             ::glfw::set_error_callback            (         [](                         fox::int32_t error   , const fox::char_t* description)
                 {

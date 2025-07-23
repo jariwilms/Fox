@@ -34,11 +34,11 @@ export namespace fox::input::api::glfw
             lastScrollWheel_    = {};
         }
 
-        auto any_key_active            ()                     const -> fox::bool_t
+        auto any_key_active            ()                   const -> fox::bool_t
         {
             return activeKeys_.any();
         }
-        auto any_button_active         ()                     const -> fox::bool_t
+        auto any_button_active         ()                   const -> fox::bool_t
         {
             return activeButtons_.any();
         }
@@ -69,20 +69,20 @@ export namespace fox::input::api::glfw
             return !activeButtons_.test(std::to_underlying(code)) && lastActiveButtons_.test(std::to_underlying(code));
         }
 
-        auto cursor_position           ()                     const -> fox::vector2f
+        auto cursor_position           ()                   const -> fox::vector2f
         {
             return cursorPosition_;
         }
-        auto cursor_position_delta     ()                     const -> fox::vector2f
+        auto cursor_position_delta     ()                   const -> fox::vector2f
         {
             return cursorPosition_ - lastCursorPosition_;
         }
 
-        auto scroll_wheel              ()                     const -> fox::vector2f
+        auto scroll_wheel              ()                   const -> fox::vector2f
         {
             return scrollWheel_;
         }
-        auto scroll_wheel_delta        ()                     const -> fox::vector2f
+        auto scroll_wheel_delta        ()                   const -> fox::vector2f
         {
             return lastScrollWheel_ - scrollWheel_;
         }
@@ -117,14 +117,14 @@ export namespace fox::input::api::glfw
         }
     
     private:
-        std::bitset<std::to_underlying(input::key_max   )> activeKeys_;
-        std::bitset<std::to_underlying(input::key_max   )> lastActiveKeys_;
-        std::bitset<std::to_underlying(input::button_max)> activeButtons_;
-        std::bitset<std::to_underlying(input::button_max)> lastActiveButtons_;
+        std::bitset<std::to_underlying(input::key_max   )> activeKeys_        ;
+        std::bitset<std::to_underlying(input::key_max   )> lastActiveKeys_    ;
+        std::bitset<std::to_underlying(input::button_max)> activeButtons_     ;
+        std::bitset<std::to_underlying(input::button_max)> lastActiveButtons_ ;
 
-        fox::vector2f                                      cursorPosition_;
+        fox::vector2f                                      cursorPosition_    ;
         fox::vector2f                                      lastCursorPosition_;
-        fox::vector2f                                      scrollWheel_;
-        fox::vector2f                                      lastScrollWheel_;
+        fox::vector2f                                      scrollWheel_       ;
+        fox::vector2f                                      lastScrollWheel_   ;
     };
 }

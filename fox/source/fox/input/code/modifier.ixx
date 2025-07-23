@@ -17,6 +17,6 @@ export namespace fox::input
         NumLock  = 0x1 << 5u, 
     };
     
-    constexpr auto modifier_min{ input::modifier::Shift   };
-    constexpr auto modifier_max{ input::modifier::NumLock };
+    constexpr auto modifier_min = input::modifier::Shift  ;
+    constexpr auto modifier_max = input::modifier::NumLock;
 }

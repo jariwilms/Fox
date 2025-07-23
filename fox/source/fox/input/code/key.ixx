@@ -80,6 +80,6 @@ export namespace fox::input
         Menu         = 348, 
     };
 
-    constexpr auto key_min{ input::key::Space };
-    constexpr auto key_max{ input::key::Menu  };
+    constexpr auto key_min = input::key::Space;
+    constexpr auto key_max = input::key::Menu ;
 }
