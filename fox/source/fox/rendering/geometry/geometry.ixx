@@ -22,11 +22,11 @@ export namespace fox::gfx::geometry
         auto layout3f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
 
               auto vertexArray = gfx::vertex_array                 ::create();
-        const auto positions   = gfx::VertexBuffer<fox::float32_t>::create(data::plane::positions  );
-        const auto normals     = gfx::VertexBuffer<fox::float32_t>::create(data::plane::normals    );
-        const auto tangents    = gfx::VertexBuffer<fox::float32_t>::create(data::plane::tangents   );
-        const auto coordinates = gfx::VertexBuffer<fox::float32_t>::create(data::plane::coordinates);
-        const auto indices     = gfx::IndexBuffer                 ::create(data::plane::indices    );
+        const auto positions   = gfx::vertex_buffer<fox::float32_t>::create(data::plane::positions  );
+        const auto normals     = gfx::vertex_buffer<fox::float32_t>::create(data::plane::normals    );
+        const auto tangents    = gfx::vertex_buffer<fox::float32_t>::create(data::plane::tangents   );
+        const auto coordinates = gfx::vertex_buffer<fox::float32_t>::create(data::plane::coordinates);
+        const auto indices     = gfx::index_buffer                 ::create(data::plane::indices    );
 
         vertexArray->tie(positions  , layout3f);
         vertexArray->tie(normals    , layout3f);
@@ -42,11 +42,11 @@ export namespace fox::gfx::geometry
         auto layout3f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
 
         auto vertexArray = gfx::vertex_array::create();
-        const auto positions   = gfx::VertexBuffer<fox::float32_t>::create(data::cube::positions  );
-        const auto normals     = gfx::VertexBuffer<fox::float32_t>::create(data::cube::normals    );
-        const auto tangents    = gfx::VertexBuffer<fox::float32_t>::create(data::cube::tangents   );
-        const auto coordinates = gfx::VertexBuffer<fox::float32_t>::create(data::cube::coordinates);
-        const auto indices     = gfx::IndexBuffer                 ::create(data::cube::indices    );
+        const auto positions   = gfx::vertex_buffer<fox::float32_t>::create(data::cube::positions  );
+        const auto normals     = gfx::vertex_buffer<fox::float32_t>::create(data::cube::normals    );
+        const auto tangents    = gfx::vertex_buffer<fox::float32_t>::create(data::cube::tangents   );
+        const auto coordinates = gfx::vertex_buffer<fox::float32_t>::create(data::cube::coordinates);
+        const auto indices     = gfx::index_buffer                 ::create(data::cube::indices    );
 
         vertexArray->tie(positions  , layout3f);
         vertexArray->tie(normals    , layout3f);

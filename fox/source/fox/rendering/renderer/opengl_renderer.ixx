@@ -58,11 +58,11 @@ export namespace fox::gfx::api
             pBuffers_.at(0)  = gfx::frame_buffer::create(viewportDimensions , pBufferManifest  );
             pBuffers_.at(1)  = gfx::frame_buffer::create(viewportDimensions , pBufferManifest  );
 
-            contextUniform_  = gfx::UniformBuffer<unf::context> ::create();
-            matricesUniform_ = gfx::UniformBuffer<unf::matrices>::create();
-            materialUniform_ = gfx::UniformBuffer<unf::material>::create();
-            cameraUniform_   = gfx::UniformBuffer<unf::camera>  ::create();
-            lightUniform_    = gfx::UniformBuffer<unf::light>   ::create();
+            contextUniform_  = gfx::uniform_buffer<unf::context> ::create();
+            matricesUniform_ = gfx::uniform_buffer<unf::matrices>::create();
+            materialUniform_ = gfx::uniform_buffer<unf::material>::create();
+            cameraUniform_   = gfx::uniform_buffer<unf::camera>  ::create();
+            lightUniform_    = gfx::uniform_buffer<unf::light>   ::create();
 
 
 
@@ -199,7 +199,7 @@ export namespace fox::gfx::api
             //PreFilter step
             const fox::vector2u reflectionDimensions{ 128u, 128u };
 
-            auto preFilterBuffer = gfx::UniformBuffer<unf::pre_filter>::create();
+            auto preFilterBuffer = gfx::uniform_buffer<unf::pre_filter>::create();
             preFilterBuffer->bind(gfx::binding_t{ 5u });
 
             preFilterCubemap_ = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::Trilinear, gfx::cubemap::wrapping_e::ClampToEdge, reflectionDimensions);
@@ -287,7 +287,7 @@ export namespace fox::gfx::api
                 ssaoKernel.at(index) = sample;
             }
 
-            ssaoSampleUniform_ = gfx::UniformArrayBuffer<unf::ssao_sample, ssaoSamples>::create(ssaoKernel);
+            ssaoSampleUniform_ = gfx::uniform_array_buffer<unf::ssao_sample, ssaoSamples>::create(ssaoKernel);
             ssaoSampleUniform_->bind(gfx::binding_t{ 7u });
 
 
@@ -579,12 +579,12 @@ export namespace fox::gfx::api
         std::shared_ptr<gfx::cubemap>                                      irradianceCubemap_{};
         std::shared_ptr<gfx::cubemap>                                      preFilterCubemap_{};
         std::shared_ptr<gfx::texture2d>                                    brdfTexture_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::context>>                  contextUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::matrices>>                 matricesUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::material>>                 materialUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::camera>>                   cameraUniform_{};
-        std::shared_ptr<gfx::UniformBuffer<unf::light>>                    lightUniform_{};
-        std::shared_ptr<gfx::UniformArrayBuffer<unf::ssao_sample, 64u>>     ssaoSampleUniform_{};
+        std::shared_ptr<gfx::uniform_buffer<unf::context>>                  contextUniform_{};
+        std::shared_ptr<gfx::uniform_buffer<unf::matrices>>                 matricesUniform_{};
+        std::shared_ptr<gfx::uniform_buffer<unf::material>>                 materialUniform_{};
+        std::shared_ptr<gfx::uniform_buffer<unf::camera>>                   cameraUniform_{};
+        std::shared_ptr<gfx::uniform_buffer<unf::light>>                    lightUniform_{};
+        std::shared_ptr<gfx::uniform_array_buffer<unf::ssao_sample, 64u>>     ssaoSampleUniform_{};
         std::unordered_map<std::string, std::shared_ptr<gfx::pipeline>>    pipelines_{};
         fox::float32_t                                                     shadowFarPlane_{ 100.0f };
         gfx::render_info                                                   renderInfo_{};

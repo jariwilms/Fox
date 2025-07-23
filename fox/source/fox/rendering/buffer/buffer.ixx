@@ -8,19 +8,19 @@ import fox.rendering.api;
 export namespace fox::gfx
 {
     template<typename T>
-    class VertexBuffer
+    class vertex_buffer
     {
     public:
-        explicit VertexBuffer(std::shared_ptr<impl::VertexBuffer<T>> _)
+        explicit vertex_buffer(std::shared_ptr<impl::VertexBuffer<T>> _)
             : _{ _ } {}
 
-        static auto create(std::span<const T> data) -> std::shared_ptr<gfx::VertexBuffer<T>>
+        static auto create(std::span<const T> data) -> std::shared_ptr<gfx::vertex_buffer<T>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexBuffer<T>>>(std::in_place_t{}, data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::vertex_buffer<T>>>(std::in_place_t{}, data);
         }
-        static auto create(fox::count_t count) -> std::shared_ptr<gfx::VertexBuffer<T>>
+        static auto create(fox::count_t count) -> std::shared_ptr<gfx::vertex_buffer<T>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::VertexBuffer<T>>>(std::in_place_t{}, count);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::vertex_buffer<T>>>(std::in_place_t{}, count);
         }
 
         auto size  () const -> fox::size_t
@@ -41,27 +41,27 @@ export namespace fox::gfx
         }
 
     protected:
-        explicit VertexBuffer(std::span<const T> data)
+        explicit vertex_buffer(std::span<const T> data)
             : _{ std::make_shared<impl::VertexBuffer<T>>(data) } {}
-        explicit VertexBuffer(fox::count_t count)
+        explicit vertex_buffer(fox::count_t count)
             : _{ std::make_shared<impl::VertexBuffer<T>>(count) } {}
 
     private:
         std::shared_ptr<impl::VertexBuffer<T>> _;
     };
-    class IndexBuffer
+    class index_buffer
     {
     public:
-        explicit IndexBuffer(std::shared_ptr<impl::IndexBuffer> _)
+        explicit index_buffer(std::shared_ptr<impl::IndexBuffer> _)
             : _{ _ } {}
 
-        static auto create(std::span<const fox::index_t> data) -> std::shared_ptr<gfx::IndexBuffer>
+        static auto create(std::span<const fox::index_t> data) -> std::shared_ptr<gfx::index_buffer>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::IndexBuffer>>(std::in_place_t{}, data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::index_buffer>>(std::in_place_t{}, data);
         }
-        static auto create(fox::count_t count) -> std::shared_ptr<gfx::IndexBuffer>
+        static auto create(fox::count_t count) -> std::shared_ptr<gfx::index_buffer>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::IndexBuffer>>(std::in_place_t{}, count);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::index_buffer>>(std::in_place_t{}, count);
         }
 
         auto size  () const -> fox::size_t
@@ -82,24 +82,24 @@ export namespace fox::gfx
         }
 
     protected:
-        explicit IndexBuffer(std::span<const fox::index_t> data)
+        explicit index_buffer(std::span<const fox::index_t> data)
             : _{ std::make_shared<impl::IndexBuffer>(data) } {}
-        explicit IndexBuffer(fox::count_t count)
+        explicit index_buffer(fox::count_t count)
             : _{ std::make_shared<impl::IndexBuffer>(count) } {}
 
     private:
         std::shared_ptr<impl::IndexBuffer> _;
     };
     template<typename T>
-    class UniformBuffer
+    class uniform_buffer
     {
     public:
-        explicit UniformBuffer(std::shared_ptr<impl::UniformBuffer<T>> _)
+        explicit uniform_buffer(std::shared_ptr<impl::UniformBuffer<T>> _)
             : _{ _ } {}
 
-        static auto create(const T& data = {}) -> std::shared_ptr<gfx::UniformBuffer<T>>
+        static auto create(const T& data = {}) -> std::shared_ptr<gfx::uniform_buffer<T>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformBuffer<T>>>(std::in_place_t{}, data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::uniform_buffer<T>>>(std::in_place_t{}, data);
         }
 
         void bind(gfx::binding_t binding) const
@@ -131,26 +131,26 @@ export namespace fox::gfx
         }
 
     protected:
-        explicit UniformBuffer(const T& data = {})
+        explicit uniform_buffer(const T& data = {})
             : _{ std::make_shared<impl::UniformBuffer<T>>(data) } {}
 
     private:
         std::shared_ptr<impl::UniformBuffer<T>> _;
     };
     template<typename T, fox::count_t N>
-    class UniformArrayBuffer
+    class uniform_array_buffer
     {
     public:
-        explicit UniformArrayBuffer(std::shared_ptr<impl::UniformArrayBuffer<T, N>> _)
+        explicit uniform_array_buffer(std::shared_ptr<impl::UniformArrayBuffer<T, N>> _)
             : _{ _ } {}
 
-        static auto create() -> std::shared_ptr<gfx::UniformArrayBuffer<T, N>>
+        static auto create() -> std::shared_ptr<gfx::uniform_array_buffer<T, N>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformArrayBuffer<T, N>>>(std::in_place_t{});
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::uniform_array_buffer<T, N>>>(std::in_place_t{});
         }
-        static auto create(std::span<const T> data) -> std::shared_ptr<gfx::UniformArrayBuffer<T, N>>
+        static auto create(std::span<const T> data) -> std::shared_ptr<gfx::uniform_array_buffer<T, N>>
         {
-            return std::make_shared<meta::from_inaccessible_ctor<gfx::UniformArrayBuffer<T, N>>>(std::in_place_t{}, data);
+            return std::make_shared<meta::from_inaccessible_ctor<gfx::uniform_array_buffer<T, N>>>(std::in_place_t{}, data);
         }
 
         void bind      (gfx::binding_t binding) const
@@ -189,9 +189,9 @@ export namespace fox::gfx
         }
 
     protected:
-                 UniformArrayBuffer()
+                 uniform_array_buffer()
             : _{ std::make_shared<impl::UniformArrayBuffer<T, N>>() } {}
-        explicit UniformArrayBuffer(std::span<const T> data)
+        explicit uniform_array_buffer(std::span<const T> data)
             : _{ std::make_shared<impl::UniformArrayBuffer<T, N>>(data) } {}
 
     private:

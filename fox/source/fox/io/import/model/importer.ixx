@@ -57,11 +57,11 @@ export namespace fox::io
                     auto layout3f        = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
 
                     auto vertexArray     = gfx::vertex_array                ::create();
-                    auto positionsBuffer = gfx::VertexBuffer<fox::vector3f>::create(positionsVector);
-                    auto normalsBuffer   = gfx::VertexBuffer<fox::vector3f>::create(normalsVector);
-                    auto tangentsBuffer  = gfx::VertexBuffer<fox::vector3f>::create(tangentsVector);
-                    auto texCoordsBuffer = gfx::VertexBuffer<fox::vector2f>::create(texCoordsVector);
-                    auto indicesBuffer   = gfx::IndexBuffer                ::create(indicesVector);
+                    auto positionsBuffer = gfx::vertex_buffer<fox::vector3f>::create(positionsVector);
+                    auto normalsBuffer   = gfx::vertex_buffer<fox::vector3f>::create(normalsVector  );
+                    auto tangentsBuffer  = gfx::vertex_buffer<fox::vector3f>::create(tangentsVector );
+                    auto texCoordsBuffer = gfx::vertex_buffer<fox::vector2f>::create(texCoordsVector);
+                    auto indicesBuffer   = gfx::index_buffer                ::create(indicesVector  );
 
                     vertexArray->tie(positionsBuffer, layout3f);
                     vertexArray->tie(normalsBuffer  , layout3f);
