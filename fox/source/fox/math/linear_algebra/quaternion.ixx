@@ -6,11 +6,11 @@ import vendor.glm;
 
 export namespace fox::math
 {
-    constexpr auto conjugate(const fox::Quaternion& quaternion) -> fox::Quaternion
+    constexpr auto conjugate(const fox::quaternion4f& quaternion) -> fox::quaternion4f
     {
         return glm::conjugate(quaternion);
     }
-              auto to_matrix(const fox::Quaternion& quaternion) -> fox::Matrix4f
+              auto to_matrix(const fox::quaternion4f& quaternion) -> fox::matrix4f
     {
         return glm::mat4_cast(quaternion);
     }

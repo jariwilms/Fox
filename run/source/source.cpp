@@ -139,7 +139,7 @@ int main()
                 const auto cpr = input::cursor_position_delta() / 10.0f;
                 rotation += fox::vector3f{ cpr.y, cpr.x, 0.0f };
 
-                cameraTransform.rotation = fox::Quaternion{ glm::radians(rotation) };
+                cameraTransform.rotation = fox::quaternion4f{ glm::radians(rotation) };
             }
         };
     auto rotate_helmet          = [&]

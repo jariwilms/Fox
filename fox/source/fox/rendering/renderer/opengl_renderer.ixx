@@ -109,7 +109,7 @@ export namespace fox::gfx::api
 
             //PBR setup
             auto captureProjection = math::perspective(1.0f, math::to_radians(90.0f), 0.1f, 10.0f);
-            const std::array<fox::Matrix4f, 6> captureViews =
+            const std::array<fox::matrix4f, 6> captureViews =
             {
                 glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{  1.0f,  0.0f,  0.0f }, fox::vector3f{ 0.0f, -1.0f,  0.0f }),
                 glm::lookAt(fox::vector3f{ 0.0f, 0.0f, 0.0f }, fox::vector3f{ -1.0f,  0.0f,  0.0f }, fox::vector3f{ 0.0f, -1.0f,  0.0f }),

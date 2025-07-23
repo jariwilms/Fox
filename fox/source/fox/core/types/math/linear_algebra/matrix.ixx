@@ -5,15 +5,17 @@ import vendor.glm;
 
 export namespace fox
 {
-    template<typename T, fox::uint32_t N> 
-    using Matrix = glm::mat<N, N, T>;
-
-    using Matrix2f = fox::Matrix<fox::float32_t, 2u>;
-    using Matrix3f = fox::Matrix<fox::float32_t, 3u>;
-    using Matrix4f = fox::Matrix<fox::float32_t, 4u>;
-
-    namespace matrix
+    template<typename T, fox::uint32_t R, fox::uint32_t C = R> 
+    using matrix_t = glm::mat<R, C, T>;
+    
+    template<typename T = fox::float32_t, fox::uint32_t R = 4u, fox::uint32_t C = R>
+    class matrix
     {
-        const auto identity = fox::Matrix4f{ 1.0f };
-    }
+    public:
+        static inline constexpr auto identity = fox::matrix_t<T, R, C>{ T{ 1 } };
+    };
+
+    using matrix2f = fox::matrix_t<fox::float32_t, 2u>;
+    using matrix3f = fox::matrix_t<fox::float32_t, 3u>;
+    using matrix4f = fox::matrix_t<fox::float32_t, 4u>;
 }

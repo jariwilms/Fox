@@ -7,6 +7,7 @@ export namespace fox
 {
 	template<typename T, fox::uint32_t N>
 	using vector_t = glm::vec<N, T, glm::packed_highp>;
+	
 	template<typename T = fox::float32_t, fox::uint32_t N = 4u>
 	class vector
 	{

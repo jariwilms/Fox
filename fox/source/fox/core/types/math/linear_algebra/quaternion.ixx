@@ -5,10 +5,15 @@ import vendor.glm;
 
 export namespace fox
 {
-    using Quaternion = glm::quat;
+    template<typename T>
+    using quaternion_t = glm::qua<T, glm::packed_highp>;
 
-    namespace quaternion
+    template<typename T = fox::float32_t>
+    class quaternion
     {
-        const auto identity = fox::Quaternion{ 1.0f, 0.0f, 0.0f, 0.0f };
-    }
+    public:
+        static inline constexpr auto identity = fox::quaternion_t<fox::float32_t>{ 1.0f, 0.0f, 0.0f, 0.0f };
+    };
+
+    using quaternion4f = quaternion_t<fox::float32_t>;
 }

@@ -11,11 +11,11 @@ export namespace fox
     {
     public:
         Camera()
-            : aspect_{ 1.0f }, fov_{ 90.0f }, projection_{ matrix::identity } {}
+            : aspect_{ 1.0f }, fov_{ 90.0f }, projection_{ fox::matrix<>::identity } {}
         Camera(fox::float32_t aspect, fox::degrees_t fov)
             : aspect_{ aspect }, fov_{ fov }, projection_{ math::perspective(aspect_, math::to_radians(fov_), 0.01f, 1000.0f) } {}
-        Camera(fox::float32_t aspect, fox::degrees_t fov, fox::Matrix4f&& projection)
-            : aspect_{ aspect }, fov_{ fov }, projection_{ std::forward<fox::Matrix4f>(projection) } {}
+        Camera(fox::float32_t aspect, fox::degrees_t fov, fox::matrix4f&& projection)
+            : aspect_{ aspect }, fov_{ fov }, projection_{ std::forward<fox::matrix4f>(projection) } {}
 
         auto aspect_ratio () const -> fox::float32_t
         {
@@ -25,7 +25,7 @@ export namespace fox
         {
             return fov_;
         }
-        auto projection   () const -> const fox::Matrix4f&
+        auto projection   () const -> const fox::matrix4f&
         {
             return projection_;
         }
@@ -33,6 +33,6 @@ export namespace fox
     private:
         fox::float32_t aspect_;
         fox::float32_t fov_;
-        fox::Matrix4f  projection_;
+        fox::matrix4f  projection_;
     };
 }

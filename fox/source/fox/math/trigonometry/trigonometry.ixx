@@ -83,13 +83,13 @@ export namespace fox::math
             return glm::radians(value);
         }
 
-                  auto euler_angles(const fox::Quaternion& value) -> fox::vector3f
+                  auto euler_angles(const fox::quaternion4f& value) -> fox::vector3f
         {
             return glm::eulerAngles(value);
         }
 
         template<typename T, fox::uint32_t N>
-        constexpr auto look_at(const fox::vector_t<T, N>& direction, const fox::vector_t<T, N>& up) -> fox::Quaternion
+        constexpr auto look_at(const fox::vector_t<T, N>& direction, const fox::vector_t<T, N>& up) -> fox::quaternion4f
         {
             return glm::quatLookAt(direction, up);
         }
