@@ -28,13 +28,13 @@ export namespace fox::gfx
             
         using VertexArray             = api::gl::VertexArray;
             
-        using Texture1D               = api::gl::Texture1D;
-        using Texture2D               = api::gl::Texture2D;
-        using Texture3D               = api::gl::Texture3D;
-        using Texture2DMultisample    = api::gl::Texture2DMultisample;
-        using Texture3DMultisample    = api::gl::Texture3DMultisample;
+        using Texture1D               = api::gl::texture1d;
+        using Texture2D               = api::gl::texture2d;
+        using Texture3D               = api::gl::texture3d;
+        using Texture2DMultisample    = api::gl::texture2d_ms;
+        using Texture3DMultisample    = api::gl::texture3d_ms;
             
-        using Cubemap                 = api::gl::Cubemap;
+        using Cubemap                 = api::gl::cubemap;
             
         using RenderBuffer            = api::gl::RenderBuffer;
         using RenderBufferMultisample = api::gl::RenderBufferMultisample;

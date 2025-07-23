@@ -1,26 +1,25 @@
 export module fox.rendering.api.opengl.texture;
 
 import std;
-
 import fox.math.texture;
 import fox.rendering.api.opengl;
 import fox.rendering.base.texture;
 
 export namespace fox::gfx::api::gl
 {
-    class Texture1D : public gl::Object
+    class texture1d : public gl::Object
     {
     public:
-        using Format        = api::Texture::Format;
-        using Filter        = api::Texture::Filter;
-        using Wrapping      = api::Texture::Wrapping;
-        using WrappingProxy = gl::proxy_t<Wrapping>;
+        using format_e   = api::Texture::Format;
+        using filter_e   = api::Texture::Filter;
+        using wrapping_e = api::Texture::Wrapping;
+        using wrapping_t = gl::proxy_t<wrapping_e>;
 
-        Texture1D(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector1u& dimensions)
+        texture1d(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector1u& dimensions)
             : gl::Object{ gl::create_texture(glf::Texture::Target::_1D), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter_ != Filter::None)
+            if (filter_ != filter_e::None)
             {
                 gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -34,25 +33,25 @@ export namespace fox::gfx::api::gl
 
             gl::texture_storage_1d(handle_, gl::map_texture_format(format_), dimensions_, mipmapLevels_);
         }
-        Texture1D(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector1u& dimensions, std::span<const gl::byte_t> data)
-            : Texture1D{ format, filter, wrapping, dimensions }
+        texture1d(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector1u& dimensions, std::span<const gl::byte_t> data)
+            : texture1d{ format, filter, wrapping, dimensions }
         {
             copy(format, data);
             generate_mipmap();
         }
-        Texture1D(Format format,                                        const gl::Vector1u& dimensions, std::span<const gl::byte_t> data)
-            : Texture1D{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {}
+        texture1d(format_e format,                                        const gl::Vector1u& dimensions, std::span<const gl::byte_t> data)
+            : texture1d{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, data } {}
 
         void bind(gl::binding_t binding) const
         {
             gl::bind_texture_unit(handle_, binding);
         }
 
-        void copy      (Format format,                      std::span<const gl::byte_t> data)
+        void copy      (format_e format,                      std::span<const gl::byte_t> data)
         {
             copy_range(format, dimensions_, data);
         }
-        void copy_range(Format format, gl::length_t region, std::span<const gl::byte_t> data)
+        void copy_range(format_e format, gl::length_t region, std::span<const gl::byte_t> data)
         {
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
@@ -60,7 +59,7 @@ export namespace fox::gfx::api::gl
             gl::texture_sub_image_1d(handle_, gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
         }
 
-        void apply_wrapping (WrappingProxy wrapping)
+        void apply_wrapping (wrapping_t wrapping)
         {
             wrapping_ = wrapping;
 
@@ -69,7 +68,7 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != Filter::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
         }
 
         void resize(const gl::Vector1u& dimensions)
@@ -77,15 +76,15 @@ export namespace fox::gfx::api::gl
             gl::todo();
         }
 
-        auto format       () const -> Format
+        auto format       () const -> format_e
         {
             return format_;
         }
-        auto filter       () const -> Filter
+        auto filter       () const -> filter_e
         {
             return filter_;
         }
-        auto wrapping     () const -> const std::tuple<Wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e>&
         {
             return wrapping_.pack;
         }
@@ -99,25 +98,25 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        Format        format_;
-        Filter        filter_;
-        WrappingProxy wrapping_;
-        gl::Vector1u  dimensions_;
-        gl::uint32_t  mipmapLevels_;
+        format_e     format_;
+        filter_e     filter_;
+        wrapping_t   wrapping_;
+        gl::Vector1u dimensions_;
+        gl::uint32_t mipmapLevels_;
     };
-    class Texture2D : public gl::Object
+    class texture2d : public gl::Object
     {
     public:
-        using Format        = api::Texture::Format;
-        using Filter        = api::Texture::Filter;
-        using Wrapping      = api::Texture::Wrapping;
-        using WrappingProxy = gl::proxy_t<Wrapping, Wrapping>;
+        using format_e   = api::Texture::Format;
+        using filter_e   = api::Texture::Filter;
+        using wrapping_e = api::Texture::Wrapping;
+        using wrapping_t = gl::proxy_t<wrapping_e, wrapping_e>;
          
-        Texture2D(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector2u& dimensions)
+        texture2d(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector2u& dimensions)
             : gl::Object{ gl::create_texture(glf::Texture::Target::_2D), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter_ != Filter::None)
+            if (filter_ != filter_e::None)
             {
                 gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -132,25 +131,25 @@ export namespace fox::gfx::api::gl
 
             gl::texture_storage_2d(handle_, gl::map_texture_format(format_), dimensions_, mipmapLevels_);
         }
-        Texture2D(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector2u& dimensions, std::span<const gl::byte_t> data)
-            : Texture2D{ format, filter, wrapping, dimensions }
+        texture2d(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector2u& dimensions, std::span<const gl::byte_t> data)
+            : texture2d{ format, filter, wrapping, dimensions }
         {
             copy(format, data);
             generate_mipmap();
         }
-        Texture2D(Format format,                                        const gl::Vector2u& dimensions, std::span<const gl::byte_t> data)
-            : Texture2D{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {}
+        texture2d(format_e format,                                       const gl::Vector2u& dimensions, std::span<const gl::byte_t> data)
+            : texture2d{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, data } {}
 
         void bind(gl::binding_t binding) const
         {
             gl::bind_texture_unit(handle_, binding);
         }
 
-        void copy      (Format format,                    std::span<const gl::byte_t> data)
+        void copy      (format_e format,                    std::span<const gl::byte_t> data)
         {
             copy_range(format, dimensions_, data);
         }
-        void copy_range(Format format, gl::area_t region, std::span<const gl::byte_t> data)
+        void copy_range(format_e format, gl::area_t region, std::span<const gl::byte_t> data)
         {
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
@@ -158,7 +157,7 @@ export namespace fox::gfx::api::gl
             gl::texture_sub_image_2d(handle_, gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
         }
 
-        void apply_wrapping (WrappingProxy wrapping)
+        void apply_wrapping (wrapping_t wrapping)
         {
             wrapping_ = wrapping;
 
@@ -168,23 +167,23 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != Filter::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
         }
 
         void resize(const gl::Vector2u& dimensions)
         {
-            if (dimensions != dimensions_) gl::Texture2D::operator=(gl::Texture2D{ format_, filter_, wrapping_, dimensions });
+            if (dimensions != dimensions_) gl::texture2d::operator=(gl::texture2d{ format_, filter_, wrapping_, dimensions });
         }
 
-        auto format       () const -> Format
+        auto format       () const -> format_e
         {
             return format_;
         }
-        auto filter       () const -> Filter
+        auto filter       () const -> filter_e
         {
             return filter_;
         }
-        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e, wrapping_e>&
         {
             return wrapping_.pack;
         }
@@ -198,25 +197,25 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        Format        format_;
-        Filter        filter_;
-        WrappingProxy wrapping_;
-        gl::Vector2u  dimensions_;
-        gl::uint32_t  mipmapLevels_;
+        format_e     format_;
+        filter_e     filter_;
+        wrapping_t   wrapping_;
+        gl::Vector2u dimensions_;
+        gl::uint32_t mipmapLevels_;
     };
-    class Texture3D : public gl::Object
+    class texture3d : public gl::Object
     {
     public:
-        using Format        = api::Texture::Format;
-        using Filter        = api::Texture::Filter;
-        using Wrapping      = api::Texture::Wrapping;
-        using WrappingProxy = gl::proxy_t<Wrapping, Wrapping, Wrapping>;
+        using format_e   = api::Texture::Format;
+        using filter_e   = api::Texture::Filter;
+        using wrapping_e = api::Texture::Wrapping;
+        using wrapping_t = gl::proxy_t<wrapping_e, wrapping_e, wrapping_e>;
 
-        Texture3D(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector3u& dimensions)
+        texture3d(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector3u& dimensions)
             : gl::Object{ gl::create_texture(glf::Texture::Target::_3D), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter_ != Filter::None)
+            if (filter_ != filter_e::None)
             {
                 gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -232,25 +231,25 @@ export namespace fox::gfx::api::gl
 
             gl::texture_storage_3d(handle_, gl::map_texture_format(format_), dimensions_, mipmapLevels_);
         }
-        Texture3D(Format format, Filter filter, WrappingProxy wrapping, const gl::Vector3u& dimensions, std::span<const gl::byte_t> data)
-            : Texture3D{ format, filter, wrapping, dimensions }
+        texture3d(format_e format, filter_e filter, wrapping_t wrapping, const gl::Vector3u& dimensions, std::span<const gl::byte_t> data)
+            : texture3d{ format, filter, wrapping, dimensions }
         {
             copy(format, data);
             generate_mipmap();
         }
-        Texture3D(Format format,                                        const gl::Vector3u& dimensions, std::span<const gl::byte_t> data)
-            : Texture3D{ format, Filter::Trilinear, Wrapping::Repeat, dimensions, data } {}
+        texture3d(format_e format,                                       const gl::Vector3u& dimensions, std::span<const gl::byte_t> data)
+            : texture3d{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, data } {}
 
         void bind(gl::binding_t binding) const
         {
             gl::bind_texture_unit(handle_, binding);
         }
 
-        void copy      (Format format,                      std::span<const gl::byte_t> data)
+        void copy      (format_e format,                      std::span<const gl::byte_t> data)
         {
             copy_range(format, dimensions_, data);
         }
-        void copy_range(Format format, gl::volume_t region, std::span<const gl::byte_t> data)
+        void copy_range(format_e format, gl::volume_t region, std::span<const gl::byte_t> data)
         {
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
@@ -258,7 +257,7 @@ export namespace fox::gfx::api::gl
             gl::texture_sub_image_3d(handle_, gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
         }
 
-        void apply_wrapping (WrappingProxy wrapping)
+        void apply_wrapping (wrapping_t wrapping)
         {
             wrapping_ = wrapping;
 
@@ -269,7 +268,7 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != Filter::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
         }
 
         void resize(const gl::Vector3u& dimensions)
@@ -277,15 +276,15 @@ export namespace fox::gfx::api::gl
             gl::todo();
         }
 
-        auto format       () const -> Format
+        auto format       () const -> format_e
         {
             return format_;
         }
-        auto filter       () const -> Filter
+        auto filter       () const -> filter_e
         {
             return filter_;
         }
-        auto wrapping     () const -> const std::tuple<Wrapping, Wrapping, Wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e, wrapping_e, wrapping_e>&
         {
             return wrapping_.pack;
         }
@@ -299,19 +298,19 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        Format        format_;
-        Filter        filter_;
-        WrappingProxy wrapping_;
-        gl::Vector3u  dimensions_;
-        gl::uint32_t  mipmapLevels_;
+        format_e     format_;
+        filter_e     filter_;
+        wrapping_t   wrapping_;
+        gl::Vector3u dimensions_;
+        gl::uint32_t mipmapLevels_;
     };
 
-    class Texture2DMultisample : public gl::Object
+    class texture2d_ms : public gl::Object
     {
     public:
-        using Format = api::Texture::Format;
+        using format_e = api::Texture::Format;
 
-        Texture2DMultisample(Format format, const gl::Vector2u& dimensions, gl::uint32_t samples)
+        texture2d_ms(format_e format, const gl::Vector2u& dimensions, gl::uint32_t samples)
             : gl::Object{ gl::create_texture(glf::Texture::Target::_2DMultisample), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
@@ -328,7 +327,7 @@ export namespace fox::gfx::api::gl
             gl::todo();
         }
 
-        auto format    () const -> Format
+        auto format    () const -> format_e
         {
             return format_;
         }
@@ -342,16 +341,16 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        Format       format_;
+        format_e     format_;
         gl::Vector2u dimensions_;
         gl::uint32_t samples_;
     };
-    class Texture3DMultisample : public gl::Object
+    class texture3d_ms : public gl::Object
     {
     public:
-        using Format = api::Texture::Format;
+        using format_e = api::Texture::Format;
 
-        Texture3DMultisample(Format format, const gl::Vector3u& dimensions, gl::uint32_t samples)
+        texture3d_ms(format_e format, const gl::Vector3u& dimensions, gl::uint32_t samples)
             : gl::Object{ gl::create_texture(glf::Texture::Target::_2DMultisampleArray), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
@@ -368,7 +367,7 @@ export namespace fox::gfx::api::gl
             gl::todo();
         }
 
-        auto format    () const -> Format
+        auto format    () const -> format_e
         {
             return format_;
         }
@@ -382,7 +381,7 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        Format       format_;
+        format_e       format_;
         gl::Vector3u dimensions_;
         gl::uint32_t samples_;
     };

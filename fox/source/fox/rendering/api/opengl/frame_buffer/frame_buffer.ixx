@@ -81,14 +81,14 @@ export namespace fox::gfx::api::gl
                     {
                         [&](api::Texture     ::Format format)
                         {
-                            auto texture    = std::make_shared<gl::Texture2D>(format, api::Texture::Filter::None, api::Texture::Wrapping::Repeat, dimensions_);
+                            auto texture    = std::make_shared<gl::texture2d>(format, api::Texture::Filter::None, api::Texture::Wrapping::Repeat, dimensions_);
                             auto attachment = map_texture_attachment(texture->format(), colorIndex);
 
                             attach(identifier, attachment, texture);
                         }, 
                         [&](api::Cubemap     ::Format format)
                         {
-                            auto cubemap    = std::make_shared<gl::Cubemap>(format, api::Cubemap::Filter::None, api::Cubemap::Wrapping::Repeat, dimensions_);
+                            auto cubemap    = std::make_shared<gl::cubemap>(format, api::Cubemap::Filter::None, api::Cubemap::Wrapping::Repeat, dimensions_);
                             auto attachment = map_cubemap_attachment(cubemap->format(), colorIndex);
 
                             attach(identifier, attachment, cubemap);
@@ -135,14 +135,14 @@ export namespace fox::gfx::api::gl
             if constexpr (A == Surface::Cubemap) cubemapMap_.at(identifier)->bind(binding);
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Texture2D>    texture     , gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::texture2d>    texture     , gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Cubemap>      cubemap     , gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::cubemap>      cubemap     , gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, cubemap->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
@@ -236,8 +236,8 @@ export namespace fox::gfx::api::gl
 
     private:
         std::array<std::string, 11u>                                       attachments_;
-        std::unordered_map<std::string, std::shared_ptr<gl::Texture2D>>    textureMap_;
-        std::unordered_map<std::string, std::shared_ptr<gl::Cubemap>>      cubemapMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::texture2d>>    textureMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::cubemap>>      cubemapMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::RenderBuffer>> renderBufferMap_;
         gl::Vector2u                                                       dimensions_;
     };
@@ -297,7 +297,7 @@ export namespace fox::gfx::api::gl
                     {
                         [&](api::Texture     ::Format format)
                         {
-                            auto texture    = std::make_shared<gl::Texture2DMultisample>(format, dimensions_, samples_);
+                            auto texture    = std::make_shared<gl::texture2d_ms>(format, dimensions_, samples_);
                             auto attachment = map_texture_attachment(texture->format(), colorIndex);
 
                             attach(identifier, attachment, texture);
@@ -343,7 +343,7 @@ export namespace fox::gfx::api::gl
             if constexpr (A == Surface::Texture) textureMap_.at(identifier)->bind(binding);
         }
 
-        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::Texture2DMultisample>    texture, gl::uint32_t level = 0u)
+        void attach(const std::string& identifier, Attachment attachment, std::shared_ptr<gl::texture2d_ms>    texture, gl::uint32_t level = 0u)
         {
             gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
@@ -431,10 +431,10 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        std::array<std::string, 11u>                                                  attachments_;
-        std::unordered_map<std::string, std::shared_ptr<gl::Texture2DMultisample>>    textureMap_;
+        std::array<std::string, 11u>                                       attachments_;
+        std::unordered_map<std::string, std::shared_ptr<gl::texture2d_ms>> textureMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::RenderBufferMultisample>> renderBufferMap_;
-        gl::Vector2u                                                                  dimensions_;
-        gl::uint32_t                                                                  samples_;
+        gl::Vector2u                                                       dimensions_;
+        gl::uint32_t                                                       samples_;
     };
 }
