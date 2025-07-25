@@ -8,7 +8,7 @@ export namespace glfw
 {
     using window_t = GLFWwindow;
 
-    enum class e_hint
+    enum class hint_e
     {
         context_version_major = GLFW_CONTEXT_VERSION_MAJOR, 
         context_version_minor = GLFW_CONTEXT_VERSION_MINOR, 
@@ -16,20 +16,20 @@ export namespace glfw
         opengl_profile        = GLFW_OPENGL_PROFILE       , 
         refresh_rate          = GLFW_REFRESH_RATE         , 
     };
-    enum class e_hint_value
+    enum class hint_value_e
     {
         dont_care              = GLFW_DONT_CARE          , 
         opengl_core_profile    = GLFW_OPENGL_CORE_PROFILE, 
         opengl_version_major_4 = 4                       ,
         opengl_version_minor_6 = 6                       ,
     };
-    enum class e_input_action
+    enum class input_action_e
     {
         release = GLFW_RELEASE, 
         press   = GLFW_PRESS  , 
         repeat  = GLFW_REPEAT , 
     };
-    enum class e_result
+    enum class result_e
     {
         failure = GLFW_FALSE, 
         success = GLFW_TRUE , 
@@ -58,11 +58,11 @@ export namespace glfw
     {
         ::glfwDestroyWindow(window);
     }
-    void window_hint                   (glfw::e_hint hint, fox::int32_t       value)
+    void window_hint                   (glfw::hint_e hint, fox::int32_t       value)
     {
         ::glfwWindowHint(std::to_underlying(hint), value);
     }
-    void window_hint                   (glfw::e_hint hint, glfw::e_hint_value value)
+    void window_hint                   (glfw::hint_e hint, glfw::hint_value_e value)
     {
         ::glfwWindowHint(std::to_underlying(hint), std::to_underlying(value));
     }

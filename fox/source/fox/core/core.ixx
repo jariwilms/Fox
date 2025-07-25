@@ -1,6 +1,5 @@
 export module fox.core;
 export import fox.core.data;
-export import fox.core.enumeration;
 export import fox.core.image;
 export import fox.core.json;
 export import fox.core.memory;

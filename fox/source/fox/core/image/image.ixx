@@ -37,7 +37,7 @@ export namespace fox
         };
 
         template<std::ranges::range R>
-        image(format_e format, const fox::vector2u& dimensions, R&& range)
+        explicit image(format_e format, const fox::vector2u& dimensions, R&& range)
             : format_{ format }, dimensions_{ dimensions }, data_{ std::from_range, std::forward<R>(range) } {}
 
         template<extension_e E>

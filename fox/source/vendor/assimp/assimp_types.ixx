@@ -8,13 +8,13 @@ import fox.core.types;
 
 export namespace assimp
 {
-    enum class e_texture_type : std::underlying_type_t<aiTextureType>
+    enum class texture_type_e : std::underlying_type_t<aiTextureType>
     {
         albedo             = aiTextureType_DIFFUSE  , 
         normal             = aiTextureType_NORMALS  , 
         metallic_roughness = aiTextureType_METALNESS, 
     };
-    enum class e_processing_flags : std::underlying_type_t<aiPostProcessSteps>
+    enum class processing_flags_e : std::underlying_type_t<aiPostProcessSteps>
     {
         calculate_tangent_space  = aiProcess_CalcTangentSpace     , //Calculate tangents and bitangents
         find_invalid_data        = aiProcess_FindInvalidData      , //Removes/fixes invalid mesh data
@@ -31,7 +31,7 @@ export namespace assimp
         transform_uv_coordinates = aiProcess_TransformUVCoords    , //Applies per-texture UV transformations
         triangulate              = aiProcess_Triangulate          , //Split up faces with >3 indices into triangles
     };
-    enum class e_scene_flags
+    enum class scene_flags_e
     {
         allow_shared       = AI_SCENE_FLAGS_ALLOW_SHARED      , 
         incomplete         = AI_SCENE_FLAGS_INCOMPLETE        , 
@@ -40,7 +40,7 @@ export namespace assimp
         validated          = AI_SCENE_FLAGS_VALIDATED         , 
         validation_warning = AI_SCENE_FLAGS_VALIDATION_WARNING, 
     };
-    enum class e_result
+    enum class result_e
     {
         failure = AI_FAILURE, 
         success = AI_SUCCESS, 
@@ -56,6 +56,6 @@ export namespace assimp
     using vector_2d    = ::aiVector2D;
     using vector_3d    = ::aiVector3D;
 
-    constexpr auto operator|(assimp::e_processing_flags first, assimp::e_processing_flags second) { return static_cast<assimp::e_processing_flags>(std::to_underlying(first) | std::to_underlying(second)); };
-    constexpr auto operator&(assimp::e_scene_flags      first, assimp::e_scene_flags      second) { return static_cast<assimp::e_scene_flags     >(std::to_underlying(first) & std::to_underlying(second)); };
+    constexpr auto operator|(assimp::processing_flags_e first, assimp::processing_flags_e second) { return static_cast<assimp::processing_flags_e>(std::to_underlying(first) | std::to_underlying(second)); };
+    constexpr auto operator&(assimp::scene_flags_e      first, assimp::scene_flags_e      second) { return static_cast<assimp::scene_flags_e     >(std::to_underlying(first) & std::to_underlying(second)); };
 }

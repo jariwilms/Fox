@@ -74,9 +74,9 @@ export namespace fox::io
             std::ranges::for_each(std::span<const assimp::material* const>{ aiScene.mMaterials, aiScene.mNumMaterials }, [&](const auto* aiMaterial)
                 {
                     auto material    = std::make_shared<gfx::material>();
-                    material->albedo = get_assimp_texture(modelDirectory, *aiMaterial, assimp::e_texture_type::albedo            ).value_or(defaultAlbedoTexture_);
-                    material->normal = get_assimp_texture(modelDirectory, *aiMaterial, assimp::e_texture_type::normal            ).value_or(defaultNormalTexture_);
-                    material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, assimp::e_texture_type::metallic_roughness).value_or(defaultARMTexture_   );
+                    material->albedo = get_assimp_texture(modelDirectory, *aiMaterial, assimp::texture_type_e::albedo            ).value_or(defaultAlbedoTexture_);
+                    material->normal = get_assimp_texture(modelDirectory, *aiMaterial, assimp::texture_type_e::normal            ).value_or(defaultNormalTexture_);
+                    material->arm    = get_assimp_texture(modelDirectory, *aiMaterial, assimp::texture_type_e::metallic_roughness).value_or(defaultARMTexture_   );
 
                     model->materials.emplace_back(std::move(material));
                 });
@@ -94,7 +94,7 @@ export namespace fox::io
         }
 
     private:
-        static auto get_assimp_texture(const std::filesystem::path& path, const assimp::material& aiMaterial, assimp::e_texture_type type) -> std::optional<std::shared_ptr<gfx::texture2d>>
+        static auto get_assimp_texture(const std::filesystem::path& path, const assimp::material& aiMaterial, assimp::texture_type_e type) -> std::optional<std::shared_ptr<gfx::texture2d>>
         {
             if (assimp::get_texture_count(aiMaterial, type))
             {

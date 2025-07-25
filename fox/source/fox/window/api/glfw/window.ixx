@@ -22,12 +22,12 @@ export namespace fox::interface::api::glfw
         {
             ::glfw::initialize();
 
-            ::glfw::window_hint(::glfw::e_hint::context_version_major, ::glfw::e_hint_value::opengl_version_major_4);
-            ::glfw::window_hint(::glfw::e_hint::context_version_minor, ::glfw::e_hint_value::opengl_version_minor_6);
-            ::glfw::window_hint(::glfw::e_hint::opengl_profile       , ::glfw::e_hint_value::opengl_core_profile   );
-            ::glfw::window_hint(::glfw::e_hint::refresh_rate         , ::glfw::e_hint_value::dont_care             );
+            ::glfw::window_hint(::glfw::hint_e::context_version_major, ::glfw::hint_value_e::opengl_version_major_4);
+            ::glfw::window_hint(::glfw::hint_e::context_version_minor, ::glfw::hint_value_e::opengl_version_minor_6);
+            ::glfw::window_hint(::glfw::hint_e::opengl_profile       , ::glfw::hint_value_e::opengl_core_profile   );
+            ::glfw::window_hint(::glfw::hint_e::refresh_rate         , ::glfw::hint_value_e::dont_care             );
 #ifdef FOX_DEBUG
-            ::glfw::window_hint(::glfw::e_hint::opengl_debug_context , fox::true_);
+            ::glfw::window_hint(::glfw::hint_e::opengl_debug_context , fox::true_);
 #endif
 
             handle_ = ::glfw::create_window(title_, dimensions);

@@ -90,21 +90,21 @@ export namespace fox::input::api::glfw
         void glfw_input_key_callback   (::glfw::window_t*, input::key      key   , fox::int32_t    , fox::int32_t action, input::modifier)
         {
             if (fox::compare_enum<std::less>(key, input::key_min) || fox::compare_enum<std::greater>(key, input::key_max)) return;
-            switch (::glfw::e_input_action{ action })
+            switch (::glfw::input_action_e{ action })
             {
-                case ::glfw::e_input_action::release: activeKeys_.set(std::to_underlying(key), fox::false_); break;
-                case ::glfw::e_input_action::press  : activeKeys_.set(std::to_underlying(key), fox::true_ ); break;
-                case ::glfw::e_input_action::repeat :                                                       break;
+                case ::glfw::input_action_e::release: activeKeys_.set(std::to_underlying(key), fox::false_); break;
+                case ::glfw::input_action_e::press  : activeKeys_.set(std::to_underlying(key), fox::true_ ); break;
+                case ::glfw::input_action_e::repeat :                                                       break;
             }
         }
         void glfw_input_button_callback(::glfw::window_t*, input::button   button,                   fox::int32_t action, input::modifier)
         {
             if (fox::compare_enum<std::less>(button, input::button_min) || fox::compare_enum<std::greater>(button, input::button_max)) return;
-            switch (::glfw::e_input_action{ action })
+            switch (::glfw::input_action_e{ action })
             {
-                case ::glfw::e_input_action::release: activeButtons_.set(std::to_underlying(button), fox::false_); break;
-                case ::glfw::e_input_action::press  : activeButtons_.set(std::to_underlying(button), fox::true_ ); break;
-                case ::glfw::e_input_action::repeat :                                                             break;
+                case ::glfw::input_action_e::release: activeButtons_.set(std::to_underlying(button), fox::false_); break;
+                case ::glfw::input_action_e::press  : activeButtons_.set(std::to_underlying(button), fox::true_ ); break;
+                case ::glfw::input_action_e::repeat :                                                             break;
             }
         }
         void glfw_input_cursor_callback(::glfw::window_t*, fox::float64_t  x     , fox::float64_t y                                      )

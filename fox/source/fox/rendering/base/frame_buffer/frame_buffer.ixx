@@ -2,7 +2,6 @@ export module fox.rendering.base.frame_buffer;
 
 import std;
 import fox.core.types;
-import fox.core.enumeration;
 import fox.rendering.base.cubemap;
 import fox.rendering.base.texture;
 import fox.rendering.base.render_buffer;
