@@ -11,7 +11,7 @@ export namespace fox::gfx
     class render_buffer
     {
     public:
-        using format_e = api::render_buffer::Format;
+        using format_e = api::render_buffer::format_e;
 
         explicit render_buffer(std::shared_ptr<impl::render_buffer> _)
             : _{ _ } {}
@@ -44,7 +44,7 @@ export namespace fox::gfx
     class render_buffer_ms
     {
     public:
-        using format_e = api::render_buffer::Format;
+        using format_e = api::render_buffer::format_e;
 
         explicit render_buffer_ms(std::shared_ptr<impl::render_buffer_ms> _)
             : _{ _ } {}

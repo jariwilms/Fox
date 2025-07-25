@@ -9,7 +9,7 @@ export namespace fox::gfx::api::gl
     class render_buffer : public gl::object
     {
     public:
-        using format_e = api::render_buffer::Format;
+        using format_e = api::render_buffer::format_e;
 
         render_buffer(format_e format, const gl::vector2u& dimensions)
             : gl::object{ gl::create_render_buffer(), [](auto* handle) { gl::delete_render_buffer(*handle); }}
@@ -39,7 +39,7 @@ export namespace fox::gfx::api::gl
     class render_buffer_ms : public gl::object
     {
     public:
-        using format_e = api::render_buffer::Format;
+        using format_e = api::render_buffer::format_e;
 
         render_buffer_ms(format_e format, const gl::vector2u& dimensions, gl::uint32_t samples)
             : gl::object{ gl::create_render_buffer(), [](auto* handle) { gl::delete_render_buffer(*handle); }}

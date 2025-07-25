@@ -10,7 +10,7 @@ export namespace fox::gfx::api::gl
     class shader : public gl::object
     {
     public:
-        using stage_e = api::shader::Stage;
+        using stage_e = api::shader::stage;
 
         shader(stage_e stage, std::span<const gl::byte_t> binary)
             : gl::object{ gl::create_program(), [](auto* handle) { gl::delete_program(*handle); }}

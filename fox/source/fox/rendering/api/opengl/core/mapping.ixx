@@ -202,23 +202,23 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    auto map_render_buffer_format       (api::render_buffer::Format format) -> gl::render_buffer_format_e
+    auto map_render_buffer_format       (api::render_buffer::format_e format) -> gl::render_buffer_format_e
     {
         switch (format)
         {
-            using enum api::render_buffer::Format;
+            using enum api::render_buffer::format_e;
 
-            case R8_UNORM         : return gl::render_buffer_format_e::r8;
-            case RG8_UNORM        : return gl::render_buffer_format_e::rg8;
-            case RGB8_UNORM       : return gl::render_buffer_format_e::rgb8;
-            case RGBA8_UNORM      : return gl::render_buffer_format_e::rgba8;
-            case RGBA8_SRGB       : return gl::render_buffer_format_e::rgba8_srgb;
-            case D16_UNORM        : return gl::render_buffer_format_e::d16_unorm;
-            case D24_UNORM        : return gl::render_buffer_format_e::d24_unorm;
-            case D32_FLOAT        : return gl::render_buffer_format_e::d32_float;
-            case D24_UNORM_S8_UINT: return gl::render_buffer_format_e::d24_unorm_s8_uint;
-            case D32_FLOAT_S8_UINT: return gl::render_buffer_format_e::d32_float_s8_uint;
-            case S8_UINT          : return gl::render_buffer_format_e::s8_uint;
+            case r8_unorm         : return gl::render_buffer_format_e::r8;
+            case rg8_unorm        : return gl::render_buffer_format_e::rg8;
+            case rgb8_unorm       : return gl::render_buffer_format_e::rgb8;
+            case rgba8_unorm      : return gl::render_buffer_format_e::rgba8;
+            case rgba8_srgb       : return gl::render_buffer_format_e::rgba8_srgb;
+            case d16_unorm        : return gl::render_buffer_format_e::d16_unorm;
+            case d24_unorm        : return gl::render_buffer_format_e::d24_unorm;
+            case d32_float        : return gl::render_buffer_format_e::d32_float;
+            case d24_unorm_s8_uint: return gl::render_buffer_format_e::d24_unorm_s8_uint;
+            case d32_float_s8_uint: return gl::render_buffer_format_e::d32_float_s8_uint;
+            case s8_uint          : return gl::render_buffer_format_e::s8_uint;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
@@ -361,129 +361,129 @@ export namespace fox::gfx::api::gl
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_frame_buffer_target        (api::frame_buffer::Target  target) -> gl::frame_buffer_target_e
+    auto map_frame_buffer_target        (api::frame_buffer::target_e  target) -> gl::frame_buffer_target_e
     {
         switch (target)
         {
-            using enum api::frame_buffer::Target;
+            using enum api::frame_buffer::target_e;
 
-            case Read : return gl::frame_buffer_target_e::read;
-            case Write: return gl::frame_buffer_target_e::write;
+            case read : return gl::frame_buffer_target_e::read;
+            case write: return gl::frame_buffer_target_e::write;
 
             default: throw std::invalid_argument{ "Invalid target!" };
         }
     }
-    auto map_frame_buffer_attachment    (api::frame_buffer::Attachment attachment) -> gl::frame_buffer_attachment_e
+    auto map_frame_buffer_attachment    (api::frame_buffer::attachment_e attachment) -> gl::frame_buffer_attachment_e
     {
         switch (attachment)
         {
-            using enum api::frame_buffer::Attachment;
+            using enum api::frame_buffer::attachment_e;
 
-            case Color0      : return gl::frame_buffer_attachment_e::color0; 
-            case Color1      : return gl::frame_buffer_attachment_e::color1; 
-            case Color2      : return gl::frame_buffer_attachment_e::color2; 
-            case Color3      : return gl::frame_buffer_attachment_e::color3; 
-            case Color4      : return gl::frame_buffer_attachment_e::color4; 
-            case Color5      : return gl::frame_buffer_attachment_e::color5; 
-            case Color6      : return gl::frame_buffer_attachment_e::color6; 
-            case Color7      : return gl::frame_buffer_attachment_e::color7; 
+            case color0      : return gl::frame_buffer_attachment_e::color0; 
+            case color1      : return gl::frame_buffer_attachment_e::color1; 
+            case color2      : return gl::frame_buffer_attachment_e::color2; 
+            case color3      : return gl::frame_buffer_attachment_e::color3; 
+            case color4      : return gl::frame_buffer_attachment_e::color4; 
+            case color5      : return gl::frame_buffer_attachment_e::color5; 
+            case color6      : return gl::frame_buffer_attachment_e::color6; 
+            case color7      : return gl::frame_buffer_attachment_e::color7; 
 
-            case Depth       : return gl::frame_buffer_attachment_e::depth;
-            case Stencil     : return gl::frame_buffer_attachment_e::stencil;
-            case DepthStencil: return gl::frame_buffer_attachment_e::depth_stencil;
+            case depth       : return gl::frame_buffer_attachment_e::depth;
+            case stencil     : return gl::frame_buffer_attachment_e::stencil;
+            case depth_stencil: return gl::frame_buffer_attachment_e::depth_stencil;
 
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    auto map_program_stage              (api::shader::Stage stage) -> gl::program_stage_e
+    auto map_program_stage              (api::shader::stage stage) -> gl::program_stage_e
     {
         switch (stage)
         {
-            using enum api::shader::Stage;
+            using enum api::shader::stage;
 
-            case Vertex                : return gl::program_stage_e::vertex;
-            case TessellationControl   : return gl::program_stage_e::tessellation_control;
-            case TessellationEvaluation: return gl::program_stage_e::tessellation_evaluation;
-            case Geometry              : return gl::program_stage_e::geometry;
-            case Fragment              : return gl::program_stage_e::fragment;
-            case Compute               : return gl::program_stage_e::compute;
+            case vertex                 : return gl::program_stage_e::vertex;
+            case tessellation_control   : return gl::program_stage_e::tessellation_control;
+            case tessellation_evaluation: return gl::program_stage_e::tessellation_evaluation;
+            case geometry               : return gl::program_stage_e::geometry;
+            case fragment               : return gl::program_stage_e::fragment;
+            case compute                : return gl::program_stage_e::compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }                                                                      
-    auto map_shader_type                (api::shader::Stage stage) -> gl::shader_type_e
+    auto map_shader_type                (api::shader::stage stage) -> gl::shader_type_e
     {
         switch (stage)
         {
-            using enum api::shader::Stage;
+            using enum api::shader::stage;
 
-            case Vertex                : return gl::shader_type_e::vertex;
-            case TessellationControl   : return gl::shader_type_e::tessellation_control;
-            case TessellationEvaluation: return gl::shader_type_e::tessellation_evaluation;
-            case Geometry              : return gl::shader_type_e::geometry;
-            case Fragment              : return gl::shader_type_e::fragment;
-            case Compute               : return gl::shader_type_e::compute;
+            case vertex                 : return gl::shader_type_e::vertex;
+            case tessellation_control   : return gl::shader_type_e::tessellation_control;
+            case tessellation_evaluation: return gl::shader_type_e::tessellation_evaluation;
+            case geometry               : return gl::shader_type_e::geometry;
+            case fragment               : return gl::shader_type_e::fragment;
+            case compute                : return gl::shader_type_e::compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    auto map_query_target               (api::Query::Target target) -> gl::query_target_e
+    auto map_query_target               (api::query::target_e target) -> gl::query_target_e
     {
         switch (target)
         {
-            using enum api::Query::Target;
+            using enum api::query::target_e;
 
-            case AnySamplesPassed                        : return gl::query_target_e::any_samples_passed;
-            case AnySamplesPassedConservative            : return gl::query_target_e::any_samples_passed_conservative;
-            case ClippingInputPrimitives                 : return gl::query_target_e::clipping_input_primitives;
-            case ClippingOutputPrimitives                : return gl::query_target_e::clipping_output_primitives;
-            case ComputeShaderInvocations                : return gl::query_target_e::compute_shader_invocations;
-            case FragmentShaderInvocations               : return gl::query_target_e::fragment_shader_invocations;
-            case GeometryShaderInvocations               : return gl::query_target_e::geometry_shader_invocations;
-            case GeometryShaderPrimitivesEmitted         : return gl::query_target_e::geometry_shader_primitives_emitted;
-            case PrimitivesGenerated                     : return gl::query_target_e::primitives_generated;
-            case PrimitivesSubmitted                     : return gl::query_target_e::primitives_submitted;
-            case SamplesPassed                           : return gl::query_target_e::samples_passed;
-            case TessellationControlShaderPatches        : return gl::query_target_e::tessellation_control_shader_patches;
-            case TessellationEvaluationShaderInvocations : return gl::query_target_e::tessellation_evaluation_shader_invocations;
-            case TimeElapsed                             : return gl::query_target_e::time_elapsed;
-            case Timestamp                               : return gl::query_target_e::timestamp;
-            case TransformFeedbackOverflow               : return gl::query_target_e::transform_feedback_overflow;
-            case TransformFeedbackPrimitivesWritten      : return gl::query_target_e::transform_feedback_primitives_written;
-            case TransformFeedbackStreamOverflow         : return gl::query_target_e::transform_feedback_stream_overflow;
-            case VertexShaderInvocations                 : return gl::query_target_e::vertex_shader_invocations;
-            case VerticesSubmitted                       : return gl::query_target_e::vertices_submitted;
+            case any_samples_passed                        : return gl::query_target_e::any_samples_passed;
+            case any_samples_passed_conservative           : return gl::query_target_e::any_samples_passed_conservative;
+            case clipping_input_primitives                 : return gl::query_target_e::clipping_input_primitives;
+            case clipping_output_primitives                : return gl::query_target_e::clipping_output_primitives;
+            case compute_shader_invocations                : return gl::query_target_e::compute_shader_invocations;
+            case fragment_shader_invocations               : return gl::query_target_e::fragment_shader_invocations;
+            case geometry_shader_invocations               : return gl::query_target_e::geometry_shader_invocations;
+            case geometry_shader_primitives_emitted        : return gl::query_target_e::geometry_shader_primitives_emitted;
+            case primitives_generated                      : return gl::query_target_e::primitives_generated;
+            case primitives_submitted                      : return gl::query_target_e::primitives_submitted;
+            case samples_passed                            : return gl::query_target_e::samples_passed;
+            case tessellation_control_shader_patches       : return gl::query_target_e::tessellation_control_shader_patches;
+            case tessellation_evaluation_shader_invocations: return gl::query_target_e::tessellation_evaluation_shader_invocations;
+            case time_elapsed                              : return gl::query_target_e::time_elapsed;
+            case timestamp                                 : return gl::query_target_e::timestamp;
+            case transform_feedback_overflow               : return gl::query_target_e::transform_feedback_overflow;
+            case transform_feedback_primitives_written     : return gl::query_target_e::transform_feedback_primitives_written;
+            case transform_feedback_stream_overflow        : return gl::query_target_e::transform_feedback_stream_overflow;
+            case vertex_shader_invocations                 : return gl::query_target_e::vertex_shader_invocations;
+            case vertices_submitted                        : return gl::query_target_e::vertices_submitted;
 
             default: throw std::invalid_argument{ "Invalid target!" };
         }
     }
-    auto map_depth_function             (api::RenderState::DepthFunction depthFunction) -> gl::depth_function_e
+    auto map_depth_function             (api::render_state::depth_function depthFunction) -> gl::depth_function_e
     {
         switch (depthFunction)
         {
-            using enum api::RenderState::DepthFunction;
+            using enum api::render_state::depth_function;
 
-            case Always      : return gl::depth_function_e::always;
-            case Never       : return gl::depth_function_e::never;
-            case Equal       : return gl::depth_function_e::equal;
-            case NotEqual    : return gl::depth_function_e::not_equal;
-            case Less        : return gl::depth_function_e::less;
-            case Greater     : return gl::depth_function_e::greater;
-            case LessEqual   : return gl::depth_function_e::less_equal;
-            case GreaterEqual: return gl::depth_function_e::greater_equal;
+            case always      : return gl::depth_function_e::always;
+            case never       : return gl::depth_function_e::never;
+            case equal       : return gl::depth_function_e::equal;
+            case notequal    : return gl::depth_function_e::not_equal;
+            case less        : return gl::depth_function_e::less;
+            case greater     : return gl::depth_function_e::greater;
+            case lessequal   : return gl::depth_function_e::less_equal;
+            case greaterequal: return gl::depth_function_e::greater_equal;
 
             default: throw std::invalid_argument{ "Invalid function!" };
         }
     }
-    auto map_culling_face               (api::RenderState::FaceCulling cullingFace) -> gl::culling_facet_e
+    auto map_culling_face               (api::render_state::face_culling cullingFace) -> gl::culling_facet_e
     {
         switch (cullingFace)
         {
-            using enum api::RenderState::FaceCulling;
+            using enum api::render_state::face_culling;
 
-            case Front    : return gl::culling_facet_e::front;
-            case Back     : return gl::culling_facet_e::back;
-            case FrontBack: return gl::culling_facet_e::front_and_back;
+            case front     : return gl::culling_facet_e::front;
+            case back      : return gl::culling_facet_e::back;
+            case front_back: return gl::culling_facet_e::front_back;
 
             default: throw std::invalid_argument{ "Invalid face!" };
         }

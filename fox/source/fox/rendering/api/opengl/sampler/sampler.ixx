@@ -9,7 +9,7 @@ export namespace fox::gfx::api::gl
 	class sampler : public gl::object
 	{
 	public:
-		using parameter_e = api::Sampler::Parameter;
+		using parameter_e = api::sampler::parameter;
 
 		sampler()
 			: gl::object{ gl::create_sampler(), [](auto* handle) { gl::delete_sampler(*handle); } } {}

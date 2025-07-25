@@ -11,7 +11,7 @@ export namespace fox::gfx
     class shader
     {
     public:
-        using stage_e = api::shader::Stage;
+        using stage_e = api::shader::stage;
 
         explicit shader(std::shared_ptr<impl::shader> _)
             : _{ _ } {}

@@ -2,18 +2,16 @@ export module fox.rendering.base.shader;
 
 export namespace fox::gfx::api
 {
-    class shader
+    struct shader
     {
-    public:
-        enum class Stage
+        enum class stage
         {
-            Vertex, 
-            TessellationControl, 
-            TessellationEvaluation, 
-            Geometry, 
-            Fragment, 
-
-            Compute, 
+            vertex, 
+            tessellation_control,
+            tessellation_evaluation,
+            geometry, 
+            fragment, 
+            compute, 
         };
     };
 }

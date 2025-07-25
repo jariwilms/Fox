@@ -4,11 +4,10 @@ import std;
 
 export namespace fox::gfx::api
 {
-    class pipeline
+    struct pipeline
     {
-    public:
         template<typename T>
-        struct Layout
+        struct layout
         {
             std::shared_ptr<T> vert{};
             std::shared_ptr<T> tesc{};

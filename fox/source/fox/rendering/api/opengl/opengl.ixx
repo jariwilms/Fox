@@ -1982,7 +1982,7 @@ export namespace fox::gfx::api::gl
     }
     void polygon_mode                               (gl::polygon_mode_e mode)
     {
-        glPolygonMode(gl::to_underlying(gl::polygon_face_e::front_and_back), gl::to_underlying(mode));
+        glPolygonMode(gl::to_underlying(gl::polygon_face_e::front_back), gl::to_underlying(mode));
     }
     void polygon_offset_clamp                       (gl::float32_t factor, gl::float32_t units, gl::float32_t clamp)
     {

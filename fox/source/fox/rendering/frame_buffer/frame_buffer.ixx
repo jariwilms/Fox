@@ -14,10 +14,10 @@ export namespace fox::gfx
     class frame_buffer
     {
     public:
-        using attachment_e    = api::frame_buffer::Attachment;
-        using specification_e = api::frame_buffer::Specification;
-        using surface_e       = api::frame_buffer::Surface;
-        using target_e        = api::frame_buffer::Target;
+        using attachment_e    = api::frame_buffer::attachment_e;
+        using specification_e = api::frame_buffer::specification;
+        using surface_e       = api::frame_buffer::surface_e;
+        using target_e        = api::frame_buffer::target_e;
 
         explicit frame_buffer(std::shared_ptr<impl::frame_buffer> _)
             : _{ _ } {}
@@ -105,10 +105,10 @@ export namespace fox::gfx
     class frame_buffer_ms
     {
     public:
-        using attachment_e    = api::frame_buffer::Attachment;
-        using specification_e = api::frame_buffer::SpecificationMultisample;
-        using surface_e       = api::frame_buffer::Surface;
-        using target_e        = api::frame_buffer::Target;
+        using attachment_e    = api::frame_buffer::attachment_e;
+        using specification_e = api::frame_buffer::specification_ms;
+        using surface_e       = api::frame_buffer::surface_e;
+        using target_e        = api::frame_buffer::target_e;
 
         explicit frame_buffer_ms(std::shared_ptr<impl::frame_buffer_ms> _)
             : _{ _ } {}

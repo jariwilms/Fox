@@ -6,7 +6,7 @@ import fox.rendering.base.render_state;
 
 export namespace fox::gfx::api::gl
 {
-    class render_state : public api::RenderState
+    class render_state : public api::render_state
     {
     public:
         render_state() = delete;

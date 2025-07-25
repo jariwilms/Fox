@@ -32,23 +32,17 @@ export namespace fox::gfx::api
             using RF = gfx::render_buffer::format_e;
             using CF = gfx::cubemap::format_e;
             using FA = gfx::frame_buffer::attachment_e;
-            {
-                "Position",     FA::Color0      , TF::RGB16_FLOAT,
-                "Albedo",       FA::Color1      , TF::RGBA8_UNORM,
-                "Normal",       FA::Color2      , TF::RGB16_FLOAT,
-                "ARM",          FA::Color3      , TF::RGB16_UNORM,
-                "DepthStencil", FA::DepthStencil, RF::D24_UNORM_S8_UINT;
-            }
+
             std::array<FS, 5> gBufferManifest {
                 FS{ "Position",     TF::RGB16_FLOAT },
                 FS{ "Albedo",       TF::RGBA8_UNORM  },
                 FS{ "Normal",       TF::RGB16_FLOAT },
                 FS{ "ARM",          TF::RGB16_UNORM  },
-                FS{ "DepthStencil", RF::D24_UNORM_S8_UINT },
+                FS{ "DepthStencil", RF::d24_unorm_s8_uint },
             };
-            std::array<FS, 2> hdrBufferManifest { FS{ "Color", TF::RGBA16_FLOAT }, FS{ "Depth", RF::D24_UNORM_S8_UINT } };
+            std::array<FS, 2> hdrBufferManifest { FS{ "Color", TF::RGBA16_FLOAT }, FS{ "Depth", RF::d24_unorm_s8_uint } };
             std::array<FS, 1> sBufferManifest   { FS{ "Depth", TF::D24_UNORM    }                                       };
-            std::array<FS, 2> pBufferManifest   { FS{ "Color", TF::RGBA16_UNORM }, FS{ "Depth", RF::D24_UNORM_S8_UINT } };
+            std::array<FS, 2> pBufferManifest   { FS{ "Color", TF::RGBA16_UNORM }, FS{ "Depth", RF::d24_unorm_s8_uint } };
             std::array<FS, 1> scBufferManifest  { FS{ "Depth", CF::D24_UNORM    }                                       };
 
 
@@ -126,7 +120,7 @@ export namespace fox::gfx::api
 
             //Load HDR environment texture
             const fox::vector2u envDimensions{ 512u, 512u };
-            const std::array<gfx::frame_buffer::specification_e, 1> manifest{ FS{ "Depth", RF::D24_UNORM }, };
+            const std::array<gfx::frame_buffer::specification_e, 1> manifest{ FS{ "Depth", RF::d24_unorm }, };
             auto frameBuffer     = gfx::frame_buffer::create(envDimensions, manifest);
             auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::render_buffer>("Depth");
             auto hdrImage        = io::load<io::asset_e::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
@@ -143,7 +137,7 @@ export namespace fox::gfx::api
             gl::viewport(envDimensions);
             gl::frame_buffer_draw_buffer(frameBuffer->handle(), gl::frame_buffer_source_e::color0);
 
-            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::write);
             hdrTex->bind(gfx::binding_t{ 0u });
             cva->bind();
 
@@ -177,7 +171,7 @@ export namespace fox::gfx::api
             gl::frame_buffer_draw_buffer(frameBuffer->handle(), gl::frame_buffer_source_e::color0);
             gl::render_buffer_storage(renderBuffer->handle(), gl::render_buffer_format_e::d24_unorm, cvDimensions);
 
-            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::write);
             cva->bind();
 
             for (auto [index, view] : std::views::zip(std::views::iota(0u), captureViews))
@@ -208,7 +202,7 @@ export namespace fox::gfx::api
             matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
-            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::write);
             cva->bind();
 
             fox::uint32_t maxMipLevels{ preFilterCubemap_->mipmap_levels() };
@@ -392,7 +386,7 @@ export namespace fox::gfx::api
 
 
 
-            ssaoBuffer_->bind(gfx::frame_buffer::target_e::Write);
+            ssaoBuffer_->bind(gfx::frame_buffer::target_e::write);
 
             pipelines_.at("SSAO")->bind();
             gBuffer_->bind_surface("Position", gfx::binding_t{ 0u });
@@ -422,7 +416,7 @@ export namespace fox::gfx::api
 
 
 
-            pBuffers_.at(0)->bind(gfx::frame_buffer::target_e::Write);
+            pBuffers_.at(0)->bind(gfx::frame_buffer::target_e::write);
             pipelines_.at("Background")->bind();
             environmentCubemap_->bind(gfx::binding_t{ 0u });
 
@@ -471,7 +465,7 @@ export namespace fox::gfx::api
     private:
         void render_meshes(std::shared_ptr<gfx::frame_buffer> frameBuffer, std::shared_ptr<gfx::pipeline> shader)
         {
-            frameBuffer->bind(gfx::frame_buffer::target_e::Write);
+            frameBuffer->bind(gfx::frame_buffer::target_e::write);
             shader->bind();
 
             gl::viewport      (frameBuffer->dimensions());
@@ -504,7 +498,7 @@ export namespace fox::gfx::api
         }
         void render_lighting(std::shared_ptr<gfx::frame_buffer> target)
         {
-            target->bind(api::frame_buffer::Target::Write);
+            target->bind(api::frame_buffer::target_e::write);
             gl::clear(gl::buffer_mask_e::all);
 
             gl::blit_frame_buffer(gBuffer_->handle(), target->handle(), gl::buffer_mask_e::depth, gl::frame_buffer_filter_e::nearest, gBuffer_->dimensions(), target->dimensions());

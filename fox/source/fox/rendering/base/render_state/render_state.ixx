@@ -2,44 +2,38 @@ export module fox.rendering.base.render_state;
 
 export namespace fox::gfx::api
 {
-    class RenderState
+    struct render_state
     {
-    public:
-        RenderState() = delete;
-
-        enum class Parameter
+        enum class parameter
         {
-            ClearColor, 
-            DepthFunction, 
-            DepthTestingAlpha, 
-            FaceCulling, 
-            FaceCullingAlpha, 
-            FrontFace, 
+            clear_color,
+            depth_function,
+            depth_testing_alpha,
+            face_culling,
+            face_culling_alpha,
+            front_face,
         };
-        enum class DepthFunction
+        enum class depth_function
         {
-            Always, 
-            Never, 
-
-            Equal, 
-            NotEqual, 
-
-            Less, 
-            LessEqual, 
-
-            Greater, 
-            GreaterEqual, 
+            always, 
+            never, 
+            equal, 
+            notequal, 
+            less, 
+            greater, 
+            lessequal, 
+            greaterequal, 
         };
-        enum class FaceCulling
+        enum class face_culling
         {
-            Front, 
-            Back, 
-            FrontBack, 
+            front, 
+            back, 
+            front_back,
         };
-        enum class FrontFace
+        enum class front_face
         {
-            Clockwise, 
-            CounterClockwise, 
+            clockwise, 
+            counter_clockwise,
         };
     };
 }

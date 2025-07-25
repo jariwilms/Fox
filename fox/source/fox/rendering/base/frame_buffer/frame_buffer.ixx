@@ -9,59 +9,57 @@ import fox.rendering.base.render_buffer;
 
 export namespace fox::gfx::api
 {
-    class frame_buffer
+    struct frame_buffer
     {
-    public:
-        enum class Attachment
+        enum class attachment_e
         {
-            Color0, 
-            Color1, 
-            Color2, 
-            Color3, 
-            Color4, 
-            Color5, 
-            Color6, 
-            Color7, 
-
-            Depth, 
-            Stencil, 
-            DepthStencil, 
+            color0, 
+            color1, 
+            color2, 
+            color3, 
+            color4, 
+            color5, 
+            color6, 
+            color7, 
+            depth, 
+            stencil, 
+            depth_stencil, 
         };
-        struct     Specification
+        struct     specification
         {
-            using format_v = std::variant<api::Texture::Format, api::cubemap::Format, api::render_buffer::Format>;
+            using format_v = std::variant<api::Texture::Format, api::cubemap::Format, api::render_buffer::format_e>;
 
-            Specification(const std::string& identifier, format_v format)
+            specification(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}
 
-            std::string identifier{};
+            std::string identifier;
             format_v    format;
         };
-        struct     SpecificationMultisample
+        struct     specification_ms
         {
-            using format_v = std::variant<api::Texture::Format, api::render_buffer::Format>;
+            using format_v = std::variant<api::Texture::Format, api::render_buffer::format_e>;
 
-            SpecificationMultisample(const std::string& identifier, format_v format)
+            specification_ms(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}
 
-            std::string identifier{};
+            std::string identifier;
             format_v    format;
         };
-        enum class Surface
+        enum class surface_e
         {
             texture, 
             cubemap,
             render_buffer,
         };
-        enum class Target
+        enum class target_e
         {
-            Read, 
-            Write, 
+            read, 
+            write, 
         };
 
-        friend constexpr auto operator+(api::frame_buffer::Attachment first, fox::uint32_t second) -> api::frame_buffer::Attachment
+        friend constexpr auto operator+(attachment_e first, fox::uint32_t second) -> api::frame_buffer::attachment_e
         {
-            return static_cast<api::frame_buffer::Attachment>(std::to_underlying(first) + second);
+            return static_cast<api::frame_buffer::attachment_e>(std::to_underlying(first) + second);
         };
     };
 };

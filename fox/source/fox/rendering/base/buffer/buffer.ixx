@@ -2,17 +2,15 @@ export module fox.rendering.base.buffer;
 
 export namespace fox::gfx::api
 {
-    class Buffer
+    struct buffer
     {
-    public:
-        enum class Access
+        enum class access
         {
-            Read, 
-            Write, 
-            ReadWrite, 
-
-            Persistent, 
-            Coherent, 
+            read, 
+            write, 
+            read_write, 
+            persistent, 
+            coherent, 
         };
     };
 }

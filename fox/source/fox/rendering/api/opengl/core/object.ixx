@@ -28,11 +28,7 @@ export namespace fox::gfx::api::gl
 
         auto operator=(object&& other) noexcept -> object&
         {
-            if (this != &other)
-            {
-                handle_ = std::exchange(other.handle_, handle_);
-            }
-
+            if (this != &other) handle_ = std::exchange(other.handle_, handle_);
             return *this;
         }
 

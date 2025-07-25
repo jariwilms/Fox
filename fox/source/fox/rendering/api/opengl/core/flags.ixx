@@ -290,9 +290,9 @@ export namespace fox::gfx::api::gl
     };
     enum class culling_facet_e : gl::enum_t
     {
-        front          = GL_FRONT,
-        back           = GL_BACK,
-        front_and_back = GL_FRONT_AND_BACK,
+        front      = GL_FRONT,
+        back       = GL_BACK,
+        front_back = GL_FRONT_AND_BACK,
     };
     enum class data_e : gl::enum_t
     {
@@ -704,27 +704,27 @@ export namespace fox::gfx::api::gl
     };
     enum class frame_buffer_source_e : gl::enum_t
     {
-        none           = GL_NONE, 
+        none        = GL_NONE, 
 
-        front_left     = GL_FRONT_LEFT,
-        front_right    = GL_FRONT_RIGHT,
-        back_left      = GL_BACK_LEFT,
-        back_right     = GL_BACK_RIGHT,
-        front_and_back = GL_FRONT_AND_BACK,
+        front_left  = GL_FRONT_LEFT,
+        front_right = GL_FRONT_RIGHT,
+        back_left   = GL_BACK_LEFT,
+        back_right  = GL_BACK_RIGHT,
+        front_back  = GL_FRONT_AND_BACK,
 
-        front          = front_left, 
-        back           = back_left, 
-        left           = GL_LEFT, 
-        right          = GL_RIGHT, 
+        front       = front_left, 
+        back        = back_left, 
+        left        = GL_LEFT, 
+        right       = GL_RIGHT, 
 
-        color0         = GL_COLOR_ATTACHMENT0, 
-        color1         = GL_COLOR_ATTACHMENT1, 
-        color2         = GL_COLOR_ATTACHMENT2, 
-        color3         = GL_COLOR_ATTACHMENT3, 
-        color4         = GL_COLOR_ATTACHMENT4, 
-        color5         = GL_COLOR_ATTACHMENT5, 
-        color6         = GL_COLOR_ATTACHMENT6, 
-        color7         = GL_COLOR_ATTACHMENT7, 
+        color0      = GL_COLOR_ATTACHMENT0, 
+        color1      = GL_COLOR_ATTACHMENT1, 
+        color2      = GL_COLOR_ATTACHMENT2, 
+        color3      = GL_COLOR_ATTACHMENT3, 
+        color4      = GL_COLOR_ATTACHMENT4, 
+        color5      = GL_COLOR_ATTACHMENT5, 
+        color6      = GL_COLOR_ATTACHMENT6, 
+        color7      = GL_COLOR_ATTACHMENT7, 
     };
     enum class frame_buffer_status_e : gl::enum_t
     {
@@ -999,7 +999,7 @@ export namespace fox::gfx::api::gl
     };
     enum class polygon_face_e : gl::enum_t
     {
-        front_and_back = GL_FRONT_AND_BACK, 
+        front_back = GL_FRONT_AND_BACK,
     };
     enum class polygon_mode_e : gl::enum_t
     {
@@ -1307,9 +1307,9 @@ export namespace fox::gfx::api::gl
     };
     enum class stencil_face_e : gl::enum_t
     {
-        front          = GL_FRONT,
-        back           = GL_BACK,
-        front_and_back = GL_FRONT_AND_BACK,
+        front      = GL_FRONT,
+        back       = GL_BACK,
+        front_back = GL_FRONT_AND_BACK,
     };
     enum class stencil_function_e : gl::enum_t
     {
