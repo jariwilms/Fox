@@ -19,28 +19,28 @@ export namespace fox::input
         return api::handler->any_button_active();
     }
 
-    auto key_active           (input::key    code) -> fox::bool_t
+    auto key_active           (input::key_e    code) -> fox::bool_t
     {
         return api::handler->key_active(code);
     }
-    auto key_pressed          (input::key    code) -> fox::bool_t
+    auto key_pressed          (input::key_e    code) -> fox::bool_t
     {
         return api::handler->key_pressed(code);
     }
-    auto key_released         (input::key    code) -> fox::bool_t
+    auto key_released         (input::key_e    code) -> fox::bool_t
     {
         return api::handler->key_released(code);
     }
 
-    auto button_active        (input::button code) -> fox::bool_t
+    auto button_active        (input::button_e code) -> fox::bool_t
     {
         return api::handler->button_active(code);
     }
-    auto button_pressed       (input::button code) -> fox::bool_t
+    auto button_pressed       (input::button_e code) -> fox::bool_t
     {
         return api::handler->button_pressed(code);
     }
-    auto button_released      (input::button code) -> fox::bool_t
+    auto button_released      (input::button_e code) -> fox::bool_t
     {
         return api::handler->button_released(code);
     }

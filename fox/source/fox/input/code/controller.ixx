@@ -5,7 +5,7 @@ import fox.core.types;
 
 export namespace fox::input
 {
-    enum class controller : fox::int32_t
+    enum class controller_e : fox::int32_t
     {
         hat_centered  = 0x0 << 0u, 
         hat_up        = 0x1 << 0u, 
@@ -19,6 +19,6 @@ export namespace fox::input
         hat_left_down  = hat_left  | hat_down, 
     };
 
-    constexpr auto controller_min = input::controller::hat_centered;
-    constexpr auto controller_max = input::controller::hat_left    ;
+    constexpr auto controller_min = input::controller_e::hat_centered;
+    constexpr auto controller_max = input::controller_e::hat_left    ;
 }

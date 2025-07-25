@@ -5,7 +5,7 @@ import fox.core.types;
 
 export namespace fox::input
 {
-    enum class key : fox::int32_t
+    enum class key_e : fox::int32_t
     {
         space        =  32, apostrophe    =  39, 
         comma        =  44, minus         =  45, 
@@ -80,6 +80,6 @@ export namespace fox::input
         menu         = 348, 
     };
 
-    constexpr auto key_min = input::key::space;
-    constexpr auto key_max = input::key::menu ;
+    constexpr auto key_min = input::key_e::space;
+    constexpr auto key_max = input::key_e::menu ;
 }

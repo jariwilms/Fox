@@ -5,7 +5,7 @@ import fox.core.types;
 
 export namespace fox::input
 {
-    enum class button : fox::int32_t
+    enum class button_e : fox::int32_t
     {
         button1 = 0, 
         button2 = 1, 
@@ -23,6 +23,6 @@ export namespace fox::input
         forward      = button5, 
     };
 
-    constexpr auto button_min = input::button::button1;
-    constexpr auto button_max = input::button::button8;
+    constexpr auto button_min = input::button_e::button1;
+    constexpr auto button_max = input::button_e::button8;
 }

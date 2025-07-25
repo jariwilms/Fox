@@ -5,7 +5,7 @@ import fox.core.types;
 
 export namespace fox::input
 {
-    enum class modifier : fox::int32_t
+    enum class modifier_e : fox::int32_t
     {
         none      = 0x0, 
 
@@ -17,6 +17,6 @@ export namespace fox::input
         num_lock  = 0x1 << 5u, 
     };
     
-    constexpr auto modifier_min = input::modifier::shift   ;
-    constexpr auto modifier_max = input::modifier::num_lock;
+    constexpr auto modifier_min = input::modifier_e::shift   ;
+    constexpr auto modifier_max = input::modifier_e::num_lock;
 }

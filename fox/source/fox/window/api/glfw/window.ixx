@@ -51,11 +51,11 @@ export namespace fox::interface::api::glfw
                 });
             ::glfw::set_key_callback              (handle_, [](::glfw::window_t*  window, fox::int32_t   key   , fox::int32_t   scancode, fox::int32_t action, fox::int32_t modifiers) 
                 { 
-                    input::api::handler->glfw_input_key_callback(window, input::key{ key }, scancode, action, input::modifier{ modifiers }); 
+                    input::api::handler->glfw_input_key_callback(window, input::key_e{ key }, scancode, action, input::modifier_e{ modifiers }); 
                 });
             ::glfw::set_mouse_button_callback     (handle_, [](::glfw::window_t*  window, fox::int32_t   button,                          fox::int32_t action, fox::int32_t modifiers)
                 {
-                    input::api::handler->glfw_input_button_callback(window, input::button{ button }, action, input::modifier{ modifiers });
+                    input::api::handler->glfw_input_button_callback(window, input::button_e{ button }, action, input::modifier_e{ modifiers });
                 });
             ::glfw::set_cursor_position_callback  (handle_, [](::glfw::window_t*  window, fox::float64_t x     , fox::float64_t y       )
                 {
