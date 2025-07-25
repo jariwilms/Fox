@@ -15,7 +15,7 @@ export namespace fox::gfx::api::gl
             , size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_                                     ,
+                handle()                                     ,
                 gl::buffer_storage_flags_e::dynamic_storage |
                 gl::buffer_storage_flags_e::read_write      |
                 gl::buffer_storage_flags_e::persistent      |
@@ -27,7 +27,7 @@ export namespace fox::gfx::api::gl
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_                                     , 
+                handle()                                     , 
                 gl::buffer_storage_flags_e::dynamic_storage |
                 gl::buffer_storage_flags_e::read_write      |
                 gl::buffer_storage_flags_e::persistent      |
@@ -38,12 +38,12 @@ export namespace fox::gfx::api::gl
         void copy      (                   std::span<const T> data)
         {
             if (gl::compare<std::greater>(data.size_bytes(), size())) throw std::invalid_argument{ "Data exceeds buffer size!" };
-            gl::buffer_data(handle_, gl::index_t{ 0u }, data);
+            gl::buffer_data(handle(), gl::index_t{ 0u }, data);
         }
         void copy_range(gl::index_t index, std::span<const T> data)
         {
             if (gl::compare<std::greater_equal>(index, count())) throw std::invalid_argument{ "Index out of range!" };
-            gl::buffer_data(handle_, index, data);
+            gl::buffer_data(handle(), index, data);
         }
 
         auto map      () -> std::weak_ptr<std::span<T>>
@@ -51,7 +51,7 @@ export namespace fox::gfx::api::gl
             unmap();
 
             auto span = gl::map_buffer_range<T>(
-                handle_                                             , 
+                handle()                                             , 
                 gl::buffer_mapping_range_access_flags_e::read_write | 
                 gl::buffer_mapping_range_access_flags_e::persistent | 
                 gl::buffer_mapping_range_access_flags_e::coherent   , 
@@ -70,7 +70,7 @@ export namespace fox::gfx::api::gl
             range.index = std::min(range.index, count() - range.count);
 
             auto span = gl::map_buffer_range<T>(
-                handle_                                                , 
+                handle()                                                , 
                 gl::buffer_mapping_range_access_flags_e::read_write    | 
                 gl::buffer_mapping_range_access_flags_e::persistent    | 
                 gl::buffer_mapping_range_access_flags_e::coherent      | 
@@ -89,7 +89,7 @@ export namespace fox::gfx::api::gl
         void unmap    ()
         {
             if (!is_mapped())               return;
-            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
+            if (!gl::unmap_buffer(handle())) throw std::runtime_error{ "Data store is undefined!" };
 
             data_ .reset();
             locks_.clear();
@@ -167,19 +167,19 @@ export namespace fox::gfx::api::gl
             , size_{ sizeof(T) }
         {
             gl::buffer_storage<T>(
-                handle_                                    , 
+                handle()                                    , 
                 gl::buffer_storage_flags_e::dynamic_storage, 
                 std::span<const T>{ &data, 1u }            );
         }
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_buffer_base(handle_, gl::buffer_base_target_e::uniform_buffer, binding);
+            gl::bind_buffer_base(handle(), gl::buffer_base_target_e::uniform_buffer, binding);
         }
 
         void copy      (const T& data)
         {
-            gl::buffer_data(handle_, gl::index_t{ 0u }, std::span<const T>{ &data, 1u });
+            gl::buffer_data(handle(), gl::index_t{ 0u }, std::span<const T>{ &data, 1u });
         }
         template<typename... T>
         void copy_slice(gl::offset_t offset, const std::tuple<T...>& data)
@@ -193,7 +193,7 @@ export namespace fox::gfx::api::gl
                     ((std::memcpy(slice.data() + offset, &element, sizeof(element)), offset += sizeof(element)), ...);
                 }, data);
 
-            gl::buffer_data<gl::byte_t>(handle_, static_cast<gl::index_t>(offset), slice);
+            gl::buffer_data<gl::byte_t>(handle(), static_cast<gl::index_t>(offset), slice);
         }
 
         auto size() const -> gl::size_t
@@ -213,7 +213,7 @@ export namespace fox::gfx::api::gl
             , size_{ static_cast<gl::size_t>(N * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_, 
+                handle(), 
                 gl::buffer_storage_flags_e::dynamic_storage | 
                 gl::buffer_storage_flags_e::read_write      |
                 gl::buffer_storage_flags_e::persistent      | 
@@ -225,7 +225,7 @@ export namespace fox::gfx::api::gl
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_                                     , 
+                handle()                                     , 
                 gl::buffer_storage_flags_e::dynamic_storage |
                 gl::buffer_storage_flags_e::read_write      |
                 gl::buffer_storage_flags_e::persistent      | 
@@ -235,24 +235,24 @@ export namespace fox::gfx::api::gl
 
         void bind      (gl::binding_t binding                 ) const
         {
-            gl::bind_buffer_base(handle_, gl::buffer_base_target_e::uniform_buffer, binding);
+            gl::bind_buffer_base(handle(), gl::buffer_base_target_e::uniform_buffer, binding);
         }
         void bind_range(gl::binding_t binding, gl::range range) const
         {
-            gl::bind_buffer_range<T>(handle_, gl::buffer_base_target_e::uniform_buffer, binding, range);
+            gl::bind_buffer_range<T>(handle(), gl::buffer_base_target_e::uniform_buffer, binding, range);
         }
 
         void copy      (                   std::span<const T, N> data)
         {
-            gl::buffer_data(handle_, gl::offset_t{ 0u }, std::span<const T>{ data });
+            gl::buffer_data(handle(), gl::offset_t{ 0u }, std::span<const T>{ data });
         }
         void copy_index(gl::index_t index,           const T   & data)
         {
-            gl::buffer_data(handle_, index, std::span<const T>{ &data, 1u });
+            gl::buffer_data(handle(), index, std::span<const T>{ &data, 1u });
         }
         void copy_range(gl::index_t index, std::span<const T   > data)
         {
-            gl::buffer_data(handle_, index, data);
+            gl::buffer_data(handle(), index, data);
         }
 
         auto map      () -> std::weak_ptr<std::span<T>>
@@ -260,7 +260,7 @@ export namespace fox::gfx::api::gl
             unmap();
 
             auto span = gl::map_buffer_range<T>(
-                handle_, 
+                handle(), 
                 gl::buffer_mapping_range_access_flags_e::read_write |
                 gl::buffer_mapping_range_access_flags_e::persistent |
                 gl::buffer_mapping_range_access_flags_e::coherent   ,
@@ -279,7 +279,7 @@ export namespace fox::gfx::api::gl
             range.index = std::min(range.index, count() - range.count);
 
             auto span = gl::map_buffer_range<T>(
-                handle_                                                ,
+                handle()                                                ,
                 gl::buffer_mapping_range_access_flags_e::read_write    |
                 gl::buffer_mapping_range_access_flags_e::persistent    |
                 gl::buffer_mapping_range_access_flags_e::coherent      |
@@ -298,7 +298,7 @@ export namespace fox::gfx::api::gl
         void unmap    ()
         {
             if (!is_mapped())               return;
-            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
+            if (!gl::unmap_buffer(handle())) throw std::runtime_error{ "Data store is undefined!" };
 
             data_ .reset();
             locks_.clear();

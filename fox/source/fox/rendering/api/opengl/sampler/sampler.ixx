@@ -16,7 +16,7 @@ export namespace fox::gfx::api::gl
 
 		void bind(gl::binding_t slot)
 		{
-			gl::bind_sampler(handle_, slot);
+			gl::bind_sampler(handle(), slot);
 		}
 	};
 }

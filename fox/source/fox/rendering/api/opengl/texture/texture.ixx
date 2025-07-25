@@ -21,17 +21,17 @@ export namespace fox::gfx::api::gl
         {
             if (filter_ != filter_e::None)
             {
-                gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
-                gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
-                gl::texture_parameter(handle_, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
+                gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
+                gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
+                gl::texture_parameter(handle(), glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
                 mipmapLevels_ = math::mipmap_levels(dimensions_);
             }
 
             const auto& [s] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
 
-            gl::texture_storage_1d(handle_, gl::map_texture_format(format_), dimensions_, mipmapLevels_);
+            gl::texture_storage_1d(handle(), gl::map_texture_format(format_), dimensions_, mipmapLevels_);
         }
         texture1d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector1u& dimensions, std::span<const gl::byte_t> data)
             : texture1d{ format, filter, wrapping, dimensions }
@@ -44,7 +44,7 @@ export namespace fox::gfx::api::gl
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(handle_, binding);
+            gl::bind_texture_unit(handle(), binding);
         }
 
         void copy      (format_e format,                      std::span<const gl::byte_t> data)
@@ -56,7 +56,7 @@ export namespace fox::gfx::api::gl
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
 
-            gl::texture_sub_image_1d(handle_, gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
+            gl::texture_sub_image_1d(handle(), gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
         }
 
         void apply_wrapping (wrapping_t wrapping)
@@ -64,11 +64,11 @@ export namespace fox::gfx::api::gl
             wrapping_ = wrapping;
 
             const auto& [s] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
         }
 
         void resize(const gl::vector1u& dimensions)
@@ -118,18 +118,18 @@ export namespace fox::gfx::api::gl
         {
             if (filter_ != filter_e::None)
             {
-                gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
-                gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
-                gl::texture_parameter(handle_, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
+                gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
+                gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
+                gl::texture_parameter(handle(), glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
                 mipmapLevels_ = math::mipmap_levels(dimensions_);
             }
 
             const auto& [s, t] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
-            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(t) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_t{ gl::map_texture_wrapping(t) });
 
-            gl::texture_storage_2d(handle_, gl::map_texture_format(format_), dimensions_, mipmapLevels_);
+            gl::texture_storage_2d(handle(), gl::map_texture_format(format_), dimensions_, mipmapLevels_);
         }
         texture2d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions, std::span<const gl::byte_t> data)
             : texture2d{ format, filter, wrapping, dimensions }
@@ -142,7 +142,7 @@ export namespace fox::gfx::api::gl
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(handle_, binding);
+            gl::bind_texture_unit(handle(), binding);
         }
 
         void copy      (format_e format,                    std::span<const gl::byte_t> data)
@@ -154,7 +154,7 @@ export namespace fox::gfx::api::gl
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
             
-            gl::texture_sub_image_2d(handle_, gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
+            gl::texture_sub_image_2d(handle(), gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
         }
 
         void apply_wrapping (wrapping_t wrapping)
@@ -162,12 +162,12 @@ export namespace fox::gfx::api::gl
             wrapping_ = wrapping;
 
             const auto& [s, t] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
-            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(t) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_t{ gl::map_texture_wrapping(t) });
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -217,19 +217,19 @@ export namespace fox::gfx::api::gl
         {
             if (filter_ != filter_e::None)
             {
-                gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
-                gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
-                gl::texture_parameter(handle_, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
+                gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
+                gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
+                gl::texture_parameter(handle(), glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
                 mipmapLevels_ = math::mipmap_levels(dimensions_);
             }
 
             const auto& [s, t, r] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
-            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(t) });
-            gl::texture_parameter(handle_, glp::wrapping_r{ gl::map_texture_wrapping(r) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_t{ gl::map_texture_wrapping(t) });
+            gl::texture_parameter(handle(), glp::wrapping_r{ gl::map_texture_wrapping(r) });
 
-            gl::texture_storage_3d(handle_, gl::map_texture_format(format_), dimensions_, mipmapLevels_);
+            gl::texture_storage_3d(handle(), gl::map_texture_format(format_), dimensions_, mipmapLevels_);
         }
         texture3d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector3u& dimensions, std::span<const gl::byte_t> data)
             : texture3d{ format, filter, wrapping, dimensions }
@@ -242,7 +242,7 @@ export namespace fox::gfx::api::gl
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(handle_, binding);
+            gl::bind_texture_unit(handle(), binding);
         }
 
         void copy      (format_e format,                      std::span<const gl::byte_t> data)
@@ -254,7 +254,7 @@ export namespace fox::gfx::api::gl
             if (data.empty()) return;
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
 
-            gl::texture_sub_image_3d(handle_, gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
+            gl::texture_sub_image_3d(handle(), gl::map_texture_format_base(format), gl::map_texture_format_type(format), gl::uint32_t{ 0u }, region, data);
         }
 
         void apply_wrapping (wrapping_t wrapping)
@@ -262,13 +262,13 @@ export namespace fox::gfx::api::gl
             wrapping_ = wrapping;
 
             const auto& [s, t, r] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
-            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(t) });
-            gl::texture_parameter(handle_, glp::wrapping_r{ gl::map_texture_wrapping(r) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_t{ gl::map_texture_wrapping(t) });
+            gl::texture_parameter(handle(), glp::wrapping_r{ gl::map_texture_wrapping(r) });
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
         }
 
         void resize(const gl::vector3u& dimensions)
@@ -314,12 +314,12 @@ export namespace fox::gfx::api::gl
             : gl::object{ gl::create_texture(gl::texture_target_e::_2d_multisample), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
-             gl::texture_storage_2d_multisample(handle_, gl::map_texture_format(format_), dimensions_, samples_);
+             gl::texture_storage_2d_multisample(handle(), gl::map_texture_format(format_), dimensions_, samples_);
         }
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(handle_, binding);
+            gl::bind_texture_unit(handle(), binding);
         }
         
         void resize(const gl::vector2u& dimensions)
@@ -354,12 +354,12 @@ export namespace fox::gfx::api::gl
             : gl::object{ gl::create_texture(gl::texture_target_e::_2d_multisample_array), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
-             gl::texture_storage_3d_multisample(handle_, gl::map_texture_format(format_), dimensions_, samples_);
+             gl::texture_storage_3d_multisample(handle(), gl::map_texture_format(format_), dimensions_, samples_);
         }
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(handle_, binding);
+            gl::bind_texture_unit(handle(), binding);
         }
 
         void resize(const gl::vector3u& dimensions)

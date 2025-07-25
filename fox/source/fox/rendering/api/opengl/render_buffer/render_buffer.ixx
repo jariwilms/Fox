@@ -15,7 +15,7 @@ export namespace fox::gfx::api::gl
             : gl::object{ gl::create_render_buffer(), [](auto* handle) { gl::delete_render_buffer(*handle); }}
             , format_{ format }, dimensions_{ dimensions }
         {
-            gl::render_buffer_storage(handle_, gl::map_render_buffer_format(format), dimensions_);
+            gl::render_buffer_storage(handle(), gl::map_render_buffer_format(format), dimensions_);
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -45,7 +45,7 @@ export namespace fox::gfx::api::gl
             : gl::object{ gl::create_render_buffer(), [](auto* handle) { gl::delete_render_buffer(*handle); }}
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
-            gl::render_buffer_storage_multisample(handle_, gl::map_render_buffer_format(format), dimensions_, samples_);
+            gl::render_buffer_storage_multisample(handle(), gl::map_render_buffer_format(format), dimensions_, samples_);
         }
 
         void resize(const gl::vector2u& dimensions)

@@ -107,8 +107,8 @@ export namespace fox::gfx::api::gl
             
             if (gl::compare<std::equal_to>(colorIndex, gl::uint32_t{ 0u }))
             {
-                gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::none);
-                gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::none);
+                gl::frame_buffer_read_buffer(handle(), gl::frame_buffer_source_e::none);
+                gl::frame_buffer_draw_buffer(handle(), gl::frame_buffer_source_e::none);
             }
             else
             {
@@ -118,15 +118,15 @@ export namespace fox::gfx::api::gl
                         colorBufferSources.at(index) = gl::frame_buffer_source_e::color0 + index;
                     });
 
-                gl::frame_buffer_draw_buffers(handle_, colorBufferSources);
+                gl::frame_buffer_draw_buffers(handle(), colorBufferSources);
             }
 
-            if (gl::check_frame_buffer_status(handle_) != gl::frame_buffer_status_e::complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(handle()) != gl::frame_buffer_status_e::complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
 
         void bind(target_e target)
         {
-            gl::bind_frame_buffer(handle_, gl::map_frame_buffer_target(target));
+            gl::bind_frame_buffer(handle(), gl::map_frame_buffer_target(target));
         }
         template<surface_e A = surface_e::texture>
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
@@ -137,21 +137,21 @@ export namespace fox::gfx::api::gl
 
         void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::texture2d>    texture     , gl::uint32_t level = 0u)
         {
-            gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
+            gl::frame_buffer_texture(handle(), texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
         void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::cubemap>      cubemap     , gl::uint32_t level = 0u)
         {
-            gl::frame_buffer_texture(handle_, cubemap->handle(), gl::map_frame_buffer_attachment(attachment), level);
+            gl::frame_buffer_texture(handle(), cubemap->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             cubemapMap_.emplace(identifier, cubemap);
         }
         void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::render_buffer> renderBuffer)
         {
-            gl::frame_buffer_render_buffer(handle_, renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
+            gl::frame_buffer_render_buffer(handle(), renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             renderBufferMap_.emplace(identifier, renderBuffer);
@@ -162,17 +162,17 @@ export namespace fox::gfx::api::gl
         {
             if constexpr (A == surface_e::texture)
             {
-                gl::frame_buffer_texture(handle_, gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
+                gl::frame_buffer_texture(handle(), gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 textureMap_.erase(identifier);
             }
             if constexpr (A == surface_e::cubemap)
             {
-                gl::frame_buffer_texture(handle_, gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
+                gl::frame_buffer_texture(handle(), gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 cubemapMap_.erase(identifier);
             }
             if constexpr (A == surface_e::render_buffer)
             {
-                gl::frame_buffer_render_buffer(handle_, gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
+                gl::frame_buffer_render_buffer(handle(), gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 renderBufferMap_.erase(identifier);
             }
         }
@@ -181,15 +181,15 @@ export namespace fox::gfx::api::gl
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
-            gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
+            gl::frame_buffer_texture    (handle(), texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_read_buffer(handle(), gl::frame_buffer_source_e::color0 + index);
         }
         void write_to (const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
-            gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
+            gl::frame_buffer_texture    (handle(), texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_draw_buffer(handle(), gl::frame_buffer_source_e::color0 + index);
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -316,8 +316,8 @@ export namespace fox::gfx::api::gl
 
             if (gl::compare<std::equal_to>(colorIndex, gl::uint32_t{ 0u }))
             {
-                gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::none);
-                gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::none);
+                gl::frame_buffer_read_buffer(handle(), gl::frame_buffer_source_e::none);
+                gl::frame_buffer_draw_buffer(handle(), gl::frame_buffer_source_e::none);
             }
             else
             {
@@ -327,15 +327,15 @@ export namespace fox::gfx::api::gl
                         colorBufferSources.at(index) = gl::frame_buffer_source_e::color0 + index;
                     });
 
-                gl::frame_buffer_draw_buffers(handle_, colorBufferSources);
+                gl::frame_buffer_draw_buffers(handle(), colorBufferSources);
             }
 
-            if (gl::check_frame_buffer_status(handle_) != gl::frame_buffer_status_e::complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(handle()) != gl::frame_buffer_status_e::complete) throw std::runtime_error{ "Framebuffer is not complete!" };
          }
         
         void bind(target_e target)
         {
-            gl::bind_frame_buffer(handle_, gl::map_frame_buffer_target(target));
+            gl::bind_frame_buffer(handle(), gl::map_frame_buffer_target(target));
         }
         template<surface_e A = surface_e::texture>
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
@@ -345,14 +345,14 @@ export namespace fox::gfx::api::gl
 
         void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::texture2d_ms>    texture, gl::uint32_t level = 0u)
         {
-            gl::frame_buffer_texture(handle_, texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
+            gl::frame_buffer_texture(handle(), texture->handle(), gl::map_frame_buffer_attachment(attachment), level);
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             textureMap_.emplace(identifier, texture);
         }
         void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::render_buffer_ms> renderBuffer)
         {
-            gl::frame_buffer_render_buffer(handle_, renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
+            gl::frame_buffer_render_buffer(handle(), renderBuffer->handle(), gl::map_frame_buffer_attachment(attachment));
 
             attachments_.at(gl::to_underlying(attachment)) = identifier;
             renderBufferMap_.emplace(identifier, renderBuffer);
@@ -377,15 +377,15 @@ export namespace fox::gfx::api::gl
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
-            gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
+            gl::frame_buffer_texture    (handle(), texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_read_buffer(handle(), gl::frame_buffer_source_e::color0 + index);
         }
         void write_to (const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
-            gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
+            gl::frame_buffer_texture    (handle(), texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_draw_buffer(handle(), gl::frame_buffer_source_e::color0 + index);
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -431,10 +431,10 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        std::array<std::string, 11u>                                       attachments_;
-        std::unordered_map<std::string, std::shared_ptr<gl::texture2d_ms>> textureMap_;
+        std::array<std::string, 11u>                                           attachments_;
+        std::unordered_map<std::string, std::shared_ptr<gl::texture2d_ms>>     textureMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::render_buffer_ms>> renderBufferMap_;
-        gl::vector2u                                                       dimensions_;
-        gl::uint32_t                                                       samples_;
+        gl::vector2u                                                           dimensions_;
+        gl::uint32_t                                                           samples_;
     };
 }

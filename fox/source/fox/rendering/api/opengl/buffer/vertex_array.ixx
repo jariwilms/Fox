@@ -16,22 +16,22 @@ export namespace fox::gfx::api::gl
 
         void bind() const
         {
-            gl::bind_vertex_array(handle_);
+            gl::bind_vertex_array(handle());
         }
 
         void enable_attribute (gl::index_t index)
         {
-            gl::enable_vertex_array_attribute(handle_, index);
+            gl::enable_vertex_array_attribute(handle(), index);
         }
         void disable_attribute(gl::index_t index)
         {
-            gl::disable_vertex_array_attribute(handle_, index);
+            gl::disable_vertex_array_attribute(handle(), index);
         }
 
         template<typename... attributes>
         void tie(gl::handle_t vertexBuffer, gfx::vertex_layout<attributes...> layout)
         {
-            gl::vertex_array_vertex_buffer(handle_, vertexBuffer, bindingPoint_, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
+            gl::vertex_array_vertex_buffer(handle(), vertexBuffer, bindingPoint_, static_cast<gl::size_t>(layout.stride()), gl::index_t{ 0u });
 
             auto offset = gl::offset_t{};
             std::apply([&](auto... elements)
@@ -40,9 +40,9 @@ export namespace fox::gfx::api::gl
                         {
                             enable_attribute(attributeIndex_);
 
-                            gl::vertex_array_attribute_format (handle_, attributeIndex_, offset, gl::map_type<typename decltype(element)::type>(), element.count(), gl::false_);
-                            gl::vertex_array_attribute_binding(handle_, attributeIndex_, bindingPoint_);
-                            gl::vertex_array_binding_divisor  (handle_, gl::binding_t{ attributeIndex_ }, element.instancing_rate());
+                            gl::vertex_array_attribute_format (handle(), attributeIndex_, offset, gl::map_type<typename decltype(element)::type>(), element.count(), gl::false_);
+                            gl::vertex_array_attribute_binding(handle(), attributeIndex_, bindingPoint_);
+                            gl::vertex_array_binding_divisor  (handle(), gl::binding_t{ attributeIndex_ }, element.instancing_rate());
 
                             offset += static_cast<gl::offset_t>(element.stride());
                             ++attributeIndex_;
@@ -53,7 +53,7 @@ export namespace fox::gfx::api::gl
         }
         void tie(gl::handle_t indexBuffer , gl::count_t indices                )
         {
-            gl::vertex_array_element_buffer(handle_, indexBuffer);
+            gl::vertex_array_element_buffer(handle(), indexBuffer);
             indexCount_ = indices;
         }
 

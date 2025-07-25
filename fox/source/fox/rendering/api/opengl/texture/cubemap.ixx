@@ -25,18 +25,18 @@ export namespace fox::gfx::api::gl
         {
             if (filter != filter_e::None)
             {
-                gl::texture_parameter(handle_, glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
-                gl::texture_parameter(handle_, glp::minification_filter { gl::map_texture_min_filter(filter_) });
-                gl::texture_parameter(handle_, glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
+                gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
+                gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
+                gl::texture_parameter(handle(), glp::maximum_anisotropy  { gl::float32_t{ 1.0f } });
 
                 mipmapLevels_ = math::mipmap_levels(dimensions_);
             }
 
             const auto& [s, t] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
-            gl::texture_parameter(handle_, glp::wrapping_t{ gl::map_texture_wrapping(t) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_t{ gl::map_texture_wrapping(t) });
             
-            gl::texture_storage_2d(handle_, gl::map_cubemap_texture_format(format_), dimensions_, mipmapLevels_);
+            gl::texture_storage_2d(handle(), gl::map_cubemap_texture_format(format_), dimensions_, mipmapLevels_);
         }
          cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions, std::span<const fox::image> faces)
             : cubemap{ format, filter, wrapping, dimensions }
@@ -49,7 +49,7 @@ export namespace fox::gfx::api::gl
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_texture_unit(handle_, binding);
+            gl::bind_texture_unit(handle(), binding);
         }
 
         void copy      (face_e face, format_e format,                    std::span<const gl::byte_t> data)
@@ -62,7 +62,7 @@ export namespace fox::gfx::api::gl
             if (glm::any(glm::greaterThan(region.origin + region.extent, dimensions_))) throw std::out_of_range{ "The given region exceeds texture bounds!" };
 
             gl::texture_sub_image_3d(
-                handle_,
+                handle(),
                 gl::map_cubemap_texture_format_base(format),
                 gl::map_cubemap_texture_format_type(format),
                 gl::uint32_t{ 0u },
@@ -75,12 +75,12 @@ export namespace fox::gfx::api::gl
             wrapping_ = wrapping;
 
             const auto& [s, t] = wrapping_.pack;
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(s) });
-            gl::texture_parameter(handle_, glp::wrapping_s{ gl::map_texture_wrapping(t) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(s) });
+            gl::texture_parameter(handle(), glp::wrapping_s{ gl::map_texture_wrapping(t) });
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle_);
+            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
         }
 
         auto format       () const -> format_e
