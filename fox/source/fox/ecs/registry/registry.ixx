@@ -3,7 +3,6 @@ export module fox.ecs.registry;
 import std;
 import fox.core.types;
 import fox.ecs.api;
-import vendor.entt;
 
 export namespace fox::ecs::registry
 {
