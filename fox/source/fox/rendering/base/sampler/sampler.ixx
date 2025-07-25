@@ -2,10 +2,9 @@ export module fox.rendering.base.sampler;
 
 export namespace fox::gfx::api
 {
-	class sampler
+	struct sampler
 	{
-	public:
-        enum class parameter
+        enum class parameter_e
         {
             border_color,
             compare_func,

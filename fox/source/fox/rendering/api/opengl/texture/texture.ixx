@@ -10,16 +10,16 @@ export namespace fox::gfx::api::gl
     class texture1d : public gl::object
     {
     public:
-        using format_e   = api::Texture::Format;
-        using filter_e   = api::Texture::Filter;
-        using wrapping_e = api::Texture::Wrapping;
+        using format_e   = api::Texture::format_e;
+        using filter_e   = api::Texture::filter_e;
+        using wrapping_e = api::Texture::wrapping_e;
         using wrapping_t = gl::proxy<wrapping_e>;
 
         texture1d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector1u& dimensions)
             : gl::object{ gl::create_texture(gl::texture_target_e::_1d), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter_ != filter_e::None)
+            if (filter_ != filter_e::none)
             {
                 gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -40,7 +40,7 @@ export namespace fox::gfx::api::gl
             generate_mipmap();
         }
         texture1d(format_e format,                                        const gl::vector1u& dimensions, std::span<const gl::byte_t> data)
-            : texture1d{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, data } {}
+            : texture1d{ format, filter_e::trilinear, wrapping_e::repeat, dimensions, data } {}
 
         void bind(gl::binding_t binding) const
         {
@@ -68,7 +68,7 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
+            if (filter_ != filter_e::none) gl::generate_texture_mipmap(handle());
         }
 
         void resize(const gl::vector1u& dimensions)
@@ -107,16 +107,16 @@ export namespace fox::gfx::api::gl
     class texture2d : public gl::object
     {
     public:
-        using format_e   = api::Texture::Format;
-        using filter_e   = api::Texture::Filter;
-        using wrapping_e = api::Texture::Wrapping;
+        using format_e   = api::Texture::format_e;
+        using filter_e   = api::Texture::filter_e;
+        using wrapping_e = api::Texture::wrapping_e;
         using wrapping_t = gl::proxy<wrapping_e, wrapping_e>;
          
         texture2d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions)
             : gl::object{ gl::create_texture(gl::texture_target_e::_2d), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter_ != filter_e::None)
+            if (filter_ != filter_e::none)
             {
                 gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -138,7 +138,7 @@ export namespace fox::gfx::api::gl
             generate_mipmap();
         }
         texture2d(format_e format,                                       const gl::vector2u& dimensions, std::span<const gl::byte_t> data)
-            : texture2d{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, data } {}
+            : texture2d{ format, filter_e::trilinear, wrapping_e::repeat, dimensions, data } {}
 
         void bind(gl::binding_t binding) const
         {
@@ -167,7 +167,7 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
+            if (filter_ != filter_e::none) gl::generate_texture_mipmap(handle());
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -206,16 +206,16 @@ export namespace fox::gfx::api::gl
     class texture3d : public gl::object
     {
     public:
-        using format_e   = api::Texture::Format;
-        using filter_e   = api::Texture::Filter;
-        using wrapping_e = api::Texture::Wrapping;
+        using format_e   = api::Texture::format_e;
+        using filter_e   = api::Texture::filter_e;
+        using wrapping_e = api::Texture::wrapping_e;
         using wrapping_t = gl::proxy<wrapping_e, wrapping_e, wrapping_e>;
 
         texture3d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector3u& dimensions)
             : gl::object{ gl::create_texture(gl::texture_target_e::_3d), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter_ != filter_e::None)
+            if (filter_ != filter_e::none)
             {
                 gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -238,7 +238,7 @@ export namespace fox::gfx::api::gl
             generate_mipmap();
         }
         texture3d(format_e format,                                       const gl::vector3u& dimensions, std::span<const gl::byte_t> data)
-            : texture3d{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, data } {}
+            : texture3d{ format, filter_e::trilinear, wrapping_e::repeat, dimensions, data } {}
 
         void bind(gl::binding_t binding) const
         {
@@ -268,7 +268,7 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
+            if (filter_ != filter_e::none) gl::generate_texture_mipmap(handle());
         }
 
         void resize(const gl::vector3u& dimensions)
@@ -308,7 +308,7 @@ export namespace fox::gfx::api::gl
     class texture2d_ms : public gl::object
     {
     public:
-        using format_e = api::Texture::Format;
+        using format_e = api::Texture::format_e;
 
         texture2d_ms(format_e format, const gl::vector2u& dimensions, gl::uint32_t samples)
             : gl::object{ gl::create_texture(gl::texture_target_e::_2d_multisample), [](auto* handle) { gl::delete_texture(*handle); } }
@@ -348,7 +348,7 @@ export namespace fox::gfx::api::gl
     class texture3d_ms : public gl::object
     {
     public:
-        using format_e = api::Texture::Format;
+        using format_e = api::Texture::format_e;
 
         texture3d_ms(format_e format, const gl::vector3u& dimensions, gl::uint32_t samples)
             : gl::object{ gl::create_texture(gl::texture_target_e::_2d_multisample_array), [](auto* handle) { gl::delete_texture(*handle); } }

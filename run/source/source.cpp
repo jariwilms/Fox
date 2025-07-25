@@ -98,7 +98,7 @@ int main()
         io::load<io::asset_e::image>(skyboxImageFiles.at(4), fox::image::format_e::rgb8), 
         io::load<io::asset_e::image>(skyboxImageFiles.at(5), fox::image::format_e::rgb8), 
     };
-    auto skybox                 = gfx::cubemap::create(gfx::cubemap::format_e::RGB8_UNORM, skyboxDimensions, cubemapFaces);
+    auto skybox                 = gfx::cubemap::create(gfx::cubemap::format_e::rgb8_unorm, skyboxDimensions, cubemapFaces);
 
     auto lights                 = std::vector<std::tuple<fox::light, fox::vector3f>>
     {

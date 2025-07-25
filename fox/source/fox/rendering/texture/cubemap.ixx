@@ -12,10 +12,10 @@ export namespace fox::gfx
     class cubemap
     {
     public:
-        using face_e     = api::cubemap::Face;
-        using filter_e   = api::cubemap::Filter;
-        using format_e   = api::cubemap::Format;
-        using wrapping_e = api::cubemap::Wrapping;
+        using face_e     = api::cubemap::face_e;
+        using filter_e   = api::cubemap::filter_e;
+        using format_e   = api::cubemap::format_e;
+        using wrapping_e = api::cubemap::wrapping_e;
 
         explicit cubemap(std::shared_ptr<impl::cubemap> _) 
             : _{ _ } {}

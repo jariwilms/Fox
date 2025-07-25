@@ -34,16 +34,16 @@ export namespace fox::gfx::api
             using FA = gfx::frame_buffer::attachment_e;
 
             std::array<FS, 5> gBufferManifest {
-                FS{ "Position",     TF::RGB16_FLOAT },
-                FS{ "Albedo",       TF::RGBA8_UNORM  },
-                FS{ "Normal",       TF::RGB16_FLOAT },
-                FS{ "ARM",          TF::RGB16_UNORM  },
+                FS{ "Position",     TF::rgb16_float },
+                FS{ "Albedo",       TF::rgba8_unorm  },
+                FS{ "Normal",       TF::rgb16_float },
+                FS{ "ARM",          TF::rgb16_unorm  },
                 FS{ "DepthStencil", RF::d24_unorm_s8_uint },
             };
-            std::array<FS, 2> hdrBufferManifest { FS{ "Color", TF::RGBA16_FLOAT }, FS{ "Depth", RF::d24_unorm_s8_uint } };
-            std::array<FS, 1> sBufferManifest   { FS{ "Depth", TF::D24_UNORM    }                                       };
-            std::array<FS, 2> pBufferManifest   { FS{ "Color", TF::RGBA16_UNORM }, FS{ "Depth", RF::d24_unorm_s8_uint } };
-            std::array<FS, 1> scBufferManifest  { FS{ "Depth", CF::D24_UNORM    }                                       };
+            std::array<FS, 2> hdrBufferManifest { FS{ "Color", TF::rgba16_float }, FS{ "Depth", RF::d24_unorm_s8_uint } };
+            std::array<FS, 1> sBufferManifest   { FS{ "Depth", TF::d24_unorm    }                                       };
+            std::array<FS, 2> pBufferManifest   { FS{ "Color", TF::rgba16_unorm }, FS{ "Depth", RF::d24_unorm_s8_uint } };
+            std::array<FS, 1> scBufferManifest  { FS{ "Depth", CF::d24_unorm    }                                       };
 
 
 
@@ -124,8 +124,8 @@ export namespace fox::gfx::api
             auto frameBuffer     = gfx::frame_buffer::create(envDimensions, manifest);
             auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::render_buffer>("Depth");
             auto hdrImage        = io::load<io::asset_e::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
-            auto hdrTex          = gfx::texture2d::create(gfx::texture2d::e_format::RGB32_FLOAT, hdrImage.dimensions(), hdrImage.data());
-            environmentCubemap_  = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::None, gfx::cubemap::wrapping_e::ClampToEdge, envDimensions);
+            auto hdrTex          = gfx::texture2d::create(gfx::texture2d::e_format::rgb32_float, hdrImage.dimensions(), hdrImage.data());
+            environmentCubemap_  = gfx::cubemap::create(gfx::cubemap::format_e::rgb16_float, gfx::cubemap::filter_e::none, gfx::cubemap::wrapping_e::clamp_to_edge, envDimensions);
 
 
 
@@ -161,7 +161,7 @@ export namespace fox::gfx::api
             //Irradiance step
             const fox::vector2u cvDimensions{ 32u, 32u };
 
-            irradianceCubemap_ = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::None, gfx::cubemap::wrapping_e::ClampToEdge, cvDimensions);
+            irradianceCubemap_ = gfx::cubemap::create(gfx::cubemap::format_e::rgb16_float, gfx::cubemap::filter_e::none, gfx::cubemap::wrapping_e::clamp_to_edge, cvDimensions);
 
             pipelines_.at("Irradiance")->bind();
             matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
@@ -196,7 +196,7 @@ export namespace fox::gfx::api
             auto preFilterBuffer = gfx::uniform_buffer<unf::pre_filter>::create();
             preFilterBuffer->bind(gfx::binding_t{ 5u });
 
-            preFilterCubemap_ = gfx::cubemap::create(gfx::cubemap::format_e::RGB16_FLOAT, gfx::cubemap::filter_e::Trilinear, gfx::cubemap::wrapping_e::ClampToEdge, reflectionDimensions);
+            preFilterCubemap_ = gfx::cubemap::create(gfx::cubemap::format_e::rgb16_float, gfx::cubemap::filter_e::trilinear, gfx::cubemap::wrapping_e::clamp_to_edge, reflectionDimensions);
 
             pipelines_.at("PreFilter")->bind();
             matricesUniform_->copy_slice(fox::utl::offset_of<unf::matrices, &unf::matrices::projection>(), std::make_tuple(captureProjection));
@@ -228,7 +228,7 @@ export namespace fox::gfx::api
 
 
             //BRDF LUT step
-            brdfTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::RG16_FLOAT, gfx::texture2d::e_filter::None, gfx::texture2d::e_wrapping::ClampToEdge, envDimensions);
+            brdfTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::rg16_float, gfx::texture2d::e_filter::none, gfx::texture2d::e_wrapping::clamp_to_edge, envDimensions);
             pipelines_.at("BRDF")->bind();
 
             gl::viewport(envDimensions);
@@ -248,7 +248,7 @@ export namespace fox::gfx::api
 
 
 
-            std::array<FS, 1> ssaoFrameBufferManifest{ FS{ "Occlusion", TF::R32_FLOAT }};
+            std::array<FS, 1> ssaoFrameBufferManifest{ FS{ "Occlusion", TF::r32_float }};
             ssaoBuffer_ = gfx::frame_buffer::create(viewportDimensions, ssaoFrameBufferManifest);
             auto occlusion = ssaoBuffer_->surface<gfx::frame_buffer::surface_e::texture>("Occlusion");
             gl::texture_parameter(occlusion->handle(), glp::magnification_filter{ gl::texture_magnification_filter_e::nearest });
@@ -257,7 +257,7 @@ export namespace fox::gfx::api
 
 
             constexpr auto                                 ssaoSamples{ 64u };
-            std::vector<unf::ssao_sample>                   ssaoKernel(ssaoSamples);
+            std::vector<unf::ssao_sample>                  ssaoKernel(ssaoSamples);
             std::uniform_real_distribution<fox::float32_t> distribution(0.0f, 1.0f);
             std::default_random_engine                     engine;
             for (auto index : std::views::iota(0u, 64u))
@@ -301,7 +301,7 @@ export namespace fox::gfx::api
                 ssaoNoise.at(index) = noise;
             }
 
-            ssaoNoiseTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::RGB32_FLOAT, gfx::texture2d::e_filter::Nearest, gfx::texture2d::e_wrapping::Repeat, fox::vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::vector3f>{ ssaoNoise }));
+            ssaoNoiseTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::rgb32_float, gfx::texture2d::e_filter::nearest, gfx::texture2d::e_wrapping::repeat, fox::vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::vector3f>{ ssaoNoise }));
         }
 
         void start(gfx::render_info renderInfo)

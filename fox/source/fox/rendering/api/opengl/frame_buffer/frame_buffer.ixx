@@ -24,36 +24,36 @@ export namespace fox::gfx::api::gl
             : gl::object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, cubemapMap_{}, renderBufferMap_{}, dimensions_{ dimensions }
         {
-            auto map_texture_attachment       = [](api::Texture::Format      format, gl::uint32_t& colorIndex)
+            auto map_texture_attachment       = [](api::Texture::format_e      format, gl::uint32_t& colorIndex)
                 {
                     switch (format)
                     {
-                        case api::Texture::Format::D16_UNORM:
-                        case api::Texture::Format::D24_UNORM:
-                        case api::Texture::Format::D32_FLOAT:         return api::frame_buffer::attachment_e::depth;
+                        case api::Texture::format_e::d16_unorm:
+                        case api::Texture::format_e::d24_unorm:
+                        case api::Texture::format_e::d32_float:         return api::frame_buffer::attachment_e::depth;
 
-                        case api::Texture::Format::D24_UNORM_S8_UINT:
-                        case api::Texture::Format::D32_FLOAT_S8_UINT: return api::frame_buffer::attachment_e::depth_stencil;
+                        case api::Texture::format_e::d24_unorm_s8_uint:
+                        case api::Texture::format_e::d32_float_s8_uint: return api::frame_buffer::attachment_e::depth_stencil;
 
-                        case api::Texture::Format::S8_UINT:           return api::frame_buffer::attachment_e::stencil;
+                        case api::Texture::format_e::s8_uint:           return api::frame_buffer::attachment_e::stencil;
 
-                        default:                                      return api::frame_buffer::attachment_e::color0 + colorIndex++;
+                        default:                                        return api::frame_buffer::attachment_e::color0 + colorIndex++;
                     }
                 };
-            auto map_cubemap_attachment       = [](api::cubemap::Format      format, gl::uint32_t& colorIndex)
+            auto map_cubemap_attachment       = [](api::cubemap::format_e      format, gl::uint32_t& colorIndex)
             {
                 switch (format)
                 {
-                    case api::cubemap::Format::D16_UNORM:
-                    case api::cubemap::Format::D24_UNORM:
-                    case api::cubemap::Format::D32_FLOAT:         return api::frame_buffer::attachment_e::depth;
+                    case api::cubemap::format_e::d16_unorm:
+                    case api::cubemap::format_e::d24_unorm:
+                    case api::cubemap::format_e::d32_float:         return api::frame_buffer::attachment_e::depth;
 
-                    case api::cubemap::Format::D24_UNORM_S8_UINT:
-                    case api::cubemap::Format::D32_FLOAT_S8_UINT: return api::frame_buffer::attachment_e::depth_stencil;
+                    case api::cubemap::format_e::d24_unorm_s8_uint:
+                    case api::cubemap::format_e::d32_float_s8_uint: return api::frame_buffer::attachment_e::depth_stencil;
 
-                    case api::cubemap::Format::S8_UINT:           return api::frame_buffer::attachment_e::stencil;
+                    case api::cubemap::format_e::s8_uint:           return api::frame_buffer::attachment_e::stencil;
 
-                    default:                                      return api::frame_buffer::attachment_e::color0 + colorIndex++;
+                    default:                                        return api::frame_buffer::attachment_e::color0 + colorIndex++;
                 }
             };
             auto map_render_buffer_attachment = [](api::render_buffer::format_e format, gl::uint32_t& colorIndex)
@@ -79,16 +79,16 @@ export namespace fox::gfx::api::gl
                     const auto& [identifier, format] = specification;
                     const auto  overload             = gl::overload
                     {
-                        [&](api::Texture     ::Format format)
+                        [&](api::Texture     ::format_e format)
                         {
-                            auto texture    = std::make_shared<gl::texture2d>(format, api::Texture::Filter::None, api::Texture::Wrapping::Repeat, dimensions_);
+                            auto texture    = std::make_shared<gl::texture2d>(format, api::Texture::filter_e::none, api::Texture::wrapping_e::repeat, dimensions_);
                             auto attachment = map_texture_attachment(texture->format(), colorIndex);
 
                             attach(identifier, attachment, texture);
                         }, 
-                        [&](api::cubemap     ::Format format)
+                        [&](api::cubemap     ::format_e format)
                         {
-                            auto cubemap    = std::make_shared<gl::cubemap>(format, api::cubemap::Filter::None, api::cubemap::Wrapping::Repeat, dimensions_);
+                            auto cubemap    = std::make_shared<gl::cubemap>(format, api::cubemap::filter_e::none, api::cubemap::wrapping_e::repeat, dimensions_);
                             auto attachment = map_cubemap_attachment(cubemap->format(), colorIndex);
 
                             attach(identifier, attachment, cubemap);
@@ -235,11 +235,11 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        std::array<std::string, 11u>                                       attachments_;
-        std::unordered_map<std::string, std::shared_ptr<gl::texture2d>>    textureMap_;
-        std::unordered_map<std::string, std::shared_ptr<gl::cubemap>>      cubemapMap_;
+        std::array<std::string, 11u>                                        attachments_;
+        std::unordered_map<std::string, std::shared_ptr<gl::texture2d>>     textureMap_;
+        std::unordered_map<std::string, std::shared_ptr<gl::cubemap>>       cubemapMap_;
         std::unordered_map<std::string, std::shared_ptr<gl::render_buffer>> renderBufferMap_;
-        gl::vector2u                                                       dimensions_;
+        gl::vector2u                                                        dimensions_;
     };
     class frame_buffer_ms : public gl::object
     {
@@ -256,20 +256,20 @@ export namespace fox::gfx::api::gl
             : gl::object{ gl::create_frame_buffer(), [](auto* handle) { gl::delete_frame_buffer(*handle); } }
             , attachments_{}, textureMap_{}, renderBufferMap_{}, dimensions_{ dimensions }, samples_{ samples }
         {
-            auto map_texture_attachment       = [](api::Texture::Format      format, gl::uint32_t& colorIndex)
+            auto map_texture_attachment       = [](api::Texture::format_e      format, gl::uint32_t& colorIndex)
                 {
                     switch (format)
                     {
-                        case api::Texture::Format::D16_UNORM:
-                        case api::Texture::Format::D24_UNORM:
-                        case api::Texture::Format::D32_FLOAT:         return api::frame_buffer::attachment_e::depth;
+                        case api::Texture::format_e::d16_unorm:
+                        case api::Texture::format_e::d24_unorm:
+                        case api::Texture::format_e::d32_float:         return api::frame_buffer::attachment_e::depth;
 
-                        case api::Texture::Format::D24_UNORM_S8_UINT:
-                        case api::Texture::Format::D32_FLOAT_S8_UINT: return api::frame_buffer::attachment_e::depth_stencil;
+                        case api::Texture::format_e::d24_unorm_s8_uint:
+                        case api::Texture::format_e::d32_float_s8_uint: return api::frame_buffer::attachment_e::depth_stencil;
 
-                        case api::Texture::Format::S8_UINT:           return api::frame_buffer::attachment_e::stencil;
+                        case api::Texture::format_e::s8_uint:           return api::frame_buffer::attachment_e::stencil;
 
-                        default:                                      return api::frame_buffer::attachment_e::color0 + colorIndex++;
+                        default:                                        return api::frame_buffer::attachment_e::color0 + colorIndex++;
                     }
                 };
             auto map_render_buffer_attachment = [](api::render_buffer::format_e format, gl::uint32_t& colorIndex)
@@ -295,7 +295,7 @@ export namespace fox::gfx::api::gl
                     const auto& [identifier, format] = specification;
                     const auto  overload             = gl::overload
                     {
-                        [&](api::Texture     ::Format format)
+                        [&](api::Texture     ::format_e format)
                         {
                             auto texture    = std::make_shared<gl::texture2d_ms>(format, dimensions_, samples_);
                             auto attachment = map_texture_attachment(texture->format(), colorIndex);

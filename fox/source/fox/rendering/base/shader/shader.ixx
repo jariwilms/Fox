@@ -4,7 +4,7 @@ export namespace fox::gfx::api
 {
     struct shader
     {
-        enum class stage
+        enum class stage_e
         {
             vertex, 
             tessellation_control,

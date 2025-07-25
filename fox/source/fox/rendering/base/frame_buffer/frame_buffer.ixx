@@ -27,7 +27,7 @@ export namespace fox::gfx::api
         };
         struct     specification
         {
-            using format_v = std::variant<api::Texture::Format, api::cubemap::Format, api::render_buffer::format_e>;
+            using format_v = std::variant<api::Texture::format_e, api::cubemap::format_e, api::render_buffer::format_e>;
 
             specification(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}
@@ -37,7 +37,7 @@ export namespace fox::gfx::api
         };
         struct     specification_ms
         {
-            using format_v = std::variant<api::Texture::Format, api::render_buffer::format_e>;
+            using format_v = std::variant<api::Texture::format_e, api::render_buffer::format_e>;
 
             specification_ms(const std::string& identifier, format_v format)
                 : identifier{ identifier }, format{ format } {}

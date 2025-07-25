@@ -4,7 +4,7 @@ export namespace fox::gfx::api
 {
     struct buffer
     {
-        enum class access
+        enum class access_e
         {
             read, 
             write, 

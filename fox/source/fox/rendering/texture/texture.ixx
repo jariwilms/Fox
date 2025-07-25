@@ -11,9 +11,9 @@ export namespace fox::gfx
     class texture1d
     {
     public:
-        using e_format   = api::Texture::Format;
-        using e_filter   = api::Texture::Filter;
-        using e_wrapping = api::Texture::Wrapping;
+        using e_format   = api::Texture::format_e;
+        using e_filter   = api::Texture::filter_e;
+        using e_wrapping = api::Texture::wrapping_e;
 
         explicit texture1d(std::shared_ptr<impl::texture1d> _)
             : _{ _ } {}
@@ -97,9 +97,9 @@ export namespace fox::gfx
     class texture2d
     {
     public:
-        using e_format   = api::Texture::Format;
-        using e_filter   = api::Texture::Filter;
-        using e_wrapping = api::Texture::Wrapping;
+        using e_format   = api::Texture::format_e;
+        using e_filter   = api::Texture::filter_e;
+        using e_wrapping = api::Texture::wrapping_e;
 
         explicit texture2d(std::shared_ptr<impl::texture2d> _)
             : _{ _ } {}
@@ -183,9 +183,9 @@ export namespace fox::gfx
     class texture3d
     {
     public:
-        using e_format   = api::Texture::Format;
-        using e_filter   = api::Texture::Filter;
-        using e_wrapping = api::Texture::Wrapping;
+        using e_format   = api::Texture::format_e;
+        using e_filter   = api::Texture::filter_e;
+        using e_wrapping = api::Texture::wrapping_e;
 
         explicit texture3d(std::shared_ptr<impl::texture3d> _)
             : _{ _ } {}
@@ -270,7 +270,7 @@ export namespace fox::gfx
     class texture2d_ms
     {
     public:
-        using e_format = api::Texture::Format;
+        using e_format = api::Texture::format_e;
 
         explicit texture2d_ms(std::shared_ptr<impl::texture2d_ms> _)
             : _{ _ } {}
@@ -316,7 +316,7 @@ export namespace fox::gfx
     class texture3d_ms
     {
     public:
-        using e_format = api::Texture::Format;
+        using e_format = api::Texture::format_e;
 
         explicit texture3d_ms(std::shared_ptr<impl::texture3d_ms> _)
             : _{ _ } {}

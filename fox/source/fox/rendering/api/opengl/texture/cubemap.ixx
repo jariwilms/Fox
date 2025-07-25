@@ -13,17 +13,17 @@ export namespace fox::gfx::api::gl
     class cubemap : public gl::object
     {
     public:
-        using format_e   = api::cubemap::Format;
-        using filter_e   = api::cubemap::Filter;
-        using wrapping_e = api::cubemap::Wrapping;
+        using format_e   = api::cubemap::format_e;
+        using filter_e   = api::cubemap::filter_e;
+        using wrapping_e = api::cubemap::wrapping_e;
         using wrapping_t = gl::proxy<wrapping_e, wrapping_e>;
-        using face_e     = api::cubemap::Face;
+        using face_e     = api::cubemap::face_e;
 
          cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions)
             : gl::object{ gl::create_texture(gl::texture_target_e::cubemap), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
-            if (filter != filter_e::None)
+            if (filter != filter_e::none)
             {
                 gl::texture_parameter(handle(), glp::magnification_filter{ gl::map_texture_mag_filter(filter_) });
                 gl::texture_parameter(handle(), glp::minification_filter { gl::map_texture_min_filter(filter_) });
@@ -45,7 +45,7 @@ export namespace fox::gfx::api::gl
             generate_mipmap();
         }
          cubemap(format_e format,                                        const gl::vector2u& dimensions, std::span<const fox::image> faces)
-            : cubemap{ format, filter_e::Trilinear, wrapping_e::Repeat, dimensions, faces } {}
+            : cubemap{ format, filter_e::trilinear, wrapping_e::repeat, dimensions, faces } {}
 
         void bind(gl::binding_t binding) const
         {
@@ -80,7 +80,7 @@ export namespace fox::gfx::api::gl
         }
         void generate_mipmap()
         {
-            if (filter_ != filter_e::None) gl::generate_texture_mipmap(handle());
+            if (filter_ != filter_e::none) gl::generate_texture_mipmap(handle());
         }
 
         auto format       () const -> format_e
