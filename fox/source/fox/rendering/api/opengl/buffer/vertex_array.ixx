@@ -40,7 +40,7 @@ export namespace fox::gfx::api::gl
                         {
                             enable_attribute(attributeIndex_);
 
-                            gl::vertex_array_attribute_format (handle_, attributeIndex_, offset, gl::map_type<typename decltype(element)::type>(), element.count(), gl::False);
+                            gl::vertex_array_attribute_format (handle_, attributeIndex_, offset, gl::map_type<typename decltype(element)::type>(), element.count(), gl::false_);
                             gl::vertex_array_attribute_binding(handle_, attributeIndex_, bindingPoint_);
                             gl::vertex_array_binding_divisor  (handle_, gl::binding_t{ attributeIndex_ }, element.instancing_rate());
 

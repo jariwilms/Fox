@@ -522,7 +522,7 @@ export namespace fox::gfx::api
             brdfTexture_      ->bind(gfx::binding_t{ 6u });
 
             gl::viewport(target->dimensions());
-            gl::depth_mask(gl::False);
+            gl::depth_mask(gl::false_);
             gl::disable<gl::feature_e::depth_test>();
             gl::enable<gl::feature_e::blending>();
             gl::blend_function(gl::blending_factor_e::source_alpha, gl::blending_factor_e::one);
@@ -542,7 +542,7 @@ export namespace fox::gfx::api
 
                 });
 
-            gl::depth_mask(gl::True);
+            gl::depth_mask(gl::true_);
         }
         void render_skybox(std::shared_ptr<gfx::frame_buffer> target, std::shared_ptr<gfx::frame_buffer> previous)
         {

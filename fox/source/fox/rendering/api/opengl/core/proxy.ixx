@@ -1,11 +1,11 @@
 export module fox.rendering.api.opengl.proxy;
 
 import std;
-import fox.rendering.api.opengl.concepts;
+import fox.rendering.api.opengl.meta;
 
 export namespace fox::gfx::api::gl
 {
-    template<typename... T> requires (gl::all_same_type<T...>)
+    template<typename... T> requires (gl::all_same_type_v<T...>)
     struct proxy
     {
         template<typename U> requires (std::is_convertible_v<U, T> && ...)

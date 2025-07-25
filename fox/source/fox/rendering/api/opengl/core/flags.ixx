@@ -1761,7 +1761,7 @@ export namespace fox::gfx::api::gl
 
 
     template<typename T>
-    struct BitmaskTraits { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::False }; };
+    struct BitmaskTraits { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::false_ }; };
 
     template<typename T> concept ValidBitmaskEnumClassConcept = BitmaskTraits<T>::enable_bitmask_operations;
 
@@ -1779,15 +1779,15 @@ export namespace fox::gfx::api::gl
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator&=(T& first, T second) { return first = first & second; }
     template<ValidBitmaskEnumClassConcept T>             constexpr T& operator|=(T& first, T second) { return first = first | second; }
 
-    template<> struct BitmaskTraits<gl::buffer_mapping_range_access_flags_e> { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::buffer_mask_e>                       { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::buffer_storage_flags_e>              { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::context_flag_e>                      { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::context_profile_e>                   { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::feature_e>                           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::frame_buffer_attachment_e>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::frame_buffer_source_e>               { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::memory_barrier_e>                    { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::memory_regional_barrier_e>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
-    template<> struct BitmaskTraits<gl::program_stage_e>                     { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::True }; };
+    template<> struct BitmaskTraits<gl::buffer_mapping_range_access_flags_e> { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::buffer_mask_e>                       { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::buffer_storage_flags_e>              { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::context_flag_e>                      { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::context_profile_e>                   { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::feature_e>                           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::frame_buffer_attachment_e>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::frame_buffer_source_e>               { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::memory_barrier_e>                    { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::memory_regional_barrier_e>           { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
+    template<> struct BitmaskTraits<gl::program_stage_e>                     { static constexpr auto enable_bitmask_operations = gl::bool_t{ gl::true_ }; };
 }

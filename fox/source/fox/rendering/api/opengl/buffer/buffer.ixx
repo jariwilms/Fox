@@ -38,13 +38,11 @@ export namespace fox::gfx::api::gl
         void copy      (                   std::span<const T> data)
         {
             if (gl::compare<std::greater>(data.size_bytes(), size())) throw std::invalid_argument{ "Data exceeds buffer size!" };
-
             gl::buffer_data(handle_, gl::index_t{ 0u }, data);
         }
         void copy_range(gl::index_t index, std::span<const T> data)
         {
             if (gl::compare<std::greater_equal>(index, count())) throw std::invalid_argument{ "Index out of range!" };
-
             gl::buffer_data(handle_, index, data);
         }
 
@@ -86,16 +84,15 @@ export namespace fox::gfx::api::gl
         }
         auto is_mapped() const -> gl::bool_t
         {
-            return data_.operator bool();
+            return data_.operator gl::bool_t();
         }
         void unmap    ()
         {
-            if (!is_mapped()) return;
+            if (!is_mapped())               return;
+            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
 
             data_ .reset();
             locks_.clear();
-            
-            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
         }
 
         void lock_range (gl::range range)
@@ -107,27 +104,24 @@ export namespace fox::gfx::api::gl
         }
         void await_range(gl::range range)
         {
-            auto locks = std::vector<gl::lock_t>{};
-
-            std::ranges::for_each(locks_, [&](const gl::lock_t& _)
+            auto locks = std::vector<gl::sync_lock_t>{};
+            std::ranges::for_each(locks_, [&](const gl::sync_lock_t& syncLock)
                 {
-                    const auto& [lock, sync] = _;
-                    
-                    if   (gl::range_overlaps(range, lock))
+                    if   (const auto& [sync, lock] = syncLock; gl::range_overlaps(range, lock))
                     {
                         auto command = gl::synchronization_command_e::none;
-                        auto time    = gl::time_t{};
+                        auto timeout = gl::time_t{};
 
-                        while (gl::True)
+                        while (gl::true_)
                         {
-                            auto status = gl::client_wait_sync(sync, command, time);
+                            auto status = gl::client_wait_sync(sync, command, timeout);
 
                             if (status == gl::synchronization_status_e::already_signaled   ) break;
                             if (status == gl::synchronization_status_e::condition_satisfied) break;
                             if (status == gl::synchronization_status_e::wait_failed        ) throw std::runtime_error{ "An error occurred!" };
 
                             command = gl::synchronization_command_e::flush;
-                            time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
+                            timeout = gl::time_t{ std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count() };
                         }
 
                         gl::delete_sync(sync);
@@ -159,10 +153,10 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        gl::size_t                    size_;
+        gl::size_t                    size_ ;
         gl::range                     range_;
-        std::vector<gl::lock_t>       locks_;
-        std::shared_ptr<std::span<T>> data_;
+        std::vector<gl::sync_lock_t>  locks_;
+        std::shared_ptr<std::span<T>> data_ ;
     };
     template<typename T>
     class uniform_buffer : public gl::object
@@ -239,7 +233,7 @@ export namespace fox::gfx::api::gl
                 data                                        );
         }
 
-        void bind      (gl::binding_t binding) const
+        void bind      (gl::binding_t binding                 ) const
         {
             gl::bind_buffer_base(handle_, gl::buffer_base_target_e::uniform_buffer, binding);
         }
@@ -248,15 +242,15 @@ export namespace fox::gfx::api::gl
             gl::bind_buffer_range<T>(handle_, gl::buffer_base_target_e::uniform_buffer, binding, range);
         }
 
-        void copy      (std::span<const T, N> data)
+        void copy      (                   std::span<const T, N> data)
         {
             gl::buffer_data(handle_, gl::offset_t{ 0u }, std::span<const T>{ data });
         }
-        void copy_index(gl::index_t index, const T& data)
+        void copy_index(gl::index_t index,           const T   & data)
         {
             gl::buffer_data(handle_, index, std::span<const T>{ &data, 1u });
         }
-        void copy_range(gl::index_t index, std::span<const T> data)
+        void copy_range(gl::index_t index, std::span<const T   > data)
         {
             gl::buffer_data(handle_, index, data);
         }
@@ -299,17 +293,15 @@ export namespace fox::gfx::api::gl
         }
         auto is_mapped() const -> gl::bool_t
         {
-            return data_.operator bool();
+            return data_.operator gl::bool_t();
         }
         void unmap    ()
         {
-            if (!is_mapped()) return;
+            if (!is_mapped())               return;
+            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
 
             data_ .reset();
             locks_.clear();
-
-            if (!gl::unmap_buffer(handle_)) throw std::runtime_error{ "Data store is undefined!" };
-
         }
 
         void lock_range (gl::range range)
@@ -321,27 +313,24 @@ export namespace fox::gfx::api::gl
         }
         void await_range(gl::range range)
         {
-            auto locks = std::vector<gl::lock_t>{};
-
-            std::ranges::for_each(locks_, [&](const gl::lock_t& _)
+            auto locks = std::vector<gl::sync_lock_t>{};
+            std::ranges::for_each(locks_, [&](const gl::sync_lock_t& syncLock)
                 {
-                    const auto& [lock, sync] = _;
-
-                    if (gl::range_overlaps(range, lock))
+                    if   (const auto& [sync, lock] = syncLock; gl::range_overlaps(range, lock))
                     {
                         auto command = gl::synchronization_command_e::none;
-                        auto time    = gl::time_t{};
+                        auto timeout = gl::time_t{};
 
-                        while (gl::True)
+                        while (gl::true_)
                         {
-                            auto status = gl::client_wait_sync(sync, command, time);
+                            auto status = gl::client_wait_sync(sync, command, timeout);
 
                             if (status == gl::synchronization_status_e::already_signaled   ) break;
                             if (status == gl::synchronization_status_e::condition_satisfied) break;
                             if (status == gl::synchronization_status_e::wait_failed        ) throw std::runtime_error{ "An error occurred!" };
 
                             command = gl::synchronization_command_e::flush;
-                            time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
+                            timeout = gl::time_t{ std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count() };
                         }
 
                         gl::delete_sync(sync);
@@ -355,11 +344,11 @@ export namespace fox::gfx::api::gl
             locks_ = std::move(locks);
         }
 
-        auto size () const
+        auto size () const -> gl::size_t
         {
             return size_;
         }
-        auto count() const
+        auto count() const -> gl::count_t
         {
             return N;
         }
@@ -373,9 +362,9 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        gl::size_t                    size_;
+        gl::size_t                    size_ ;
         gl::range                     range_;
-        std::vector<gl::lock_t>       locks_;
-        std::shared_ptr<std::span<T>> data_;
+        std::vector<gl::sync_lock_t>  locks_;
+        std::shared_ptr<std::span<T>> data_ ;
     };
 }

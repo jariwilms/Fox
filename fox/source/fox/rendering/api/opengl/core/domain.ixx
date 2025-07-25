@@ -8,13 +8,13 @@ export namespace fox::gfx::api::gl
     template<typename T, gl::uint32_t N>
     struct region
     {
-        constexpr region(const gl::vector<T, N>& extent = {}, const gl::vector<T, N>& origin = {})
+        constexpr region(const gl::vector_t<T, N>& extent = {}, const gl::vector_t<T, N>& origin = {})
             : extent{ extent }, origin{ origin } {}
 
         auto operator==(const region&) const -> gl::bool_t = default;
 
-        gl::vector<T, N> extent{};
-        gl::vector<T, N> origin{};
+        gl::vector_t<T, N> extent{};
+        gl::vector_t<T, N> origin{};
     };
     struct range
     {
@@ -42,5 +42,4 @@ export namespace fox::gfx::api::gl
     using volume_t      = gl::region<gl::uint32_t, 3u>;
     using hypervolume_t = gl::region<gl::uint32_t, 4u>; //Yes, this exists
 
-    using lock_t        = std::tuple<gl::range, gl::sync_t>;
 }

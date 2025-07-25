@@ -1,4 +1,4 @@
-export module fox.rendering.api.opengl.concepts;
+export module fox.rendering.api.opengl.meta;
 
 import std;
 import fox.rendering.api.opengl.flags;
@@ -6,11 +6,8 @@ import fox.rendering.api.opengl.types;
 
 export namespace fox::gfx::api::gl
 {
-    //template<typename T>
-    //concept arithmetic_type = std::integral<T> || std::floating_point<T>;
-
     template<typename T, typename... Ts>
-    constexpr auto all_same_type = gl::bool_t{ std::conjunction_v<std::is_same<T, Ts>...> };
+    constexpr auto all_same_type_v = gl::bool_t{ std::conjunction_v<std::is_same<T, Ts>...> };
 
 
 

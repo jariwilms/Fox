@@ -19,18 +19,18 @@ export namespace fox::gfx::api::gl
             auto type   = gl::map_shader_type(stage);
             auto shader = gl::create_shader  (type );
 
-            gl::program_parameter<gl::program_specification_e::separable>(handle_, gl::True);
+            gl::program_parameter<gl::program_specification_e::separable>(handle_, gl::true_);
             gl::shader_binary(shader, GL_SHADER_BINARY_FORMAT_SPIR_V, binary);
             gl::specialize_shader(shader, "main");
 
             auto compileStatus = gl::get_shader_value<gl::shader_parameter_e::compile_status>(shader);
-            if (compileStatus != gl::True) throw std::runtime_error{ gl::get_shader_info_log(shader) };
+            if (compileStatus != gl::true_) throw std::runtime_error{ gl::get_shader_info_log(shader) };
             
             gl::attach_shader(handle_, shader);
             gl::link_program (handle_        );
 
             auto linkStatus = gl::get_program_value<gl::program_parameter_e::link_status>(handle_);
-            if (linkStatus != gl::True) throw std::runtime_error{ gl::get_program_info_log(handle_) };
+            if (linkStatus != gl::true_) throw std::runtime_error{ gl::get_program_info_log(handle_) };
 
             gl::detach_shader(handle_, shader);
             gl::delete_shader(         shader);

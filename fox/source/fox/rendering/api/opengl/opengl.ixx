@@ -1,8 +1,9 @@
 export module fox.rendering.api.opengl;
-export import fox.rendering.api.opengl.concepts;
 export import fox.rendering.api.opengl.domain;
 export import fox.rendering.api.opengl.flags;
+export import fox.rendering.api.opengl.lock;
 export import fox.rendering.api.opengl.mapping;
+export import fox.rendering.api.opengl.meta;
 export import fox.rendering.api.opengl.object;
 export import fox.rendering.api.opengl.parameters;
 export import fox.rendering.api.opengl.proxy;
@@ -1529,7 +1530,7 @@ export namespace fox::gfx::api::gl
             gl::to_underlying       (format)      , 
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y), static_cast<gl::sizei_t>(dimensions.z));
     }
-    void texture_storage_2d_multisample             (gl::handle_t texture, gl::texture_format_e format, const gl::vector2u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::True)
+    void texture_storage_2d_multisample             (gl::handle_t texture, gl::texture_format_e format, const gl::vector2u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::true_)
     {
         glTextureStorage2DMultisample(
             gl::to_underlying       (texture)     , 
@@ -1537,7 +1538,7 @@ export namespace fox::gfx::api::gl
             static_cast<gl::sizei_t>(dimensions.x), static_cast<gl::sizei_t>(dimensions.y), 
             fixed);
     }
-    void texture_storage_3d_multisample             (gl::handle_t texture, gl::texture_format_e format, const gl::vector3u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::True)
+    void texture_storage_3d_multisample             (gl::handle_t texture, gl::texture_format_e format, const gl::vector3u& dimensions, gl::uint32_t samples, gl::bool_t fixed = gl::true_)
     {
         glTextureStorage3DMultisample(
             gl::to_underlying       (texture)     , 
@@ -1613,7 +1614,7 @@ export namespace fox::gfx::api::gl
             || P == gl::frame_buffer_parameter_e::default_samples
             || P == gl::frame_buffer_parameter_e::default_fixed_sample_locations
             || P == gl::frame_buffer_parameter_e::default_width                 ) frame_buffer_parameter_i(frameBuffer, P, value);
-        else static_assert(gl::False, "Invalid FrameBuffer Parameter!");
+        else static_assert(gl::false_, "Invalid FrameBuffer Parameter!");
     }
     auto create_render_buffer                       () -> gl::handle_t
     {
@@ -1698,52 +1699,52 @@ export namespace fox::gfx::api::gl
 
         std::visit(overload, parameter);
     }
-    template<typename T, gl::uint32_t N, gl::bool_t NORM = gl::False>
-    void vertex_attribute                           (gl::index_t index, const gl::vector<T, N>& value)
+    template<typename T, gl::uint32_t N, gl::bool_t NORM = gl::false_>
+    void vertex_attribute                           (gl::index_t index, const gl::vector_t<T, N>& value)
     {
         auto maximumAttributes = gl::get_value<gl::data_e::maximum_vertex_attributes>();
         if (gl::compare<std::greater>(index, maximumAttributes)) throw std::invalid_argument{ "Index exceeds the maximum amount of vertex attributes!" };
         
         if   constexpr (std::is_same_v<T, gl::uint8_t  >)
         {
-            if constexpr (N == 4 && NORM == gl::True ) glVertexAttrib4Nub(index, value.x, value.y, value.z, value.w);
+            if constexpr (N == 4 && NORM == gl::true_ ) glVertexAttrib4Nub(index, value.x, value.y, value.z, value.w);
         }
         if   constexpr (std::is_same_v<T, gl::int16_t  >)
         {
-            if constexpr (N == 1 && NORM == gl::False) glVertexAttrib1s  (index, value.x                           );
-            if constexpr (N == 2 && NORM == gl::False) glVertexAttrib2s  (index, value.x, value.y                  );
-            if constexpr (N == 3 && NORM == gl::False) glVertexAttrib3s  (index, value.x, value.y, value.z         );
-            if constexpr (N == 4 && NORM == gl::False) glVertexAttrib4s  (index, value.x, value.y, value.z, value.w);
+            if constexpr (N == 1 && NORM == gl::false_) glVertexAttrib1s  (index, value.x                           );
+            if constexpr (N == 2 && NORM == gl::false_) glVertexAttrib2s  (index, value.x, value.y                  );
+            if constexpr (N == 3 && NORM == gl::false_) glVertexAttrib3s  (index, value.x, value.y, value.z         );
+            if constexpr (N == 4 && NORM == gl::false_) glVertexAttrib4s  (index, value.x, value.y, value.z, value.w);
         }
         if   constexpr (std::is_same_v<T, gl::int32_t  >)
         {
-            if constexpr (N == 1 && NORM == gl::False) glVertexAttribI1i (index, value.x                           );
-            if constexpr (N == 2 && NORM == gl::False) glVertexAttribI2i (index, value.x, value.y                  );
-            if constexpr (N == 3 && NORM == gl::False) glVertexAttribI3i (index, value.x, value.y, value.z         );
-            if constexpr (N == 4 && NORM == gl::False) glVertexAttribI4i (index, value.x, value.y, value.z, value.w);
+            if constexpr (N == 1 && NORM == gl::false_) glVertexAttribI1i (index, value.x                           );
+            if constexpr (N == 2 && NORM == gl::false_) glVertexAttribI2i (index, value.x, value.y                  );
+            if constexpr (N == 3 && NORM == gl::false_) glVertexAttribI3i (index, value.x, value.y, value.z         );
+            if constexpr (N == 4 && NORM == gl::false_) glVertexAttribI4i (index, value.x, value.y, value.z, value.w);
         }
         if   constexpr (std::is_same_v<T, gl::uint32_t >)
         {
-            if constexpr (N == 1 && NORM == gl::False) glVertexAttribI1ui(index, value.x                           );
-            if constexpr (N == 2 && NORM == gl::False) glVertexAttribI2ui(index, value.x, value.y                  );
-            if constexpr (N == 3 && NORM == gl::False) glVertexAttribI3ui(index, value.x, value.y, value.z         );
-            if constexpr (N == 4 && NORM == gl::False) glVertexAttribI4ui(index, value.x, value.y, value.z, value.w);
+            if constexpr (N == 1 && NORM == gl::false_) glVertexAttribI1ui(index, value.x                           );
+            if constexpr (N == 2 && NORM == gl::false_) glVertexAttribI2ui(index, value.x, value.y                  );
+            if constexpr (N == 3 && NORM == gl::false_) glVertexAttribI3ui(index, value.x, value.y, value.z         );
+            if constexpr (N == 4 && NORM == gl::false_) glVertexAttribI4ui(index, value.x, value.y, value.z, value.w);
         }
         if   constexpr (std::is_same_v<T, gl::float32_t>)
         {
-            if constexpr (N == 1 && NORM == gl::False) glVertexAttrib1f  (index, value.x                           );
-            if constexpr (N == 2 && NORM == gl::False) glVertexAttrib2f  (index, value.x, value.y                  );
-            if constexpr (N == 3 && NORM == gl::False) glVertexAttrib3f  (index, value.x, value.y, value.z         );
-            if constexpr (N == 4 && NORM == gl::False) glVertexAttrib4f  (index, value.x, value.y, value.z, value.w);
+            if constexpr (N == 1 && NORM == gl::false_) glVertexAttrib1f  (index, value.x                           );
+            if constexpr (N == 2 && NORM == gl::false_) glVertexAttrib2f  (index, value.x, value.y                  );
+            if constexpr (N == 3 && NORM == gl::false_) glVertexAttrib3f  (index, value.x, value.y, value.z         );
+            if constexpr (N == 4 && NORM == gl::false_) glVertexAttrib4f  (index, value.x, value.y, value.z, value.w);
         }
         if   constexpr (std::is_same_v<T, gl::float64_t>)
         {
-            if constexpr (N == 1 && NORM == gl::False) glVertexAttribL1d (index, value.x                           );
-            if constexpr (N == 2 && NORM == gl::False) glVertexAttribL2d (index, value.x, value.y                  );
-            if constexpr (N == 3 && NORM == gl::False) glVertexAttribL3d (index, value.x, value.y, value.z         );
-            if constexpr (N == 4 && NORM == gl::False) glVertexAttribL4d (index, value.x, value.y, value.z, value.w);
+            if constexpr (N == 1 && NORM == gl::false_) glVertexAttribL1d (index, value.x                           );
+            if constexpr (N == 2 && NORM == gl::false_) glVertexAttribL2d (index, value.x, value.y                  );
+            if constexpr (N == 3 && NORM == gl::false_) glVertexAttribL3d (index, value.x, value.y, value.z         );
+            if constexpr (N == 4 && NORM == gl::false_) glVertexAttribL4d (index, value.x, value.y, value.z, value.w);
         }
-        else static_assert(gl::False, "The given input does not match a valid vertex attribute function!");
+        else static_assert(gl::false_, "The given input does not match a valid vertex attribute function!");
     }
     auto create_vertex_array                        () -> gl::handle_t
     {
@@ -1771,7 +1772,7 @@ export namespace fox::gfx::api::gl
     {
         glVertexArrayElementBuffer(gl::to_underlying(vertexArray), gl::to_underlying(elementBuffer));
     }
-    void vertex_array_attribute_format              (gl::handle_t vertexArray, gl::index_t attribute, gl::offset_t offset, gl::vertex_array_attribute_type_e type, gl::count_t count, gl::bool_t normalized = gl::False)
+    void vertex_array_attribute_format              (gl::handle_t vertexArray, gl::index_t attribute, gl::offset_t offset, gl::vertex_array_attribute_type_e type, gl::count_t count, gl::bool_t normalized = gl::false_)
     {
         auto vertex_array_attribute_format_i = [](gl::handle_t vertexArray, gl::index_t attribute, gl::vertex_array_attribute_type_e type, gl::count_t count, gl::offset_t offset) -> gl::void_t
             {
