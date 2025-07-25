@@ -37,7 +37,7 @@ export namespace fox::io
         auto load_texture2d = [&](const std::filesystem::path& path) -> std::shared_ptr<gfx::texture2d>
             {
                 auto image = load_image(path, fox::image::format_e::rgba8);
-                return gfx::texture2d::create(gfx::texture2d::e_format::rgba8_unorm, image.dimensions(), image.data());
+                return gfx::texture2d::create(gfx::texture2d::format_e::rgba8_unorm, image.dimensions(), image.data());
             };
 
         if constexpr (A == asset_e::file     ) return std::invoke(load_file     , absolute, std::forward<Args>(args)...);

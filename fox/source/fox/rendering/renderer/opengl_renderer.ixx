@@ -28,7 +28,7 @@ export namespace fox::gfx::api
             const fox::vector2u shadowMapDimensions{ 2048u, 2048u };
 
             using FS = gfx::frame_buffer::specification_e;
-            using TF = gfx::texture2d::e_format;
+            using TF = gfx::texture2d::format_e;
             using RF = gfx::render_buffer::format_e;
             using CF = gfx::cubemap::format_e;
             using FA = gfx::frame_buffer::attachment_e;
@@ -124,7 +124,7 @@ export namespace fox::gfx::api
             auto frameBuffer     = gfx::frame_buffer::create(envDimensions, manifest);
             auto renderBuffer    = frameBuffer->surface<gfx::frame_buffer::surface_e::render_buffer>("Depth");
             auto hdrImage        = io::load<io::asset_e::image>("textures/kloppenheim_sky.hdr", fox::image::format_e::rgb32_float);
-            auto hdrTex          = gfx::texture2d::create(gfx::texture2d::e_format::rgb32_float, hdrImage.dimensions(), hdrImage.data());
+            auto hdrTex          = gfx::texture2d::create(gfx::texture2d::format_e::rgb32_float, hdrImage.dimensions(), hdrImage.data());
             environmentCubemap_  = gfx::cubemap::create(gfx::cubemap::format_e::rgb16_float, gfx::cubemap::filter_e::none, gfx::cubemap::wrapping_e::clamp_to_edge, envDimensions);
 
 
@@ -228,7 +228,7 @@ export namespace fox::gfx::api
 
 
             //BRDF LUT step
-            brdfTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::rg16_float, gfx::texture2d::e_filter::none, gfx::texture2d::e_wrapping::clamp_to_edge, envDimensions);
+            brdfTexture_ = gfx::texture2d::create(gfx::texture2d::format_e::rg16_float, gfx::texture2d::filter_e::none, gfx::texture2d::wrapping_e::clamp_to_edge, envDimensions);
             pipelines_.at("BRDF")->bind();
 
             gl::viewport(envDimensions);
@@ -301,7 +301,7 @@ export namespace fox::gfx::api
                 ssaoNoise.at(index) = noise;
             }
 
-            ssaoNoiseTexture_ = gfx::texture2d::create(gfx::texture2d::e_format::rgb32_float, gfx::texture2d::e_filter::nearest, gfx::texture2d::e_wrapping::repeat, fox::vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::vector3f>{ ssaoNoise }));
+            ssaoNoiseTexture_ = gfx::texture2d::create(gfx::texture2d::format_e::rgb32_float, gfx::texture2d::filter_e::nearest, gfx::texture2d::wrapping_e::repeat, fox::vector2u{ 4u, 4u }, fox::as_bytes(std::span<const fox::vector3f>{ ssaoNoise }));
         }
 
         void start(gfx::render_info renderInfo)

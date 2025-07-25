@@ -11,22 +11,22 @@ export namespace fox::gfx
     class texture1d
     {
     public:
-        using e_format   = api::Texture::format_e;
-        using e_filter   = api::Texture::filter_e;
-        using e_wrapping = api::Texture::wrapping_e;
+        using format_e   = api::Texture::format_e;
+        using filter_e   = api::Texture::filter_e;
+        using wrapping_e = api::Texture::wrapping_e;
 
         explicit texture1d(std::shared_ptr<impl::texture1d> _)
             : _{ _ } {}
 
-        static auto create(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector1u& dimensions) -> std::shared_ptr<gfx::texture1d>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector1u& dimensions) -> std::shared_ptr<gfx::texture1d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture1d>>(std::in_place_t{}, format, filter, wrapping, dimensions);
         }
-        static auto create(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector1u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture1d>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector1u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture1d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture1d>>(std::in_place_t{}, format, filter, wrapping, dimensions, data);
         }
-        static auto create(e_format format,                                   const fox::vector1u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture1d>
+        static auto create(format_e format,                                   const fox::vector1u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture1d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture1d>>(std::in_place_t{}, format, dimensions, data);
         }
@@ -36,16 +36,16 @@ export namespace fox::gfx
             _->bind(binding);
         }
 
-        void copy      (e_format format,                       std::span<const fox::byte_t> data)
+        void copy      (format_e format,                       std::span<const fox::byte_t> data)
         {
             _->copy(format, data);
         }
-        void copy_range(e_format format, fox::length_t region, std::span<const fox::byte_t> data)
+        void copy_range(format_e format, fox::length_t region, std::span<const fox::byte_t> data)
         {
             _->copy_range(format, impl::length_t{ region.extent, region.origin }, data);
         }
 
-        void apply_wrapping (e_wrapping s)
+        void apply_wrapping (wrapping_e s)
         {
             _->apply_wrapping({ s });
         }
@@ -54,15 +54,15 @@ export namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const -> e_format
+        auto format       () const -> format_e
         {
             return _->format();
         }
-        auto filter       () const -> e_filter
+        auto filter       () const -> filter_e
         {
             return _->filter();
         }
-        auto wrapping     () const -> const std::tuple<e_wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e>&
         {
             return _->wrapping();
         }
@@ -84,11 +84,11 @@ export namespace fox::gfx
         }
 
     protected:
-        texture1d(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector1u& dimensions)
+        texture1d(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector1u& dimensions)
             : _{ std::make_shared<impl::texture1d>(format, filter, wrapping, dimensions) } {}
-        texture1d(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector1u& dimensions, std::span<const fox::byte_t> data)
+        texture1d(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector1u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::texture1d>(format, filter, wrapping, dimensions, data) } {}
-        texture1d(e_format format,                                       const fox::vector1u& dimensions, std::span<const fox::byte_t> data)
+        texture1d(format_e format,                                       const fox::vector1u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::texture1d>(format, dimensions, data) } {}
 
     private:
@@ -97,22 +97,22 @@ export namespace fox::gfx
     class texture2d
     {
     public:
-        using e_format   = api::Texture::format_e;
-        using e_filter   = api::Texture::filter_e;
-        using e_wrapping = api::Texture::wrapping_e;
+        using format_e   = api::Texture::format_e;
+        using filter_e   = api::Texture::filter_e;
+        using wrapping_e = api::Texture::wrapping_e;
 
         explicit texture2d(std::shared_ptr<impl::texture2d> _)
             : _{ _ } {}
 
-        static auto create(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector2u& dimensions) -> std::shared_ptr<gfx::texture2d>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions) -> std::shared_ptr<gfx::texture2d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture2d>>(std::in_place_t{}, format, filter, wrapping, dimensions);
         }
-        static auto create(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector2u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture2d>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture2d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture2d>>(std::in_place_t{}, format, filter, wrapping, dimensions, data);
         }
-        static auto create(e_format format,                                       const fox::vector2u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture2d>
+        static auto create(format_e format,                                       const fox::vector2u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture2d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture2d>>(std::in_place_t{}, format, dimensions, data);
         }
@@ -122,16 +122,16 @@ export namespace fox::gfx
             _->bind(binding);
         }
 
-        void copy      (e_format format,                     std::span<const fox::byte_t> data)
+        void copy      (format_e format,                     std::span<const fox::byte_t> data)
         {
             _->copy(format, data);
         }
-        void copy_range(e_format format, fox::area_t region, std::span<const fox::byte_t> data)
+        void copy_range(format_e format, fox::area_t region, std::span<const fox::byte_t> data)
         {
             _->copy_range(format, impl::area_t{ region.extent, region.origin }, data);
         }
 
-        void apply_wrapping (e_wrapping s, e_wrapping t)
+        void apply_wrapping (wrapping_e s, wrapping_e t)
         {
             _->apply_wrapping({ s, t });
         }
@@ -140,15 +140,15 @@ export namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const -> e_format
+        auto format       () const -> format_e
         {
             return _->format();
         }
-        auto filter       () const -> e_filter
+        auto filter       () const -> filter_e
         {
             return _->filter();
         }
-        auto wrapping     () const -> const std::tuple<e_wrapping, e_wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e, wrapping_e>&
         {
             return _->wrapping();
         }
@@ -170,11 +170,11 @@ export namespace fox::gfx
         }
 
     protected:
-        texture2d(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector2u& dimensions)
+        texture2d(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions)
             : _{ std::make_shared<impl::texture2d>(format, filter, wrapping, dimensions) } {}
-        texture2d(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector2u& dimensions, std::span<const fox::byte_t> data)
+        texture2d(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector2u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::texture2d>(format, filter, wrapping, dimensions, data) } {}
-        texture2d(e_format format,                                   const fox::vector2u& dimensions, std::span<const fox::byte_t> data)
+        texture2d(format_e format,                                   const fox::vector2u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::texture2d>(format, dimensions, data) } {}
 
     private:
@@ -183,22 +183,22 @@ export namespace fox::gfx
     class texture3d
     {
     public:
-        using e_format   = api::Texture::format_e;
-        using e_filter   = api::Texture::filter_e;
-        using e_wrapping = api::Texture::wrapping_e;
+        using format_e   = api::Texture::format_e;
+        using filter_e   = api::Texture::filter_e;
+        using wrapping_e = api::Texture::wrapping_e;
 
         explicit texture3d(std::shared_ptr<impl::texture3d> _)
             : _{ _ } {}
 
-        static auto create(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector3u& dimensions) -> std::shared_ptr<gfx::texture3d>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector3u& dimensions) -> std::shared_ptr<gfx::texture3d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture3d>>(std::in_place_t{}, format, filter, wrapping, dimensions);
         }
-        static auto create(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector3u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture3d>
+        static auto create(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector3u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture3d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture3d>>(std::in_place_t{}, format, filter, wrapping, dimensions, data);
         }
-        static auto create(e_format format,                                       const fox::vector3u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture3d>
+        static auto create(format_e format,                                       const fox::vector3u& dimensions, std::span<const fox::byte_t> data) -> std::shared_ptr<gfx::texture3d>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture3d>>(std::in_place_t{}, format, dimensions, data);
         }
@@ -208,16 +208,16 @@ export namespace fox::gfx
             _->bind(binding);
         }
 
-        void copy      (e_format format,                       std::span<const fox::byte_t> data)
+        void copy      (format_e format,                       std::span<const fox::byte_t> data)
         {
             _->copy(format, data);
         }
-        void copy_range(e_format format, fox::volume_t region, std::span<const fox::byte_t> data)
+        void copy_range(format_e format, fox::volume_t region, std::span<const fox::byte_t> data)
         {
             _->copy_range(format, impl::volume_t{ region.extent, region.origin }, data);
         }
 
-        void apply_wrapping (e_wrapping s, e_wrapping t, e_wrapping r)
+        void apply_wrapping (wrapping_e s, wrapping_e t, wrapping_e r)
         {
             _->apply_wrapping({ s, t, r });
         }
@@ -226,15 +226,15 @@ export namespace fox::gfx
             _->generate_mipmap();
         }
 
-        auto format       () const -> e_format
+        auto format       () const -> format_e
         {
             return _->format();
         }
-        auto filter       () const -> e_filter
+        auto filter       () const -> filter_e
         {
             return _->filter();
         }
-        auto wrapping     () const -> const std::tuple<e_wrapping, e_wrapping, e_wrapping>&
+        auto wrapping     () const -> const std::tuple<wrapping_e, wrapping_e, wrapping_e>&
         {
             return _->wrapping();
         }
@@ -256,11 +256,11 @@ export namespace fox::gfx
         }
 
     protected:
-        texture3d(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector3u& dimensions)
+        texture3d(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector3u& dimensions)
             : _{ std::make_shared<impl::texture3d>(format, filter, wrapping, dimensions) } {}
-        texture3d(e_format format, e_filter filter, e_wrapping wrapping, const fox::vector3u& dimensions, std::span<const fox::byte_t> data)
+        texture3d(format_e format, filter_e filter, wrapping_e wrapping, const fox::vector3u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::texture3d>(format, filter, wrapping, dimensions, data) } {}
-        texture3d(e_format format,                                       const fox::vector3u& dimensions, std::span<const fox::byte_t> data)
+        texture3d(format_e format,                                       const fox::vector3u& dimensions, std::span<const fox::byte_t> data)
             : _{ std::make_shared<impl::texture3d>(format, dimensions, data) } {}
 
     private:
@@ -270,12 +270,12 @@ export namespace fox::gfx
     class texture2d_ms
     {
     public:
-        using e_format = api::Texture::format_e;
+        using format_e = api::Texture::format_e;
 
         explicit texture2d_ms(std::shared_ptr<impl::texture2d_ms> _)
             : _{ _ } {}
 
-        static auto create(e_format format, const fox::vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::texture2d_ms>
+        static auto create(format_e format, const fox::vector2u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::texture2d_ms>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture2d_ms>>(std::in_place_t{}, format, dimensions, samples);
         }
@@ -285,7 +285,7 @@ export namespace fox::gfx
             _->bind(binding);
         }
 
-        auto format    () const -> e_format
+        auto format    () const -> format_e
         {
             return _->format();
         }
@@ -307,7 +307,7 @@ export namespace fox::gfx
         }
 
     protected:
-        texture2d_ms(e_format format, const fox::vector2u& dimensions, fox::uint32_t samples)
+        texture2d_ms(format_e format, const fox::vector2u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::texture2d_ms>(format, dimensions, samples) } {}
 
     private:
@@ -316,12 +316,12 @@ export namespace fox::gfx
     class texture3d_ms
     {
     public:
-        using e_format = api::Texture::format_e;
+        using format_e = api::Texture::format_e;
 
         explicit texture3d_ms(std::shared_ptr<impl::texture3d_ms> _)
             : _{ _ } {}
 
-        static auto create(e_format format, const fox::vector3u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::texture3d_ms>
+        static auto create(format_e format, const fox::vector3u& dimensions, fox::uint32_t samples) -> std::shared_ptr<gfx::texture3d_ms>
         {
             return std::make_shared<meta::from_inaccessible_ctor<gfx::texture3d_ms>>(std::in_place_t{}, format, dimensions, samples);
         }
@@ -331,7 +331,7 @@ export namespace fox::gfx
             _->bind(binding);
         }
 
-        auto format    () const -> e_format
+        auto format    () const -> format_e
         {
             return _->format();
         }
@@ -353,7 +353,7 @@ export namespace fox::gfx
         }
 
     protected:
-        texture3d_ms(e_format format, const fox::vector3u& dimensions, fox::uint32_t samples)
+        texture3d_ms(format_e format, const fox::vector3u& dimensions, fox::uint32_t samples)
             : _{ std::make_shared<impl::texture3d_ms>(format, dimensions, samples) } {}
 
     private:
