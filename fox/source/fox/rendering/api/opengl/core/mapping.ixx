@@ -18,19 +18,19 @@ import fox.rendering.base.frame_buffer;
 export namespace fox::gfx::api::gl
 {
     template<typename T>
-    constexpr auto map_type             () -> glf::vertex_array::Attribute::Type
+    constexpr auto map_type             () -> gl::vertex_array_attribute_type_e
     {
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int8_t   >) return glf::vertex_array::Attribute::Type::Byte           ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint8_t  >) return glf::vertex_array::Attribute::Type::UnsignedByte   ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int16_t  >) return glf::vertex_array::Attribute::Type::Short          ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint16_t >) return glf::vertex_array::Attribute::Type::UnsignedShort  ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int32_t  >) return glf::vertex_array::Attribute::Type::Integer        ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint32_t >) return glf::vertex_array::Attribute::Type::UnsignedInteger;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float32_t>) return glf::vertex_array::Attribute::Type::Float          ;
-        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float64_t>) return glf::vertex_array::Attribute::Type::Double         ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int8_t   >) return gl::vertex_array_attribute_type_e::byte            ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint8_t  >) return gl::vertex_array_attribute_type_e::unsigned_byte   ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int16_t  >) return gl::vertex_array_attribute_type_e::short_          ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint16_t >) return gl::vertex_array_attribute_type_e::unsigned_short  ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::int32_t  >) return gl::vertex_array_attribute_type_e::integer         ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::uint32_t >) return gl::vertex_array_attribute_type_e::unsigned_integer;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float32_t>) return gl::vertex_array_attribute_type_e::float_          ;
+        if constexpr (std::is_same_v<std::remove_cvref_t<T>, gl::float64_t>) return gl::vertex_array_attribute_type_e::double_         ;
     }
 
-    auto map_texture_format_base        (api::Texture::Format format) -> glf::Texture::BaseFormat
+    auto map_texture_format_base        (api::Texture::Format format) -> gl::texture_base_format_e
     {
         switch (format)
         {
@@ -41,14 +41,14 @@ export namespace fox::gfx::api::gl
             case R8_SNORM    :
             case R16_SNORM   :
             case R16_FLOAT   :
-            case R32_FLOAT   : return glf::Texture::BaseFormat::R;
+            case R32_FLOAT   : return gl::texture_base_format_e::r;
             
             case RG8_UNORM   :
             case RG16_UNORM  :
             case RG8_SNORM   :
             case RG16_SNORM  :
             case RG16_FLOAT  :
-            case RG32_FLOAT  : return glf::Texture::BaseFormat::RG;
+            case RG32_FLOAT  : return gl::texture_base_format_e::rg;
             
             case RGB8_UNORM  :
             case RGB16_UNORM :
@@ -56,7 +56,7 @@ export namespace fox::gfx::api::gl
             case RGB16_SNORM :
             case RGB8_SRGB   :
             case RGB16_FLOAT :
-            case RGB32_FLOAT : return glf::Texture::BaseFormat::RGB;
+            case RGB32_FLOAT : return gl::texture_base_format_e::rgb;
             
             case RGBA8_UNORM :
             case RGBA16_UNORM:
@@ -64,60 +64,60 @@ export namespace fox::gfx::api::gl
             case RGBA16_SNORM:
             case RGBA8_SRGB  :
             case RGBA16_FLOAT:
-            case RGBA32_FLOAT: return glf::Texture::BaseFormat::RGBA;
+            case RGBA32_FLOAT: return gl::texture_base_format_e::rgba;
             
             case D16_UNORM   :
             case D24_UNORM   :
-            case D32_FLOAT   : return glf::Texture::BaseFormat::D;
+            case D32_FLOAT   : return gl::texture_base_format_e::d;
             
-            case S8_UINT     : return glf::Texture::BaseFormat::S;
+            case S8_UINT     : return gl::texture_base_format_e::s;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_texture_format             (api::Texture::Format format) -> glf::Texture::Format
+    auto map_texture_format             (api::Texture::Format format) -> gl::texture_format_e
     {
         switch (format)
         {
             using enum api::Texture::Format;
 
-            case R8_UNORM         : return glf::Texture::Format::R8_UNORM;
-            case RG8_UNORM        : return glf::Texture::Format::RG8_UNORM;
-            case RGB8_UNORM       : return glf::Texture::Format::RGB8_UNORM;
-            case RGBA8_UNORM      : return glf::Texture::Format::RGBA8_UNORM;
-            case R16_UNORM        : return glf::Texture::Format::R16_UNORM;
-            case RG16_UNORM       : return glf::Texture::Format::RG16_UNORM;
-            case RGB16_UNORM      : return glf::Texture::Format::RGB16_UNORM;
-            case RGBA16_UNORM     : return glf::Texture::Format::RGBA16_UNORM;
-            case R8_SNORM         : return glf::Texture::Format::R8_SNORM;
-            case RG8_SNORM        : return glf::Texture::Format::RG8_SNORM;
-            case RGB8_SNORM       : return glf::Texture::Format::RGB8_SNORM;
-            case RGBA8_SNORM      : return glf::Texture::Format::RGBA8_SNORM;
-            case R16_SNORM        : return glf::Texture::Format::R16_SNORM;
-            case RG16_SNORM       : return glf::Texture::Format::RG16_SNORM;
-            case RGB16_SNORM      : return glf::Texture::Format::RGB16_SNORM;
-            case RGBA16_SNORM     : return glf::Texture::Format::RGBA16_SNORM;
-            case RGB8_SRGB        : return glf::Texture::Format::RGB8_SRGB;
-            case RGBA8_SRGB       : return glf::Texture::Format::RGBA8_SRGB;
-            case R16_FLOAT        : return glf::Texture::Format::R16_FLOAT;
-            case RG16_FLOAT       : return glf::Texture::Format::RG16_FLOAT;
-            case RGB16_FLOAT      : return glf::Texture::Format::RGB16_FLOAT;
-            case RGBA16_FLOAT     : return glf::Texture::Format::RGBA16_FLOAT;
-            case R32_FLOAT        : return glf::Texture::Format::R32_FLOAT;
-            case RG32_FLOAT       : return glf::Texture::Format::RG32_FLOAT;
-            case RGB32_FLOAT      : return glf::Texture::Format::RGB32_FLOAT;
-            case RGBA32_FLOAT     : return glf::Texture::Format::RGBA32_FLOAT;
-            case D16_UNORM        : return glf::Texture::Format::D16_UNORM;
-            case D24_UNORM        : return glf::Texture::Format::D24_UNORM;
-            case D32_FLOAT        : return glf::Texture::Format::D32_FLOAT;
-            case D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
-            case D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
-            case S8_UINT          : return glf::Texture::Format::S8_UINT;
+            case R8_UNORM         : return gl::texture_format_e::r8_unorm;
+            case RG8_UNORM        : return gl::texture_format_e::rg8_unorm;
+            case RGB8_UNORM       : return gl::texture_format_e::rgb8_unorm;
+            case RGBA8_UNORM      : return gl::texture_format_e::rgba8_unorm;
+            case R16_UNORM        : return gl::texture_format_e::r16_unorm;
+            case RG16_UNORM       : return gl::texture_format_e::rg16_unorm;
+            case RGB16_UNORM      : return gl::texture_format_e::rgb16_unorm;
+            case RGBA16_UNORM     : return gl::texture_format_e::rgba16_unorm;
+            case R8_SNORM         : return gl::texture_format_e::r8_snorm;
+            case RG8_SNORM        : return gl::texture_format_e::rg8_snorm;
+            case RGB8_SNORM       : return gl::texture_format_e::rgb8_snorm;
+            case RGBA8_SNORM      : return gl::texture_format_e::rgba8_snorm;
+            case R16_SNORM        : return gl::texture_format_e::r16_snorm;
+            case RG16_SNORM       : return gl::texture_format_e::rg16_snorm;
+            case RGB16_SNORM      : return gl::texture_format_e::rgb16_snorm;
+            case RGBA16_SNORM     : return gl::texture_format_e::rgba16_snorm;
+            case RGB8_SRGB        : return gl::texture_format_e::rgb8_srgb;
+            case RGBA8_SRGB       : return gl::texture_format_e::rgba8_srgb;
+            case R16_FLOAT        : return gl::texture_format_e::r16_float;
+            case RG16_FLOAT       : return gl::texture_format_e::rg16_float;
+            case RGB16_FLOAT      : return gl::texture_format_e::rgb16_float;
+            case RGBA16_FLOAT     : return gl::texture_format_e::rgba16_float;
+            case R32_FLOAT        : return gl::texture_format_e::r32_float;
+            case RG32_FLOAT       : return gl::texture_format_e::rg32_float;
+            case RGB32_FLOAT      : return gl::texture_format_e::rgb32_float;
+            case RGBA32_FLOAT     : return gl::texture_format_e::rgba32_float;
+            case D16_UNORM        : return gl::texture_format_e::d16_unorm;
+            case D24_UNORM        : return gl::texture_format_e::d24_unorm;
+            case D32_FLOAT        : return gl::texture_format_e::d32_float;
+            case D24_UNORM_S8_UINT: return gl::texture_format_e::d24_unorm_s8_uint;
+            case D32_FLOAT_S8_UINT: return gl::texture_format_e::d32_float_s8_uint;
+            case S8_UINT          : return gl::texture_format_e::s8_uint;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_texture_format_type        (api::Texture::Format format) -> glf::PixelData::Type
+    auto map_texture_format_type        (api::Texture::Format format) -> gl::pixel_data_type_e
     {
         switch (format)
         {
@@ -126,104 +126,104 @@ export namespace fox::gfx::api::gl
             case R8_UNORM    :
             case RG8_UNORM   :
             case RGB8_UNORM  :
-            case RGBA8_UNORM :  return glf::PixelData::Type::UnsignedByte;
+            case RGBA8_UNORM :  return gl::pixel_data_type_e::unsigned_byte_;
 
             case R16_UNORM   :
             case RG16_UNORM  :
             case RGB16_UNORM :
-            case RGBA16_UNORM: return glf::PixelData::Type::UnsignedShort;
+            case RGBA16_UNORM: return gl::pixel_data_type_e::unsigned_short_;
 
             case R8_SNORM    :
             case RG8_SNORM   :
             case RGB8_SNORM  :
-            case RGBA8_SNORM : return glf::PixelData::Type::Byte;
+            case RGBA8_SNORM : return gl::pixel_data_type_e::byte_;
 
             case R16_SNORM   :
             case RG16_SNORM  :
             case RGB16_SNORM :
-            case RGBA16_SNORM: return glf::PixelData::Type::Short;
+            case RGBA16_SNORM: return gl::pixel_data_type_e::short_;
 
             case RGB8_SRGB   :
-            case RGBA8_SRGB  : return glf::PixelData::Type::UnsignedByte;
+            case RGBA8_SRGB  : return gl::pixel_data_type_e::unsigned_byte_;
             
             case R16_FLOAT   :
             case RG16_FLOAT  :
             case RGB16_FLOAT :
-            case RGBA16_FLOAT: return glf::PixelData::Type::HalfFloat;
+            case RGBA16_FLOAT: return gl::pixel_data_type_e::half_float_;
             
             case R32_FLOAT   :
             case RG32_FLOAT  :
             case RGB32_FLOAT :
-            case RGBA32_FLOAT: return glf::PixelData::Type::Float;
+            case RGBA32_FLOAT: return gl::pixel_data_type_e::float_;
             
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_texture_min_filter         (api::Texture::Filter filter) -> glf::Texture::MinificationFilter
+    auto map_texture_min_filter         (api::Texture::Filter filter) -> gl::texture_minification_filter_e
     {
         switch (filter)
         {
             using enum api::Texture::Filter;
 
-            case None     : return glf::Texture::MinificationFilter::Nearest;
-            case Nearest  : return glf::Texture::MinificationFilter::NearestMipmapNearest;
-            case Bilinear : return glf::Texture::MinificationFilter::LinearMipmapNearest;
-            case Trilinear: return glf::Texture::MinificationFilter::LinearMipmapLinear;
+            case None     : return gl::texture_minification_filter_e::nearest;
+            case Nearest  : return gl::texture_minification_filter_e::nearest_mipmap_nearest;
+            case Bilinear : return gl::texture_minification_filter_e::linear_mipmap_nearest;
+            case Trilinear: return gl::texture_minification_filter_e::linear_mipmap_linear;
 
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    auto map_texture_mag_filter         (api::Texture::Filter filter) -> glf::Texture::MagnificationFilter
+    auto map_texture_mag_filter         (api::Texture::Filter filter) -> gl::texture_magnification_filter_e
     {
         switch (filter)
         {
             using enum api::Texture::Filter;
 
-            case None     : return glf::Texture::MagnificationFilter::Nearest;
-            case Nearest  : return glf::Texture::MagnificationFilter::Nearest;
-            case Bilinear : return glf::Texture::MagnificationFilter::Linear;
-            case Trilinear: return glf::Texture::MagnificationFilter::Linear;
+            case None     : return gl::texture_magnification_filter_e::nearest;
+            case Nearest  : return gl::texture_magnification_filter_e::nearest;
+            case Bilinear : return gl::texture_magnification_filter_e::linear;
+            case Trilinear: return gl::texture_magnification_filter_e::linear;
 
             default: throw std::invalid_argument{ "Invalid filter!" };
         }
     }
-    auto map_texture_wrapping           (api::Texture::Wrapping wrapping) -> glf::Texture::Wrapping
+    auto map_texture_wrapping           (api::Texture::Wrapping wrapping) -> gl::texture_wrapping_e
     {
         switch (wrapping)
         {
             using enum api::Texture::Wrapping;
 
-            case ClampToEdge        : return glf::Texture::Wrapping::ClampToEdge;
-            case ClampToBorder      : return glf::Texture::Wrapping::ClampToBorder;
-            case Repeat             : return glf::Texture::Wrapping::Repeat;
-            case MirroredRepeat     : return glf::Texture::Wrapping::MirroredRepeat;
-            case MirroredClampToEdge: return glf::Texture::Wrapping::MirroredClampToEdge;
+            case ClampToEdge        : return gl::texture_wrapping_e::clamp_to_edge;
+            case ClampToBorder      : return gl::texture_wrapping_e::clamp_to_border;
+            case Repeat             : return gl::texture_wrapping_e::repeat;
+            case MirroredRepeat     : return gl::texture_wrapping_e::mirrored_repeat;
+            case MirroredClampToEdge: return gl::texture_wrapping_e::mirrored_clamp_to_edge;
 
             default: throw std::invalid_argument{ "Invalid wrapping!" };
         }
     }
-    auto map_render_buffer_format       (api::render_buffer::Format format) -> glf::render_buffer::Format
+    auto map_render_buffer_format       (api::render_buffer::Format format) -> gl::render_buffer_format_e
     {
         switch (format)
         {
             using enum api::render_buffer::Format;
 
-            case R8_UNORM         : return glf::render_buffer::Format::R8;
-            case RG8_UNORM        : return glf::render_buffer::Format::RG8;
-            case RGB8_UNORM       : return glf::render_buffer::Format::RGB8;
-            case RGBA8_UNORM      : return glf::render_buffer::Format::RGBA8;
-            case RGBA8_SRGB       : return glf::render_buffer::Format::RGBA8_SRGB;
-            case D16_UNORM        : return glf::render_buffer::Format::D16_UNORM;
-            case D24_UNORM        : return glf::render_buffer::Format::D24_UNORM;
-            case D32_FLOAT        : return glf::render_buffer::Format::D32_FLOAT;
-            case D24_UNORM_S8_UINT: return glf::render_buffer::Format::D24_UNORM_S8_UINT;
-            case D32_FLOAT_S8_UINT: return glf::render_buffer::Format::D32_FLOAT_S8_UINT;
-            case S8_UINT          : return glf::render_buffer::Format::S8_UINT;
+            case R8_UNORM         : return gl::render_buffer_format_e::r8;
+            case RG8_UNORM        : return gl::render_buffer_format_e::rg8;
+            case RGB8_UNORM       : return gl::render_buffer_format_e::rgb8;
+            case RGBA8_UNORM      : return gl::render_buffer_format_e::rgba8;
+            case RGBA8_SRGB       : return gl::render_buffer_format_e::rgba8_srgb;
+            case D16_UNORM        : return gl::render_buffer_format_e::d16_unorm;
+            case D24_UNORM        : return gl::render_buffer_format_e::d24_unorm;
+            case D32_FLOAT        : return gl::render_buffer_format_e::d32_float;
+            case D24_UNORM_S8_UINT: return gl::render_buffer_format_e::d24_unorm_s8_uint;
+            case D32_FLOAT_S8_UINT: return gl::render_buffer_format_e::d32_float_s8_uint;
+            case S8_UINT          : return gl::render_buffer_format_e::s8_uint;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_cubemap_texture_format_base(api::cubemap::Format format) -> glf::Texture::BaseFormat
+    auto map_cubemap_texture_format_base(api::cubemap::Format format) -> gl::texture_base_format_e
     {
         switch (format)
         {
@@ -234,14 +234,14 @@ export namespace fox::gfx::api::gl
             case R8_SNORM    :
             case R16_SNORM   :
             case R16_FLOAT   :
-            case R32_FLOAT   : return glf::Texture::BaseFormat::R;
+            case R32_FLOAT   : return gl::texture_base_format_e::r;
             
             case RG8_UNORM   :
             case RG16_UNORM  :
             case RG8_SNORM   :
             case RG16_SNORM  :
             case RG16_FLOAT  :
-            case RG32_FLOAT  : return glf::Texture::BaseFormat::RG;
+            case RG32_FLOAT  : return gl::texture_base_format_e::rg;
             
             case RGB8_UNORM  :
             case RGB16_UNORM :
@@ -249,7 +249,7 @@ export namespace fox::gfx::api::gl
             case RGB16_SNORM :
             case RGB8_SRGB   :
             case RGB16_FLOAT :
-            case RGB32_FLOAT : return glf::Texture::BaseFormat::RGB;
+            case RGB32_FLOAT : return gl::texture_base_format_e::rgb;
             
             case RGBA8_UNORM :
             case RGBA16_UNORM:
@@ -257,69 +257,69 @@ export namespace fox::gfx::api::gl
             case RGBA16_SNORM:
             case RGBA8_SRGB  :
             case RGBA16_FLOAT:
-            case RGBA32_FLOAT: return glf::Texture::BaseFormat::RGBA;
+            case RGBA32_FLOAT: return gl::texture_base_format_e::rgba;
             
             case D16_UNORM   :
             case D24_UNORM   :
-            case D32_FLOAT   : return glf::Texture::BaseFormat::D;
+            case D32_FLOAT   : return gl::texture_base_format_e::d;
             
-            case S8_UINT     : return glf::Texture::BaseFormat::S;
+            case S8_UINT     : return gl::texture_base_format_e::s;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_cubemap_texture_format     (api::cubemap::Format format) -> glf::Texture::Format
+    auto map_cubemap_texture_format     (api::cubemap::Format format) -> gl::texture_format_e
     {
         switch (format)
         {
             using enum api::cubemap::Format;
 
-            case R8_UNORM         : return glf::Texture::Format::R8_UNORM;
-            case RG8_UNORM        : return glf::Texture::Format::RG8_UNORM;
-            case RGB8_UNORM       : return glf::Texture::Format::RGB8_UNORM;
-            case RGBA8_UNORM      : return glf::Texture::Format::RGBA8_UNORM;
+            case R8_UNORM         : return gl::texture_format_e::r8_unorm;
+            case RG8_UNORM        : return gl::texture_format_e::rg8_unorm;
+            case RGB8_UNORM       : return gl::texture_format_e::rgb8_unorm;
+            case RGBA8_UNORM      : return gl::texture_format_e::rgba8_unorm;
             
-            case R16_UNORM        : return glf::Texture::Format::R16_UNORM;
-            case RG16_UNORM       : return glf::Texture::Format::RG16_UNORM;
-            case RGB16_UNORM      : return glf::Texture::Format::RGB16_UNORM;
-            case RGBA16_UNORM     : return glf::Texture::Format::RGBA16_UNORM;
+            case R16_UNORM        : return gl::texture_format_e::r16_unorm;
+            case RG16_UNORM       : return gl::texture_format_e::rg16_unorm;
+            case RGB16_UNORM      : return gl::texture_format_e::rgb16_unorm;
+            case RGBA16_UNORM     : return gl::texture_format_e::rgba16_unorm;
             
-            case R8_SNORM         : return glf::Texture::Format::R8_SNORM;
-            case RG8_SNORM        : return glf::Texture::Format::RG8_SNORM;
-            case RGB8_SNORM       : return glf::Texture::Format::RGB8_SNORM;
-            case RGBA8_SNORM      : return glf::Texture::Format::RGBA8_SNORM;
+            case R8_SNORM         : return gl::texture_format_e::r8_snorm;
+            case RG8_SNORM        : return gl::texture_format_e::rg8_snorm;
+            case RGB8_SNORM       : return gl::texture_format_e::rgb8_snorm;
+            case RGBA8_SNORM      : return gl::texture_format_e::rgba8_snorm;
             
-            case R16_SNORM        : return glf::Texture::Format::R16_SNORM;
-            case RG16_SNORM       : return glf::Texture::Format::RG16_SNORM;
-            case RGB16_SNORM      : return glf::Texture::Format::RGB16_SNORM;
-            case RGBA16_SNORM     : return glf::Texture::Format::RGBA16_SNORM;
+            case R16_SNORM        : return gl::texture_format_e::r16_snorm;
+            case RG16_SNORM       : return gl::texture_format_e::rg16_snorm;
+            case RGB16_SNORM      : return gl::texture_format_e::rgb16_snorm;
+            case RGBA16_SNORM     : return gl::texture_format_e::rgba16_snorm;
             
-            case RGB8_SRGB        : return glf::Texture::Format::RGB8_SRGB;
-            case RGBA8_SRGB       : return glf::Texture::Format::RGBA8_SRGB;
+            case RGB8_SRGB        : return gl::texture_format_e::rgb8_srgb;
+            case RGBA8_SRGB       : return gl::texture_format_e::rgba8_srgb;
             
-            case R16_FLOAT        : return glf::Texture::Format::R16_FLOAT;
-            case RG16_FLOAT       : return glf::Texture::Format::RG16_FLOAT;
-            case RGB16_FLOAT      : return glf::Texture::Format::RGB16_FLOAT;
-            case RGBA16_FLOAT     : return glf::Texture::Format::RGBA16_FLOAT;
+            case R16_FLOAT        : return gl::texture_format_e::r16_float;
+            case RG16_FLOAT       : return gl::texture_format_e::rg16_float;
+            case RGB16_FLOAT      : return gl::texture_format_e::rgb16_float;
+            case RGBA16_FLOAT     : return gl::texture_format_e::rgba16_float;
             
-            case R32_FLOAT        : return glf::Texture::Format::R32_FLOAT;
-            case RG32_FLOAT       : return glf::Texture::Format::RG32_FLOAT;
-            case RGB32_FLOAT      : return glf::Texture::Format::RGB32_FLOAT;
-            case RGBA32_FLOAT     : return glf::Texture::Format::RGBA32_FLOAT;
+            case R32_FLOAT        : return gl::texture_format_e::r32_float;
+            case RG32_FLOAT       : return gl::texture_format_e::rg32_float;
+            case RGB32_FLOAT      : return gl::texture_format_e::rgb32_float;
+            case RGBA32_FLOAT     : return gl::texture_format_e::rgba32_float;
             
-            case D16_UNORM        : return glf::Texture::Format::D16_UNORM;
-            case D24_UNORM        : return glf::Texture::Format::D24_UNORM;
-            case D32_FLOAT        : return glf::Texture::Format::D32_FLOAT;
+            case D16_UNORM        : return gl::texture_format_e::d16_unorm;
+            case D24_UNORM        : return gl::texture_format_e::d24_unorm;
+            case D32_FLOAT        : return gl::texture_format_e::d32_float;
             
-            case D24_UNORM_S8_UINT: return glf::Texture::Format::D24_UNORM_S8_UINT;
-            case D32_FLOAT_S8_UINT: return glf::Texture::Format::D32_FLOAT_S8_UINT;
+            case D24_UNORM_S8_UINT: return gl::texture_format_e::d24_unorm_s8_uint;
+            case D32_FLOAT_S8_UINT: return gl::texture_format_e::d32_float_s8_uint;
             
-            case S8_UINT          : return glf::Texture::Format::S8_UINT;
+            case S8_UINT          : return gl::texture_format_e::s8_uint;
 
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_cubemap_texture_format_type(api::cubemap::Format format) -> glf::PixelData::Type
+    auto map_cubemap_texture_format_type(api::cubemap::Format format) -> gl::pixel_data_type_e
     {
         switch (format)
         {
@@ -328,162 +328,162 @@ export namespace fox::gfx::api::gl
             case R8_UNORM    :
             case RG8_UNORM   :
             case RGB8_UNORM  :
-            case RGBA8_UNORM : return glf::PixelData::Type::UnsignedByte;
+            case RGBA8_UNORM : return gl::pixel_data_type_e::unsigned_byte_;
 
             case R16_UNORM   :
             case RG16_UNORM  :
             case RGB16_UNORM :
-            case RGBA16_UNORM: return glf::PixelData::Type::UnsignedShort;
+            case RGBA16_UNORM: return gl::pixel_data_type_e::unsigned_short_;
 
             case R8_SNORM    :
             case RG8_SNORM   :
             case RGB8_SNORM  :
-            case RGBA8_SNORM : return glf::PixelData::Type::Byte;
+            case RGBA8_SNORM : return gl::pixel_data_type_e::byte_;
 
             case R16_SNORM   :
             case RG16_SNORM  :
             case RGB16_SNORM :
-            case RGBA16_SNORM: return glf::PixelData::Type::Short;
+            case RGBA16_SNORM: return gl::pixel_data_type_e::short_;
 
             case RGB8_SRGB   :
-            case RGBA8_SRGB  : return glf::PixelData::Type::UnsignedByte;
+            case RGBA8_SRGB  : return gl::pixel_data_type_e::unsigned_byte_;
 
             case R16_FLOAT   :
             case RG16_FLOAT  :
             case RGB16_FLOAT :
-            case RGBA16_FLOAT: return glf::PixelData::Type::HalfFloat;
+            case RGBA16_FLOAT: return gl::pixel_data_type_e::half_float_;
 
             case R32_FLOAT   :
             case RG32_FLOAT  :
             case RGB32_FLOAT :
-            case RGBA32_FLOAT: return glf::PixelData::Type::Float;
+            case RGBA32_FLOAT: return gl::pixel_data_type_e::float_;
             
             default: throw std::invalid_argument{ "Invalid format!" };
         }
     }
-    auto map_frame_buffer_target        (api::frame_buffer::Target  target) -> glf::frame_buffer::Target
+    auto map_frame_buffer_target        (api::frame_buffer::Target  target) -> gl::frame_buffer_target_e
     {
         switch (target)
         {
             using enum api::frame_buffer::Target;
 
-            case Read : return glf::frame_buffer::Target::Read;
-            case Write: return glf::frame_buffer::Target::Write;
+            case Read : return gl::frame_buffer_target_e::read;
+            case Write: return gl::frame_buffer_target_e::write;
 
             default: throw std::invalid_argument{ "Invalid target!" };
         }
     }
-    auto map_frame_buffer_attachment    (api::frame_buffer::Attachment attachment) -> glf::frame_buffer::Attachment
+    auto map_frame_buffer_attachment    (api::frame_buffer::Attachment attachment) -> gl::frame_buffer_attachment_e
     {
         switch (attachment)
         {
             using enum api::frame_buffer::Attachment;
 
-            case Color0      : return glf::frame_buffer::Attachment::Color0; 
-            case Color1      : return glf::frame_buffer::Attachment::Color1; 
-            case Color2      : return glf::frame_buffer::Attachment::Color2; 
-            case Color3      : return glf::frame_buffer::Attachment::Color3; 
-            case Color4      : return glf::frame_buffer::Attachment::Color4; 
-            case Color5      : return glf::frame_buffer::Attachment::Color5; 
-            case Color6      : return glf::frame_buffer::Attachment::Color6; 
-            case Color7      : return glf::frame_buffer::Attachment::Color7; 
+            case Color0      : return gl::frame_buffer_attachment_e::color0; 
+            case Color1      : return gl::frame_buffer_attachment_e::color1; 
+            case Color2      : return gl::frame_buffer_attachment_e::color2; 
+            case Color3      : return gl::frame_buffer_attachment_e::color3; 
+            case Color4      : return gl::frame_buffer_attachment_e::color4; 
+            case Color5      : return gl::frame_buffer_attachment_e::color5; 
+            case Color6      : return gl::frame_buffer_attachment_e::color6; 
+            case Color7      : return gl::frame_buffer_attachment_e::color7; 
 
-            case Depth       : return glf::frame_buffer::Attachment::Depth;
-            case Stencil     : return glf::frame_buffer::Attachment::Stencil;
-            case DepthStencil: return glf::frame_buffer::Attachment::DepthStencil;
+            case Depth       : return gl::frame_buffer_attachment_e::depth;
+            case Stencil     : return gl::frame_buffer_attachment_e::stencil;
+            case DepthStencil: return gl::frame_buffer_attachment_e::depth_stencil;
 
             default: throw std::invalid_argument{ "Invalid attachment!" };
         }
     }
-    auto map_program_stage              (api::shader::Stage stage) -> glf::Program::Stage
+    auto map_program_stage              (api::shader::Stage stage) -> gl::program_stage_e
     {
         switch (stage)
         {
             using enum api::shader::Stage;
 
-            case Vertex                : return glf::Program::Stage::Vertex;
-            case TessellationControl   : return glf::Program::Stage::TessellationControl;
-            case TessellationEvaluation: return glf::Program::Stage::TessellationEvaluation;
-            case Geometry              : return glf::Program::Stage::Geometry;
-            case Fragment              : return glf::Program::Stage::Fragment;
-            case Compute               : return glf::Program::Stage::Compute;
+            case Vertex                : return gl::program_stage_e::vertex;
+            case TessellationControl   : return gl::program_stage_e::tessellation_control;
+            case TessellationEvaluation: return gl::program_stage_e::tessellation_evaluation;
+            case Geometry              : return gl::program_stage_e::geometry;
+            case Fragment              : return gl::program_stage_e::fragment;
+            case Compute               : return gl::program_stage_e::compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }                                                                      
-    auto map_shader_type                (api::shader::Stage stage) -> glf::shader::Type
+    auto map_shader_type                (api::shader::Stage stage) -> gl::shader_type_e
     {
         switch (stage)
         {
             using enum api::shader::Stage;
 
-            case Vertex                : return glf::shader::Type::Vertex;
-            case TessellationControl   : return glf::shader::Type::TessellationControl;
-            case TessellationEvaluation: return glf::shader::Type::TessellationEvaluation;
-            case Geometry              : return glf::shader::Type::Geometry;
-            case Fragment              : return glf::shader::Type::Fragment;
-            case Compute               : return glf::shader::Type::Compute;
+            case Vertex                : return gl::shader_type_e::vertex;
+            case TessellationControl   : return gl::shader_type_e::tessellation_control;
+            case TessellationEvaluation: return gl::shader_type_e::tessellation_evaluation;
+            case Geometry              : return gl::shader_type_e::geometry;
+            case Fragment              : return gl::shader_type_e::fragment;
+            case Compute               : return gl::shader_type_e::compute;
 
             default: throw std::invalid_argument{ "Invalid stage!" };
         }
     }
-    auto map_query_target               (api::Query::Target target) -> glf::Query::Target
+    auto map_query_target               (api::Query::Target target) -> gl::query_target_e
     {
         switch (target)
         {
             using enum api::Query::Target;
 
-            case AnySamplesPassed                        : return glf::Query::Target::AnySamplesPassed;
-            case AnySamplesPassedConservative            : return glf::Query::Target::AnySamplesPassedConservative;
-            case ClippingInputPrimitives                 : return glf::Query::Target::ClippingInputPrimitives;
-            case ClippingOutputPrimitives                : return glf::Query::Target::ClippingOutputPrimitives;
-            case ComputeShaderInvocations                : return glf::Query::Target::ComputeShaderInvocations;
-            case FragmentShaderInvocations               : return glf::Query::Target::FragmentShaderInvocations;
-            case GeometryShaderInvocations               : return glf::Query::Target::GeometryShaderInvocations;
-            case GeometryShaderPrimitivesEmitted         : return glf::Query::Target::GeometryShaderPrimitivesEmitted;
-            case PrimitivesGenerated                     : return glf::Query::Target::PrimitivesGenerated;
-            case PrimitivesSubmitted                     : return glf::Query::Target::PrimitivesSubmitted;
-            case SamplesPassed                           : return glf::Query::Target::SamplesPassed;
-            case TessellationControlShaderPatches        : return glf::Query::Target::TessellationControlShaderPatches;
-            case TessellationEvaluationShaderInvocations : return glf::Query::Target::TessellationEvaluationShaderInvocations;
-            case TimeElapsed                             : return glf::Query::Target::TimeElapsed;
-            case Timestamp                               : return glf::Query::Target::Timestamp;
-            case TransformFeedbackOverflow               : return glf::Query::Target::TransformFeedbackOverflow;
-            case TransformFeedbackPrimitivesWritten      : return glf::Query::Target::TransformFeedbackPrimitivesWritten;
-            case TransformFeedbackStreamOverflow         : return glf::Query::Target::TransformFeedbackStreamOverflow;
-            case VertexShaderInvocations                 : return glf::Query::Target::VertexShaderInvocations;
-            case VerticesSubmitted                       : return glf::Query::Target::VerticesSubmitted;
+            case AnySamplesPassed                        : return gl::query_target_e::any_samples_passed;
+            case AnySamplesPassedConservative            : return gl::query_target_e::any_samples_passed_conservative;
+            case ClippingInputPrimitives                 : return gl::query_target_e::clipping_input_primitives;
+            case ClippingOutputPrimitives                : return gl::query_target_e::clipping_output_primitives;
+            case ComputeShaderInvocations                : return gl::query_target_e::compute_shader_invocations;
+            case FragmentShaderInvocations               : return gl::query_target_e::fragment_shader_invocations;
+            case GeometryShaderInvocations               : return gl::query_target_e::geometry_shader_invocations;
+            case GeometryShaderPrimitivesEmitted         : return gl::query_target_e::geometry_shader_primitives_emitted;
+            case PrimitivesGenerated                     : return gl::query_target_e::primitives_generated;
+            case PrimitivesSubmitted                     : return gl::query_target_e::primitives_submitted;
+            case SamplesPassed                           : return gl::query_target_e::samples_passed;
+            case TessellationControlShaderPatches        : return gl::query_target_e::tessellation_control_shader_patches;
+            case TessellationEvaluationShaderInvocations : return gl::query_target_e::tessellation_evaluation_shader_invocations;
+            case TimeElapsed                             : return gl::query_target_e::time_elapsed;
+            case Timestamp                               : return gl::query_target_e::timestamp;
+            case TransformFeedbackOverflow               : return gl::query_target_e::transform_feedback_overflow;
+            case TransformFeedbackPrimitivesWritten      : return gl::query_target_e::transform_feedback_primitives_written;
+            case TransformFeedbackStreamOverflow         : return gl::query_target_e::transform_feedback_stream_overflow;
+            case VertexShaderInvocations                 : return gl::query_target_e::vertex_shader_invocations;
+            case VerticesSubmitted                       : return gl::query_target_e::vertices_submitted;
 
             default: throw std::invalid_argument{ "Invalid target!" };
         }
     }
-    auto map_depth_function             (api::RenderState::DepthFunction depthFunction) -> glf::DepthFunction
+    auto map_depth_function             (api::RenderState::DepthFunction depthFunction) -> gl::depth_function_e
     {
         switch (depthFunction)
         {
             using enum api::RenderState::DepthFunction;
 
-            case Always      : return glf::DepthFunction::Always;
-            case Never       : return glf::DepthFunction::Never;
-            case Equal       : return glf::DepthFunction::Equal;
-            case NotEqual    : return glf::DepthFunction::NotEqual;
-            case Less        : return glf::DepthFunction::Less;
-            case LessEqual   : return glf::DepthFunction::LessEqual;
-            case Greater     : return glf::DepthFunction::Greater;
-            case GreaterEqual: return glf::DepthFunction::GreaterEqual;
+            case Always      : return gl::depth_function_e::always;
+            case Never       : return gl::depth_function_e::never;
+            case Equal       : return gl::depth_function_e::equal;
+            case NotEqual    : return gl::depth_function_e::not_equal;
+            case Less        : return gl::depth_function_e::less;
+            case Greater     : return gl::depth_function_e::greater;
+            case LessEqual   : return gl::depth_function_e::less_equal;
+            case GreaterEqual: return gl::depth_function_e::greater_equal;
 
             default: throw std::invalid_argument{ "Invalid function!" };
         }
     }
-    auto map_culling_face               (api::RenderState::FaceCulling cullingFace) -> glf::Culling::Facet
+    auto map_culling_face               (api::RenderState::FaceCulling cullingFace) -> gl::culling_facet_e
     {
         switch (cullingFace)
         {
             using enum api::RenderState::FaceCulling;
 
-            case Front    : return glf::Culling::Facet::Front;
-            case Back     : return glf::Culling::Facet::Back;
-            case FrontBack: return glf::Culling::Facet::FrontBack;
+            case Front    : return gl::culling_facet_e::front;
+            case Back     : return gl::culling_facet_e::back;
+            case FrontBack: return gl::culling_facet_e::front_and_back;
 
             default: throw std::invalid_argument{ "Invalid face!" };
         }

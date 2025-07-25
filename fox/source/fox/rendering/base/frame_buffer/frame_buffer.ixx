@@ -1,7 +1,6 @@
 export module fox.rendering.base.frame_buffer;
 
 import std;
-
 import fox.core.types;
 import fox.core.enumeration;
 import fox.rendering.base.cubemap;
@@ -50,7 +49,7 @@ export namespace fox::gfx::api
         };
         enum class Surface
         {
-            Texture,
+            texture, 
             cubemap,
             render_buffer,
         };
@@ -59,9 +58,10 @@ export namespace fox::gfx::api
             Read, 
             Write, 
         };
+
+        friend constexpr auto operator+(api::frame_buffer::Attachment first, fox::uint32_t second) -> api::frame_buffer::Attachment
+        {
+            return static_cast<api::frame_buffer::Attachment>(std::to_underlying(first) + second);
+        };
     };
 };
-namespace fox
-{
-    template<> struct fox::enumeration_operator<gfx::api::frame_buffer::Attachment> { static constexpr auto enable = fox::bool_t{ fox::true_ }; };
-}

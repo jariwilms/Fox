@@ -1,7 +1,6 @@
 export module fox.rendering.api.opengl.parameters;
 
 import std;
-
 import fox.rendering.api.opengl.flags;
 import fox.rendering.api.opengl.types;
 
@@ -27,31 +26,31 @@ export namespace fox::gfx::api::glp
     };
     struct compare_mode
     { 
-        glf::Texture::CompareMode value{}; 
+        gl::texture_compare_mode_e value{}; 
     };
     struct compare_function     
     { 
-        glf::Texture::CompareFunction value{}; 
+        gl::texture_compare_function_e value{}; 
     };
     struct magnification_filter 
     { 
-        glf::Texture::MagnificationFilter value{}; 
+        gl::texture_magnification_filter_e value{}; 
     };
     struct minification_filter  
     { 
-        glf::Texture::MinificationFilter value{}; 
+        gl::texture_minification_filter_e value{}; 
     };
     struct wrapping_s           
     { 
-        glf::Texture::Wrapping value{}; 
+        gl::texture_wrapping_e value{}; 
     };
     struct wrapping_t           
     { 
-        glf::Texture::Wrapping value{}; 
+        gl::texture_wrapping_e value{}; 
     };
     struct wrapping_r           
     { 
-        glf::Texture::Wrapping value{}; 
+        gl::texture_wrapping_e value{}; 
     };
     struct border_color         
     { 
@@ -69,7 +68,7 @@ export namespace fox::gfx::api::glp
     };
     struct depth_stencil_mode
     {
-        glf::Texture::BaseFormat value{};
+        gl::texture_base_format_e value{};
     };
     struct base_level
     {
@@ -89,23 +88,23 @@ export namespace fox::gfx::api::glp
     };
     struct swizzle_r
     {
-        glf::Texture::Swizzle value{};
+        gl::texture_swizzle_e value{};
     };
     struct swizzle_g
     {
-        glf::Texture::Swizzle value{};
+        gl::texture_swizzle_e value{};
     };
     struct swizzle_b
     {
-        glf::Texture::Swizzle value{};
+        gl::texture_swizzle_e value{};
     };
     struct swizzle_a
     {
-        glf::Texture::Swizzle value{};
+        gl::texture_swizzle_e value{};
     };
     struct swizzle_rgba
     {
-        std::array<glf::Texture::Swizzle, 4> value{};
+        std::array<gl::texture_swizzle_e, 4> value{};
     };
     struct fade_threshold_size
     {
@@ -113,7 +112,7 @@ export namespace fox::gfx::api::glp
     };
     struct sprite_coordinate_origin
     {
-        glf::Point::Origin value{};
+        gl::point_origin_e value{};
     };
     struct patch_vertices
     {

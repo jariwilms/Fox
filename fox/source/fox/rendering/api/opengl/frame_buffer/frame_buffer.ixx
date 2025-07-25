@@ -69,7 +69,7 @@ export namespace fox::gfx::api::gl
 
                     case api::render_buffer::Format::S8_UINT:           return api::frame_buffer::Attachment::Stencil;
 
-                    default:                                           return api::frame_buffer::Attachment::Color0 + colorIndex++;
+                    default:                                            return api::frame_buffer::Attachment::Color0 + colorIndex++;
                 }
             };
 
@@ -107,31 +107,31 @@ export namespace fox::gfx::api::gl
             
             if (gl::compare<std::equal_to>(colorIndex, gl::uint32_t{ 0u }))
             {
-                gl::frame_buffer_read_buffer(handle_, glf::frame_buffer::Source::None);
-                gl::frame_buffer_draw_buffer(handle_, glf::frame_buffer::Source::None);
+                gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::none);
+                gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::none);
             }
             else
             {
-                auto colorBufferSources = std::vector<glf::frame_buffer::Source>(colorIndex);
+                auto colorBufferSources = std::vector<gl::frame_buffer_source_e>(colorIndex);
                 std::ranges::for_each(std::views::iota(0u, colorIndex), [&](gl::uint32_t index)
                     {
-                        colorBufferSources.at(index) = glf::frame_buffer::Source::Color0 + index;
+                        colorBufferSources.at(index) = gl::frame_buffer_source_e::color0 + index;
                     });
 
                 gl::frame_buffer_draw_buffers(handle_, colorBufferSources);
             }
 
-            if (gl::check_frame_buffer_status(handle_) != glf::frame_buffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(handle_) != gl::frame_buffer_status_e::complete) throw std::runtime_error{ "Framebuffer is not complete!" };
         }
 
         void bind(target_e target)
         {
             gl::bind_frame_buffer(handle_, gl::map_frame_buffer_target(target));
         }
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
         {
-            if constexpr (A == surface_e::Texture) textureMap_.at(identifier)->bind(binding);
+            if constexpr (A == surface_e::texture) textureMap_.at(identifier)->bind(binding);
             if constexpr (A == surface_e::cubemap) cubemapMap_.at(identifier)->bind(binding);
         }
 
@@ -157,10 +157,10 @@ export namespace fox::gfx::api::gl
             renderBufferMap_.emplace(identifier, renderBuffer);
         }
         
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void detach(const std::string& identifier, attachment_e attachment)
         {
-            if constexpr (A == surface_e::Texture)
+            if constexpr (A == surface_e::texture)
             {
                 gl::frame_buffer_texture(handle_, gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 textureMap_.erase(identifier);
@@ -181,15 +181,15 @@ export namespace fox::gfx::api::gl
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), glf::frame_buffer::Attachment::Color0 + index, level);
-            gl::frame_buffer_read_buffer(handle_, glf::frame_buffer::Source::Color0 + index);
+            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
         }
         void write_to (const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), glf::frame_buffer::Attachment::Color0 + index, level);
-            gl::frame_buffer_draw_buffer(handle_, glf::frame_buffer::Source::Color0 + index);
+            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -208,10 +208,10 @@ export namespace fox::gfx::api::gl
             dimensions_ = dimensions;
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         auto surface(const std::string& identifier) -> auto
         {
-            if constexpr (A == surface_e::Texture)
+            if constexpr (A == surface_e::texture)
             {
                 return textureMap_.at(identifier);
             }
@@ -316,31 +316,31 @@ export namespace fox::gfx::api::gl
 
             if (gl::compare<std::equal_to>(colorIndex, gl::uint32_t{ 0u }))
             {
-                gl::frame_buffer_read_buffer(handle_, glf::frame_buffer::Source::None);
-                gl::frame_buffer_draw_buffer(handle_, glf::frame_buffer::Source::None);
+                gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::none);
+                gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::none);
             }
             else
             {
-                auto colorBufferSources = std::vector<glf::frame_buffer::Source>(colorIndex);
+                auto colorBufferSources = std::vector<gl::frame_buffer_source_e>(colorIndex);
                 std::ranges::for_each(std::views::iota(0u, colorIndex), [&](gl::uint32_t index)
                     {
-                        colorBufferSources.at(index) = glf::frame_buffer::Source::Color0 + index;
+                        colorBufferSources.at(index) = gl::frame_buffer_source_e::color0 + index;
                     });
 
                 gl::frame_buffer_draw_buffers(handle_, colorBufferSources);
             }
 
-            if (gl::check_frame_buffer_status(handle_) != glf::frame_buffer::Status::Complete) throw std::runtime_error{ "Framebuffer is not complete!" };
+            if (gl::check_frame_buffer_status(handle_) != gl::frame_buffer_status_e::complete) throw std::runtime_error{ "Framebuffer is not complete!" };
          }
         
         void bind(target_e target)
         {
             gl::bind_frame_buffer(handle_, gl::map_frame_buffer_target(target));
         }
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void bind_surface(const std::string& identifier, gl::binding_t binding) const
         {
-            if constexpr (A == surface_e::Texture) textureMap_.at(identifier)->bind(binding);
+            if constexpr (A == surface_e::texture) textureMap_.at(identifier)->bind(binding);
         }
 
         void attach(const std::string& identifier, attachment_e attachment, std::shared_ptr<gl::texture2d_ms>    texture, gl::uint32_t level = 0u)
@@ -358,10 +358,10 @@ export namespace fox::gfx::api::gl
             renderBufferMap_.emplace(identifier, renderBuffer);
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void detach(const std::string& identifier, attachment_e attachment)
         {
-            if constexpr (A == surface_e::Texture)
+            if constexpr (A == surface_e::texture)
             {
                 gl::frame_buffer_texture(handle_, gl::null_object, gl::map_frame_buffer_attachment(attachment), gl::uint32_t{ 0u });
                 textureMap_.erase(identifier);
@@ -377,15 +377,15 @@ export namespace fox::gfx::api::gl
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), glf::frame_buffer::Attachment::Color0 + index, level);
-            gl::frame_buffer_read_buffer(handle_, glf::frame_buffer::Source::Color0 + index);
+            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_read_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
         }
         void write_to (const std::string& identifier, gl::index_t index, gl::uint32_t level = 0u)
         {
             auto& texture = textureMap_.at(identifier);
 
-            gl::frame_buffer_texture    (handle_, texture->handle(), glf::frame_buffer::Attachment::Color0 + index, level);
-            gl::frame_buffer_draw_buffer(handle_, glf::frame_buffer::Source::Color0 + index);
+            gl::frame_buffer_texture    (handle_, texture->handle(), gl::frame_buffer_attachment_e::color0 + index, level);
+            gl::frame_buffer_draw_buffer(handle_, gl::frame_buffer_source_e::color0 + index);
         }
 
         void resize(const gl::vector2u& dimensions)
@@ -404,10 +404,10 @@ export namespace fox::gfx::api::gl
             dimensions_ = dimensions;
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         auto surface(const std::string& identifier) -> auto
         {
-            if constexpr (A == surface_e::Texture)
+            if constexpr (A == surface_e::texture)
             {
                 return textureMap_.at(identifier);
             }

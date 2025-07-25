@@ -1,7 +1,6 @@
 export module fox.rendering.api.opengl.buffer;
 
 import std;
-
 import fox.rendering.api.opengl;
 import fox.rendering.base.buffer;
 
@@ -16,24 +15,24 @@ export namespace fox::gfx::api::gl
             , size_{ static_cast<gl::size_t>(count * sizeof(T)) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_                                   ,
-                glf::Buffer::StorageFlags::DynamicStorage |
-                glf::Buffer::StorageFlags::ReadWrite      |
-                glf::Buffer::StorageFlags::Persistent     |
-                glf::Buffer::StorageFlags::Coherent       ,
-                count                                    );
+                handle_                                     ,
+                gl::buffer_storage_flags_e::dynamic_storage |
+                gl::buffer_storage_flags_e::read_write      |
+                gl::buffer_storage_flags_e::persistent      |
+                gl::buffer_storage_flags_e::coherent        ,
+                count                                       );
         }
         explicit buffer(std::span<const T> data)
             : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_                                   , 
-                glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::ReadWrite      | 
-                glf::Buffer::StorageFlags::Persistent     | 
-                glf::Buffer::StorageFlags::Coherent       , 
-                data                                     );
+                handle_                                     , 
+                gl::buffer_storage_flags_e::dynamic_storage |
+                gl::buffer_storage_flags_e::read_write      |
+                gl::buffer_storage_flags_e::persistent      |
+                gl::buffer_storage_flags_e::coherent        ,
+                data                                        );
         }
 
         void copy      (                   std::span<const T> data)
@@ -54,11 +53,11 @@ export namespace fox::gfx::api::gl
             unmap();
 
             auto span = gl::map_buffer_range<T>(
-                handle_                                            , 
-                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite  | 
-                glf::Buffer::Mapping::RangeAccessFlags::Persistent | 
-                glf::Buffer::Mapping::RangeAccessFlags::Coherent   , 
-                count()                                           );
+                handle_                                             , 
+                gl::buffer_mapping_range_access_flags_e::read_write | 
+                gl::buffer_mapping_range_access_flags_e::persistent | 
+                gl::buffer_mapping_range_access_flags_e::coherent   , 
+                count()                                             );
 
             data_  = std::shared_ptr<std::span<T>>{ span, [this](auto* _) { unmap(); } };
             range_ = count();
@@ -73,12 +72,12 @@ export namespace fox::gfx::api::gl
             range.index = std::min(range.index, count() - range.count);
 
             auto span = gl::map_buffer_range<T>(
-                handle_                                              , 
-                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    | 
-                glf::Buffer::Mapping::RangeAccessFlags::Persistent   | 
-                glf::Buffer::Mapping::RangeAccessFlags::Coherent     | 
-                glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit, 
-                range                                               );
+                handle_                                                , 
+                gl::buffer_mapping_range_access_flags_e::read_write    | 
+                gl::buffer_mapping_range_access_flags_e::persistent    | 
+                gl::buffer_mapping_range_access_flags_e::coherent      | 
+                gl::buffer_mapping_range_access_flags_e::flush_explicit, 
+                range                                                  );
 
             data_  = std::shared_ptr<std::span<T>>{ span, [this](const auto* _) { unmap(); } };
             range_ = range;
@@ -116,18 +115,18 @@ export namespace fox::gfx::api::gl
                     
                     if   (gl::range_overlaps(range, lock))
                     {
-                        auto command = glf::Synchronization::Command::None;
+                        auto command = gl::synchronization_command_e::none;
                         auto time    = gl::time_t{};
 
                         while (gl::True)
                         {
                             auto status = gl::client_wait_sync(sync, command, time);
 
-                            if (status == glf::Synchronization::Status::AlreadySignaled   ) break;
-                            if (status == glf::Synchronization::Status::ConditionSatisfied) break;
-                            if (status == glf::Synchronization::Status::WaitFailed        ) throw std::runtime_error{ "An error occurred!" };
+                            if (status == gl::synchronization_status_e::already_signaled   ) break;
+                            if (status == gl::synchronization_status_e::condition_satisfied) break;
+                            if (status == gl::synchronization_status_e::wait_failed        ) throw std::runtime_error{ "An error occurred!" };
 
-                            command = glf::Synchronization::Command::Flush;
+                            command = gl::synchronization_command_e::flush;
                             time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
                         }
 
@@ -161,7 +160,7 @@ export namespace fox::gfx::api::gl
 
     private:
         gl::size_t                    size_;
-        gl::range                   range_;
+        gl::range                     range_;
         std::vector<gl::lock_t>       locks_;
         std::shared_ptr<std::span<T>> data_;
     };
@@ -174,14 +173,14 @@ export namespace fox::gfx::api::gl
             , size_{ sizeof(T) }
         {
             gl::buffer_storage<T>(
-                handle_                                  , 
-                glf::Buffer::StorageFlags::DynamicStorage, 
-                std::span<const T>{ &data, 1u }         );
+                handle_                                    , 
+                gl::buffer_storage_flags_e::dynamic_storage, 
+                std::span<const T>{ &data, 1u }            );
         }
 
         void bind(gl::binding_t binding) const
         {
-            gl::bind_buffer_base(handle_, glf::Buffer::BaseTarget::uniform_buffer, binding);
+            gl::bind_buffer_base(handle_, gl::buffer_base_target_e::uniform_buffer, binding);
         }
 
         void copy      (const T& data)
@@ -221,32 +220,32 @@ export namespace fox::gfx::api::gl
         {
             gl::buffer_storage<T>(
                 handle_, 
-                glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::ReadWrite      | 
-                glf::Buffer::StorageFlags::Persistent     | 
-                glf::Buffer::StorageFlags::Coherent       , 
-                gl::size_t{ N * sizeof(T) }              );
+                gl::buffer_storage_flags_e::dynamic_storage | 
+                gl::buffer_storage_flags_e::read_write      |
+                gl::buffer_storage_flags_e::persistent      | 
+                gl::buffer_storage_flags_e::coherent        , 
+                gl::size_t{ N * sizeof(T) }                 );
         }
         explicit uniform_array_buffer(std::span<const T> data)
             : gl::object{ gl::create_buffer(), [](auto* handle) { gl::delete_buffer(*handle); } }
             , size_{ static_cast<gl::size_t>(data.size_bytes()) }, range_{}, locks_{}, data_{}
         {
             gl::buffer_storage<T>(
-                handle_                                   , 
-                glf::Buffer::StorageFlags::DynamicStorage | 
-                glf::Buffer::StorageFlags::ReadWrite      | 
-                glf::Buffer::StorageFlags::Persistent     | 
-                glf::Buffer::StorageFlags::Coherent       , 
-                data                                     );
+                handle_                                     , 
+                gl::buffer_storage_flags_e::dynamic_storage |
+                gl::buffer_storage_flags_e::read_write      |
+                gl::buffer_storage_flags_e::persistent      | 
+                gl::buffer_storage_flags_e::coherent        , 
+                data                                        );
         }
 
         void bind      (gl::binding_t binding) const
         {
-            gl::bind_buffer_base(handle_, glf::Buffer::BaseTarget::uniform_buffer, binding);
+            gl::bind_buffer_base(handle_, gl::buffer_base_target_e::uniform_buffer, binding);
         }
         void bind_range(gl::binding_t binding, gl::range range) const
         {
-            gl::bind_buffer_range<T>(handle_, glf::Buffer::BaseTarget::uniform_buffer, binding, range);
+            gl::bind_buffer_range<T>(handle_, gl::buffer_base_target_e::uniform_buffer, binding, range);
         }
 
         void copy      (std::span<const T, N> data)
@@ -268,10 +267,10 @@ export namespace fox::gfx::api::gl
 
             auto span = gl::map_buffer_range<T>(
                 handle_, 
-                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite  |
-                glf::Buffer::Mapping::RangeAccessFlags::Persistent |
-                glf::Buffer::Mapping::RangeAccessFlags::Coherent   ,
-                count()                                           );
+                gl::buffer_mapping_range_access_flags_e::read_write |
+                gl::buffer_mapping_range_access_flags_e::persistent |
+                gl::buffer_mapping_range_access_flags_e::coherent   ,
+                count()                                             );
 
             data_  = std::shared_ptr<std::span<T>>{ span, [this](const auto* _) { unmap(); } };
             range_ = count();
@@ -286,12 +285,12 @@ export namespace fox::gfx::api::gl
             range.index = std::min(range.index, count() - range.count);
 
             auto span = gl::map_buffer_range<T>(
-                handle_                                              ,
-                glf::Buffer::Mapping::RangeAccessFlags::ReadWrite    |
-                glf::Buffer::Mapping::RangeAccessFlags::Persistent   |
-                glf::Buffer::Mapping::RangeAccessFlags::Coherent     |
-                glf::Buffer::Mapping::RangeAccessFlags::FlushExplicit,
-                range                                               );
+                handle_                                                ,
+                gl::buffer_mapping_range_access_flags_e::read_write    |
+                gl::buffer_mapping_range_access_flags_e::persistent    |
+                gl::buffer_mapping_range_access_flags_e::coherent      |
+                gl::buffer_mapping_range_access_flags_e::flush_explicit,
+                range                                                  );
 
             data_  = std::shared_ptr<std::span<T>>{ span, [this](const auto* _) { unmap(); } };
             range_ = range;
@@ -330,18 +329,18 @@ export namespace fox::gfx::api::gl
 
                     if (gl::range_overlaps(range, lock))
                     {
-                        auto command = glf::Synchronization::Command::None;
+                        auto command = gl::synchronization_command_e::none;
                         auto time    = gl::time_t{};
 
                         while (gl::True)
                         {
                             auto status = gl::client_wait_sync(sync, command, time);
 
-                            if (status == glf::Synchronization::Status::AlreadySignaled   ) break;
-                            if (status == glf::Synchronization::Status::ConditionSatisfied) break;
-                            if (status == glf::Synchronization::Status::WaitFailed        ) throw std::runtime_error{ "An error occurred!" };
+                            if (status == gl::synchronization_status_e::already_signaled   ) break;
+                            if (status == gl::synchronization_status_e::condition_satisfied) break;
+                            if (status == gl::synchronization_status_e::wait_failed        ) throw std::runtime_error{ "An error occurred!" };
 
-                            command = glf::Synchronization::Command::Flush;
+                            command = gl::synchronization_command_e::flush;
                             time    = static_cast<gl::time_t>(std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds{ 1u }).count());
                         }
 
@@ -375,7 +374,7 @@ export namespace fox::gfx::api::gl
 
     private:
         gl::size_t                    size_;
-        gl::range                   range_;
+        gl::range                     range_;
         std::vector<gl::lock_t>       locks_;
         std::shared_ptr<std::span<T>> data_;
     };

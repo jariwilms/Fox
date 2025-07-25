@@ -11,9 +11,9 @@ export namespace fox::gfx::api::gl
     {
         gl ::uint32_t        id;
         std::string          message;
-        glf::Debug::Source   source;
-        glf::Debug::Type     type;
-        glf::Debug::Severity severity;
+        gl::debug_source_e   source;
+        gl::debug_type_e     type;
+        gl::debug_severity_e severity;
     };
     struct binary_info
     {

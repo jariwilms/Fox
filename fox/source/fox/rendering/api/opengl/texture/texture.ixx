@@ -16,7 +16,7 @@ export namespace fox::gfx::api::gl
         using wrapping_t = gl::proxy<wrapping_e>;
 
         texture1d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector1u& dimensions)
-            : gl::object{ gl::create_texture(glf::Texture::Target::_1D), [](auto* handle) { gl::delete_texture(*handle); } }
+            : gl::object{ gl::create_texture(gl::texture_target_e::_1d), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
             if (filter_ != filter_e::None)
@@ -113,7 +113,7 @@ export namespace fox::gfx::api::gl
         using wrapping_t = gl::proxy<wrapping_e, wrapping_e>;
          
         texture2d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions)
-            : gl::object{ gl::create_texture(glf::Texture::Target::_2D), [](auto* handle) { gl::delete_texture(*handle); } }
+            : gl::object{ gl::create_texture(gl::texture_target_e::_2d), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
             if (filter_ != filter_e::None)
@@ -212,7 +212,7 @@ export namespace fox::gfx::api::gl
         using wrapping_t = gl::proxy<wrapping_e, wrapping_e, wrapping_e>;
 
         texture3d(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector3u& dimensions)
-            : gl::object{ gl::create_texture(glf::Texture::Target::_3D), [](auto* handle) { gl::delete_texture(*handle); } }
+            : gl::object{ gl::create_texture(gl::texture_target_e::_3d), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
             if (filter_ != filter_e::None)
@@ -311,7 +311,7 @@ export namespace fox::gfx::api::gl
         using format_e = api::Texture::Format;
 
         texture2d_ms(format_e format, const gl::vector2u& dimensions, gl::uint32_t samples)
-            : gl::object{ gl::create_texture(glf::Texture::Target::_2DMultisample), [](auto* handle) { gl::delete_texture(*handle); } }
+            : gl::object{ gl::create_texture(gl::texture_target_e::_2d_multisample), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
              gl::texture_storage_2d_multisample(handle_, gl::map_texture_format(format_), dimensions_, samples_);
@@ -351,7 +351,7 @@ export namespace fox::gfx::api::gl
         using format_e = api::Texture::Format;
 
         texture3d_ms(format_e format, const gl::vector3u& dimensions, gl::uint32_t samples)
-            : gl::object{ gl::create_texture(glf::Texture::Target::_2DMultisampleArray), [](auto* handle) { gl::delete_texture(*handle); } }
+            : gl::object{ gl::create_texture(gl::texture_target_e::_2d_multisample_array), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, dimensions_{ dimensions }, samples_{ samples }
         {
              gl::texture_storage_3d_multisample(handle_, gl::map_texture_format(format_), dimensions_, samples_);
@@ -381,7 +381,7 @@ export namespace fox::gfx::api::gl
         }
 
     private:
-        format_e       format_;
+        format_e     format_;
         gl::vector3u dimensions_;
         gl::uint32_t samples_;
     };

@@ -31,7 +31,7 @@ export namespace fox::gfx
         {
             _->bind(target);
         }
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void bind_surface(const std::string& identifier, gfx::binding_t binding)
         {
             _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
@@ -50,7 +50,7 @@ export namespace fox::gfx
             _->attach(identifier, attachment, renderBuffer->impl());
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void detach(const std::string& identifier, attachment_e attachment)
         {
             _->detach<A>(identifier, attachment);
@@ -70,11 +70,11 @@ export namespace fox::gfx
             _->resize(dimensions);
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         auto surface   (const std::string& identifier)
         {
-            if constexpr (A == surface_e::Texture     ) return std::make_shared<gfx::texture2d>    (_->surface<A>(identifier));
-            if constexpr (A == surface_e::cubemap     ) return std::make_shared<gfx::cubemap>      (_->surface<A>(identifier));
+            if constexpr (A == surface_e::texture      ) return std::make_shared<gfx::texture2d>    (_->surface<A>(identifier));
+            if constexpr (A == surface_e::cubemap      ) return std::make_shared<gfx::cubemap>      (_->surface<A>(identifier));
             if constexpr (A == surface_e::render_buffer) return std::make_shared<gfx::render_buffer>(_->surface<A>(identifier));
         }
         auto attachment(attachment_e attachment) -> std::string
@@ -122,7 +122,7 @@ export namespace fox::gfx
         {
             _->bind(target);
         }
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void bind_surface(const std::string& identifier, gfx::binding_t binding)
         {
             _->bind_surface<A>(identifier, static_cast<impl::binding_t>(binding));
@@ -137,7 +137,7 @@ export namespace fox::gfx
             _->attach(identifier, attachment, renderBuffer->impl());
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         void detach(const std::string& identifier, attachment_e attachment)
         {
             _->detach<A>(identifier, attachment);
@@ -157,11 +157,11 @@ export namespace fox::gfx
             _->resize(dimensions);
         }
 
-        template<surface_e A = surface_e::Texture>
+        template<surface_e A = surface_e::texture>
         auto surface   (const std::string& identifier)
         {
-            if constexpr (A == surface_e::Texture)      return std::make_shared<gfx::texture2d>   (_->surface<A>(identifier));
-            if constexpr (A == surface_e::cubemap)      return std::make_shared<gfx::cubemap>     (_->surface<A>(identifier));
+            if constexpr (A == surface_e::texture      ) return std::make_shared<gfx::texture2d>   (_->surface<A>(identifier));
+            if constexpr (A == surface_e::cubemap      ) return std::make_shared<gfx::cubemap>     (_->surface<A>(identifier));
             if constexpr (A == surface_e::render_buffer) return std::make_shared<gfx::render_buffer>(_->surface<A>(identifier));
         }
         auto attachment(attachment_e attachment) -> std::string

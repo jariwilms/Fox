@@ -20,7 +20,7 @@ export namespace fox::gfx::api::gl
         using face_e     = api::cubemap::Face;
 
          cubemap(format_e format, filter_e filter, wrapping_t wrapping, const gl::vector2u& dimensions)
-            : gl::object{ gl::create_texture(glf::Texture::Target::CubeMap), [](auto* handle) { gl::delete_texture(*handle); } }
+            : gl::object{ gl::create_texture(gl::texture_target_e::cubemap), [](auto* handle) { gl::delete_texture(*handle); } }
             , format_{ format }, filter_{ filter }, wrapping_{ wrapping }, dimensions_{ dimensions }, mipmapLevels_{ 1u }
         {
             if (filter != filter_e::None)
