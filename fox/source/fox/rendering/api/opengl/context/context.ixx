@@ -1,7 +1,6 @@
 export module fox.rendering.api.opengl.context;
 
 import std;
-
 import fox.rendering.api.opengl;
 
 export namespace fox::gfx::api::gl

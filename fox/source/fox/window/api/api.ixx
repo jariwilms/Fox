@@ -1,10 +1,8 @@
 export module fox.window.api;
 
-import std;
-import fox.window.api.glfw;
-import fox.core.types.window;
+import vendor.glfw;
 
-export namespace fox::interface::api
+export namespace fox::window::api
 {
-	using window_t = interface::api::glfw::window;
+	using window_t = vendor::glfw::window;
 }

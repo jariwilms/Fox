@@ -4,5 +4,12 @@ import fox.core.types;
 
 export namespace fox::cfg
 {
-    constexpr auto flip_images = fox::true_;
+    enum class build_configuration_e
+    {
+        debug, 
+        release, 
+    };
+
+    constexpr auto flip_images         = fox::true_;
+    constexpr auto build_configuration = cfg::build_configuration_e::debug;
 }

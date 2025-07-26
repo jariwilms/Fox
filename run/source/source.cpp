@@ -34,11 +34,8 @@ static auto transform_product   (std::shared_ptr<fox::scene> scene, const fox::r
 
 int main()
 {
-    auto window_ = interface::window::create("Fox", fox::vector2u{ 1280u, 720u });
+    fox::initialize();
 
-    gfx::geometry     ::init();
-    io ::model_importer::init();
-    gfx::renderer     ::init();
 
 
     auto  scene                 = std::make_shared<fox::scene>();
@@ -109,7 +106,7 @@ int main()
         {
             auto speed{ 5.0f * fox::time::delta() };
 
-            if (input::key_active(input::key_e::escape      )) window_->close();
+            if (input::key_active(input::key_e::escape      )) window::close();
             if (input::key_active(input::key_e::left_shift  )) speed *= 10.0f;
             if (input::key_active(input::key_e::left_control)) speed /=  5.0f;
             if (input::key_active(input::key_e::w           )) cameraTransform.position += cameraTransform.forward() * speed;
@@ -144,15 +141,15 @@ int main()
 
 
 
-
+    
 
     fox::time::reset();
     auto frametimes = fox::circular_buffer<fox::float32_t, fox::size_t{ 144u }>{};
 
-    while (!window_->should_close())
+    while (!window::should_close())
     {
         fox::time::update();
-        window_->poll_events();
+        window::poll_events();
 
         move_camera();
         rotate_helmet();
@@ -179,7 +176,7 @@ int main()
 
         gfx::renderer::finish();
 
-        window_->swap_buffers();
+        window::swap_buffers();
         frametimes.push_back(fox::time::delta());
     }
 
