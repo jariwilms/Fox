@@ -38,7 +38,7 @@ Visual Studio > Tools > External Tools... > Add
   - Initial directory: $(ItemDir)
   - [v] Use Output Window
 ```
-It is only recommended to use the "--no-backup" flag if files are under source control
+It is not recommended to use the "--no-backup" flag without git source control
 
 #### Register a keybind
 ```
@@ -47,3 +47,6 @@ Search for: "Tools.ExternalCommand"
 Assign a shortcut key to your liking
 ```
 Note that the Tools.ExternalCommand number needs to be equal to the command's index in the external tools list
+
+#### Configuration
+The Uncrustify directory contains a .cfg file with the recommended formatting
