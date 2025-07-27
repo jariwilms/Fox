@@ -16,7 +16,7 @@ export namespace fox::gfx::geometry
     std::shared_ptr<gfx::mesh> cube;
     std::shared_ptr<gfx::mesh> sphere;
 
-    void plane_init()
+    void initialize_plane ()
     {
         auto layout2f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 2u>>{};
         auto layout3f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
@@ -36,7 +36,7 @@ export namespace fox::gfx::geometry
 
         plane = std::make_shared<gfx::mesh>(vertexArray);
     }
-    void cube_init()
+    void initialize_cube  ()
     {
         auto layout2f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 2u>>{};
         auto layout3f = gfx::vertex_layout<gfx::vertex_attribute<fox::float32_t, 3u>>{};
@@ -56,15 +56,15 @@ export namespace fox::gfx::geometry
 
         cube = std::make_shared<gfx::mesh>(vertexArray);
     }
-    void sphere_init()
+    void initialize_sphere()
     {
         sphere = io::model_importer::import2("models/sphere/Sphere.gltf")->meshes.at(0u);
     }
 
-    void init()
+    void initialize()
     {
-        plane_init();
-        cube_init();
-        sphere_init();
+        initialize_plane ();
+        initialize_cube  ();
+        initialize_sphere();
     }
 }

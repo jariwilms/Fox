@@ -9,7 +9,7 @@ auto renderer_ = std::unique_ptr<fox::gfx::api::OpenGLRenderer>{};
 
 export namespace fox::gfx::renderer
 {
-    void init()
+    void initialize()
     {
         renderer_ = std::make_unique<fox::gfx::api::OpenGLRenderer>();
     }

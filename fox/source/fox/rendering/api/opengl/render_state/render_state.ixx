@@ -11,7 +11,7 @@ export namespace fox::gfx::api::gl
     public:
         render_state() = delete;
 
-        static void init()
+        static void initialize()
         {
             
         }

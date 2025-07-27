@@ -105,14 +105,6 @@ export namespace vendor::glfw
         ::glfwHideWindow(window);
     }
 
-    void make_context_current          (glfw::window_t* window)
-    {
-        ::glfwMakeContextCurrent(window);
-    }
-    void swap_interval                 (fox::uint32_t interval)
-    {
-        ::glfwSwapInterval(static_cast<fox::int32_t>(interval));
-    }
     void poll_events                   ()
     {
         ::glfwPollEvents();
@@ -120,6 +112,14 @@ export namespace vendor::glfw
     void wait_events                   ()
     {
         glfwWaitEvents();
+    }
+    void swap_interval                 (fox::uint32_t interval)
+    {
+        ::glfwSwapInterval(static_cast<fox::int32_t>(interval));
+    }
+    void make_context_current          (glfw::window_t* window)
+    {
+        ::glfwMakeContextCurrent(window);
     }
     void swap_buffers                  (glfw::window_t* window)
     {

@@ -20,7 +20,7 @@ export namespace fox::io
     class model_importer
     {
     public:
-        static void init()
+        static void initialize()
         {
             defaultAlbedoTexture_ = io::load<io::asset_e::texture2d>("textures/albedo.png");
             defaultNormalTexture_ = io::load<io::asset_e::texture2d>("textures/normal.png");

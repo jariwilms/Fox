@@ -28,8 +28,8 @@ export namespace fox
     {
         api::initialize();
 
-        gfx::geometry     ::init();
-        io::model_importer::init();
-        gfx::renderer     ::init();
+        gfx::geometry     ::initialize();
+        io::model_importer::initialize();
+        gfx::renderer     ::initialize();
     }
 }

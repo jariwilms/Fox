@@ -13,7 +13,7 @@ import vendor.glfw.types;
 
 export namespace vendor::glfw
 {
-    class input_handler
+    class input
     {
     public:
         void capture                   ()

@@ -23,7 +23,7 @@ export namespace vendor::glfw
         };
         struct user_data
         {
-            std::shared_ptr<glfw::input_handler> input;
+            std::shared_ptr<glfw::input> input;
             fox::vector2u* dimensions;
         };
 
@@ -52,11 +52,11 @@ export namespace vendor::glfw
             glfw::show_window(window_.get());
             
             vendor::glad::initialize();
-            fox::gfx::api::gl::context::init();
+            fox::gfx::api::gl::context::initialize();
 
 
 
-            input_ = std::make_shared<glfw::input_handler>();
+            input_ = std::make_shared<glfw::input>();
             user_data_ = user_data{ input_, &dimensions_ };
             glfwSetWindowUserPointer(window_.get(), &user_data_);
 
@@ -143,18 +143,18 @@ export namespace vendor::glfw
             return displayMode_;
         }
 
-        auto input_handler() const -> std::shared_ptr<const glfw::input_handler>
+        auto input_handler() const -> std::shared_ptr<const glfw::input>
         {
             return input_;
         }
-        auto input_handler() -> std::shared_ptr<glfw::input_handler>
+        auto input_handler() -> std::shared_ptr<glfw::input>
         {
             return input_;
         }
 
     private:
         using window_ptr = std::unique_ptr<glfw::window_t, std::function<void(glfw::window_t*)>>;
-        using input_ptr  = std::shared_ptr<glfw::input_handler>;
+        using input_ptr  = std::shared_ptr<glfw::input>;
         
         window_ptr     window_;
         input_ptr      input_;
