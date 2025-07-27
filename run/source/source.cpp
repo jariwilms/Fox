@@ -104,7 +104,7 @@ int main()
 
     auto move_camera            = [&]
         {
-            auto speed{ 5.0f * fox::time::delta() };
+            auto speed = fox::float32_t{ fox::time::delta() * 5.0f };
 
             if (input::key_active(input::key_e::escape      )) window::close();
             if (input::key_active(input::key_e::left_shift  )) speed *= 10.0f;
@@ -119,10 +119,9 @@ int main()
             if (input::button_active(input::button_e::right_mouse))
             {
                 static auto rotation = fox::vector3f{};
+                const  auto cpr      = input::cursor_position_delta() / 10.0f;
 
-                const auto cpr = input::cursor_position_delta() / 10.0f;
                 rotation += fox::vector3f{ cpr.y, cpr.x, 0.0f };
-
                 cameraTransform.rotation = fox::quaternion4f{ glm::radians(rotation) };
             }
         };
@@ -154,7 +153,7 @@ int main()
         move_camera();
         rotate_helmet();
 
-        auto renderInfo = gfx::render_info{ camera, cameraTransform, lights, skybox };
+        auto renderInfo = gfx::render_info{ window::dimensions(), camera, cameraTransform, lights, skybox };
         gfx::renderer::start(renderInfo);
 
         auto view = ecs::registry::view<ecs::relationship_component, ecs::transform_component, ecs::mesh_filter_component>();

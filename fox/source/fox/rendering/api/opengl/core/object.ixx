@@ -1,7 +1,6 @@
 export module fox.rendering.api.opengl.object;
 
 import std;
-
 import fox.rendering.api.opengl.types;
 
 export namespace fox::gfx::api::gl
@@ -21,7 +20,7 @@ export namespace fox::gfx::api::gl
         explicit object(gl::handle_t handle)
             : handle_{ handle } {}
         template<typename Dx>
-                 object(gl::handle_t handle, Dx deleter)
+        explicit object(gl::handle_t handle, Dx deleter)
             : handle_{ handle }, deleter_{ &handle_, std::move(deleter) } {}
         explicit object(object&& other) noexcept
             : handle_{ std::exchange(other.handle_, gl::null_object) } {}

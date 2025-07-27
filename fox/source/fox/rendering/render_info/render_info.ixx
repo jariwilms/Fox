@@ -11,6 +11,7 @@ export namespace fox::gfx
 {
     struct render_info
     {
+        fox::vector2u                                                dimensions;
         fox::camera                                                  camera;
         fox::transform                                               cameraTransform;
         std::span      <const std::tuple<fox::light, fox::vector3f>> lights;

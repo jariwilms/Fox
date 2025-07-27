@@ -12,6 +12,7 @@ import fox.rendering.api.gl;
 import fox.rendering.api;
 import fox.rendering.utility;
 import fox.rendering;
+import fox.window;
 
 export namespace fox::gfx::api
 {
@@ -24,7 +25,7 @@ export namespace fox::gfx::api
 
 
 
-            const fox::vector2u viewportDimensions { 1280u,  720u };
+            const auto viewportDimensions = window::dimensions();
             const fox::vector2u shadowMapDimensions{ 2048u, 2048u };
 
             using FS = gfx::frame_buffer::specification_e;
@@ -360,7 +361,7 @@ export namespace fox::gfx::api
         }
         void finish()
         {
-            const fox::vector2u  dimensions{ 1280u,  720u };
+            const fox::vector2u  dimensions = window::dimensions();
             const fox::vector2u sDimensions{ 2048u, 2048u };
 
             //Bind Uniform Buffers to correct indices

@@ -16,6 +16,19 @@ export namespace vendor::glfw
         ::glfwTerminate();
     }
     
+    auto get_primary_monitor           () -> glfw::monitor_t*
+    {
+        return ::glfwGetPrimaryMonitor();
+    }
+    auto get_video_mode                (glfw::monitor_t* monitor) -> const glfw::video_mode_t*
+    {
+        return ::glfwGetVideoMode(monitor);
+    }
+
+    void window_hint                   (glfw::hint_e hint, glfw::hint_value_e value)
+    {
+        ::glfwWindowHint(std::to_underlying(hint), std::to_underlying(value));
+    }
     auto create_window                 (const std::string& title, fox::vector2u dimensions) -> glfw::window_t*
     {
         auto handle = ::glfwCreateWindow(
@@ -30,18 +43,34 @@ export namespace vendor::glfw
     {
         ::glfwDestroyWindow(window);
     }
-    void window_hint                   (glfw::hint_e hint, fox::int32_t       value)
+    auto window_should_close           (glfw::window_t* window) -> fox::bool_t
     {
-        ::glfwWindowHint(std::to_underlying(hint), value);
+        return ::glfwWindowShouldClose(window);
     }
-    void window_hint                   (glfw::hint_e hint, glfw::hint_value_e value)
+    auto get_window_size               (glfw::window_t* window) -> fox::vector2u
     {
-        ::glfwWindowHint(std::to_underlying(hint), std::to_underlying(value));
-    }
+        auto dimensions = fox::vector2i{};
+        ::glfwGetWindowSize(window, &dimensions.x, &dimensions.y);
 
-    void set_window_title              (glfw::window_t* window, const std::string& title)
+        return std::bit_cast<fox::vector2u>(dimensions);
+    }
+    auto get_monitor_size              (glfw::monitor_t* monitor) -> fox::vector2u
     {
-        ::glfwSetWindowTitle(window, title.c_str());
+        auto dimensions = fox::vector2i{};
+        ::glfwGetMonitorPhysicalSize(monitor, &dimensions.x, &dimensions.y);
+
+        return std::bit_cast<fox::vector2u>(dimensions);
+    }
+    auto get_frame_buffer_size         (glfw::window_t* window) -> fox::vector2u
+    {
+        auto dimensions = fox::vector2i{};
+        ::glfwGetFramebufferSize(window, &dimensions.x, &dimensions.y);
+
+        return std::bit_cast<fox::vector2u>(dimensions);
+    }
+    void set_window_should_close       (glfw::window_t* window, fox::bool_t value)
+    {
+        ::glfwSetWindowShouldClose(window, value);
     }
     void set_window_size               (glfw::window_t* window, const fox::vector2u& dimensions)
     {
@@ -50,13 +79,30 @@ export namespace vendor::glfw
             static_cast<fox::int32_t>(dimensions.x) , 
             static_cast<fox::int32_t>(dimensions.y));
     }
-    void set_window_should_close       (glfw::window_t* window, fox::bool_t value)
+    void set_window_title              (glfw::window_t* window, const std::string& title)
     {
-        ::glfwSetWindowShouldClose(window, value);
+        ::glfwSetWindowTitle(window, title.c_str());
     }
-    auto window_should_close           (glfw::window_t* window) -> fox::bool_t
+    void set_window_monitor            (glfw::window_t* window, glfw::monitor_t* monitor, fox::vector2u dimensions)
     {
-        return ::glfwWindowShouldClose(window);
+        const auto video_mode         = glfw::get_video_mode(monitor ? monitor : glfw::get_primary_monitor());
+        const auto monitor_resolution = fox::vector2u{ video_mode->width, video_mode->height };
+        const auto window_center      = fox::vector2u{  glfw::get_window_size (window) / 2u  };
+        const auto monitor_center     = fox::vector2u{              monitor_resolution / 2u  };
+        const auto top_left           = fox::vector2u{        monitor_center - window_center };
+
+        ::glfwSetWindowMonitor(
+            window, monitor, 
+            static_cast<fox::int32_t>(top_left  .x), static_cast<fox::int32_t>(top_left  .y), 
+            static_cast<fox::int32_t>(dimensions.x), static_cast<fox::int32_t>(dimensions.y), fox::int32_t{ 0 });
+    }
+    void show_window                   (glfw::window_t* window)
+    {
+        ::glfwShowWindow(window);
+    }
+    void hide_window                   (glfw::window_t* window)
+    {
+        ::glfwHideWindow(window);
     }
 
     void make_context_current          (glfw::window_t* window)
@@ -70,6 +116,10 @@ export namespace vendor::glfw
     void poll_events                   ()
     {
         ::glfwPollEvents();
+    }
+    void wait_events                   ()
+    {
+        glfwWaitEvents();
     }
     void swap_buffers                  (glfw::window_t* window)
     {

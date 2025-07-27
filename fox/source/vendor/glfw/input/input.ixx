@@ -16,7 +16,7 @@ export namespace vendor::glfw
     class input_handler
     {
     public:
-        void update                    ()
+        void capture                   ()
         {
             lastActiveKeys_     = activeKeys_;
             lastActiveButtons_  = activeButtons_;
@@ -89,7 +89,7 @@ export namespace vendor::glfw
             return lastScrollWheel_ - scrollWheel_;
         }
 
-        void glfw_input_key_callback   (glfw::window_t*, fox::input::key_e    key   , fox::int32_t, fox::int32_t action, fox::input::modifier_e)
+        void input_key_callback        (glfw::window_t*, fox::input::key_e    key   , fox::int32_t, fox::int32_t action, fox::input::modifier_e)
         {
             if (fox::compare_enum<std::less>(key, fox::input::key_min) || fox::compare_enum<std::greater>(key, fox::input::key_max)) 
                 return;
@@ -101,7 +101,7 @@ export namespace vendor::glfw
                 case glfw::input_action_e::repeat :                                                        break;
             }
         }
-        void glfw_input_button_callback(glfw::window_t*, fox::input::button_e button,               fox::int32_t action, fox::input::modifier_e)
+        void input_button_callback     (glfw::window_t*, fox::input::button_e button,               fox::int32_t action, fox::input::modifier_e)
         {
             if (fox::compare_enum<std::less>(button, fox::input::button_min) || fox::compare_enum<std::greater>(button, fox::input::button_max)) 
                 return;
@@ -113,11 +113,11 @@ export namespace vendor::glfw
                 case glfw::input_action_e::repeat :                                                              break;
             }
         }
-        void glfw_input_cursor_callback(glfw::window_t*, fox::float64_t  x, fox::float64_t y)
+        void input_cursor_callback     (glfw::window_t*, fox::float64_t  x, fox::float64_t y)
         {
             cursorPosition_ = fox::vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
-        void glfw_input_scroll_callback(glfw::window_t*, fox::float64_t  x, fox::float64_t y)
+        void input_scroll_callback     (glfw::window_t*, fox::float64_t  x, fox::float64_t y)
         {
             scrollWheel_ = fox::vector2f{ static_cast<fox::float32_t>(x), static_cast<fox::float32_t>(y) };
         }
